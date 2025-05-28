@@ -7,4 +7,6 @@ export interface IAuthServiceService {
   GetCompanyData():Observable<APIResponse>;
   setUsername(username: string);
   PayRegisterDownload():Observable<Blob>
+  changepassword(val):Observable<APIResponse>
+ 
 }

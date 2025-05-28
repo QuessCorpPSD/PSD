@@ -15,6 +15,8 @@ import { SopformComponent } from './pages/sopform/sopform.component';
 import { SopComponent } from './pages/Customer/sop/sop.component';
 import { SopnewComponent } from './pages/sopnew/sopnew.component';
 import { UserMappingComponent } from './pages/admin/user-mapping/user-mapping.component';
+import { DashboardComponent } from './pages/dashboard/dashboard.component';
+import { ChangepasswordComponent } from './pages/changepassword/changepassword.component'; 
 
 
 
@@ -26,7 +28,9 @@ export const routes: Routes = [
             { path: 'Severity', component: SeverityComponent },
             { path: 'AllottedLot', component: AllotedLotComponent },
             { path: 'SOP', component: SopnewComponent },
-            { path: 'hierarchy', component: UserMappingComponent },
+            { path: 'user', component: UserMappingComponent },
+            { path: 'dashboard', component: DashboardComponent },
+            { path: 'changepassword', component: ChangepasswordComponent },
          //   { path: 'UI', component: SopComponent },
             { path: '**', redirectTo: '/Home', pathMatch: 'full' }
 
@@ -52,6 +56,7 @@ export const routes: Routes = [
     // },
 
     {path:'Login',loadComponent:()=>import('./layout/loginmaster/loginmaster.component').then((c)=>c.LoginmasterComponent)},
+     {path:'forgot',loadComponent:()=>import('./pages/forgot/forgot.component').then((c)=>c.ForgotComponent)},
     {path:'**',redirectTo:'Login',pathMatch:'full'}
     
     //, canActivate: [AuthGuard]

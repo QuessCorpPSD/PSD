@@ -3,9 +3,9 @@ import { CommonModule } from '@angular/common';
 import { RouterModule,RouterLink, RouterOutlet, RouterLinkActive, Router } from '@angular/router';
 
 import { AppHeaderComponent } from '../app-header/app-header.component';
-import { AuthServiceService } from '../../Service/auth-service.service';
-import { SessionStorageService } from '../../Shared/SessionStorageService';
 
+import { SessionStorageService } from '../../Shared/SessionStorageService';
+import { EncryptionService } from '../../Shared/encryption.service';
 @Component({
   selector: 'app-master',
   standalone: true,
@@ -18,8 +18,10 @@ import { SessionStorageService } from '../../Shared/SessionStorageService';
 export class MasterComponent implements  OnInit {
   username = '';
   menuCode:string='1';
+  menuHideVisibility=false;
+constructor( private _sessionStoreage:SessionStorageService, 
   
-constructor( private _sessionStoreage:SessionStorageService,  private router: Router,){
+  private _encry:EncryptionService, private router: Router,){
 
 }
  isActive(route: string): boolean {    
@@ -36,7 +38,16 @@ constructor( private _sessionStoreage:SessionStorageService,  private router: Ro
     this.router.navigateByUrl('/Login');
    }
   ngOnInit(): void {
-
+  const userdetail= this._sessionStoreage.getItem('UserProfile');
+  var user = JSON.parse(this._encry.decrypt(userdetail!)); 
+    if(user.role_Id === 17)
+    {
+      this.menuHideVisibility=true;
+    }
+    else
+    {
+      this.menuHideVisibility=false;
+    }
    
    
     

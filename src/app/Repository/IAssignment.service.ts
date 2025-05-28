@@ -10,8 +10,10 @@ export interface IAssignmentService {
       LotStatus(val):Observable<APIResponse>
       QCLotVerify(val):Observable<APIResponse>
       InputFileDownload(val):Observable<APIResponse>
-      
-GetSOP_QA(): Observable<APIResponse>;
+      OutPutFileDownload(val):Observable<APIResponse>
+      LotValidationEstimate(val):Observable<APIResponse>
+      FeedBackMail(val):Observable<APIResponse>;
+      GetSOP_QA(): Observable<APIResponse>;
       getApiOptions(url: string): Observable<any[]>;
       GetCompanyDetails(val:any): Observable<APIResponse>;
       GetCategory(): Observable<APIResponse>;

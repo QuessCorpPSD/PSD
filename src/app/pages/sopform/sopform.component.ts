@@ -53,11 +53,11 @@ export class SopformComponent implements OnInit {
     this._authService.GetSOP_QA().subscribe({
       next: res => {
         this.category = res.Data;
-        console.log('Data:', this.category);
+//        console.log('Data:', this.category);
         this.isLoading = false;
       },
       error: err => {
-        console.error('Error loading questions', err);
+      //  console.error('Error loading questions', err);
         this.isLoading = false;
       }
     });
@@ -65,13 +65,13 @@ export class SopformComponent implements OnInit {
   
 
   onSubmit() {
-    console.log('Submitted Form:', this.sopForm.value);
+    //console.log('Submitted Form:', this.sopForm.value);
   }
 
   onQuestionSubmit(selectedQuestionId) {
 
     const finalJson = this.collectAnswersByQuestionId(selectedQuestionId);
-    console.log('Final JSON:', JSON.stringify(finalJson));
+   // console.log('Final JSON:', JSON.stringify(finalJson));
 
     // ✅ Mark the current question as answered
     const index = this.questions.findIndex(q => q.questionId === selectedQuestionId);
@@ -104,7 +104,7 @@ export class SopformComponent implements OnInit {
     this.selectedQuestion = null;
     this.selectedCategory = cat;
     this.questions = cat.questions;
-    console.log('questions Data:', this.questions);
+   // console.log('questions Data:', this.questions);
     this.selectedCategoryIndex = this.category.findIndex(c => c.categoryId === cat.categoryId);
     if (this.questions.length > 0) {
       this.onQuestionClick(this.questions[0]);
@@ -349,12 +349,12 @@ export class SopformComponent implements OnInit {
   getControlFor(controlName: string): FormControl {
     const group = this.findFormGroupContainingControl(this.sopForm, controlName);
     if (!group) {
-      console.warn('⚠️ No FormGroup found for:', controlName);
+      //console.warn('⚠️ No FormGroup found for:', controlName);
       return new FormControl('');
     }
     const control = group.get(controlName);
     if (!control) {
-      console.warn('⚠️ No FormControl found for:', controlName);
+      //console.warn('⚠️ No FormControl found for:', controlName);
     }
     return control as FormControl;
   }

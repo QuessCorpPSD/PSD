@@ -10,6 +10,8 @@ import { AuthServiceService } from '../../Service/auth-service.service';
 import { NgOptimizedImage } from '@angular/common'
 import { EncryptionService } from '../../Shared/encryption.service';
 import { SessionStorageService } from '../../Shared/SessionStorageService';
+import { TokenService } from '../../Shared/TokenService';
+import { HttpClient } from '@angular/common/http';
 
 
 
@@ -18,7 +20,7 @@ const auth= InjectionToken<IAuthServiceService>;
 @Component({
   selector: 'app-loginmaster',
   standalone: true,
-  imports: [FormsModule,CommonModule ],
+  imports: [FormsModule,CommonModule,RouterLink ],
   templateUrl: './loginmaster.component.html',
   styleUrl: './loginmaster.component.css',
   encapsulation: ViewEncapsulation.None ,
@@ -36,7 +38,8 @@ username:string = ''
   isSubmitting:boolean = false;
   Name:string='';
   userDeviceData!:string;
-    
+    ipAddress: string = '';
+ computername:string='';
   validationErrors:Array<any> = [];
   
    
@@ -46,8 +49,8 @@ username:string = ''
   private router: Router,
   private _encry:EncryptionService,
   private sessionStorageService: SessionStorageService,
-      
-  @Inject(DOCUMENT) private document: Document
+  private tokenservice:TokenService ,
+  private http:HttpClient  
   ) {
    
     }
@@ -64,81 +67,86 @@ username:string = ''
     }
    
   ngOnInit(): void {
-   
+   this.http.get('http://localhost:7000/', { responseType: 'text' })
+      .subscribe({
+        next: (response: string) => {
+          
+          // If you're using jQuery (not recommended), you can do:
+          this.computername=response
+          
+          // Angular way (recommended):
+          // this.companyName = response;
+        },
+        error: (error) => {
+          console.error('Error fetching data', error);
+        }
+      });
     //console.log(this.deviceInfo);
   }
-
-
+ 
+ getIpAddress(): void {
+    this.http.get('https://api.ipify.org?format=json').subscribe({
+      next: (res: any) => {
+        this.ipAddress = res.ip;
+      },
+      error: (err) => {
+        console.error('Error fetching IP:', err);
+      }
+    });
+  }
 
  
 
-  validateLogin(): void {
-
-    if(this.username=='' || this.username == undefined)
-    {
-      this.toastr.error("Please Enter Employee Code","Error")
-      return ;
-    }    
-
-    if(this.password=='' || this.password == undefined)
-      {
-        this.toastr.error("Please Enter Password","Error")
-        return ;
-      }
-
-
-    var login = {
-      "username": this.username,
-      "password": this.password
-    };
-
-          this._authService.ValidateLogin(login).subscribe((loginStatus)=>{ 
-            if(loginStatus.Data.error_Message =="" && loginStatus.Data.user_Id>0 )
-            {            
-             // console.log(loginStatus.Data)
-              
-             // localStorage.setItem('userId',loginStatus.Data.user_Id);
-             this.sessionStorageService.setItem('userId', loginStatus.Data.user_Id);
-            this.sessionStorageService.setItem('employeeID', loginStatus.Data.employeeID);
-              this.Name=loginStatus.Data.userName;   
-              var userProfile={
-                "UserName" : loginStatus.Data.userName,
-                "EmployeeCode" : loginStatus.Data.employeeId,
-                "userId":loginStatus.Data.user_Id
-              }
-              this.sessionStorageService.setItem('UserProfile',this._encry.encrypt(JSON.stringify(loginStatus.Data)));
-             // sessionStorage.setItem('employeeCode',loginStatus.Data.emp);           
-              this._authService.setUsername(this.Name);
-              this.router.navigateByUrl('/Master/Home');
-            }
-            else{
-              this.toastr.error(loginStatus.Data.error_Message, "Error");
-              this.router.navigate(['/Login']);
-            }
-          },error=>{
-            this.toastr.error("Please check Interner", "Error");
-          })
-    
-      // this._Auth.authenticate(login).subscribe((response)=>
-      // {
-      //   console.log(response);
-      //   if (response.StatusCode == 200) {
-      //     let data = response.Data;
-      //     console.log("data");
-      //     console.log(data);
-      //     if (data.error_Message == "") {
-      //       this.router.navigate(['/Home']);
-      //     }
-      //     else {
-      //       this.router.navigate(['/Login']);
-      //       this.toastr.error(data.error_Message, "Error");
-      //     }
-      //   }
-      //   else {
-      //     this.router.navigate(['/Login']);
-      //     this.toastr.error("User Name and Password are mismatched !!!", "Error");
-      //   }
-      // });
+ validateLogin(): void {
+  if (!this.username || this.username.trim() === '') {
+    this.toastr.error("Please Enter Employee Code", "Error");
+    return;
   }
+
+  if (!this.password || this.password.trim() === '') {
+    this.toastr.error("Please Enter Password", "Error");
+    return;
+  }
+
+ 
+
+ this.getIpAddress();
+    
+   const login = {
+    username: this.username,
+    password: this.password,
+    ipAddress:this.ipAddress,
+    Cname:this.computername,
+  };
+  
+  this._authService.ValidateLogin(login).subscribe({
+    next: (loginStatus) => {
+      const data = loginStatus.Data;
+
+      if (data.error_Message === "" && data.user_Id > 0) {
+        this.Name = data.userName;
+        this.sessionStorageService.setItem('UserProfile', this._encry.encrypt(JSON.stringify(data)));
+        this.tokenservice.setTokens(
+          this._encry.encrypt(data.token),
+          this._encry.encrypt(data.refreshtoken)
+        );
+
+        if (data.role_Id === 17) {
+          this.router.navigateByUrl('/Master/dashboard');
+        } else {
+          this.router.navigateByUrl('/Master/Home');
+        }
+      } else {
+        this.toastr.error(data.error_Message || "Invalid credentials", "Error");
+        this.router.navigate(['/Login']);
+      }
+    },
+    error: (err) => {
+      console.error(err);
+      this.toastr.error(err.message, "Error");
+    }
+  });
+}
+
 }
 

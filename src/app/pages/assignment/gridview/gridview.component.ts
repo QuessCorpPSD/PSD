@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component,  CUSTOM_ELEMENTS_SCHEMA,  Input,  OnInit } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component,  CUSTOM_ELEMENTS_SCHEMA,  Input,  OnInit } from '@angular/core';
 import { Router, RouterLink, RouterOutlet  } from '@angular/router';
 import { EncryptionService } from '../../../Shared/encryption.service';
-
+declare var bootstrap: any;
 @Component({
   selector: 'app-gridview',
   standalone: true,
@@ -12,11 +12,19 @@ import { EncryptionService } from '../../../Shared/encryption.service';
   schemas:[CUSTOM_ELEMENTS_SCHEMA],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class GridviewComponent implements OnInit {
+
+export class GridviewComponent implements OnInit,AfterViewInit  {
   
   @Input() data!:any;
   constructor(private route:Router,private _encry:EncryptionService){
 
+  }
+  ngAfterViewInit() {
+    // Initialize all tooltips
+    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+    tooltipTriggerList.forEach((tooltipTriggerEl) => {
+      new bootstrap.Tooltip(tooltipTriggerEl);
+    });
   }
   ngOnInit(): void {
     console.log(this.data);

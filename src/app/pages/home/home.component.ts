@@ -111,10 +111,11 @@ GetDashboardByUserId(userId){
 this._dashboard.GetUserDashBoard(userId).subscribe({
 next: res => {
 	this.userData=res.Data;
+  
 	this.checkInStatus=this.userData.checkInStatus;
 	this.checkInDateTime=res.Data.checkInDateTime;
 	    this.percent_inComplate_Assignment=res.Data.inComplate_Assignment;
-       this.progressBar.nativeElement.style.width = this.percent_inComplate_Assignment+"%";
+      // this.progressBar.nativeElement.style.width = this.percent_inComplate_Assignment+"%";
 },
 error:error=>{}
 })

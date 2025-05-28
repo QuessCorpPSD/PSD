@@ -28,11 +28,34 @@ export class AuthServiceService implements IAuthServiceService {
         //return userInfo.headers.get('authorization');
       }));
   }
-
+  
+changepassword(val):Observable<APIResponse>
+{
+  var inputval=JSON.stringify(val);
+   
+    const config = new HttpHeaders().set('Content-Type', 'application/json')
+    .set('Accept', 'application/json')
+    return this.http.post<APIResponse>(this.environment.apiUrl+"Authendicate/ChangePassword",inputval, { headers: config })     
+   
+}
   GetCompanyData():Observable<APIResponse>{
     return this.http.get<APIResponse>(this.environment.apiUrl+'Authendicate/GetData');
   }
-  
+  getCompanyName() {
+    this.http.get('http://localhost:7000/', { responseType: 'text' })
+      .subscribe({
+        next: (response: string) => {
+          // If you're using jQuery (not recommended), you can do:
+          
+          
+          // Angular way (recommended):
+          // this.companyName = response;
+        },
+        error: (error) => {
+          console.error('Error fetching data', error);
+        }
+      });
+  }
   setUsername(username: string) {
     
     this.usernameSubject.next(username); // Set username
@@ -40,5 +63,6 @@ export class AuthServiceService implements IAuthServiceService {
   PayRegisterDownload(): Observable<Blob> {
     return this.http.get<Blob>(this.environment.apiUrl + 'Authendicate/PayRegisterDownload')
   }
+
   
 }

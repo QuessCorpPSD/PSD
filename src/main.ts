@@ -1,25 +1,20 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { appConfig } from './app/app.config';
+import { provideRouter } from '@angular/router';
+import { provideAnimations } from '@angular/platform-browser/animations';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { LocationStrategy, HashLocationStrategy } from '@angular/common';
+import { provideToastr } from 'ngx-toastr'; // if you're using ngx-toastr
 import { AppComponent } from './app/app.component';
-import { provideRouter, withComponentInputBinding } from '@angular/router';
-
 import { routes } from './app/app.routes';
-import { provideHttpClient } from '@angular/common/http';
-import { provideToastr } from 'ngx-toastr';
-import { provideAnimations, provideNoopAnimations } from '@angular/platform-browser/animations';
-import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { HashLocationStrategy, LocationStrategy } from '@angular/common';
-
-// import 'jquery';
-// import 'bootstrap';
-// bootstrapApplication(AppComponent, appConfig)
-//   .catch((err) => console.error(err));
+import { authInterceptor } from './app/Shared/AuthInterceptor';
+ // update path as needed
 
 bootstrapApplication(AppComponent, {
-  providers: [provideRouter(routes)
-    ,provideHttpClient()
-    ,provideAnimations()
-    ,provideToastr(), 
-     { provide: LocationStrategy, useClass: HashLocationStrategy }
-    ]
+  providers: [
+    provideRouter(routes),
+    provideAnimations(),
+    provideHttpClient(withInterceptors([authInterceptor])),
+    provideToastr(), // 
+    { provide: LocationStrategy, useClass: HashLocationStrategy }
+  ]
 }).catch(err => console.error(err));

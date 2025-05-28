@@ -49,7 +49,9 @@ private _sessionStoreage:SessionStorageService){
   }
 
   GetCompanyData(UserId) {
-    this._authService.GetAssignmentLot(UserId).subscribe(
+    const userdetail= this._sessionStoreage.getItem('UserProfile');
+  var user = JSON.parse(this._decrypt.decrypt(userdetail!));
+    this._authService.GetAssignmentLot(user.user_Id).subscribe(
       {
         next: data =>  {this.data = data.Data;
           console.log("Data Fetching")

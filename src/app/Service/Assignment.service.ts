@@ -490,4 +490,23 @@ export class AssignmentService implements IAssignmentService {
     GetSOPAnswer22(val1: string,val2: string): Observable<APIResponse> {
         return this.http.get<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/GetSOPAnswer22/'+val1+'/'+val2);
     }
+    LotValidationEstimate(val):Observable<APIResponse>{
+          var inputval = JSON.stringify(val);
+        const config = new HttpHeaders().set('Content-Type', 'application/json')
+            .set('Accept', 'application/json')
+        return this.http.post<APIResponse>(this.environment.apiUrl+'Assignment/UserLotStatusValidation',inputval,{ headers: config })
+    }
+    FeedBackMail(val):Observable<APIResponse>{
+          var inputval = JSON.stringify(val);
+        const config = new HttpHeaders().set('Content-Type', 'application/json')
+            .set('Accept', 'application/json')
+        return this.http.post<APIResponse>(this.environment.apiUrl+'CheckInCheckOut/SendFeedBackMail',inputval,{ headers: config })
+    }
+    OutPutFileDownload(val):Observable<APIResponse>
+    {
+        var inputval = JSON.stringify(val);
+        const config = new HttpHeaders().set('Content-Type', 'application/json')
+            .set('Accept', 'application/json')
+        return this.http.post<APIResponse>(this.environment.apiUrl + 'PayRegister/OutFileDownload', inputval, { headers: config })
+    }
 }

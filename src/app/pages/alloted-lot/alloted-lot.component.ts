@@ -21,6 +21,9 @@ import { IAssignmentService } from '../../Repository/IAssignment.service';
 import { AssignmentService } from '../../Service/Assignment.service';
 import { LoadingService } from './progress/LoadingService ';
 import { SessionStorageService } from '../../Shared/SessionStorageService';
+import { interval, map, Subject, switchMap, takeUntil } from 'rxjs';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { EstimatetimeValidationComponent } from './estimatetime-validation/estimatetime-validation.component';
 
 
 
@@ -61,7 +64,7 @@ const auth= InjectionToken<IAssignmentService>;
 })
 
 export class AllotedLotComponent implements OnInit {
-
+private destroy$ = new Subject<void>();
   isLinear:boolean=true;
   AllotmentForm!: FormGroup;
   lot: number | null = null;
@@ -84,17 +87,21 @@ export class AllotedLotComponent implements OnInit {
    ismatching:boolean=false;
    isRevised:boolean=false;
    InputText:string="";
+   showNodification:boolean=false; 
   constructor(private route:ActivatedRoute,
     private router:Router,
     private decry:EncryptionService,
     private loadingService:LoadingService,
     private _sessionStoreage:SessionStorageService ,
   @Inject(auth)private _authService:IAssignmentService,
-  private fb: FormBuilder
+  private snackBar: MatSnackBar,
+  private fb: FormBuilder,
+
   ) {
 
     this.AllotmentForm = this.fb.group({
-      allotemt: this.fb.array([])
+      allotemt: this.fb.array([]),
+      "RaiseQuery" : new FormControl('')
     });
 
   }
@@ -114,7 +121,7 @@ export class AllotedLotComponent implements OnInit {
 }
   GetAllotmenetDetail(val):FormGroup{
     
-    const matchingstatus=this.GetMatchingText(val.ismatching,val.input_Headcount,val.output_Headcount)
+  const matchingstatus=this.GetMatchingText(val.ismatching,val.input_Headcount,val.output_Headcount)
   return this.fb.group({
      InputLot_Id: new FormControl(val.inputLot_Id),
      CategoryListName: new FormControl(val.input_Category),
@@ -124,7 +131,184 @@ export class AllotedLotComponent implements OnInit {
      Remarks:new FormControl('')
   })
 }
+ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+  LotestimateValidation(userId: string): void {
+  const request = {
+    userId,
+    companycode: this.lotAssignment.company_Id,
+    pay_period_Id: this.lotAssignment.pay_period_id,
+    lot_number: this.lotAssignment.lot_Number
+  };
 
+
+  // if (!this.showNodification) {
+  // const startTime = new Date();
+  // const startMinutes = startTime.getMinutes();
+
+  // interval(1000).pipe(
+  //   map(() => {
+  //     console.log(this.estimateTime);
+  //     console.log(startMinutes);
+  //     const ratio =  ((startMinutes || 1)/Number(this.estimateTime) )*0.1; // Avoid divide-by-zero
+  //     return ratio;
+  //   }),
+  //   takeUntil(this.destroy$)
+  // ).subscribe({
+  //   next: (ratio) => {
+  //     console.log("Ratio:", ratio);
+  //     // Do something with the calculated ratio
+  //   },
+  //   error: (err) => {
+  //     console.error('Polling error:', err);
+  //     this.destroy$.next();
+  //   }
+  // });
+//}
+
+
+    if (!this.showNodification) {
+      interval(1000).pipe(
+        switchMap(() => this._authService.LotValidationEstimate(request)),
+        takeUntil(this.destroy$)
+      ).subscribe({
+        next: (response) => {
+          const data = response?.Data;
+          console.log("Repeated Calling")
+          console.log(response, data);
+
+          if (!data) return;
+
+          switch (data.mailType) {
+            case 'Self':
+              this.showNodification = true;
+
+              this.snackBar.openFromComponent(EstimatetimeValidationComponent, {
+                horizontalPosition: 'right',
+                verticalPosition: 'bottom',
+                duration: 50000000,
+                data: {
+                  estimateTime: this.estimateTime,
+                  score: data.score,
+                  TotalSecond: this.TotalSecond,
+                  userId,
+                  companycode: request.companycode,
+                  pay_period_Id: request.pay_period_Id,
+                  lot_number: request.lot_number
+                },
+                panelClass: ['custom-snackbar']
+              });
+              break;
+
+            case 'Manager':
+              this.sendFeedbackMail(data.manager_Email_Id, data);
+              break;
+
+            default:
+              this.sendFeedbackMail(data.fun_Head_EmailId, data);
+          }
+
+          this.destroy$.next(); // Stop polling after handling response
+        },
+        error: (err) => {
+          console.error('Polling error:', err);
+          this.destroy$.next(); // Stop polling on error too (optional)
+        }
+      });
+    }
+}
+
+private sendFeedbackMail(email: string, data: any): void {
+  const mailRequest = {
+    email,
+    mobileNumber: "6379793916",
+    body: data.body,
+    subject: data.subjects,
+    ColorCode: "#FFB224"
+  };
+
+  this._authService.FeedBackMail(mailRequest).subscribe({
+    next: (res) => console.log('Mail sent:', res.Data),
+    error: (err) => console.error('Mail sending failed:', err)
+  });
+}
+
+LotestimateValidation_Old(userId)
+{
+ 
+  var request={
+    "userId":userId,
+    "companycode":this.lotAssignment.company_Id,
+    "pay_period_Id":this.lotAssignment.pay_period_id,
+    "lot_number": this.lotAssignment.lot_Number
+}
+  if (!this.showNodification) {
+    interval(1000) // every 1 second
+      .pipe(
+        switchMap(() => this._authService.LotValidationEstimate(request)),
+        takeUntil(this.destroy$)
+      )
+      .subscribe({
+        next: (data) => {
+          console.log(data);
+          console.log(data?.Data)
+          if (data?.Data?.mailType === 'Self') {
+            this.showNodification = true;
+
+            this.snackBar.openFromComponent(EstimatetimeValidationComponent, {
+              horizontalPosition: 'right',
+              verticalPosition: 'bottom',
+              duration: 50000000,
+              data: {
+                estimateTime: this.estimateTime,
+                score: data?.Data.score,
+                TotalSecond: this.TotalSecond,
+                userId: userId,
+                companycode: this.lotAssignment.company_Id,
+                pay_period_Id: this.lotAssignment.pay_period_id,
+                lot_number: this.lotAssignment.lot_Number
+              },
+              panelClass: ['custom-snackbar'] // Optional: for styling
+            });
+          }
+          else if (data?.Data?.mailType === 'Manager') {
+            var request = {
+              "email": data?.Data?.manager_Email_Id
+              ,
+              "mobileNumber": "6379793916",
+              "body": data?.Data?.body,
+              "subject": data?.Data?.subjects,
+              "ColorCode": "#FFB224"
+
+            }
+            this._authService.FeedBackMail(request).subscribe({
+              next: res => { console.log(res.Data) }
+            })
+          }
+          else {
+            var requests = {
+              "email": data?.Data?.fun_Head_EmailId
+              ,
+              "mobileNumber": "6379793916",
+              "body": data?.Data?.body,
+              "subject": data?.Data?.subjects,
+              "ColorCode": "#FFB224"
+
+            }
+            this._authService.FeedBackMail(requests).subscribe({
+              next: res => { console.log(res.Data) }
+            })
+          }
+          this.destroy$.next();
+        },
+        error: (err) => console.error('Polling error:', err)
+      });
+  }
+
+  
+}
   ShareRegisterModelPopup(){
     this.sharepayregister=true;
   }
@@ -169,28 +353,49 @@ export class AllotedLotComponent implements OnInit {
     this.loadingService.hide();
   }
 ngOnInit(): void {
+  const userdetail = this._sessionStoreage.getItem('UserProfile');
+
+  if (!userdetail) return;
+
+  const user = JSON.parse(this.decry.decrypt(userdetail));
   
   this.route.queryParams.subscribe(params => {
-    const item = params['items'];
-    var param = this.decry.decrypt(item);    
-    this.lotAssignment = JSON.parse(param);
-    if(this.lotAssignment.revisedtime>0)
-    {
-      this.InputText="Revised Input"
-      this.isRevised=true;
-    }
-    else{
-       this.InputText="Input"
-      this.isRevised=false;
-    }
-    this.GetAllotment(this.lotAssignment?.company_code,this.lotAssignment?.pay_period,this.lotAssignment?.lot_Number);
-    this.GetAllotmentByLots();
-    this.GetLotStatus(this.lotAssignment.company_Id,this.lotAssignment.pay_period_id,this.lotAssignment.lot_Number,"M",this.lotAssignment.payroll_Input_Type,this.lotAssignment.createdOn);    
-    this.TotalSecond=this.convertToSeconds(this.lotAssignment!.estimate_time)
-    this.Reqeustformodification();
+    const encryptedItem = params['items'];
+    if (!encryptedItem) return;
 
+    const param = this.decry.decrypt(encryptedItem);
+    this.lotAssignment = JSON.parse(param);
+
+    // Set input label and revised flag
+    this.InputText = this.lotAssignment.revisedtime > 0 ? "Revised Input" : "Input";
+    this.isRevised = this.lotAssignment.revisedtime > 0;
+
+    // Start validation and data loading
+    this.LotestimateValidation(user.user_Id);
+
+    this.GetAllotment(
+      this.lotAssignment.company_code,
+      this.lotAssignment.pay_period,
+      this.lotAssignment.lot_Number
+    );
+
+    this.GetAllotmentByLots();
+
+    this.GetLotStatus(
+      this.lotAssignment.company_Id,
+      this.lotAssignment.pay_period_id,
+      this.lotAssignment.lot_Number,
+      "M",
+      this.lotAssignment.payroll_Input_Type,
+      this.lotAssignment.createdOn
+    );
+
+    this.TotalSecond = this.convertToSeconds(this.lotAssignment.estimate_time);
+
+    this.Reqeustformodification();
   });
 }
+
 
 
 
@@ -216,7 +421,8 @@ QCVerifyButtonDisable(val)
 }
 QCVerify(){
   this.isLoading=true;
-  const user_id=this._sessionStoreage.getItem("userId");   
+  const userdetail= this._sessionStoreage.getItem('UserProfile');
+  var user = JSON.parse(this.decry.decrypt(userdetail!));  
   this.isDisable=true;
 const catg=this.AllotmentForm.get("allotemt")?.value;   
   var request={
@@ -228,9 +434,11 @@ const catg=this.AllotmentForm.get("allotemt")?.value;
     "UpdateStatus":"Q",
     "Payroll_Input_Type":this.lotAssignment.payroll_Input_Type,
     "createdon":this.lotAssignment.createdOn,
-    "userId":user_id,
-     "allotments":catg
+    "userId":user.user_Id,
+    "allotments":catg,
+    "RaiseQuery":this.AllotmentForm.get("RaiseQuery")?.value 
 }
+console.log(request);
   this._authService.QCLotVerify(request).subscribe({
     next: res => {
       console.log(res);
@@ -250,6 +458,8 @@ const catg=this.AllotmentForm.get("allotemt")?.value;
     error: error =>{ this.isLoading=false; console.error('Error:', error)}
   });
 }
+
+
 
 InputDownload(){
   this.isLoading=true;
@@ -275,7 +485,8 @@ InputDownload(){
 
 }
 GetLotStatus(Company_Id,pay_period_id,lotnumber,UpdateType,payroll_Input_Type,createdOn){
-  const user_id=this._sessionStoreage.getItem("userId"); 
+const userdetail= this._sessionStoreage.getItem('UserProfile');
+  var user = JSON.parse(this.decry.decrypt(userdetail!)); 
   var request={
     "Company_Id":Company_Id,
     "pay_period_id":pay_period_id,
@@ -283,7 +494,7 @@ GetLotStatus(Company_Id,pay_period_id,lotnumber,UpdateType,payroll_Input_Type,cr
     "UpdateStatus":UpdateType,
     "Payroll_Input_Type":payroll_Input_Type,
     "createdOn":createdOn,
-    "userId":user_id
+    "userId":user.user_Id
 };
 
   this._authService.LotStatus(request).subscribe({
@@ -325,7 +536,10 @@ GetAllotment(companyCode,payPeriod,lot)
 }
 RequestForRevised(lotAllocated):void{
   this.isLoading=true;
-  const user_id=this._sessionStoreage.getItem("userId");   
+    
+    const userdetail= this._sessionStoreage.getItem('UserProfile');
+  var user = JSON.parse(this.decry.decrypt(userdetail!));
+  
   this.isDisable=true;
 const catg=this.AllotmentForm.get("allotemt")?.value;   
   var request={
@@ -337,7 +551,7 @@ const catg=this.AllotmentForm.get("allotemt")?.value;
     "UpdateStatus":"R",
     "Payroll_Input_Type":this.lotAssignment.payroll_Input_Type,
     "createdon":this.lotAssignment.createdOn,
-    "userId":user_id,
+    "userId":user.user_Id,
     "allotments":catg
 }
   this._authService.QCLotVerify(request).subscribe({
