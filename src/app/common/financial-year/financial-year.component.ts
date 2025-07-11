@@ -76,10 +76,11 @@ private _filter(value: string): FinancialYear[] {
   );
 }
 
-  displayFn = (option: any): string => option?.financial_Year_Name ?? '';
+  displayFn = (option: any): string => option?.financial_Year_Name ??option.financial_Year_Name;
 
   onOptionSelected(option: any) {
     this.selectedOption = option;
+    console.log(option);
    this.financialEmit.emit(this.selectedOption);
   }
 }

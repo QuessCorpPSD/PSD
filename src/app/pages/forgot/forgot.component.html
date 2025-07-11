@@ -1,7 +1,7 @@
 <div class="container min-vh-100 d-flex justify-content-center align-items-center bg-light">
   <div class="card shadow-sm p-4 w-100" style="max-width: 400px;">
     <h4 class="text-center mb-3">Forgot Password</h4>
-   <form [formGroup]="forgotForm" (ngSubmit)="onSubmit()" novalidate>
+   <form [formGroup]="forgotForm" (ngSubmit)="forgotpassword()" novalidate>
   <div class="mb-3">
     <label for="password" class="form-label">Password</label>
     <input
@@ -36,10 +36,10 @@
     </div>
   </div>
 
-  <button type="submit" class="btn btn-primary w-100">Reset Password</button>
+  <button type="submit" (click)="forgotpassword()" class="btn btn-primary w-100">Reset Password</button>
 
   <div class="text-center mt-3">
-    <a href="/login">Back to Login</a>
+    <a href="#/login">Back to Login</a>
   </div>
 </form>
 

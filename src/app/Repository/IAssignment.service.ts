@@ -3,6 +3,7 @@ import { APIResponse } from "../Models/apiresponse";
 
 export interface IAssignmentService {
       GetAssignmentLot(userid):Observable<APIResponse>;
+      
       GetAllotment(val):Observable<APIResponse>;
       PayRegisterDownload(val):Observable<APIResponse>
       ReconPayRegisterDownload(val):Observable<APIResponse>

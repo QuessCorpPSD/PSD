@@ -68,6 +68,7 @@ export class AssignmentService implements IAssignmentService {
     }
     QCLotVerify(val): Observable<APIResponse> {
         var inputval = JSON.stringify(val);
+        console.log(inputval);
         const config = new HttpHeaders().set('Content-Type', 'application/json')
             .set('Accept', 'application/json')
         return this.http.post<APIResponse>(this.environment.apiUrl + 'Assignment/QCLotVerify', inputval, { headers: config })
@@ -492,6 +493,7 @@ export class AssignmentService implements IAssignmentService {
     }
     LotValidationEstimate(val):Observable<APIResponse>{
           var inputval = JSON.stringify(val);
+          console.log(val);
         const config = new HttpHeaders().set('Content-Type', 'application/json')
             .set('Accept', 'application/json')
         return this.http.post<APIResponse>(this.environment.apiUrl+'Assignment/UserLotStatusValidation',inputval,{ headers: config })

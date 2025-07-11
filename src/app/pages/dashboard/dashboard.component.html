@@ -131,7 +131,7 @@
 
 
           <!-- Export Button -->
-          <div
+          <div (click)="exportToExcelCompleted()"
             style="width: 97px; height: 36px; background: white; border-radius: 36px; border: 1px solid #E9E9E9; display: flex; align-items: center; padding: 0 12px; gap: 10px;">
 
             <div style="color: #222; font-size: 12px; font-family: 'Nunito Sans'; font-weight: 600;"><i><svg width="12"
@@ -310,6 +310,25 @@
         <!-- Left: Title -->
         <div style="color: #302CB3; font-size: 18px; font-family: 'Nunito Sans'; font-weight: 700;">
           Pending Assignment List
+        </div>
+         <div class="d-flex gap-2">
+          <!-- Export Button -->
+          <button  (click)="exportToExcelPending()"
+            style="width: 97px; height: 36px; background: white; border-radius: 36px; border: 1px solid #E9E9E9; display: flex; align-items: center; padding: 0 12px; gap: 10px;">
+
+            <div style="color: #222; font-size: 12px; font-family: 'Nunito Sans'; font-weight: 600; display: flex; align-items: center; gap: 6px;">
+  <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path
+      d="M6.5 1C6.5 0.723858 6.27614 0.5 6 0.5C5.72386 0.5 5.5 0.723858 5.5 1V6.79289L4.35355 5.64645C4.15829 5.45118 3.84171 5.45118 3.64645 5.64645C3.45118 5.84171 3.45118 6.15829 3.64645 6.35355L5.64609 8.3532C5.6473 8.3544 5.64851 8.35561 5.64973 8.3568C5.6969 8.40313 5.75098 8.43822 5.80861 8.46206C5.86713 8.48633 5.93125 8.4998 5.9985 8.5L6 8.5L6.0015 8.5C6.13732 8.4996 6.26039 8.44505 6.35027 8.3568C6.35149 8.35561 6.3527 8.3544 6.35391 8.3532L8.35355 6.35355C8.54882 6.15829 8.54882 5.84171 8.35355 5.64645C8.15829 5.45118 7.84171 5.45118 7.64645 5.64645L6.5 6.79289V1Z"
+      fill="#131313" />
+    <path
+      d="M1.5 8C1.77614 8 2 8.22386 2 8.5V10C2 10.2761 2.22386 10.5 2.5 10.5H9.5C9.77614 10.5 10 10.2761 10 10V8.5C10 8.22386 10.2239 8 10.5 8C10.7761 8 11 8.22386 11 8.5V10C11 10.8284 10.3284 11.5 9.5 11.5H2.5C1.67157 11.5 1 10.8284 1 10V8.5C1 8.22386 1.22386 8 1.5 8Z"
+      fill="#131313" />
+  </svg>
+  <span>Export</span>
+</div>
+
+          </button>
         </div>
 
       </div>

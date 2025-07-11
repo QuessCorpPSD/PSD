@@ -11,6 +11,8 @@ import {provideNativeDateAdapter} from '@angular/material/core';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import { MatTableModule,MatTableDataSource  } from '@angular/material/table';
+import * as XLSX from 'xlsx';
+import * as FileSaver from 'file-saver';
 
 export  const DASH_TOKEN=new InjectionToken<IDashBoardServices>('DASH_TOKEN');
 export  const AUTH_TOKEN=new InjectionToken<IAssignmentService>('AUTH_TOKEN');
@@ -101,6 +103,42 @@ constructor(@Inject(DASH_TOKEN) private dashService: IDashBoardServices,
 
   this.BindDashboardDetail(request);
   this.BindPendingLot();
+}
+exportToExcelPending():void
+{
+ 
+  const dataToExport = this.pendingLots.filteredData || this.pendingLots.data;
+
+
+
+const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(dataToExport);
+const workbook: XLSX.WorkBook = {
+  Sheets: { 'Sheet1': worksheet },
+  SheetNames: ['Sheet1']
+};
+
+const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+const blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
+FileSaver.saveAs(blob, 'PendingLot.xlsx');
+
+}
+
+exportToExcelCompleted():void{  
+  
+  const dataToExports = this.dataSource.filteredData || this.dataSource.data;
+
+
+
+const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(dataToExports);
+const workbook: XLSX.WorkBook = {
+  Sheets: { 'Sheet1': worksheet },
+  SheetNames: ['Sheet1']
+};
+
+const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+const blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
+FileSaver.saveAs(blob, 'Completed.xlsx');
+
 }
 applyFilters()
 {
@@ -269,8 +307,7 @@ handlefinancialYearEvent(financialYear:any)
 {
  this.financialyear=financialYear;
 }
-getfromToDate(fromTodate:any){
-  console.log(fromTodate);
+getfromToDate(fromTodate:any){  
   this.range.patchValue({
   start: fromTodate.start,  // January 1, 2024
   end: fromTodate.end   // December 31, 2024

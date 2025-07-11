@@ -1,7 +1,7 @@
 import { Data } from "@angular/router";
 
 export interface APIResponse {
-    StatusCode: number
+  StatusCode: number
   Message: string
   Data: any
   Error: any

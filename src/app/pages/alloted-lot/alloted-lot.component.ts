@@ -128,7 +128,7 @@ private destroy$ = new Subject<void>();
      Input: new FormControl(val.input_Headcount),
      Output:new FormControl(val.output_Headcount),
      Mismatch:new FormControl(matchingstatus),     
-     Remarks:new FormControl('')
+     Remarks:new FormControl(val.remarks)
   })
 }
 ngOnDestroy(): void {
@@ -137,10 +137,10 @@ ngOnDestroy(): void {
   }
   LotestimateValidation(userId: string): void {
   const request = {
-    userId,
-    companycode: this.lotAssignment.company_Id,
-    pay_period_Id: this.lotAssignment.pay_period_id,
-    lot_number: this.lotAssignment.lot_Number
+    "userId":userId,
+    "companycode": this.lotAssignment.company_Id,
+    "pay_period_Id": this.lotAssignment.pay_period_id,
+    "lot_number": this.lotAssignment.lot_Number
   };
 
 
@@ -168,21 +168,19 @@ ngOnDestroy(): void {
   // });
 //}
 
-
-    if (!this.showNodification) {
+console.log(request);
+   
       interval(1000).pipe(
         switchMap(() => this._authService.LotValidationEstimate(request)),
         takeUntil(this.destroy$)
       ).subscribe({
         next: (response) => {
-          const data = response?.Data;
-          console.log("Repeated Calling")
-          console.log(response, data);
+          const data = response?.Data;         
 
           if (!data) return;
 
           switch (data.mailType) {
-            case 'Self':
+            case 'S':
               this.showNodification = true;
 
               this.snackBar.openFromComponent(EstimatetimeValidationComponent, {
@@ -202,22 +200,29 @@ ngOnDestroy(): void {
               });
               break;
 
-            case 'Manager':
+            case 'T':
+              this.sendFeedbackMail(data.teamLead_Email_Id, data);
+              break;
+                case 'M':
               this.sendFeedbackMail(data.manager_Email_Id, data);
+              break;
+                case 'F':
+              this.sendFeedbackMail(data.fun_Head_EmailId, data);
               break;
 
             default:
-              this.sendFeedbackMail(data.fun_Head_EmailId, data);
+              break;
+            
           }
 
-          this.destroy$.next(); // Stop polling after handling response
+          //this.destroy$.next(); // Stop polling after handling response
         },
         error: (err) => {
           console.error('Polling error:', err);
-          this.destroy$.next(); // Stop polling on error too (optional)
+          //this.destroy$.next(); // Stop polling on error too (optional)
         }
       });
-    }
+    
 }
 
 private sendFeedbackMail(email: string, data: any): void {
@@ -438,7 +443,7 @@ const catg=this.AllotmentForm.get("allotemt")?.value;
     "allotments":catg,
     "RaiseQuery":this.AllotmentForm.get("RaiseQuery")?.value 
 }
-console.log(request);
+console.log(JSON.stringify(request));
   this._authService.QCLotVerify(request).subscribe({
     next: res => {
       console.log(res);
