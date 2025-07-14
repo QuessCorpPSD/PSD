@@ -60,21 +60,147 @@
                     {{ selectedQuestion.questionOrder }}. {{ selectedQuestion.questionName }}
                 </div>
                 <div *ngIf="selectedQuestion.questionId == 1">
-                    <div style="width: 100%;padding-top: 1%;">
-                        <input *ngIf="Answer1" type="text" class="rectangle-div" style="width: 100%;" maxlength="200"
-                            [(ngModel)]="Answer1.client_website_link" name="client_website_link" autocomplete="off">
-                        <div *ngIf="isSubmitted1 && !Answer1?.client_website_link?.trim()"
-                            style="color: red; font-size: 12px;">
-                            Client website link is empty
+                    <div class="form-row">
+                        <div class="form-column">
+                            <div class="docs-h6">
+                                <b class="employee-id">Company Code</b>
+                            </div>
+                            <div class="input-wrapper">
+                                <select class="custom-select" style="width: 200px;" [(ngModel)]="selectedCompany1"
+                                    (change)="onCompanyChange1($event)">
+                                    <option *ngFor="let usercompany of userwisecompanydetails"
+                                        [value]="usercompany.company_Id">{{ usercompany.company_Code }}
+                                    </option>
+                                </select>
+                                <div *ngIf="isSubmitted1 && (!Answer1?.Company_Id || Answer1?.Company_Id.toString() === '0')"
+                                    style="color: red; font-size: 12px;">
+                                    Please select company code
+                                </div>
+                            </div>
                         </div>
-                        <div *ngIf="isSubmitted1 && isvalidateurl1" style="color: red; font-size: 12px;">
-                            Invalid URL
+                        <div class="form-column">
+                            <div class="docs-h6">
+                                <b class="employee-id">Company Name</b>
+                            </div>
+                            <div class="input-wrapper">
+                                <input *ngIf="Answer1" type="text" class="rectangle-div"
+                                    [(ngModel)]="Answer1.Company_Name" name="company_Name" autocomplete="off"
+                                    (input)="onAlphanumericInput($event)" maxlength="200" />
+                                <div *ngIf="isSubmitted1 && !Answer1?.Company_Name?.trim()"
+                                    style="color: red; font-size: 12px;">
+                                    Company Name is empty
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-column">
+                            <div class="docs-h6">
+                                <b class="employee-id">SAP Code</b>
+                            </div>
+                            <div class="input-wrapper">
+                                <input *ngIf="Answer1" type="text" class="rectangle-div" [(ngModel)]="Answer1.SAP_Code"
+                                    name="saP_Code" autocomplete="off" (input)="onAlphanumericInput($event)"
+                                    maxlength="15" />
+                                <div *ngIf="isSubmitted1 && !Answer1?.SAP_Code?.trim()"
+                                    style="color: red; font-size: 12px;">
+                                    SAP Code is empty
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-column">
+                            <div class="docs-h6">
+                                <b class="employee-id">My Contract Reference ID</b>
+                            </div>
+                            <div class="input-wrapper">
+                                <input *ngIf="Answer1" type="text" class="rectangle-div"
+                                    [(ngModel)]="Answer1.MyContract_Reference_ID" name="myContract_Reference_ID"
+                                    autocomplete="off" (input)="onAlphanumericInput($event)" maxlength="20" />
+                                <div *ngIf="isSubmitted1 && !Answer1?.MyContract_Reference_ID?.trim()"
+                                    style="color: red; font-size: 12px;">
+                                    MyContract Reference ID is empty
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-column">
+                            <div class="docs-h6">
+                                <b class="employee-id">Client website link</b>
+                            </div>
+                            <div class="input-wrapper">
+                                <input *ngIf="Answer1" type="text" class="rectangle-div" maxlength="200"
+                                    [(ngModel)]="Answer1.Client_Website_link" name="client_website_link"
+                                    autocomplete="off">
+                                <div *ngIf="isSubmitted1 && !Answer1?.Client_Website_link?.trim()"
+                                    style="color: red; font-size: 12px;">
+                                    Client website link is empty
+                                </div>
+                                <div *ngIf="isSubmitted1 && isvalidateurl1" style="color: red; font-size: 12px;">
+                                    Invalid URL
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-column">
+                            <div class="docs-h6">
+                                <b class="employee-id">First Month Payroll</b>
+                            </div>
+                            <div class="input-wrapper">
+                                <input type="text" class="rectangle-div" maxlength="20"
+                                    [(ngModel)]="Answer1.First_Month_Payroll" name="First_month_Payroll"
+                                    [disabled]="!!(Answer1?.First_Month_Payroll || '').trim()" autocomplete="off"
+                                    (input)="onAlphanumericInput($event)" />
+                                <div *ngIf="selectedCompany1 && !Answer1?.First_Month_Payroll?.trim()"
+                                    style="color: #FFC107; font-size: 12px;">
+                                    Payroll not yet processed
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-column">
+                            <div class="docs-h6">
+                                <b class="employee-id">Client Onboarding Month</b>
+                            </div>
+                            <div class="input-wrapper">
+                                <input type="text" class="rectangle-div" maxlength="20"
+                                    [(ngModel)]="Answer1.Client_Onboarding_Month" name="Client_Onboarding_Month"
+                                    [disabled]="!!Answer1?.Client_Onboarding_Month?.trim()" autocomplete="off"
+                                    (input)="onAlphanumericInput($event)" />
+                                <div *ngIf="isSubmitted1 && !Answer1?.Client_Onboarding_Month?.trim()"
+                                    style="color:red; font-size: 12px;">
+                                    Client Onboarding Month is empty
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div style="padding-top: 3%;">
                         <div *ngIf="selectedQuestion" class="property-1active-submit" (click)="onSubmitQuestion1()">
                             <div class="submit">Submit</div>
                         </div>
+                    </div>
+                    <div style="padding-top: 2%;">
+                        <table class="styled-table" *ngIf="clientdetailsdate.length > 0" border="1">
+                            <tr>
+                                <th>Company Code</th>
+                                <th>Company Name</th>
+                                <th>SAP Code</th>
+                                <th>Contract Ref Id</th>
+                                <th>Website Link</th>
+                                <th>First Month Payroll</th>
+                                <th>Onboarding</th>
+                            </tr>
+                            <tr *ngFor="let data of clientdetailsdate">
+                                <td>{{ data.company_Code }}</td>
+                                <td>{{ data.company_Name }}</td>
+                                <td>{{ data.saP_Code }}</td>
+                                <td>{{ data.myContract_Reference_ID }}</td>
+                                <td>{{ data.client_Website_link }}</td>
+                                <td>{{ data.first_Month_Payroll }}</td>
+                                <td>{{ data.client_Onboarding_Month }}</td>
+                            </tr>
+
+                        </table>
                     </div>
                 </div>
                 <div *ngIf="selectedQuestion.questionId == 2">
@@ -93,51 +219,6 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="form-column">
-                            <div class="docs-h6">
-                                <b class="employee-id">Company Name</b>
-                            </div>
-                            <div class="input-wrapper">
-                                <input *ngIf="Answer2" type="text" class="rectangle-div"
-                                    [(ngModel)]="Answer2.company_Name" name="company_Name" autocomplete="off"
-                                    (input)="onAlphanumericInput($event)" maxlength="200" />
-                                <div *ngIf="isSubmitted2 && !Answer2?.company_Name?.trim()"
-                                    style="color: red; font-size: 12px;">
-                                    Company Name is empty
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-column">
-                            <div class="docs-h6">
-                                <b class="employee-id">SAP Code</b>
-                            </div>
-                            <div class="input-wrapper">
-                                <input *ngIf="Answer2" type="text" class="rectangle-div" [(ngModel)]="Answer2.saP_Code"
-                                    name="saP_Code" autocomplete="off" (input)="onAlphanumericInput($event)"
-                                    maxlength="15" />
-                                <div *ngIf="isSubmitted2 && !Answer2?.saP_Code?.trim()"
-                                    style="color: red; font-size: 12px;">
-                                    SAP Code is empty
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-column">
-                            <div class="docs-h6">
-                                <b class="employee-id">MyContract Reference ID</b>
-                            </div>
-                            <div class="input-wrapper">
-                                <input *ngIf="Answer2" type="text" class="rectangle-div"
-                                    [(ngModel)]="Answer2.myContract_Reference_ID" name="myContract_Reference_ID"
-                                    autocomplete="off" (input)="onAlphanumericInput($event)" maxlength="20" />
-                                <div *ngIf="isSubmitted2 && !Answer2?.myContract_Reference_ID?.trim()"
-                                    style="color: red; font-size: 12px;">
-                                    MyContract Reference ID is empty
-                                </div>
-                            </div>
-                        </div>
                     </div>
                     <div style="padding-top: 3%;">
                         <div *ngIf="selectedQuestion" class="property-1active-submit" (click)="onSubmitQuestion2()">
@@ -147,18 +228,51 @@
                 </div>
 
                 <div *ngIf="selectedQuestion.questionId == 3">
-                    <div class="radio-options-container">
-                        <div class="checkboxradio-button" *ngFor="let item of options3"
-                            (click)="selectOption3(item.label)">
-                            <img class="component-39-icon"
-                                [src]="Answer3.selection === item.label ? '../../../assets/radiochecked.svg' : '../../../assets/radiodefault.svg'"
-                                alt="Radio icon">
-                            <div class="option">{{ item.label }}</div>
+                    <div class="form-row">
+                        <div class="form-column">
+                            <div class="docs-h6">
+                                <b class="employee-id">Change Frequency for POCs</b>
+                            </div>
+                            <div class="input-wrapper">
+                                <div class="radio-options-container">
+                                    <div class="checkboxradio-button" *ngFor="let item of options3"
+                                        (click)="selectOption3(item.label)">
+                                        <img class="component-39-icon"
+                                            [src]="Answer3.selection === item.label ? '../../../assets/radiochecked.svg' : '../../../assets/radiodefault.svg'"
+                                            alt="Radio icon">
+                                        <div class="option">{{ item.label }}</div>
+                                    </div>
+                                </div>
+                                <div *ngIf="isSubmitted3 && !Answer3?.selection?.trim()"
+                                    style="color: red; font-size: 12px;">
+                                    Please select POCs
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div *ngIf="isSubmitted3 && !Answer3?.selection?.trim()" style="color: red; font-size: 12px;">
-                        Please select an option
+                    <div class="form-row">
+                        <div class="form-column">
+                            <div class="docs-h6">
+                                <b class="employee-id">Change Frequency for BU Locations</b>
+                            </div>
+                            <div class="input-wrapper">
+                                <div class="radio-options-container">
+                                    <div class="checkboxradio-button" *ngFor="let item of options3"
+                                        (click)="selectbuOption3(item.label)">
+                                        <img class="component-39-icon"
+                                            [src]="Answer3.bulocation === item.label ? '../../../assets/radiochecked.svg' : '../../../assets/radiodefault.svg'"
+                                            alt="Radio icon">
+                                        <div class="option">{{ item.label }}</div>
+                                    </div>
+                                </div>
+                                <div *ngIf="isSubmitted3 && !Answer3?.bulocation?.trim()"
+                                    style="color: red; font-size: 12px;">
+                                    Please select BU Locations
+                                </div>
+                            </div>
+                        </div>
                     </div>
+
                     <div style="padding-top: 3%;">
                         <div *ngIf="selectedQuestion" class="property-1active-submit" (click)="onSubmitQuestion3()">
                             <div class="submit">Submit</div>
@@ -261,11 +375,22 @@
                                     <th>Mobile Number</th>
                                     <th>Designation</th>
                                 </tr>
-                                <tr *ngFor="let data of verticalGridData_4">
+                                <tr *ngFor="let data of verticalGridData_4; let i = index">
                                     <td>{{ data.input1 }}</td>
                                     <td>{{ data.input2 }}</td>
                                     <td>{{ data.input3 }}</td>
                                     <td>{{ data.input4 }}</td>
+                                    <td (click)="editVerticalData_4(i)" style="cursor: pointer;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24">
+                                            <path
+                                                d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1.003 1.003 0 0 0 0-1.42l-2.34-2.34a1.003 1.003 0 0 0-1.42 0l-1.83 1.83 3.75 3.75 1.84-1.82z" />
+                                        </svg>
+                                    </td>
+                                    <td (click)="deleteVerticalData_4(i)" style="cursor: pointer;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24">
+                                            <path d="M16 9v10H8V9h8m-1.5-6h-5l-1 1H5v2h14V4h-4.5l-1-1z" />
+                                        </svg>
+                                    </td>
                                 </tr>
 
                             </table>
@@ -313,7 +438,7 @@
                             </div>
                             <div class="form-row">
                                 <div class="form-column">
-                                    <div class="text" style="padding-bottom: 2%;">
+                                    <div class="text" style="padding-bottom: 2%;display: none;">
                                         <div class="docs-h6">
                                             <b class="employee-id">Designation</b>
                                         </div>
@@ -348,12 +473,21 @@
                                 <tr>
                                     <th>Department name</th>
                                     <th>Head count</th>
-                                    <th>Designation</th>
                                 </tr>
-                                <tr *ngFor="let data of departmentGridData_4">
+                                <tr *ngFor="let data of departmentGridData_4;let i=index">
                                     <td>{{ data.input1 }}</td>
                                     <td>{{ data.input2 }}</td>
-                                    <td>{{ data.input4 }}</td>
+                                    <td (click)="editDepartmentData_4(i)" style="cursor: pointer;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24">
+                                            <path
+                                                d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1.003 1.003 0 0 0 0-1.42l-2.34-2.34a1.003 1.003 0 0 0-1.42 0l-1.83 1.83 3.75 3.75 1.84-1.82z" />
+                                        </svg>
+                                    </td>
+                                    <td (click)="deleteDepartmentData_4(i)" style="cursor: pointer;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24">
+                                            <path d="M16 9v10H8V9h8m-1.5-6h-5l-1 1H5v2h14V4h-4.5l-1-1z" />
+                                        </svg>
+                                    </td>
                                 </tr>
                             </table>
                         </div>
@@ -448,11 +582,22 @@
                                     <th>Mobile Number</th>
                                     <th>Designation</th>
                                 </tr>
-                                <tr *ngFor="let data of managerGridData_4">
+                                <tr *ngFor="let data of managerGridData_4;let i=index">
                                     <td>{{ data.input1 }}</td>
                                     <td>{{ data.input2 }}</td>
                                     <td>{{ data.input3 }}</td>
                                     <td>{{ data.input4 }}</td>
+                                    <td (click)="editManagerData_4(i)" style="cursor: pointer;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24">
+                                            <path
+                                                d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1.003 1.003 0 0 0 0-1.42l-2.34-2.34a1.003 1.003 0 0 0-1.42 0l-1.83 1.83 3.75 3.75 1.84-1.82z" />
+                                        </svg>
+                                    </td>
+                                    <td (click)="deleteManagerData_4(i)" style="cursor: pointer;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24">
+                                            <path d="M16 9v10H8V9h8m-1.5-6h-5l-1 1H5v2h14V4h-4.5l-1-1z" />
+                                        </svg>
+                                    </td>
                                 </tr>
                             </table>
                         </div>
@@ -541,11 +686,22 @@
                                     <th>Mobile Number</th>
                                     <th>Designation</th>
                                 </tr>
-                                <tr *ngFor="let data of circleGridData_4">
+                                <tr *ngFor="let data of circleGridData_4;let i=index">
                                     <td>{{ data.input1 }}</td>
                                     <td>{{ data.input2 }}</td>
                                     <td>{{ data.input3 }}</td>
                                     <td>{{ data.input4 }}</td>
+                                    <td (click)="editCircleData_4(i)" style="cursor: pointer;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24">
+                                            <path
+                                                d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1.003 1.003 0 0 0 0-1.42l-2.34-2.34a1.003 1.003 0 0 0-1.42 0l-1.83 1.83 3.75 3.75 1.84-1.82z" />
+                                        </svg>
+                                    </td>
+                                    <td (click)="deleteCircleData_4(i)" style="cursor: pointer;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24">
+                                            <path d="M16 9v10H8V9h8m-1.5-6h-5l-1 1H5v2h14V4h-4.5l-1-1z" />
+                                        </svg>
+                                    </td>
                                 </tr>
                             </table>
                         </div>
@@ -650,85 +806,33 @@
                         </div>
                         <div class="form-row">
                             <div class="form-column">
-                                <div class="docs-h6">
-                                    <div style="text-align: center;">
+                                <div style="padding-left: 6%;">
+                                    <div class="docs-h6">
                                         <b class="employee-id">Collection Date</b>
                                     </div>
-                                </div>
-                                <div class="row">
-                                    <div class="form-column">
-                                        <div class="docs-h6">
-                                            <div style="text-align: center;">
-                                                <b class="employee-id">From</b>
-                                            </div>
-                                        </div>
-                                        <div class="input-wrapper" style="text-align: center;">
-                                            <input type="text" class="rectangle-divnum"
-                                                [(ngModel)]="Answer5.Collection_Date_From" name="collection_Date_From"
-                                                autocomplete="off" (input)="onNumericInput31Collection($event)"
-                                                maxlength="2" />
-                                            <div *ngIf="isSubmitted5 && !Answer5?.Collection_Date_From?.trim()"
-                                                style="color: red; font-size: 12px;">
-                                                From is empty
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-column">
-                                        <div class="docs-h6">
-                                            <div style="text-align: center;">
-                                                <b class="employee-id">To</b>
-                                            </div>
-                                        </div>
-                                        <div class="input-wrapper" style="text-align: center;">
-                                            <input type="text" class="rectangle-divnum"
-                                                [(ngModel)]="Answer5.Collection_Date_To" name="collection_Date_To"
-                                                autocomplete="off" maxlength="2" [disabled]="true" />
-                                            <div *ngIf="isSubmitted5 && !Answer5?.Collection_Date_To?.trim()"
-                                                style="color: red; font-size: 12px;">
-                                                To is empty
-                                            </div>
+                                    <div class="input-wrapper">
+                                        <input type="text" class="rectangle-div" [(ngModel)]="Answer5.Collection_Date"
+                                            name="collection_Date" autocomplete="off"
+                                            (input)="onNumericInput31Collection($event)" maxlength="2" />
+                                        <div *ngIf="isSubmitted5 && !Answer5?.Collection_Date?.trim()"
+                                            style="color: red; font-size: 12px;">
+                                            Collection Date is empty
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="form-column">
-                                <div class="docs-h6">
-                                    <div style="text-align: center;">
+                                <div style="padding-left: 6%;">
+                                    <div class="docs-h6">
                                         <b class="employee-id">Payout Date</b>
                                     </div>
-                                </div>
-                                <div class="row">
-                                    <div class="form-column">
-                                        <div class="docs-h6">
-                                            <div style="text-align: center;">
-                                                <b class="employee-id">From</b>
-                                            </div>
-                                        </div>
-                                        <div class="input-wrapper" style="text-align: center;">
-                                            <input type="text" class="rectangle-divnum"
-                                                [(ngModel)]="Answer5.Pay_Out_Date_From" name="payOut_Date_From"
-                                                autocomplete="off" (input)="onNumericInput31Payout($event)"
-                                                maxlength="2" />
-                                            <div *ngIf="isSubmitted5 && !Answer5?.Pay_Out_Date_From?.trim()"
-                                                style="color: red; font-size: 12px;">
-                                                From is empty
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-column">
-                                        <div class="docs-h6">
-                                            <div style="text-align: center;">
-                                                <b class="employee-id">To</b>
-                                            </div>
-                                        </div>
-                                        <div class="input-wrapper" style="text-align: center;">
-                                            <input type="text" class="rectangle-divnum"
-                                                [(ngModel)]="Answer5.Pay_Out_Date_To" name="payOut_Date_To"
-                                                autocomplete="off" maxlength="2" [disabled]="true" />
-                                            <div *ngIf="isSubmitted5 && !Answer5?.Pay_Out_Date_To?.trim()"
-                                                style="color: red; font-size: 12px;">
-                                                To is empty
-                                            </div>
+                                    <div class="input-wrapper">
+                                        <input type="text" class="rectangle-div" [(ngModel)]="Answer5.Pay_Out_Date"
+                                            name="payOut_Date" autocomplete="off"
+                                            (input)="onNumericInput31Payout($event)" maxlength="2" />
+                                        <div *ngIf="isSubmitted5 && !Answer5?.Pay_Out_Date?.trim()"
+                                            style="color: red; font-size: 12px;">
+                                            Payout Date is empty
                                         </div>
                                     </div>
                                 </div>
@@ -823,21 +927,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="form-column">
-                            <div class="docs-h6">
-                                <b class="employee-id">Month-Year</b>
-                            </div>
-                            <div class="input-wrapper">
-                                <input type="text" class="rectangle-div" maxlength="20"
-                                    [(ngModel)]="Answer7.first_month_Payroll" name="First_month_Payroll"
-                                    [disabled]="!!(Answer7?.first_month_Payroll ?? '').trim()" autocomplete="off"
-                                    (input)="onAlphanumericInput($event)" />
-                                <div *ngIf="isSubmitted7 && !Answer7?.first_month_Payroll?.trim()"
-                                    style="color: red; font-size: 12px;">
-                                    First month Payroll is empty
-                                </div>
-                            </div>
-                        </div>
+
                     </div>
                     <div style="padding-bottom: 1%;">
                         <div class="button-parent" (click)="Addvalues7()">
@@ -873,18 +963,72 @@
                     </div>
                 </div>
                 <div *ngIf="selectedQuestion.questionId == 8">
-                    <div class="radio-options-container">
-                        <div class="checkboxradio-button" *ngFor="let item of options8"
-                            (click)="selectOption8(item.label)">
-                            <img class="component-39-icon"
-                                [src]="Answer8.selection === item.label ? '../../../assets/radiochecked.svg' : '../../../assets/radiodefault.svg'"
-                                alt="Radio icon">
-                            <div class="option">{{ item.label }}</div>
+                    <div class="form-row">
+                        <div class="form-column">
+                            <div class="docs-h6">
+                                <b class="employee-id">Sim Card Management tracker</b>
+                            </div>
+                            <div class="input-wrapper">
+                                <div class="radio-options-container">
+                                    <div class="checkboxradio-button" *ngFor="let item of options8"
+                                        (click)="selectOption8(item.label)">
+                                        <img class="component-39-icon"
+                                            [src]="Answer8.selection === item.label ? '../../../assets/radiochecked.svg' : '../../../assets/radiodefault.svg'"
+                                            alt="Radio icon">
+                                        <div class="option">{{ item.label }}</div>
+                                    </div>
+                                </div>
+                                <div *ngIf="isSubmitted8 && !Answer8?.selection?.trim()"
+                                    style="color: red; font-size: 12px;">
+                                    Please Select Sim Card Management tracker
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div *ngIf="isSubmitted8 && !Answer8?.selection?.trim()" style="color: red; font-size: 12px;">
-                        Please Select Sim Card Management tracker
+                    <div class="form-row">
+                        <div class="form-column">
+                            <div class="docs-h6">
+                                <b class="employee-id">Email Id Management tracker</b>
+                            </div>
+                            <div class="input-wrapper">
+                                <div class="radio-options-container">
+                                    <div class="checkboxradio-button" *ngFor="let item of options9"
+                                        (click)="selectOption9(item.label)">
+                                        <img class="component-39-icon"
+                                            [src]="Answer8.email === item.label ? '../../../assets/radiochecked.svg' : '../../../assets/radiodefault.svg'"
+                                            alt="Radio icon">
+                                        <div class="option">{{ item.label }}</div>
+                                    </div>
+                                </div>
+                                <div *ngIf="isSubmitted8 && !Answer8?.email?.trim()"
+                                    style="color: red; font-size: 12px;">
+                                    Please Select Email ID Management Tracker
+                                </div>
+                            </div>
+                        </div>
                     </div>
+                    <div class="form-row">
+                        <div class="form-column">
+                            <div class="docs-h6">
+                                <b class="employee-id">ID card Management tracker</b>
+                            </div>
+                            <div class="input-wrapper">
+                                <div class="radio-options-container">
+                                    <div class="checkboxradio-button" *ngFor="let item of options10"
+                                        (click)="selectOption10(item.label)">
+                                        <img class="component-39-icon"
+                                            [src]="Answer8.id === item.label ? '../../../assets/radiochecked.svg' : '../../../assets/radiodefault.svg'"
+                                            alt="Radio icon">
+                                        <div class="option">{{ item.label }}</div>
+                                    </div>
+                                </div>
+                                <div *ngIf="isSubmitted8 && !Answer8?.id?.trim()" style="color: red; font-size: 12px;">
+                                    Please Select ID Card Management Tracker
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div style="padding-top: 3%;">
                         <div *ngIf="selectedQuestion" class="property-1active-submit" (click)="onSubmitQuestion8()">
                             <div class="submit">Submit</div>
@@ -892,18 +1036,7 @@
                     </div>
                 </div>
                 <div *ngIf="selectedQuestion.questionId == 9">
-                    <div class="radio-options-container">
-                        <div class="checkboxradio-button" *ngFor="let item of options9"
-                            (click)="selectOption9(item.label)">
-                            <img class="component-39-icon"
-                                [src]="Answer9.selection === item.label ? '../../../assets/radiochecked.svg' : '../../../assets/radiodefault.svg'"
-                                alt="Radio icon">
-                            <div class="option">{{ item.label }}</div>
-                        </div>
-                    </div>
-                    <div *ngIf="isSubmitted9 && !Answer9?.selection?.trim()" style="color: red; font-size: 12px;">
-                        Please Select Email ID Managemnet Tracker
-                    </div>
+
                     <div style="padding-top: 3%;">
                         <div *ngIf="selectedQuestion" class="property-1active-submit" (click)="onSubmitQuestion9()">
                             <div class="submit">Submit</div>
@@ -911,18 +1044,7 @@
                     </div>
                 </div>
                 <div *ngIf="selectedQuestion.questionId == 10">
-                    <div class="radio-options-container">
-                        <div class="checkboxradio-button" *ngFor="let item of options10"
-                            (click)="selectOption10(item.label)">
-                            <img class="component-39-icon"
-                                [src]="Answer10.selection === item.label ? '../../../assets/radiochecked.svg' : '../../../assets/radiodefault.svg'"
-                                alt="Radio icon">
-                            <div class="option">{{ item.label }}</div>
-                        </div>
-                    </div>
-                    <div *ngIf="isSubmitted10 && !Answer10?.selection?.trim()" style="color: red; font-size: 12px;">
-                        Please Select ID Card Managemnet Tracker
-                    </div>
+
                     <div style="padding-top: 3%;">
                         <div *ngIf="selectedQuestion" class="property-1active-submit" (click)="onSubmitQuestion10()">
                             <div class="submit">Submit</div>
@@ -1066,11 +1188,22 @@
                                     <th>Designation</th>
                                     <th>Date</th>
                                 </tr>
-                                <tr *ngFor="let data of EmailGridData_11_3">
+                                <tr *ngFor="let data of EmailGridData_11_3;let i=index">
                                     <td>{{ data.input1 }}</td>
                                     <td>{{ data.input2 }}</td>
                                     <td>{{ data.input3 }}</td>
                                     <td>{{ data.input4 }}</td>
+                                    <td (click)="editEmailData_11_3(i)" style="cursor: pointer;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24">
+                                            <path
+                                                d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1.003 1.003 0 0 0 0-1.42l-2.34-2.34a1.003 1.003 0 0 0-1.42 0l-1.83 1.83 3.75 3.75 1.84-1.82z" />
+                                        </svg>
+                                    </td>
+                                    <td (click)="deleteEmailData_11_3(i)" style="cursor: pointer;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24">
+                                            <path d="M16 9v10H8V9h8m-1.5-6h-5l-1 1H5v2h14V4h-4.5l-1-1z" />
+                                        </svg>
+                                    </td>
                                 </tr>
                             </table>
                         </div>
@@ -1119,6 +1252,17 @@
                                 <div class="form-column">
                                     <div class="text" style="padding-bottom: 2%;">
                                         <div class="docs-h6">
+                                            <b class="employee-id">Login Credential</b>
+                                        </div>
+                                        <div class="input-wrapper">
+                                            <input type="text" [(ngModel)]="PortalInput3_11_3" class="rectangle-div"
+                                                autocomplete="off" maxlength="100" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-column">
+                                    <div class="text" style="padding-bottom: 2%;">
+                                        <div class="docs-h6">
                                             <b class="employee-id">Date of Input</b>
                                         </div>
                                         <div class="input-wrapper">
@@ -1137,12 +1281,25 @@
                                 <tr>
                                     <th>Portal name</th>
                                     <th>Point of contact</th>
+                                    <th>Login Credential</th>
                                     <th>Date</th>
                                 </tr>
-                                <tr *ngFor="let data of PortalGridData_11_3">
+                                <tr *ngFor="let data of PortalGridData_11_3;let i=index">
                                     <td>{{ data.input1 }}</td>
                                     <td>{{ data.input2 }}</td>
+                                    <td>{{ data.input3 }}</td>
                                     <td>{{ data.input4 }}</td>
+                                    <td (click)="editPortalData_11_3(i)" style="cursor: pointer;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24">
+                                            <path
+                                                d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1.003 1.003 0 0 0 0-1.42l-2.34-2.34a1.003 1.003 0 0 0-1.42 0l-1.83 1.83 3.75 3.75 1.84-1.82z" />
+                                        </svg>
+                                    </td>
+                                    <td (click)="deletePortalData_11_3(i)" style="cursor: pointer;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24">
+                                            <path d="M16 9v10H8V9h8m-1.5-6h-5l-1 1H5v2h14V4h-4.5l-1-1z" />
+                                        </svg>
+                                    </td>
                                 </tr>
                             </table>
                         </div>
@@ -1211,10 +1368,21 @@
                                     <th>Point of contact</th>
                                     <th>Date</th>
                                 </tr>
-                                <tr *ngFor="let data of BiometricGridData_11_3">
+                                <tr *ngFor="let data of BiometricGridData_11_3;let i=index">
                                     <td>{{ data.input1 }}</td>
                                     <td>{{ data.input2 }}</td>
                                     <td>{{ data.input4 }}</td>
+                                    <td (click)="editBiometricData_11_3(i)" style="cursor: pointer;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24">
+                                            <path
+                                                d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1.003 1.003 0 0 0 0-1.42l-2.34-2.34a1.003 1.003 0 0 0-1.42 0l-1.83 1.83 3.75 3.75 1.84-1.82z" />
+                                        </svg>
+                                    </td>
+                                    <td (click)="deleteBiometricData_11_3(i)" style="cursor: pointer;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24">
+                                            <path d="M16 9v10H8V9h8m-1.5-6h-5l-1 1H5v2h14V4h-4.5l-1-1z" />
+                                        </svg>
+                                    </td>
                                 </tr>
                             </table>
                         </div>
@@ -1299,11 +1467,22 @@
                                     <th>Designation</th>
                                     <th>Date</th>
                                 </tr>
-                                <tr *ngFor="let data of OthersGridData_11_3">
+                                <tr *ngFor="let data of OthersGridData_11_3;let i=index">
                                     <td>{{ data.input1 }}</td>
                                     <td>{{ data.input2 }}</td>
                                     <td>{{ data.input3 }}</td>
                                     <td>{{ data.input4 }}</td>
+                                    <td (click)="editOtherData_11_3(i)" style="cursor: pointer;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24">
+                                            <path
+                                                d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1.003 1.003 0 0 0 0-1.42l-2.34-2.34a1.003 1.003 0 0 0-1.42 0l-1.83 1.83 3.75 3.75 1.84-1.82z" />
+                                        </svg>
+                                    </td>
+                                    <td (click)="deleteOtherData_11_3(i)" style="cursor: pointer;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24">
+                                            <path d="M16 9v10H8V9h8m-1.5-6h-5l-1 1H5v2h14V4h-4.5l-1-1z" />
+                                        </svg>
+                                    </td>
                                 </tr>
                             </table>
                         </div>
@@ -1519,11 +1698,22 @@
                                     <th>POC Mobile Number</th>
                                     <th>Designation</th>
                                 </tr>
-                                <tr *ngFor="let data of EmailGridData_15">
+                                <tr *ngFor="let data of EmailGridData_15;let i=index">
                                     <td>{{ data.input1 }}</td>
                                     <td>{{ data.input2 }}</td>
                                     <td>{{ data.input3 }}</td>
                                     <td>{{ data.input4 }}</td>
+                                    <td (click)="editEmailData_15(i)" style="cursor: pointer;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24">
+                                            <path
+                                                d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1.003 1.003 0 0 0 0-1.42l-2.34-2.34a1.003 1.003 0 0 0-1.42 0l-1.83 1.83 3.75 3.75 1.84-1.82z" />
+                                        </svg>
+                                    </td>
+                                    <td (click)="deleteEmailData_15(i)" style="cursor: pointer;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24">
+                                            <path d="M16 9v10H8V9h8m-1.5-6h-5l-1 1H5v2h14V4h-4.5l-1-1z" />
+                                        </svg>
+                                    </td>
                                 </tr>
                             </table>
                         </div>
@@ -1581,6 +1771,10 @@
                                         <div class="input-wrapper">
                                             <input type="text" [(ngModel)]="PortalInput3_15" class="rectangle-div"
                                                 autocomplete="off" (input)="onNumericInput($event)" maxlength="10" />
+                                            <div *ngIf="isSubmitted15_4 && !isValidMobile(PortalInput3_15)"
+                                                style="color: red; font-size: 12px;">
+                                                Please enter a valid 10-digit mobile number
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -1612,11 +1806,22 @@
                                     <th>POC Mobile Number</th>
                                     <th>Designation</th>
                                 </tr>
-                                <tr *ngFor="let data of PortalGridData_15">
+                                <tr *ngFor="let data of PortalGridData_15;let i=index">
                                     <td>{{ data.input1 }}</td>
                                     <td>{{ data.input2 }}</td>
                                     <td>{{ data.input3 }}</td>
                                     <td>{{ data.input4 }}</td>
+                                    <td (click)="editPortalData_15(i)" style="cursor: pointer;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24">
+                                            <path
+                                                d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1.003 1.003 0 0 0 0-1.42l-2.34-2.34a1.003 1.003 0 0 0-1.42 0l-1.83 1.83 3.75 3.75 1.84-1.82z" />
+                                        </svg>
+                                    </td>
+                                    <td (click)="deletePortalData_15(i)" style="cursor: pointer;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24">
+                                            <path d="M16 9v10H8V9h8m-1.5-6h-5l-1 1H5v2h14V4h-4.5l-1-1z" />
+                                        </svg>
+                                    </td>
                                 </tr>
                             </table>
                         </div>
@@ -1709,11 +1914,22 @@
                                     <th>POC Mobile Number</th>
                                     <th>Designation</th>
                                 </tr>
-                                <tr *ngFor="let data of BiometricGridData_15">
+                                <tr *ngFor="let data of BiometricGridData_15;let i=index">
                                     <td>{{ data.input1 }}</td>
                                     <td>{{ data.input2 }}</td>
                                     <td>{{ data.input3 }}</td>
                                     <td>{{ data.input4 }}</td>
+                                    <td (click)="editBiometricData_15(i)" style="cursor: pointer;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24">
+                                            <path
+                                                d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1.003 1.003 0 0 0 0-1.42l-2.34-2.34a1.003 1.003 0 0 0-1.42 0l-1.83 1.83 3.75 3.75 1.84-1.82z" />
+                                        </svg>
+                                    </td>
+                                    <td (click)="deleteBiometricData_15(i)" style="cursor: pointer;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24">
+                                            <path d="M16 9v10H8V9h8m-1.5-6h-5l-1 1H5v2h14V4h-4.5l-1-1z" />
+                                        </svg>
+                                    </td>
                                 </tr>
                             </table>
                         </div>
@@ -1805,11 +2021,22 @@
                                     <th>POC Mobile Number</th>
                                     <th>Designation</th>
                                 </tr>
-                                <tr *ngFor="let data of OthersGridData_15">
+                                <tr *ngFor="let data of OthersGridData_15;let i=index">
                                     <td>{{ data.input1 }}</td>
                                     <td>{{ data.input2 }}</td>
                                     <td>{{ data.input3 }}</td>
                                     <td>{{ data.input4 }}</td>
+                                    <td (click)="editOtherData_15(i)" style="cursor: pointer;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24">
+                                            <path
+                                                d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1.003 1.003 0 0 0 0-1.42l-2.34-2.34a1.003 1.003 0 0 0-1.42 0l-1.83 1.83 3.75 3.75 1.84-1.82z" />
+                                        </svg>
+                                    </td>
+                                    <td (click)="deleteOtherData_15(i)" style="cursor: pointer;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24">
+                                            <path d="M16 9v10H8V9h8m-1.5-6h-5l-1 1H5v2h14V4h-4.5l-1-1z" />
+                                        </svg>
+                                    </td>
                                 </tr>
                             </table>
                         </div>
@@ -1908,7 +2135,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="form-row" *ngIf="Answer16.Input_Type === 'Formula Driven'">
+                    <div class="form-row">
                         <div class="form-column">
                             <div class="docs-h6">
                                 <b class="employee-id">Incentive Calculation Methodology</b>
@@ -1945,8 +2172,8 @@
                             Please select an option
                         </div>
                     </div>
-                    <div *ngIf="Answer17.Inactive_Employee_Load ==='Yes'">
-                        <div style="padding-bottom: 1%;">
+                    <div>
+                        <div style="padding-bottom: 1%;" *ngIf="Answer17.Inactive_Employee_Load ==='Yes'">
                             <div class="=form-row">
                                 <div class="form-column">
                                     <div class="docs-h6">
@@ -1994,7 +2221,7 @@
                             </div>
 
                         </div>
-                        <div style="padding-bottom: 1%;">
+                        <div style="padding-bottom: 1%;" *ngIf="Answer17.Inactive_Employee_Load ==='Yes'">
                             <div class="docs-h6">
                                 <b class="employee-id">Date of Input Submission</b>
                             </div>
@@ -2028,6 +2255,28 @@
                         <div *ngIf="isSubmitted18 && !Answer18?.Payslip_Distribution?.trim()"
                             style="color: red; font-size: 12px;">
                             Please select an option
+                        </div>
+                    </div>
+                    <div class="form-row" *ngIf="Answer18.Payslip_Distribution === 'Quess ESS'">
+                        <div class="form-column">
+                            <div class="docs-h6">
+                                <b class="employee-id">Quess ESS</b>
+                            </div>
+                            <div class="input-wrapper">
+                                <div class="radio-options-container">
+                                    <div class="checkboxradio-button" *ngFor="let item of options18_1"
+                                        (click)="Answer18.Quess_Ess = item.label">
+                                        <img class="component-39-icon"
+                                            [src]="Answer18.Quess_Ess === item.label ? '../../../assets/radiochecked.svg' : '../../../assets/radiodefault.svg'"
+                                            alt="Radio icon">
+                                        <div class="option">{{ item.label }}</div>
+                                    </div>
+                                </div>
+                                <div *ngIf="isSubmitted18 && !Answer18?.Quess_Ess?.trim()"
+                                    style="color: red; font-size: 12px;">
+                                    Please select an option
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div style="padding-top: 3%;">
@@ -2166,23 +2415,6 @@
                         <div *ngIf="Answer20.Applicable_Desc_Client==='Designation Wise'">
                             <div style="padding-bottom: 1%;">
                                 <div class="docs-h6">
-                                    <b class="employee-id">Company Code</b>
-                                </div>
-                                <div class="input-wrapper">
-                                    <select class="custom-select" style="width: 200px;" [(ngModel)]="selectedCompany20"
-                                        (change)="onCompanyChange20($event)">
-                                        <option *ngFor="let usercompany of userwisecompanydetails"
-                                            [value]="usercompany.company_Id">{{ usercompany.company_Code }}
-                                        </option>
-                                    </select>
-                                    <div *ngIf="isSubmitted20 && (Answer20.CompanyId==='0' || Answer20.CompanyId==='')"
-                                        style="color: red; font-size: 12px;">
-                                        Please select Compnay Code
-                                    </div>
-                                </div>
-                            </div>
-                            <div style="padding-bottom: 1%;">
-                                <div class="docs-h6">
                                     <b class="employee-id">Designation</b>
                                 </div>
                                 <div class="input-wrapper">
@@ -2196,6 +2428,20 @@
                                     <div *ngIf="isSubmitted20 && !Answer20?.Designation_Id?.trim()"
                                         style="color: red; font-size: 12px;">
                                         Please select Designation
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="padding-bottom: 1%;">
+                                <div class="docs-h6">
+                                    <b class="employee-id">Designationwise Days</b>
+                                </div>
+                                <div class="input-wrapper">
+                                    <input type="text" class="rectangle-div" [(ngModel)]="Answer20.Designationwise_Days"
+                                        name="designationwise_Days" autocomplete="off" maxlength="3"
+                                        (input)="onNumericInput($event)">
+                                    <div *ngIf="isSubmitted20 && !Answer20?.Designationwise_Days?.trim()"
+                                        style="color: red; font-size: 12px;">
+                                        Designationwise Days is empty
                                     </div>
                                 </div>
                             </div>
@@ -2251,6 +2497,7 @@
                                     <th>Client Description</th>
                                     <th>Company Code</th>
                                     <th>Designation</th>
+                                    <th>Designationwise Days</th>
                                     <th>BASIC+DA</th>
                                     <th>GROSS</th>
                                 </tr>
@@ -2263,6 +2510,7 @@
                                     <td>{{ item.applicable_Desc_Client }}</td>
                                     <td>{{ item.company_Code }}</td>
                                     <td>{{ item.designation_Name }}</td>
+                                    <td>{{ item.designationwise_Days }}</td>
                                     <td>{{ item.applicable_Wages_BASIC_DA }}</td>
                                     <td>{{ item.applicable_Wages_GROSS }}</td>
                                 </tr>
@@ -2347,7 +2595,7 @@
                             </div>
                         </div>
                     </div>
-                    <div style="padding-bottom: 1%;">
+                    <div style="padding-bottom: 1%;" *ngIf="Answer21.Billable==='Yes'">
                         <div class="docs-h6">
                             <b class="employee-id">Salary</b>
                         </div>
@@ -2367,7 +2615,7 @@
                             </div>
                         </div>
                     </div>
-                    <div style="padding-bottom: 1%;">
+                    <div style="padding-bottom: 1%;" *ngIf="Answer21.Billable==='Yes'">
                         <div class="docs-h6">
                             <b class="employee-id">Approval</b>
                         </div>
@@ -2486,99 +2734,7 @@
                     <div *ngIf="Answer22.Applicable==='Yes'">
                         <div style="padding-bottom: 1%;">
                             <div class="docs-h6">
-                                <b class="employee-id">Leave</b>
-                            </div>
-                            <div class="input-wrapper">
-                                <select class="custom-select" style="width: 200px;" id="leavetype"
-                                    [(ngModel)]="selectedLeave22" (change)="onLeaveChange22($event)">
-                                    <option value="">-Select-</option>
-                                    <option *ngFor="let item of options22_6" [value]="item.id">{{ item.name }}</option>
-                                </select>
-                                <div *ngIf="isSubmitted22 && !Answer22?.Leave_Type_Id?.trim()"
-                                    style="color: red; font-size: 12px;">
-                                    Please select an Leave
-                                </div>
-                            </div>
-                        </div>
-                        <div style="padding-bottom: 1%;">
-                            <div class="docs-h6">
-                                <b class="employee-id">Carryforward</b>
-                            </div>
-                            <div class="input-wrapper">
-                                <div class="radio-options-container">
-                                    <div class="checkboxradio-button" *ngFor="let item of options22_2"
-                                        (click)="Answer22.Carry_Forward = item.label">
-                                        <img class="component-39-icon"
-                                            [src]="Answer22.Carry_Forward === item.label ? '../../../assets/radiochecked.svg' : '../../../assets/radiodefault.svg'"
-                                            alt="Radio icon">
-                                        <div class="option">{{ item.label }}</div>
-                                    </div>
-                                </div>
-                                <div *ngIf="isSubmitted22 && !Answer22?.Carry_Forward?.trim()"
-                                    style="color: red; font-size: 12px;">
-                                    Please select an Carryforward
-                                </div>
-                            </div>
-                        </div>
-                        <div *ngIf="Answer22.Carry_Forward ==='Yes'">
-                            <div style="padding-bottom: 1%;">
-                                <div class="docs-h6">
-                                    <b class="employee-id">Number of Carryforward Days</b>
-                                </div>
-                                <div class="input-wrapper">
-                                    <input type="text" class="rectangle-div" [(ngModel)]="Answer22.Carry_Forward_Days"
-                                        name="carry_Forward_Days" autocomplete="off" maxlength="3"
-                                        (input)="onNumericInput($event)">
-                                    <div *ngIf="isSubmitted22 && !Answer22?.Carry_Forward_Days?.trim()"
-                                        style="color: red; font-size: 12px;">
-                                        Number of Carryforward Days is empty
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div style="padding-bottom: 1%;">
-                            <div class="docs-h6">
-                                <b class="employee-id">Calander Type</b>
-                            </div>
-                            <div class="input-wrapper">
-                                <div class="radio-options-container">
-                                    <div class="checkboxradio-button" *ngFor="let item of options22_3"
-                                        (click)="Answer22.Calander_Type = item.label">
-                                        <img class="component-39-icon"
-                                            [src]="Answer22.Calander_Type === item.label ? '../../../assets/radiochecked.svg' : '../../../assets/radiodefault.svg'"
-                                            alt="Radio icon">
-                                        <div class="option">{{ item.label }}</div>
-                                    </div>
-                                </div>
-                                <div *ngIf="isSubmitted22 && !Answer22?.Calander_Type?.trim()"
-                                    style="color: red; font-size: 12px;">
-                                    Please select an Calander Type
-                                </div>
-                            </div>
-                        </div>
-                        <div style="padding-bottom: 1%;">
-                            <div class="docs-h6">
-                                <b class="employee-id">Leave encashment</b>
-                            </div>
-                            <div class="input-wrapper">
-                                <div class="radio-options-container">
-                                    <div class="checkboxradio-button" *ngFor="let item of options22_4"
-                                        (click)="Answer22.Leave_Encashment = item.label">
-                                        <img class="component-39-icon"
-                                            [src]="Answer22.Leave_Encashment === item.label ? '../../../assets/radiochecked.svg' : '../../../assets/radiodefault.svg'"
-                                            alt="Radio icon">
-                                        <div class="option">{{ item.label }}</div>
-                                    </div>
-                                </div>
-                                <div *ngIf="isSubmitted22 && !Answer22?.Leave_Encashment?.trim()"
-                                    style="color: red; font-size: 12px;">
-                                    Please select an Leave encashment
-                                </div>
-                            </div>
-                        </div>
-                        <div style="padding-bottom: 1%;">
-                            <div class="docs-h6">
-                                <b class="employee-id">Leave management</b>
+                                <b class="employee-id">Leave Management</b>
                             </div>
                             <div class="input-wrapper">
                                 <div class="radio-options-container">
@@ -2596,12 +2752,147 @@
                                 </div>
                             </div>
                         </div>
-                        <div style="padding-bottom: 1%;" class="input-wrapper">
-                            <div class="button-parent" (click)="Addvalues22()">
-                                <div class="button">
-                                    <img class="plus-icon" alt="" src="../../../assets/plus.svg">
+                        <div *ngIf="Answer22.Leave_Management=='Quess'">
+                            <div style="padding-bottom: 1%;">
+                                <div class="docs-h6">
+                                    <b class="employee-id">Calander Type</b>
                                 </div>
-                                <div class="add-new">Add new</div>
+                                <div class="input-wrapper">
+                                    <div class="radio-options-container">
+                                        <div class="checkboxradio-button" *ngFor="let item of options22_3"
+                                            (click)="Answer22.Calander_Type = item.label">
+                                            <img class="component-39-icon"
+                                                [src]="Answer22.Calander_Type === item.label ? '../../../assets/radiochecked.svg' : '../../../assets/radiodefault.svg'"
+                                                alt="Radio icon">
+                                            <div class="option">{{ item.label }}</div>
+                                        </div>
+                                    </div>
+                                    <div *ngIf="isSubmitted22 && !Answer22?.Calander_Type?.trim()"
+                                        style="color: red; font-size: 12px;">
+                                        Please select an Calander Type
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="padding-bottom: 1%;">
+                                <div class="docs-h6">
+                                    <b class="employee-id">Leave</b>
+                                </div>
+                                <div class="input-wrapper">
+                                    <select class="custom-select" style="width: 200px;" id="leavetype"
+                                        [(ngModel)]="selectedLeave22" (change)="onLeaveChange22($event)">
+                                        <option value="">-Select-</option>
+                                        <option *ngFor="let item of options22_6" [value]="item.id">{{ item.name }}
+                                        </option>
+                                    </select>
+                                    <div *ngIf="isSubmitted22 && !Answer22?.Leave_Type_Id?.trim()"
+                                        style="color: red; font-size: 12px;">
+                                        Please select an Leave
+                                    </div>
+                                </div>
+                            </div>
+                            <div
+                                *ngIf="Answer22.Leave_Type=='Paternity leave' || Answer22.Leave_Type=='Sabbatical leave'">
+                                <div style="padding-bottom: 1%;">
+                                    <div class="docs-h6">
+                                        <b class="employee-id">Number of Leave</b>
+                                    </div>
+                                    <div class="input-wrapper">
+                                        <input type="text" class="rectangle-div" [(ngModel)]="Answer22.No_Of_Leave"
+                                            name="no_Of_Leave" autocomplete="off" maxlength="3"
+                                            (input)="onNumericInput($event)">
+                                        <div *ngIf="isSubmitted22 && !Answer22?.No_Of_Leave?.trim()"
+                                            style="color: red; font-size: 12px;">
+                                            No Of Leave is empty
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div
+                                *ngIf="Answer22.Leave_Type!='Paternity leave' && Answer22.Leave_Type!='Sabbatical leave'">
+                                <div style="padding-bottom: 1%;">
+                                    <div class="docs-h6">
+                                        <b class="employee-id">Carryforward</b>
+                                    </div>
+                                    <div class="input-wrapper">
+                                        <div class="radio-options-container">
+                                            <div class="checkboxradio-button" *ngFor="let item of options22_2"
+                                                (click)="Answer22.Carry_Forward = item.label">
+                                                <img class="component-39-icon"
+                                                    [src]="Answer22.Carry_Forward === item.label ? '../../../assets/radiochecked.svg' : '../../../assets/radiodefault.svg'"
+                                                    alt="Radio icon">
+                                                <div class="option">{{ item.label }}</div>
+                                            </div>
+                                        </div>
+                                        <div *ngIf="isSubmitted22 && !Answer22?.Carry_Forward?.trim()"
+                                            style="color: red; font-size: 12px;">
+                                            Please select an Carryforward
+                                        </div>
+                                    </div>
+                                </div>
+                                <div *ngIf="Answer22.Carry_Forward ==='Yes'">
+                                    <div style="padding-bottom: 1%;">
+                                        <div class="docs-h6">
+                                            <b class="employee-id">Number of Carryforward Days</b>
+                                        </div>
+                                        <div class="input-wrapper">
+                                            <input type="text" class="rectangle-div"
+                                                [(ngModel)]="Answer22.Carry_Forward_Days" name="carry_Forward_Days"
+                                                autocomplete="off" maxlength="3" (input)="onNumericInput($event)">
+                                            <div *ngIf="isSubmitted22 && !Answer22?.Carry_Forward_Days?.trim()"
+                                                style="color: red; font-size: 12px;">
+                                                Number of Carryforward Days is empty
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div style="padding-bottom: 1%;">
+                                    <div class="docs-h6">
+                                        <b class="employee-id">Encashment</b>
+                                    </div>
+                                    <div class="input-wrapper">
+                                        <div class="radio-options-container">
+                                            <div class="checkboxradio-button" *ngFor="let item of options22_2"
+                                                (click)="Answer22.Encashment = item.label">
+                                                <img class="component-39-icon"
+                                                    [src]="Answer22.Encashment === item.label ? '../../../assets/radiochecked.svg' : '../../../assets/radiodefault.svg'"
+                                                    alt="Radio icon">
+                                                <div class="option">{{ item.label }}</div>
+                                            </div>
+                                        </div>
+                                        <div *ngIf="isSubmitted22 && !Answer22?.Encashment?.trim()"
+                                            style="color: red; font-size: 12px;">
+                                            Please select an Encashment
+                                        </div>
+                                    </div>
+                                </div>
+                                <div *ngIf="Answer22.Encashment=='Yes'" style="padding-bottom: 1%;">
+                                    <div class="docs-h6">
+                                        <b class="employee-id">Leave encashment</b>
+                                    </div>
+                                    <div class="input-wrapper">
+                                        <div class="radio-options-container">
+                                            <div class="checkboxradio-button" *ngFor="let item of options22_4"
+                                                (click)="Answer22.Leave_Encashment = item.label">
+                                                <img class="component-39-icon"
+                                                    [src]="Answer22.Leave_Encashment === item.label ? '../../../assets/radiochecked.svg' : '../../../assets/radiodefault.svg'"
+                                                    alt="Radio icon">
+                                                <div class="option">{{ item.label }}</div>
+                                            </div>
+                                        </div>
+                                        <div *ngIf="isSubmitted22 && !Answer22?.Leave_Encashment?.trim()"
+                                            style="color: red; font-size: 12px;">
+                                            Please select an Leave encashment
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="padding-bottom: 1%;" class="input-wrapper">
+                                <div class="button-parent" (click)="Addvalues22()">
+                                    <div class="button">
+                                        <img class="plus-icon" alt="" src="../../../assets/plus.svg">
+                                    </div>
+                                    <div class="add-new">Add new</div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -2611,30 +2902,34 @@
                                 <tr>
                                     <th hidden>SOPId</th>
                                     <th hidden>Applicable</th>
-                                    <th>Leave Type</th>
-                                    <th>Carry Forward</th>
-                                    <th>Carry Forward Days</th>
-                                    <th>Calander Type</th>
-                                    <th>Leave Encashment</th>
                                     <th>Leave Management</th>
+                                    <th>Calander Type</th>
+                                    <th>Leave Type</th>
+                                    <th>No of Leave</th>
+                                    <th>Carry Forward</th>
+                                    <th>Carry Forward Days</th>  
+                                    <th>Encashment</th>                                  
+                                    <th>Leave Encashment</th>                                    
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr *ngFor="let item of answer22GridData">
                                     <td hidden>{{ item.sopid }}</td>
                                     <td hidden>{{ item.applicable }}</td>
-                                    <td>{{ item.leave_Type }}</td>
-                                    <td>{{ item.carry_Forward }}</td>
-                                    <td>{{ item.carry_Forward_Days }}</td>
-                                    <td>{{ item.calander_Type }}</td>
-                                    <td>{{ item.leave_Encashment }}</td>
                                     <td>{{ item.leave_Management }}</td>
+                                    <td>{{ item.calander_Type }}</td>
+                                    <td>{{ item.leave_Type }}</td>
+                                    <td>{{ item.no_Of_Leave }}</td>
+                                    <td>{{ item.carry_Forward }}</td>
+                                    <td>{{ item.carry_Forward_Days }}</td> 
+                                    <td>{{ item.encashment }}</td>                                   
+                                    <td>{{ item.leave_Encashment }}</td>                                    
                                 </tr>
                             </tbody>
                         </table>
                     </div>
-                    <div *ngIf="isSubmitted22 && Answer22.Applicable==='Yes' && answer22GridData.length===0"
-                        style="color: red; font-size: 12px;">
+                    <div *ngIf="isSubmitted22 && Answer22.Applicable==='Yes' &&  Answer22.Leave_Management==='Quess' 
+                    && answer22GridData.length===0" style="color: red; font-size: 12px;">
                         Please Add atleast one leave
                     </div>
                     <div style="padding-top: 3%;">
@@ -2700,7 +2995,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div *ngIf="Answer23.Eligibility_By==='Client' || Answer23.Eligibility_By==='Both'">
+                        <div>
                             <div style="padding-bottom: 1%;">
                                 <div class="docs-h6">
                                     <b class="employee-id">Cost (Fixed Or Percentage)</b>
@@ -2766,7 +3061,7 @@
                     <div class="form-row">
                         <div class="form-column">
                             <div class="docs-h6">
-                                <b class="employee-id">Leave Type</b>
+                                <b class="employee-id">Holiday Type</b>
                             </div>
                             <div class="input-wrapper">
                                 <div class="radio-options-container">
@@ -2831,7 +3126,7 @@
                                         </select>
                                         <div *ngIf="isSubmitted24 && !Answer24?.Is_Billable_Id?.trim()"
                                             style="color: red; font-size: 12px;">
-                                            Please select is Billable
+                                            Please select Billable
                                         </div>
                                     </div>
                                 </div>
@@ -2852,7 +3147,7 @@
                                 </select>
                                 <div *ngIf="isSubmitted24 && !Answer24?.Billable_Type_Id?.trim()"
                                     style="color: red; font-size: 12px;">
-                                    Please select is Bill type
+                                    Please select Bill type
                                 </div>
                             </div>
                         </div>
@@ -2903,80 +3198,93 @@
                     </div>
                 </div>
                 <div *ngIf="selectedQuestion.questionId == 25">
-                    <div style="padding-bottom: 1%;">
-                        <div class="docs-h6">
-                            <b class="employee-id">Billiable</b>
-                        </div>
-                        <div class="input-wrapper">
-                            <div class="radio-options-container">
-                                <div class="checkboxradio-button" *ngFor="let item of options25_1"
-                                    (click)="Answer25.Billiable = item.label">
-                                    <img class="component-39-icon"
-                                        [src]="Answer25.Billiable === item.label ? '../../../assets/radiochecked.svg' : '../../../assets/radiodefault.svg'"
-                                        alt="Radio icon">
-                                    <div class="option">{{ item.label }}</div>
-                                </div>
+                    <div class="form-row">
+                        <div class="form-column">
+                            <div class="docs-h6">
+                                <b class="employee-id">Billable</b>
                             </div>
-                            <div *ngIf="isSubmitted25 && !Answer25?.Billiable?.trim()"
-                                style="color: red; font-size: 12px;">
-                                Please select Billiable
+                            <div class="input-wrapper">
+                                <div class="radio-options-container">
+                                    <div class="checkboxradio-button" *ngFor="let item of options25_1"
+                                        (click)="Answer25.Billiable = item.label">
+                                        <img class="component-39-icon"
+                                            [src]="Answer25.Billiable === item.label ? '../../../assets/radiochecked.svg' : '../../../assets/radiodefault.svg'"
+                                            alt="Radio icon">
+                                        <div class="option">{{ item.label }}</div>
+                                    </div>
+                                </div>
+                                <div *ngIf="isSubmitted25 && !Answer25?.Billiable?.trim()"
+                                    style="color: red; font-size: 12px;">
+                                    Please select Billiable
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div *ngIf="Answer25.Billiable==='Yearly'">
-                        <div style="padding-bottom: 1%;">
-                            <select class="custom-select" style="width: 200px;" id="month"
-                                [(ngModel)]="Answer25.Eligibility_Month">
-                                <option value="">-Select-</option>
-                                <option *ngFor="let item of options25_2" [value]="item.name">{{ item.name }}</option>
-                            </select>
-                            <div *ngIf="isSubmitted25 && !Answer25?.Eligibility_Month?.trim()"
-                                style="color: red; font-size: 12px;">
-                                Please select Month
-                            </div>
-                        </div>
-                    </div>
-                    <div *ngIf="Answer25.Billiable==='Monthly'">
-                        <div style="padding-bottom: 1%;">
-                            <div class="docs-h6">
-                                <b class="employee-id">Month</b>
-                            </div>
-                            <div class="input-wrapper">
-                                <input type="text" class="rectangle-div" [(ngModel)]="Answer25.Eligibility_Month"
-                                    name="eligibility_Month" autocomplete="off" (input)="onAlphanumericInput($event)"
-                                    maxlength="15">
-                                <div *ngIf="isSubmitted25 && !Answer25?.Eligibility_Month?.trim()"
-                                    style="color: red; font-size: 12px;">
-                                    Month is empty
+                        <div class="form-row">
+                            <div class="form-column">
+                                <div class="docs-h6">
+                                    <b class="employee-id">Calander Type</b>
+                                </div>
+                                <div class="input-wrapper">
+                                    <div class="radio-options-container">
+                                        <div class="checkboxradio-button" *ngFor="let item of options25_3"
+                                            (click)="Answer25.Calandar_Type = item.label">
+                                            <img class="component-39-icon"
+                                                [src]="Answer25.Calandar_Type === item.label ? '../../../assets/radiochecked.svg' : '../../../assets/radiodefault.svg'"
+                                                alt="Radio icon">
+                                            <div class="option">{{ item.label }}</div>
+                                        </div>
+                                    </div>
+                                    <div *ngIf="isSubmitted25 && !Answer25?.Calandar_Type?.trim()"
+                                        style="color: red; font-size: 12px;">
+                                        Please select Calandar Type
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div style="padding-bottom: 1%;">
-                        <div class="docs-h6">
-                            <b class="employee-id">Accumulated and FlushOut</b>
-                        </div>
-                        <div class="input-wrapper">
-                            <input type="text" class="rectangle-div" [(ngModel)]="Answer25.Accumulated_FlushOut"
-                                name="accumulated_FlushOut" autocomplete="off" (input)="onAlphanumericInput($event)"
-                                maxlength="50">
-                            <div *ngIf="isSubmitted25 && !Answer25?.Accumulated_FlushOut?.trim()"
-                                style="color: red; font-size: 12px;">
-                                Accumulated and FlushOut is empty
+                        <div class="form-row">
+                            <div class="form-column">
+                                <div class="docs-h6">
+                                    <b class="employee-id">Accumulated and FlushOut</b>
+                                </div>
+                                <div class="input-wrapper">
+                                    <div class="radio-options-container">
+                                        <div class="checkboxradio-button" *ngFor="let item of options25_4"
+                                            (click)="Answer25.Accumulated_FlushOut = item.label">
+                                            <img class="component-39-icon"
+                                                [src]="Answer25.Accumulated_FlushOut === item.label ? '../../../assets/radiochecked.svg' : '../../../assets/radiodefault.svg'"
+                                                alt="Radio icon">
+                                            <div class="option">{{ item.label }}</div>
+                                        </div>
+                                    </div>
+                                    <div *ngIf="isSubmitted25 && !Answer25?.Accumulated_FlushOut?.trim()"
+                                        style="color: red; font-size: 12px;">
+                                        Please select Accumulated and FlushOut
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div style="padding-bottom: 1%;">
-                        <div class="docs-h6">
-                            <b class="employee-id">Billed & Paid (Pass Through)</b>
-                        </div>
-                        <div class="input-wrapper">
-                            <input type="text" class="rectangle-div" [(ngModel)]="Answer25.Billed_Paid"
-                                name="billed_Paid" autocomplete="off" (input)="onAlphanumericInput($event)"
-                                maxlength="50">
-                            <div *ngIf="isSubmitted25 && !Answer25?.Billed_Paid?.trim()"
-                                style="color: red; font-size: 12px;">
-                                Billed & Paid is empty
+                        <div class="form-row">
+                            <div class="form-column">
+                                <div class="docs-h6">
+                                    <b class="employee-id">Billed & Paid (Pass Through)</b>
+                                </div>
+                                <div class="input-wrapper">
+                                    <div class="radio-options-container">
+                                        <div class="checkboxradio-button" *ngFor="let item of options25_4"
+                                            (click)="Answer25.Billed_Paid = item.label">
+                                            <img class="component-39-icon"
+                                                [src]="Answer25.Billed_Paid === item.label ? '../../../assets/radiochecked.svg' : '../../../assets/radiodefault.svg'"
+                                                alt="Radio icon">
+                                            <div class="option">{{ item.label }}</div>
+                                        </div>
+                                    </div>
+                                    <div *ngIf="isSubmitted25 && !Answer25?.Billed_Paid?.trim()"
+                                        style="color: red; font-size: 12px;">
+                                        Please select Billed & Paid
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -3412,11 +3720,11 @@
                                     <td>{{ item.billingAmount }}</td>
                                     <td>{{ item.billingPaycode }}</td>
                                     <td>{{ item.effectiveDate }}</td>
-                                    <td>{{ item.gMCAmount }}</td>
-                                    <td>{{ item.gPAPolicyNumber }}</td>
-                                    <td>{{ item.gPAAmount }}</td>
-                                    <td>{{ item.gTLIPolicyNumber }}</td>
-                                    <td>{{ item.gTLIAmount }}</td>
+                                    <td>{{ item.gmcAmount }}</td>
+                                    <td>{{ item.gpaPolicyNumber }}</td>
+                                    <td>{{ item.gpaAmount }}</td>
+                                    <td>{{ item.gtliPolicyNumber }}</td>
+                                    <td>{{ item.gtliAmount }}</td>
                                     <td>{{ item.remarks }}</td>
                                     <td>{{ item.maritalStatus }}</td>
                                     <td>{{ item.is_ESIApplicable }}</td>
@@ -3764,15 +4072,6 @@
                             <div class="docs-h6">
                                 <b class="employee-id">PF CALCULATED CAPING TO 15K BASED ON ATTENDANCE PRO-RATE</b>
                             </div>
-                            <div class="input-wrapper">
-                                <input type="text" class="rectangle-div"
-                                    [(ngModel)]="Answer30.PF_Calculated_15K_BASED_ON_ATTENDANCE"
-                                    name="pF_Calculated_15K_BASED_ON_ATTENDANCE" autocomplete="off" maxlength="50">
-                                <div *ngIf="isSubmitted30 && !Answer30?.PF_Calculated_15K_BASED_ON_ATTENDANCE?.trim()"
-                                    style="color: red; font-size: 12px;">
-                                    PF CALCULATED CAPING TO 15K BASED ON ATTENDANCE PRO-RATE is empty
-                                </div>
-                            </div>
                         </div>
                     </div>
                     <div *ngIf="Answer30.PO_Type==='NONCAP' || Answer30.PO_Type==='BOTH (CAP/NON CAP/CAPFW)'  ">
@@ -3780,30 +4079,12 @@
                             <div class="docs-h6">
                                 <b class="employee-id">PF CALCULATED WAGES WITHOUT ANY CAPPING</b>
                             </div>
-                            <div class="input-wrapper">
-                                <input type="text" class="rectangle-div"
-                                    [(ngModel)]="Answer30.PF_Calculated_Wages_Without_Any_Capping"
-                                    name="pF_Calculated_Wages_Without_Any_Capping" autocomplete="off" maxlength="50">
-                                <div *ngIf="isSubmitted30 && !Answer30?.PF_Calculated_Wages_Without_Any_Capping?.trim()"
-                                    style="color: red; font-size: 12px;">
-                                    PF CALCULATED WAGES WITHOUT ANY CAPPING is empty
-                                </div>
-                            </div>
                         </div>
                     </div>
                     <div *ngIf="Answer30.PO_Type==='CAPFW' || Answer30.PO_Type==='BOTH (CAP/NON CAP/CAPFW)'  ">
                         <div style="padding-bottom: 1%;">
                             <div class="docs-h6">
                                 <b class="employee-id">PF CALCULATED ON EARNINGS BY RESTRICTING 15K</b>
-                            </div>
-                            <div class="input-wrapper">
-                                <input type="text" class="rectangle-div"
-                                    [(ngModel)]="Answer30.PF_Calculated_Earnings_Restricting_15K"
-                                    name="pF_Calculated_Earnings_Restricting_15K" autocomplete="off" maxlength="50">
-                                <div *ngIf="isSubmitted30 && !Answer30?.PF_Calculated_Earnings_Restricting_15K?.trim()"
-                                    style="color: red; font-size: 12px;">
-                                    PF CALCULATED ON EARNINGS BY RESTRICTING 15K is empty
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -3837,8 +4118,7 @@
                                     <b class="employee-id">REPOSITORY</b>
                                 </div>
                                 <div class="input-wrapper">
-                                    <input type="file" class="rectangle-div" (change)="onFileSelected($event)"
-                                        accept=".pdf">
+                                    <input type="file" class="rectangle-div" (change)="onFileSelected($event)">
                                 </div>
                             </div>
                             <div *ngIf="Answer31.FilePath!=''" class=" form-column">
@@ -3966,9 +4246,20 @@
                                     <th>Enter email Detail</th>
                                     <th>Point of contact</th>
                                 </tr>
-                                <tr *ngFor="let data of EmailGridData_33">
+                                <tr *ngFor="let data of EmailGridData_33;let i=index">
                                     <td>{{ data.input1 }}</td>
                                     <td>{{ data.input2 }}</td>
+                                    <td (click)="editEmailData_33(i)" style="cursor: pointer;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24">
+                                            <path
+                                                d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1.003 1.003 0 0 0 0-1.42l-2.34-2.34a1.003 1.003 0 0 0-1.42 0l-1.83 1.83 3.75 3.75 1.84-1.82z" />
+                                        </svg>
+                                    </td>
+                                    <td (click)="deleteEmailData_33(i)" style="cursor: pointer;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24">
+                                            <path d="M16 9v10H8V9h8m-1.5-6h-5l-1 1H5v2h14V4h-4.5l-1-1z" />
+                                        </svg>
+                                    </td>
                                 </tr>
                             </table>
                         </div>
@@ -4022,9 +4313,20 @@
                                     <th>Enter Portal Details</th>
                                     <th>Point of contact</th>
                                 </tr>
-                                <tr *ngFor="let data of PortalGridData_33">
+                                <tr *ngFor="let data of PortalGridData_33;let i=index">
                                     <td>{{ data.input1 }}</td>
                                     <td>{{ data.input2 }}</td>
+                                    <td (click)="editPortalData_33(i)" style="cursor: pointer;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24">
+                                            <path
+                                                d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1.003 1.003 0 0 0 0-1.42l-2.34-2.34a1.003 1.003 0 0 0-1.42 0l-1.83 1.83 3.75 3.75 1.84-1.82z" />
+                                        </svg>
+                                    </td>
+                                    <td (click)="deletePortalData_33(i)" style="cursor: pointer;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24">
+                                            <path d="M16 9v10H8V9h8m-1.5-6h-5l-1 1H5v2h14V4h-4.5l-1-1z" />
+                                        </svg>
+                                    </td>
                                 </tr>
                             </table>
                         </div>
@@ -4591,7 +4893,7 @@
                                     maxlength="15">
                                 <div *ngIf="isSubmitted35 && !Answer35?.Sourcing_Fee?.trim()"
                                     style="color: red; font-size: 12px;">
-                                    Sourcing Fee In % is empty
+                                    Sourcing Fee is empty
                                 </div>
                             </div>
                         </div>
@@ -4608,7 +4910,7 @@
                                     maxlength="50">
                                 <div *ngIf="isSubmitted35 && !Answer35?.Replacement_Clause?.trim()"
                                     style="color: red; font-size: 12px;">
-                                    Replacement Fee In % is empty
+                                    Replacement Clause is empty
                                 </div>
                             </div>
                         </div>
@@ -4786,7 +5088,7 @@
                                     <td>{{ item.agreement_Status }}</td>
                                     <td>{{ item.busniess_Head_Approval }}</td>
                                     <td>{{ item.one_Time_Onboarding_Fees }}</td>
-                                    <td>{{ item.oBApplicable }}</td>
+                                    <td>{{ item.obApplicable }}</td>
                                     <td>{{ item.service_Fee_Type }}</td>
                                     <td>{{ item.service_Fee }}</td>
                                     <td>{{ item.sourcing_Fee }}</td>
@@ -4904,17 +5206,17 @@
                                 </div>
                             </div>
                         </div>
-                        <div *ngIf="Answer36.Commercials==='Flat'">
+                        <div *ngIf="Answer36.Commercials==='Flat' || Answer36.Commercials==='Percentage'">
                             <div style="padding-bottom: 1%;">
                                 <div class="docs-h6">
-                                    <b class="employee-id">Flat</b>
+                                    <b class="employee-id">{{Answer36.Commercials}}</b>
                                 </div>
                                 <div class="input-wrapper">
                                     <input type="text" class="rectangle-div" [(ngModel)]="Answer36.Flat" name="flat"
                                         autocomplete="off" maxlength="10" (input)="onNumericInput($event)">
                                     <div *ngIf="isSubmitted36 && !Answer36?.Flat?.trim()"
                                         style="color: red; font-size: 12px;">
-                                        Flat is empty
+                                        {{Answer36.Commercials}} is empty
                                     </div>
                                 </div>
                             </div>
@@ -4992,12 +5294,36 @@
                     </div>
                 </div>
                 <div *ngIf="selectedQuestion.questionId == 38">
-                    <div style="padding-bottom: 1%;">
-                        <input type="text" class="rectangle-div" [(ngModel)]="Answer38.Penalty_Clause"
-                            name="penalty_Clause" autocomplete="off" maxlength="100">
-                        <div *ngIf="isSubmitted38 && !Answer38?.Penalty_Clause?.trim()"
-                            style="color: red; font-size: 12px;">
-                            Penalty Clause is empty
+                    <div class="form-row">
+                        <div class="form-column">
+                            <div class="radio-options-container">
+                                <div class="checkboxradio-button" *ngFor="let item of options38"
+                                    (click)="Answer38.Penalty_Clause = item.label">
+                                    <img class="component-39-icon"
+                                        [src]="Answer38.Penalty_Clause === item.label ? '../../../assets/radiochecked.svg' : '../../../assets/radiodefault.svg'"
+                                        alt="Radio icon">
+                                    <div class="option">{{ item.label }}</div>
+                                </div>
+                            </div>
+                            <div *ngIf="isSubmitted38 && !Answer38?.Penalty_Clause?.trim()"
+                                style="color: red; font-size: 12px;">
+                                Please select an option
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row" *ngIf="Answer38?.Penalty_Clause=='Yes'">
+                        <div class="form-column">
+                            <div class="docs-h6">
+                                <b class="employee-id">Payroll Closure Date</b>
+                            </div>
+                            <div class="input-wrapper">
+                                <input type="text" class="rectangle-div" [(ngModel)]="Answer38.Payroll_Closure_Date"
+                                    name="payroll_Closure_Date" autocomplete="off" maxlength="100">
+                                <div *ngIf="isSubmitted38 && !Answer38?.Payroll_Closure_Date?.trim()"
+                                    style="color: red; font-size: 12px;">
+                                    Payroll Closure Date is empty
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div style="padding-top: 3%;">
@@ -5366,25 +5692,7 @@
                     </div>
                 </div>
                 <div *ngIf="selectedQuestion.questionId == 41">
-                    <div class="form-row">
-                        <div class="form-column">
-                            <div class="docs-h6">
-                                <b class="employee-id">Company Code</b>
-                            </div>
-                            <div class="input-wrapper">
-                                <select class="custom-select" style="width: 200px;" [(ngModel)]="selectedCompany41"
-                                    (change)="onCompanyChange41($event)">
-                                    <option *ngFor="let usercompany of userwisecompanydetails"
-                                        [value]="usercompany.company_Id">{{ usercompany.company_Code }}
-                                    </option>
-                                </select>
-                                <div *ngIf="isSubmitted41 && (Answer41?.CompanyCode==='-Select-' || Answer41?.CompanyCode==='')"
-                                    style="color: red; font-size: 12px;">
-                                    Please select Company Code
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+
                     <div *ngIf="verticalGridData_4.length > 0" style="padding-bottom: 2%;">
                         <table class="styled-table" *ngIf="verticalGridData_4.length > 0" border="1">
                             <tr>
@@ -5506,37 +5814,6 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div style="padding-bottom: 1%;">
-                        <div class="button-parent" (click)="Addvalues41()">
-                            <div class="button">
-                                <img class="plus-icon" alt="" src="../../../assets/plus.svg">
-                            </div>
-                            <div class="add-new">Add new</div>
-                        </div>
-                    </div>
-                    <div style="padding-bottom: 1%;overflow-x: scroll;scrollbar-width: none;">
-                        <table class="styled-table" *ngIf="answer41GridData.length > 0" border="1">
-                            <thead>
-                                <tr>
-                                    <th>Company Code</th>
-                                    <th>Master Checklist</th>
-                                    <th>Spoc</th>
-                                    <th>Date of Completion</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr *ngFor="let item of answer41GridData">
-                                    <td>{{ item.companyCode }}</td>
-                                    <td>{{ item.masterChecklist }}</td>
-                                    <td>{{ item.spocDetails }}</td>
-                                    <td>{{ item.completionActivity }}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div *ngIf="isSubmitted41 && answer41GridData.length===0" style="color: red; font-size: 12px;">
-                        Please Add atleast one PIN
                     </div>
                     <div style="padding-top: 3%;">
                         <div *ngIf="selectedQuestion" class="property-1active-submit" (click)="onSubmitQuestion41()">
@@ -5685,23 +5962,6 @@
                         <div class="form-row">
                             <div class="form-column">
                                 <div class="docs-h6">
-                                    <b class="employee-id">Company Code</b>
-                                </div>
-                                <div class="input-wrapper">
-                                    <select class="custom-select" style="width: 200px;" [(ngModel)]="selectedCompany42"
-                                        (change)="onCompanyChange42($event)">
-                                        <option *ngFor="let usercompany of userwisecompanydetails"
-                                            [value]="usercompany.company_Id">{{ usercompany.company_Code }}
-                                        </option>
-                                    </select>
-                                    <div *ngIf="isSubmitted42_2 && (Answer42_3.CompanyId==='0' || Answer42_3.CompanyId==='')"
-                                        style="color: red; font-size: 12px;">
-                                        Please select Compnay Code
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-column">
-                                <div class="docs-h6">
                                     <b class="employee-id">Designation</b>
                                 </div>
                                 <div class="input-wrapper">
@@ -5718,9 +5978,6 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="form-row">
-
                             <div class="form-column">
                                 <div class="docs-h6">
                                     <b class="employee-id">Skilled Category</b>
@@ -5739,8 +5996,10 @@
                                 </div>
                             </div>
                             <div *ngIf="isSubmitted42_2 && isduplicate42_2" style="color: red; font-size: 12px;">
-                                Company & Designation already exists. Please choose a different one.
+                                Designation already exists. Please choose a different one.
                             </div>
+                        </div>
+                        <div class="form-row">
                             <div class="form-column">
                                 <div class="docs-h6">
                                     <b class="employee-id"></b>
