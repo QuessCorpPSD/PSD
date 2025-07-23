@@ -21,7 +21,7 @@ import { IAssignmentService } from '../../Repository/IAssignment.service';
 import { AssignmentService } from '../../Service/Assignment.service';
 import { LoadingService } from './progress/LoadingService ';
 import { SessionStorageService } from '../../Shared/SessionStorageService';
-import { interval, map, Subject, switchMap, takeUntil } from 'rxjs';
+import { catchError, filter, interval, map, of, Subject, switchMap, takeUntil, tap } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { EstimatetimeValidationComponent } from './estimatetime-validation/estimatetime-validation.component';
 
@@ -168,21 +168,24 @@ ngOnDestroy(): void {
   // });
 //}
 
-console.log(request);
+
    
       interval(1000).pipe(
         switchMap(() => this._authService.LotValidationEstimate(request)),
         takeUntil(this.destroy$)
       ).subscribe({
         next: (response) => {
-          const data = response?.Data;         
-
-          if (!data) return;
-
-          switch (data.mailType) {
+          const data = response?.Data; 
+          if (!data || !data.mailType) {
+//  console.error('Invalid data or missing mailType:', data);
+  return;
+}
+//console.log('Detected mail type:', data.mailType);
+          switch (data.mailType?.trim()?.toUpperCase()) {
             case 'S':
               this.showNodification = true;
-
+              if(this.showNodification)
+              {
               this.snackBar.openFromComponent(EstimatetimeValidationComponent, {
                 horizontalPosition: 'right',
                 verticalPosition: 'bottom',
@@ -198,18 +201,23 @@ console.log(request);
                 },
                 panelClass: ['custom-snackbar']
               });
+            }
               break;
 
             case 'T':
+               this.showNodification = false;
               this.sendFeedbackMail(data.teamLead_Email_Id, data);
               break;
                 case 'M':
+                  this.showNodification = false;
               this.sendFeedbackMail(data.manager_Email_Id, data);
               break;
                 case 'F':
+                  this.showNodification = false;
               this.sendFeedbackMail(data.fun_Head_EmailId, data);
               break;
-
+              case 'N': this.showNodification=false;
+              break;
             default:
               break;
             
@@ -257,8 +265,7 @@ LotestimateValidation_Old(userId)
       )
       .subscribe({
         next: (data) => {
-          console.log(data);
-          console.log(data?.Data)
+         
           if (data?.Data?.mailType === 'Self') {
             this.showNodification = true;
 
@@ -340,13 +347,16 @@ LotestimateValidation_Old(userId)
       "payroll_input_type":this.lotAssignment.payroll_Input_Type,
       "pay_period":this.lotAssignment.pay_period
   }
+
+  
   
     this._authService.ReconPayRegisterDownload(request).subscribe({
       next: res => { if(res.StatusCode==200){
-        console.log(res.Data);
+       
         const data=res.Data;
         var base64=data.file;
-        this.downloadExcelFromBase64(base64,res.Data.fileName)
+         let fileName = `${'Recon_Pay_Register'}-${this.lotAssignment.company_code} _ ${this.lotAssignment.pay_period}_ ${this.lotAssignment.lot_Number}`;
+        this.downloadExcelFromBase64(base64,fileName)
         this.isLoading=false;
         this.isPayDisable=false;
       }
@@ -376,8 +386,10 @@ ngOnInit(): void {
     this.isRevised = this.lotAssignment.revisedtime > 0;
 
     // Start validation and data loading
-    this.LotestimateValidation(user.user_Id);
+  //  this.LotestimateValidation(user.user_Id);
 
+//this.EstimateValidation(user.user_Id); selvaraj
+//this.LotEstimatValidate(user.user_Id)
     this.GetAllotment(
       this.lotAssignment.company_code,
       this.lotAssignment.pay_period,
@@ -400,7 +412,199 @@ ngOnInit(): void {
     this.Reqeustformodification();
   });
 }
+ userresponses:any;
+ countdown!:number;
+EstimateValidation(userId: number) {
+  const request = {
+    "company_Id": this.lotAssignment.company_Id,
+    "payperiodId": this.lotAssignment.pay_period_id,
+    "lotnumber": this.lotAssignment.lot_Number,
+    "Payroll_Input_Type": this.lotAssignment.payroll_Input_Type,
+    "CreatedOn": this.lotAssignment.createdOn,
+    "userId": userId,
+    "ActionType":""
+  };
 
+  // First get the response
+  this._authService.UserLotValidation(request).subscribe({
+    next: (res) => {
+      this.userresponses = res.Data;
+     
+     
+     this.countdown = (this.userresponses.remainingMinutes || 0) * 60;
+      // Start polling only after receiving response
+      interval(1000).pipe(
+        takeUntil(this.destroy$),
+        tap(() => {
+          if (!this.userresponses) return;
+          this.showNodification = true;
+
+            if (this.countdown <= 0) {
+            this.showNodification = false;
+            this.destroy$.next(); // ⛔ Stop timer
+            const data = this.userresponses;
+          if (!data?.actionType) return;
+
+          const mailType = data.actionType.trim().toUpperCase();
+          
+            switch (mailType) {
+            case 'S':
+              if (!this.showNodification) {
+                this.showNodification = true;
+                this.snackBar.openFromComponent(EstimatetimeValidationComponent, {
+                  horizontalPosition: 'right',
+                  verticalPosition: 'bottom',
+                  duration: 50000000,
+                  data: {
+                    estimateTime: this.estimateTime,
+                    score: data.score,
+                    TotalSecond: this.TotalSecond,
+                    userId,
+                    request : request,
+                    actionType:'S'
+                  },
+                  panelClass: ['custom-snackbar']
+                });
+              }
+              break;
+
+            case 'T':
+              this.showNodification = false;
+              this.sendFeedbackMail(data.teamLead_Email_Id, data);
+              break;
+
+            case 'M':
+              this.showNodification = false;
+              this.sendFeedbackMail(data.manager_Email_Id, data);
+              break;
+
+            case 'F':
+              this.showNodification = false;
+              this.sendFeedbackMail(data.fun_Head_EmailId, data);
+              break;
+
+            case 'N':
+              this.showNodification = false;
+              break;
+
+            default:
+              console.warn(`Unhandled mailType: ${mailType}`);
+              break;
+          }
+            return;
+          }
+          // if (currentMinute >= this.userresponses.remainingMinutes) {
+          //   this.showNodification = false;
+          //   this.destroy$.next(); // Stop
+          // }
+
+          
+
+          
+        })
+      ).subscribe();
+    },
+    error: (err) => console.error(err)
+  });
+
+  
+}
+
+LotEstimatValidate(userId)
+{
+  const request = {
+    "company_Id": this.lotAssignment.company_Id,
+    "payperiodId": this.lotAssignment.pay_period_id,
+    "lotnumber": this.lotAssignment.lot_Number,
+    "Payroll_Input_Type": this.lotAssignment.payroll_Input_Type,
+    "CreatedOn": this.lotAssignment.createdOn,
+    "userId": userId,
+    "ActionType":""
+  };
+  this._authService.UserLotValidation(request).subscribe({
+    next: (res) => {
+      this.userresponses = res.Data;
+      console.log(this.userresponses);
+      this.countdown = (this.userresponses.remainingMinutes || 0) * 60;
+    interval(5000).pipe(
+  takeUntil(this.destroy$),
+  tap(() => {
+    //console.log(this.countdown)
+    this.countdown--;
+    if (this.countdown <= 0) {
+      this.destroy$.next(); // Stop the timer
+      this.callFinalValidation(request, userId);
+    }
+  })
+).subscribe();
+    },
+      error:err=>console.log(err)
+    })
+}
+
+callFinalValidation(request: any, userId: number) {
+  this._authService.UserLotValidation(request).subscribe({
+    next: (res) => {
+      const data = res?.Data;
+      if (!data?.actionType) return;
+
+      const mailType = data.actionType.trim().toUpperCase();
+
+      switch (mailType) {
+        case 'S':
+          if (!this.showNodification) {
+            this.showNodification = true;
+            this.snackBar.openFromComponent(EstimatetimeValidationComponent, {
+              horizontalPosition: 'right',
+              verticalPosition: 'bottom',
+              duration: 50000000,
+              data: {
+                estimateTime: this.estimateTime,
+                score: data.score,
+                TotalSecond: this.TotalSecond,
+                userId,
+                request: request,
+                actionType: 'S'
+              },
+              panelClass: ['custom-snackbar']
+            });
+          }
+          break;
+
+        case 'T':
+          if(data.teamLead_Email_Id)
+          {
+            this.sendFeedbackMail(data.teamLead_Email_Id, data);
+          }
+         
+          break;
+
+        case 'M':
+          if(data.manager_Email_Id)
+          {
+            this.sendFeedbackMail(data.manager_Email_Id, data);
+          }
+         
+          break;
+
+        case 'F':
+          if(data.fun_Head_EmailId)
+          {
+          this.sendFeedbackMail(data.fun_Head_EmailId, data);
+          }
+          break;
+
+        case 'N':
+          break;
+
+        default:
+          console.warn(`Unhandled mailType: ${mailType}`);
+          break;
+      }
+    },
+    error: (err) => console.error('Final validation failed', err)
+  });
+}
 
 
 
@@ -443,15 +647,19 @@ const catg=this.AllotmentForm.get("allotemt")?.value;
     "allotments":catg,
     "RaiseQuery":this.AllotmentForm.get("RaiseQuery")?.value 
 }
-console.log(JSON.stringify(request));
+
   this._authService.QCLotVerify(request).subscribe({
     next: res => {
-      console.log(res);
+      
       this.lotStatus = res.Data;
       this.QCVerifyButtonDisable(res.Data.qC_Verified_Status);   
       if(res.Data.qC_Verified_Status)
       {
-        this.downloadExcelFromBase64(this.lotStatus.fileResponse.file, "PayRegister");
+        const inputType = this.lotAssignment.payroll_Input_Type;
+        const label = inputType === 'Salary' ? inputType : 'ONETIME';
+        let fileName = `${this.lotAssignment.company_code}_${this.lotAssignment.company_name}_${label}_${this.lotAssignment.pay_period}_${this.lotAssignment.lot_Number}`;
+        fileName = fileName.replace(/\s+/g, '_'); 
+        this.downloadExcelFromBase64(this.lotStatus.fileResponse.file,fileName);
       }   
       else{
          this.isLoading=false;
@@ -480,7 +688,8 @@ InputDownload(){
       next: res => { if(res.StatusCode==200){
         const data=res.Data;
         var base64=data.file;
-        this.downloadExcelFromBase64(base64,this.lotAssignment.lot_Number)
+        let fileName = `${this.lotAssignment.company_code} _ ${this.lotAssignment.pay_period}_ ${this.lotAssignment.lot_Number}`;
+        this.downloadExcelFromBase64(base64,fileName)
         this.isLoading=false;
       }
 

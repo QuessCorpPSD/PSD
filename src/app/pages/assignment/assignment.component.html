@@ -38,9 +38,9 @@
                                     </svg></i> &nbsp;<span class="title">Filter</span> 
                             </button>&nbsp;
                             <ul class="dropdown-menu">
-                                <li><button class="dropdown-item" type="button">All Lot</button></li>
-                                <li><button class="dropdown-item" type="button">New Lot</button></li>
-                                <li><button class="dropdown-item" type="button">Revised Lot</button></li>
+                                <li><button (click)="FilterLayout('A')" class="dropdown-item"  type="button">All Lot</button></li>
+                                <li><button (click)="FilterLayout('N')" class="dropdown-item" type="button">New Lot</button></li>
+                                <li><button (click)="FilterLayout('R')" class="dropdown-item" type="button">Revised Lot</button></li>
                             </ul>
                         </div>
             

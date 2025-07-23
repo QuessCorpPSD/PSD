@@ -2,7 +2,7 @@ import { Observable } from "rxjs";
 import { APIResponse } from "../Models/apiresponse";
 
 export interface IAssignmentService {
-      GetAssignmentLot(userid):Observable<APIResponse>;
+      GetAssignmentLot(userid,filterType):Observable<APIResponse>;
       
       GetAllotment(val):Observable<APIResponse>;
       PayRegisterDownload(val):Observable<APIResponse>
@@ -13,6 +13,8 @@ export interface IAssignmentService {
       InputFileDownload(val):Observable<APIResponse>
       OutPutFileDownload(val):Observable<APIResponse>
       LotValidationEstimate(val):Observable<APIResponse>
+      UserLotValidation(val):Observable<APIResponse>
+      UserLotValidationAdd(val):Observable<APIResponse>
       FeedBackMail(val):Observable<APIResponse>;
       GetSOP_QA(): Observable<APIResponse>;
       getApiOptions(url: string): Observable<any[]>;

@@ -49,14 +49,20 @@ private _sessionStoreage:SessionStorageService){
   }
 
   GetCompanyData(UserId) {
-    const userdetail= this._sessionStoreage.getItem('UserProfile');
-  var user = JSON.parse(this._decrypt.decrypt(userdetail!));
-    this._authService.GetAssignmentLot(user.user_Id).subscribe(
+    const userdetail = this._sessionStoreage.getItem('UserProfile');
+    var user = JSON.parse(this._decrypt.decrypt(userdetail!));
+    this._authService.GetAssignmentLot(user.user_Id, 'A').subscribe(
       {
-        next: data =>  {this.data = data.Data;
-          console.log("Data Fetching")
-          console.log(this.data);
-        },
+        next: data => { this.data = data.Data; },
+        error: error => console.error('Error:', error)
+      });
+  }
+  FilterLayout(filterType):void{
+const userdetail= this._sessionStoreage.getItem('UserProfile');
+  var user = JSON.parse(this._decrypt.decrypt(userdetail!));
+    this._authService.GetAssignmentLot(user.user_Id,filterType).subscribe(
+      {
+        next: data => { this.data = data.Data;  },
         error: error => console.error('Error:', error)
       });
   }

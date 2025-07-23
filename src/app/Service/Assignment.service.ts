@@ -14,9 +14,9 @@ export class AssignmentService implements IAssignmentService {
     constructor(private http: HttpClient) {
 
     }
-    GetAssignmentLot(userid): Observable<APIResponse> {
-        console.log(this.http.get<APIResponse>(this.environment.apiUrl + 'Assignment/GetAssignmentLot/' + userid));
-        return this.http.get<APIResponse>(this.environment.apiUrl + 'Assignment/GetAssignmentLot/' + userid)
+    GetAssignmentLot(userid,filterType): Observable<APIResponse> {
+       
+        return this.http.get<APIResponse>(this.environment.apiUrl + 'Assignment/GetAssignmentLot/' + userid+'/'+filterType)
     }
     GetAllotment(val): Observable<APIResponse> {
         var inputval = JSON.stringify(val);
@@ -40,7 +40,7 @@ export class AssignmentService implements IAssignmentService {
 
         var inputval = JSON.stringify(val);
         const config = new HttpHeaders().set('Content-Type', 'application/json')
-            .set('Accept', 'application/json')
+            .set('Accept', 'application/json');           
         return this.http.post<APIResponse>(this.environment.apiUrl + 'Assignment/InputLotDownload', inputval, { headers: config })
     }
 
@@ -68,7 +68,7 @@ export class AssignmentService implements IAssignmentService {
     }
     QCLotVerify(val): Observable<APIResponse> {
         var inputval = JSON.stringify(val);
-        console.log(inputval);
+       
         const config = new HttpHeaders().set('Content-Type', 'application/json')
             .set('Accept', 'application/json')
         return this.http.post<APIResponse>(this.environment.apiUrl + 'Assignment/QCLotVerify', inputval, { headers: config })
@@ -76,6 +76,24 @@ export class AssignmentService implements IAssignmentService {
 
     GetCompanyDetails(val: string): Observable<APIResponse> {
         return this.http.get<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/GetCompanyCode?user_id=' + val);
+    }
+
+    UserLotValidation(val):Observable<APIResponse>
+    {
+        var inputval = JSON.stringify(val);
+        
+        const config = new HttpHeaders().set('Content-Type', 'application/json')
+            .set('Accept', 'application/json')
+        return this.http.post<APIResponse>(this.environment.apiUrl + 'Assignment/UserEstimateLotValidation', inputval, { headers: config })
+    }
+
+    UserLotValidationAdd(val):Observable<APIResponse>
+    {
+        var inputval = JSON.stringify(val);
+        console.log(inputval);
+        const config = new HttpHeaders().set('Content-Type', 'application/json')
+            .set('Accept', 'application/json')
+        return this.http.post<APIResponse>(this.environment.apiUrl + 'Assignment/UserEstimateLotValidationAdd', inputval, { headers: config })
     }
 
     GetCategory(): Observable<APIResponse> {
@@ -492,8 +510,7 @@ export class AssignmentService implements IAssignmentService {
         return this.http.get<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/GetSOPAnswer22/'+val1+'/'+val2);
     }
     LotValidationEstimate(val):Observable<APIResponse>{
-          var inputval = JSON.stringify(val);
-          console.log(val);
+          var inputval = JSON.stringify(val);         
         const config = new HttpHeaders().set('Content-Type', 'application/json')
             .set('Accept', 'application/json')
         return this.http.post<APIResponse>(this.environment.apiUrl+'Assignment/UserLotStatusValidation',inputval,{ headers: config })

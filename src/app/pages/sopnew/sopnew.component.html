@@ -126,7 +126,7 @@
                     <div class="form-row">
                         <div class="form-column">
                             <div class="docs-h6">
-                                <b class="employee-id">Client website link</b>
+                                <b class="employee-id">Client Website link</b>
                             </div>
                             <div class="input-wrapper">
                                 <input *ngIf="Answer1" type="text" class="rectangle-div" maxlength="200"
@@ -134,7 +134,7 @@
                                     autocomplete="off">
                                 <div *ngIf="isSubmitted1 && !Answer1?.Client_Website_link?.trim()"
                                     style="color: red; font-size: 12px;">
-                                    Client website link is empty
+                                    Client Website link is empty
                                 </div>
                                 <div *ngIf="isSubmitted1 && isvalidateurl1" style="color: red; font-size: 12px;">
                                     Invalid URL
@@ -143,7 +143,7 @@
                         </div>
                         <div class="form-column">
                             <div class="docs-h6">
-                                <b class="employee-id">First Month Payroll</b>
+                                <b class="employee-id">First Month of Payroll</b>
                             </div>
                             <div class="input-wrapper">
                                 <input type="text" class="rectangle-div" maxlength="20"
@@ -297,7 +297,7 @@
                                 <div class="form-column">
                                     <div class="text" style="padding-bottom: 2%;">
                                         <div class="docs-h6">
-                                            <b class="employee-id">Enter vertical name</b>
+                                            <b class="employee-id">Vertical Name</b>
                                         </div>
                                         <div class="input-wrapper">
                                             <input type="text" [(ngModel)]="verticalInput1_4" class="rectangle-div"
@@ -309,7 +309,7 @@
                                 <div class="form-column">
                                     <div class="text" style="padding-bottom: 2%;">
                                         <div class="docs-h6">
-                                            <b class="employee-id">Spoc detail</b>
+                                            <b class="employee-id">Spoc Details</b>
                                         </div>
                                         <div class="input-wrapper">
                                             <input type="text" [(ngModel)]="verticalInput2_4" class="rectangle-div"
@@ -370,8 +370,8 @@
                         <div style="padding-bottom: 2%;">
                             <table class="styled-table" *ngIf="verticalGridData_4.length > 0" border="1">
                                 <tr>
-                                    <th>Vertical name</th>
-                                    <th>Spoc detail</th>
+                                    <th>Vertical Name</th>
+                                    <th>Spoc Details</th>
                                     <th>Mobile Number</th>
                                     <th>Designation</th>
                                 </tr>
@@ -402,7 +402,7 @@
                                 <div class="form-column">
                                     <div class="text" style="padding-bottom: 2%;">
                                         <div class="docs-h6">
-                                            <b class="employee-id">Enter department name</b>
+                                            <b class="employee-id">Department Name</b>
                                         </div>
                                         <div class="input-wrapper">
                                             <input type="text" [(ngModel)]="departmentInput1_4" class="rectangle-div"
@@ -414,7 +414,7 @@
                                 <div class="form-column">
                                     <div class="text" style="padding-bottom: 2%;">
                                         <div class="docs-h6">
-                                            <b class="employee-id">Head count</b>
+                                            <b class="employee-id">Headcount</b>
                                         </div>
                                         <div class="input-wrapper">
                                             <input type="text" [(ngModel)]="departmentInput2_4" class="rectangle-div"
@@ -471,8 +471,8 @@
                         <div style="padding-bottom: 2%;">
                             <table class="styled-table" *ngIf="departmentGridData_4.length > 0" border="1">
                                 <tr>
-                                    <th>Department name</th>
-                                    <th>Head count</th>
+                                    <th>Department Name</th>
+                                    <th>Headcount</th>
                                 </tr>
                                 <tr *ngFor="let data of departmentGridData_4;let i=index">
                                     <td>{{ data.input1 }}</td>
@@ -499,7 +499,7 @@
                                 <div class="form-column">
                                     <div class="text" style="padding-bottom: 2%;">
                                         <div class="docs-h6">
-                                            <b class="employee-id">Enter manager name</b>
+                                            <b class="employee-id">Manager Name</b>
                                         </div>
                                         <div class="input-wrapper">
                                             <input type="text" [(ngModel)]="managerInput1_4" class="rectangle-div"
@@ -577,7 +577,7 @@
                         <div style="padding-bottom: 2%;">
                             <table class="styled-table" *ngIf="managerGridData_4.length > 0" border="1">
                                 <tr>
-                                    <th>Manager name</th>
+                                    <th>Manager Name</th>
                                     <th>Mail ID</th>
                                     <th>Mobile Number</th>
                                     <th>Designation</th>
@@ -608,7 +608,7 @@
                                 <div class="form-column">
                                     <div class="text" style="padding-bottom: 2%;">
                                         <div class="docs-h6">
-                                            <b class="employee-id">Enter circle name</b>
+                                            <b class="employee-id">Circle Name</b>
                                         </div>
                                         <div class="input-wrapper">
                                             <input type="text" [(ngModel)]="circleInput1_4" class="rectangle-div"
@@ -620,7 +620,7 @@
                                 <div class="form-column">
                                     <div class="text" style="padding-bottom: 2%;">
                                         <div class="docs-h6">
-                                            <b class="employee-id">Spoc detail</b>
+                                            <b class="employee-id">Spoc Details</b>
                                         </div>
                                         <div class="input-wrapper">
                                             <input type="text" [(ngModel)]="circleInput2_4" class="rectangle-div"
@@ -681,8 +681,8 @@
                         <div style="padding-bottom: 2%;">
                             <table class="styled-table" *ngIf="circleGridData_4.length > 0" border="1">
                                 <tr>
-                                    <th>Circle name</th>
-                                    <th>Spoc detail</th>
+                                    <th>Circle Name</th>
+                                    <th>Spoc Details</th>
                                     <th>Mobile Number</th>
                                     <th>Designation</th>
                                 </tr>
@@ -722,7 +722,7 @@
                             <div class="form-column">
                                 <div class="docs-h6">
                                     <div style="text-align: center;">
-                                        <b class="employee-id">Attendance Cycle</b>
+                                        <b class="employee-id">Client Attendance Cycle</b>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -966,7 +966,7 @@
                     <div class="form-row">
                         <div class="form-column">
                             <div class="docs-h6">
-                                <b class="employee-id">Sim Card Management tracker</b>
+                                <b class="employee-id">Sim Card Applicability</b>
                             </div>
                             <div class="input-wrapper">
                                 <div class="radio-options-container">
@@ -980,7 +980,7 @@
                                 </div>
                                 <div *ngIf="isSubmitted8 && !Answer8?.selection?.trim()"
                                     style="color: red; font-size: 12px;">
-                                    Please Select Sim Card Management tracker
+                                    Please Select Sim Card Applicability
                                 </div>
                             </div>
                         </div>
@@ -988,7 +988,7 @@
                     <div class="form-row">
                         <div class="form-column">
                             <div class="docs-h6">
-                                <b class="employee-id">Email Id Management tracker</b>
+                                <b class="employee-id">Email ID Applicability</b>
                             </div>
                             <div class="input-wrapper">
                                 <div class="radio-options-container">
@@ -1002,7 +1002,7 @@
                                 </div>
                                 <div *ngIf="isSubmitted8 && !Answer8?.email?.trim()"
                                     style="color: red; font-size: 12px;">
-                                    Please Select Email ID Management Tracker
+                                    Please Select Email ID Applicability
                                 </div>
                             </div>
                         </div>
@@ -1010,7 +1010,7 @@
                     <div class="form-row">
                         <div class="form-column">
                             <div class="docs-h6">
-                                <b class="employee-id">ID card Management tracker</b>
+                                <b class="employee-id">ID Card Applicability</b>
                             </div>
                             <div class="input-wrapper">
                                 <div class="radio-options-container">
@@ -1023,7 +1023,7 @@
                                     </div>
                                 </div>
                                 <div *ngIf="isSubmitted8 && !Answer8?.id?.trim()" style="color: red; font-size: 12px;">
-                                    Please Select ID Card Management Tracker
+                                    Please Select ID Card Applicability
                                 </div>
                             </div>
                         </div>
@@ -1111,7 +1111,7 @@
                                 <div class="form-column">
                                     <div class="text" style="padding-bottom: 2%;">
                                         <div class="docs-h6">
-                                            <b class="employee-id">Enter email Detail</b>
+                                            <b class="employee-id">Email ID</b>
                                         </div>
                                         <div class="input-wrapper">
                                             <input type="text" [(ngModel)]="EmailInput1_11_3" class="rectangle-div"
@@ -1126,7 +1126,7 @@
                                 <div class="form-column">
                                     <div class="text" style="padding-bottom: 2%;">
                                         <div class="docs-h6">
-                                            <b class="employee-id">Point of contact</b>
+                                            <b class="employee-id">Point of Contact</b>
                                         </div>
                                         <div class="input-wrapper">
                                             <input type="text" [(ngModel)]="EmailInput2_11_3" class="rectangle-div"
@@ -1183,8 +1183,8 @@
                         <div style="padding-bottom: 2%;">
                             <table class="styled-table" *ngIf="EmailGridData_11_3.length > 0" border="1">
                                 <tr>
-                                    <th>Email name</th>
-                                    <th>Point of contact</th>
+                                    <th>Email ID</th>
+                                    <th>Point of Contact</th>
                                     <th>Designation</th>
                                     <th>Date</th>
                                 </tr>
@@ -1214,7 +1214,7 @@
                                 <div class="form-column">
                                     <div class="text" style="padding-bottom: 2%;">
                                         <div class="docs-h6">
-                                            <b class="employee-id">Enter Portal name</b>
+                                            <b class="employee-id">Portal Name</b>
                                         </div>
                                         <div class="input-wrapper">
                                             <input type="text" [(ngModel)]="PortalInput1_11_3" class="rectangle-div"
@@ -1225,7 +1225,7 @@
                                 <div class="form-column">
                                     <div class="text" style="padding-bottom: 2%;">
                                         <div class="docs-h6">
-                                            <b class="employee-id">Point of contact</b>
+                                            <b class="employee-id">Point of Contact</b>
                                         </div>
                                         <div class="input-wrapper">
                                             <input type="text" [(ngModel)]="PortalInput2_11_3" class="rectangle-div"
@@ -1248,11 +1248,19 @@
                                     </div>
                                 </div>
                             </div>
+                            <div>
+                                <div class="form-column">
+                                    <div class="docs-h6">
+                                        <b class="employee-id">Login Credential</b>
+                                    </div>
+                                </div>
+
+                            </div>
                             <div class="form-row">
                                 <div class="form-column">
                                     <div class="text" style="padding-bottom: 2%;">
                                         <div class="docs-h6">
-                                            <b class="employee-id">Login Credential</b>
+                                            <b class="employee-id">User Name</b>
                                         </div>
                                         <div class="input-wrapper">
                                             <input type="text" [(ngModel)]="PortalInput3_11_3" class="rectangle-div"
@@ -1260,6 +1268,23 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="form-column">
+                                    <div class="text" style="padding-bottom: 2%;">
+                                        <div class="docs-h6">
+                                            <b class="employee-id">Password</b>
+                                        </div>
+                                        <div class="input-wrapper">
+                                            <input type="text" [(ngModel)]="PortalInput5_11_3" class="rectangle-div"
+                                                autocomplete="off" maxlength="100" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-column">
+
+                                </div>
+                            </div>
+                            <div class="form-row">
+
                                 <div class="form-column">
                                     <div class="text" style="padding-bottom: 2%;">
                                         <div class="docs-h6">
@@ -1271,6 +1296,12 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="form-column">
+
+                                </div>
+                                <div class="form-column">
+
+                                </div>
                             </div>
 
                         </div>
@@ -1279,15 +1310,17 @@
                         <div style="padding-bottom: 2%;">
                             <table class="styled-table" *ngIf="PortalGridData_11_3.length > 0" border="1">
                                 <tr>
-                                    <th>Portal name</th>
-                                    <th>Point of contact</th>
-                                    <th>Login Credential</th>
+                                    <th>Portal Name</th>
+                                    <th>Point of Contact</th>
+                                    <th>User Name</th>
+                                    <th>Password</th>
                                     <th>Date</th>
                                 </tr>
                                 <tr *ngFor="let data of PortalGridData_11_3;let i=index">
                                     <td>{{ data.input1 }}</td>
                                     <td>{{ data.input2 }}</td>
                                     <td>{{ data.input3 }}</td>
+                                    <td>{{ data.input5 }}</td>
                                     <td>{{ data.input4 }}</td>
                                     <td (click)="editPortalData_11_3(i)" style="cursor: pointer;">
                                         <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24">
@@ -1311,7 +1344,7 @@
                                 <div class="form-column">
                                     <div class="text" style="padding-bottom: 2%;">
                                         <div class="docs-h6">
-                                            <b class="employee-id">Enter Biometric name</b>
+                                            <b class="employee-id">Biometric Name</b>
                                         </div>
                                         <div class="input-wrapper">
                                             <input type="text" [(ngModel)]="BiometricInput1_11_3" class="rectangle-div"
@@ -1322,7 +1355,7 @@
                                 <div class="form-column">
                                     <div class="text" style="padding-bottom: 2%;">
                                         <div class="docs-h6">
-                                            <b class="employee-id">Point of contact</b>
+                                            <b class="employee-id">Point of Contact</b>
                                         </div>
                                         <div class="input-wrapper">
                                             <input type="text" [(ngModel)]="BiometricInput2_11_3" class="rectangle-div"
@@ -1364,8 +1397,8 @@
                         <div style="padding-bottom: 2%;">
                             <table class="styled-table" *ngIf="BiometricGridData_11_3.length > 0" border="1">
                                 <tr>
-                                    <th>Biometric name</th>
-                                    <th>Point of contact</th>
+                                    <th>Biometric Name</th>
+                                    <th>Point of Contact</th>
                                     <th>Date</th>
                                 </tr>
                                 <tr *ngFor="let data of BiometricGridData_11_3;let i=index">
@@ -1393,7 +1426,7 @@
                                 <div class="form-column">
                                     <div class="text" style="padding-bottom: 2%;">
                                         <div class="docs-h6">
-                                            <b class="employee-id">Enter Name</b>
+                                            <b class="employee-id">Name</b>
                                         </div>
                                         <div class="input-wrapper">
                                             <input type="text" [(ngModel)]="OthersInput1_11_3" class="rectangle-div"
@@ -1405,7 +1438,7 @@
                                 <div class="form-column">
                                     <div class="text" style="padding-bottom: 2%;">
                                         <div class="docs-h6">
-                                            <b class="employee-id">Point of contact</b>
+                                            <b class="employee-id">Point of Contact</b>
                                         </div>
                                         <div class="input-wrapper">
                                             <input type="text" [(ngModel)]="OthersInput2_11_3" class="rectangle-div"
@@ -1462,8 +1495,8 @@
                         <div style="padding-bottom: 2%;">
                             <table class="styled-table" *ngIf="OthersGridData_11_3.length > 0" border="1">
                                 <tr>
-                                    <th>Enter Name</th>
-                                    <th>Point of contact</th>
+                                    <th>Name</th>
+                                    <th>Point of Contact</th>
                                     <th>Designation</th>
                                     <th>Date</th>
                                 </tr>
@@ -1574,26 +1607,26 @@
                     <div class="form-row">
                         <div class="form-column">
                             <div class="docs-h6">
-                                <b class="employee-id">First Input date</b>
+                                <b class="employee-id">First Input Date</b>
                             </div>
                             <div class="input-wrapper">
                                 <input type="date" class="rectangle-div" [(ngModel)]="Answer15.First_Input_date"
                                     name="first_Input_date" autocomplete="off" />
                                 <div *ngIf="isSubmitted15 && !Answer15?.First_Input_date?.trim()"
                                     style="color: red; font-size: 12px;">
-                                    Please select First Input date
+                                    Please select First Input Date
                                 </div>
                             </div>
                         </div>
                         <div class="form-column">
                             <div class="docs-h6">
-                                <b class="employee-id">Revised input date</b>
+                                <b class="employee-id">Revised Input Date</b>
                             </div>
                             <div class="input-wrapper">
                                 <input type="date" class="rectangle-div" [(ngModel)]="Answer15.Revised_Input_date"
                                     name="revised_Input_date" autocomplete="off" />
                                 <div *ngIf="!isRevisedDateValid()" style="color: red; font-size: 12px;">
-                                    Revised input date must be greater than First Input date.
+                                    Revised Input Date must be greater than First Input Date.
                                 </div>
                             </div>
                         </div>
@@ -1615,7 +1648,7 @@
                                 <div class="form-column">
                                     <div class="text" style="padding-bottom: 2%;">
                                         <div class="docs-h6">
-                                            <b class="employee-id">Enter POC Name</b>
+                                            <b class="employee-id">POC Name</b>
                                         </div>
                                         <div class="input-wrapper">
                                             <input type="text" [(ngModel)]="EmailInput1_15" class="rectangle-div"
@@ -1628,7 +1661,7 @@
                                 <div class="form-column">
                                     <div class="text" style="padding-bottom: 2%;">
                                         <div class="docs-h6">
-                                            <b class="employee-id">Enter Email</b>
+                                            <b class="employee-id">Email ID</b>
                                         </div>
                                         <div class="input-wrapper">
                                             <input type="text" [(ngModel)]="EmailInput2_15" class="rectangle-div"
@@ -1693,8 +1726,8 @@
                         <div style="padding-bottom: 2%;">
                             <table class="styled-table" *ngIf="EmailGridData_15.length > 0" border="1">
                                 <tr>
-                                    <th>Enter POC name</th>
-                                    <th>Enter Email</th>
+                                    <th>POC Name</th>
+                                    <th>Email ID</th>
                                     <th>POC Mobile Number</th>
                                     <th>Designation</th>
                                 </tr>
@@ -1724,7 +1757,7 @@
                                 <div class="form-column">
                                     <div class="text" style="padding-bottom: 2%;">
                                         <div class="docs-h6">
-                                            <b class="employee-id">Enter POC Name</b>
+                                            <b class="employee-id">POC Name</b>
                                         </div>
                                         <div class="input-wrapper">
                                             <input type="text" [(ngModel)]="PortalInput1_15" class="rectangle-div"
@@ -1736,7 +1769,7 @@
                                 <div class="form-column">
                                     <div class="text" style="padding-bottom: 2%;">
                                         <div class="docs-h6">
-                                            <b class="employee-id">Enter Email</b>
+                                            <b class="employee-id">Email ID</b>
                                         </div>
                                         <div class="input-wrapper">
                                             <input type="text" [(ngModel)]="PortalInput2_15" class="rectangle-div"
@@ -1801,8 +1834,8 @@
                         <div style="padding-bottom: 2%;">
                             <table class="styled-table" *ngIf="PortalGridData_15.length > 0" border="1">
                                 <tr>
-                                    <th>Enter POC name</th>
-                                    <th>Enter Email</th>
+                                    <th>POC Name</th>
+                                    <th>Email ID</th>
                                     <th>POC Mobile Number</th>
                                     <th>Designation</th>
                                 </tr>
@@ -1833,7 +1866,7 @@
                                 <div class="form-column">
                                     <div class="text" style="padding-bottom: 2%;">
                                         <div class="docs-h6">
-                                            <b class="employee-id">Enter POC name</b>
+                                            <b class="employee-id">POC Name</b>
                                         </div>
                                         <div class="input-wrapper">
                                             <input type="text" [(ngModel)]="BiometricInput1_15" class="rectangle-div"
@@ -1845,7 +1878,7 @@
                                 <div class="form-column">
                                     <div class="text" style="padding-bottom: 2%;">
                                         <div class="docs-h6">
-                                            <b class="employee-id">Enter Email</b>
+                                            <b class="employee-id">Email ID</b>
                                         </div>
                                         <div class="input-wrapper">
                                             <input type="text" [(ngModel)]="BiometricInput2_15" class="rectangle-div"
@@ -1909,8 +1942,8 @@
                         <div style="padding-bottom: 2%;">
                             <table class="styled-table" *ngIf="BiometricGridData_15.length > 0" border="1">
                                 <tr>
-                                    <th>Enter POC name</th>
-                                    <th>Enter Email</th>
+                                    <th>POC Name</th>
+                                    <th>Email ID</th>
                                     <th>POC Mobile Number</th>
                                     <th>Designation</th>
                                 </tr>
@@ -1940,7 +1973,7 @@
                                 <div class="form-column">
                                     <div class="text" style="padding-bottom: 2%;">
                                         <div class="docs-h6">
-                                            <b class="employee-id">Enter POC Name</b>
+                                            <b class="employee-id">POC Name</b>
                                         </div>
                                         <div class="input-wrapper">
                                             <input type="text" [(ngModel)]="OthersInput1_15" class="rectangle-div"
@@ -1952,7 +1985,7 @@
                                 <div class="form-column">
                                     <div class="text" style="padding-bottom: 2%;">
                                         <div class="docs-h6">
-                                            <b class="employee-id">Enter Email</b>
+                                            <b class="employee-id">Email ID</b>
                                         </div>
                                         <div class="input-wrapper">
                                             <input type="text" [(ngModel)]="OthersInput2_15" class="rectangle-div"
@@ -2016,8 +2049,8 @@
                         <div style="padding-bottom: 2%;">
                             <table class="styled-table" *ngIf="OthersGridData_15.length > 0" border="1">
                                 <tr>
-                                    <th>Enter POC name</th>
-                                    <th>Enter Email</th>
+                                    <th>POC Name</th>
+                                    <th>Email ID</th>
                                     <th>POC Mobile Number</th>
                                     <th>Designation</th>
                                 </tr>
@@ -2170,69 +2203,6 @@
                         <div *ngIf="isSubmitted17 && !Answer17?.Inactive_Employee_Load?.trim()"
                             style="color: red; font-size: 12px;">
                             Please select an option
-                        </div>
-                    </div>
-                    <div>
-                        <div style="padding-bottom: 1%;" *ngIf="Answer17.Inactive_Employee_Load ==='Yes'">
-                            <div class="=form-row">
-                                <div class="form-column">
-                                    <div class="docs-h6">
-                                        <b class="employee-id">Date (1-31)</b>
-                                    </div>
-                                    <div class="input-wrapper">
-                                        <input type="text" class="rectangle-div" [(ngModel)]="Answer17.FF_Days"
-                                            name="fF_Days" autocomplete="off" maxlength="5"
-                                            (input)="onDayInput($event)" />
-                                        <div *ngIf="isSubmitted17 && !Answer17?.FF_Days?.trim()"
-                                            style="color: red; font-size: 12px;">
-                                            Date (0-31) is empty
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-column">
-                                    <div class="docs-h6">
-                                        <b class="employee-id">Remarks</b>
-                                    </div>
-                                    <div class="input-wrapper">
-                                        <input type="text" class="rectangle-div" maxlength="500"
-                                            [(ngModel)]="Answer17.Remarks" name="remarks" autocomplete="off" />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div style="padding-bottom: 1%;">
-                            <div class="docs-h6">
-                                <b class="employee-id">Gratuity</b>
-                            </div>
-                            <div class="input-wrapper">
-                                <div class="radio-options-container">
-                                    <div class="checkboxradio-button" *ngFor="let item of options17_2"
-                                        (click)="Answer17.Gratuity = item.label">
-                                        <img class="component-39-icon"
-                                            [src]="Answer17.Gratuity === item.label ? '../../../assets/radiochecked.svg' : '../../../assets/radiodefault.svg'"
-                                            alt="Radio icon">
-                                        <div class="option">{{ item.label }}</div>
-                                    </div>
-                                </div>
-                                <div *ngIf="isSubmitted17 && !Answer17?.Gratuity?.trim()"
-                                    style="color: red; font-size: 12px;">
-                                    Please Select Gratuity
-                                </div>
-                            </div>
-
-                        </div>
-                        <div style="padding-bottom: 1%;" *ngIf="Answer17.Inactive_Employee_Load ==='Yes'">
-                            <div class="docs-h6">
-                                <b class="employee-id">Date of Input Submission</b>
-                            </div>
-                            <div class="input-wrapper">
-                                <input type="date" class="rectangle-div" [(ngModel)]="Answer17.Date_Submission"
-                                    name="date_Submission" autocomplete="off" />
-                                <div *ngIf="isSubmitted17 && !Answer17?.Date_Submission?.trim()"
-                                    style="color: red; font-size: 12px;">
-                                    Date of Input Submission is empty
-                                </div>
-                            </div>
                         </div>
                     </div>
                     <div style="padding-top: 3%;">
@@ -2433,7 +2403,7 @@
                             </div>
                             <div style="padding-bottom: 1%;">
                                 <div class="docs-h6">
-                                    <b class="employee-id">Designationwise Days</b>
+                                    <b class="employee-id">Designation-wise Days</b>
                                 </div>
                                 <div class="input-wrapper">
                                     <input type="text" class="rectangle-div" [(ngModel)]="Answer20.Designationwise_Days"
@@ -2640,7 +2610,7 @@
                             <div class="form-row">
                                 <div class="form-column">
                                     <div class="docs-h6">
-                                        <b class="employee-id">Point of contact</b>
+                                        <b class="employee-id">Point of Contact</b>
                                     </div>
                                     <div class="input-wrapper">
                                         <input type="text" class="rectangle-div" [(ngModel)]="Answer21.Point_Of_Contact"
@@ -2648,14 +2618,14 @@
                                             (input)="onAlphanumericInput($event)" maxlength="50">
                                         <div *ngIf="isSubmitted21 && !Answer21?.Point_Of_Contact?.trim()"
                                             style="color: red; font-size: 12px;">
-                                            Point Of Contact is empty
+                                            Point of Contact is empty
                                         </div>
                                     </div>
                                 </div>
                                 <div class="form-column">
                                     <div style="padding-bottom: 1%;">
                                         <div class="docs-h6">
-                                            <b class="employee-id">Email</b>
+                                            <b class="employee-id">Email ID</b>
                                         </div>
                                         <div class="input-wrapper">
                                             <input type="text" class="rectangle-div" [(ngModel)]="Answer21.Email"
@@ -2755,7 +2725,7 @@
                         <div *ngIf="Answer22.Leave_Management=='Quess'">
                             <div style="padding-bottom: 1%;">
                                 <div class="docs-h6">
-                                    <b class="employee-id">Calander Type</b>
+                                    <b class="employee-id">Calendar Type</b>
                                 </div>
                                 <div class="input-wrapper">
                                     <div class="radio-options-container">
@@ -2769,7 +2739,7 @@
                                     </div>
                                     <div *ngIf="isSubmitted22 && !Answer22?.Calander_Type?.trim()"
                                         style="color: red; font-size: 12px;">
-                                        Please select an Calander Type
+                                        Please select an Calendar Type
                                     </div>
                                 </div>
                             </div>
@@ -2791,7 +2761,7 @@
                                 </div>
                             </div>
                             <div
-                                *ngIf="Answer22.Leave_Type=='Paternity leave' || Answer22.Leave_Type=='Sabbatical leave'">
+                                *ngIf="Answer22.Leave_Type=='Paternity Leave' || Answer22.Leave_Type=='Sabbatical Leave'">
                                 <div style="padding-bottom: 1%;">
                                     <div class="docs-h6">
                                         <b class="employee-id">Number of Leave</b>
@@ -2867,7 +2837,7 @@
                                 </div>
                                 <div *ngIf="Answer22.Encashment=='Yes'" style="padding-bottom: 1%;">
                                     <div class="docs-h6">
-                                        <b class="employee-id">Leave encashment</b>
+                                        <b class="employee-id">Leave Encashment</b>
                                     </div>
                                     <div class="input-wrapper">
                                         <div class="radio-options-container">
@@ -2903,13 +2873,13 @@
                                     <th hidden>SOPId</th>
                                     <th hidden>Applicable</th>
                                     <th>Leave Management</th>
-                                    <th>Calander Type</th>
+                                    <th>Calendar Type</th>
                                     <th>Leave Type</th>
                                     <th>No of Leave</th>
-                                    <th>Carry Forward</th>
-                                    <th>Carry Forward Days</th>  
-                                    <th>Encashment</th>                                  
-                                    <th>Leave Encashment</th>                                    
+                                    <th>Carryforward</th>
+                                    <th>Carryforward Days</th>
+                                    <th>Encashment</th>
+                                    <th>Leave Encashment</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -2921,9 +2891,9 @@
                                     <td>{{ item.leave_Type }}</td>
                                     <td>{{ item.no_Of_Leave }}</td>
                                     <td>{{ item.carry_Forward }}</td>
-                                    <td>{{ item.carry_Forward_Days }}</td> 
-                                    <td>{{ item.encashment }}</td>                                   
-                                    <td>{{ item.leave_Encashment }}</td>                                    
+                                    <td>{{ item.carry_Forward_Days }}</td>
+                                    <td>{{ item.encashment }}</td>
+                                    <td>{{ item.leave_Encashment }}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -3021,7 +2991,7 @@
                     <div class="form-row">
                         <div class="form-column">
                             <div class="docs-h6">
-                                <b class="employee-id">Calander Type</b>
+                                <b class="employee-id">Calendar Type</b>
                             </div>
                             <div class="input-wrapper">
                                 <div class="radio-options-container">
@@ -3033,7 +3003,7 @@
                                     </select>
                                     <div *ngIf="isSubmitted24 && !Answer24?.Calander_Type_Id?.trim()"
                                         style="color: red; font-size: 12px;">
-                                        Please select Calander Type
+                                        Please select Calendar Type
                                     </div>
                                 </div>
                             </div>
@@ -3098,7 +3068,7 @@
                     <div class="form-row">
                         <div class="form-column">
                             <div class="docs-h6">
-                                <b class="employee-id">Leave Description</b>
+                                <b class="employee-id">Holiday Description</b>
                             </div>
                             <div class="input-wrapper">
                                 <div class="radio-options-container">
@@ -3106,14 +3076,14 @@
                                         name="leave_Description" autocomplete="off" maxlength="100">
                                     <div *ngIf="isSubmitted24 && !Answer24?.Leave_Description?.trim()"
                                         style="color: red; font-size: 12px;">
-                                        Leave Description is empty
+                                        Holiday Description is empty
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="form-column">
                             <div class="docs-h6">
-                                <b class="employee-id">is Billable</b>
+                                <b class="employee-id">Is Billable</b>
                             </div>
                             <div class="input-wrapper">
                                 <div class="input-wrapper">
@@ -3165,7 +3135,7 @@
                             <thead>
                                 <tr>
                                     <th hidden>SOPId</th>
-                                    <th>Calander Type</th>
+                                    <th>Calendar Type</th>
                                     <th>State Name</th>
                                     <th>Leave Type</th>
                                     <th>Date</th>
@@ -3224,7 +3194,7 @@
                         <div class="form-row">
                             <div class="form-column">
                                 <div class="docs-h6">
-                                    <b class="employee-id">Calander Type</b>
+                                    <b class="employee-id">Calendar Type</b>
                                 </div>
                                 <div class="input-wrapper">
                                     <div class="radio-options-container">
@@ -3238,7 +3208,7 @@
                                     </div>
                                     <div *ngIf="isSubmitted25 && !Answer25?.Calandar_Type?.trim()"
                                         style="color: red; font-size: 12px;">
-                                        Please select Calandar Type
+                                        Please select Calendar Type
                                     </div>
                                 </div>
                             </div>
@@ -3246,7 +3216,7 @@
                         <div class="form-row">
                             <div class="form-column">
                                 <div class="docs-h6">
-                                    <b class="employee-id">Accumulated and FlushOut</b>
+                                    <b class="employee-id">Accumulated and Flush-Out</b>
                                 </div>
                                 <div class="input-wrapper">
                                     <div class="radio-options-container">
@@ -3260,7 +3230,7 @@
                                     </div>
                                     <div *ngIf="isSubmitted25 && !Answer25?.Accumulated_FlushOut?.trim()"
                                         style="color: red; font-size: 12px;">
-                                        Please select Accumulated and FlushOut
+                                        Please select Accumulated and Flush-Out
                                     </div>
                                 </div>
                             </div>
@@ -3620,7 +3590,7 @@
                         </div>
                         <div class="form-column">
                             <div class="docs-h6">
-                                <b class="employee-id">Is ESI NonApplicable</b>
+                                <b class="employee-id">Is ESI Non-Applicable</b>
                             </div>
                             <div class="input-wrapper">
                                 <div class="checkboxcheckbox">
@@ -3654,7 +3624,7 @@
                         </div>
                         <div class="form-column">
                             <div class="docs-h6">
-                                <b class="employee-id">NewJoinee Arrear</b>
+                                <b class="employee-id">New Joinee Arrear</b>
                             </div>
                             <div class="input-wrapper">
                                 <select class="custom-select" style="width: 200px;"
@@ -3924,7 +3894,7 @@
                             <div class="form-row">
                                 <div class="form-column">
                                     <div class="docs-h6">
-                                        <b class="employee-id">Point of contact</b>
+                                        <b class="employee-id">Point of Contact</b>
                                     </div>
                                     <div class="input-wrapper">
                                         <input type="text" class="rectangle-div" [(ngModel)]="Answer28.Point_Of_Contact"
@@ -3932,13 +3902,13 @@
                                             (input)="onAlphanumericInput($event)" maxlength="50">
                                         <div *ngIf="isSubmitted28 && !Answer28?.Point_Of_Contact?.trim()"
                                             style="color: red; font-size: 12px;">
-                                            Point Of Contact is empty
+                                            Point of Contact is empty
                                         </div>
                                     </div>
                                 </div>
                                 <div class="form-column">
                                     <div class="docs-h6">
-                                        <b class="employee-id">Email</b>
+                                        <b class="employee-id">Email ID</b>
                                     </div>
                                     <div class="input-wrapper">
                                         <input type="text" class="rectangle-div" [(ngModel)]="Answer28.Email"
@@ -4021,7 +3991,7 @@
                     <div *ngIf="Answer29.Billable==='No'">
                         <div style="padding-bottom: 1%;">
                             <div class="docs-h6">
-                                <b class="employee-id">DISPLAY REGISTER</b>
+                                <b class="employee-id">Display Register</b>
                             </div>
                             <div class="input-wrapper">
                                 <div class="radio-options-container">
@@ -4115,7 +4085,7 @@
                         <div class="form-row">
                             <div class="form-column">
                                 <div class="docs-h6">
-                                    <b class="employee-id">REPOSITORY</b>
+                                    <b class="employee-id">Repository</b>
                                 </div>
                                 <div class="input-wrapper">
                                     <input type="file" class="rectangle-div" (change)="onFileSelected($event)">
@@ -4163,14 +4133,14 @@
                     <div *ngIf="Answer32.Calculation==='Quess'">
                         <div style="padding-bottom: 1%;">
                             <div class="docs-h6">
-                                <b class="employee-id">ATTRIBUTES</b>
+                                <b class="employee-id">Attributes</b>
                             </div>
                             <div class="input-wrapper">
                                 <input type="text" class="rectangle-div" [(ngModel)]="Answer32.ATTRIBUTES"
                                     name="attributes" autocomplete="off" maxlength="50">
                                 <div *ngIf="isSubmitted32 && !Answer32?.ATTRIBUTES?.trim()"
                                     style="color: red; font-size: 12px;">
-                                    ATTRIBUTES is empty
+                                    Attributes is empty
                                 </div>
                             </div>
                         </div>
@@ -4199,7 +4169,7 @@
                                 <div class="form-column">
                                     <div class="text" style="padding-bottom: 2%;">
                                         <div class="docs-h6">
-                                            <b class="employee-id">Enter email Detail</b>
+                                            <b class="employee-id">Email ID</b>
                                         </div>
                                         <div class="input-wrapper">
                                             <input type="text" [(ngModel)]="EmailInput1_33" class="rectangle-div"
@@ -4214,7 +4184,7 @@
                                 <div class="form-column">
                                     <div class="text" style="padding-bottom: 2%;">
                                         <div class="docs-h6">
-                                            <b class="employee-id">Point of contact</b>
+                                            <b class="employee-id">Point of Contact</b>
                                         </div>
                                         <div class="input-wrapper">
                                             <input type="text" [(ngModel)]="EmailInput2_33" class="rectangle-div"
@@ -4243,8 +4213,8 @@
                         <div style="padding-bottom: 2%;">
                             <table class="styled-table" *ngIf="EmailGridData_33.length > 0" border="1">
                                 <tr>
-                                    <th>Enter email Detail</th>
-                                    <th>Point of contact</th>
+                                    <th>Email ID</th>
+                                    <th>Point of Contact</th>
                                 </tr>
                                 <tr *ngFor="let data of EmailGridData_33;let i=index">
                                     <td>{{ data.input1 }}</td>
@@ -4270,7 +4240,7 @@
                                 <div class="form-column">
                                     <div class="text" style="padding-bottom: 2%;">
                                         <div class="docs-h6">
-                                            <b class="employee-id">Enter Portal Details</b>
+                                            <b class="employee-id">Portal Details</b>
                                         </div>
                                         <div class="input-wrapper">
                                             <input type="text" [(ngModel)]="PortalInput1_33" class="rectangle-div"
@@ -4281,7 +4251,7 @@
                                 <div class="form-column">
                                     <div class="text" style="padding-bottom: 2%;">
                                         <div class="docs-h6">
-                                            <b class="employee-id">Point of contact</b>
+                                            <b class="employee-id">Point of Contact</b>
                                         </div>
                                         <div class="input-wrapper">
                                             <input type="text" [(ngModel)]="PortalInput2_33" class="rectangle-div"
@@ -4292,7 +4262,7 @@
                                 </div>
                                 <div class="form-column">
                                     <div class="docs-h6">
-                                        <b class="employee-id">Point of contact</b>
+                                        <b class="employee-id">Point of Contact</b>
                                     </div>
                                     <div class="input-wrapper">
                                         <div (click)="addPortalData_33()" class="button-parent">
@@ -4310,8 +4280,8 @@
                         <div style="padding-bottom: 2%;">
                             <table class="styled-table" *ngIf="PortalGridData_33.length > 0" border="1">
                                 <tr>
-                                    <th>Enter Portal Details</th>
-                                    <th>Point of contact</th>
+                                    <th>Portal Details</th>
+                                    <th>Point of Contact</th>
                                 </tr>
                                 <tr *ngFor="let data of PortalGridData_33;let i=index">
                                     <td>{{ data.input1 }}</td>
@@ -4707,7 +4677,7 @@
                     <div class="form-row">
                         <div class="form-column">
                             <div class="docs-h6">
-                                <b class="employee-id">Mode of payment*</b>
+                                <b class="employee-id">Mode of Payment*</b>
                             </div>
                             <div class="input-wrapper">
                                 <select class="custom-select" style="width: 200px;"
@@ -4717,13 +4687,13 @@
                                 </select>
                                 <div *ngIf="isSubmitted35 && (Answer35?.Type_Of_Contact === '0' || Answer35?.Type_Of_Contact === '')"
                                     style="color: red; font-size: 12px;">
-                                    Please select Mode of payment
+                                    Please select Mode of Payment
                                 </div>
                             </div>
                         </div>
                         <div class="form-column">
                             <div class="docs-h6">
-                                <b class="employee-id">If Upfront, Credit Days agreed*</b>
+                                <b class="employee-id">If Upfront, Credit Days Agreed*</b>
                             </div>
                             <div class="input-wrapper">
                                 <input type="text" class="rectangle-div" [(ngModel)]="Answer35.Credit_Days_Agreed"
@@ -4740,14 +4710,14 @@
                     <div class="form-row">
                         <div class="form-column">
                             <div class="docs-h6">
-                                <b class="employee-id">Start date of the Service Agreement/Contract*</b>
+                                <b class="employee-id">Start Date of the Service Agreement/Contract*</b>
                             </div>
                             <div class="input-wrapper">
                                 <input type="date" class="rectangle-div" [(ngModel)]="Answer35.Agreement_Start_Date"
                                     name="agreement_Start_Date" autocomplete="off">
                                 <div *ngIf="isSubmitted35 && !Answer35?.Agreement_Start_Date?.trim()"
                                     style="color: red; font-size: 12px;">
-                                    Start date is empty
+                                    Start Date is empty
                                 </div>
                             </div>
                         </div>
@@ -4772,17 +4742,17 @@
                     <div class="form-row">
                         <div class="form-column">
                             <div class="docs-h6">
-                                <b class="employee-id">End date of the service agreement*</b>
+                                <b class="employee-id">End Date of the service agreement*</b>
                             </div>
                             <div class="input-wrapper">
                                 <input type="date" class="rectangle-div" [(ngModel)]="Answer35.Agreement_End_Date"
                                     name="agreement_End_Date" [disabled]="isTillServiceTerminate">
                                 <div *ngIf="!isEnddateserviceDateValid()" style="color: red; font-size: 12px;">
-                                    End date must be greater than Start date.
+                                    End Date must be greater than Start date.
                                 </div>
                                 <div *ngIf="isSubmitted35 && !isTillServiceTerminate && !Answer35?.Agreement_End_Date?.trim()"
                                     style="color: red; font-size: 12px;">
-                                    End date is empty
+                                    End Date is empty
                                 </div>
                             </div>
                         </div>
@@ -4852,7 +4822,7 @@
                         </div>
                         <div class="form-column">
                             <div class="docs-h6">
-                                <b class="employee-id">Service fee Type*</b>
+                                <b class="employee-id">Service Fee Type*</b>
                             </div>
                             <div class="input-wrapper">
                                 <select class="custom-select" style="width: 200px;" [(ngModel)]="selectedServiceFee35"
@@ -4862,7 +4832,7 @@
                                 </select>
                                 <div *ngIf="isSubmitted35 && (Answer35.Service_Fee_Type==='0' ||Answer35.Service_Fee_Type==='')"
                                     style="color: red; font-size: 12px;">
-                                    Please select Service fee Type
+                                    Please select Service Fee Type
                                 </div>
                             </div>
                         </div>
@@ -5018,7 +4988,7 @@
                     <div class="form-row">
                         <div class="form-column">
                             <div class="docs-h6">
-                                <b class="employee-id">PAYROLL WITH DECIMAL</b>
+                                <b class="employee-id">Payroll with Decimal</b>
                             </div>
                             <div class="input-wrapper">
                                 <select class="custom-select" style="width: 200px;" [(ngModel)]="selectedPAYROLL35"
@@ -5030,7 +5000,7 @@
                         </div>
                         <div class="form-column">
                             <div class="docs-h6">
-                                <b class="employee-id">SERVICE FEE WITH DECIMAL</b>
+                                <b class="employee-id">Service Fee with Decimal</b>
                             </div>
                             <div class="input-wrapper">
                                 <select class="custom-select" style="width: 200px;" [(ngModel)]="selectedSERVICE35"
@@ -5074,8 +5044,8 @@
                                     <th>Supplementary Charges</th>
                                     <th>LatePayment Fee</th>
                                     <th>Other Fees</th>
-                                    <th>PAYROLL WITH DECIMAL</th>
-                                    <th>SERVICE FEE WITH DECIMAL</th>
+                                    <th>Payroll with Decimal</th>
+                                    <th>Service Fee with Decimal</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -5376,7 +5346,7 @@
                         </div>
                         <div style="padding-bottom: 1%;">
                             <div class="docs-h6">
-                                <b class="employee-id">PO Utiliziation</b>
+                                <b class="employee-id">PO Utilization</b>
                             </div>
                             <div class="input-wrapper">
                                 <div class="checkboxcheckbox" *ngFor="let item of options39_3">
@@ -5390,7 +5360,7 @@
                                 </div>
                                 <div *ngIf="isSubmitted39 && !Answer39?.selection?.trim()"
                                     style="color: red; font-size: 12px;">
-                                    Please select PO Utiliziation
+                                    Please select PO Utilization
                                 </div>
                             </div>
                         </div>
@@ -5544,7 +5514,7 @@
                     <div class="form-row">
                         <div class="form-column">
                             <div class="docs-h6">
-                                <b class="employee-id">Vendor Creation date</b>
+                                <b class="employee-id">Vendor Creation Date</b>
                             </div>
                             <div class="input-wrapper">
                                 <input type="date" class="rectangle-div" [(ngModel)]="Answer40.VendorCreationDate"
@@ -5696,8 +5666,8 @@
                     <div *ngIf="verticalGridData_4.length > 0" style="padding-bottom: 2%;">
                         <table class="styled-table" *ngIf="verticalGridData_4.length > 0" border="1">
                             <tr>
-                                <th>Vertical name</th>
-                                <th>Spoc detail</th>
+                                <th>Vertical Name</th>
+                                <th>Spoc Details</th>
                                 <th>Mobile Number</th>
                                 <th>Designation</th>
                             </tr>
@@ -5713,8 +5683,8 @@
                     <div *ngIf="departmentGridData_4.length > 0" style="padding-bottom: 2%;">
                         <table class="styled-table" *ngIf="departmentGridData_4.length > 0" border="1">
                             <tr>
-                                <th>Department name</th>
-                                <th>Head count</th>
+                                <th>Department Name</th>
+                                <th>Headcount</th>
                                 <th>Designation</th>
                             </tr>
                             <tr *ngFor="let data of departmentGridData_4">
@@ -5743,8 +5713,8 @@
                     <div *ngIf="circleGridData_4.length > 0" style="padding-bottom: 2%;">
                         <table class="styled-table" *ngIf="circleGridData_4.length > 0" border="1">
                             <tr>
-                                <th>Circle name</th>
-                                <th>Spoc detail</th>
+                                <th>Circle Name</th>
+                                <th>Spoc Details</th>
                                 <th>Mobile Number</th>
                                 <th>Designation</th>
                             </tr>
@@ -5848,7 +5818,7 @@
                         <div class="form-row">
                             <div class="form-column">
                                 <div class="docs-h6">
-                                    <b class="employee-id">Minimum wage category</b>
+                                    <b class="employee-id">Minimum Wage Category</b>
                                 </div>
                                 <div class="input-wrapper">
                                     <div class="radio-options-container">
@@ -5862,7 +5832,7 @@
                                     </div>
                                     <div *ngIf="isSubmitted42_1 && Answer42_2.Category===''"
                                         style="color: red; font-size: 12px;">
-                                        Please select Minimum wage category
+                                        Please select Minimum Wage Category
                                     </div>
                                 </div>
                             </div>
@@ -6021,7 +5991,7 @@
                                     <tr>
                                         <th>Company Code</th>
                                         <th>Designation</th>
-                                        <th>Skilled category</th>
+                                        <th>Skilled Category</th>
                                     </tr>
                                 </thead>
                                 <tbody>

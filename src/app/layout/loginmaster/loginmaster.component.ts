@@ -38,7 +38,7 @@ username:string = ''
   isSubmitting:boolean = false;
   Name:string='';
   userDeviceData!:string;
-    ipAddress: string = '';
+    ipAddress: string = '::1';
  computername:string='';
   validationErrors:Array<any> = [];
   
@@ -67,13 +67,20 @@ username:string = ''
     }
    
   ngOnInit(): void {
-   this.http.get('http://localhost:7000/', { responseType: 'text' })
+    // localStorage.clear();
+  //sessionStorage.clear();
+ if (!this.router.navigated) {
+    location.reload(); // Only if you need hard reload
+  }
+  // Optionally clear any custom cache service data
+  //this.cacheService?.clear(); // if you're using a caching service
+   this.http.get('http://localhost:7000', { responseType: 'text' })
       .subscribe({
         next: (response: string) => {
           
           // If you're using jQuery (not recommended), you can do:
           this.computername=response
-          
+         // console.log("Computer Name " +this.computername);
           // Angular way (recommended):
           // this.companyName = response;
         },
@@ -94,9 +101,20 @@ username:string = ''
       }
     });
   }
-
+   roleIdGroups: Record<Role, number[]> = {
+  [Role.Admin]: [1,12, 14, 17, 20,38, 52, 263],
+  [Role.SOP]: [0],
+  [Role.Manager]: [] // fallback
+};
  
-
+getUserRole(roleId: number): Role {
+  for (const role in this.roleIdGroups) {
+    if (this.roleIdGroups[role as Role].includes(roleId)) {
+      return role as Role;
+    }
+  }
+  return Role.Manager;
+}
  validateLogin(): void {
   if (!this.username || this.username.trim() === '') {
     this.toastr.error("Please Enter Employee Code", "Error");
@@ -110,7 +128,9 @@ username:string = ''
 
  
 
- this.getIpAddress();
+ ///this.getIpAddress();
+
+
     
    const login = {
     username: this.username,
@@ -122,7 +142,7 @@ username:string = ''
   this._authService.ValidateLogin(login).subscribe({
     next: (loginStatus) => {
       const data = loginStatus.Data;
-
+      console.log(data);
       if (data.error_Message === "" && data.user_Id > 0) {
         this.Name = data.userName;
         this.sessionStorageService.setItem('UserProfile', this._encry.encrypt(JSON.stringify(data)));
@@ -130,8 +150,8 @@ username:string = ''
           this._encry.encrypt(data.token),
           this._encry.encrypt(data.refreshtoken)
         );
-
-        if (data.role_Id === 17) {
+;
+        if (this.getUserRole(data.role_Id)=='admin') {
           this.router.navigateByUrl('/Master/dashboard');
         } else {
           this.router.navigateByUrl('/Master/Home');
@@ -149,4 +169,8 @@ username:string = ''
 }
 
 }
-
+enum Role {
+  Admin = 'admin',
+  SOP = 'SOP',
+  Manager = 'manager'
+}

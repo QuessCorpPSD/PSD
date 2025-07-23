@@ -109,8 +109,8 @@ export class CustomersopService implements ICustomersop {
     return this.http.post<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/PostSOPAnswer2', inputval, { headers: config })
   }
 
-  GetSOPAnswer3(val1: string,val2: string, val3: string): Observable<APIResponse> {
-    return this.http.get<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/GetSOPAnswer3/' + val1 + '/' + val2+ '/' + val3);
+  GetSOPAnswer3(val1: string, val2: string, val3: string): Observable<APIResponse> {
+    return this.http.get<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/GetSOPAnswer3/' + val1 + '/' + val2 + '/' + val3);
   }
 
   PostSOPAnswer3(val): Observable<APIResponse> {
@@ -121,7 +121,7 @@ export class CustomersopService implements ICustomersop {
   }
 
   GetSOPAnswer6(val1: string, val2: string, val3: string): Observable<APIResponse> {
-    return this.http.get<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/GetSOPAnswer6/' + val1 + '/' + val2+ '/' + val3);
+    return this.http.get<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/GetSOPAnswer6/' + val1 + '/' + val2 + '/' + val3);
   }
 
   PostSOPAnswer6(val): Observable<APIResponse> {
@@ -132,7 +132,7 @@ export class CustomersopService implements ICustomersop {
   }
 
   GetSOPAnswer8(val1: string, val2: string, val3: string): Observable<APIResponse> {
-    return this.http.get<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/GetSOPAnswer8/' + val1 + '/' + val2+ '/' + val3);
+    return this.http.get<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/GetSOPAnswer8/' + val1 + '/' + val2 + '/' + val3);
   }
 
   PostSOPAnswer8(val): Observable<APIResponse> {
@@ -165,7 +165,7 @@ export class CustomersopService implements ICustomersop {
   }
 
   GetSOPAnswer5(val1: string, val2: string, val3: string): Observable<APIResponse> {
-    return this.http.get<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/GetSOPAnswer5/' + val1 + '/' + val2+ '/' + val3);
+    return this.http.get<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/GetSOPAnswer5/' + val1 + '/' + val2 + '/' + val3);
   }
 
   PostSOPAnswer5(val): Observable<APIResponse> {
@@ -187,7 +187,7 @@ export class CustomersopService implements ICustomersop {
   }
 
   GetSOPAnswer12(val1: string, val2: string, val3: string): Observable<APIResponse> {
-    return this.http.get<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/GetSOPAnswer12/' + val1 + '/' + val2+ '/' + val3);
+    return this.http.get<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/GetSOPAnswer12/' + val1 + '/' + val2 + '/' + val3);
   }
 
   PostSOPAnswer12(val): Observable<APIResponse> {
@@ -198,7 +198,7 @@ export class CustomersopService implements ICustomersop {
   }
 
   GetSOPAnswer13(val1: string, val2: string, val3: string): Observable<APIResponse> {
-    return this.http.get<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/GetSOPAnswer13/' + val1 + '/' + val2+ '/' + val3);
+    return this.http.get<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/GetSOPAnswer13/' + val1 + '/' + val2 + '/' + val3);
   }
 
   PostSOPAnswer13(val): Observable<APIResponse> {
@@ -209,7 +209,7 @@ export class CustomersopService implements ICustomersop {
   }
 
   GetSOPAnswer14(val1: string, val2: string, val3: string): Observable<APIResponse> {
-    return this.http.get<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/GetSOPAnswer14/' + val1 + '/' + val2+ '/' + val3);
+    return this.http.get<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/GetSOPAnswer14/' + val1 + '/' + val2 + '/' + val3);
   }
 
   PostSOPAnswer14(val): Observable<APIResponse> {
@@ -220,7 +220,7 @@ export class CustomersopService implements ICustomersop {
   }
 
   GetSOPAnswer16(val1: string, val2: string, val3: string): Observable<APIResponse> {
-    return this.http.get<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/GetSOPAnswer16/' + val1 + '/' + val2+ '/' + val3);
+    return this.http.get<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/GetSOPAnswer16/' + val1 + '/' + val2 + '/' + val3);
   }
 
   PostSOPAnswer16(val): Observable<APIResponse> {
@@ -231,7 +231,7 @@ export class CustomersopService implements ICustomersop {
   }
 
   GetSOPAnswer17(val1: string, val2: string, val3: string): Observable<APIResponse> {
-    return this.http.get<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/GetSOPAnswer17/' + val1 + '/' + val2+ '/' + val3);
+    return this.http.get<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/GetSOPAnswer17/' + val1 + '/' + val2 + '/' + val3);
   }
 
   PostSOPAnswer17(val): Observable<APIResponse> {
@@ -242,7 +242,7 @@ export class CustomersopService implements ICustomersop {
   }
 
   GetSOPAnswer18(val1: string, val2: string, val3: string): Observable<APIResponse> {
-    return this.http.get<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/GetSOPAnswer18/' + val1 + '/' + val2+ '/' + val3);
+    return this.http.get<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/GetSOPAnswer18/' + val1 + '/' + val2 + '/' + val3);
   }
 
   PostSOPAnswer18(val): Observable<APIResponse> {
@@ -253,7 +253,7 @@ export class CustomersopService implements ICustomersop {
   }
 
   GetSOPAnswer19(val1: string, val2: string, val3: string): Observable<APIResponse> {
-    return this.http.get<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/GetSOPAnswer19/' + val1 + '/' + val2+ '/' + val3);
+    return this.http.get<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/GetSOPAnswer19/' + val1 + '/' + val2 + '/' + val3);
   }
 
   PostSOPAnswer19(val): Observable<APIResponse> {
@@ -264,7 +264,7 @@ export class CustomersopService implements ICustomersop {
   }
 
   GetSOPAnswer21(val1: string, val2: string, val3: string): Observable<APIResponse> {
-    return this.http.get<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/GetSOPAnswer21/' + val1 + '/' + val2+ '/' + val3);
+    return this.http.get<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/GetSOPAnswer21/' + val1 + '/' + val2 + '/' + val3);
   }
 
   PostSOPAnswer21(val): Observable<APIResponse> {
@@ -275,7 +275,7 @@ export class CustomersopService implements ICustomersop {
   }
 
   GetSOPAnswer23(val1: string, val2: string, val3: string): Observable<APIResponse> {
-    return this.http.get<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/GetSOPAnswer23/' + val1 + '/' + val2+ '/' + val3);
+    return this.http.get<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/GetSOPAnswer23/' + val1 + '/' + val2 + '/' + val3);
   }
 
   PostSOPAnswer23(val): Observable<APIResponse> {
@@ -286,7 +286,7 @@ export class CustomersopService implements ICustomersop {
   }
 
   GetSOPAnswer25(val1: string, val2: string, val3: string): Observable<APIResponse> {
-    return this.http.get<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/GetSOPAnswer25/' + val1 + '/' + val2+ '/' + val3);
+    return this.http.get<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/GetSOPAnswer25/' + val1 + '/' + val2 + '/' + val3);
   }
 
   PostSOPAnswer25(val): Observable<APIResponse> {
@@ -296,8 +296,8 @@ export class CustomersopService implements ICustomersop {
     return this.http.post<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/PostSOPAnswer25', inputval, { headers: config })
   }
 
-  GetSOPAnswer28(val1: string, val2: string): Observable<APIResponse> {
-    return this.http.get<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/GetSOPAnswer28/' + val1 + '/' + val2);
+  GetSOPAnswer28(val1: string, val2: string, val3: string): Observable<APIResponse> {
+    return this.http.get<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/GetSOPAnswer28/' + val1 + '/' + val2 + '/' + val3);
   }
 
   PostSOPAnswer28(val): Observable<APIResponse> {
@@ -308,7 +308,7 @@ export class CustomersopService implements ICustomersop {
   }
 
   GetSOPAnswer29(val1: string, val2: string, val3: string): Observable<APIResponse> {
-    return this.http.get<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/GetSOPAnswer29/' + val1 + '/' + val2+ '/' + val3);
+    return this.http.get<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/GetSOPAnswer29/' + val1 + '/' + val2 + '/' + val3);
   }
 
   PostSOPAnswer29(val): Observable<APIResponse> {
@@ -319,7 +319,7 @@ export class CustomersopService implements ICustomersop {
   }
 
   GetSOPAnswer30(val1: string, val2: string, val3: string): Observable<APIResponse> {
-    return this.http.get<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/GetSOPAnswer30/' + val1 + '/' + val2+ '/' + val3);
+    return this.http.get<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/GetSOPAnswer30/' + val1 + '/' + val2 + '/' + val3);
   }
 
   PostSOPAnswer30(val): Observable<APIResponse> {
@@ -330,7 +330,7 @@ export class CustomersopService implements ICustomersop {
   }
 
   GetSOPAnswer32(val1: string, val2: string, val3: string): Observable<APIResponse> {
-    return this.http.get<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/GetSOPAnswer32/' + val1 + '/' + val2+ '/' + val3);
+    return this.http.get<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/GetSOPAnswer32/' + val1 + '/' + val2 + '/' + val3);
   }
 
   PostSOPAnswer32(val): Observable<APIResponse> {
@@ -341,7 +341,7 @@ export class CustomersopService implements ICustomersop {
   }
 
   GetSOPAnswer36(val1: string, val2: string, val3: string): Observable<APIResponse> {
-    return this.http.get<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/GetSOPAnswer36/' + val1 + '/' + val2+ '/' + val3);
+    return this.http.get<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/GetSOPAnswer36/' + val1 + '/' + val2 + '/' + val3);
   }
 
   PostSOPAnswer36(val): Observable<APIResponse> {
@@ -352,7 +352,7 @@ export class CustomersopService implements ICustomersop {
   }
 
   GetSOPAnswer37(val1: string, val2: string, val3: string): Observable<APIResponse> {
-    return this.http.get<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/GetSOPAnswer37/' + val1 + '/' + val2+ '/' + val3);
+    return this.http.get<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/GetSOPAnswer37/' + val1 + '/' + val2 + '/' + val3);
   }
 
   PostSOPAnswer37(val): Observable<APIResponse> {
@@ -374,7 +374,7 @@ export class CustomersopService implements ICustomersop {
   }
 
   GetSOPAnswer27(val1: string, val2: string, val3: string): Observable<APIResponse> {
-    return this.http.get<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/GetSOPAnswer27/' + val1 + '/' + val2+ '/' + val3);
+    return this.http.get<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/GetSOPAnswer27/' + val1 + '/' + val2 + '/' + val3);
   }
 
   PostSOPAnswer27(val): Observable<APIResponse> {
@@ -385,7 +385,7 @@ export class CustomersopService implements ICustomersop {
   }
 
   GetSOPAnswer39(val1: string, val2: string, val3: string): Observable<APIResponse> {
-    return this.http.get<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/GetSOPAnswer39/' + val1 + '/' + val2+ '/' + val3);
+    return this.http.get<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/GetSOPAnswer39/' + val1 + '/' + val2 + '/' + val3);
   }
 
   PostSOPAnswer39(val): Observable<APIResponse> {
@@ -395,12 +395,12 @@ export class CustomersopService implements ICustomersop {
     return this.http.post<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/PostSOPAnswer39', inputval, { headers: config })
   }
 
-  GetmarkedQuestion(val1: string,val2:string): Observable<APIResponse> {
-    return this.http.get<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/GetmarkedQuestion/' + val1+'/'+val2);
+  GetmarkedQuestion(val1: string, val2: string): Observable<APIResponse> {
+    return this.http.get<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/GetmarkedQuestion/' + val1 + '/' + val2);
   }
 
   GetSOPAnswer4(val1: string, val2: string, val3: string): Observable<APIResponse> {
-    return this.http.get<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/GetSOPAnswer4/' + val1 + '/' + val2+ '/' + val3);
+    return this.http.get<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/GetSOPAnswer4/' + val1 + '/' + val2 + '/' + val3);
   }
 
   PostSOPAnswer4(val): Observable<APIResponse> {
@@ -411,7 +411,7 @@ export class CustomersopService implements ICustomersop {
   }
 
   GetSOPAnswer33(val1: string, val2: string, val3: string): Observable<APIResponse> {
-    return this.http.get<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/GetSOPAnswer33/' + val1 + '/' + val2+ '/' + val3);
+    return this.http.get<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/GetSOPAnswer33/' + val1 + '/' + val2 + '/' + val3);
   }
 
   PostSOPAnswer33(val): Observable<APIResponse> {
@@ -434,12 +434,12 @@ export class CustomersopService implements ICustomersop {
     );
   }
 
-  GetSOPAnswer31(val1: string, val2: string,val3: string): Observable<APIResponse> {
-    return this.http.get<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/GetSOPAnswer31/' + val1 + '/' + val2+ '/' + val3);
+  GetSOPAnswer31(val1: string, val2: string, val3: string): Observable<APIResponse> {
+    return this.http.get<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/GetSOPAnswer31/' + val1 + '/' + val2 + '/' + val3);
   }
 
   GetSOPAnswer11(val1: string, val2: string, val3: string): Observable<APIResponse> {
-    return this.http.get<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/GetSOPAnswer11/' + val1 + '/' + val2+ '/' + val3);
+    return this.http.get<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/GetSOPAnswer11/' + val1 + '/' + val2 + '/' + val3);
   }
 
   PostSOPAnswer11(val): Observable<APIResponse> {
@@ -449,7 +449,7 @@ export class CustomersopService implements ICustomersop {
     return this.http.post<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/PostSOPAnswer11', inputval, { headers: config })
   }
   GetSOPAnswer15(val1: string, val2: string, val3: string): Observable<APIResponse> {
-    return this.http.get<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/GetSOPAnswer15/' + val1 + '/' + val2+ '/' + val3);
+    return this.http.get<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/GetSOPAnswer15/' + val1 + '/' + val2 + '/' + val3);
   }
 
   PostSOPAnswer15(val): Observable<APIResponse> {
@@ -467,7 +467,7 @@ export class CustomersopService implements ICustomersop {
   }
 
   GetSOPAnswer20(val1: string, val2: string, val3: string): Observable<APIResponse> {
-    return this.http.get<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/GetSOPAnswer20/' + val1 + '/' + val2+ '/' + val3);
+    return this.http.get<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/GetSOPAnswer20/' + val1 + '/' + val2 + '/' + val3);
   }
 
   PostSOPAnswer22(val): Observable<APIResponse> {
@@ -613,7 +613,7 @@ export class CustomersopService implements ICustomersop {
   }
 
   GetSOPAnswer34(val1: string, val2: string, val3: string): Observable<APIResponse> {
-    return this.http.get<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/GetSOPAnswer34/' + val1 + '/' + val2+ '/' + val3);
+    return this.http.get<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/GetSOPAnswer34/' + val1 + '/' + val2 + '/' + val3);
   }
 
   PostSOPAnswer40(val): Observable<APIResponse> {
@@ -624,7 +624,7 @@ export class CustomersopService implements ICustomersop {
   }
 
   GetSOPAnswer40(val1: string, val2: string, val3: string): Observable<APIResponse> {
-    return this.http.get<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/GetSOPAnswer40/' + val1 + '/' + val2+ '/' + val3);
+    return this.http.get<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/GetSOPAnswer40/' + val1 + '/' + val2 + '/' + val3);
   }
 
   GetCountry(): Observable<APIResponse> {
@@ -647,7 +647,7 @@ export class CustomersopService implements ICustomersop {
   }
 
   GetSOPAnswer41(val1: string, val2: string, val3: string): Observable<APIResponse> {
-    return this.http.get<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/GetSOPAnswer41/' + val1 + '/' + val2+ '/' + val3);
+    return this.http.get<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/GetSOPAnswer41/' + val1 + '/' + val2 + '/' + val3);
   }
 
   PostSOPAnswerCompliance42(val): Observable<APIResponse> {
@@ -658,7 +658,7 @@ export class CustomersopService implements ICustomersop {
   }
 
   GetSOPAnswerCompliance42(val1: string, val2: string, val3: string): Observable<APIResponse> {
-    return this.http.get<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/GetSOPAnswerCompliance42/' + val1 + '/' + val2+ '/' + val3);
+    return this.http.get<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/GetSOPAnswerCompliance42/' + val1 + '/' + val2 + '/' + val3);
   }
 
   PostSOPAnswerMinimumwages42(val): Observable<APIResponse> {
@@ -669,7 +669,7 @@ export class CustomersopService implements ICustomersop {
   }
 
   GetSOPAnswerMinimumwages42(val1: string, val2: string, val3: string): Observable<APIResponse> {
-    return this.http.get<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/GetSOPAnswerMinimumwages42/' + val1 + '/' + val2+ '/' + val3);
+    return this.http.get<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/GetSOPAnswerMinimumwages42/' + val1 + '/' + val2 + '/' + val3);
   }
 
   PostSOPAnswerDesignation42(val): Observable<APIResponse> {
@@ -680,7 +680,7 @@ export class CustomersopService implements ICustomersop {
   }
 
   GetSOPAnswerDesignation42(val1: string, val2: string, val3: string): Observable<APIResponse> {
-    return this.http.get<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/GetSOPAnswerDesignation42/' + val1 + '/' + val2+ '/' + val3);
+    return this.http.get<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/GetSOPAnswerDesignation42/' + val1 + '/' + val2 + '/' + val3);
   }
 
   PostSOPAnswerCLRA42(val): Observable<APIResponse> {
@@ -691,7 +691,7 @@ export class CustomersopService implements ICustomersop {
   }
 
   GetSOPAnswerCLRA42(val1: string, val2: string, val3: string): Observable<APIResponse> {
-    return this.http.get<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/GetSOPAnswerCLRA42/' + val1 + '/' + val2+ '/' + val3);
+    return this.http.get<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/GetSOPAnswerCLRA42/' + val1 + '/' + val2 + '/' + val3);
   }
 
   DeleteSOPAnswer31(val1: string, val2: string): Observable<APIResponse> {
@@ -703,8 +703,8 @@ export class CustomersopService implements ICustomersop {
   }
 
   DownloadFile(fileName: string): Observable<Blob> {
-  return this.http.get(this.environment.apiUrl + 'QuestionAnswer/DownloadFile/' + fileName, {
-    responseType: 'blob'
-  });
-}
+    return this.http.get(this.environment.apiUrl + 'QuestionAnswer/DownloadFile/' + fileName, {
+      responseType: 'blob'
+    });
+  }
 }

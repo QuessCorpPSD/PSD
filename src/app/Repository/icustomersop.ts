@@ -54,7 +54,7 @@ export interface ICustomersop {
     PostSOPAnswer23(val): Observable<APIResponse>;
     GetSOPAnswer25(val1: string, val2: string, val3: string): Observable<APIResponse>;
     PostSOPAnswer25(val): Observable<APIResponse>;
-    GetSOPAnswer28(val1: string, val2: string): Observable<APIResponse>;
+    GetSOPAnswer28(val1: string, val2: string, val3: string): Observable<APIResponse>;
     PostSOPAnswer28(val): Observable<APIResponse>;
     GetSOPAnswer29(val1: string, val2: string, val3: string): Observable<APIResponse>;
     PostSOPAnswer29(val): Observable<APIResponse>;

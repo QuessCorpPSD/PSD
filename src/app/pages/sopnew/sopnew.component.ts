@@ -1026,7 +1026,7 @@ export class SopnewComponent {
     const currentYear = today.getFullYear();
     const currentMonth = today.getMonth() + 1;
 
-    if (this.Answer24.Calander_Type === 'Financial calander') {
+    if (this.Answer24.Calander_Type === 'Financial Calendar') {
 
       // Financial Year: April 1 - March 31
       let startYear = currentYear;
@@ -1036,7 +1036,7 @@ export class SopnewComponent {
 
       this.minDate = `${startYear}-04-01`;
       this.maxDate = `${endYear}-03-31`;
-    } else if (this.Answer24.Calander_Type === 'Normal calander') {
+    } else if (this.Answer24.Calander_Type === 'Normal Calendar') {
 
       // Calendar Year: Jan 1 - Dec 31
       this.minDate = `${currentYear}-01-01`;
@@ -1258,7 +1258,7 @@ export class SopnewComponent {
         this.isSubmitted25 = false;
       }
       if (this.selectedQuestion.questionId == 28) {
-        this.GetSOPAnswer28(this.selectedQuestion.questionId, this.employeeId);
+        this.GetSOPAnswer28(this.selectedQuestion.questionId, this.selectedCompany1, this.employeeId);
         this.isSubmitted28 = false;
       }
       if (this.selectedQuestion.questionId == 29) {
@@ -1665,8 +1665,8 @@ export class SopnewComponent {
   }
 
 
-  GetSOPAnswer28(Questionid, Createdby) {
-    this._authService.GetSOPAnswer28(Questionid, Createdby).subscribe({
+  GetSOPAnswer28(Questionid, CompanyId, Createdby) {
+    this._authService.GetSOPAnswer28(Questionid, CompanyId, Createdby).subscribe({
       next: res => {
         this.Answer28.Compensatory_Off = res.Data.compensatory_Off;
         this.Answer28.Remarks = res.Data.remarks;
@@ -2146,7 +2146,7 @@ export class SopnewComponent {
 
   options3 = [
     { label: 'Frequently' },
-    { label: 'No change' }
+    { label: 'No Change' }
   ];
 
   options4 = [
@@ -2521,17 +2521,20 @@ export class SopnewComponent {
   PortalInput2_11_3 = '';
   PortalInput3_11_3 = '';
   PortalInput4_11_3 = '';
+  PortalInput5_11_3 = '';
 
-  PortalGridData_11_3: { input1: string; input2: string; input3: string; input4: string }[] = [];
+  PortalGridData_11_3: { input1: string; input2: string; input3: string; input4: string, input5: string }[] = [];
 
   addPortalData_11_3() {
-    if (this.PortalInput1_11_3 && this.PortalInput2_11_3 && this.PortalInput3_11_3 && this.PortalInput4_11_3) {
+    if (this.PortalInput1_11_3 && this.PortalInput2_11_3 && this.PortalInput3_11_3
+      && this.PortalInput4_11_3 && this.PortalInput5_11_3) {
 
       const newEntry = {
         input1: this.PortalInput1_11_3,
         input2: this.PortalInput2_11_3,
         input3: this.PortalInput3_11_3,
-        input4: this.PortalInput4_11_3
+        input4: this.PortalInput4_11_3,
+        input5: this.PortalInput5_11_3,
       };
 
       if (this.editPortalIndex_11_3 !== null) {
@@ -2548,6 +2551,7 @@ export class SopnewComponent {
       this.PortalInput2_11_3 = '';
       this.PortalInput3_11_3 = '';
       this.PortalInput4_11_3 = '';
+      this.PortalInput5_11_3 = '';
     }
   }
 
@@ -2557,6 +2561,7 @@ export class SopnewComponent {
     this.PortalInput2_11_3 = data.input2;
     this.PortalInput3_11_3 = data.input3;
     this.PortalInput4_11_3 = data.input4;
+    this.PortalInput5_11_3 = data.input5;
     this.editPortalIndex_11_3 = index;
   }
 
@@ -2692,9 +2697,9 @@ export class SopnewComponent {
   options12 = [
     { id: "1", label: 'ESS', checked: false },
     { id: "2", label: 'Biometric', checked: false },
-    { id: "3", label: 'Physical register', checked: false },
-    { id: "4", label: 'Face recogination', checked: false },
-    { id: "5", label: 'Hand device', checked: false }
+    { id: "3", label: 'Physical Register', checked: false },
+    { id: "4", label: 'Face Recognition', checked: false },
+    { id: "5", label: 'Hand Device', checked: false }
   ];
 
   options14 = [
@@ -2976,7 +2981,7 @@ export class SopnewComponent {
 
   options16_1 = [
     { label: 'Part of Salary' },
-    { label: 'Supplymentry process' },
+    { label: 'Supplementary Process' },
     { label: 'Both' }
   ];
 
@@ -2991,13 +2996,14 @@ export class SopnewComponent {
   ];
 
   options17_1 = [
-    { label: 'Yes' },
-    { label: 'No' }
+    { label: 'Separate' },
+    { label: 'Along with Salary' },
+    { label: 'Both' }
   ];
 
   options17_2 = [
     { label: 'Seperate' },
-    { label: 'Part of settlement' },
+    { label: 'Part of Settlement' },
     { label: 'Both' },
   ];
 
@@ -3024,18 +3030,18 @@ export class SopnewComponent {
 
   options20_2 = [
     { label: 'Designation Wise' },
-    { label: 'As per Client Instruction' }
+    { label: 'As Per Client Instruction' }
   ];
 
   options21_1 = [
-    { label: 'Part of attendence' },
-    { label: 'Seperate email' },
+    { label: 'Part of Attendance' },
+    { label: 'Seperate Email' },
     { label: 'Both' }
   ];
 
   options21_2 = [
-    { label: 'Minimum 6 month' },
-    { label: 'Restricted to 12 months' }
+    { label: 'Minimum 6 Months' },
+    { label: 'Restricted to 12 Months' }
   ];
 
   options21_3 = [
@@ -3044,9 +3050,9 @@ export class SopnewComponent {
   ];
 
   options21_4 = [
-    { label: 'Gross salary' },
-    { label: 'Basic wage' },
-    { label: 'NO PAY (ESIC)' }
+    { label: 'Gross Salary' },
+    { label: 'Basic Wage' },
+    { label: 'No Pay (ESIC)' }
   ];
 
   options21_5 = [
@@ -3065,8 +3071,8 @@ export class SopnewComponent {
   ];
 
   options22_3 = [
-    { label: 'Financial calander' },
-    { label: 'Normal calander' },
+    { label: 'Financial Calendar' },
+    { label: 'Normal Calendar' },
     { label: 'Monthly' }
   ];
 
@@ -3081,14 +3087,14 @@ export class SopnewComponent {
   ];
 
   options22_6 = [
-    { id: '1', name: 'Casual leave' },
-    { id: '2', name: 'Personal leave' },
-    { id: '3', name: 'Sick leave' },
-    { id: '4', name: 'Wellness leave' },
-    { id: '5', name: 'Happiness leave' },
-    { id: '6', name: 'Vacation leave' },
-    { id: '7', name: 'Paternity leave' },
-    { id: '8', name: 'Sabbatical leave' }
+    { id: '1', name: 'Casual Leave' },
+    { id: '2', name: 'Personal Leave' },
+    { id: '3', name: 'Sick Leave' },
+    { id: '4', name: 'Wellness Leave' },
+    { id: '5', name: 'Happiness Leave' },
+    { id: '6', name: 'Vacation Leave' },
+    { id: '7', name: 'Paternity Leave' },
+    { id: '8', name: 'Sabbatical Leave' }
   ];
 
   options23_1 = [
@@ -3110,7 +3116,7 @@ export class SopnewComponent {
 
   options25_1 = [
     { label: 'Yearly' },
-    { label: 'Quaterly' },
+    { label: 'Quarterly' },
     { label: 'Monthly' }
   ];
 
@@ -3130,8 +3136,8 @@ export class SopnewComponent {
   ];
 
   options25_3 = [
-    { label: 'Normal Calander' },
-    { label: 'Financial Calander' }
+    { label: 'Financial Calendar' },
+    { label: 'Normal Calendar' }
   ];
 
   options25_4 = [
@@ -3146,7 +3152,7 @@ export class SopnewComponent {
 
   options27_2 = [
     { id: "1", label: 'Montly' },
-    { id: "2", label: 'Quaterly' },
+    { id: "2", label: 'Quarterly' },
     { id: "3", label: 'Yearly' }
   ];
 
@@ -3156,14 +3162,15 @@ export class SopnewComponent {
   ];
 
   options28_1 = [
-    { label: 'Part of attendence' },
-    { label: 'Seperate email' },
+    { label: 'Part of Attendance' },
+    { label: 'Separate Email' },
     { label: 'Both' }
   ];
 
   options28_2 = [
-    { label: 'Minimum 6 month' },
-    { label: 'restricted to 12 months' }
+    { label: 'Minimum 3 Months' },
+    { label: 'Minimum 6 Months' },
+    { label: 'Restricted to 12 Months' }
   ];
 
   options28_3 = [
@@ -3172,9 +3179,9 @@ export class SopnewComponent {
   ];
 
   options28_4 = [
-    { label: 'Gross salary' },
-    { label: 'Basic wage' },
-    { label: 'NO PAY (ESIC)' }
+    { label: 'Gross Salary' },
+    { label: 'Basic Wage' },
+    { label: 'No Pay (ESIC)' }
   ];
 
   options28_5 = [
@@ -3215,8 +3222,8 @@ export class SopnewComponent {
   ];
 
   options24_1 = [
-    { id: "1", name: 'Financial calander' },
-    { id: "2", name: 'Normal calander' }
+    { id: "1", name: 'Financial Calendar' },
+    { id: "2", name: 'Normal Calendar' }
   ];
 
   minDate: string = '';
@@ -3362,9 +3369,9 @@ export class SopnewComponent {
   ];
 
   options36_3 = [
-    { label: '3 MONTHS' },
-    { label: '6 MONTHS' },
-    { label: 'BOTH' },
+    { label: '3 Months' },
+    { label: '6 Months' },
+    { label: 'Both' },
   ];
 
   options36_4 = [
@@ -3373,7 +3380,7 @@ export class SopnewComponent {
   ];
 
   options36_5 = [
-    { label: 'GROSS' },
+    { label: 'Gross' },
     { label: 'CTC' }
   ];
 
@@ -3393,25 +3400,25 @@ export class SopnewComponent {
   ];
 
   options39_2 = [
-    { label: 'HOURLY' },
-    { label: 'DAILY' },
-    { label: 'MONTHLY' },
-    { label: 'WEEKLY' },
+    { label: 'Hourly' },
+    { label: 'Daily' },
+    { label: 'Weekly' },
+    { label: 'Monthly' },
     { label: 'Others' }
   ];
 
   options39_3 = [
-    { id: '1', label: 'EMPLOYEE WISE', checked: false },
-    { id: '2', label: 'MANAGER', checked: false },
-    { id: '3', label: 'VERTICAL', checked: false },
-    { id: '4', label: 'OPEN', checked: false }
+    { id: '1', label: 'Employeewise', checked: false },
+    { id: '2', label: 'Manager', checked: false },
+    { id: '3', label: 'Vertical', checked: false },
+    { id: '4', label: 'Open', checked: false }
   ];
 
   options39_4 = [
-    { label: 'SALARY' },
-    { label: 'ONETIME' },
-    { label: 'SALARY+ONETIME' },
-    { label: 'VENDOR' }
+    { label: 'Salary' },
+    { label: 'Onetime' },
+    { label: 'Salary+Onetime' },
+    { label: 'Vendor' }
   ];
 
   options35_1 = [
@@ -3423,9 +3430,9 @@ export class SopnewComponent {
   options35_2 = [
     { id: '0', name: '-Select-' },
     { id: 'LOI Available', name: 'LOI Available' },
-    { id: 'Client signed agreement available', name: 'Client signed agreement available' },
-    { id: 'Quess signed agreement available', name: 'Quess signed agreement available' },
-    { id: 'Both party signed agreement available', name: 'Both party signed agreement available' },
+    { id: 'Client Signed Agreement Available', name: 'Client Signed Agreement Available' },
+    { id: 'Quess Signed Agreement Available', name: 'Quess Signed Agreement Available' },
+    { id: 'Both Party Signed Agreement Available', name: 'Both Party Signed Agreement Available' },
     { id: 'BH Approval', name: 'BH Approval' }
   ];
 
@@ -3465,7 +3472,7 @@ export class SopnewComponent {
 
   options34_3 = [
     { id: '0', name: '-Select-' },
-    { id: 'SEZ WITOUT GST', name: 'SEZ WITOUT GST' },
+    { id: 'SEZ WITHOUT GST', name: 'SEZ WITHOUT GST' },
     { id: 'SEZ WITH GST', name: 'SEZ WITH GST' }
   ];
 
@@ -3502,15 +3509,15 @@ export class SopnewComponent {
 
 
   options42_3 = [
-    { label: 'GROSS' },
-    { label: 'BASIC' }
+    { label: 'Gross' },
+    { label: 'Basic' }
   ];
 
   options42_4 = [
-    { id: '1', name: 'SKILLED' },
-    { id: '2', name: 'SEMI-SKILLED' },
-    { id: '3', name: 'HIGHLY SKILLED' },
-    { id: '4', name: 'UNSKILLED' }
+    { id: '1', name: 'Skilled' },
+    { id: '2', name: 'Semi-Skilled' },
+    { id: '3', name: 'Highly Skilled' },
+    { id: '4', name: 'Unskilled' }
   ];
 
   onSubmitQuestion1() {
@@ -3978,56 +3985,57 @@ export class SopnewComponent {
     this.isSubmitted17 = true;
     var payload: any;
 
-    if (this.Answer17.Inactive_Employee_Load == "Yes") {
 
-      if (this.Answer17.FF_Days == '' || this.Answer17.Gratuity == '' || this.Answer17.Date_Submission == '') {
-        return;
-      }
+    // if (this.Answer17.Inactive_Employee_Load == "Yes") {
 
-      payload = {
-        QuestionId: String(17),
-        Company_Id: String(this.selectedCompany1),
-        Inactive_Employee_Load: String(this.Answer17.Inactive_Employee_Load),
-        FF_Days: String(this.Answer17.FF_Days),
-        Remarks: String(this.Answer17.Remarks),
-        Gratuity: String(this.Answer17.Gratuity),
-        Date_Submission: String(this.Answer17.Date_Submission),
-        CreatedBy: String(this.employeeId)
-      };
+    //   if (this.Answer17.FF_Days == '' || this.Answer17.Gratuity == '' || this.Answer17.Date_Submission == '') {
+    //     return;
+    //   }
+
+    //   payload = {
+    //     QuestionId: String(17),
+    //     Company_Id: String(this.selectedCompany1),
+    //     Inactive_Employee_Load: String(this.Answer17.Inactive_Employee_Load),
+    //     FF_Days: String(this.Answer17.FF_Days),
+    //     Remarks: String(this.Answer17.Remarks),
+    //     Gratuity: String(this.Answer17.Gratuity),
+    //     Date_Submission: String(this.Answer17.Date_Submission),
+    //     CreatedBy: String(this.employeeId)
+    //   };
+    // }
+    // else if (this.Answer17.Inactive_Employee_Load == "No") {
+
+    //   if (this.Answer17.Gratuity == '') {
+    //     return;
+    //   }
+
+    //   payload = {
+    //     QuestionId: String(17),
+    //     Company_Id: String(this.selectedCompany1),
+    //     Inactive_Employee_Load: String(this.Answer17.Inactive_Employee_Load),
+    //     FF_Days: "",
+    //     Remarks: "",
+    //     Gratuity: String(this.Answer17.Gratuity),
+    //     Date_Submission: "",
+    //     CreatedBy: String(this.employeeId)
+    //   };
+    // }
+    // else {
+    if (this.Answer17.Inactive_Employee_Load == '') {
+      return;
     }
-    else if (this.Answer17.Inactive_Employee_Load == "No") {
 
-      if (this.Answer17.Gratuity == '') {
-        return;
-      }
-
-      payload = {
-        QuestionId: String(17),
-        Company_Id: String(this.selectedCompany1),
-        Inactive_Employee_Load: String(this.Answer17.Inactive_Employee_Load),
-        FF_Days: "",
-        Remarks: "",
-        Gratuity: String(this.Answer17.Gratuity),
-        Date_Submission: "",
-        CreatedBy: String(this.employeeId)
-      };
-    }
-    else {
-      if (this.Answer17.Inactive_Employee_Load == '') {
-        return;
-      }
-
-      payload = {
-        QuestionId: String(17),
-        Company_Id: String(this.selectedCompany1),
-        Inactive_Employee_Load: String(this.Answer17.Inactive_Employee_Load),
-        FF_Days: "",
-        Remarks: "",
-        Gratuity: "",
-        Date_Submission: "",
-        CreatedBy: String(this.employeeId)
-      };
-    }
+    payload = {
+      QuestionId: String(17),
+      Company_Id: String(this.selectedCompany1),
+      Inactive_Employee_Load: String(this.Answer17.Inactive_Employee_Load),
+      FF_Days: "",
+      Remarks: "",
+      Gratuity: "",
+      Date_Submission: "",
+      CreatedBy: String(this.employeeId)
+    };
+    //}
 
 
     this._authService.PostSOPAnswer17(payload).subscribe({
@@ -4432,6 +4440,7 @@ export class SopnewComponent {
 
       payload = {
         QuestionId: String(28),
+        Company_Id: String(this.selectedCompany1),
         Compensatory_Off: String(this.Answer28.Compensatory_Off),
         Remarks: String(this.Answer28.Remarks),
         Applicable: String(this.Answer28.Applicable),
@@ -4448,6 +4457,7 @@ export class SopnewComponent {
     else if (this.Answer28.Compensatory_Off == "Both" && this.Answer28.Approval != "Yes") {
       payload = {
         QuestionId: String(28),
+        Company_Id: String(this.selectedCompany1),
         Compensatory_Off: String(this.Answer28.Compensatory_Off),
         Remarks: String(this.Answer28.Remarks),
         Applicable: String(this.Answer28.Applicable),
@@ -4485,6 +4495,7 @@ export class SopnewComponent {
 
       payload = {
         QuestionId: String(28),
+        Company_Id: String(this.selectedCompany1),
         Compensatory_Off: String(this.Answer28.Compensatory_Off),
         Remarks: "",
         Applicable: String(this.Answer28.Applicable),
@@ -4501,6 +4512,7 @@ export class SopnewComponent {
     else if (this.Answer28.Compensatory_Off != "Both" && this.Answer28.Approval != "Yes") {
       payload = {
         QuestionId: String(28),
+        Company_Id: String(this.selectedCompany1),
         Compensatory_Off: String(this.Answer28.Compensatory_Off),
         Remarks: "",
         Applicable: String(this.Answer28.Applicable),
@@ -5420,7 +5432,7 @@ export class SopnewComponent {
       return;
     }
 
-    if (this.Answer22.Leave_Type == "Paternity leave" || this.Answer22.Leave_Type == "Sabbatical leave") {
+    if (this.Answer22.Leave_Type == "Paternity Leave" || this.Answer22.Leave_Type == "Sabbatical Leave") {
       if (this.Answer22.No_Of_Leave == '') {
         return;
       }
