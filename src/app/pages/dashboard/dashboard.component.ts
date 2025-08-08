@@ -1,4 +1,4 @@
-import { Component,  Inject,  InjectionToken, OnInit, ViewChild } from '@angular/core';
+import { Component,  Inject,  InjectionToken, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { IDashBoardServices } from '../../Repository/IDashBoardService';
 import { CommonModule } from '@angular/common';
 import { DashBoardServices } from '../../Service/DashBoardService';
@@ -44,7 +44,8 @@ import { MatSortModule } from '@angular/material/sort';
         {
             provide: AUTH_TOKEN,
             useClass: AssignmentService,
-          }]
+          }],
+           encapsulation: ViewEncapsulation.None
 })
 export class DashboardComponent implements OnInit {
 carddashboard:any;

@@ -1,0 +1,78 @@
+<!-- Trigger Button -->
+
+<button class="btn btn-danger btn-sm" (click)="openModal()" >Add</button> 
+<!-- Modal -->
+<div class="modal-overlay" *ngIf="isModalOpen">
+  <div class="modal-content">
+     <button class="modal-close" (click)="closeModal()">×</button>
+    <h4>Add/ Update Break  Details</h4>
+    <form [formGroup]="breakForm" >
+ <div class="container p-4  rounded shadow-sm">
+  <div class="mb-3">
+    <label for="descriptionSelect" class="form-label">Process Category</label>
+    <select id="descriptionSelect" class="form-select" formControlName="ProcessCategory">
+      <option value="">-- Select --</option>
+      <option *ngFor="let item of descriptionOptions" [value]="item.value">
+        {{ item.label }}
+      </option>
+    </select>
+    <div class="text-danger mt-1" *ngIf="breakForm.get('ProcessCategory')?.touched && breakForm.get('ProcessCategory')?.invalid">
+    Process Category is required.
+  </div>
+  </div>
+
+  <!-- Description -->
+  <div class="mb-3">
+    <label for="descriptionInput" class="form-label">Description</label>
+    <input type="text"
+           formControlName="Description"
+           id="descriptionInput"
+           class="form-control"
+           placeholder="Enter description">
+           <div class="text-danger mt-1" *ngIf="breakForm.get('Description')?.touched && breakForm.get('Description')?.invalid">
+   Description is required.
+  </div>
+  </div>
+
+  <!-- Total Minutes -->
+  <div class="mb-3">
+    <label for="totalMinutesInput" class="form-label">Total Minutes</label>
+    <input type="text"
+           formControlName="TotalMinutes"
+           id="totalMinutesInput"
+           class="form-control"
+           placeholder="Total minutes">
+           <div class="text-danger mt-1" *ngIf="breakForm.get('TotalMinutes')?.touched && breakForm.get('TotalMinutes')?.invalid">
+   Total Minutes is required.
+  </div>
+  </div>
+
+  <!-- Is Active -->
+  <div class="form-check mb-4">
+    <input type="checkbox"
+           formControlName="IsActive"
+           id="isActiveCheckbox"
+           class="form-check-input">
+    <label class="form-check-label" for="isActiveCheckbox">Is Active</label>
+    <div class="text-danger mt-1" *ngIf="(breakForm.get('IsActive')?.touched || submitted) && breakForm.get('IsActive')?.invalid ">
+   Total Minutes is required.
+  </div>
+  </div>
+
+  <!-- Buttons -->
+  <div class="text-end">
+    <button type="button" class="btn btn-outline-secondary me-2" (click)="closeModal()">Cancel</button>
+    <button type="submit" class="btn btn-primary" (click)="onSubmit()">Save</button>
+  </div>
+</div>
+
+
+
+
+</form>
+
+    
+  </div>
+</div>
+<div *ngIf="showPopup" class="overlay"></div>
+    <app-model *ngIf="showPopup" [message]="popupMessage" [submessage]="popupSubMessage" class="centered-popup"></app-model>

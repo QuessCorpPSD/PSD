@@ -19,8 +19,12 @@ export class AuthServiceService implements IAuthServiceService {
   ValidateLogin(login):Observable<APIResponse>{
     var inputval=JSON.stringify(login);
    
-    const config = new HttpHeaders().set('Content-Type', 'application/json')
-    .set('Accept', 'application/json')
+      const config = new HttpHeaders({
+            'Cache-Control': 'no-cache, no-store, must-revalidate',
+            'Pragma': 'no-cache',
+            'Expires': '0'
+        }).set('Content-Type', 'application/json')
+            .set('Accept', 'application/json')
     return this.http.post<APIResponse>(this.environment.apiUrl+"Authendicate/UserLogin",inputval, { headers: config }).pipe(
       map(userInfo=> {
         let data=userInfo.Data;       
@@ -32,17 +36,35 @@ export class AuthServiceService implements IAuthServiceService {
 changepassword(val):Observable<APIResponse>
 {
   var inputval=JSON.stringify(val);
-   
-    const config = new HttpHeaders().set('Content-Type', 'application/json')
-    .set('Accept', 'application/json')
+     const config = new HttpHeaders({
+            'Cache-Control': 'no-cache, no-store, must-revalidate',
+            'Pragma': 'no-cache',
+            'Expires': '0'
+        }).set('Content-Type', 'application/json')
+            .set('Accept', 'application/json')
     return this.http.post<APIResponse>(this.environment.apiUrl+"Authendicate/ChangePassword",inputval, { headers: config })     
    
 }
   GetCompanyData():Observable<APIResponse>{
-    return this.http.get<APIResponse>(this.environment.apiUrl+'Authendicate/GetData');
+    const headers  = new HttpHeaders({
+            'Cache-Control': 'no-cache, no-store, must-revalidate',
+            'Pragma': 'no-cache',
+            'Expires': '0'
+        }).set('Content-Type', 'application/json')
+            .set('Accept', 'application/json');
+            const config = { headers };
+    return this.http.get<APIResponse>(this.environment.apiUrl+'Authendicate/GetData',config);
   }
   getCompanyName() {
-    this.http.get('http://localhost:7000/', { responseType: 'text' })
+      const headers  = new HttpHeaders({
+            'Cache-Control': 'no-cache, no-store, must-revalidate',
+            'Pragma': 'no-cache',
+            'Expires': '0'
+        }).set('Content-Type', 'application/json')
+            .set('Accept', 'application/json');
+
+            const config = { headers };
+    this.http.get('http://localhost:7000', { responseType: 'text' })
       .subscribe({
         next: (response: string) => {
           // If you're using jQuery (not recommended), you can do:
@@ -61,7 +83,15 @@ changepassword(val):Observable<APIResponse>
     this.usernameSubject.next(username); // Set username
   }
   PayRegisterDownload(): Observable<Blob> {
-    return this.http.get<Blob>(this.environment.apiUrl + 'Authendicate/PayRegisterDownload')
+    const headers  = new HttpHeaders({
+            'Cache-Control': 'no-cache, no-store, must-revalidate',
+            'Pragma': 'no-cache',
+            'Expires': '0'
+        }).set('Content-Type', 'application/json')
+            .set('Accept', 'application/json');
+
+            const config = { headers };
+    return this.http.get<Blob>(this.environment.apiUrl + 'Authendicate/PayRegisterDownload',config)
   }
 
   

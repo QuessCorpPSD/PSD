@@ -24,6 +24,7 @@ import { SessionStorageService } from '../../Shared/SessionStorageService';
 import { catchError, filter, interval, map, of, Subject, switchMap, takeUntil, tap } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { EstimatetimeValidationComponent } from './estimatetime-validation/estimatetime-validation.component';
+import { TokenService } from '../../Shared/TokenService';
 
 
 
@@ -95,6 +96,7 @@ private destroy$ = new Subject<void>();
     private _sessionStoreage:SessionStorageService ,
   @Inject(auth)private _authService:IAssignmentService,
   private snackBar: MatSnackBar,
+  private tokenservice:TokenService ,
   private fb: FormBuilder,
 
   ) {
@@ -351,14 +353,19 @@ LotestimateValidation_Old(userId)
   
   
     this._authService.ReconPayRegisterDownload(request).subscribe({
-      next: res => { if(res.StatusCode==200){
-       
+      next: res => { if(res.StatusCode==200){       
         const data=res.Data;
         var base64=data.file;
-         let fileName = `${'Recon_Pay_Register'}-${this.lotAssignment.company_code} _ ${this.lotAssignment.pay_period}_ ${this.lotAssignment.lot_Number}`;
-        this.downloadExcelFromBase64(base64,fileName)
-        this.isLoading=false;
-        this.isPayDisable=false;
+        if (data.file == "No") {
+          this.isLoading = false;
+          this.isPayDisable = false;
+        }
+        else {
+          let fileName = `${'Recon_Pay_Register'}-${this.lotAssignment.company_code} _ ${this.lotAssignment.pay_period}_ ${this.lotAssignment.lot_Number}`;
+          this.downloadExcelFromBase64(base64, fileName)
+          this.isLoading = false;
+          this.isPayDisable = false;
+        }
       }
 
       },
@@ -369,18 +376,18 @@ LotestimateValidation_Old(userId)
   }
 ngOnInit(): void {
   const userdetail = this._sessionStoreage.getItem('UserProfile');
-
-  if (!userdetail) return;
-
-  const user = JSON.parse(this.decry.decrypt(userdetail));
-  
+  if (!userdetail){ 
+     this._sessionStoreage.removeItem('UserProfile');
+  this._sessionStoreage.clear();
+  this.tokenservice.clearTokens();
+    this.router.navigateByUrl('/Login')}
+  else{
+  const user = JSON.parse(this.decry.decrypt(userdetail));  
   this.route.queryParams.subscribe(params => {
     const encryptedItem = params['items'];
-    if (!encryptedItem) return;
-
+        if (!encryptedItem) this.router.navigateByUrl('/Login');
     const param = this.decry.decrypt(encryptedItem);
     this.lotAssignment = JSON.parse(param);
-
     // Set input label and revised flag
     this.InputText = this.lotAssignment.revisedtime > 0 ? "Revised Input" : "Input";
     this.isRevised = this.lotAssignment.revisedtime > 0;
@@ -389,7 +396,7 @@ ngOnInit(): void {
   //  this.LotestimateValidation(user.user_Id);
 
 //this.EstimateValidation(user.user_Id); selvaraj
-//this.LotEstimatValidate(user.user_Id)
+this.LotEstimatValidate(user.user_Id)
     this.GetAllotment(
       this.lotAssignment.company_code,
       this.lotAssignment.pay_period,
@@ -406,11 +413,10 @@ ngOnInit(): void {
       this.lotAssignment.payroll_Input_Type,
       this.lotAssignment.createdOn
     );
-
     this.TotalSecond = this.convertToSeconds(this.lotAssignment.estimate_time);
-
     this.Reqeustformodification();
   });
+}
 }
  userresponses:any;
  countdown!:number;
@@ -510,37 +516,41 @@ EstimateValidation(userId: number) {
   
 }
 
-LotEstimatValidate(userId)
-{
-  const request = {
-    "company_Id": this.lotAssignment.company_Id,
-    "payperiodId": this.lotAssignment.pay_period_id,
-    "lotnumber": this.lotAssignment.lot_Number,
-    "Payroll_Input_Type": this.lotAssignment.payroll_Input_Type,
-    "CreatedOn": this.lotAssignment.createdOn,
-    "userId": userId,
-    "ActionType":""
-  };
-  this._authService.UserLotValidation(request).subscribe({
-    next: (res) => {
-      this.userresponses = res.Data;
-      console.log(this.userresponses);
-      this.countdown = (this.userresponses.remainingMinutes || 0) * 60;
-    interval(5000).pipe(
-  takeUntil(this.destroy$),
-  tap(() => {
-    //console.log(this.countdown)
-    this.countdown--;
-    if (this.countdown <= 0) {
-      this.destroy$.next(); // Stop the timer
-      this.callFinalValidation(request, userId);
-    }
-  })
-).subscribe();
-    },
-      error:err=>console.log(err)
+  LotEstimatValidate(userId) {
+    const request = {
+      "company_Id": this.lotAssignment.company_Id,
+      "payperiodId": this.lotAssignment.pay_period_id,
+      "lotnumber": this.lotAssignment.lot_Number,
+      "Payroll_Input_Type": this.lotAssignment.payroll_Input_Type,
+      "CreatedOn": this.lotAssignment.createdOn,
+      "userId": userId,
+      "ActionType": ""
+    };
+    this._authService.UserLotValidation(request).subscribe({
+      next: (res) => {
+        if (this.userresponses) {
+          if (this.userresponses.remainingMinutes) {
+            this.userresponses = res.Data;
+            console.log(this.userresponses);
+            this.countdown = (this.userresponses.remainingMinutes || 0) * 60;
+            interval(5000).pipe(
+              takeUntil(this.destroy$),
+              tap(() => {
+                //console.log(this.countdown)
+                this.countdown--;
+                if (this.countdown <= 0) {
+                  this.destroy$.next(); // Stop the timer
+                  this.callFinalValidation(request, userId);
+                }
+              })
+            ).subscribe();
+          }
+        }
+
+      },
+      error: err => console.log(err)
     })
-}
+  }
 
 callFinalValidation(request: any, userId: number) {
   this._authService.UserLotValidation(request).subscribe({
@@ -799,32 +809,15 @@ SharedPayRegisterUpload()
 
 }
 convertToSeconds(time: number): number {
-  // const parts = time.split(':');
- 
-  // if (parts.length !== 3) return 0;
-
-  // const [h, m, s] = parts.map(Number);
-  // if (isNaN(h) || isNaN(m) || isNaN(s)) return 0;
-
-  // return h * 3600 + m * 60 + s;
-
   const seconds = time * 60;
-
- return  seconds;
-   
+ return  seconds;   
 }
-  Reqeustformodification() {
-    // if (this.lotAssignment?.newJoinee.ismatching && this.lotAssignment?.attendance.ismatching &&
-    //   this.lotAssignment?.adhoc.ismatching && this.lotAssignment?.increment && this.lotAssignment?.otherInput.ismatching) {
-      this.RequestforModification = false;
-    //}
+  Reqeustformodification() {    
+      this.RequestforModification = false;    
   }
 RetuenHome(){
   this.router.navigate(['/Master/Assignment'])
 }
-
-
-   
 }
 
 export interface LotAllotmentStatus { 

@@ -14,4 +14,7 @@ export interface ICommonService {
     GetUserByEmployeeId(employeeID):Observable<APIResponse>
     UserCreate(val):Observable<APIResponse>
     GetFinancialYears(): Observable<APIResponse>
+    AddBreakDetail(val):Observable<APIResponse>
+    GetBreakDetail():Observable<APIResponse>
+    GetEmployeeBreakByDate(userId,date):Observable<APIResponse>
 }

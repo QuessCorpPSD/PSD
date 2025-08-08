@@ -61,6 +61,22 @@
               d="M14 4.577v6.846L8 15l-6-3.577V4.577L8 1zM8.5.134a1 1 0 0 0-1 0l-6 3.577a1 1 0 0 0-.5.866v6.846a1 1 0 0 0 .5.866l6 3.577a1 1 0 0 0 1 0l6-3.577a1 1 0 0 0 .5-.866V4.577a1 1 0 0 0-.5-.866z" />
           </svg>
         </i><span style="font-family: Nunito Sans;">SOP</span> </a>
+         <a [routerLink]="['/Master/Break']" class="nav-link" routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }" [ngClass]="{ 'inactive-link': !isActive('/Master/Break') }"><i>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-hexagon"
+            viewBox="0 0 16 16">
+            <path
+              d="M14 4.577v6.846L8 15l-6-3.577V4.577L8 1zM8.5.134a1 1 0 0 0-1 0l-6 3.577a1 1 0 0 0-.5.866v6.846a1 1 0 0 0 .5.866l6 3.577a1 1 0 0 0 1 0l6-3.577a1 1 0 0 0 .5-.866V4.577a1 1 0 0 0-.5-.866z" />
+          </svg>
+        </i><span style="font-family: Nunito Sans;">Break</span> </a>
+        <a [routerLink]="['/Master/Employee']" class="nav-link" routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }" [ngClass]="{ 'inactive-link': !isActive('/Master/Employee') }"><i>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-hexagon"
+            viewBox="0 0 16 16">
+            <path
+              d="M14 4.577v6.846L8 15l-6-3.577V4.577L8 1zM8.5.134a1 1 0 0 0-1 0l-6 3.577a1 1 0 0 0-.5.866v6.846a1 1 0 0 0 .5.866l6 3.577a1 1 0 0 0 1 0l6-3.577a1 1 0 0 0 .5-.866V4.577a1 1 0 0 0-.5-.866z" />
+          </svg>
+        </i><span style="font-family: Nunito Sans;">Employee</span> </a>
       <a [routerLink]="['/Master/user']" class="nav-link" routerLinkActive="active"
         [routerLinkActiveOptions]="{ exact: true }" [ngClass]="{ 'inactive-link': !isActive('/Master/hierarchy') }"><i>
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person"

@@ -11,7 +11,7 @@ import { NgOptimizedImage } from '@angular/common'
 import { EncryptionService } from '../../Shared/encryption.service';
 import { SessionStorageService } from '../../Shared/SessionStorageService';
 import { TokenService } from '../../Shared/TokenService';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 
 
@@ -41,7 +41,7 @@ username:string = ''
     ipAddress: string = '::1';
  computername:string='';
   validationErrors:Array<any> = [];
-  
+
    
   constructor(
     @Inject(auth)private _authService:IAuthServiceService, 
@@ -69,25 +69,33 @@ username:string = ''
   ngOnInit(): void {
     // localStorage.clear();
   //sessionStorage.clear();
+
+  this.sessionStorageService.removeItem('UserProfile');
+  this.sessionStorageService.clear();
+  this.tokenservice.clearTokens();
  if (!this.router.navigated) {
     location.reload(); // Only if you need hard reload
   }
-  // Optionally clear any custom cache service data
-  //this.cacheService?.clear(); // if you're using a caching service
-   this.http.get('http://localhost:7000', { responseType: 'text' })
-      .subscribe({
-        next: (response: string) => {
-          
-          // If you're using jQuery (not recommended), you can do:
-          this.computername=response
-         // console.log("Computer Name " +this.computername);
-          // Angular way (recommended):
-          // this.companyName = response;
-        },
-        error: (error) => {
-          console.error('Error fetching data', error);
-        }
-      });
+   const APIURL:string = 'http://localhost:7000';
+
+   const config = {
+  headers: new HttpHeaders({
+    'Cache-Control': 'no-cache, no-store, must-revalidate',
+    'Pragma': 'no-cache',
+    'Expires': '0'
+  }),
+  responseType: 'text' as const  // 👈 ensures type safety
+};
+   this.http.get(APIURL, config)
+  .subscribe({
+    next: (response: string) => {
+      this.computername = response;
+       console.log("Computer Name: " + this.computername);
+    },
+    error: (error) => {
+      console.error('Error fetching data', error);
+    }
+  });
     //console.log(this.deviceInfo);
   }
  

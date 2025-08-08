@@ -44,13 +44,15 @@ private _sessionStoreage:SessionStorageService){
     this.isDropdownOpen = !this.isDropdownOpen;
   }
   ngOnInit(): void {
-    const user_id=this._sessionStoreage.getItem("userId");   
-   this.GetCompanyData(user_id);
+    //const user_id=this._sessionStoreage.getItem("userId");   
+   this.GetCompanyData();
   }
 
-  GetCompanyData(UserId) {
+  GetCompanyData() {
     const userdetail = this._sessionStoreage.getItem('UserProfile');
     var user = JSON.parse(this._decrypt.decrypt(userdetail!));
+    console.log(user);
+    
     this._authService.GetAssignmentLot(user.user_Id, 'A').subscribe(
       {
         next: data => { this.data = data.Data; },

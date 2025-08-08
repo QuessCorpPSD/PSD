@@ -6,6 +6,7 @@ import { AppHeaderComponent } from '../app-header/app-header.component';
 
 import { SessionStorageService } from '../../Shared/SessionStorageService';
 import { EncryptionService } from '../../Shared/encryption.service';
+import { TokenService } from '../../Shared/TokenService';
 @Component({
   selector: 'app-master',
   standalone: true,
@@ -21,7 +22,7 @@ export class MasterComponent implements  OnInit {
   menuHideVisibility=false;
   userRole:any;
 constructor( private _sessionStoreage:SessionStorageService, 
-  
+  private tokenservice:TokenService ,
   private _encry:EncryptionService, private router: Router,){
 
 }
@@ -34,8 +35,10 @@ constructor( private _sessionStoreage:SessionStorageService,
     //  this.menuCode.emit(this.menuId.toString());
    }
    Logout():void{
-    this._sessionStoreage.removeItem("userId");
-    this._sessionStoreage.clear();
+   
+     this._sessionStoreage.removeItem('UserProfile');
+  this._sessionStoreage.clear();
+  this.tokenservice.clearTokens();
     this.router.navigateByUrl('/Login');
    }
  
@@ -50,7 +53,7 @@ constructor( private _sessionStoreage:SessionStorageService,
     
   }
    roleIdGroups: Record<Role, number[]> = {
-  [Role.Admin]: [ 1,12, 14, 17, 20,38, 52, 263],
+  [Role.Admin]: [ 1,2,12, 14, 17, 20,38, 52, 263],
   [Role.SOP]: [0],
   [Role.Manager]: [] // fallback
 };

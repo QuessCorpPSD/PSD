@@ -79,13 +79,7 @@
       <div class="col-12 col-md-1 d-flex align-items-center">
         <button (click)="GetDatashboardByFilter()" class="btn text-white fw-semibold w-40"
           style="height: 36px; background-color: #302CB3; border-radius: 6px; font-size: 12px; font-family: 'Nunito Sans'; letter-spacing: 0.24px;">
-          <!-- <i>
-          <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor"
-            class="bi bi-search" viewBox="0 0 16 16">
-            <path
-              d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
-          </svg>
-        </i> &nbsp;  -->Search
+          Search
         </button>
       </div>
   
@@ -206,7 +200,7 @@
           <ng-container matColumnDef="companyShortName" sticky>
             <th mat-header-cell *matHeaderCellDef style="width: 15px;"> Customer Name </th>
             <td mat-cell *matCellDef="let element">
-               <span matTooltip="{{element.company_Name}}">
+               <span [matTooltipClass]="'my-tooltip'" matTooltip="{{element.company_Name}}">
                {{element.companyShortName}} ...
               </span>
             </td>

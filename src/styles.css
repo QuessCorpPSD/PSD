@@ -1,13 +1,24 @@
 /* You can add global styles to this file, and also import other style files */
 	
 .container {
-    width: 1200px; /* hard-coded width */
+    width: 100%; /* hard-coded width */
   }
 @media (max-width: 768px) {
     .my-class {
       display: none !important;
     }
   }
+  .my-tooltip  {
+  background-color: #3f51b5 !important; /* Indigo */
+  color: #fff !important;
+  font-size: 14px !important;
+  padding: 8px 12px !important;
+  border-radius: 6px !important;
+  box-shadow: 0 2px 10px lab(32.82% 75.46 -99.05 / 0.3) !important;
+  max-width: 250px;
+  white-space: pre-wrap; /* Allow multiline text */
+  text-align: center;
+}
 * {
     max-width: 100%;  
  }
