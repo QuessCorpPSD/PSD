@@ -1,0 +1,117 @@
+<div class="container-fluid">
+  <div class="row">
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z2 w-100">
+      <ng-container matColumnDef="description">
+        <th mat-header-cell *matHeaderCellDef>Description</th>
+        <td mat-cell *matCellDef="let element; let i = index">
+
+          <ng-template #readName>{{ element.description }}</ng-template>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="description">
+        <th mat-header-cell *matHeaderCellDef>Total Minutes</th>
+        <td mat-cell *matCellDef="let element; let i = index">
+
+          <ng-template #readName>{{ element.description }}</ng-template>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="description">
+        <th mat-header-cell *matHeaderCellDef>Start Time</th>
+        <td mat-cell *matCellDef="let element; let i = index">
+
+          <ng-template #readName>{{ element.description }}</ng-template>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="description">
+        <th mat-header-cell *matHeaderCellDef>End Time</th>
+        <td mat-cell *matCellDef="let element; let i = index">
+
+          <ng-template #readName>{{ element.description }}</ng-template>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="description">
+        <th mat-header-cell *matHeaderCellDef>Remarks</th>
+        <td mat-cell *matCellDef="let element; let i = index">
+
+          <ng-template #readName>{{ element.description }}</ng-template>
+        </td>
+      </ng-container>
+    </table>
+  </div>
+</div>
+
+<!-- <table mat-table [dataSource]="dataSource" class="mat-elevation-z2 w-100">
+
+  
+  <ng-container matColumnDef="description">
+    <th mat-header-cell *matHeaderCellDef>Description</th>
+    <td mat-cell *matCellDef="let element; let i = index">
+     
+      <ng-template #readName>{{ element.description }}</ng-template>
+    </td>
+  </ng-container>
+
+  
+  <ng-container matColumnDef="totalMinutes">
+    <th mat-header-cell *matHeaderCellDef>Total Minutes</th>
+    <td mat-cell *matCellDef="let element; let i = index">
+    
+      <ng-template >{{ element.totalMinutes }}</ng-template>
+    </td>
+  </ng-container>
+
+    <ng-container matColumnDef="startTime">
+    <th mat-header-cell *matHeaderCellDef>Start Time</th>
+    <td mat-cell *matCellDef="let element; let i = index">
+      <ng-container *ngIf="editIndex === i; else readEmail">
+        <input type="time" [(ngModel)]="editableRow.startTime" class="form-control">
+      </ng-container>
+      <ng-template #readEmail>{{ element.startTime }}</ng-template>
+    </td>
+  </ng-container>
+
+   <ng-container matColumnDef="endTime">
+    <th mat-header-cell *matHeaderCellDef>End Time</th>
+    <td mat-cell *matCellDef="let element; let i = index">
+      <ng-container *ngIf="editIndex === i; else endTime">
+        <input [(ngModel)]="editableRow.endTime" class="form-control">
+      </ng-container>
+      <ng-template #endTime>{{ element.endTime }}</ng-template>
+    </td>
+  </ng-container>
+
+    <ng-container matColumnDef="remarks">
+    <th mat-header-cell *matHeaderCellDef>Remarks</th>
+    <td mat-cell *matCellDef="let element; let i = index">
+      <ng-container *ngIf="editIndex === i; else remarks">
+        <input [(ngModel)]="editableRow.remarks" class="form-control">
+      </ng-container>
+      <ng-template #remarks>{{ element.endTime }}</ng-template>
+    </td>
+  </ng-container>
+
+  
+  <ng-container matColumnDef="actions">
+    <th mat-header-cell *matHeaderCellDef>Actions</th>
+    <td mat-cell *matCellDef="let element; let i = index">
+      <ng-container *ngIf="editIndex === i; else actionButtons">
+        <button mat-icon-button color="primary" (click)="saveRow(i)">
+          <mat-icon>check</mat-icon>
+        </button>
+        <button mat-icon-button color="warn" (click)="cancelEdit()">
+          <mat-icon>close</mat-icon>
+        </button>
+      </ng-container>
+      <ng-template #actionButtons>
+        <button mat-icon-button color="accent" (click)="editRow(i)">
+          <mat-icon>edit</mat-icon>
+        </button>
+      </ng-template>
+    </td>
+  </ng-container>
+
+  
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+
+</table> -->

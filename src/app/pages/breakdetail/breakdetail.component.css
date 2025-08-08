@@ -1,0 +1,131 @@
+.custom-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.custom-table th.mat-header-cell {
+  background-color: #3f51b5; /* Indigo */
+  color: white;
+  font-weight: bold;
+  font-size: 15px;
+  padding: 12px;
+}
+mat-form-field.timepicker-compact .mat-form-field-flex {
+  height: 20px;
+  align-items: center;
+}
+.timepicker-compact {
+  width: 140px;
+}
+
+.timepicker-compact input[type="time"] {
+  height: 30px;
+  font-size: 13px;
+  padding: 4px 6px;
+}
+
+
+/* Table overall styling */
+.custom-mat-table {
+  width: 100%;
+  font-size: 14px;
+  border: 1px solid #ddd;
+}
+
+/* Header cell style */
+.mat-header-cell {
+  background-color: #343a40; /* dark header */
+  color: white;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+/* Cell style */
+.mat-cell {
+  padding: 12px;
+  border-bottom: 1px solid #eee;
+}
+
+/* Row hover effect */
+.mat-row:hover {
+  background-color: #f8f9fa;
+}
+
+/* Sticky header if needed */
+.mat-header-row {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+/* Add spacing or margin */
+.mat-table {
+  margin-top: 1rem;
+}
+.mat-row:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.custom-table td.mat-cell {
+  font-size: 14px;
+  padding: 10px;
+  color: #333;
+}
+
+.compact-form-field {
+  height: 26px;             /* Total height you want */
+  font-size: 13px;          /* Optional: smaller font */
+}
+
+.compact-form-field .mat-form-field-wrapper {
+  padding-bottom: 0px;
+  padding-top: 0px;
+  height: 80%;             /* Inherit full height */
+}
+
+.compact-form-field .mat-form-field-flex {
+  height: 20px;             /* Controls internal height */
+  align-items: center;      /* Center input vertically */
+}
+
+.compact-form-field .mat-input-element {
+  height: 20px;             /* Input field height */
+  padding: 0 0 0 0;         /* Remove internal padding */
+  font-size: 13px;
+  line-height: 20px;
+}
+
+.custom-table tr.mat-row:nth-child(even) {
+  background-color: #fff;
+}
+
+.custom-table tr.mat-row:hover {
+  background-color: #e0e0e0;
+  transition: background-color 0.3s ease;
+}
+.timepicker-compact {
+  width: 130px !important;
+}
+
+.timepicker-compact .mat-form-field-wrapper {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.timepicker-compact .mat-form-field-flex {
+  height: 20px !important;
+  padding: 0 4px !important;
+  align-items: center !important;
+}
+
+.timepicker-compact .mat-form-field-infix {
+  padding: 0 !important;
+  border-top: 0 !important;
+}
+
+.timepicker-compact .mat-input-element {
+  font-size: 12px !important;
+  height: 24px !important;
+  padding: 2px 4px !important;
+}
+

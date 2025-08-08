@@ -11,7 +11,7 @@ import { NgOptimizedImage } from '@angular/common'
 import { EncryptionService } from '../../Shared/encryption.service';
 import { SessionStorageService } from '../../Shared/SessionStorageService';
 import { TokenService } from '../../Shared/TokenService';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 
 
@@ -38,10 +38,10 @@ username:string = ''
   isSubmitting:boolean = false;
   Name:string='';
   userDeviceData!:string;
-    ipAddress: string = '';
+    ipAddress: string = '::1';
  computername:string='';
   validationErrors:Array<any> = [];
-  
+
    
   constructor(
     @Inject(auth)private _authService:IAuthServiceService, 
@@ -67,20 +67,35 @@ username:string = ''
     }
    
   ngOnInit(): void {
-   this.http.get('http://localhost:7000/', { responseType: 'text' })
-      .subscribe({
-        next: (response: string) => {
-          
-          // If you're using jQuery (not recommended), you can do:
-          this.computername=response
-          
-          // Angular way (recommended):
-          // this.companyName = response;
-        },
-        error: (error) => {
-          console.error('Error fetching data', error);
-        }
-      });
+    // localStorage.clear();
+  //sessionStorage.clear();
+
+  this.sessionStorageService.removeItem('UserProfile');
+  this.sessionStorageService.clear();
+  this.tokenservice.clearTokens();
+ if (!this.router.navigated) {
+    location.reload(); // Only if you need hard reload
+  }
+   const APIURL:string = 'http://localhost:7000';
+
+   const config = {
+  headers: new HttpHeaders({
+    'Cache-Control': 'no-cache, no-store, must-revalidate',
+    'Pragma': 'no-cache',
+    'Expires': '0'
+  }),
+  responseType: 'text' as const  // 👈 ensures type safety
+};
+   this.http.get(APIURL, config)
+  .subscribe({
+    next: (response: string) => {
+      this.computername = response;
+       console.log("Computer Name: " + this.computername);
+    },
+    error: (error) => {
+      console.error('Error fetching data', error);
+    }
+  });
     //console.log(this.deviceInfo);
   }
  
@@ -94,9 +109,20 @@ username:string = ''
       }
     });
   }
-
+   roleIdGroups: Record<Role, number[]> = {
+  [Role.Admin]: [1,12, 14, 17, 20,38, 52, 263],
+  [Role.SOP]: [0],
+  [Role.Manager]: [] // fallback
+};
  
-
+getUserRole(roleId: number): Role {
+  for (const role in this.roleIdGroups) {
+    if (this.roleIdGroups[role as Role].includes(roleId)) {
+      return role as Role;
+    }
+  }
+  return Role.Manager;
+}
  validateLogin(): void {
   if (!this.username || this.username.trim() === '') {
     this.toastr.error("Please Enter Employee Code", "Error");
@@ -110,7 +136,9 @@ username:string = ''
 
  
 
- this.getIpAddress();
+ ///this.getIpAddress();
+
+
     
    const login = {
     username: this.username,
@@ -122,7 +150,7 @@ username:string = ''
   this._authService.ValidateLogin(login).subscribe({
     next: (loginStatus) => {
       const data = loginStatus.Data;
-
+      console.log(data);
       if (data.error_Message === "" && data.user_Id > 0) {
         this.Name = data.userName;
         this.sessionStorageService.setItem('UserProfile', this._encry.encrypt(JSON.stringify(data)));
@@ -130,8 +158,8 @@ username:string = ''
           this._encry.encrypt(data.token),
           this._encry.encrypt(data.refreshtoken)
         );
-
-        if (data.role_Id === 17) {
+;
+        if (this.getUserRole(data.role_Id)=='admin') {
           this.router.navigateByUrl('/Master/dashboard');
         } else {
           this.router.navigateByUrl('/Master/Home');
@@ -149,4 +177,8 @@ username:string = ''
 }
 
 }
-
+enum Role {
+  Admin = 'admin',
+  SOP = 'SOP',
+  Manager = 'manager'
+}

@@ -43,7 +43,7 @@ export class ForgotComponent implements OnInit{
 });
   }
  
-  onSubmit() {
+  forgotpassword() {
      this.forgotForm.get('Password')?.valueChanges.subscribe(value => {
   console.log('Password changed:', value);
 });

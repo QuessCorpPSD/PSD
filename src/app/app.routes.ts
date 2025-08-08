@@ -11,12 +11,13 @@ import { HomeComponent } from './pages/home/home.component';
 import { AssignmentComponent } from './pages/assignment/assignment.component';
 import { SeverityComponent } from './pages/severity/severity.component';
 import { AllotedLotComponent } from './pages/alloted-lot/alloted-lot.component';
-import { SopformComponent } from './pages/sopform/sopform.component';
-import { SopComponent } from './pages/Customer/sop/sop.component';
+
 import { SopnewComponent } from './pages/sopnew/sopnew.component';
 import { UserMappingComponent } from './pages/admin/user-mapping/user-mapping.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { ChangepasswordComponent } from './pages/changepassword/changepassword.component'; 
+import { BreakdetailComponent } from './pages/breakdetail/breakdetail.component';
+import { BreakComponent } from './pages/employee/break/break.component';
 
 
 
@@ -27,7 +28,9 @@ export const routes: Routes = [
             { path: 'Assignment', component: AssignmentComponent },
             { path: 'Severity', component: SeverityComponent },
             { path: 'AllottedLot', component: AllotedLotComponent },
-            { path: 'SOP', component: SopnewComponent },
+            { path: 'Break', component: BreakdetailComponent },
+            { path: 'Employee', component: BreakComponent },
+             { path: 'SOP', component: SopnewComponent },
             { path: 'user', component: UserMappingComponent },
             { path: 'dashboard', component: DashboardComponent },
             { path: 'changepassword', component: ChangepasswordComponent },

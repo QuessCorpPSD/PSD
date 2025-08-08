@@ -10,26 +10,35 @@ import { catchError, Observable, switchMap, throwError } from 'rxjs';
 import { TokenService } from './TokenService';
 import { EncryptionService } from './encryption.service';
 import { APIResponse } from '../Models/apiresponse';
-
 export const authInterceptor: HttpInterceptorFn = (
   req: HttpRequest<unknown>,
   next: HttpHandlerFn
 ): Observable<HttpEvent<unknown>> => {
-   
+
   // Bypass token logic for login and refresh endpoints
   if (req.url.includes('/UserLogin') || req.url.includes('/refresh')) {
-    return next(req); // Skip token
+    return next(req);
   }
 
   const tokenService = inject(TokenService);
   const decryptionService = inject(EncryptionService);
-  const http = inject(HttpClient); // Required for refresh
+  const http = inject(HttpClient);
 
   const encryptedToken = tokenService.getAccessToken();
   const accessToken = encryptedToken ? decryptionService.decrypt(encryptedToken) : null;
-  const cloned = accessToken
-    ? req.clone({ setHeaders: { Authorization: `Bearer ${accessToken}` } })
-    : req;
+
+  // ✅ Set both Authorization and Cache-Control headers
+  const headersConfig: Record<string, string> = {
+    'Cache-Control': 'no-cache, no-store, must-revalidate',
+    'Pragma': 'no-cache',
+    'Expires': '0'
+  };
+
+  if (accessToken) {
+    headersConfig['Authorization'] = `Bearer ${accessToken}`;
+  }
+
+  const cloned = req.clone({ setHeaders: headersConfig });
 
   return next(cloned).pipe(
     catchError(err => {
@@ -42,8 +51,14 @@ export const authInterceptor: HttpInterceptorFn = (
           switchMap((res: any) => {
             tokenService.setTokens(res.Data.accessToken, res.Data.refreshToken);
 
+            // Re-attach new token with no-cache headers
             const retried = req.clone({
-              setHeaders: { Authorization: `Bearer ${res.Data.accessToken}` }
+              setHeaders: {
+                'Authorization': `Bearer ${res.Data.accessToken}`,
+                'Cache-Control': 'no-cache, no-store, must-revalidate',
+                'Pragma': 'no-cache',
+                'Expires': '0'
+              }
             });
 
             return next(retried);
@@ -58,3 +73,4 @@ export const authInterceptor: HttpInterceptorFn = (
     })
   );
 };
+

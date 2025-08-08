@@ -17,24 +17,49 @@ export class DashBoardServices implements IDashBoardServices {
 
     GetUserDashBoard(userId):Observable<APIResponse>
     {
-        return this.http.get<APIResponse>(this.environment.apiUrl+'DashBoard/GetDashBoardByUserId/'+userId);
+        const headers  = new HttpHeaders({
+            'Cache-Control': 'no-cache, no-store, must-revalidate',
+            'Pragma': 'no-cache',
+            'Expires': '0'
+        }).set('Content-Type', 'application/json')
+            .set('Accept', 'application/json');
+
+            const config = { headers };
+        return this.http.get<APIResponse>(this.environment.apiUrl+'DashBoard/GetDashBoardByUserId/'+userId,config);
     }
     UserCheckIn(userId,Type):Observable<APIResponse>
     {
-        return this.http.get<APIResponse>(this.environment.apiUrl + 'CheckInCheckOut/CheckIn/' + userId + '/' + Type)
+         const headers  = new HttpHeaders({
+            'Cache-Control': 'no-cache, no-store, must-revalidate',
+            'Pragma': 'no-cache',
+            'Expires': '0'
+        }).set('Content-Type', 'application/json')
+            .set('Accept', 'application/json');
+
+            const config = { headers };
+        return this.http.get<APIResponse>(this.environment.apiUrl + 'CheckInCheckOut/CheckIn/' + userId + '/' + Type,config)
     }
     getadmindashboard():Observable<APIResponse>
     {
-        return this.http.get<APIResponse>(this.environment.apiUrl+'DashBoard/GetAdminDashBoard')
+           const headers  = new HttpHeaders({
+            'Cache-Control': 'no-cache, no-store, must-revalidate',
+            'Pragma': 'no-cache',
+            'Expires': '0'
+        }).set('Content-Type', 'application/json')
+            .set('Accept', 'application/json');
+
+            const config = { headers };
+        return this.http.get<APIResponse>(this.environment.apiUrl+'DashBoard/GetAdminDashBoard',config)
     }
     getadmindashboarddetail(val):Observable<APIResponse>
     {
+
         const url = `${this.environment.apiUrl}DashBoard/GetAdminDashBoardDetail`;
         const headers = new HttpHeaders({
             'Content-Type': 'application/json',
             'Accept': 'application/json'
         });
-        var inputval = JSON.stringify(val);
+        
         const config = new HttpHeaders().set('Content-Type', 'application/json')
             .set('Accept', 'application/json')
         return this.http.post<APIResponse>(url, JSON.stringify(val), { headers });
@@ -42,6 +67,14 @@ export class DashBoardServices implements IDashBoardServices {
     }
     getadminPendingLot():Observable<APIResponse>
     {
-        return this.http.get<APIResponse>(this.environment.apiUrl+'DashBoard/PendingLot') 
+         const headers  = new HttpHeaders({
+            'Cache-Control': 'no-cache, no-store, must-revalidate',
+            'Pragma': 'no-cache',
+            'Expires': '0'
+        }).set('Content-Type', 'application/json')
+            .set('Accept', 'application/json');
+
+            const config = { headers };
+        return this.http.get<APIResponse>(this.environment.apiUrl+'DashBoard/PendingLot',config) 
     }
 }

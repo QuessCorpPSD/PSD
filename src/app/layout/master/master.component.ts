@@ -6,6 +6,7 @@ import { AppHeaderComponent } from '../app-header/app-header.component';
 
 import { SessionStorageService } from '../../Shared/SessionStorageService';
 import { EncryptionService } from '../../Shared/encryption.service';
+import { TokenService } from '../../Shared/TokenService';
 @Component({
   selector: 'app-master',
   standalone: true,
@@ -19,8 +20,9 @@ export class MasterComponent implements  OnInit {
   username = '';
   menuCode:string='1';
   menuHideVisibility=false;
+  userRole:any;
 constructor( private _sessionStoreage:SessionStorageService, 
-  
+  private tokenservice:TokenService ,
   private _encry:EncryptionService, private router: Router,){
 
 }
@@ -33,28 +35,50 @@ constructor( private _sessionStoreage:SessionStorageService,
     //  this.menuCode.emit(this.menuId.toString());
    }
    Logout():void{
-    this._sessionStoreage.removeItem("userId");
-    this._sessionStoreage.clear();
+   
+     this._sessionStoreage.removeItem('UserProfile');
+  this._sessionStoreage.clear();
+  this.tokenservice.clearTokens();
     this.router.navigateByUrl('/Login');
    }
+ 
   ngOnInit(): void {
   const userdetail= this._sessionStoreage.getItem('UserProfile');
   var user = JSON.parse(this._encry.decrypt(userdetail!)); 
-    if(user.role_Id === 17)
-    {
-      this.menuHideVisibility=true;
-    }
-    else
-    {
-      this.menuHideVisibility=false;
-    }
+
+
    
-   
+  this.userRole=this.getUserRole(user.role_Id);
+  
     
   }
+   roleIdGroups: Record<Role, number[]> = {
+  [Role.Admin]: [ 1,2,12, 14, 17, 20,38, 52, 263],
+  [Role.SOP]: [0],
+  [Role.Manager]: [] // fallback
+};
+   getUserRole(roleId: number): Role {
+  for (const role in this.roleIdGroups) {
+    if (this.roleIdGroups[role as Role].includes(roleId)) {
+      return role as Role;
+    }
+  }
+  return Role.Manager;
+}
+  
   receiveData(data: string) {
 
   //  console.log('Master data received the values : '+data)
     this.menuCode = data; // Update parent property with received data
   }
+}
+//   enum RoleIds {
+//   Admin = 12,
+//   SOP = 38
+// }
+
+enum Role {
+  Admin = 'admin',
+  SOP = 'SOP',
+  Manager = 'manager'
 }

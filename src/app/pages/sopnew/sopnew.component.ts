@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, InjectionToken, ChangeDetectorRef } from '@angular/core';
+import { Component, Inject, OnInit, InjectionToken, ChangeDetectorRef, input } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, FormGroup, FormControl, FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
@@ -58,7 +58,7 @@ export class SopnewComponent {
   renderKey = 1;
   dropdownSubMap: { [controlName: string]: any[] } = {};
   selectionLog: { title: string, key: string, value: string }[] = [];
-  isLoading = false;
+  isLoading = true;
   questionAnswerStateMap: { [questionId: string]: any } = {};
   state_id = "11";
   user_id!: string;
@@ -83,13 +83,14 @@ export class SopnewComponent {
   policyconditioncycoveragetypedetails: any;
   policynobyconditiondetails: any;
   Firstmonthpayroll: any;
-  isEsiApplicable: boolean = false;
+  isEsiApplicable: boolean | null = null;
   isTillServiceTerminate: boolean = false;
-  isEsiNonApplicable: boolean = false;
+  isEsiNonApplicable: boolean | null = null;
   countrylist: any[] = [];
   currencylist: any[] = [];
   citylist: any[] = [];
 
+  selectedCompany1: string = '';
   selectedOptionLabel3: string = '';
   selectedOptionLabel5: string = '';
   selectedOptionLabel6: string = '';
@@ -251,12 +252,25 @@ export class SopnewComponent {
   isduplicate42_2: boolean = false;
   isSubmitted42_3: boolean = false;
   isduplicate42_3: boolean = false;
-  Answer1: any;
+  Answer1: any = {
+    QuestionId: '',
+    Company_Id: '',
+    Company_Code: '',
+    Company_Name: '',
+    SAP_Code: '',
+    MyContract_Reference_ID: '',
+    Client_Website_link: '',
+    First_Month_Payroll: '',
+    Client_Onboarding_Month: '',
+    CreatedBy: ''
+  };
   Answer1Post: any;
+  clientdetailsdate: any[] = [];
   Answer2: any;
   Answer2Post: any;
   Answer3 = {
-    selection: ''
+    selection: '',
+    bulocation: '',
   };
   Answer3Post: any;
   Answer4: any;
@@ -266,11 +280,9 @@ export class SopnewComponent {
     Attendance_Cycle_To: '',
     PayRoll_Cycle_From: '',
     PayRoll_Cycle_To: '',
-    Collection_Date_From: '',
-    Collection_Date_To: '',
+    Collection_Date: '',
     Group_Name_Site_Master: '',
-    Pay_Out_Date_From: '',
-    Pay_Out_Date_To: '',
+    Pay_Out_Date: '',
     Payment_Proof: ''
   };
   Answer5Post: any;
@@ -287,7 +299,9 @@ export class SopnewComponent {
   Answer7Post: any;
   answer7GridData: any[] = [];
   Answer8 = {
-    selection: ''
+    selection: '',
+    email: '',
+    id: ''
   };
   Answer8Post: any;
   Answer9 = {
@@ -329,7 +343,8 @@ export class SopnewComponent {
   };
   Answer17Post: any;
   Answer18: any = {
-    Payslip_Distribution: ''
+    Payslip_Distribution: '',
+    Quess_Ess: ''
   };
   Answer18Post: any;
   Answer19: any = {
@@ -361,7 +376,7 @@ export class SopnewComponent {
   Answer23Post: any;
   Answer25: any = {
     Billiable: '',
-    Eligibility_Month: '',
+    Calandar_Type: '',
     Accumulated_FlushOut: '',
     Billed_Paid: ''
   };
@@ -412,7 +427,8 @@ export class SopnewComponent {
   };
   Answer37Post: any;
   Answer38: any = {
-    Penalty_Clause: ''
+    Penalty_Clause: '',
+    Payroll_Closure_Date: ''
   };
   Answer38Post: any;
   Answer27: any = {
@@ -458,6 +474,7 @@ export class SopnewComponent {
     Company_Code: '',
     Designation_Id: '',
     Designation_Name: '',
+    Designationwise_Days: '',
     Applicable_Wages_BASIC_DA: '',
     Applicable_Wages_GROSS: ''
   };
@@ -466,13 +483,16 @@ export class SopnewComponent {
 
   Answer22: any = {
     Applicable: '',
+    Leave_Management: '',
+    Calander_Type: '',
     Leave_Type_Id: '',
     Leave_Type: '',
+    No_Of_Leave: '',
     Carry_Forward: '',
     Carry_Forward_Days: '',
-    Calander_Type: '',
+    Encashment: '',
     Leave_Encashment: '',
-    Leave_Management: '',
+
   };
   Answer22Post: any;
   answer22GridData: any[] = [];
@@ -726,6 +746,12 @@ export class SopnewComponent {
 
   }
 
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.isLoading = false;
+    }, 5000); // Optional delay to simulate loading
+  }
+
   GetCountry() {
     this._authService.GetCountry().subscribe({
       next: res => {
@@ -745,6 +771,20 @@ export class SopnewComponent {
       },
       error: err => {
         console.error('Error loading questions', err);
+      }
+    });
+  }
+
+  handleWithLoader<T>(observable: Observable<T>, onNext: (res: T) => void): void {
+    this.isLoading = true;
+    observable.subscribe({
+      next: onNext,
+      error: (err) => {
+        console.error(err);
+        this.isLoading = false;
+      },
+      complete: () => {
+        this.isLoading = false;
       }
     });
   }
@@ -986,7 +1026,7 @@ export class SopnewComponent {
     const currentYear = today.getFullYear();
     const currentMonth = today.getMonth() + 1;
 
-    if (this.Answer24.Calander_Type === 'Financial calander') {
+    if (this.Answer24.Calander_Type === 'Financial Calendar') {
 
       // Financial Year: April 1 - March 31
       let startYear = currentYear;
@@ -996,7 +1036,7 @@ export class SopnewComponent {
 
       this.minDate = `${startYear}-04-01`;
       this.maxDate = `${endYear}-03-31`;
-    } else if (this.Answer24.Calander_Type === 'Normal calander') {
+    } else if (this.Answer24.Calander_Type === 'Normal Calendar') {
 
       // Calendar Year: Jan 1 - Dec 31
       this.minDate = `${currentYear}-01-01`;
@@ -1050,49 +1090,66 @@ export class SopnewComponent {
   }
 
   async onCategoryClick(cat: any): Promise<void> {
-    this.isLoading = true;
-    this.selectedQuestion = null;
-    this.selectedCategory = cat;
-    this.selectedCategoryIndex = this.categorylist.findIndex(c => c.categoryId === cat.categoryId);
-    await this.GetQuestion(cat.categoryId);
-    this.isLoading = false;
+
+    try {
+      this.isLoading = true;
+      this.selectedQuestion = null;
+      this.selectedCategory = cat;
+      this.selectedCategoryIndex = this.categorylist.findIndex(c => c.categoryId === cat.categoryId);
+      await this.GetQuestion(cat.categoryId);
+
+    }
+    catch (error) {
+      console.error('Error in onCategoryClick:', error);
+    } finally {
+      this.isLoading = false; // 👉 Stop loader no matter what
+    }
+
   }
 
-  GetQuestion(categoryid: any) {
-    this._authService.GetQuestion(categoryid).subscribe({
-      next: res => {
-        this.questions = res.Data.map((q: any) => ({
-          ...q,
-          answered: false // default value
-        }));
-        this.GetMarkedQuestion(this.employeeId, this.questions.length);
+  GetQuestion(categoryid: any): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this._authService.GetQuestion(categoryid).subscribe({
+        next: res => {
+          this.questions = res.Data.map((q: any) => ({
+            ...q,
+            answered: false
+          }));
 
-      },
-      error: err => {
-        console.error('Error loading questions', err);
-      }
-    });
-  }
-
-  GetMarkedQuestion(employeeID: any, questionlength: any) {
-    this._authService.GetmarkedQuestion(employeeID).subscribe({
-      next: res => {
-        this.markedProgressData = res.Data;
-
-        this.markAnsweredQuestionsFromProgress();
-
-        if (questionlength > 0) {
-          this.onQuestionClick(this.questions[0]);
-        } else {
-          console.warn('No questions found in this category.');
+          this.GetMarkedQuestion(this.employeeId, this.questions.length)
+            .then(() => resolve())
+            .catch(err => reject(err));
+        },
+        error: err => {
+          console.error('Error loading questions', err);
+          reject(err);
         }
-      },
-      error: err => {
-        console.error('Error loading questions', err);
-      }
+      });
     });
   }
 
+  GetMarkedQuestion(employeeID: any, questionlength: any): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this._authService.GetmarkedQuestion(this.selectedCompany1 || "0", employeeID).subscribe({
+        next: res => {
+          this.markedProgressData = res.Data;
+          this.markAnsweredQuestionsFromProgress();
+
+          if (questionlength > 0) {
+            this.onQuestionClick(this.questions[0]);
+          } else {
+            console.warn('No questions found in this category.');
+          }
+
+          resolve();
+        },
+        error: err => {
+          console.error('Error loading marked questions', err);
+          reject(err);
+        }
+      });
+    });
+  }
   markAnsweredQuestionsFromProgress() {
     const allMarkedIds = this.markedProgressData
       .flatMap((category: any) => category.marked_Question)
@@ -1106,182 +1163,201 @@ export class SopnewComponent {
 
   onQuestionClick(question: any): void {
 
-    this.selectedQuestion = question;
+    this.isLoading = true; // Start loader
+
+    try {
 
 
-    this.selectedQuestionIndex = this.questions.findIndex(q => q.questionId === question.questionId);
 
-    if (this.selectedQuestion.questionId == 1) {
-      this.GetSOPAnswer1(this.selectedQuestion.questionId, this.employeeId);
-      this.isSubmitted1 = false;
+      if (question.questionId != 1 && this.selectedCompany1 == '') {
+        alert('Please select company code before proceeding.');
+        return;
+      }
+
+
+      this.selectedQuestion = question;
+
+
+
+      this.selectedQuestionIndex = this.questions.findIndex(q => q.questionId === question.questionId);
+
+      if (this.selectedQuestion.questionId == 1) {
+        this.GetSOPAnswer1(this.selectedQuestion.questionId, this.employeeId);
+        this.isSubmitted1 = false;
+      }
+      if (this.selectedQuestion.questionId == 2) {
+        this.GetSOPAnswer2(this.selectedQuestion.questionId, this.employeeId);
+        this.isSubmitted2 = false;
+      }
+      if (this.selectedQuestion.questionId == 3) {
+        this.GetSOPAnswer3(this.selectedQuestion.questionId, this.selectedCompany1, this.employeeId);
+        this.isSubmitted3 = false;
+      }
+      if (this.selectedQuestion.questionId == 6) {
+        this.GetSOPAnswer6(this.selectedQuestion.questionId, this.selectedCompany1, this.employeeId);
+        this.isSubmitted6 = false;
+      }
+      if (this.selectedQuestion.questionId == 8) {
+        this.GetSOPAnswer8(this.selectedQuestion.questionId, this.selectedCompany1, this.employeeId);
+        this.isSubmitted8 = false;
+      }
+      if (this.selectedQuestion.questionId == 9) {
+        this.GetSOPAnswer9(this.selectedQuestion.questionId, this.employeeId);
+        this.isSubmitted9 = false;
+      }
+      if (this.selectedQuestion.questionId == 10) {
+        this.GetSOPAnswer10(this.selectedQuestion.questionId, this.employeeId);
+        this.isSubmitted10 = false;
+      }
+      if (this.selectedQuestion.questionId == 5) {
+        this.GetSOPAnswer5(this.selectedQuestion.questionId, this.selectedCompany1, this.employeeId);
+        this.isSubmitted5 = false;
+      }
+      if (this.selectedQuestion.questionId == 7) {
+        this.GetSOPAnswer7(this.selectedQuestion.questionId, this.employeeId);
+        this.isSubmitted7 = false;
+      }
+      if (this.selectedQuestion.questionId == 12) {
+        this.GetSOPAnswer12(this.selectedQuestion.questionId, this.selectedCompany1, this.employeeId);
+        this.isSubmitted12 = false;
+      }
+      if (this.selectedQuestion.questionId == 13) {
+        this.GetSOPAnswer13(this.selectedQuestion.questionId, this.selectedCompany1, this.employeeId);
+        this.isSubmitted13 = false;
+      }
+      if (this.selectedQuestion.questionId == 14) {
+        this.GetSOPAnswer14(this.selectedQuestion.questionId, this.selectedCompany1, this.employeeId);
+        this.isSubmitted14 = false;
+      }
+      if (this.selectedQuestion.questionId == 16) {
+        this.GetSOPAnswer16(this.selectedQuestion.questionId, this.selectedCompany1, this.employeeId);
+        this.isSubmitted16 = false;
+      }
+      if (this.selectedQuestion.questionId == 17) {
+        this.GetSOPAnswer17(this.selectedQuestion.questionId, this.selectedCompany1, this.employeeId);
+        this.isSubmitted17 = false;
+      }
+      if (this.selectedQuestion.questionId == 18) {
+        this.GetSOPAnswer18(this.selectedQuestion.questionId, this.selectedCompany1, this.employeeId);
+        this.isSubmitted18 = false;
+      }
+      if (this.selectedQuestion.questionId == 19) {
+        this.GetSOPAnswer19(this.selectedQuestion.questionId, this.selectedCompany1, this.employeeId);
+        this.isSubmitted19 = false;
+      }
+      if (this.selectedQuestion.questionId == 21) {
+        this.GetSOPAnswer21(this.selectedQuestion.questionId, this.selectedCompany1, this.employeeId);
+        this.isSubmitted21 = false;
+      }
+      if (this.selectedQuestion.questionId == 23) {
+        this.GetSOPAnswer23(this.selectedQuestion.questionId, this.selectedCompany1, this.employeeId);
+        this.isSubmitted23 = false;
+      }
+      if (this.selectedQuestion.questionId == 25) {
+        this.GetSOPAnswer25(this.selectedQuestion.questionId, this.selectedCompany1, this.employeeId);
+        this.isSubmitted25 = false;
+      }
+      if (this.selectedQuestion.questionId == 28) {
+        this.GetSOPAnswer28(this.selectedQuestion.questionId, this.selectedCompany1, this.employeeId);
+        this.isSubmitted28 = false;
+      }
+      if (this.selectedQuestion.questionId == 29) {
+        this.GetSOPAnswer29(this.selectedQuestion.questionId, this.selectedCompany1, this.employeeId);
+        this.isSubmitted29 = false;
+      }
+      if (this.selectedQuestion.questionId == 30) {
+        this.GetSOPAnswer30(this.selectedQuestion.questionId, this.selectedCompany1, this.employeeId);
+        this.isSubmitted30 = false;
+      }
+      if (this.selectedQuestion.questionId == 32) {
+        this.GetSOPAnswer32(this.selectedQuestion.questionId, this.selectedCompany1, this.employeeId);
+        this.isSubmitted32 = false;
+      }
+      if (this.selectedQuestion.questionId == 36) {
+        this.GetSOPAnswer36(this.selectedQuestion.questionId, this.selectedCompany1, this.employeeId);
+        this.isSubmitted36 = false;
+      }
+      if (this.selectedQuestion.questionId == 37) {
+        this.GetSOPAnswer37(this.selectedQuestion.questionId, this.selectedCompany1, this.employeeId);
+        this.isSubmitted37 = false;
+      }
+      if (this.selectedQuestion.questionId == 38) {
+        this.GetSOPAnswer38(this.selectedQuestion.questionId, this.selectedCompany1, this.employeeId);
+        this.isSubmitted38 = false;
+      }
+      if (this.selectedQuestion.questionId == 27) {
+        this.GetSOPAnswer27(this.selectedQuestion.questionId, this.selectedCompany1, this.employeeId);
+        this.isSubmitted27 = false;
+      }
+      if (this.selectedQuestion.questionId == 39) {
+        this.GetSOPAnswer39(this.selectedQuestion.questionId, this.selectedCompany1, this.employeeId);
+        this.isSubmitted39 = false;
+      }
+      if (this.selectedQuestion.questionId == 4) {
+        this.GetSOPAnswer4(this.selectedQuestion.questionId, this.selectedCompany1, this.employeeId);
+        this.isSubmitted4 = false;
+      }
+      if (this.selectedQuestion.questionId == 33) {
+        this.GetSOPAnswer33(this.selectedQuestion.questionId, this.selectedCompany1, this.employeeId);
+        this.isSubmitted33 = false;
+      }
+      if (this.selectedQuestion.questionId == 31) {
+        this.GetSOPAnswer31(this.selectedQuestion.questionId, this.selectedCompany1, this.employeeId);
+        this.isSubmitted31 = false;
+      }
+      if (this.selectedQuestion.questionId == 11) {
+        this.GetSOPAnswer11(this.selectedQuestion.questionId, this.selectedCompany1, this.employeeId);
+        this.isSubmitted11 = false;
+      }
+      if (this.selectedQuestion.questionId == 15) {
+        this.GetSOPAnswer15(this.selectedQuestion.questionId, this.selectedCompany1, this.employeeId);
+        this.isSubmitted15 = false;
+      }
+      if (this.selectedQuestion.questionId == 20) {
+        this.GetSOPAnswer20(this.selectedQuestion.questionId, this.selectedCompany1, this.employeeId);
+        this.isSubmitted20 = false;
+      }
+      if (this.selectedQuestion.questionId == 22) {
+        this.GetSOPAnswer22(this.selectedQuestion.questionId, this.selectedCompany1, this.employeeId);
+        this.isSubmitted22 = false;
+      }
+      if (this.selectedQuestion.questionId == 24) {
+        this.GetSOPAnswer24(this.selectedQuestion.questionId, this.employeeId);
+        this.isSubmitted24 = false;
+      }
+      if (this.selectedQuestion.questionId == 26) {
+        this.GetSOPAnswer26(this.selectedQuestion.questionId, this.employeeId);
+        this.isSubmitted26 = false;
+      }
+      if (this.selectedQuestion.questionId == 35) {
+        this.GetSOPAnswer35(this.selectedQuestion.questionId, this.employeeId);
+        this.isSubmitted35 = false;
+      }
+      if (this.selectedQuestion.questionId == 34) {
+        this.GetSOPAnswer34(this.selectedQuestion.questionId, this.selectedCompany1, this.employeeId);
+        this.isSubmitted34 = false;
+      }
+      if (this.selectedQuestion.questionId == 40) {
+        this.GetSOPAnswer40(this.selectedQuestion.questionId, this.selectedCompany1, this.employeeId);
+        this.isSubmitted40 = false;
+      }
+      if (this.selectedQuestion.questionId == 41) {
+        this.isSubmitted41 = false;
+        this.GetSOPAnswer41_1("4", this.employeeId);
+        this.GetSOPAnswer41(this.selectedQuestion.questionId, this.selectedCompany1, this.employeeId);
+      }
+      if (this.selectedQuestion.questionId == 42) {
+        this.isSubmitted42 = false;
+        this.GetSOPAnswerCompliance42(this.selectedQuestion.questionId, this.selectedCompany1, this.employeeId);
+        this.GetSOPAnswerMinimumwages42(this.selectedQuestion.questionId, this.selectedCompany1, this.employeeId);
+        this.GetSOPAnswerDesignation42(this.selectedQuestion.questionId, this.selectedCompany1, this.employeeId);
+        this.GetSOPAnswerCLRA42(this.selectedQuestion.questionId, this.selectedCompany1, this.employeeId);
+      }
     }
-    if (this.selectedQuestion.questionId == 2) {
-      this.GetSOPAnswer2(this.selectedQuestion.questionId, this.employeeId);
-      this.isSubmitted2 = false;
-    }
-    if (this.selectedQuestion.questionId == 3) {
-      this.GetSOPAnswer3(this.selectedQuestion.questionId, this.employeeId);
-      this.isSubmitted3 = false;
-    }
-    if (this.selectedQuestion.questionId == 6) {
-      this.GetSOPAnswer6(this.selectedQuestion.questionId, this.employeeId);
-      this.isSubmitted6 = false;
-    }
-    if (this.selectedQuestion.questionId == 8) {
-      this.GetSOPAnswer8(this.selectedQuestion.questionId, this.employeeId);
-      this.isSubmitted8 = false;
-    }
-    if (this.selectedQuestion.questionId == 9) {
-      this.GetSOPAnswer9(this.selectedQuestion.questionId, this.employeeId);
-      this.isSubmitted9 = false;
-    }
-    if (this.selectedQuestion.questionId == 10) {
-      this.GetSOPAnswer10(this.selectedQuestion.questionId, this.employeeId);
-      this.isSubmitted10 = false;
-    }
-    if (this.selectedQuestion.questionId == 5) {
-      this.GetSOPAnswer5(this.selectedQuestion.questionId, this.employeeId);
-      this.isSubmitted5 = false;
-    }
-    if (this.selectedQuestion.questionId == 7) {
-      this.GetSOPAnswer7(this.selectedQuestion.questionId, this.employeeId);
-      this.isSubmitted7 = false;
-    }
-    if (this.selectedQuestion.questionId == 12) {
-      this.GetSOPAnswer12(this.selectedQuestion.questionId, this.employeeId);
-      this.isSubmitted12 = false;
-    }
-    if (this.selectedQuestion.questionId == 13) {
-      this.GetSOPAnswer13(this.selectedQuestion.questionId, this.employeeId);
-      this.isSubmitted13 = false;
-    }
-    if (this.selectedQuestion.questionId == 14) {
-      this.GetSOPAnswer14(this.selectedQuestion.questionId, this.employeeId);
-      this.isSubmitted14 = false;
-    }
-    if (this.selectedQuestion.questionId == 16) {
-      this.GetSOPAnswer16(this.selectedQuestion.questionId, this.employeeId);
-      this.isSubmitted16 = false;
-    }
-    if (this.selectedQuestion.questionId == 17) {
-      this.GetSOPAnswer17(this.selectedQuestion.questionId, this.employeeId);
-      this.isSubmitted17 = false;
-    }
-    if (this.selectedQuestion.questionId == 18) {
-      this.GetSOPAnswer18(this.selectedQuestion.questionId, this.employeeId);
-      this.isSubmitted18 = false;
-    }
-    if (this.selectedQuestion.questionId == 19) {
-      this.GetSOPAnswer19(this.selectedQuestion.questionId, this.employeeId);
-      this.isSubmitted19 = false;
-    }
-    if (this.selectedQuestion.questionId == 21) {
-      this.GetSOPAnswer21(this.selectedQuestion.questionId, this.employeeId);
-      this.isSubmitted21 = false;
-    }
-    if (this.selectedQuestion.questionId == 23) {
-      this.GetSOPAnswer23(this.selectedQuestion.questionId, this.employeeId);
-      this.isSubmitted23 = false;
-    }
-    if (this.selectedQuestion.questionId == 25) {
-      this.GetSOPAnswer25(this.selectedQuestion.questionId, this.employeeId);
-      this.isSubmitted25 = false;
-    }
-    if (this.selectedQuestion.questionId == 28) {
-      this.GetSOPAnswer28(this.selectedQuestion.questionId, this.employeeId);
-      this.isSubmitted28 = false;
-    }
-    if (this.selectedQuestion.questionId == 29) {
-      this.GetSOPAnswer29(this.selectedQuestion.questionId, this.employeeId);
-      this.isSubmitted29 = false;
-    }
-    if (this.selectedQuestion.questionId == 30) {
-      this.GetSOPAnswer30(this.selectedQuestion.questionId, this.employeeId);
-      this.isSubmitted30 = false;
-    }
-    if (this.selectedQuestion.questionId == 32) {
-      this.GetSOPAnswer32(this.selectedQuestion.questionId, this.employeeId);
-      this.isSubmitted32 = false;
-    }
-    if (this.selectedQuestion.questionId == 36) {
-      this.GetSOPAnswer36(this.selectedQuestion.questionId, this.employeeId);
-      this.isSubmitted36 = false;
-    }
-    if (this.selectedQuestion.questionId == 37) {
-      this.GetSOPAnswer37(this.selectedQuestion.questionId, this.employeeId);
-      this.isSubmitted37 = false;
-    }
-    if (this.selectedQuestion.questionId == 38) {
-      this.GetSOPAnswer38(this.selectedQuestion.questionId, this.employeeId);
-      this.isSubmitted38 = false;
-    }
-    if (this.selectedQuestion.questionId == 27) {
-      this.GetSOPAnswer27(this.selectedQuestion.questionId, this.employeeId);
-      this.isSubmitted27 = false;
-    }
-    if (this.selectedQuestion.questionId == 39) {
-      this.GetSOPAnswer39(this.selectedQuestion.questionId, this.employeeId);
-      this.isSubmitted39 = false;
-    }
-    if (this.selectedQuestion.questionId == 4) {
-      this.GetSOPAnswer4(this.selectedQuestion.questionId, this.employeeId);
-      this.isSubmitted4 = false;
-    }
-    if (this.selectedQuestion.questionId == 33) {
-      this.GetSOPAnswer33(this.selectedQuestion.questionId, this.employeeId);
-      this.isSubmitted33 = false;
-    }
-    if (this.selectedQuestion.questionId == 31) {
-      this.GetSOPAnswer31(this.selectedQuestion.questionId, this.employeeId);
-      this.isSubmitted31 = false;
-    }
-    if (this.selectedQuestion.questionId == 11) {
-      this.GetSOPAnswer11(this.selectedQuestion.questionId, this.employeeId);
-      this.isSubmitted11 = false;
-    }
-    if (this.selectedQuestion.questionId == 15) {
-      this.GetSOPAnswer15(this.selectedQuestion.questionId, this.employeeId);
-      this.isSubmitted15 = false;
-    }
-    if (this.selectedQuestion.questionId == 20) {
-      this.GetSOPAnswer20(this.selectedQuestion.questionId, this.employeeId);
-      this.isSubmitted20 = false;
-    }
-    if (this.selectedQuestion.questionId == 22) {
-      this.GetSOPAnswer22(this.selectedQuestion.questionId, this.employeeId);
-      this.isSubmitted22 = false;
-    }
-    if (this.selectedQuestion.questionId == 24) {
-      this.GetSOPAnswer24(this.selectedQuestion.questionId, this.employeeId);
-      this.isSubmitted24 = false;
-    }
-    if (this.selectedQuestion.questionId == 26) {
-      this.GetSOPAnswer26(this.selectedQuestion.questionId, this.employeeId);
-      this.isSubmitted26 = false;
-    }
-    if (this.selectedQuestion.questionId == 35) {
-      this.GetSOPAnswer35(this.selectedQuestion.questionId, this.employeeId);
-      this.isSubmitted35 = false;
-    }
-    if (this.selectedQuestion.questionId == 34) {
-      this.GetSOPAnswer34(this.selectedQuestion.questionId, this.employeeId);
-      this.isSubmitted34 = false;
-    }
-    if (this.selectedQuestion.questionId == 40) {
-      this.GetSOPAnswer40(this.selectedQuestion.questionId, this.employeeId);
-      this.isSubmitted40 = false;
-    }
-    if (this.selectedQuestion.questionId == 41) {
-      this.isSubmitted41 = false;
-      this.GetSOPAnswer41_1("4", this.employeeId);
-      this.GetSOPAnswer41(this.selectedQuestion.questionId, this.employeeId);
-    }
-    if (this.selectedQuestion.questionId == 42) {
-      this.isSubmitted42 = false;
-      this.GetSOPAnswerCompliance42(this.selectedQuestion.questionId, this.employeeId);
-      this.GetSOPAnswerMinimumwages42(this.selectedQuestion.questionId, this.employeeId);
-      this.GetSOPAnswerDesignation42(this.selectedQuestion.questionId, this.employeeId);
-      this.GetSOPAnswerCLRA42(this.selectedQuestion.questionId, this.employeeId);
+    catch (err) {
+      console.error('Error in onQuestionClick:', err);
+    } finally {
+      this.isLoading = false; // Stop loader
     }
   }
 
@@ -1300,7 +1376,7 @@ export class SopnewComponent {
   GetSOPAnswer1(Questionid, Createdby) {
     this._authService.GetSOPAnswer1(Questionid, Createdby).subscribe({
       next: res => {
-        this.Answer1 = res.Data;
+        this.clientdetailsdate = res.Data || [];
 
       },
       error: err => {
@@ -1321,8 +1397,8 @@ export class SopnewComponent {
     });
   }
 
-  GetSOPAnswer6(Questionid, Createdby) {
-    this._authService.GetSOPAnswer6(Questionid, Createdby).subscribe({
+  GetSOPAnswer6(Questionid, CompanyId, Createdby) {
+    this._authService.GetSOPAnswer6(Questionid, CompanyId, Createdby).subscribe({
       next: res => {
         this.Answer6.selection = res.Data.fF_Payment_Mode;
 
@@ -1333,10 +1409,12 @@ export class SopnewComponent {
     });
   }
 
-  GetSOPAnswer8(Questionid, Createdby) {
-    this._authService.GetSOPAnswer8(Questionid, Createdby).subscribe({
+  GetSOPAnswer8(Questionid, ComapnayId, Createdby) {
+    this._authService.GetSOPAnswer8(Questionid, ComapnayId, Createdby).subscribe({
       next: res => {
         this.Answer8.selection = res.Data.sim_Card_Management_tracker;
+        this.Answer8.email = res.Data.email_Id_Management_tracker;
+        this.Answer8.id = res.Data.id_Card_Management_tracker;
 
       },
       error: err => {
@@ -1369,10 +1447,11 @@ export class SopnewComponent {
     });
   }
 
-  GetSOPAnswer3(Questionid, Createdby) {
-    this._authService.GetSOPAnswer3(Questionid, Createdby).subscribe({
+  GetSOPAnswer3(Questionid, CompanyId, Createdby) {
+    this._authService.GetSOPAnswer3(Questionid, CompanyId, Createdby).subscribe({
       next: res => {
         this.Answer3.selection = res.Data.poC_Change;
+        this.Answer3.bulocation = res.Data.bU_Location_Change;
 
       },
       error: err => {
@@ -1381,8 +1460,8 @@ export class SopnewComponent {
     });
   }
 
-  GetSOPAnswer5(Questionid, Createdby) {
-    this._authService.GetSOPAnswer5(Questionid, Createdby).subscribe({
+  GetSOPAnswer5(Questionid, CompanyId, Createdby) {
+    this._authService.GetSOPAnswer5(Questionid, CompanyId, Createdby).subscribe({
       next: res => {
         if (res?.Data) {
           this.Answer5 = {
@@ -1390,11 +1469,9 @@ export class SopnewComponent {
             Attendance_Cycle_To: res.Data.attendance_Cycle_To || '',
             Payroll_Cycle_From: res.Data.payRoll_Cycle_From || '',
             Payroll_Cycle_To: res.Data.payRoll_Cycle_To || '',
-            Collection_Date_From: res.Data.collection_Date_From || '',
-            Collection_Date_To: res.Data.collection_Date_To || '',
+            Collection_Date: res.Data.collection_Date || '',
             Group_Name_Site_Master: res.Data.group_Name_Site_Master || '',
-            Pay_Out_Date_From: res.Data.payOut_Date_From || '',
-            Pay_Out_Date_To: res.Data.payOut_Date_To || '',
+            Pay_Out_Date: res.Data.payOut_Date || '',
             Payment_Proof: res.Data.payment_Proof || ''
           };
 
@@ -1413,7 +1490,6 @@ export class SopnewComponent {
           this.answer7GridData = res.Data || [];
         }
 
-        console.log('Data:', res.Data);
 
       },
       error: err => {
@@ -1422,8 +1498,8 @@ export class SopnewComponent {
     });
   }
 
-  GetSOPAnswer12(Questionid, Createdby) {
-    this._authService.GetSOPAnswer12(Questionid, Createdby).subscribe({
+  GetSOPAnswer12(Questionid, CompanyId, Createdby) {
+    this._authService.GetSOPAnswer12(Questionid, CompanyId, Createdby).subscribe({
       next: res => {
         const savedSelections: string[] = res?.Data?.map((x: any) => x.subId) || [];
 
@@ -1436,8 +1512,8 @@ export class SopnewComponent {
   }
 
 
-  GetSOPAnswer13(Questionid, Createdby) {
-    this._authService.GetSOPAnswer13(Questionid, Createdby).subscribe({
+  GetSOPAnswer13(Questionid, CompanyId, Createdby) {
+    this._authService.GetSOPAnswer13(Questionid, CompanyId, Createdby).subscribe({
       next: res => {
         this.Answer13 = res.Data;
         this.Answer13 = {
@@ -1451,8 +1527,8 @@ export class SopnewComponent {
     });
   }
 
-  GetSOPAnswer14(Questionid, Createdby) {
-    this._authService.GetSOPAnswer14(Questionid, Createdby).subscribe({
+  GetSOPAnswer14(Questionid, CompanyId, Createdby) {
+    this._authService.GetSOPAnswer14(Questionid, CompanyId, Createdby).subscribe({
       next: res => {
         if (res?.Data) {
           this.Answer14 = {
@@ -1468,8 +1544,8 @@ export class SopnewComponent {
     });
   }
 
-  GetSOPAnswer16(Questionid, Createdby) {
-    this._authService.GetSOPAnswer16(Questionid, Createdby).subscribe({
+  GetSOPAnswer16(Questionid, CompanyId, Createdby) {
+    this._authService.GetSOPAnswer16(Questionid, CompanyId, Createdby).subscribe({
       next: res => {
         if (res?.Data) {
           this.Answer16 = {
@@ -1489,8 +1565,8 @@ export class SopnewComponent {
     });
   }
 
-  GetSOPAnswer17(Questionid, Createdby) {
-    this._authService.GetSOPAnswer17(Questionid, Createdby).subscribe({
+  GetSOPAnswer17(Questionid, CompanyId, Createdby) {
+    this._authService.GetSOPAnswer17(Questionid, CompanyId, Createdby).subscribe({
       next: res => {
         if (res?.Data) {
           this.Answer17 = {
@@ -1509,11 +1585,11 @@ export class SopnewComponent {
     });
   }
 
-  GetSOPAnswer18(Questionid, Createdby) {
-    this._authService.GetSOPAnswer18(Questionid, Createdby).subscribe({
+  GetSOPAnswer18(Questionid, CompanyId, Createdby) {
+    this._authService.GetSOPAnswer18(Questionid, CompanyId, Createdby).subscribe({
       next: res => {
         this.Answer18.Payslip_Distribution = res.Data.payslip_Distribution;
-
+        this.Answer18.Quess_Ess = res.Data.quess_Ess;
       },
       error: err => {
         console.error('Error loading questions', err);
@@ -1521,8 +1597,8 @@ export class SopnewComponent {
     });
   }
 
-  GetSOPAnswer19(Questionid, Createdby) {
-    this._authService.GetSOPAnswer19(Questionid, Createdby).subscribe({
+  GetSOPAnswer19(Questionid, CompanyId, Createdby) {
+    this._authService.GetSOPAnswer19(Questionid, CompanyId, Createdby).subscribe({
       next: res => {
         this.Answer19.Notice_Period_Pay = res.Data.notice_Period_Pay;
         this.Answer19.Threshold_Day = res.Data.threshold_Day;
@@ -1536,8 +1612,8 @@ export class SopnewComponent {
     });
   }
 
-  GetSOPAnswer21(Questionid, Createdby) {
-    this._authService.GetSOPAnswer21(Questionid, Createdby).subscribe({
+  GetSOPAnswer21(Questionid, CompanyId, Createdby) {
+    this._authService.GetSOPAnswer21(Questionid, CompanyId, Createdby).subscribe({
       next: res => {
         this.Answer21.Maternity = res.Data.maternity;
         this.Answer21.Remarks = res.Data.remarks;
@@ -1558,8 +1634,8 @@ export class SopnewComponent {
   }
 
 
-  GetSOPAnswer23(Questionid, Createdby) {
-    this._authService.GetSOPAnswer23(Questionid, Createdby).subscribe({
+  GetSOPAnswer23(Questionid, CompanyId, Createdby) {
+    this._authService.GetSOPAnswer23(Questionid, CompanyId, Createdby).subscribe({
       next: res => {
         this.Answer23.BGV_Applicable = res.Data.bgV_Applicable;
         this.Answer23.Eligibility = res.Data.eligibility;
@@ -1573,11 +1649,11 @@ export class SopnewComponent {
     });
   }
 
-  GetSOPAnswer25(Questionid, Createdby) {
-    this._authService.GetSOPAnswer25(Questionid, Createdby).subscribe({
+  GetSOPAnswer25(Questionid, CompanyId, Createdby) {
+    this._authService.GetSOPAnswer25(Questionid, CompanyId, Createdby).subscribe({
       next: res => {
         this.Answer25.Billiable = res.Data.billiable;
-        this.Answer25.Eligibility_Month = res.Data.eligibility_Month;
+        this.Answer25.Calandar_Type = res.Data.calandar_Type;
         this.Answer25.Accumulated_FlushOut = res.Data.accumulated_FlushOut;
         this.Answer25.Billed_Paid = res.Data.billed_Paid;
 
@@ -1589,8 +1665,8 @@ export class SopnewComponent {
   }
 
 
-  GetSOPAnswer28(Questionid, Createdby) {
-    this._authService.GetSOPAnswer28(Questionid, Createdby).subscribe({
+  GetSOPAnswer28(Questionid, CompanyId, Createdby) {
+    this._authService.GetSOPAnswer28(Questionid, CompanyId, Createdby).subscribe({
       next: res => {
         this.Answer28.Compensatory_Off = res.Data.compensatory_Off;
         this.Answer28.Remarks = res.Data.remarks;
@@ -1610,11 +1686,11 @@ export class SopnewComponent {
     });
   }
 
-  GetSOPAnswer29(Questionid, Createdby) {
-    this._authService.GetSOPAnswer29(Questionid, Createdby).subscribe({
+  GetSOPAnswer29(Questionid, CompanyId, Createdby) {
+    this._authService.GetSOPAnswer29(Questionid, CompanyId, Createdby).subscribe({
       next: res => {
-        this.Answer29.Billiable = res.Data.billiable;
-        this.Answer29.Display_Register = res.Data.Display_Register;
+        this.Answer29.Billable = res.Data.billable;
+        this.Answer29.Display_Register = res.Data.display_Register;
 
       },
       error: err => {
@@ -1623,8 +1699,8 @@ export class SopnewComponent {
     });
   }
 
-  GetSOPAnswer30(Questionid, Createdby) {
-    this._authService.GetSOPAnswer30(Questionid, Createdby).subscribe({
+  GetSOPAnswer30(Questionid, CompanyId, Createdby) {
+    this._authService.GetSOPAnswer30(Questionid, CompanyId, Createdby).subscribe({
       next: res => {
         this.Answer30.PO_Type = res.Data.pO_Type;
         this.Answer30.PF_Calculated_15K_BASED_ON_ATTENDANCE = res.Data.pF_Calculated_15K_BASED_ON_ATTENDANCE;
@@ -1638,8 +1714,8 @@ export class SopnewComponent {
     });
   }
 
-  GetSOPAnswer32(Questionid, Createdby) {
-    this._authService.GetSOPAnswer32(Questionid, Createdby).subscribe({
+  GetSOPAnswer32(Questionid, ComapnayId, Createdby) {
+    this._authService.GetSOPAnswer32(Questionid, ComapnayId, Createdby).subscribe({
       next: res => {
         this.Answer32.Calculation = res.Data.calculation;
         this.Answer32.ATTRIBUTES = res.Data.attributes;
@@ -1651,8 +1727,8 @@ export class SopnewComponent {
     });
   }
 
-  GetSOPAnswer36(Questionid, Createdby) {
-    this._authService.GetSOPAnswer36(Questionid, Createdby).subscribe({
+  GetSOPAnswer36(Questionid, CompanyId, Createdby) {
+    this._authService.GetSOPAnswer36(Questionid, CompanyId, Createdby).subscribe({
       next: res => {
         this.Answer36.Absorption_Fee = res.Data.absorption_Fee;
         this.Answer36.Eligibility = res.Data.eligibility;
@@ -1669,8 +1745,8 @@ export class SopnewComponent {
     });
   }
 
-  GetSOPAnswer37(Questionid, Createdby) {
-    this._authService.GetSOPAnswer37(Questionid, Createdby).subscribe({
+  GetSOPAnswer37(Questionid, CompanyId, Createdby) {
+    this._authService.GetSOPAnswer37(Questionid, CompanyId, Createdby).subscribe({
       next: res => {
         this.Answer37.Payment = res.Data.payment;
         this.Answer37.Payment_Days = res.Data.payment_Days;
@@ -1682,11 +1758,11 @@ export class SopnewComponent {
     });
   }
 
-  GetSOPAnswer38(Questionid, Createdby) {
-    this._authService.GetSOPAnswer38(Questionid, Createdby).subscribe({
+  GetSOPAnswer38(Questionid, CompanyId, Createdby) {
+    this._authService.GetSOPAnswer38(Questionid, CompanyId, Createdby).subscribe({
       next: res => {
         this.Answer38.Penalty_Clause = res.Data.penalty_Clause;
-
+        this.Answer38.Payroll_Closure_Date = res.Data.payroll_Closure_Date;
       },
       error: err => {
         console.error('Error loading questions', err);
@@ -1694,8 +1770,8 @@ export class SopnewComponent {
     });
   }
 
-  GetSOPAnswer27(Questionid, Createdby) {
-    this._authService.GetSOPAnswer27(Questionid, Createdby).subscribe({
+  GetSOPAnswer27(Questionid, CompanyId, Createdby) {
+    this._authService.GetSOPAnswer27(Questionid, CompanyId, Createdby).subscribe({
       next: res => {
         this.Answer27.Variable_Pay = res.Data.variable_Pay;
         this.Answer27.Term = res.Data.term;
@@ -1709,8 +1785,8 @@ export class SopnewComponent {
   }
 
 
-  GetSOPAnswer39(questionId: string, createdBy: string) {
-    this._authService.GetSOPAnswer39(questionId, createdBy).subscribe({
+  GetSOPAnswer39(questionId: string, ComapnayId: string, createdBy: string) {
+    this._authService.GetSOPAnswer39(questionId, ComapnayId, createdBy).subscribe({
       next: res => {
         const data = res.Data;
 
@@ -1739,8 +1815,8 @@ export class SopnewComponent {
     });
   }
 
-  GetSOPAnswer4(questionId: string, createdBy: string) {
-    this._authService.GetSOPAnswer4(questionId, createdBy).subscribe({
+  GetSOPAnswer4(questionId: string, CompanyId: string, createdBy: string) {
+    this._authService.GetSOPAnswer4(questionId, CompanyId, createdBy).subscribe({
       next: res => {
         const data = res.Data;
 
@@ -1755,8 +1831,8 @@ export class SopnewComponent {
     });
   }
 
-  GetSOPAnswer33(questionId: string, createdBy: string) {
-    this._authService.GetSOPAnswer33(questionId, createdBy).subscribe({
+  GetSOPAnswer33(questionId: string, CompanyId: string, createdBy: string) {
+    this._authService.GetSOPAnswer33(questionId, CompanyId, createdBy).subscribe({
       next: res => {
         const data = res.Data;
 
@@ -1771,8 +1847,8 @@ export class SopnewComponent {
     });
   }
 
-  GetSOPAnswer11(questionId: string, createdBy: string) {
-    this._authService.GetSOPAnswer11(questionId, createdBy).subscribe({
+  GetSOPAnswer11(questionId: string, CompanyId: string, createdBy: string) {
+    this._authService.GetSOPAnswer11(questionId, CompanyId, createdBy).subscribe({
       next: res => {
         const data = res.Data;
 
@@ -1793,8 +1869,8 @@ export class SopnewComponent {
     });
   }
 
-  GetSOPAnswer15(questionId: string, createdBy: string) {
-    this._authService.GetSOPAnswer15(questionId, createdBy).subscribe({
+  GetSOPAnswer15(questionId: string, CompanyId: string, createdBy: string) {
+    this._authService.GetSOPAnswer15(questionId, CompanyId, createdBy).subscribe({
       next: res => {
         const data = res.Data;
 
@@ -1827,8 +1903,8 @@ export class SopnewComponent {
     });
   }
 
-  GetSOPAnswer20(Questionid, Createdby) {
-    this._authService.GetSOPAnswer20(Questionid, Createdby).subscribe({
+  GetSOPAnswer20(Questionid, CompanyId, Createdby) {
+    this._authService.GetSOPAnswer20(Questionid, CompanyId, Createdby).subscribe({
       next: res => {
         if (res.Data.length > 0) {
           if (res.Data[0].applicable == "Yes"
@@ -1856,16 +1932,20 @@ export class SopnewComponent {
     });
   }
 
-  GetSOPAnswer22(Questionid, Createdby) {
-    this._authService.GetSOPAnswer22(Questionid, Createdby).subscribe({
+  GetSOPAnswer22(Questionid, CompanyId, Createdby) {
+    this._authService.GetSOPAnswer22(Questionid, CompanyId, Createdby).subscribe({
       next: res => {
 
         if (res.Data.length > 0) {
-          if (res.Data[0].applicable == "Yes") {
+          if (res.Data[0].applicable == "Yes" && res.Data[0].leave_Management == "Quess") {
             this.answer22GridData = res.Data || [];
           }
-          else {
+          else if (res.Data[0].applicable == "No") {
             this.Answer22.Applicable = res.Data[0].applicable;
+          }
+          else if (res.Data[0].applicable == "Yes" && res.Data[0].leave_Management == "Client") {
+            this.Answer22.Applicable = res.Data[0].applicable;
+            this.Answer22.Leave_Management = res.Data[0].leave_Management;
           }
         }
 
@@ -1970,18 +2050,8 @@ export class SopnewComponent {
     if (num > 31) num = 31;
     if (num < 1 && input !== '') num = 1;
 
-    this.Answer5.Collection_Date_From = input === '' ? '' : String(num);
-    event.target.value = this.Answer5.Collection_Date_From;
-
-    // Now set the To value
-    const from = Number(this.Answer5.Collection_Date_From);
-    if (from === 1 || from === 31) {
-      this.Answer5.Collection_Date_To = '30';
-    } else if (from > 1 && from <= 31) {
-      this.Answer5.Collection_Date_To = String(from - 1);
-    } else {
-      this.Answer5.Collection_Date_To = '';
-    }
+    this.Answer5.Collection_Date = input === '' ? '' : String(num);
+    event.target.value = this.Answer5.Collection_Date;
   }
 
   onNumericInput31Payout(event: any): void {
@@ -1993,18 +2063,9 @@ export class SopnewComponent {
     if (num > 31) num = 31;
     if (num < 1 && input !== '') num = 1;
 
-    this.Answer5.Pay_Out_Date_From = input === '' ? '' : String(num);
-    event.target.value = this.Answer5.Pay_Out_Date_From;
+    this.Answer5.Pay_Out_Date = input === '' ? '' : String(num);
+    event.target.value = this.Answer5.Pay_Out_Date;
 
-    // Now set the To value
-    const from = Number(this.Answer5.Pay_Out_Date_From);
-    if (from === 1 || from === 31) {
-      this.Answer5.Pay_Out_Date_To = '30';
-    } else if (from > 1 && from <= 31) {
-      this.Answer5.Pay_Out_Date_To = String(from - 1);
-    } else {
-      this.Answer5.Pay_Out_Date_To = '';
-    }
   }
 
   onDayInput(event: any): void {
@@ -2085,7 +2146,7 @@ export class SopnewComponent {
 
   options3 = [
     { label: 'Frequently' },
-    { label: 'No change' }
+    { label: 'No Change' }
   ];
 
   options4 = [
@@ -2094,7 +2155,7 @@ export class SopnewComponent {
     { label: 'Manager', checked: false },
     { label: 'Circle', checked: false }
   ];
-
+  editVerticalIndex_4: number | null = null;
   // Vertical 
   verticalInput1_4 = '';
   verticalInput2_4 = '';
@@ -2108,12 +2169,22 @@ export class SopnewComponent {
     if (this.isValidMobile(this.verticalInput3_4)) {
       if (this.verticalInput1_4 && this.verticalInput2_4 && this.verticalInput3_4 && this.verticalInput4_4) {
 
-        this.verticalGridData_4.push({
+        const newEntry = {
           input1: this.verticalInput1_4,
           input2: this.verticalInput2_4,
           input3: this.verticalInput3_4,
           input4: this.verticalInput4_4
-        });
+        };
+
+        if (this.editVerticalIndex_4 !== null) {
+          // Edit existing
+          this.verticalGridData_4[this.editVerticalIndex_4] = newEntry;
+          this.editVerticalIndex_4 = null;
+        } else {
+          // Add new
+          this.verticalGridData_4.push(newEntry);
+        }
+
         this.verticalInput1_4 = '';
         this.verticalInput2_4 = '';
         this.verticalInput3_4 = '';
@@ -2128,11 +2199,28 @@ export class SopnewComponent {
 
   }
 
+  editVerticalData_4(index: number) {
+    const data = this.verticalGridData_4[index];
+    this.verticalInput1_4 = data.input1;
+    this.verticalInput2_4 = data.input2;
+    this.verticalInput3_4 = data.input3;
+    this.verticalInput4_4 = data.input4;
+    this.editVerticalIndex_4 = index;
+  }
+
+  deleteVerticalData_4(index: number) {
+    this.verticalGridData_4.splice(index, 1);
+    if (this.editVerticalIndex_4 === index) {
+      this.editVerticalIndex_4 = null;
+    }
+  }
+
   isVerticalChecked_4(): boolean {
     return this.options4.find(option => option.label === 'Vertical')?.checked || false;
   }
 
   // Department 
+  editDepartmentIndex_4: number | null = null;
   departmentInput1_4 = '';
   departmentInput2_4 = '';
   departmentInput3_4 = '';
@@ -2141,13 +2229,24 @@ export class SopnewComponent {
 
   addDepartmentData_4() {
 
-    if (this.departmentInput1_4 && this.departmentInput2_4 && this.departmentInput4_4) {
-      this.departmentGridData_4.push({
+    if (this.departmentInput1_4 && this.departmentInput2_4) {
+
+      const newEntry = {
         input1: this.departmentInput1_4,
         input2: this.departmentInput2_4,
         input3: this.departmentInput3_4,
         input4: this.departmentInput4_4
-      });
+      };
+
+      if (this.editDepartmentIndex_4 !== null) {
+        // Edit existing
+        this.departmentGridData_4[this.editDepartmentIndex_4] = newEntry;
+        this.editDepartmentIndex_4 = null;
+      } else {
+        // Add new
+        this.departmentGridData_4.push(newEntry);
+      }
+
       this.departmentInput1_4 = '';
       this.departmentInput2_4 = '';
       this.departmentInput3_4 = '';
@@ -2155,11 +2254,29 @@ export class SopnewComponent {
     }
   }
 
+  editDepartmentData_4(index: number) {
+    const data = this.departmentGridData_4[index];
+    this.departmentInput1_4 = data.input1;
+    this.departmentInput2_4 = data.input2;
+    this.departmentInput3_4 = data.input3;
+    this.departmentInput4_4 = data.input4;
+    this.editDepartmentIndex_4 = index;
+  }
+
+  deleteDepartmentData_4(index: number) {
+    this.departmentGridData_4.splice(index, 1);
+    if (this.editDepartmentIndex_4 === index) {
+      this.editDepartmentIndex_4 = null;
+    }
+  }
+
+
   isDepartmentChecked_4(): boolean {
     return this.options4.find(option => option.label === 'Department')?.checked || false;
   }
 
   // Manager 
+  editManagerIndex_4: number | null = null;
   managerInput1_4 = '';
   managerInput2_4 = '';
   managerInput3_4 = '';
@@ -2172,12 +2289,23 @@ export class SopnewComponent {
 
     if (this.isValidMobile(this.managerInput3_4) && this.isValidEmail(this.managerInput2_4)) {
       if (this.managerInput1_4 && this.managerInput2_4 && this.managerInput3_4 && this.managerInput4_4) {
-        this.managerGridData_4.push({
+
+        const newEntry = {
           input1: this.managerInput1_4,
           input2: this.managerInput2_4,
           input3: this.managerInput3_4,
           input4: this.managerInput4_4
-        });
+        };
+
+        if (this.editManagerIndex_4 !== null) {
+          // Edit existing
+          this.managerGridData_4[this.editManagerIndex_4] = newEntry;
+          this.editManagerIndex_4 = null;
+        } else {
+          // Add new
+          this.managerGridData_4.push(newEntry);
+        }
+
         this.managerInput1_4 = '';
         this.managerInput2_4 = '';
         this.managerInput3_4 = '';
@@ -2191,11 +2319,28 @@ export class SopnewComponent {
 
   }
 
+  editManagerData_4(index: number) {
+    const data = this.managerGridData_4[index];
+    this.managerInput1_4 = data.input1;
+    this.managerInput2_4 = data.input2;
+    this.managerInput3_4 = data.input3;
+    this.managerInput4_4 = data.input4;
+    this.editManagerIndex_4 = index;
+  }
+
+  deleteManagerData_4(index: number) {
+    this.managerGridData_4.splice(index, 1);
+    if (this.editManagerIndex_4 === index) {
+      this.editManagerIndex_4 = null;
+    }
+  }
+
   isManagerChecked_4(): boolean {
     return this.options4.find(option => option.label === 'Manager')?.checked || false;
   }
 
   // Circle 
+  editCircleIndex_4: number | null = null;
   circleInput1_4 = '';
   circleInput2_4 = '';
   circleInput3_4 = '';
@@ -2208,12 +2353,23 @@ export class SopnewComponent {
 
     if (this.isValidMobile(this.circleInput3_4)) {
       if (this.circleInput1_4 && this.circleInput2_4 && this.circleInput3_4 && this.circleInput4_4) {
-        this.circleGridData_4.push({
+        const newEntry = {
           input1: this.circleInput1_4,
           input2: this.circleInput2_4,
           input3: this.circleInput3_4,
           input4: this.circleInput4_4
-        });
+        };
+
+        if (this.editCircleIndex_4 !== null) {
+          // Edit existing
+          this.circleGridData_4[this.editCircleIndex_4] = newEntry;
+          this.editCircleIndex_4 = null;
+        } else {
+          // Add new
+          this.circleGridData_4.push(newEntry);
+        }
+
+
         this.circleInput1_4 = '';
         this.circleInput2_4 = '';
         this.circleInput3_4 = '';
@@ -2226,6 +2382,22 @@ export class SopnewComponent {
     }
 
 
+  }
+
+  editCircleData_4(index: number) {
+    const data = this.circleGridData_4[index];
+    this.circleInput1_4 = data.input1;
+    this.circleInput2_4 = data.input2;
+    this.circleInput3_4 = data.input3;
+    this.circleInput4_4 = data.input4;
+    this.editManagerIndex_4 = index;
+  }
+
+  deleteCircleData_4(index: number) {
+    this.circleGridData_4.splice(index, 1);
+    if (this.editCircleIndex_4 === index) {
+      this.editCircleIndex_4 = null;
+    }
   }
 
   isCircleChecked_4(): boolean {
@@ -2265,7 +2437,7 @@ export class SopnewComponent {
   ];
 
   options11_2 = [
-    { label: '06' },
+    { label: '06 ' },
     { label: '4.5' },
     { label: '04' }
   ];
@@ -2278,6 +2450,7 @@ export class SopnewComponent {
   ];
 
   // Email 
+  editEmailIndex_11_3: number | null = null;
   EmailInput1_11_3 = '';
   EmailInput2_11_3 = '';
   EmailInput3_11_3 = '';
@@ -2290,12 +2463,24 @@ export class SopnewComponent {
 
     if (this.isValidEmail(this.EmailInput1_11_3)) {
       if (this.EmailInput1_11_3 && this.EmailInput2_11_3 && this.EmailInput3_11_3 && this.EmailInput4_11_3) {
-        this.EmailGridData_11_3.push({
+
+        const newEntry = {
           input1: this.EmailInput1_11_3,
           input2: this.EmailInput2_11_3,
           input3: this.EmailInput3_11_3,
-          input4: this.EmailInput4_11_3,
-        });
+          input4: this.EmailInput4_11_3
+        };
+
+        if (this.editEmailIndex_11_3 !== null) {
+          // Edit existing
+          this.EmailGridData_11_3[this.editEmailIndex_11_3] = newEntry;
+          this.editEmailIndex_11_3 = null;
+        } else {
+          // Add new
+          this.EmailGridData_11_3.push(newEntry);
+        }
+
+
         this.EmailInput1_11_3 = '';
         this.EmailInput2_11_3 = '';
         this.EmailInput3_11_3 = '';
@@ -2310,30 +2495,80 @@ export class SopnewComponent {
 
   }
 
+  editEmailData_11_3(index: number) {
+    const data = this.EmailGridData_11_3[index];
+    this.EmailInput1_11_3 = data.input1;
+    this.EmailInput2_11_3 = data.input2;
+    this.EmailInput3_11_3 = data.input3;
+    this.EmailInput4_11_3 = data.input4;
+    this.editEmailIndex_11_3 = index;
+  }
+
+  deleteEmailData_11_3(index: number) {
+    this.EmailGridData_11_3.splice(index, 1);
+    if (this.editEmailIndex_11_3 === index) {
+      this.editEmailIndex_11_3 = null;
+    }
+  }
+
   isEmailChecked_11_3(): boolean {
     return this.options11_3.find(option => option.label === 'Email')?.checked || false;
   }
 
   // Portal 
+  editPortalIndex_11_3: number | null = null;
   PortalInput1_11_3 = '';
   PortalInput2_11_3 = '';
   PortalInput3_11_3 = '';
   PortalInput4_11_3 = '';
+  PortalInput5_11_3 = '';
 
-  PortalGridData_11_3: { input1: string; input2: string; input3: string; input4: string }[] = [];
+  PortalGridData_11_3: { input1: string; input2: string; input3: string; input4: string, input5: string }[] = [];
 
   addPortalData_11_3() {
-    if (this.PortalInput1_11_3 && this.PortalInput2_11_3 && this.PortalInput4_11_3) {
-      this.PortalGridData_11_3.push({
+    if (this.PortalInput1_11_3 && this.PortalInput2_11_3 && this.PortalInput3_11_3
+      && this.PortalInput4_11_3 && this.PortalInput5_11_3) {
+
+      const newEntry = {
         input1: this.PortalInput1_11_3,
         input2: this.PortalInput2_11_3,
         input3: this.PortalInput3_11_3,
-        input4: this.PortalInput4_11_3
-      });
+        input4: this.PortalInput4_11_3,
+        input5: this.PortalInput5_11_3,
+      };
+
+      if (this.editPortalIndex_11_3 !== null) {
+        // Edit existing
+        this.PortalGridData_11_3[this.editPortalIndex_11_3] = newEntry;
+        this.editPortalIndex_11_3 = null;
+      } else {
+        // Add new
+        this.PortalGridData_11_3.push(newEntry);
+      }
+
+
       this.PortalInput1_11_3 = '';
       this.PortalInput2_11_3 = '';
       this.PortalInput3_11_3 = '';
       this.PortalInput4_11_3 = '';
+      this.PortalInput5_11_3 = '';
+    }
+  }
+
+  editPortalData_11_3(index: number) {
+    const data = this.PortalGridData_11_3[index];
+    this.PortalInput1_11_3 = data.input1;
+    this.PortalInput2_11_3 = data.input2;
+    this.PortalInput3_11_3 = data.input3;
+    this.PortalInput4_11_3 = data.input4;
+    this.PortalInput5_11_3 = data.input5;
+    this.editPortalIndex_11_3 = index;
+  }
+
+  deletePortalData_11_3(index: number) {
+    this.PortalGridData_11_3.splice(index, 1);
+    if (this.editPortalIndex_11_3 === index) {
+      this.editPortalIndex_11_3 = null;
     }
   }
 
@@ -2342,6 +2577,7 @@ export class SopnewComponent {
   }
 
   // Biometric 
+  editBiometricIndex_11_3: number | null = null;
   BiometricInput1_11_3 = '';
   BiometricInput2_11_3 = '';
   BiometricInput3_11_3 = '';
@@ -2350,12 +2586,24 @@ export class SopnewComponent {
 
   addBiometricData_11_3() {
     if (this.BiometricInput1_11_3 && this.BiometricInput2_11_3 && this.BiometricInput4_11_3) {
-      this.BiometricGridData_11_3.push({
+
+      const newEntry = {
         input1: this.BiometricInput1_11_3,
         input2: this.BiometricInput2_11_3,
         input3: this.BiometricInput3_11_3,
         input4: this.BiometricInput4_11_3
-      });
+      };
+
+      if (this.editBiometricIndex_11_3 !== null) {
+        // Edit existing
+        this.BiometricGridData_11_3[this.editBiometricIndex_11_3] = newEntry;
+        this.editBiometricIndex_11_3 = null;
+      } else {
+        // Add new
+        this.BiometricGridData_11_3.push(newEntry);
+      }
+
+
       this.BiometricInput1_11_3 = '';
       this.BiometricInput2_11_3 = '';
       this.BiometricInput3_11_3 = '';
@@ -2364,11 +2612,28 @@ export class SopnewComponent {
     }
   }
 
+  editBiometricData_11_3(index: number) {
+    const data = this.BiometricGridData_11_3[index];
+    this.BiometricInput1_11_3 = data.input1;
+    this.BiometricInput2_11_3 = data.input2;
+    this.BiometricInput3_11_3 = data.input3;
+    this.BiometricInput4_11_3 = data.input4;
+    this.editBiometricIndex_11_3 = index;
+  }
+
+  deleteBiometricData_11_3(index: number) {
+    this.BiometricGridData_11_3.splice(index, 1);
+    if (this.editBiometricIndex_11_3 === index) {
+      this.editBiometricIndex_11_3 = null;
+    }
+  }
+
   isBiometricChecked_11_3(): boolean {
     return this.options11_3.find(option => option.label === 'Biometric')?.checked || false;
   }
 
   // Others 
+  editOtherIndex_11_3: number | null = null;
   OthersInput1_11_3 = '';
   OthersInput2_11_3 = '';
   OthersInput3_11_3 = '';
@@ -2377,6 +2642,23 @@ export class SopnewComponent {
 
   addOthersData_11_3() {
     if (this.OthersInput1_11_3 && this.OthersInput2_11_3 && this.OthersInput3_11_3 && this.OthersInput4_11_3) {
+
+      const newEntry = {
+        input1: this.OthersInput1_11_3,
+        input2: this.OthersInput2_11_3,
+        input3: this.OthersInput3_11_3,
+        input4: this.OthersInput4_11_3
+      };
+
+      if (this.editOtherIndex_11_3 !== null) {
+        // Edit existing
+        this.OthersGridData_11_3[this.editOtherIndex_11_3] = newEntry;
+        this.editOtherIndex_11_3 = null;
+      } else {
+        // Add new
+        this.OthersGridData_11_3.push(newEntry);
+      }
+
       this.OthersGridData_11_3.push({
         input1: this.OthersInput1_11_3,
         input2: this.OthersInput2_11_3,
@@ -2390,6 +2672,24 @@ export class SopnewComponent {
     }
   }
 
+
+  editOtherData_11_3(index: number) {
+    const data = this.OthersGridData_11_3[index];
+    this.OthersInput1_11_3 = data.input1;
+    this.OthersInput2_11_3 = data.input2;
+    this.OthersInput3_11_3 = data.input3;
+    this.OthersInput4_11_3 = data.input4;
+    this.editOtherIndex_11_3 = index;
+  }
+
+  deleteOtherData_11_3(index: number) {
+    this.OthersGridData_11_3.splice(index, 1);
+    if (this.editOtherIndex_11_3 === index) {
+      this.editOtherIndex_11_3 = null;
+    }
+  }
+
+
   isOthersChecked_11_3(): boolean {
     return this.options11_3.find(option => option.label === 'Others')?.checked || false;
   }
@@ -2397,9 +2697,9 @@ export class SopnewComponent {
   options12 = [
     { id: "1", label: 'ESS', checked: false },
     { id: "2", label: 'Biometric', checked: false },
-    { id: "3", label: 'Physical register', checked: false },
-    { id: "4", label: 'Face recogination', checked: false },
-    { id: "5", label: 'Hand device', checked: false }
+    { id: "3", label: 'Physical Register', checked: false },
+    { id: "4", label: 'Face Recognition', checked: false },
+    { id: "5", label: 'Hand Device', checked: false }
   ];
 
   options14 = [
@@ -2416,6 +2716,7 @@ export class SopnewComponent {
   ];
 
   // Email 
+  editEmailIndex_15: number | null = null;
   EmailInput1_15 = '';
   EmailInput2_15 = '';
   EmailInput3_15 = '';
@@ -2428,12 +2729,24 @@ export class SopnewComponent {
 
     if (this.isValidMobile(this.EmailInput3_15) && this.isValidEmail(this.EmailInput2_15)) {
       if (this.EmailInput1_15 && this.EmailInput2_15 && this.EmailInput3_15 && this.EmailInput4_15) {
-        this.EmailGridData_15.push({
+
+        const newEntry = {
           input1: this.EmailInput1_15,
           input2: this.EmailInput2_15,
           input3: this.EmailInput3_15,
           input4: this.EmailInput4_15
-        });
+        };
+
+        if (this.editEmailIndex_15 !== null) {
+          // Edit existing
+          this.EmailGridData_15[this.editEmailIndex_15] = newEntry;
+          this.editEmailIndex_15 = null;
+        } else {
+          // Add new
+          this.EmailGridData_15.push(newEntry);
+        }
+
+
         this.EmailInput1_15 = '';
         this.EmailInput2_15 = '';
         this.EmailInput3_15 = '';
@@ -2448,11 +2761,28 @@ export class SopnewComponent {
 
   }
 
+  editEmailData_15(index: number) {
+    const data = this.EmailGridData_15[index];
+    this.EmailInput1_15 = data.input1;
+    this.EmailInput2_15 = data.input2;
+    this.EmailInput3_15 = data.input3;
+    this.EmailInput4_15 = data.input4;
+    this.editEmailIndex_15 = index;
+  }
+
+  deleteEmailData_15(index: number) {
+    this.EmailGridData_15.splice(index, 1);
+    if (this.editEmailIndex_15 === index) {
+      this.editEmailIndex_15 = null;
+    }
+  }
+
   isEmailChecked_15(): boolean {
     return this.options15.find(option => option.label === 'Email')?.checked || false;
   }
 
   // Portal 
+  editPortalIndex_15: number | null = null;
   PortalInput1_15 = '';
   PortalInput2_15 = '';
   PortalInput3_15 = '';
@@ -2464,14 +2794,26 @@ export class SopnewComponent {
 
     this.isSubmitted15_4 = true;
 
-    if (this.isValidEmail(this.PortalInput2_15)) {
+    if (this.isValidMobile(this.PortalInput3_15) && this.isValidEmail(this.PortalInput2_15)) {
       if (this.PortalInput1_15 && this.PortalInput2_15 && this.PortalInput3_15 && this.PortalInput4_15) {
-        this.PortalGridData_15.push({
+
+        const newEntry = {
           input1: this.PortalInput1_15,
           input2: this.PortalInput2_15,
           input3: this.PortalInput3_15,
           input4: this.PortalInput4_15
-        });
+        };
+
+        if (this.editPortalIndex_15 !== null) {
+          // Edit existing
+          this.PortalGridData_15[this.editPortalIndex_15] = newEntry;
+          this.editPortalIndex_15 = null;
+        } else {
+          // Add new
+          this.PortalGridData_15.push(newEntry);
+        }
+
+
         this.PortalInput1_15 = '';
         this.PortalInput2_15 = '';
         this.PortalInput3_15 = '';
@@ -2487,11 +2829,28 @@ export class SopnewComponent {
 
   }
 
+  editPortalData_15(index: number) {
+    const data = this.PortalGridData_15[index];
+    this.PortalInput1_15 = data.input1;
+    this.PortalInput2_15 = data.input2;
+    this.PortalInput3_15 = data.input3;
+    this.PortalInput4_15 = data.input4;
+    this.editPortalIndex_15 = index;
+  }
+
+  deletePortalData_15(index: number) {
+    this.PortalGridData_15.splice(index, 1);
+    if (this.editPortalIndex_15 === index) {
+      this.editPortalIndex_15 = null;
+    }
+  }
+
   isPortalChecked_15(): boolean {
     return this.options15.find(option => option.label === 'Portal')?.checked || false;
   }
 
   // Biometric 
+  editBiometricIndex_15: number | null = null;
   BiometricInput1_15 = '';
   BiometricInput2_15 = '';
   BiometricInput3_15 = '';
@@ -2504,12 +2863,23 @@ export class SopnewComponent {
 
     if (this.isValidMobile(this.BiometricInput3_15) && this.isValidEmail(this.BiometricInput2_15)) {
       if (this.BiometricInput1_15 && this.BiometricInput2_15 && this.BiometricInput3_15 && this.BiometricInput4_15) {
-        this.BiometricGridData_15.push({
+
+        const newEntry = {
           input1: this.BiometricInput1_15,
           input2: this.BiometricInput2_15,
           input3: this.BiometricInput3_15,
           input4: this.BiometricInput4_15
-        });
+        };
+
+        if (this.editBiometricIndex_15 !== null) {
+          // Edit existing
+          this.BiometricGridData_15[this.editBiometricIndex_15] = newEntry;
+          this.editBiometricIndex_15 = null;
+        } else {
+          // Add new
+          this.BiometricGridData_15.push(newEntry);
+        }
+
         this.BiometricInput1_15 = '';
         this.BiometricInput2_15 = '';
         this.BiometricInput3_15 = '';
@@ -2523,11 +2893,28 @@ export class SopnewComponent {
 
   }
 
+  editBiometricData_15(index: number) {
+    const data = this.BiometricGridData_15[index];
+    this.BiometricInput1_15 = data.input1;
+    this.BiometricInput2_15 = data.input2;
+    this.BiometricInput3_15 = data.input3;
+    this.BiometricInput4_15 = data.input4;
+    this.editBiometricIndex_15 = index;
+  }
+
+  deleteBiometricData_15(index: number) {
+    this.BiometricGridData_15.splice(index, 1);
+    if (this.editBiometricIndex_15 === index) {
+      this.editBiometricIndex_15 = null;
+    }
+  }
+
   isBiometricChecked_15(): boolean {
     return this.options15.find(option => option.label === 'Biometric')?.checked || false;
   }
 
   // Others 
+  editOtherIndex_15: number | null = null;
   OthersInput1_15 = '';
   OthersInput2_15 = '';
   OthersInput3_15 = '';
@@ -2540,12 +2927,23 @@ export class SopnewComponent {
 
     if (this.isValidMobile(this.OthersInput3_15) && this.isValidEmail(this.OthersInput2_15)) {
       if (this.OthersInput1_15 && this.OthersInput2_15 && this.OthersInput3_15 && this.OthersInput4_15) {
-        this.OthersGridData_15.push({
+
+        const newEntry = {
           input1: this.OthersInput1_15,
           input2: this.OthersInput2_15,
           input3: this.OthersInput3_15,
           input4: this.OthersInput4_15
-        });
+        };
+
+        if (this.editOtherIndex_15 !== null) {
+          // Edit existing
+          this.OthersGridData_15[this.editOtherIndex_15] = newEntry;
+          this.editOtherIndex_15 = null;
+        } else {
+          // Add new
+          this.OthersGridData_15.push(newEntry);
+        }
+
         this.OthersInput1_15 = '';
         this.OthersInput2_15 = '';
         this.OthersInput3_15 = '';
@@ -2560,13 +2958,30 @@ export class SopnewComponent {
 
   }
 
+  editOtherData_15(index: number) {
+    const data = this.OthersGridData_15[index];
+    this.OthersInput1_15 = data.input1;
+    this.OthersInput2_15 = data.input2;
+    this.OthersInput3_15 = data.input3;
+    this.OthersInput4_15 = data.input4;
+    this.editOtherIndex_15 = index;
+  }
+
+  deleteOtherData_15(index: number) {
+    this.OthersGridData_15.splice(index, 1);
+    if (this.editOtherIndex_15 === index) {
+      this.editOtherIndex_15 = null;
+    }
+  }
+
+
   isOthersChecked_15(): boolean {
     return this.options15.find(option => option.label === 'Others')?.checked || false;
   }
 
   options16_1 = [
     { label: 'Part of Salary' },
-    { label: 'Supplymentry process' },
+    { label: 'Supplementary Process' },
     { label: 'Both' }
   ];
 
@@ -2581,19 +2996,26 @@ export class SopnewComponent {
   ];
 
   options17_1 = [
-    { label: 'Yes' },
-    { label: 'No' }
+    { label: 'Separate' },
+    { label: 'Along with Salary' },
+    { label: 'Both' }
   ];
 
   options17_2 = [
     { label: 'Seperate' },
-    { label: 'Part of settlement' }
+    { label: 'Part of Settlement' },
+    { label: 'Both' },
   ];
 
   options18 = [
     { label: 'Client ESS' },
     { label: 'Quess ESS' },
     { label: 'Both' }
+  ];
+
+  options18_1 = [
+    { label: 'Hamara HR' },
+    { label: 'All Sec' }
   ];
 
   options19 = [
@@ -2608,18 +3030,18 @@ export class SopnewComponent {
 
   options20_2 = [
     { label: 'Designation Wise' },
-    { label: 'As per Client Instruction' }
+    { label: 'As Per Client Instruction' }
   ];
 
   options21_1 = [
-    { label: 'Part of attendence' },
-    { label: 'Seperate email' },
+    { label: 'Part of Attendance' },
+    { label: 'Seperate Email' },
     { label: 'Both' }
   ];
 
   options21_2 = [
-    { label: 'Minimum 6 month' },
-    { label: 'Restricted to 12 months' }
+    { label: 'Minimum 6 Months' },
+    { label: 'Restricted to 12 Months' }
   ];
 
   options21_3 = [
@@ -2628,9 +3050,9 @@ export class SopnewComponent {
   ];
 
   options21_4 = [
-    { label: 'Gross salary' },
-    { label: 'Basic wage' },
-    { label: 'NO PAY (ESIC)' }
+    { label: 'Gross Salary' },
+    { label: 'Basic Wage' },
+    { label: 'No Pay (ESIC)' }
   ];
 
   options21_5 = [
@@ -2649,8 +3071,8 @@ export class SopnewComponent {
   ];
 
   options22_3 = [
-    { label: 'Financial calander' },
-    { label: 'Normal calander' },
+    { label: 'Financial Calendar' },
+    { label: 'Normal Calendar' },
     { label: 'Monthly' }
   ];
 
@@ -2661,19 +3083,18 @@ export class SopnewComponent {
 
   options22_5 = [
     { label: 'Quess' },
-    { label: 'Client' },
-    { label: 'Both' }
+    { label: 'Client' }
   ];
 
   options22_6 = [
-    { id: '1', name: 'Casual leave' },
-    { id: '2', name: 'Personal leave' },
-    { id: '3', name: 'Sick leave' },
-    { id: '4', name: 'Wellness leave' },
-    { id: '5', name: 'happiness leave' },
-    { id: '6', name: 'vacation leave' },
-    { id: '7', name: 'Paternity leave' },
-    { id: '8', name: 'Sabbatical leave' }
+    { id: '1', name: 'Casual Leave' },
+    { id: '2', name: 'Personal Leave' },
+    { id: '3', name: 'Sick Leave' },
+    { id: '4', name: 'Wellness Leave' },
+    { id: '5', name: 'Happiness Leave' },
+    { id: '6', name: 'Vacation Leave' },
+    { id: '7', name: 'Paternity Leave' },
+    { id: '8', name: 'Sabbatical Leave' }
   ];
 
   options23_1 = [
@@ -2695,6 +3116,7 @@ export class SopnewComponent {
 
   options25_1 = [
     { label: 'Yearly' },
+    { label: 'Quarterly' },
     { label: 'Monthly' }
   ];
 
@@ -2713,6 +3135,16 @@ export class SopnewComponent {
     { id: '12', name: 'December' }
   ];
 
+  options25_3 = [
+    { label: 'Financial Calendar' },
+    { label: 'Normal Calendar' }
+  ];
+
+  options25_4 = [
+    { label: 'Yes' },
+    { label: 'No' }
+  ];
+
   options27_1 = [
     { label: 'Yes' },
     { label: 'No' }
@@ -2720,7 +3152,7 @@ export class SopnewComponent {
 
   options27_2 = [
     { id: "1", label: 'Montly' },
-    { id: "2", label: 'Quaterly' },
+    { id: "2", label: 'Quarterly' },
     { id: "3", label: 'Yearly' }
   ];
 
@@ -2730,14 +3162,15 @@ export class SopnewComponent {
   ];
 
   options28_1 = [
-    { label: 'Part of attendence' },
-    { label: 'Seperate email' },
+    { label: 'Part of Attendance' },
+    { label: 'Separate Email' },
     { label: 'Both' }
   ];
 
   options28_2 = [
-    { label: 'Minimum 6 month' },
-    { label: 'restricted to 12 months' }
+    { label: 'Minimum 3 Months' },
+    { label: 'Minimum 6 Months' },
+    { label: 'Restricted to 12 Months' }
   ];
 
   options28_3 = [
@@ -2746,9 +3179,9 @@ export class SopnewComponent {
   ];
 
   options28_4 = [
-    { label: 'Gross salary' },
-    { label: 'Basic wage' },
-    { label: 'NO PAY (ESIC)' }
+    { label: 'Gross Salary' },
+    { label: 'Basic Wage' },
+    { label: 'No Pay (ESIC)' }
   ];
 
   options28_5 = [
@@ -2789,8 +3222,8 @@ export class SopnewComponent {
   ];
 
   options24_1 = [
-    { id: "1", name: 'Financial calander' },
-    { id: "2", name: 'Normal calander' }
+    { id: "1", name: 'Financial Calendar' },
+    { id: "2", name: 'Normal Calendar' }
   ];
 
   minDate: string = '';
@@ -2813,6 +3246,7 @@ export class SopnewComponent {
   ];
 
   // Vertical 
+  editEmailIndex_33: number | null = null;
   EmailInput1_33 = '';
   EmailInput2_33 = '';
   EmailGridData_33: { input1: string; input2: string, input3: string; input4: string }[] = [];
@@ -2823,10 +3257,24 @@ export class SopnewComponent {
 
     if (this.isValidEmail(this.EmailInput1_33)) {
       if (this.EmailInput1_33 && this.EmailInput2_33) {
-        this.EmailGridData_33.push({
-          input1: this.EmailInput1_33, input2: this.EmailInput2_33,
-          input3: '', input4: ''
-        });
+
+        const newEntry = {
+          input1: this.EmailInput1_33,
+          input2: this.EmailInput2_33,
+          input3: '',
+          input4: ''
+        };
+
+        if (this.editEmailIndex_33 !== null) {
+          // Edit existing
+          this.EmailGridData_33[this.editEmailIndex_33] = newEntry;
+          this.editEmailIndex_33 = null;
+        } else {
+          // Add new
+          this.EmailGridData_33.push(newEntry);
+        }
+
+
         this.EmailInput1_33 = '';
         this.EmailInput2_33 = '';
       }
@@ -2839,27 +3287,70 @@ export class SopnewComponent {
 
   }
 
+  editEmailData_33(index: number) {
+    const data = this.EmailGridData_33[index];
+    this.EmailInput1_33 = data.input1;
+    this.EmailInput2_33 = data.input2;
+    this.editEmailIndex_33 = index;
+  }
+
+  deleteEmailData_33(index: number) {
+    this.EmailGridData_33.splice(index, 1);
+    if (this.editEmailIndex_33 === index) {
+      this.editEmailIndex_33 = null;
+    }
+  }
+
+
   isEmailChecked_33(): boolean {
     return this.options33.find(option => option.label === 'Email')?.checked || false;
   }
 
   // Department 
+  editPortalIndex_33: number | null = null;
   PortalInput1_33 = '';
   PortalInput2_33 = '';
   PortalGridData_33: { input1: string; input2: string; input3: string; input4: string }[] = [];
 
   addPortalData_33() {
     if (this.PortalInput1_33 && this.PortalInput2_33) {
-      this.PortalGridData_33.push({
+
+      const newEntry = {
         input1: this.PortalInput1_33,
         input2: this.PortalInput2_33,
         input3: '',
         input4: ''
-      });
+      };
+
+      if (this.editPortalIndex_33 !== null) {
+        // Edit existing
+        this.PortalGridData_33[this.editPortalIndex_33] = newEntry;
+        this.editPortalIndex_33 = null;
+      } else {
+        // Add new
+        this.PortalGridData_33.push(newEntry);
+      }
+
+
       this.PortalInput1_33 = '';
       this.PortalInput2_33 = '';
     }
   }
+
+  editPortalData_33(index: number) {
+    const data = this.PortalGridData_33[index];
+    this.PortalInput1_33 = data.input1;
+    this.PortalInput2_33 = data.input2;
+    this.editPortalIndex_33 = index;
+  }
+
+  deletePortalData_33(index: number) {
+    this.PortalGridData_33.splice(index, 1);
+    if (this.editPortalIndex_33 === index) {
+      this.editPortalIndex_33 = null;
+    }
+  }
+
 
   isPortalChecked_33(): boolean {
     return this.options33.find(option => option.label === 'Portal')?.checked || false;
@@ -2878,9 +3369,9 @@ export class SopnewComponent {
   ];
 
   options36_3 = [
-    { label: '3 MONTHS' },
-    { label: '6 MONTHS' },
-    { label: 'BOTH' },
+    { label: '3 Months' },
+    { label: '6 Months' },
+    { label: 'Both' },
   ];
 
   options36_4 = [
@@ -2889,7 +3380,7 @@ export class SopnewComponent {
   ];
 
   options36_5 = [
-    { label: 'GROSS' },
+    { label: 'Gross' },
     { label: 'CTC' }
   ];
 
@@ -2898,31 +3389,36 @@ export class SopnewComponent {
     { label: 'Upfront' }
   ];
 
+  options38 = [
+    { label: 'Yes' },
+    { label: 'No' }
+  ];
+
   options39_1 = [
     { label: 'Yes' },
     { label: 'No' }
   ];
 
   options39_2 = [
-    { label: 'HOURLY' },
-    { label: 'DAILY' },
-    { label: 'MONTHLY' },
-    { label: 'WEEKLY' },
+    { label: 'Hourly' },
+    { label: 'Daily' },
+    { label: 'Weekly' },
+    { label: 'Monthly' },
     { label: 'Others' }
   ];
 
   options39_3 = [
-    { id: '1', label: 'EMPLOYEE WISE', checked: false },
-    { id: '2', label: 'MANAGER', checked: false },
-    { id: '3', label: 'VERTICAL', checked: false },
-    { id: '4', label: 'OPEN', checked: false }
+    { id: '1', label: 'Employeewise', checked: false },
+    { id: '2', label: 'Manager', checked: false },
+    { id: '3', label: 'Vertical', checked: false },
+    { id: '4', label: 'Open', checked: false }
   ];
 
   options39_4 = [
-    { label: 'SALARY' },
-    { label: 'ONETIME' },
-    { label: 'SALARY+ONETIME' },
-    { label: 'VENDOR' }
+    { label: 'Salary' },
+    { label: 'Onetime' },
+    { label: 'Salary+Onetime' },
+    { label: 'Vendor' }
   ];
 
   options35_1 = [
@@ -2934,9 +3430,9 @@ export class SopnewComponent {
   options35_2 = [
     { id: '0', name: '-Select-' },
     { id: 'LOI Available', name: 'LOI Available' },
-    { id: 'Client signed agreement available', name: 'Client signed agreement available' },
-    { id: 'Quess signed agreement available', name: 'Quess signed agreement available' },
-    { id: 'Both party signed agreement available', name: 'Both party signed agreement available' },
+    { id: 'Client Signed Agreement Available', name: 'Client Signed Agreement Available' },
+    { id: 'Quess Signed Agreement Available', name: 'Quess Signed Agreement Available' },
+    { id: 'Both Party Signed Agreement Available', name: 'Both Party Signed Agreement Available' },
     { id: 'BH Approval', name: 'BH Approval' }
   ];
 
@@ -2976,7 +3472,7 @@ export class SopnewComponent {
 
   options34_3 = [
     { id: '0', name: '-Select-' },
-    { id: 'SEZ WITOUT GST', name: 'SEZ WITOUT GST' },
+    { id: 'SEZ WITHOUT GST', name: 'SEZ WITHOUT GST' },
     { id: 'SEZ WITH GST', name: 'SEZ WITH GST' }
   ];
 
@@ -3013,31 +3509,42 @@ export class SopnewComponent {
 
 
   options42_3 = [
-    { label: 'GROSS' },
-    { label: 'BASIC' }
+    { label: 'Gross' },
+    { label: 'Basic' }
   ];
 
   options42_4 = [
-    { id: '1', name: 'SKILLED' },
-    { id: '2', name: 'SEMI-SKILLED' },
-    { id: '3', name: 'HIGHLY SKILLED' },
-    { id: '4', name: 'UNSKILLED' }
+    { id: '1', name: 'Skilled' },
+    { id: '2', name: 'Semi-Skilled' },
+    { id: '3', name: 'Highly Skilled' },
+    { id: '4', name: 'Unskilled' }
   ];
 
   onSubmitQuestion1() {
     this.isSubmitted1 = true;
-    if (this.Answer1.client_website_link == '') {
+    if (this.Answer1.Company_Id == '0' || this.Answer1.Company_Id == '' || this.Answer1.Company_Name == ''
+      || this.Answer1.SAP_Code == '' || this.Answer1.Client_Website_link == '' ||
+      this.Answer1.Client_Onboarding_Month == ''
+    ) {
+
       return;
     }
 
-    if (!this.isValidUrl(this.Answer1.client_website_link)) {
+    if (!this.isValidUrl(this.Answer1.Client_Website_link)) {
       this.isvalidateurl1 = true;
       return;
     }
 
     const payload = {
       QuestionId: String(1),
-      Client_website_link: String(this.Answer1.client_website_link),
+      Company_Id: String(this.Answer1.Company_Id),
+      Company_Code: String(this.Answer1.Company_Code),
+      Company_Name: String(this.Answer1.Company_Name),
+      SAP_Code: String(this.Answer1.SAP_Code),
+      MyContract_Reference_ID: String(this.Answer1.MyContract_Reference_ID),
+      Client_Website_link: String(this.Answer1.Client_Website_link),
+      First_Month_Payroll: String(this.Answer1.First_Month_Payroll),
+      Client_Onboarding_Month: String(this.Answer1.Client_Onboarding_Month),
       CreatedBy: String(this.employeeId)
     };
 
@@ -3045,8 +3552,11 @@ export class SopnewComponent {
     this._authService.PostSOPAnswer1(payload).subscribe({
       next: res => {
         this.Answer1Post = res.Data;
+        this.Answer1.Company_Id = '';
         this.isvalidateurl1 = false;
         this.isSubmitted1 = false;
+        this.GetSOPAnswer1(String(1), String(this.employeeId));
+
         this.Marked_Answerd(1);
         this.goToNextQuestion();
       },
@@ -3111,15 +3621,21 @@ export class SopnewComponent {
     this.Answer3.selection = label;
   }
 
+  selectbuOption3(label: string) {
+    this.Answer3.bulocation = label;
+  }
+
   onSubmitQuestion3() {
     this.isSubmitted3 = true;
-    if (this.Answer3.selection == '') {
+    if (this.Answer3.selection == '' || this.Answer3.bulocation == '') {
       return;
     }
 
     const payload = {
       QuestionId: String(3),
+      Company_Id: String(this.selectedCompany1),
       POC_Change: String(this.Answer3.selection),
+      BU_Location_Change: String(this.Answer3.bulocation),
       CreatedBy: String(this.employeeId)
     };
 
@@ -3148,6 +3664,7 @@ export class SopnewComponent {
 
     const payload = {
       QuestionId: String(6),
+      Company_Id: String(this.selectedCompany1),
       FF_Payment_Mode: String(this.Answer6.selection),
       CreatedBy: String(this.employeeId)
     };
@@ -3177,7 +3694,10 @@ export class SopnewComponent {
 
     const payload = {
       QuestionId: String(8),
+      Company_Id: String(this.selectedCompany1),
       Sim_Card_Management_tracker: String(this.Answer8.selection),
+      Email_Id_Management_tracker: String(this.Answer8.email),
+      Id_Card_Management_tracker: String(this.Answer8.id),
       CreatedBy: String(this.employeeId)
     };
 
@@ -3194,7 +3714,7 @@ export class SopnewComponent {
   }
 
   selectOption9(label: string) {
-    this.Answer9.selection = label;
+    this.Answer8.email = label;
   }
 
   onSubmitQuestion9() {
@@ -3223,7 +3743,7 @@ export class SopnewComponent {
   }
 
   selectOption10(label: string) {
-    this.Answer10.selection = label;
+    this.Answer8.id = label;
   }
 
   onSubmitQuestion10() {
@@ -3256,24 +3776,23 @@ export class SopnewComponent {
 
     if (this.Answer5.Attendance_Cycle_From == '' || this.Answer5.Attendance_Cycle_To == '' ||
       this.Answer5.Payroll_Cycle_From == '' || this.Answer5.Payroll_Cycle_To == '' ||
-      this.Answer5.Collection_Date_From == '' || this.Answer5.Collection_Date_To == '' ||
+      this.Answer5.Collection_Date == '' ||
       this.Answer5.Group_Name_Site_Master == '' ||
-      this.Answer5.Pay_Out_Date_From == '' || this.Answer5.Pay_Out_Date_To == '' ||
+      this.Answer5.Pay_Out_Date == '' ||
       this.Answer5.Payment_Proof == '') {
       return;
     }
 
     const payload = {
       QuestionId: String(5),
+      Company_Id: String(this.selectedCompany1),
       Attendance_Cycle_From: String(this.Answer5.Attendance_Cycle_From),
       Attendance_Cycle_To: String(this.Answer5.Attendance_Cycle_To),
       Payroll_Cycle_From: String(this.Answer5.Payroll_Cycle_From),
       Payroll_Cycle_To: String(this.Answer5.Payroll_Cycle_To),
-      Collection_Date_From: String(this.Answer5.Collection_Date_From),
-      Collection_Date_To: String(this.Answer5.Collection_Date_To),
+      Collection_Date: String(this.Answer5.Collection_Date),
       Group_Name_Site_Master: String(this.Answer5.Group_Name_Site_Master),
-      PayOut_Date_From: String(this.Answer5.Pay_Out_Date_From),
-      PayOut_Date_To: String(this.Answer5.Pay_Out_Date_To),
+      PayOut_Date: String(this.Answer5.Pay_Out_Date),
       Payment_Proof: String(this.Answer5.Payment_Proof),
       CreatedBy: String(this.employeeId)
     };
@@ -3282,7 +3801,7 @@ export class SopnewComponent {
     this._authService.PostSOPAnswer5(payload).subscribe({
       next: res => {
         this.Answer5Post = res.Data;
-        this.GetSOPAnswer5(5, this.employeeId);
+        this.GetSOPAnswer5(5, this.selectedCompany1, this.employeeId);
         this.Marked_Answerd(5);
         this.goToNextQuestion();
       },
@@ -3292,9 +3811,11 @@ export class SopnewComponent {
 
   Addvalues7() {
     this.isSubmitted7 = true;
-    console.log('CompanyId:', this.Answer7.CompanyId);
 
-    if ((this.Answer7.CompanyId == '' || this.Answer7.CompanyId == '0') &&
+    console.log('CompanyId:', this.Answer7.CompanyId);
+    console.log('first_month_Payroll:', this.Answer7.first_month_Payroll);
+
+    if ((this.Answer7.CompanyId == '' || this.Answer7.CompanyId == '0') ||
       this.Answer7.first_month_Payroll == '') {
       return;
     }
@@ -3314,6 +3835,7 @@ export class SopnewComponent {
         this.GetSOPAnswer7(String(7), String(this.employeeId));
 
         this.selectedCompany7 = '';
+        this.Answer7.CompanyId == '';
         this.Answer7.first_month_Payroll = '';
         this.isSubmitted7 = false;
       },
@@ -3342,6 +3864,7 @@ export class SopnewComponent {
       .filter(opt => opt.checked)
       .map(opt => ({
         questionId: "12",
+        Company_Id: String(this.selectedCompany1),
         subId: opt.id,
         filling_Attendance: opt.label,
         createdBy: String(this.employeeId)
@@ -3378,6 +3901,7 @@ export class SopnewComponent {
 
     const payload = {
       QuestionId: String(13),
+      Company_Id: String(this.selectedCompany1),
       Attendance_Checking: String(this.Answer13.Attendance_Checking),
       CreatedBy: String(this.employeeId)
     };
@@ -3403,6 +3927,7 @@ export class SopnewComponent {
 
     const payload = {
       QuestionId: String(14),
+      Company_Id: String(this.selectedCompany1),
       Major_Correction: String(this.Answer14.Major_Correction),
       Remarks: String(this.Answer14.Remarks),
       CreatedBy: String(this.employeeId)
@@ -3425,42 +3950,24 @@ export class SopnewComponent {
     this.isSubmitted16 = true;
     var payload: any;
 
-    if (this.Answer16.Input_Type == "Formula Driven") {
 
-      if (this.Answer16.Adhoc_Payment == '' || this.Answer16.Date_Of_Disbursal == '' ||
-        this.Answer16.Payment_proof == '' || this.Answer16.Paycode == '' ||
-        this.Answer16.Input_Type == '' || this.Answer16.Incentive_Calculation == '') {
-        return;
-      }
+    if (this.Answer16.Adhoc_Payment == '' || this.Answer16.Date_Of_Disbursal == '' ||
+      this.Answer16.Payment_proof == '' || this.Answer16.Paycode == '' ||
+      this.Answer16.Input_Type == '' || this.Answer16.Incentive_Calculation == '') {
+      return;
+    }
 
-      payload = {
-        QuestionId: String(16),
-        Adhoc_Payment: String(this.Answer16.Adhoc_Payment),
-        Date_Of_Disbursal: String(this.Answer16.Date_Of_Disbursal),
-        Payment_proof: String(this.Answer16.Payment_proof),
-        Paycode: String(this.Answer16.Paycode),
-        Input_Type: String(this.Answer16.Input_Type),
-        Incentive_Calculation: String(this.Answer16.Incentive_Calculation),
-        CreatedBy: String(this.employeeId)
-      };
-    }
-    else {
-      if (this.Answer16.Adhoc_Payment == '' || this.Answer16.Date_Of_Disbursal == '' ||
-        this.Answer16.Payment_proof == '' || this.Answer16.Paycode == '' ||
-        this.Answer16.Input_Type == '') {
-        return;
-      }
-      payload = {
-        QuestionId: String(16),
-        Adhoc_Payment: String(this.Answer16.Adhoc_Payment),
-        Date_Of_Disbursal: String(this.Answer16.Date_Of_Disbursal),
-        Payment_proof: String(this.Answer16.Payment_proof),
-        Paycode: String(this.Answer16.Paycode),
-        Input_Type: String(this.Answer16.Input_Type),
-        Incentive_Calculation: "",
-        CreatedBy: String(this.employeeId)
-      };
-    }
+    payload = {
+      QuestionId: String(16),
+      Company_Id: String(this.selectedCompany1),
+      Adhoc_Payment: String(this.Answer16.Adhoc_Payment),
+      Date_Of_Disbursal: String(this.Answer16.Date_Of_Disbursal),
+      Payment_proof: String(this.Answer16.Payment_proof),
+      Paycode: String(this.Answer16.Paycode),
+      Input_Type: String(this.Answer16.Input_Type),
+      Incentive_Calculation: String(this.Answer16.Incentive_Calculation),
+      CreatedBy: String(this.employeeId)
+    };
 
 
     this._authService.PostSOPAnswer16(payload).subscribe({
@@ -3478,37 +3985,57 @@ export class SopnewComponent {
     this.isSubmitted17 = true;
     var payload: any;
 
-    if (this.Answer17.Inactive_Employee_Load == "Yes") {
 
-      if (this.Answer17.FF_Days == '' || this.Answer17.Gratuity == '' || this.Answer17.Date_Submission == '') {
-        return;
-      }
+    // if (this.Answer17.Inactive_Employee_Load == "Yes") {
 
-      payload = {
-        QuestionId: String(17),
-        Inactive_Employee_Load: String(this.Answer17.Inactive_Employee_Load),
-        FF_Days: String(this.Answer17.FF_Days),
-        Remarks: String(this.Answer17.Remarks),
-        Gratuity: String(this.Answer17.Gratuity),
-        Date_Submission: String(this.Answer17.Date_Submission),
-        CreatedBy: String(this.employeeId)
-      };
+    //   if (this.Answer17.FF_Days == '' || this.Answer17.Gratuity == '' || this.Answer17.Date_Submission == '') {
+    //     return;
+    //   }
+
+    //   payload = {
+    //     QuestionId: String(17),
+    //     Company_Id: String(this.selectedCompany1),
+    //     Inactive_Employee_Load: String(this.Answer17.Inactive_Employee_Load),
+    //     FF_Days: String(this.Answer17.FF_Days),
+    //     Remarks: String(this.Answer17.Remarks),
+    //     Gratuity: String(this.Answer17.Gratuity),
+    //     Date_Submission: String(this.Answer17.Date_Submission),
+    //     CreatedBy: String(this.employeeId)
+    //   };
+    // }
+    // else if (this.Answer17.Inactive_Employee_Load == "No") {
+
+    //   if (this.Answer17.Gratuity == '') {
+    //     return;
+    //   }
+
+    //   payload = {
+    //     QuestionId: String(17),
+    //     Company_Id: String(this.selectedCompany1),
+    //     Inactive_Employee_Load: String(this.Answer17.Inactive_Employee_Load),
+    //     FF_Days: "",
+    //     Remarks: "",
+    //     Gratuity: String(this.Answer17.Gratuity),
+    //     Date_Submission: "",
+    //     CreatedBy: String(this.employeeId)
+    //   };
+    // }
+    // else {
+    if (this.Answer17.Inactive_Employee_Load == '') {
+      return;
     }
-    else {
-      if (this.Answer17.Inactive_Employee_Load == '') {
-        return;
-      }
 
-      payload = {
-        QuestionId: String(17),
-        Inactive_Employee_Load: String(this.Answer17.Inactive_Employee_Load),
-        FF_Days: "",
-        Remarks: "",
-        Gratuity: "",
-        Date_Submission: "",
-        CreatedBy: String(this.employeeId)
-      };
-    }
+    payload = {
+      QuestionId: String(17),
+      Company_Id: String(this.selectedCompany1),
+      Inactive_Employee_Load: String(this.Answer17.Inactive_Employee_Load),
+      FF_Days: "",
+      Remarks: "",
+      Gratuity: "",
+      Date_Submission: "",
+      CreatedBy: String(this.employeeId)
+    };
+    //}
 
 
     this._authService.PostSOPAnswer17(payload).subscribe({
@@ -3529,9 +4056,15 @@ export class SopnewComponent {
       return;
     }
 
+    if (this.Answer18.Payslip_Distribution == 'Quess ESS' && this.Answer18.Quess_Ess == '') {
+      return;
+    }
+
     const payload = {
       QuestionId: String(18),
+      Company_Id: String(this.selectedCompany1),
       Payslip_Distribution: String(this.Answer18.Payslip_Distribution),
+      Quess_Ess: String(this.Answer18.Quess_Ess),
       CreatedBy: String(this.employeeId)
     };
 
@@ -3561,6 +4094,7 @@ export class SopnewComponent {
 
       payload = {
         QuestionId: String(19),
+        Company_Id: String(this.selectedCompany1),
         Notice_Period_Pay: String(this.Answer19.Notice_Period_Pay),
         Threshold_Day: String(this.Answer19.Threshold_Day),
         Applicable_Wages_BASIC_DA: String(this.Answer19.Applicable_Wages_BASIC_DA),
@@ -3575,6 +4109,7 @@ export class SopnewComponent {
 
       payload = {
         QuestionId: String(19),
+        Company_Id: String(this.selectedCompany1),
         Notice_Period_Pay: String(this.Answer19.Notice_Period_Pay),
         Threshold_Day: "",
         Applicable_Wages_BASIC_DA: "",
@@ -3600,112 +4135,163 @@ export class SopnewComponent {
     var payload: any;
 
 
+    if (this.Answer21.Maternity == '' || this.Answer21.Applicable == '' || this.Answer21.Billable == '') {
+      return;
+    }
 
-    if (this.Answer21.Maternity == "Both" && this.Answer21.Approval == "Yes") {
 
-      if (this.Answer21.Maternity == '' || this.Answer21.Applicable == '' || this.Answer21.Billable == '' ||
-        this.Answer21.Salary == '' || this.Answer21.Approval == '' || this.Answer21.Point_Of_Contact == '' ||
-        this.Answer21.Email == '' || this.Answer21.Mobile_Number == '' || this.Answer21.Name == '') {
+    if (this.Answer21.Maternity == "Both" && this.Answer21.Billable == 'Yes') {
+      if (this.Answer21.Salary == '' || this.Answer21.Approval == '') {
         return;
       }
 
-      if (this.isValidMobile(this.Answer21.Mobile_Number)) { }
+      if (this.Answer21.Approval == 'Yes') {
+        if (this.Answer21.Point_Of_Contact == '' ||
+          this.Answer21.Email == '' || this.Answer21.Mobile_Number == '' || this.Answer21.Name == '') {
+          return;
+        }
+
+
+        if (this.isValidMobile(this.Answer21.Mobile_Number)) { }
+        else {
+          return;
+        }
+
+        if (this.isValidEmail(this.Answer21.Email)) { }
+        else {
+          return;
+        }
+
+        payload = {
+          QuestionId: String(21),
+          Company_Id: String(this.selectedCompany1),
+          Maternity: String(this.Answer21.Maternity),
+          Remarks: String(this.Answer21.Remarks ?? ''),
+          Applicable: String(this.Answer21.Applicable),
+          Billable: String(this.Answer21.Billable),
+          Salary: String(this.Answer21.Salary),
+          Approval: String(this.Answer21.Approval),
+          Point_Of_Contact: String(this.Answer21.Point_Of_Contact),
+          Email: String(this.Answer21.Email),
+          Mobile_Number: String(this.Answer21.Mobile_Number),
+          Name: String(this.Answer21.Name),
+          CreatedBy: String(this.employeeId)
+        };
+      }
       else {
-        return;
+        if (this.Answer21.Salary == '') {
+          return;
+        }
+
+        payload = {
+          QuestionId: String(21),
+          Company_Id: String(this.selectedCompany1),
+          Maternity: String(this.Answer21.Maternity),
+          Remarks: String(this.Answer21.Remarks ?? ''),
+          Applicable: String(this.Answer21.Applicable),
+          Billable: String(this.Answer21.Billable),
+          Salary: String(this.Answer21.Salary),
+          Approval: String(this.Answer21.Approval),
+          Point_Of_Contact: '',
+          Email: '',
+          Mobile_Number: '',
+          Name: '',
+          CreatedBy: String(this.employeeId)
+        };
       }
 
-      if (this.isValidEmail(this.Answer21.Email)) { }
-      else {
-        return;
-      }
+    }
 
+    if (this.Answer21.Maternity == "Both" && this.Answer21.Billable != 'Yes') {
       payload = {
         QuestionId: String(21),
+        Company_Id: String(this.selectedCompany1),
         Maternity: String(this.Answer21.Maternity),
-        Remarks: String(this.Answer21.Remarks),
+        Remarks: String(this.Answer21.Remarks ?? ''),
         Applicable: String(this.Answer21.Applicable),
         Billable: String(this.Answer21.Billable),
-        Salary: String(this.Answer21.Salary),
-        Approval: String(this.Answer21.Approval),
-        Point_Of_Contact: String(this.Answer21.Point_Of_Contact),
-        Email: String(this.Answer21.Email),
-        Mobile_Number: String(this.Answer21.Mobile_Number),
-        Name: String(this.Answer21.Name),
+        Salary: '',
+        Approval: '',
+        Point_Of_Contact: '',
+        Email: '',
+        Mobile_Number: '',
+        Name: '',
         CreatedBy: String(this.employeeId)
       };
     }
-    else if (this.Answer21.Maternity == "Both" && this.Answer21.Approval != "Yes") {
 
-      if (this.Answer21.Maternity == '' || this.Answer21.Applicable == '' || this.Answer21.Billable == '' ||
-        this.Answer21.Salary == '' || this.Answer21.Approval == '') {
+    if (this.Answer21.Maternity != "Both" && this.Answer21.Billable == 'Yes') {
+      if (this.Answer21.salary == '' || this.Answer21.Approval == '') {
         return;
       }
 
-      payload = {
-        QuestionId: String(21),
-        Maternity: String(this.Answer21.Maternity),
-        Remarks: String(this.Answer21.Remarks),
-        Applicable: String(this.Answer21.Applicable),
-        Billable: String(this.Answer21.Billable),
-        Salary: String(this.Answer21.Salary),
-        Approval: String(this.Answer21.Approval),
-        Point_Of_Contact: "",
-        Email: "",
-        Mobile_Number: "",
-        Name: "",
-        CreatedBy: String(this.employeeId)
-      };
-    }
-    else if (this.Answer21.Maternity != "Both" && this.Answer21.Approval == "Yes") {
-      if (this.Answer21.Maternity == '' || this.Answer21.Applicable == '' || this.Answer21.Billable == '' ||
-        this.Answer21.Salary == '' || this.Answer21.Approval == '' || this.Answer21.Point_Of_Contact == '' ||
-        this.Answer21.Email == '' || this.Answer21.Mobile_Number == '' || this.Answer21.Name == '') {
-        return;
-      }
+      if (this.Answer21.Approval == 'Yes') {
+        if (this.Answer21.Point_Of_Contact == '' ||
+          this.Answer21.Email == '' || this.Answer21.Mobile_Number == '' || this.Answer21.Name == '') {
+          return;
+        }
 
-      if (this.isValidMobile(this.Answer21.Mobile_Number)) { }
+
+        if (this.isValidMobile(this.Answer21.Mobile_Number)) { }
+        else {
+          return;
+        }
+
+        if (this.isValidEmail(this.Answer21.Email)) { }
+        else {
+          return;
+        }
+
+        payload = {
+          QuestionId: String(21),
+          Company_Id: String(this.selectedCompany1),
+          Maternity: String(this.Answer21.Maternity),
+          Remarks: '',
+          Applicable: String(this.Answer21.Applicable),
+          Billable: String(this.Answer21.Billable),
+          Salary: String(this.Answer21.Salary),
+          Approval: String(this.Answer21.Approval),
+          Point_Of_Contact: String(this.Answer21.Point_Of_Contact),
+          Email: String(this.Answer21.Email),
+          Mobile_Number: String(this.Answer21.Mobile_Number),
+          Name: String(this.Answer21.Name),
+          CreatedBy: String(this.employeeId)
+        };
+      }
       else {
-        return;
+        payload = {
+          QuestionId: String(21),
+          Company_Id: String(this.selectedCompany1),
+          Maternity: String(this.Answer21.Maternity),
+          Remarks: '',
+          Applicable: String(this.Answer21.Applicable),
+          Billable: String(this.Answer21.Billable),
+          Salary: String(this.Answer21.Salary),
+          Approval: String(this.Answer21.Approval),
+          Point_Of_Contact: '',
+          Email: '',
+          Mobile_Number: '',
+          Name: '',
+          CreatedBy: String(this.employeeId)
+        };
       }
-      if (this.isValidEmail(this.Answer21.Email)) { }
-      else {
-        return;
-      }
-
-      payload = {
-        QuestionId: String(21),
-        Maternity: String(this.Answer21.Maternity),
-        Remarks: "",
-        Applicable: String(this.Answer21.Applicable),
-        Billable: String(this.Answer21.Billable),
-        Salary: String(this.Answer21.Salary),
-        Approval: String(this.Answer21.Approval),
-        Point_Of_Contact: String(this.Answer21.Point_Of_Contact),
-        Email: String(this.Answer21.Email),
-        Mobile_Number: String(this.Answer21.Mobile_Number),
-        Name: String(this.Answer21.Name),
-        CreatedBy: String(this.employeeId)
-      };
     }
-    else if (this.Answer21.Maternity != "Both" && this.Answer21.Approval != "Yes") {
 
-      if (this.Answer21.Maternity == '' || this.Answer21.Applicable == '' || this.Answer21.Billable == '' ||
-        this.Answer21.Salary == '' || this.Answer21.Approval == '') {
-        return;
-      }
+    if (this.Answer21.Maternity != "Both" && this.Answer21.Billable != 'Yes') {
 
       payload = {
         QuestionId: String(21),
+        Company_Id: String(this.selectedCompany1),
         Maternity: String(this.Answer21.Maternity),
-        Remarks: "",
+        Remarks: '',
         Applicable: String(this.Answer21.Applicable),
         Billable: String(this.Answer21.Billable),
-        Salary: String(this.Answer21.Salary),
-        Approval: String(this.Answer21.Approval),
-        Point_Of_Contact: "",
-        Email: "",
-        Mobile_Number: "",
-        Name: "",
+        Salary: '',
+        Approval: '',
+        Point_Of_Contact: '',
+        Email: '',
+        Mobile_Number: '',
+        Name: '',
         CreatedBy: String(this.employeeId)
       };
     }
@@ -3731,37 +4317,28 @@ export class SopnewComponent {
 
     if (this.Answer23.BGV_Applicable == "Yes") {
 
-      if (this.Answer23.Eligibility == '' || this.Answer23.Eligibility_By == '') {
+      if (this.Answer23.Eligibility == '' || this.Answer23.Eligibility_By == '' ||
+        this.Answer23.Cost == ''
+      ) {
         return;
       }
-      if (this.Answer23.Eligibility_By != "Quess") {
 
-        if (this.Answer23.Cost == '') {
-          return;
-        }
-        payload = {
-          QuestionId: String(23),
-          BGV_Applicable: String(this.Answer23.BGV_Applicable),
-          Eligibility: String(this.Answer23.Eligibility),
-          Eligibility_By: String(this.Answer23.Eligibility_By),
-          Cost: String(this.Answer23.Cost),
-          CreatedBy: String(this.employeeId)
-        };
-      }
-      else {
-        payload = {
-          QuestionId: String(23),
-          BGV_Applicable: String(this.Answer23.BGV_Applicable),
-          Eligibility: String(this.Answer23.Eligibility),
-          Eligibility_By: String(this.Answer23.Eligibility_By),
-          Cost: "",
-          CreatedBy: String(this.employeeId)
-        };
-      }
+      payload = {
+        QuestionId: String(23),
+        Company_Id: String(this.selectedCompany1),
+        BGV_Applicable: String(this.Answer23.BGV_Applicable),
+        Eligibility: String(this.Answer23.Eligibility),
+        Eligibility_By: String(this.Answer23.Eligibility_By),
+        Cost: String(this.Answer23.Cost),
+        CreatedBy: String(this.employeeId)
+      };
+
+
     }
     else {
       payload = {
         QuestionId: String(23),
+        Company_Id: String(this.selectedCompany1),
         BGV_Applicable: String(this.Answer23.BGV_Applicable),
         Eligibility: "",
         Eligibility_By: "",
@@ -3790,32 +4367,30 @@ export class SopnewComponent {
       return;
     }
     if (this.Answer25.Billiable == "Yearly") {
-      if (this.Answer25.Eligibility_Month?.id == '' || this.Answer25.Accumulated_FlushOut == '' ||
+      if (this.Answer25.Calandar_Type == '' || this.Answer25.Accumulated_FlushOut == '' ||
         this.Answer25.Billed_Paid == ''
       ) {
         return;
       }
       payload = {
         QuestionId: String(25),
+        Company_Id: String(this.selectedCompany1),
         Billiable: String(this.Answer25.Billiable),
-        Eligibility_Month: String(this.Answer25.Eligibility_Month?.name || ''),
+        Calandar_Type: String(this.Answer25.Calandar_Type),
         Accumulated_FlushOut: String(this.Answer25.Accumulated_FlushOut),
         Billed_Paid: String(this.Answer25.Billed_Paid),
         CreatedBy: String(this.employeeId)
       };
     }
     else {
-      if (this.Answer25.Eligibility_Month == '' || this.Answer25.Accumulated_FlushOut == '' ||
-        this.Answer25.Billed_Paid == ''
-      ) {
-        return;
-      }
+
       payload = {
         QuestionId: String(25),
+        Company_Id: String(this.selectedCompany1),
         Billiable: String(this.Answer25.Billiable),
-        Eligibility_Month: String(this.Answer25.Eligibility_Month),
-        Accumulated_FlushOut: String(this.Answer25.Accumulated_FlushOut),
-        Billed_Paid: String(this.Answer25.Billed_Paid),
+        Calandar_Type: '',
+        Accumulated_FlushOut: '',
+        Billed_Paid: '',
         CreatedBy: String(this.employeeId)
       };
     }
@@ -3865,6 +4440,7 @@ export class SopnewComponent {
 
       payload = {
         QuestionId: String(28),
+        Company_Id: String(this.selectedCompany1),
         Compensatory_Off: String(this.Answer28.Compensatory_Off),
         Remarks: String(this.Answer28.Remarks),
         Applicable: String(this.Answer28.Applicable),
@@ -3881,6 +4457,7 @@ export class SopnewComponent {
     else if (this.Answer28.Compensatory_Off == "Both" && this.Answer28.Approval != "Yes") {
       payload = {
         QuestionId: String(28),
+        Company_Id: String(this.selectedCompany1),
         Compensatory_Off: String(this.Answer28.Compensatory_Off),
         Remarks: String(this.Answer28.Remarks),
         Applicable: String(this.Answer28.Applicable),
@@ -3899,6 +4476,9 @@ export class SopnewComponent {
         this.Answer28.Mobile_Number == '' || this.Answer28.Name == '') {
         return;
       }
+
+
+
       if (this.Answer28.Mobile_Number != '') {
         if (this.isValidMobile(this.Answer28.Mobile_Number)) { }
         else {
@@ -3907,7 +4487,7 @@ export class SopnewComponent {
       }
 
       if (this.Answer28.Email != '') {
-        if (this.isValidMobile(this.Answer28.Email)) { }
+        if (this.isValidEmail(this.Answer28.Email)) { }
         else {
           return;
         }
@@ -3915,6 +4495,7 @@ export class SopnewComponent {
 
       payload = {
         QuestionId: String(28),
+        Company_Id: String(this.selectedCompany1),
         Compensatory_Off: String(this.Answer28.Compensatory_Off),
         Remarks: "",
         Applicable: String(this.Answer28.Applicable),
@@ -3931,6 +4512,7 @@ export class SopnewComponent {
     else if (this.Answer28.Compensatory_Off != "Both" && this.Answer28.Approval != "Yes") {
       payload = {
         QuestionId: String(28),
+        Company_Id: String(this.selectedCompany1),
         Compensatory_Off: String(this.Answer28.Compensatory_Off),
         Remarks: "",
         Applicable: String(this.Answer28.Applicable),
@@ -3967,8 +4549,9 @@ export class SopnewComponent {
     if (this.Answer29.Billable == "Yes") {
       payload = {
         QuestionId: String(29),
+        Company_Id: String(this.selectedCompany1),
         Billable: String(this.Answer29.Billable),
-        Display_Register: "",
+        Display_Register: 'Yes',
         CreatedBy: String(this.employeeId)
       };
     }
@@ -3980,6 +4563,7 @@ export class SopnewComponent {
 
       payload = {
         QuestionId: String(29),
+        Company_Id: String(this.selectedCompany1),
         Billable: String(this.Answer29.Billable),
         Display_Register: String(this.Answer29.Display_Register),
         CreatedBy: String(this.employeeId)
@@ -3990,7 +4574,7 @@ export class SopnewComponent {
     this._authService.PostSOPAnswer29(payload).subscribe({
       next: res => {
         this.Answer29Post = res.Data;
-
+        this.GetSOPAnswer29(29, this.selectedCompany1, this.employeeId);
         this.Marked_Answerd(29);
         this.goToNextQuestion();
       },
@@ -4007,57 +4591,50 @@ export class SopnewComponent {
     }
 
     if (this.Answer30.PO_Type == "CAP") {
-      if (this.Answer30.PF_Calculated_15K_BASED_ON_ATTENDANCE == '') {
-        return;
-      }
+
       payload = {
         QuestionId: String(30),
+        Company_Id: String(this.selectedCompany1),
         PO_Type: String(this.Answer30.PO_Type),
-        PF_Calculated_15K_BASED_ON_ATTENDANCE: String(this.Answer30.PF_Calculated_15K_BASED_ON_ATTENDANCE),
+        PF_Calculated_15K_BASED_ON_ATTENDANCE: 'PF CALCULATED CAPING TO 15K BASED ON ATTENDANCE PRO-RATE',
         PF_Calculated_Wages_Without_Any_Capping: "",
         PF_Calculated_Earnings_Restricting_15K: "",
         CreatedBy: String(this.employeeId)
       };
     }
     else if (this.Answer30.PO_Type == "NONCAP") {
-      if (this.Answer30.PF_Calculated_Wages_Without_Any_Capping == '') {
-        return;
-      }
+
       payload = {
         QuestionId: String(30),
+        Company_Id: String(this.selectedCompany1),
         PO_Type: String(this.Answer30.PO_Type),
         PF_Calculated_15K_BASED_ON_ATTENDANCE: "",
-        PF_Calculated_Wages_Without_Any_Capping: String(this.Answer30.PF_Calculated_Wages_Without_Any_Capping),
+        PF_Calculated_Wages_Without_Any_Capping: 'PF CALCULATED WAGES WITHOUT ANY CAPPING',
         PF_Calculated_Earnings_Restricting_15K: "",
         CreatedBy: String(this.employeeId)
       };
     }
     else if (this.Answer30.PO_Type == "CAPFW") {
-      if (this.Answer30.PF_Calculated_Earnings_Restricting_15K == '') {
-        return;
-      }
+
       payload = {
         QuestionId: String(30),
+        Company_Id: String(this.selectedCompany1),
         PO_Type: String(this.Answer30.PO_Type),
         PF_Calculated_15K_BASED_ON_ATTENDANCE: "",
         PF_Calculated_Wages_Without_Any_Capping: "",
-        PF_Calculated_Earnings_Restricting_15K: String(this.Answer30.PF_Calculated_Earnings_Restricting_15K),
+        PF_Calculated_Earnings_Restricting_15K: 'PF CALCULATED ON EARNINGS BY RESTRICTING 15K',
         CreatedBy: String(this.employeeId)
       };
     }
     else if (this.Answer30.PO_Type == "BOTH (CAP/NON CAP/CAPFW)") {
-      if (this.Answer30.PF_Calculated_15K_BASED_ON_ATTENDANCE == '' ||
-        this.Answer30.PF_Calculated_Wages_Without_Any_Capping == '' ||
-        this.Answer30.PF_Calculated_Earnings_Restricting_15K == ''
-      ) {
-        return;
-      }
+
       payload = {
         QuestionId: String(30),
+        Company_Id: String(this.selectedCompany1),
         PO_Type: String(this.Answer30.PO_Type),
-        PF_Calculated_15K_BASED_ON_ATTENDANCE: String(this.Answer30.PF_Calculated_15K_BASED_ON_ATTENDANCE),
-        PF_Calculated_Wages_Without_Any_Capping: String(this.Answer30.PF_Calculated_Wages_Without_Any_Capping),
-        PF_Calculated_Earnings_Restricting_15K: String(this.Answer30.PF_Calculated_Earnings_Restricting_15K),
+        PF_Calculated_15K_BASED_ON_ATTENDANCE: 'PF CALCULATED CAPING TO 15K BASED ON ATTENDANCE PRO-RATE',
+        PF_Calculated_Wages_Without_Any_Capping: 'PF CALCULATED WAGES WITHOUT ANY CAPPING',
+        PF_Calculated_Earnings_Restricting_15K: 'PF CALCULATED ON EARNINGS BY RESTRICTING 15K',
         CreatedBy: String(this.employeeId)
       };
     }
@@ -4088,6 +4665,7 @@ export class SopnewComponent {
       }
       payload = {
         QuestionId: String(32),
+        Company_Id: String(this.selectedCompany1),
         Calculation: String(this.Answer32.Calculation),
         ATTRIBUTES: String(this.Answer32.ATTRIBUTES),
         CreatedBy: String(this.employeeId)
@@ -4096,6 +4674,7 @@ export class SopnewComponent {
     else {
       payload = {
         QuestionId: String(32),
+        Company_Id: String(this.selectedCompany1),
         Calculation: String(this.Answer32.Calculation),
         ATTRIBUTES: "",
         CreatedBy: String(this.employeeId)
@@ -4143,17 +4722,20 @@ export class SopnewComponent {
       }
 
       if (this.Answer36.Commercials == "Percentage") {
-        if (this.Answer36.Commercials == '' || this.Answer36.Pay_Code == '') {
+        if (this.Answer36.Commercials == '' || this.Answer36.Pay_Code == ''
+          || this.Answer36.Flat == ''
+        ) {
           return;
         }
         payload = {
           QuestionId: String(36),
+          Company_Id: String(this.selectedCompany1),
           Absorption_Fee: String(this.Answer36.Absorption_Fee),
           Eligibility: String(this.Answer36.Eligibility),
           Designation: String(this.Answer36.Designation),
           TAT: String(this.Answer36.TAT),
           Commercials: String(this.Answer36.Commercials),
-          Flat: "",
+          Flat: String(this.Answer36.Flat),
           Pay_Code: String(this.Answer36.Pay_Code),
           CreatedBy: String(this.employeeId)
         };
@@ -4164,6 +4746,7 @@ export class SopnewComponent {
         }
         payload = {
           QuestionId: String(36),
+          Company_Id: String(this.selectedCompany1),
           Absorption_Fee: String(this.Answer36.Absorption_Fee),
           Eligibility: String(this.Answer36.Eligibility),
           Designation: String(this.Answer36.Designation),
@@ -4178,6 +4761,7 @@ export class SopnewComponent {
     else {
       payload = {
         QuestionId: String(36),
+        Company_Id: String(this.selectedCompany1),
         Absorption_Fee: String(this.Answer36.Absorption_Fee),
         Eligibility: "",
         Designation: "",
@@ -4217,6 +4801,7 @@ export class SopnewComponent {
 
       payload = {
         QuestionId: String(37),
+        Company_Id: String(this.selectedCompany1),
         Payment: String(this.Answer37.Payment),
         Payment_Days: String(this.Answer37.Payment_Days),
         CreatedBy: String(this.employeeId)
@@ -4225,6 +4810,7 @@ export class SopnewComponent {
     else {
       payload = {
         QuestionId: String(37),
+        Company_Id: String(this.selectedCompany1),
         Payment: String(this.Answer37.Payment),
         Payment_Days: "",
         CreatedBy: String(this.employeeId)
@@ -4247,18 +4833,31 @@ export class SopnewComponent {
 
   onSubmitQuestion38() {
     this.isSubmitted38 = true;
-
+    var payload: any;
     if (this.Answer38.Penalty_Clause == '') {
       return;
     }
 
-    var payload: any;
-    payload = {
-      QuestionId: String(38),
-      Penalty_Clause: String(this.Answer38.Penalty_Clause),
-      CreatedBy: String(this.employeeId)
-    };
+    if (this.Answer38.Penalty_Clause == 'Yes') {
+      payload = {
+        QuestionId: String(38),
+        Company_Id: String(this.selectedCompany1),
+        Penalty_Clause: String(this.Answer38.Penalty_Clause),
+        Payroll_Closure_Date: String(this.Answer38.Payroll_Closure_Date),
+        CreatedBy: String(this.employeeId)
+      };
 
+    }
+    else {
+      payload = {
+        QuestionId: String(38),
+        Company_Id: String(this.selectedCompany1),
+        Penalty_Clause: String(this.Answer38.Penalty_Clause),
+        Payroll_Closure_Date: '',
+        CreatedBy: String(this.employeeId)
+      };
+
+    }
 
     this._authService.PostSOPAnswer38(payload).subscribe({
       next: res => {
@@ -4288,6 +4887,7 @@ export class SopnewComponent {
 
       payload = {
         QuestionId: String(27),
+        Company_Id: String(this.selectedCompany1),
         Variable_Pay: String(this.Answer27.Variable_Pay),
         Term: String(this.Answer27.Term),
         Billing_Type: String(this.Answer27.Billing_Type),
@@ -4297,6 +4897,7 @@ export class SopnewComponent {
     else {
       payload = {
         QuestionId: String(27),
+        Company_Id: String(this.selectedCompany1),
         Variable_Pay: String(this.Answer27.Variable_Pay),
         Term: "",
         Billing_Type: "",
@@ -4360,6 +4961,7 @@ export class SopnewComponent {
 
       answerData = {
         questionId: "39",
+        Company_Id: String(this.selectedCompany1),
         PO_Applicable: String(this.Answer39.PO_Applicable),
         PO_Type: String(this.Answer39.PO_Type),
         PO_Category: String(this.Answer39.PO_Category),
@@ -4371,6 +4973,7 @@ export class SopnewComponent {
     else {
       answerData = {
         questionId: "39",
+        Company_Id: String(this.selectedCompany1),
         PO_Applicable: String(this.Answer39.PO_Applicable),
         PO_Type: "",
         PO_Category: "",
@@ -4401,6 +5004,7 @@ export class SopnewComponent {
 
     const payload = {
       QuestionId: String(4),
+      Company_Id: String(this.selectedCompany1),
       Vertical: this.verticalGridData_4,
       Department: this.departmentGridData_4,
       Manager: this.managerGridData_4,
@@ -4429,6 +5033,7 @@ export class SopnewComponent {
 
     const payload = {
       QuestionId: String(33),
+      Company_Id: String(this.selectedCompany1),
       Email: this.EmailGridData_33,
       Portal: this.PortalGridData_33,
       CreatedBy: String(this.employeeId)
@@ -4448,6 +5053,16 @@ export class SopnewComponent {
 
   onFileSelected(event: any): void {
     const file = event.target.files[0];
+
+    const maxSizeInMB = 50; // Example: 5 MB
+    const maxSizeInBytes = maxSizeInMB * 1024 * 1024;
+
+    if (file && file.size > maxSizeInBytes) {
+      alert(`File exceeds the ${maxSizeInMB} MB limit.`);
+      event.target.value = ''; // Clear file input
+      return;
+    }
+
     if (file) {
       this.Answer31.File_Upload = file;
 
@@ -4466,6 +5081,7 @@ export class SopnewComponent {
       formData.append('File', this.Answer31.File_Upload);
       formData.append('billApplicable', this.Answer31.Bill_Applicable);
       formData.append('QuestionId', '31');
+      formData.append('CompanyId', this.selectedCompany1);
       formData.append('CreatedBy', this.employeeId);
       this._authService.PostSOPAnswer31(formData).subscribe({
         next: res => {
@@ -4481,6 +5097,7 @@ export class SopnewComponent {
     else {
       formData.append('billApplicable', this.Answer31.Bill_Applicable);
       formData.append('QuestionId', '31');
+      formData.append('Company_Id', this.selectedCompany1);
       formData.append('CreatedBy', this.employeeId);
       this._authService.PostSOPAnswer31_1(formData).subscribe({
         next: res => {
@@ -4496,8 +5113,8 @@ export class SopnewComponent {
 
   }
 
-  GetSOPAnswer31(questionId: string, createdBy: string) {
-    this._authService.GetSOPAnswer31(questionId, createdBy).subscribe({
+  GetSOPAnswer31(questionId: string, CompanyId: string, createdBy: string) {
+    this._authService.GetSOPAnswer31(questionId, CompanyId, createdBy).subscribe({
       next: res => {
         const data = res.Data;
 
@@ -4531,6 +5148,7 @@ export class SopnewComponent {
 
     const payload = {
       QuestionId: String(11),
+      Company_Id: String(this.selectedCompany1),
       Std_Working_Hours_Full_Day: String(this.Answer11.Std_Working_Hours_Full_Day),
       Std_Working_Hours_Half_Day: String(this.Answer11.Std_Working_Hours_Half_Day),
       Email: this.EmailGridData_11_3,
@@ -4560,8 +5178,7 @@ export class SopnewComponent {
       return;
     }
 
-    if(!this.isRevisedDateValid())
-    {
+    if (!this.isRevisedDateValid()) {
       return;
     }
 
@@ -4572,6 +5189,7 @@ export class SopnewComponent {
 
     const payload = {
       QuestionId: String(15),
+      Company_Id: String(this.selectedCompany1),
       First_Input_date: String(this.Answer15.First_Input_date),
       Revised_Input_date: String(this.Answer15.Revised_Input_date),
       Email: this.EmailGridData_15,
@@ -4613,7 +5231,7 @@ export class SopnewComponent {
   Addvalues20() {
     this.isSubmitted20 = true;
     var payload;
-
+    this.Answer20.CompanyId = this.selectedCompany1;
 
     if (this.Answer20.Applicable == "Yes") {
 
@@ -4623,15 +5241,15 @@ export class SopnewComponent {
           return;
         }
 
-        if (this.Answer20.Designation_Id == '' || this.Answer20.Applicable_Wages_BASIC_DA == '' ||
-          this.Answer20.Applicable_Wages_GROSS == ''
+        if (this.Answer20.Designation_Id == '' || this.Answer20.Designationwise_Days == ''
+          || this.Answer20.Applicable_Wages_BASIC_DA == '' || this.Answer20.Applicable_Wages_GROSS == ''
         ) {
           return;
         }
 
         const isDuplicate = this.answer20GridData.some(
           item => item.designation_Id === this.Answer20.Designation_Id &&
-            item.company_Code === this.Answer20.Company_Code
+            item.company_Id === this.Answer20.CompanyId
         );
 
         if (isDuplicate) {
@@ -4646,10 +5264,11 @@ export class SopnewComponent {
           Applicable: String(this.Answer20.Applicable),
           Eligible_days: String(this.Answer20.Eligible_days),
           Applicable_Desc_Client: String(this.Answer20.Applicable_Desc_Client),
-          CompanyId: String(this.Answer20.CompanyId),
-          Company_Code: String(this.Answer20.Company_Code),
+          CompanyId: String(this.selectedCompany1),
+          Company_Code: "",
           Designation_Id: String(this.Answer20.Designation_Id),
           Designation_Name: String(this.Answer20.Designation_Name),
+          Designationwise_Days: String(this.Answer20.Designationwise_Days),
           Applicable_Wages_BASIC_DA: String(this.Answer20.Applicable_Wages_BASIC_DA),
           Applicable_Wages_GROSS: String(this.Answer20.Applicable_Wages_GROSS),
           CreatedBy: String(this.employeeId)
@@ -4669,6 +5288,7 @@ export class SopnewComponent {
         Company_Code: '',
         Designation_Id: '',
         Designation_Name: '',
+        Designationwise_Days: '',
         Applicable_Wages_BASIC_DA: '',
         Applicable_Wages_GROSS: '',
         CreatedBy: String(this.employeeId)
@@ -4680,13 +5300,14 @@ export class SopnewComponent {
     this._authService.PostSOPAnswer20(payload).subscribe({
       next: res => {
         if (this.Answer20.Applicable == "Yes") {
-          this.GetSOPAnswer20(String(20), String(this.employeeId));
+          this.GetSOPAnswer20(String(20), String(this.selectedCompany1), String(this.employeeId));
 
           this.selectedCompany20 = '';
           this.selecteddesignation20 = '';
           this.Answer20.Eligible_days = '';
           this.Answer20.Designation_Id = '';
           this.Answer20.Designation_Name = '';
+          this.Answer20.Designationwise_Days = '';
           this.Answer20.Applicable_Wages_BASIC_DA = '';
           this.Answer20.Applicable_Wages_GROSS = '';
 
@@ -4713,6 +5334,7 @@ export class SopnewComponent {
         Applicable_Desc_Client: '',
         Designation_Id: '',
         Designation_Name: '',
+        Designationwise_Days: '',
         Applicable_Wages_BASIC_DA: '',
         Applicable_Wages_GROSS: '',
         CreatedBy: String(this.employeeId)
@@ -4804,96 +5426,155 @@ export class SopnewComponent {
     this.isSubmitted22 = true;
     var payload;
 
-
-    if (this.Answer22.Applicable == "Yes") {
-
-      if (this.Answer22.Leave_Type_Id == '' || this.Answer22.Carry_Forward == '') {
-        return;
-      }
-
-      if (this.Answer22.Applicable == "Yes" && this.Answer22.Carry_Forward == "Yes") {
-
-        if (this.Answer22.Leave_Type_Id == '' || this.Answer22.Carry_Forward_Days == '' ||
-          this.Answer22.Calander_Type == '' || this.Answer22.Leave_Encashment == '' ||
-          this.Answer22.Leave_Management == ''
-        ) {
-          return;
-        }
-
-        const isDuplicate = this.answer22GridData.some(
-          item => item.leave_Type_Id === this.Answer22.Leave_Type_Id
-        );
-
-        if (isDuplicate) {
-          alert("❗ Leave already exists. Please choose a different one.");
-          return;
-        }
-
-        payload = {
-          Sopid: String(0),
-          QuestionId: String(22),
-          Applicable: String(this.Answer22.Applicable),
-          Leave_Type_Id: String(this.Answer22.Leave_Type_Id),
-          Leave_Type: String(this.Answer22.Leave_Type),
-          Carry_Forward: String(this.Answer22.Carry_Forward),
-          Carry_Forward_Days: String(this.Answer22.Carry_Forward_Days),
-          Calander_Type: String(this.Answer22.Calander_Type),
-          Leave_Encashment: String(this.Answer22.Leave_Encashment),
-          Leave_Management: String(this.Answer22.Leave_Management),
-          CreatedBy: String(this.employeeId)
-        };
-      }
-      else if (this.Answer22.Applicable == "Yes"
-        && this.Answer22.Carry_Forward == "No") {
-
-
-        if (this.Answer22.Leave_Type_Id == '' ||
-          this.Answer22.Calander_Type == '' || this.Answer22.Leave_Encashment == '' ||
-          this.Answer22.Leave_Management == ''
-        ) {
-          return;
-        }
-
-        const isDuplicate = this.answer22GridData.some(
-          item => item.leave_Type_Id === this.Answer22.Leave_Type_Id
-        );
-
-        if (isDuplicate) {
-          alert("❗ Leave already exists. Please choose a different one.");
-          return;
-        }
-
-        payload = {
-          Sopid: String(0),
-          QuestionId: String(22),
-          Applicable: String(this.Answer22.Applicable),
-          Leave_Type_Id: String(this.Answer22.Leave_Type_Id),
-          Leave_Type: String(this.Answer22.Leave_Type),
-          Carry_Forward: String(this.Answer22.Carry_Forward),
-          Carry_Forward_Days: '',
-          Calander_Type: String(this.Answer22.Calander_Type),
-          Leave_Encashment: String(this.Answer22.Leave_Encashment),
-          Leave_Management: String(this.Answer22.Leave_Management),
-          CreatedBy: String(this.employeeId)
-        };
-      }
-
+    if (this.Answer22.Leave_Management == '' || this.Answer22.Calander_Type == '' ||
+      this.Answer22.Leave_Type_Id == ''
+    ) {
+      return;
     }
 
+    if (this.Answer22.Leave_Type == "Paternity Leave" || this.Answer22.Leave_Type == "Sabbatical Leave") {
+      if (this.Answer22.No_Of_Leave == '') {
+        return;
+      }
+      else {
+        const isDuplicate = this.answer22GridData.some(
+          item => item.leave_Type_Id === this.Answer22.Leave_Type_Id
+        );
+
+        payload = {
+          Sopid: String(0),
+          QuestionId: String(22),
+          Company_Id: String(this.selectedCompany1),
+          Applicable: String(this.Answer22.Applicable),
+          Leave_Management: String(this.Answer22.Leave_Management),
+          Calander_Type: String(this.Answer22.Calander_Type),
+          Leave_Type_Id: String(this.Answer22.Leave_Type_Id),
+          Leave_Type: String(this.Answer22.Leave_Type),
+          No_Of_Leave: String(this.Answer22.No_Of_Leave),
+          Carry_Forward: '',
+          Carry_Forward_Days: '',
+          Encashment: '',
+          Leave_Encashment: '',
+          CreatedBy: String(this.employeeId)
+        };
+      }
+    }
+    else {
+      if (this.Answer22.Carry_Forward == '' || this.Answer22.Encashment == '') {
+        return;
+      }
+      else {
+        if (this.Answer22.Carry_Forward == "Yes") {
+          if (this.Answer22.Carry_Forward_Days == '') {
+            return;
+          }
+          else {
+            if (this.Answer22.Encashment == "Yes") {
+              if (this.Answer22.Leave_Encashment == '') {
+                return;
+              }
+              else {
+                payload = {
+                  Sopid: String(0),
+                  QuestionId: String(22),
+                  Company_Id: String(this.selectedCompany1),
+                  Applicable: String(this.Answer22.Applicable),
+                  Leave_Management: String(this.Answer22.Leave_Management),
+                  Calander_Type: String(this.Answer22.Calander_Type),
+                  Leave_Type_Id: String(this.Answer22.Leave_Type_Id),
+                  Leave_Type: String(this.Answer22.Leave_Type),
+                  No_Of_Leave: '',
+                  Carry_Forward: String(this.Answer22.Carry_Forward),
+                  Carry_Forward_Days: String(this.Answer22.Carry_Forward_Days),
+                  Encashment: String(this.Answer22.Encashment),
+                  Leave_Encashment: String(this.Answer22.Leave_Encashment),
+                  CreatedBy: String(this.employeeId)
+                };
+              }
+            }
+            else {
+              payload = {
+                Sopid: String(0),
+                QuestionId: String(22),
+                Company_Id: String(this.selectedCompany1),
+                Applicable: String(this.Answer22.Applicable),
+                Leave_Management: String(this.Answer22.Leave_Management),
+                Calander_Type: String(this.Answer22.Calander_Type),
+                Leave_Type_Id: String(this.Answer22.Leave_Type_Id),
+                Leave_Type: String(this.Answer22.Leave_Type),
+                No_Of_Leave: '',
+                Carry_Forward: String(this.Answer22.Carry_Forward),
+                Carry_Forward_Days: String(this.Answer22.Carry_Forward_Days),
+                Encashment: String(this.Answer22.Encashment),
+                Leave_Encashment: '',
+                CreatedBy: String(this.employeeId)
+              };
+            }
+          }
+
+        }
+        else {
+          if (this.Answer22.Encashment == "Yes") {
+            if (this.Answer22.Leave_Encashment == '') {
+              return;
+            }
+            else {
+              payload = {
+                Sopid: String(0),
+                QuestionId: String(22),
+                Company_Id: String(this.selectedCompany1),
+                Applicable: String(this.Answer22.Applicable),
+                Leave_Management: String(this.Answer22.Leave_Management),
+                Calander_Type: String(this.Answer22.Calander_Type),
+                Leave_Type_Id: String(this.Answer22.Leave_Type_Id),
+                Leave_Type: String(this.Answer22.Leave_Type),
+                No_Of_Leave: '',
+                Carry_Forward: String(this.Answer22.Carry_Forward),
+                Carry_Forward_Days: '',
+                Encashment: String(this.Answer22.Encashment),
+                Leave_Encashment: String(this.Answer22.Leave_Encashment),
+                CreatedBy: String(this.employeeId)
+              };
+            }
+          }
+          else {
+            payload = {
+              Sopid: String(0),
+              QuestionId: String(22),
+              Company_Id: String(this.selectedCompany1),
+              Applicable: String(this.Answer22.Applicable),
+              Leave_Management: String(this.Answer22.Leave_Management),
+              Calander_Type: String(this.Answer22.Calander_Type),
+              Leave_Type_Id: String(this.Answer22.Leave_Type_Id),
+              Leave_Type: String(this.Answer22.Leave_Type),
+              No_Of_Leave: '',
+              Carry_Forward: String(this.Answer22.Carry_Forward),
+              Carry_Forward_Days: '',
+              Encashment: String(this.Answer22.Encashment),
+              Leave_Encashment: '',
+              CreatedBy: String(this.employeeId)
+            };
+          }
+
+        }
+      }
+    }
 
     this._authService.PostSOPAnswer22(payload).subscribe({
       next: res => {
         if (this.Answer22.Applicable == "Yes") {
-          this.GetSOPAnswer22(String(22), String(this.employeeId));
+          this.GetSOPAnswer22(String(22), this.selectedCompany1, String(this.employeeId));
 
           this.selectedLeave22 = '';
+          this.Answer22.Leave_Management = '';
+          this.Answer22.Calander_Type = '';
           this.Answer22.Leave_Type_Id = '';
           this.Answer22.Leave_Type = '';
+          this.Answer22.No_Of_Leave = '';
           this.Answer22.Carry_Forward = '';
           this.Answer22.Carry_Forward_Days = '';
-          this.Answer22.Calander_Type = '';
+          this.Answer22.Encashment = '';
           this.Answer22.Leave_Encashment = '';
-          this.Answer22.Leave_Management = '';
           this.isSubmitted22 = false;
 
         }
@@ -4909,42 +5590,69 @@ export class SopnewComponent {
     if (this.Answer22.Applicable == '') {
       return;
     }
-    if (this.Answer22.Applicable == "Yes" && this.answer22GridData.length == 0) {
-      return;
+    if (this.Answer22.Applicable == "Yes") {
+
+      if (this.Answer22.Leave_Management == '') {
+        return;
+      }
+      else {
+        if (this.Answer22.Leave_Management == 'Quess' && this.answer22GridData.length == 0) {
+          return;
+        }
+      }
     }
 
     var payload;
-
-    if (this.Answer22.Applicable == "No") {
+    if (this.Answer22.Applicable == "Yes") {
       payload = {
         Sopid: String(0),
         QuestionId: String(22),
+        Company_Id: String(this.selectedCompany1),
         Applicable: String(this.Answer22.Applicable),
+        Leave_Management: String(this.Answer22.Leave_Management),
+        Calander_Type: '',
         Leave_Type_Id: '',
         Leave_Type: '',
+        No_Of_Leave: '',
         Carry_Forward: '',
         Carry_Forward_Days: '',
-        Calander_Type: '',
+        Encashment: '',
         Leave_Encashment: '',
-        Leave_Management: '',
+
         CreatedBy: String(this.employeeId)
       };
 
-
-
-      this._authService.PostSOPAnswer22(payload).subscribe({
-        next: res => {
-          this.Marked_Answerd(22);
-          this.goToNextQuestion();
-
-        },
-        error: err => console.error('❌ Error saving Q22', err)
-      });
     }
-    else {
-      this.Marked_Answerd(22);
-      this.goToNextQuestion();
+    else if (this.Answer22.Applicable == "No") {
+      payload = {
+        Sopid: String(0),
+        QuestionId: String(22),
+        Company_Id: String(this.selectedCompany1),
+        Applicable: String(this.Answer22.Applicable),
+        Leave_Management: '',
+        Calander_Type: '',
+        Leave_Type_Id: '',
+        Leave_Type: '',
+        No_Of_Leave: '',
+        Carry_Forward: '',
+        Carry_Forward_Days: '',
+        Encashment: '',
+        Leave_Encashment: '',
+
+        CreatedBy: String(this.employeeId)
+      };
+
     }
+
+    this._authService.PostSOPAnswer22(payload).subscribe({
+      next: res => {
+        this.Marked_Answerd(22);
+        this.goToNextQuestion();
+
+      },
+      error: err => console.error('❌ Error saving Q22', err)
+    });
+
   }
 
   oncalandertype24(event: Event): void {
@@ -5376,7 +6084,7 @@ export class SopnewComponent {
     );
 
     if (selected) {
-      this.Answer26.newJoineeArrearId = selected.newJoineeArrearId;
+      this.Answer26.NewJoineeArrearId = selected.newJoineeArrearId;
     } else {
 
     }
@@ -5388,8 +6096,10 @@ export class SopnewComponent {
   }
 
   toggleEsiApplicable(): void {
+
     if (this.Answer26.PremiumTrackerId !== '1365') return;
     this.isEsiApplicable = !this.isEsiApplicable;
+    console.log('isEsiApplicable', this.isEsiApplicable);
   }
 
   toggleTillServiceTerminate(): void {
@@ -5400,7 +6110,6 @@ export class SopnewComponent {
   Addvalues26() {
     this.isSubmitted26 = true;
 
-    console.log('CoverageTypeId:', this.Answer26.CoverageTypeId);
 
     if (this.Answer26.CompanyId == "0" || this.Answer26.PremiumTrackerId == "0" ||
       this.Answer26.PayCodeId == "0" || this.Answer26.BillingPayCodeId == "0" ||
@@ -5434,8 +6143,6 @@ export class SopnewComponent {
       Insurance_Vertical_ID: String(this.Answer26.Insurance_Vertical_ID)
     };
 
-
-
     this._authService.InsuranceExists(payload).subscribe({
       next: res => {
         if (res.Data.response == "Success") {
@@ -5463,8 +6170,8 @@ export class SopnewComponent {
             EffectiveDate: String(this.Answer26.EffectiveDate),
             Remarks: String(this.Answer26.Remarks),
             MaritalStatus: String(this.Answer26.MaritalStatus),
-            Is_ESIApplicable: String(this.Answer26.Is_ESIApplicable),
-            Is_ESINonApplicable: String(this.Answer26.Is_ESINonApplicable),
+            Is_ESIApplicable: String(this.isEsiApplicable),
+            Is_ESINonApplicable: String(this.isEsiNonApplicable),
             EmployeeTypeId: String(this.Answer26.EmployeeTypeId),
             Insurance_Vertical_ID: String(this.Answer26.Insurance_Vertical_ID),
             NewJoineeArrearId: String(this.Answer26.NewJoineeArrearId),
@@ -5745,8 +6452,8 @@ export class SopnewComponent {
     });
   }
 
-  GetSOPAnswer34(Questionid, Createdby) {
-    this._authService.GetSOPAnswer34(Questionid, Createdby).subscribe({
+  GetSOPAnswer34(Questionid, CompanyId, Createdby) {
+    this._authService.GetSOPAnswer34(Questionid, CompanyId, Createdby).subscribe({
       next: res => {
 
         if (res.Data.length > 0) {
@@ -5831,6 +6538,11 @@ export class SopnewComponent {
 
   onSubmitQuestion34() {
     this.isSubmitted34 = true;
+
+    if (this.answer34GridData.length == 0) {
+      return;
+    }
+
     this.Marked_Answerd(34);
     this.goToNextQuestion();
   }
@@ -5839,10 +6551,13 @@ export class SopnewComponent {
     this.isSubmitted34 = true;
     var payloadcreate;
 
+
+
     payloadcreate = {
       sr_no: String(34),
       SOPId: String(34),
       QuestionId: String(34),
+      Company_Id: String(this.selectedCompany1),
       State_Id: String(this.Answer34.State_Id ?? ''),
       State_Name: String(this.Answer34.State_Name ?? ''),
       Certificate_Type: String(this.Answer34.Certificate_Type ?? ''),
@@ -5859,9 +6574,9 @@ export class SopnewComponent {
       Client_Invoice_State: String(this.Answer34.Client_Invoice_State ?? ''),
       Quess_Invoice_State: String(this.Answer34.Quess_Invoice_State ?? ''),
       SEZ_Certificate_path: String(34),
-      LUT_No: String(this.Answer34.LUT_No ?? ''),
-      LUT_From_Date: String(this.Answer34.LUT_From_Date ?? ''),
-      LUT_End_Date: String(this.Answer34.LUT_End_Date ?? ''),
+      LUT_No: this.Answer34.LUT_No?.trim() ? String(this.Answer34.LUT_No) : "34",
+      LUT_From_Date: this.Answer34.LUT_From_Date?.trim() ? String(this.Answer34.LUT_From_Date) : "1900-01-01",
+      LUT_End_Date: this.Answer34.LUT_End_Date?.trim() ? String(this.Answer34.LUT_End_Date) : "1900-01-01",
       LUT_Certificate_Path: String(34),
       SUB_Code: String(this.Answer34.SUB_Code ?? ''),
       CreatedBy: String(this.employeeId)
@@ -5878,21 +6593,30 @@ export class SopnewComponent {
       }
     });
 
+    if (this.fileGST instanceof File && this.fileGST.size > 0) {
+      formData.append('fileGST', this.fileGST);
+    }
 
-    if (this.fileGST) formData.append('fileGST', this.fileGST);
-    if (this.fileSEZ) formData.append('fileSEZ', this.fileSEZ);
-    if (this.fileLUT) formData.append('fileLUT', this.fileLUT);
+    if (this.fileSEZ instanceof File && this.fileSEZ.size > 0) {
+      formData.append('fileSEZ', this.fileSEZ);
+    }
+
+    if (this.fileLUT instanceof File && this.fileLUT.size > 0) {
+      formData.append('fileLUT', this.fileLUT);
+    }
 
 
 
     this._authService.PostSOPAnswer34(formData).subscribe({
       next: res => {
-        this.GetSOPAnswer34(String(34), this.employeeId);
+        this.GetSOPAnswer34(String(34), this.selectedCompany1, this.employeeId);
         this.clearAnswer34();
       },
       error: err => console.error('❌ Error saving Q34', err)
     });
   }
+
+
 
   clearAnswer34() {
 
@@ -5985,6 +6709,7 @@ export class SopnewComponent {
 
     payloadcreate = {
       SOPId: String(40),
+      Company_Id: String(this.selectedCompany1),
       QuestionId: String(40),
       VendorCode: String(this.Answer40.VendorCode),
       VendorName: String(this.Answer40.VendorName),
@@ -6008,7 +6733,7 @@ export class SopnewComponent {
 
     this._authService.PostSOPAnswer40(payloadcreate).subscribe({
       next: res => {
-        this.GetSOPAnswer40(String(40), this.employeeId);
+        this.GetSOPAnswer40(String(40), this.selectedCompany1, this.employeeId);
 
         this.Answer40.VendorCode = '';
         this.Answer40.VendorName = '';
@@ -6038,8 +6763,8 @@ export class SopnewComponent {
 
   }
 
-  GetSOPAnswer40(Questionid, Createdby) {
-    this._authService.GetSOPAnswer40(Questionid, Createdby).subscribe({
+  GetSOPAnswer40(Questionid, CompanyId, Createdby) {
+    this._authService.GetSOPAnswer40(Questionid, CompanyId, Createdby).subscribe({
       next: res => {
 
         if (res.Data.length > 0) {
@@ -6082,7 +6807,7 @@ export class SopnewComponent {
   }
 
   GetSOPAnswer41_1(questionId: string, createdBy: string) {
-    this._authService.GetSOPAnswer4(questionId, createdBy).subscribe({
+    this._authService.GetSOPAnswer4(questionId, this.selectedCompany1, createdBy).subscribe({
       next: res => {
         const data = res.Data;
 
@@ -6101,7 +6826,7 @@ export class SopnewComponent {
     this.isSubmitted41 = true;
     var payloadcreate;
 
-    if (this.Answer41.CompanyCode == "-Select-" || this.Answer41.MasterChecklist == '' ||
+    if (this.Answer41.MasterChecklist == '' ||
       this.Answer41.SpocDetails == '' || this.Answer41.CompletionActivity == ''
     ) {
       return;
@@ -6110,7 +6835,7 @@ export class SopnewComponent {
     payloadcreate = {
       SOPId: String(41),
       QuestionId: String(41),
-      CompanyCode: String(this.Answer41.CompanyCode),
+      Company_Id: String(this.selectedCompany1),
       MasterChecklist: String(this.Answer41.MasterChecklist),
       SpocDetails: String(this.Answer41.SpocDetails),
       CompletionActivity: String(this.Answer41.CompletionActivity),
@@ -6121,7 +6846,7 @@ export class SopnewComponent {
 
     this._authService.PostSOPAnswer41(payloadcreate).subscribe({
       next: res => {
-        this.GetSOPAnswer41(String(41), this.employeeId);
+        this.GetSOPAnswer41(String(41), this.selectedCompany1, this.employeeId);
 
         this.Answer41.CompanyCode = '';
         this.Answer41.MasterChecklist = '';
@@ -6135,11 +6860,42 @@ export class SopnewComponent {
 
   }
 
-  GetSOPAnswer41(Questionid, Createdby) {
-    this._authService.GetSOPAnswer41(Questionid, Createdby).subscribe({
+  GetSOPAnswer41(Questionid, CompanyId, Createdby) {
+    this._authService.GetSOPAnswer41(Questionid, CompanyId, Createdby).subscribe({
       next: res => {
         if (res.Data.length > 0) {
-          this.answer41GridData = res.Data || [];
+
+          this.Answer41.SpocDetails = res.Data[0].spocDetails;
+
+          var completionActivity_date;
+          const rawDate = res.Data[0].completionActivity;
+
+          if (rawDate && rawDate.trim() !== '') {
+            const parts = rawDate.split('-'); // because format is "dd-MM-yyyy"
+            if (parts.length === 3) {
+              completionActivity_date = `${parts[2]}-${parts[1]}-${parts[0]}`; // yyyy-MM-dd
+            }
+          }
+
+          this.Answer41.CompletionActivity = completionActivity_date;
+
+          if (res.Data[0].masterChecklist) {
+
+            this.Answer41.MasterChecklist = res.Data[0].masterChecklist;
+
+            const selectedItems = res.Data[0].masterChecklist
+              .split(',')
+              .map(x => x.trim());
+
+            this.options41_1.forEach(item => {
+              item.checked = selectedItems.includes(item.label);
+            });
+          } else {
+            this.Answer41.MasterChecklist = '';
+            this.options41_1.forEach(item => {
+              item.checked = false;
+            });
+          }
         }
       },
       error: err => {
@@ -6150,13 +6906,37 @@ export class SopnewComponent {
 
   onSubmitQuestion41() {
     this.isSubmitted41 = true;
+    var payloadcreate;
 
-    if (this.answer41GridData.length == 0) {
+    if (this.Answer41.MasterChecklist == '' ||
+      this.Answer41.SpocDetails == '' || this.Answer41.CompletionActivity == ''
+    ) {
       return;
     }
 
-    this.Marked_Answerd(41);
-    this.goToNextQuestion();
+    payloadcreate = {
+      SOPId: String(41),
+      QuestionId: String(41),
+      Company_Id: String(this.selectedCompany1),
+      MasterChecklist: String(this.Answer41.MasterChecklist),
+      SpocDetails: String(this.Answer41.SpocDetails),
+      CompletionActivity: String(this.Answer41.CompletionActivity),
+      CreatedBy: String(this.employeeId)
+    };
+
+
+
+    this._authService.PostSOPAnswer41(payloadcreate).subscribe({
+      next: res => {
+
+        this.Marked_Answerd(41);
+        this.goToNextQuestion();
+
+        this.isSubmitted41 = false;
+      },
+      error: err => console.error('❌ Error saving Q26', err)
+    });
+
   }
 
   onstate42_1(event: Event): void {
@@ -6197,6 +6977,7 @@ export class SopnewComponent {
 
     payloadcreate = {
       SOPId: String(42),
+      Company_Id: String(this.selectedCompany1),
       QuestionId: String(42),
       Category: String(this.Answer42_2.Category),
       StateId: String(this.Answer42_2.StateId),
@@ -6207,7 +6988,7 @@ export class SopnewComponent {
 
     this._authService.PostSOPAnswerMinimumwages42(payloadcreate).subscribe({
       next: res => {
-        this.GetSOPAnswerMinimumwages42(String(42), this.employeeId);
+        this.GetSOPAnswerMinimumwages42(String(42), this.selectedCompany1, this.employeeId);
         this.isSubmitted42_1 = false;
         this.isduplicate42_1 = false;
         this.selectedstate42_1 = '';
@@ -6222,8 +7003,8 @@ export class SopnewComponent {
     });
   }
 
-  GetSOPAnswerMinimumwages42(Questionid, Createdby) {
-    this._authService.GetSOPAnswerMinimumwages42(Questionid, Createdby).subscribe({
+  GetSOPAnswerMinimumwages42(Questionid, CompanyId, Createdby) {
+    this._authService.GetSOPAnswerMinimumwages42(Questionid, CompanyId, Createdby).subscribe({
       next: res => {
         if (res.Data.length > 0) {
           this.answer42_2GridData = res.Data || [];
@@ -6270,10 +7051,6 @@ export class SopnewComponent {
     this.isSubmitted42_2 = true;
     var payloadcreate;
 
-    if (this.Answer42_3.CompanyId === '0' || this.Answer42_3.CompanyId === '') {
-      return;
-    }
-
     if (this.Answer42_3.Designationid === '0' || this.Answer42_3.Designationid === '') {
       return;
     }
@@ -6284,7 +7061,6 @@ export class SopnewComponent {
 
     const isDuplicate = this.answer42_3GridData.some(
       item =>
-        item.company_Code === this.Answer42_3.Company_Code &&
         item.designationName === this.Answer42_3.DesignationName
     );
 
@@ -6296,7 +7072,7 @@ export class SopnewComponent {
     payloadcreate = {
       SOPId: String(42),
       QuestionId: String(42),
-      CompanyId: String(this.Answer42_3.CompanyId),
+      CompanyId: String(this.selectedCompany1),
       Company_Code: '',
       Designationid: String(this.Answer42_3.Designationid),
       DesignationName: String(this.Answer42_3.DesignationName),
@@ -6307,7 +7083,7 @@ export class SopnewComponent {
 
     this._authService.PostSOPAnswerDesignation42(payloadcreate).subscribe({
       next: res => {
-        this.GetSOPAnswerDesignation42(String(42), this.employeeId);
+        this.GetSOPAnswerDesignation42(String(42), this.selectedCompany1, this.employeeId);
         this.isSubmitted42_2 = false;
         this.isduplicate42_2 = false;
         this.selectedCompany42 = '';
@@ -6323,8 +7099,8 @@ export class SopnewComponent {
     });
   }
 
-  GetSOPAnswerDesignation42(Questionid, Createdby) {
-    this._authService.GetSOPAnswerDesignation42(Questionid, Createdby).subscribe({
+  GetSOPAnswerDesignation42(Questionid, CompanyId, Createdby) {
+    this._authService.GetSOPAnswerDesignation42(Questionid, CompanyId, Createdby).subscribe({
       next: res => {
         if (res.Data.length > 0) {
           this.answer42_3GridData = res.Data || [];
@@ -6382,6 +7158,7 @@ export class SopnewComponent {
 
     payloadcreate = {
       SOPId: String(42),
+      Company_Id: String(this.selectedCompany1),
       QuestionId: String(42),
       StateId: String(this.Answer42_4.StateId),
       StateName: String(this.Answer42_4.StateName),
@@ -6393,7 +7170,7 @@ export class SopnewComponent {
 
     this._authService.PostSOPAnswerCLRA42(payloadcreate).subscribe({
       next: res => {
-        this.GetSOPAnswerCLRA42(String(42), this.employeeId);
+        this.GetSOPAnswerCLRA42(String(42), this.selectedCompany1, this.employeeId);
 
         this.isSubmitted42_3 = false;
         this.selectedstate42_3 = '';
@@ -6409,8 +7186,8 @@ export class SopnewComponent {
     });
   }
 
-  GetSOPAnswerCLRA42(Questionid, Createdby) {
-    this._authService.GetSOPAnswerCLRA42(Questionid, Createdby).subscribe({
+  GetSOPAnswerCLRA42(Questionid, CompanyId, Createdby) {
+    this._authService.GetSOPAnswerCLRA42(Questionid, CompanyId, Createdby).subscribe({
       next: res => {
         if (res.Data.length > 0) {
           this.answer42_4GridData = res.Data || [];
@@ -6432,6 +7209,7 @@ export class SopnewComponent {
 
     payloadcreate = {
       SOPId: String(42),
+      Company_Id: String(this.selectedCompany1),
       QuestionId: String(42),
       IndustryType: String(this.Answer42_1.IndustryType),
       CreatedBy: String(this.employeeId)
@@ -6439,7 +7217,7 @@ export class SopnewComponent {
 
     this._authService.PostSOPAnswerCompliance42(payloadcreate).subscribe({
       next: res => {
-        this.GetSOPAnswerCompliance42(String(42), this.employeeId);
+        this.GetSOPAnswerCompliance42(String(42), this.selectedCompany1, this.employeeId);
 
         this.Answer42_1.IndustryType = '';
 
@@ -6453,8 +7231,8 @@ export class SopnewComponent {
 
   }
 
-  GetSOPAnswerCompliance42(Questionid, Createdby) {
-    this._authService.GetSOPAnswerCompliance42(Questionid, Createdby).subscribe({
+  GetSOPAnswerCompliance42(Questionid, CompanyId, Createdby) {
+    this._authService.GetSOPAnswerCompliance42(Questionid, CompanyId, Createdby).subscribe({
       next: res => {
         if (res.Data.length > 0) {
           this.Answer42_1.IndustryType = res.Data[0].industryType;
@@ -6469,7 +7247,7 @@ export class SopnewComponent {
   DeleteSOPAnswer31() {
     this._authService.DeleteSOPAnswer31(String(31), this.employeeId).subscribe({
       next: res => {
-        this.GetSOPAnswer31(String(31), this.employeeId);
+        this.GetSOPAnswer31(String(31), this.selectedCompany1, this.employeeId);
       },
       error: err => {
         console.error('Error loading questions', err);
@@ -6477,8 +7255,24 @@ export class SopnewComponent {
     });
   }
 
+  // ViewReimbursmentPolicy() {
+  //   window.open(this.Answer31.FilePath, '_blank');
+  // }
+
   ViewReimbursmentPolicy() {
-    window.open(this.Answer31.FilePath, '_blank');
+
+    const fileUrl = this.Answer31.FilePath;
+    const a = document.createElement('a');
+    a.href = fileUrl;
+    a.download = ''; // Optional - will use the filename from the URL
+    a.target = '_blank'; // Optional - opens in new tab if needed
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  }
+
+  getFileNameFromPath(path: string): string {
+    return path.split('/').pop() || 'downloaded-file';
   }
 
   onCompanyChange7(event: Event): void {
@@ -6489,12 +7283,28 @@ export class SopnewComponent {
     this.GetFirstMonthPayroll(this.Answer7.CompanyId);
   }
 
+
+  onCompanyChange1(event: Event): void {
+    const selectElement = event.target as HTMLSelectElement;
+    const selectedId = selectElement.value;
+    const selectedName = selectElement.options[selectElement.selectedIndex].text;
+    this.Answer1.Company_Id = selectedId;
+    this.Answer1.Company_Code = selectedName;
+    this.GetFirstMonthPayroll(this.Answer1.Company_Id);
+    this.GetDesignationbyCompany(this.Answer1.Company_Id);
+    this.onCategoryClick(this.categorylist[0]);
+  }
+
   GetFirstMonthPayroll(company_Id: any) {
     this._authService.GetFirstMonthPayroll(company_Id).subscribe({
       next: res => {
-        this.fbdetails = res.Data;
-        this.Answer7.first_month_Payroll = this.fbdetails.fpMonth;
 
+        this.Answer1.Company_Name = res.Data[0].company_Name;
+        this.Answer1.SAP_Code = res.Data[0].saP_Code;
+        this.Answer1.MyContract_Reference_ID = res.Data[0].myContract_Reference_ID;
+        this.Answer1.Client_Website_link = res.Data[0].client_Website_link;
+        this.Answer1.First_Month_Payroll = res.Data[0].first_Month_Payroll;
+        this.Answer1.Client_Onboarding_Month = res.Data[0].client_Onboarding_Month;
       },
       error: err => {
         console.error('Error loading questions', err);

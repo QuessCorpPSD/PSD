@@ -1,0 +1,60 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="d-flex justify-content-between align-items-center  p-2">
+            <span></span>
+            <!-- <button class="btn btn-danger btn-sm" (click)="isModalVisible = true">Add</button> -->
+            <app-break-add class="me-2" (updated)="onChildUpdated()" [isOpen]="isModalVisible" (close)="isModalVisible = false"
+                [title]="'My Modal Title'"> </app-break-add>
+        </div>
+    </div>
+
+<div class="row">
+<table mat-table [dataSource]="dataSource" class="mat-elevation-z8 custom-mat-table">
+
+    <!-- ID Column -->
+    <ng-container matColumnDef="breakId">
+        <th mat-header-cell *matHeaderCellDef> ID </th>
+        <td mat-cell *matCellDef="let element"> {{element.breakId}} </td>
+    </ng-container>
+
+    <!-- Name Column -->
+    <ng-container matColumnDef="description">
+        <th mat-header-cell *matHeaderCellDef> Name </th>
+        <td mat-cell *matCellDef="let element"> {{element.description}} </td>
+    </ng-container>
+
+    <!-- Start Time Column -->
+    <ng-container matColumnDef="totalTime">
+        <th mat-header-cell *matHeaderCellDef> Total Minutes </th>
+        <td mat-cell *matCellDef="let element">
+            {{element.totalMinutes}}
+           
+        </td>
+    </ng-container>
+
+
+    <!-- End Time Column -->
+    <ng-container matColumnDef="endTime">
+        <th mat-header-cell *matHeaderCellDef> End Time </th>
+        <td mat-cell *matCellDef="let element">
+             {{element.endTime}}
+         
+        </td>
+    </ng-container>
+       <!-- End Time Column -->
+    <ng-container matColumnDef="isActive">
+        <th mat-header-cell *matHeaderCellDef> Active </th>
+        <td mat-cell *matCellDef="let element">
+             {{element.isActive}}
+          
+        </td>
+    </ng-container>
+
+    <!-- Header and Row Declarations -->
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>
+</div>
+
+</div>
+

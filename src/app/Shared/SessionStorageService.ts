@@ -19,11 +19,15 @@ export class SessionStorageService{
     return this.isBrowser ? localStorage.getItem(key) : null;
   }
 
-  removeItem(key: string): void {
-    if (this.isBrowser) {
-        localStorage.removeItem(key);
-    }
+removeItem(key: string): void {
+  if (!this.isBrowser) return;
+
+  try {
+    localStorage.removeItem(key);
+  } catch (e) {
+    console.error(`Failed to remove item "${key}" from localStorage`, e);
   }
+}
 
   clear(): void {
     if (this.isBrowser) {

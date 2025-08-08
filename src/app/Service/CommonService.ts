@@ -15,8 +15,12 @@ export class CommonService implements ICommonService {
       UserCreate(login):Observable<APIResponse>{
     var inputval=JSON.stringify(login);
    
-    const config = new HttpHeaders().set('Content-Type', 'application/json')
-    .set('Accept', 'application/json')
+      const config = new HttpHeaders({
+            'Cache-Control': 'no-cache, no-store, must-revalidate',
+            'Pragma': 'no-cache',
+            'Expires': '0'
+        }).set('Content-Type', 'application/json')
+            .set('Accept', 'application/json')
     return this.http.post<APIResponse>(this.environment.apiUrl+"Authendicate/UserCreate",inputval, { headers: config }).pipe(
       map(userInfo=> {
         let data=userInfo.Data;       
@@ -25,38 +29,163 @@ export class CommonService implements ICommonService {
       }));
   }
     GetProcessCategory(): Observable<APIResponse> {
-        return this.http.get<APIResponse>(this.environment.apiUrl + "Common/GetAllProcessCategory")
+        const headers  = new HttpHeaders({
+            'Cache-Control': 'no-cache, no-store, must-revalidate',
+            'Pragma': 'no-cache',
+            'Expires': '0'
+        }).set('Content-Type', 'application/json')
+            .set('Accept', 'application/json');
+
+            const config = { headers };
+        return this.http.get<APIResponse>(this.environment.apiUrl + "Common/GetAllProcessCategory",config);
     }
     GetReporting(): Observable<APIResponse> {
-        return this.http.get<APIResponse>(this.environment.apiUrl + "Authendicate/GetReporting")
+         const headers  = new HttpHeaders({
+            'Cache-Control': 'no-cache, no-store, must-revalidate',
+            'Pragma': 'no-cache',
+            'Expires': '0'
+        }).set('Content-Type', 'application/json')
+            .set('Accept', 'application/json');
+
+            const config = { headers };
+        return this.http.get<APIResponse>(this.environment.apiUrl + "Authendicate/GetReporting",config)
     }
     GetTeamLeader(): Observable<APIResponse> {
-        return this.http.get<APIResponse>(this.environment.apiUrl + "Authendicate/GetAllTeamLead")
+          const headers  = new HttpHeaders({
+            'Cache-Control': 'no-cache, no-store, must-revalidate',
+            'Pragma': 'no-cache',
+            'Expires': '0'
+        }).set('Content-Type', 'application/json')
+            .set('Accept', 'application/json');
+
+            const config = { headers };
+        return this.http.get<APIResponse>(this.environment.apiUrl + "Authendicate/GetAllTeamLead",config)
     }
     GetMangers(): Observable<APIResponse> {
-        return this.http.get<APIResponse>(this.environment.apiUrl + "Authendicate/GetAllManager")
+        const headers  = new HttpHeaders({
+            'Cache-Control': 'no-cache, no-store, must-revalidate',
+            'Pragma': 'no-cache',
+            'Expires': '0'
+        }).set('Content-Type', 'application/json')
+            .set('Accept', 'application/json');
+
+            const config = { headers };
+        return this.http.get<APIResponse>(this.environment.apiUrl + "Authendicate/GetAllManager",config)
     }
     GetFun_Head(): Observable<APIResponse> {
-        return this.http.get<APIResponse>(this.environment.apiUrl + "Authendicate/GetAllFunctionalityHead")
+         const headers  = new HttpHeaders({
+            'Cache-Control': 'no-cache, no-store, must-revalidate',
+            'Pragma': 'no-cache',
+            'Expires': '0'
+        }).set('Content-Type', 'application/json')
+            .set('Accept', 'application/json');
+
+            const config = { headers };
+        return this.http.get<APIResponse>(this.environment.apiUrl + "Authendicate/GetAllFunctionalityHead",config)
     }
     GetRoles(): Observable<APIResponse> {
-        return this.http.get<APIResponse>(this.environment.apiUrl + "Common/GetAllActiveRole")
+         const headers  = new HttpHeaders({
+            'Cache-Control': 'no-cache, no-store, must-revalidate',
+            'Pragma': 'no-cache',
+            'Expires': '0'
+        }).set('Content-Type', 'application/json')
+            .set('Accept', 'application/json');
+
+            const config = { headers };
+        return this.http.get<APIResponse>(this.environment.apiUrl + "Common/GetAllActiveRole",config)
     }
     GetAccessType(): Observable<APIResponse> {
-        return this.http.get<APIResponse>(this.environment.apiUrl + "Common/GetAccessType")
+          const headers  = new HttpHeaders({
+            'Cache-Control': 'no-cache, no-store, must-revalidate',
+            'Pragma': 'no-cache',
+            'Expires': '0'
+        }).set('Content-Type', 'application/json')
+            .set('Accept', 'application/json');
+
+            const config = { headers };
+        return this.http.get<APIResponse>(this.environment.apiUrl + "Common/GetAccessType",config)
     }
     GetFinancialYears(): Observable<APIResponse> {
-        return this.http.get<APIResponse>(this.environment.apiUrl + "Common/GetFinancialYear")
+          const headers  = new HttpHeaders({
+            'Cache-Control': 'no-cache, no-store, must-revalidate',
+            'Pragma': 'no-cache',
+            'Expires': '0'
+        }).set('Content-Type', 'application/json')
+            .set('Accept', 'application/json');
+
+            const config = { headers };
+        return this.http.get<APIResponse>(this.environment.apiUrl + "Common/GetFinancialYear",config)
     }
     GetUserById(userId):Observable<APIResponse>
     {
-        return this.http.get<APIResponse>(this.environment.apiUrl + "Authendicate/GetUserById/"+userId)
+        const headers  = new HttpHeaders({
+            'Cache-Control': 'no-cache, no-store, must-revalidate',
+            'Pragma': 'no-cache',
+            'Expires': '0'
+        }).set('Content-Type', 'application/json')
+            .set('Accept', 'application/json');
+
+            const config = { headers };
+        return this.http.get<APIResponse>(this.environment.apiUrl + "Authendicate/GetUserById/"+userId,config)
     }
      GetUserByEmployeeId(employeeID):Observable<APIResponse>
      {
-        return this.http.get<APIResponse>(this.environment.apiUrl + "Authendicate/UserByEmployeeId/"+employeeID)
+        const headers  = new HttpHeaders({
+            'Cache-Control': 'no-cache, no-store, must-revalidate',
+            'Pragma': 'no-cache',
+            'Expires': '0'
+        }).set('Content-Type', 'application/json')
+            .set('Accept', 'application/json');
+
+            const config = { headers };
+        return this.http.get<APIResponse>(this.environment.apiUrl + "Authendicate/UserByEmployeeId/"+employeeID,config)
      }
      GetAllUser():Observable<APIResponse>{
-        return this.http.get<APIResponse>(this.environment.apiUrl + "Authendicate/GetAllActiveUsers")
+           const headers  = new HttpHeaders({
+            'Cache-Control': 'no-cache, no-store, must-revalidate',
+            'Pragma': 'no-cache',
+            'Expires': '0'
+        }).set('Content-Type', 'application/json')
+            .set('Accept', 'application/json');
+
+            const config = { headers };
+        return this.http.get<APIResponse>(this.environment.apiUrl + "Authendicate/GetAllActiveUsers",config)
+     }
+     AddBreakDetail(val):Observable<APIResponse>
+     {
+          const headers  = new HttpHeaders({
+            'Cache-Control': 'no-cache, no-store, must-revalidate',
+            'Pragma': 'no-cache',
+            'Expires': '0'
+        }).set('Content-Type', 'application/json')
+            .set('Accept', 'application/json');
+
+            const config = { headers };
+            
+        return this.http.post<APIResponse>(this.environment.apiUrl + "Admin/AddBreakDetail",JSON.stringify(val),config)
+     }
+     GetBreakDetail():Observable<APIResponse>
+     {
+         const headers  = new HttpHeaders({
+            'Cache-Control': 'no-cache, no-store, must-revalidate',
+            'Pragma': 'no-cache',
+            'Expires': '0'
+        }).set('Content-Type', 'application/json')
+            .set('Accept', 'application/json');
+
+            const config = { headers };
+        return this.http.get<APIResponse>(this.environment.apiUrl + "Admin/GetAllBreakDetail",config)
+     }
+     GetEmployeeBreakByDate(userId,date):Observable<APIResponse>
+     {
+        const headers  = new HttpHeaders({
+            'Cache-Control': 'no-cache, no-store, must-revalidate',
+            'Pragma': 'no-cache',
+            'Expires': '0'
+        }).set('Content-Type', 'application/json')
+            .set('Accept', 'application/json');
+
+            const config = { headers };
+        return this.http.get<APIResponse>(this.environment.apiUrl + "Admin/GetAllBreakDetail",config)
      }
 }
