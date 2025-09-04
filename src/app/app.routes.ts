@@ -29,7 +29,7 @@ export const routes: Routes = [
             { path: 'Severity', component: SeverityComponent },
             { path: 'AllottedLot', component: AllotedLotComponent },
             { path: 'Break', component: BreakdetailComponent },
-            { path: 'Employee', component: BreakComponent },
+            // { path: 'Employee', component: BreakComponent },
              { path: 'SOP', component: SopnewComponent },
             { path: 'user', component: UserMappingComponent },
             { path: 'dashboard', component: DashboardComponent },

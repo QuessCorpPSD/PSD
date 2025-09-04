@@ -1,7 +1,7 @@
 <div class="container-fluid">
     <div class="row">
         <div class="d-flex justify-content-between align-items-center  p-2">
-            <span></span>
+            <span>Global Break Time</span>
             <!-- <button class="btn btn-danger btn-sm" (click)="isModalVisible = true">Add</button> -->
             <app-break-add class="me-2" (updated)="onChildUpdated()" [isOpen]="isModalVisible" (close)="isModalVisible = false"
                 [title]="'My Modal Title'"> </app-break-add>
@@ -9,12 +9,17 @@
     </div>
 
 <div class="row">
-<table mat-table [dataSource]="dataSource" class="mat-elevation-z8 custom-mat-table">
+<table mat-table [dataSource]="dataSource" class=" custom-mat-table">
 
     <!-- ID Column -->
     <ng-container matColumnDef="breakId">
         <th mat-header-cell *matHeaderCellDef> ID </th>
         <td mat-cell *matCellDef="let element"> {{element.breakId}} </td>
+    </ng-container>
+
+     <ng-container matColumnDef="processCategory">
+        <th mat-header-cell *matHeaderCellDef> Process Category </th>
+        <td mat-cell *matCellDef="let element"> {{element.processCategory}} </td>
     </ng-container>
 
     <!-- Name Column -->
@@ -24,20 +29,21 @@
     </ng-container>
 
     <!-- Start Time Column -->
-    <ng-container matColumnDef="totalTime">
-        <th mat-header-cell *matHeaderCellDef> Total Minutes </th>
+    <ng-container matColumnDef="starttime">
+        <th mat-header-cell *matHeaderCellDef> Start Time </th>
         <td mat-cell *matCellDef="let element">
-            {{element.totalMinutes}}
+            {{element.starttime}}
            
         </td>
     </ng-container>
 
 
+
     <!-- End Time Column -->
-    <ng-container matColumnDef="endTime">
+    <ng-container matColumnDef="endtime">
         <th mat-header-cell *matHeaderCellDef> End Time </th>
         <td mat-cell *matCellDef="let element">
-             {{element.endTime}}
+             {{element.endtime}}
          
         </td>
     </ng-container>
@@ -58,3 +64,6 @@
 
 </div>
 
+<br>
+<br>
+<br>

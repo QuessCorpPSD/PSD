@@ -1,0 +1,10 @@
+.table-container {
+  max-height: 400px;   /* adjust height as needed */
+  overflow-y: auto;
+  display: block;
+}
+.btn-container {
+  display: flex;
+  justify-content: center; /* horizontal center */
+  align-items: center;     /* vertical center if container has height */
+}

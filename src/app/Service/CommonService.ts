@@ -178,14 +178,56 @@ export class CommonService implements ICommonService {
      }
      GetEmployeeBreakByDate(userId,date):Observable<APIResponse>
      {
-        const headers  = new HttpHeaders({
+         const headers  = new HttpHeaders({
             'Cache-Control': 'no-cache, no-store, must-revalidate',
             'Pragma': 'no-cache',
             'Expires': '0'
         }).set('Content-Type', 'application/json')
             .set('Accept', 'application/json');
 
-            const config = { headers };
-        return this.http.get<APIResponse>(this.environment.apiUrl + "Admin/GetAllBreakDetail",config)
+    
+            const val={
+                "userId":userId,
+                "date":date
+            }
+            const url = `${this.environment.apiUrl}Admin/GetEmployeeBreak`;
+             const config = new HttpHeaders().set('Content-Type', 'application/json')
+            .set('Accept', 'application/json')
+        return this.http.post<APIResponse>(url, JSON.stringify(val), { headers });
+        //return this.http.post<APIResponse>(this.environment.apiUrl + "Admin/GetEmployeeBreak/"+userId+"/"+date,config)
+     }
+       AddEmployeeBreak(val):Observable<APIResponse>
+     {
+         const headers  = new HttpHeaders({
+            'Cache-Control': 'no-cache, no-store, must-revalidate',
+            'Pragma': 'no-cache',
+            'Expires': '0'
+        }).set('Content-Type', 'application/json')
+            .set('Accept', 'application/json');
+
+    
+            
+            const url = `${this.environment.apiUrl}Admin/EmployeeBreakAdd`;
+             const config = new HttpHeaders().set('Content-Type', 'application/json')
+            .set('Accept', 'application/json')
+        return this.http.post<APIResponse>(url, JSON.stringify(val), { headers });
+        //return this.http.post<APIResponse>(this.environment.apiUrl + "Admin/GetEmployeeBreak/"+userId+"/"+date,config)
+     }
+     AddBulkEmployeeBreak(val):Observable<APIResponse>
+     {
+         const headers  = new HttpHeaders({
+            'Cache-Control': 'no-cache, no-store, must-revalidate',
+            'Pragma': 'no-cache',
+            'Expires': '0'
+        }).set('Content-Type', 'application/json')
+            .set('Accept', 'application/json');
+
+    
+            
+            const url = `${this.environment.apiUrl}Admin/BulkEmployeeBreakAdd`;
+             const config = new HttpHeaders().set('Content-Type', 'application/json')
+            .set('Accept', 'application/json')
+        return this.http.post<APIResponse>(url, JSON.stringify(val), { headers });
+        //return this.http.post<APIResponse>(this.environment.apiUrl + "Admin/GetEmployeeBreak/"+userId+"/"+date,config)
      }
 }

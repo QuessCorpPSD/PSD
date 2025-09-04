@@ -12,6 +12,8 @@ import { EncryptionService } from '../../Shared/encryption.service';
 import { SessionStorageService } from '../../Shared/SessionStorageService';
 import { TokenService } from '../../Shared/TokenService';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { BreakdetailsComponent } from './breakdetails/breakdetails.component';
+import { MatDialog } from '@angular/material/dialog';
 
 
 
@@ -20,7 +22,7 @@ const auth= InjectionToken<IAuthServiceService>;
 @Component({
   selector: 'app-loginmaster',
   standalone: true,
-  imports: [FormsModule,CommonModule,RouterLink ],
+  imports: [FormsModule,CommonModule,RouterLink,BreakdetailsComponent ],
   templateUrl: './loginmaster.component.html',
   styleUrl: './loginmaster.component.css',
   encapsulation: ViewEncapsulation.None ,
@@ -50,7 +52,8 @@ username:string = ''
   private _encry:EncryptionService,
   private sessionStorageService: SessionStorageService,
   private tokenservice:TokenService ,
-  private http:HttpClient  
+  private http:HttpClient  ,
+  private dialog: MatDialog
   ) {
    
     }
@@ -76,26 +79,38 @@ username:string = ''
  if (!this.router.navigated) {
     location.reload(); // Only if you need hard reload
   }
-   const APIURL:string = 'http://localhost:7000';
+   $.ajax({
+      url: 'http://localhost:7000',
+      type: 'GET',
+      cache: false,
+      success: (response) => {
+        this.computername = response;
+        console.log("Computer Name:", response);
+      },
+      error: (xhr, status, error) => {
+        console.error('Error fetching data:', error);
+      }
+    });
+//    const APIURL:string = 'http://localhost:7000';
 
-   const config = {
-  headers: new HttpHeaders({
-    'Cache-Control': 'no-cache, no-store, must-revalidate',
-    'Pragma': 'no-cache',
-    'Expires': '0'
-  }),
-  responseType: 'text' as const  // 👈 ensures type safety
-};
-   this.http.get(APIURL, config)
-  .subscribe({
-    next: (response: string) => {
-      this.computername = response;
-       console.log("Computer Name: " + this.computername);
-    },
-    error: (error) => {
-      console.error('Error fetching data', error);
-    }
-  });
+//    const config = {
+//   headers: new HttpHeaders({
+//     'Cache-Control': 'no-cache, no-store, must-revalidate',
+//     'Pragma': 'no-cache',
+//     'Expires': '0'
+//   }),
+//   responseType: 'text' as const  // 👈 ensures type safety
+// };
+//    this.http.get(APIURL, config)
+//   .subscribe({
+//     next: (response: string) => {
+//       this.computername = response;
+//        console.log("Computer Name: " + this.computername);
+//     },
+//     error: (error) => {
+//       console.error('Error fetching data', error);
+//     }
+//   });
     //console.log(this.deviceInfo);
   }
  
@@ -110,7 +125,7 @@ username:string = ''
     });
   }
    roleIdGroups: Record<Role, number[]> = {
-  [Role.Admin]: [1,12, 14, 17, 20,38, 52, 263],
+  [Role.Admin]: [1,12, 14, 20,38, 52, 263],
   [Role.SOP]: [0],
   [Role.Manager]: [] // fallback
 };
@@ -162,6 +177,18 @@ getUserRole(roleId: number): Role {
         if (this.getUserRole(data.role_Id)=='admin') {
           this.router.navigateByUrl('/Master/dashboard');
         } else {
+       const dialogRef=   this.dialog.open(BreakdetailsComponent, {
+            width: '90%',
+            height: '90vh', // adjust size
+            disableClose: true, // prevent closing by clicking outside
+            data: { example: 'Hello from parent!' } // optional data
+          });
+          dialogRef.afterClosed().subscribe(result => {
+            console.log('Dialog closed with result:', result);
+            if (result?.success) {
+              // do something, e.g., refresh table
+            }
+          });
           this.router.navigateByUrl('/Master/Home');
         }
       } else {

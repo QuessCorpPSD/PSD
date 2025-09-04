@@ -45,13 +45,23 @@ private _sessionStoreage:SessionStorageService){
   }
   ngOnInit(): void {
     //const user_id=this._sessionStoreage.getItem("userId");   
-   this.GetCompanyData();
+    this.AutoAllotment();
+   
+  }
+
+  AutoAllotment(){
+      const userdetail = this._sessionStoreage.getItem('UserProfile');
+    var user = JSON.parse(this._decrypt.decrypt(userdetail!));
+    this._authService.AutoAllotmentByUser(user.user_Id).subscribe({
+      next:res=>{console.log(res); this.GetCompanyData();},
+      error:err=>{}
+    })
   }
 
   GetCompanyData() {
     const userdetail = this._sessionStoreage.getItem('UserProfile');
     var user = JSON.parse(this._decrypt.decrypt(userdetail!));
-    console.log(user);
+    
     
     this._authService.GetAssignmentLot(user.user_Id, 'A').subscribe(
       {

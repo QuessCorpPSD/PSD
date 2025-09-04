@@ -347,9 +347,12 @@ LotestimateValidation_Old(userId)
       "pay_period_Id":this.lotAssignment.pay_period_id,
       "lotNumber":this.lotAssignment.lot_Number,
       "payroll_input_type":this.lotAssignment.payroll_Input_Type,
-      "pay_period":this.lotAssignment.pay_period
+      "pay_period":this.lotAssignment.pay_period,
+      "revised":this.lotAssignment.revisedtime,
+      "process_category":this.lotAssignment.process_Category
   }
-
+console.log (request)
+  
   
   
     this._authService.ReconPayRegisterDownload(request).subscribe({
@@ -655,31 +658,62 @@ const catg=this.AllotmentForm.get("allotemt")?.value;
     "createdon":this.lotAssignment.createdOn,
     "userId":user.user_Id,
     "allotments":catg,
-    "RaiseQuery":this.AllotmentForm.get("RaiseQuery")?.value 
+    "RaiseQuery":this.AllotmentForm.get("RaiseQuery")?.value ,
+    "revised":this.lotAssignment.revised
 }
 
-  this._authService.QCLotVerify(request).subscribe({
-    next: res => {
-      
-      this.lotStatus = res.Data;
-      this.QCVerifyButtonDisable(res.Data.qC_Verified_Status);   
-      if(res.Data.qC_Verified_Status)
+ this._authService.QCLotVerify(request).subscribe({
+  next: res => {
+    this.lotStatus = res.Data;
+    this.QCVerifyButtonDisable(res.Data.qC_Verified_Status);   
+
+    if (res.Data.qC_Verified_Status) {
+      const inputType = this.lotAssignment.payroll_Input_Type;
+      const label = inputType === 'Salary' ? inputType : 'ONETIME';
+      let fileName = `${this.lotAssignment.company_code}_${this.lotAssignment.company_name}_${label}_${this.lotAssignment.pay_period}_${this.lotAssignment.lot_Number}`;
+      fileName = fileName.replace(/\s+/g, '_'); 
+
+      if(this.lotStatus.fileResponse.file!="No")
       {
-        const inputType = this.lotAssignment.payroll_Input_Type;
-        const label = inputType === 'Salary' ? inputType : 'ONETIME';
-        let fileName = `${this.lotAssignment.company_code}_${this.lotAssignment.company_name}_${label}_${this.lotAssignment.pay_period}_${this.lotAssignment.lot_Number}`;
-        fileName = fileName.replace(/\s+/g, '_'); 
-        this.downloadExcelFromBase64(this.lotStatus.fileResponse.file,fileName);
-      }   
-      else{
-         this.isLoading=false;
-        window.alert("Pay Register not download");
+        this.downloadExcelFromBase64(this.lotStatus.fileResponse.file, fileName);
+      }
+      else {
+        this.isLoading = false;
+        window.alert("Pay Register not downloaded.");
       }
       
-      
-    },
-    error: error =>{ this.isLoading=false; console.error('Error:', error)}
-  });
+    } else {
+      this.isLoading = false;
+      window.alert("Pay Register not downloaded.");
+    }
+  },
+  error: (error) => {
+    this.isLoading = false;
+
+    let errorMessage = "Something went wrong. Please try again.";
+
+    if (error.status === 0) {
+      // Network error or server unreachable
+      errorMessage = "Unable to connect to server. Please check your internet or server status.";
+    } else if (error.status >= 500) {
+      // Server-side error
+      errorMessage = "Server error occurred. Please try again later.";
+    } else if (error.status === 404) {
+      errorMessage = "Requested API not found (404).";
+    } else if (error.status === 401 || error.status === 403) {
+      errorMessage = "Unauthorized access. Please login again.";
+      // optional: redirect to login
+      // this.router.navigate(['/login']);
+    } else if (error.error?.message) {
+      // API sent a specific error message
+      errorMessage = error.error.message;
+    }
+
+    console.error("QC Lot Verify API Error:", error);
+    window.alert(errorMessage);
+  }
+});
+
 }
 
 

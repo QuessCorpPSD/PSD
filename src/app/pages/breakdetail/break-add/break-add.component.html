@@ -3,76 +3,96 @@
 <button class="btn btn-danger btn-sm" (click)="openModal()" >Add</button> 
 <!-- Modal -->
 <div class="modal-overlay" *ngIf="isModalOpen">
-  <div class="modal-content">
-     <button class="modal-close" (click)="closeModal()">×</button>
-    <h4>Add/ Update Break  Details</h4>
-    <form [formGroup]="breakForm" >
- <div class="container p-4  rounded shadow-sm">
-  <div class="mb-3">
-    <label for="descriptionSelect" class="form-label">Process Category</label>
-    <select id="descriptionSelect" class="form-select" formControlName="ProcessCategory">
-      <option value="">-- Select --</option>
-      <option *ngFor="let item of descriptionOptions" [value]="item.value">
-        {{ item.label }}
-      </option>
-    </select>
-    <div class="text-danger mt-1" *ngIf="breakForm.get('ProcessCategory')?.touched && breakForm.get('ProcessCategory')?.invalid">
-    Process Category is required.
-  </div>
-  </div>
+  <div class="modal-content container-fluid p-4 rounded shadow-sm bg-white">
+    <!-- Close Button -->
+    <button class="modal-close btn-close position-absolute top-0 end-0 m-2" (click)="closeModal()"></button>
 
-  <!-- Description -->
-  <div class="mb-3">
-    <label for="descriptionInput" class="form-label">Description</label>
-    <input type="text"
-           formControlName="Description"
-           id="descriptionInput"
-           class="form-control"
-           placeholder="Enter description">
-           <div class="text-danger mt-1" *ngIf="breakForm.get('Description')?.touched && breakForm.get('Description')?.invalid">
-   Description is required.
-  </div>
-  </div>
+    <h4 class="mb-4">Add / Update Break Details</h4>
 
-  <!-- Total Minutes -->
-  <div class="mb-3">
-    <label for="totalMinutesInput" class="form-label">Total Minutes</label>
-    <input type="text"
-           formControlName="TotalMinutes"
-           id="totalMinutesInput"
-           class="form-control"
-           placeholder="Total minutes">
-           <div class="text-danger mt-1" *ngIf="breakForm.get('TotalMinutes')?.touched && breakForm.get('TotalMinutes')?.invalid">
-   Total Minutes is required.
-  </div>
-  </div>
+    <form [formGroup]="breakForm" (ngSubmit)="onSubmit()">
+      <div class="row g-3">
+        
+        <!-- Process Category -->
+        <div class="col-12">
+          <label for="processCategory" class="form-label">Process Category</label>
+          <select id="processCategory" class="form-select" formControlName="ProcessCategory">
+            <option value="">-- Select --</option>
+            <option *ngFor="let item of descriptionOptions" [value]="item.value">
+              {{ item.label }}
+            </option>
+          </select>
+          <div class="text-danger mt-1"
+               *ngIf="breakForm.get('ProcessCategory')?.touched && breakForm.get('ProcessCategory')?.invalid">
+            Process Category is required.
+          </div>
+        </div>
 
-  <!-- Is Active -->
-  <div class="form-check mb-4">
-    <input type="checkbox"
-           formControlName="IsActive"
-           id="isActiveCheckbox"
-           class="form-check-input">
-    <label class="form-check-label" for="isActiveCheckbox">Is Active</label>
-    <div class="text-danger mt-1" *ngIf="(breakForm.get('IsActive')?.touched || submitted) && breakForm.get('IsActive')?.invalid ">
-   Total Minutes is required.
-  </div>
-  </div>
+        <!-- Description -->
+        <div class="col-12">
+          <label for="descriptionInput" class="form-label">Description</label>
+          <input type="text"
+                 formControlName="Description"
+                 id="descriptionInput"
+                 class="form-control"
+                 placeholder="Enter description">
+          <div class="text-danger mt-1"
+               *ngIf="breakForm.get('Description')?.touched && breakForm.get('Description')?.invalid">
+            Description is required.
+          </div>
+        </div>
 
-  <!-- Buttons -->
-  <div class="text-end">
-    <button type="button" class="btn btn-outline-secondary me-2" (click)="closeModal()">Cancel</button>
-    <button type="submit" class="btn btn-primary" (click)="onSubmit()">Save</button>
+        <!-- Start & End Time -->
+        <div class="col-md-6">
+          <label for="startTimeInput" class="form-label">Start Time</label>
+          <input type="time"
+                 formControlName="StartTime"
+                 id="startTimeInput"
+                 class="form-control">
+          <div class="text-danger mt-1"
+               *ngIf="breakForm.get('StartTime')?.touched && breakForm.get('StartTime')?.invalid">
+            Start Time is required.
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <label for="endTimeInput" class="form-label">End Time</label>
+          <input type="time"
+                 formControlName="EndTime"
+                 id="endTimeInput"
+                 class="form-control">
+          <div class="text-danger mt-1"
+               *ngIf="breakForm.get('EndTime')?.touched && breakForm.get('EndTime')?.invalid">
+            End Time is required.
+          </div>
+          <div class="col-12 text-danger mt-1"
+     *ngIf="breakForm.hasError('timeInvalid') && (breakForm.get('EndTime')?.touched || breakForm.get('StartTime')?.touched)">
+  End Time must be greater than Start Time.
+</div>
+        </div>
+
+        <!-- Is Active -->
+        <div class="col-12">
+          <div class="form-check">
+            <input type="checkbox"
+                   formControlName="IsActive"
+                   id="isActiveCheckbox"
+                   class="form-check-input">
+            <label class="form-check-label" for="isActiveCheckbox">Is Active</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Buttons -->
+      <div class="text-end mt-4">
+        <button type="button" class="btn btn-outline-secondary me-2" (click)="closeModal()">Cancel</button>
+        <button type="submit" class="btn btn-primary">Save</button>
+      </div>
+    </form>
   </div>
 </div>
 
-
-
-
-</form>
-
-    
-  </div>
+<div *ngIf="showPopup" class="overlay">
+  <app-model *ngIf="showPopup" [type]="popupType" [fontColor]="popupType === 'success' ? 'green' : popupType === 'error' ? 'red' : 'orange'" [message]="popupMessage" [submessage]="popupSubMessage" (closed)="showPopup = false"
+   class="centered-popup"></app-model>
 </div>
-<div *ngIf="showPopup" class="overlay"></div>
-    <app-model *ngIf="showPopup" [message]="popupMessage" [submessage]="popupSubMessage" class="centered-popup"></app-model>
+  

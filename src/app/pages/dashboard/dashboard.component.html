@@ -1,34 +1,47 @@
 <div class="container py-4">
-  <div class="row g-3" *ngIf="carddashboard">
-    
-    <div class="col-12 col-md-3">
-        <div class="p-3  text-white  rounded-4" style="background: conic-gradient(from 140deg at 70.81% 15.58%, #4446CE 0deg, #212784 360deg);">
-            <div class="label-class">Total Assignment</div>
-            <h3 class="mt-2 mb-0 fw-bold">{{carddashboard.totalLot}}</h3>
-        </div>
-    </div>
+ 
 
-    <div class="col-12 col-md-3">
-      <div class="p-3 text-white  rounded-4" style="background: conic-gradient(from 140deg at 70.81% 15.58%, #0D825D 0deg, #084430 360deg);">
-        <div  class="label-class">Completed Assignment</div>
-         <h3 class="mt-2 mb-0 fw-bold">{{carddashboard.completedLot}}</h3>
-      </div>
-    </div>
+<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-5 g-3" *ngIf="carddashboard">
 
-    <div class="col-12 col-md-3">
-      <div class="p-3  text-white  rounded-4" style="background: conic-gradient(from 140deg at 70.81% 15.58%, #820D7A 0deg, #44082F 360deg);">
-        <div  class="label-class">Overdue Assignment</div>
-         <h3 class="mt-2 mb-0 fw-bold">{{carddashboard.overdue_lot}}</h3>
-      </div>
-    </div>
-    
-    <div class="col-12 col-md-3">
-      <div class="p-3 text-white rounded-4" style="background: conic-gradient(from 140deg at 70.81% 15.58%, #D7D733 0deg, #909021 360deg);">
-        <div class="label-class">Pending Assignment</div>
-        <h3 class="mt-2 mb-0 fw-bold">{{carddashboard.pendingLot}}</h3>
-      </div>
+  <!-- Each card -->
+  <div class="col d-flex">
+    <div class="p-3 text-white rounded-4 flex-fill d-flex flex-column justify-content-between"
+         style="background: conic-gradient(from 140deg at 70.81% 15.58%, #4446CE 0deg, #212784 360deg);">
+      <div class="label-class">Total Assignment</div>
+      <h3 class="mt-2 mb-0 fw-bold">{{carddashboard.totalLot}}</h3>
     </div>
   </div>
+    <div class="col d-flex">
+    <div class="p-3 text-white rounded-4 flex-fill d-flex flex-column justify-content-between"
+          style="background: conic-gradient(from 140deg at 70.81% 15.58%, #0D825D 0deg, #084430 360deg);">
+      <div class="label-class">Completed Assignment</div>
+      <h3 class="mt-2 mb-0 fw-bold">{{carddashboard.completedLot}}</h3>
+    </div>
+  </div>
+    <div class="col d-flex">
+    <div class="p-3 text-white rounded-4 flex-fill d-flex flex-column justify-content-between"
+         style="background: conic-gradient(from 140deg at 70.81% 15.58%, #820D7A 0deg, #44082F 360deg);">
+      <div class="label-class">Overdue Assignment</div>
+      <h3 class="mt-2 mb-0 fw-bold">{{carddashboard.overdue_lot}}</h3>
+    </div>
+  </div>
+    <div class="col d-flex">
+    <div class="p-3 text-white rounded-4 flex-fill d-flex flex-column justify-content-between"
+         style="background: conic-gradient(from 140deg at 70.81% 15.58%, #D7D733 0deg, #909021 360deg);">
+      <div class="label-class">In Progress Assignment</div>
+      <h3 class="mt-2 mb-0 fw-bold">{{carddashboard.pendingLot}}</h3>
+    </div>
+  </div>
+    <div class="col d-flex">
+    <div class="p-3 text-white rounded-4 flex-fill d-flex flex-column justify-content-between"
+         style="background: conic-gradient(from 140deg at 70.81% 15.58%, #D32F2F 0deg, #7B1F1F 360deg);">
+      <div class="label-class">Not Allotted Assignment</div>
+      <h3 class="mt-2 mb-0 fw-bold">{{carddashboard.notAllotted}}</h3>
+    </div>
+  </div>
+
+  <!-- Repeat same col for others -->
+</div>
   <form [formGroup]="range">
     <div class="row g-3 py-2">
       <!-- Financial Year -->

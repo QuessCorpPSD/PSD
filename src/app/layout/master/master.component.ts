@@ -44,11 +44,14 @@ constructor( private _sessionStoreage:SessionStorageService,
  
   ngOnInit(): void {
   const userdetail= this._sessionStoreage.getItem('UserProfile');
+  if(userdetail)
+  {
   var user = JSON.parse(this._encry.decrypt(userdetail!)); 
-
-
-   
   this.userRole=this.getUserRole(user.role_Id);
+  }
+  else{
+     this.router.navigate(['/Login']);
+  }
   
     
   }

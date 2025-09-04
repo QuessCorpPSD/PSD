@@ -29,7 +29,7 @@ mat-form-field.timepicker-compact .mat-form-field-flex {
 .custom-mat-table {
   width: 100%;
   font-size: 14px;
-  border: 1px solid #ddd;
+  /* border: 1px solid #ddd; */
 }
 
 /* Header cell style */
@@ -99,10 +99,10 @@ mat-form-field.timepicker-compact .mat-form-field-flex {
   background-color: #fff;
 }
 
-.custom-table tr.mat-row:hover {
+/* .custom-table tr.mat-row:hover {
   background-color: #e0e0e0;
   transition: background-color 0.3s ease;
-}
+} */
 .timepicker-compact {
   width: 130px !important;
 }

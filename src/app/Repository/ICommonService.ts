@@ -17,4 +17,6 @@ export interface ICommonService {
     AddBreakDetail(val):Observable<APIResponse>
     GetBreakDetail():Observable<APIResponse>
     GetEmployeeBreakByDate(userId,date):Observable<APIResponse>
+    AddEmployeeBreak(val):Observable<APIResponse>;
+    AddBulkEmployeeBreak(val):Observable<APIResponse>;
 }

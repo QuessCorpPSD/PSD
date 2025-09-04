@@ -100,16 +100,30 @@ export class SharepayregisterComponent {
   
 
   }
-  ConvertFile(file:File):Observable<string>{
-    const result=new ReplaySubject<string>(1);
-    const reader = new FileReader();
-    reader.readAsDataURL(file);    
-    reader.onload = (event: ProgressEvent<FileReader>) => {
-      result.next(btoa(event.target?.result as string));
-    };
-   
-    return result;
-  }
+ConvertFile(file: File): Observable<string> {
+  const result = new ReplaySubject<string>(1);
+  const reader = new FileReader();
+
+  reader.readAsDataURL(file);
+
+  reader.onload = () => {
+    // Already base64 encoded
+    const base64 = reader.result as string;
+
+    // If you only need the pure base64 (without the data:... prefix)
+    const pureBase64 = base64.split(',')[1];
+
+    result.next(pureBase64);
+    result.complete();
+  };
+
+  reader.onerror = (error) => {
+    result.error(error);
+  };
+
+  return result.asObservable();
+}
+
  
 
   onDragOver(event: DragEvent) {

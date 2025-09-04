@@ -24,6 +24,20 @@ export class AssignmentService implements IAssignmentService {
 const config = { headers };
         return this.http.get<APIResponse>(this.environment.apiUrl + 'Assignment/GetAssignmentLot/' + userid+'/'+filterType,config)
     }
+
+    AutoAllotmentByUser(val):Observable<APIResponse>
+    {
+        const headers = new HttpHeaders({
+            'Cache-Control': 'no-cache, no-store, must-revalidate',
+            'Pragma': 'no-cache',
+            'Expires': '0'
+        });
+
+        const config = { headers };
+        console.log(this.environment.apiUrl + 'Assignment/AutoAllomentByUserId/' + val);
+        return this.http.get<APIResponse>(this.environment.apiUrl + 'Assignment/GetAssignmentLot/' + val, config)
+
+    }
     GetAllotment(val): Observable<APIResponse> {
         var inputval = JSON.stringify(val);
         const config = new HttpHeaders({

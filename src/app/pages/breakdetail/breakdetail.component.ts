@@ -7,6 +7,9 @@ import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { BreakAddComponent } from './break-add/break-add.component';
 import { ICommonService } from '../../Repository/ICommonService';
 import { CommonService } from '../../Service/CommonService';
+import { EncryptionService } from '../../Shared/encryption.service';
+import { SessionStorageService } from '../../Shared/SessionStorageService';
+import { Router } from '@angular/router';
 
 
 export  const Admin_TOKEN=new InjectionToken<ICommonService>('Admin_TOKEN');
@@ -26,10 +29,16 @@ export  const Admin_TOKEN=new InjectionToken<ICommonService>('Admin_TOKEN');
 })
 export class BreakdetailComponent implements OnInit {
   isModalVisible = false;
-  displayedColumns: string[] = ['breakId', 'description','totalTime','isActive'];
+  displayedColumns: string[] = ['breakId','processCategory', 'description','starttime','endtime','isActive'];
  dataSource:any
-constructor(@Inject(Admin_TOKEN) private _adminService: ICommonService){}
+constructor(@Inject(Admin_TOKEN) private _adminService: ICommonService,
+ private router: Router,
+  private _encry:EncryptionService,
+  private _sessionStoreage: SessionStorageService,){}
 ngOnInit(): void {
+  const userdetail= this._sessionStoreage.getItem('UserProfile');
+  if(userdetail)
+  {
     this._adminService.GetBreakDetail().subscribe({
       next: res => {
         console.log(res);
@@ -39,6 +48,10 @@ ngOnInit(): void {
         console.log(err);
       }
     });
+  }
+  else{
+     this.router.navigate(['/Login']);
+  }
   }
   onChildUpdated(){
      this._adminService.GetBreakDetail().subscribe({
