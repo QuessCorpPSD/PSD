@@ -70,7 +70,7 @@ userList:any;
 // ];
 
 displayedColumns: string[] = ['all', 'input', 'output','companyShortName','lot_Number',
-  'headCount','ctc','netPay','createdOn','allottedDateTime','assignedTo','estimateTime','qC_Verified_DateTime','score',
+  'headCount','ctc','netPay','createdOn','processDatetime','allottedDateTime','assignedTo','estimateTime','qC_Verified_DateTime','score',
   'reportingManager','invoiceGenerated','invoiceGeneratedDate','customer_Confirmation_DateTime','salaryPayout'
 
 ];
@@ -83,7 +83,12 @@ displayedPeningColumns: string[] =  ['companyShortName','lot_Number',
     lot_Number: ''
   };
   @ViewChild(MatPaginator) paginator!: MatPaginator;
-  
+    showPanel = false;
+    showCompletedPanel = false;
+    showOverduePanel = false;
+    showInprogressPanel = false;
+    showNotAssignmentPanel = false;
+    gridData:any;
 constructor(@Inject(DASH_TOKEN) private dashService: IDashBoardServices,
     @Inject(AUTH_TOKEN) private _authService: IAssignmentService,
     private _decrypt:EncryptionService,
@@ -105,6 +110,39 @@ constructor(@Inject(DASH_TOKEN) private dashService: IDashBoardServices,
   this.BindDashboardDetail(request);
   this.BindPendingLot();
 }
+onMouseEnter(assignmentType: 'T' | 'C' | 'O' | 'I' | 'N'):void{
+  this.BindDashBoard();
+  this.showPanel = false;
+  this.showCompletedPanel = false;
+  this.showOverduePanel = false;
+  this.showInprogressPanel = false;
+  this.showNotAssignmentPanel = false;
+  switch (assignmentType) {
+    case 'T':
+      this.showPanel = true;
+      break;
+    case 'C':
+      this.showCompletedPanel = true;
+      break;
+    case 'O':
+      this.showOverduePanel = true;
+      break;
+    case 'I':
+      this.showInprogressPanel = true;
+      break;
+    case 'N':
+      this.showNotAssignmentPanel = true;
+      break;
+  }
+  this.dashService.getCategoryLotDetail(assignmentType).subscribe({
+    next:res=>{this.gridData=res.Data},
+    error:err=>{console.log(err)}
+  })
+}
+
+ 
+
+
 exportToExcelPending():void
 {
  

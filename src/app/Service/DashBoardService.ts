@@ -39,6 +39,18 @@ export class DashBoardServices implements IDashBoardServices {
             const config = { headers };
         return this.http.get<APIResponse>(this.environment.apiUrl + 'CheckInCheckOut/CheckIn/' + userId + '/' + Type,config)
     }
+        getCategoryLotDetail(assignmentType):Observable<APIResponse>
+    {
+          const headers  = new HttpHeaders({
+            'Cache-Control': 'no-cache, no-store, must-revalidate',
+            'Pragma': 'no-cache',
+            'Expires': '0'
+        }).set('Content-Type', 'application/json')
+            .set('Accept', 'application/json');
+
+            const config = { headers };
+        return this.http.get<APIResponse>(this.environment.apiUrl+'DashBoard/CategoryLotDetail/'+assignmentType,config)
+    }
     getadmindashboard():Observable<APIResponse>
     {
            const headers  = new HttpHeaders({

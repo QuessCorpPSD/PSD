@@ -85,6 +85,7 @@ onSubmit():void{
         this.type="error"
       }
       else{
+        
         this.popupType="success";
         this.type="success"
       }

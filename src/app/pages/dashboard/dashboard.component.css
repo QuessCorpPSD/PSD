@@ -93,10 +93,21 @@ td.mat-column-star {
   border-radius: 4px;
   white-space: normal;
 }
+:root {
+  --mat-tooltip-container-color: orange !important;  /* background */
+  --mat-tooltip-supporting-text-color: white !important; /* text */
+}
+	.mat-tooltip {
+  background-color: orange !important; /* change tooltip background */
+  color: white !important;             /* text color */
+  font-size: 14px !important;          /* optional */
+  border-radius: 6px !important;       /* rounded corners */
+  padding: 6px 10px !important;        /* spacing */
+}
 
 ::ng-deep .mat-elevation-z8 {
   box-shadow: none !important;
-  border: 0.5px solid #e0e0e0;
+  border: 0.5px solid #cc7979;
   border-radius: 40px;
 }
 th.mat-column-position, td.mat-column-position {
@@ -187,3 +198,38 @@ th.mat-column-position, td.mat-column-position {
   font-size: 10px;
   height: 20px;
 }
+
+.hover-target {
+  display: inline-block;
+  position: relative;
+  cursor: pointer;
+  padding: 6px;  
+  border-radius: 4px;
+}
+
+.hover-panel {
+  position: absolute;
+  top: 100%; /* below target */
+  left: 0;
+  z-index: 1000;
+  background: rgba(90, 152, 233, 0.55);
+    color: #fff; /* best readable text */
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 8px;
+  background: linear-gradient(120deg, rgba(59, 130, 246, 0.6), rgba(16, 185, 129, 0.6));
+  min-width: 100px;
+  backdrop-filter: blur(6px); /* smooth blur for depth */
+   font-size: 12px;
+}
+
+/* .hover-panel table {
+  width: 100%;
+  /* border-collapse: collapse; 
+  font-size: 12px;
+} */
+
+/* .hover-panel th, .hover-panel td {
+  border: 1px solid #ddd;
+  padding: 4px 8px;
+} */

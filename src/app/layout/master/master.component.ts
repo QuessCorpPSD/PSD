@@ -56,7 +56,7 @@ constructor( private _sessionStoreage:SessionStorageService,
     
   }
    roleIdGroups: Record<Role, number[]> = {
-  [Role.Admin]: [ 1,2,12, 14, 17, 20,38, 52, 263],
+  [Role.Admin]: [ 1,2,12, 11,14, 17, 20,38, 52, 263],
   [Role.SOP]: [0],
   [Role.Manager]: [] // fallback
 };

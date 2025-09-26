@@ -8,14 +8,64 @@
     <div class="p-3 text-white rounded-4 flex-fill d-flex flex-column justify-content-between"
          style="background: conic-gradient(from 140deg at 70.81% 15.58%, #4446CE 0deg, #212784 360deg);">
       <div class="label-class">Total Assignment</div>
-      <h3 class="mt-2 mb-0 fw-bold">{{carddashboard.totalLot}}</h3>
+      <h3 class="mt-2 mb-0 fw-bold">
+        <div class="hover-target" (mouseenter)="onMouseEnter('T')" (mouseleave)="showPanel = false">
+      
+          {{carddashboard.totalLot}}
+      
+          <div class="hover-panel" *ngIf="showPanel">
+            <table class="table-boderless">
+              <!-- <thead>
+                <tr>
+                  <th>Category</th>
+                  <th>Assigment</th>
+                </tr>
+              </thead> -->
+              <tbody>
+                <tr *ngFor="let item of gridData">
+                  <td>{{item.process_Category}}</td>
+                  <td>{{item.totalAssignment}}</td>
+      
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </h3>
     </div>
   </div>
     <div class="col d-flex">
     <div class="p-3 text-white rounded-4 flex-fill d-flex flex-column justify-content-between"
           style="background: conic-gradient(from 140deg at 70.81% 15.58%, #0D825D 0deg, #084430 360deg);">
       <div class="label-class">Completed Assignment</div>
-      <h3 class="mt-2 mb-0 fw-bold">{{carddashboard.completedLot}}</h3>
+      <h3 class="mt-2 mb-0 fw-bold">
+        
+        
+      
+         <div class="hover-target" (mouseenter)="onMouseEnter('C')" (mouseleave)="showCompletedPanel = false">
+      
+         {{carddashboard.completedLot}}
+      
+          <div class="hover-panel" *ngIf="showCompletedPanel">
+            <table>
+              <!-- <thead>
+                <tr>
+                  <th>Category</th>
+                  <th>Assigment</th>
+                </tr>
+              </thead> -->
+              <tbody>
+                <tr *ngFor="let item of gridData">
+                  <td>{{item.process_Category}}</td>
+                  <td>{{item.totalAssignment}}</td>
+      
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </h3>
     </div>
   </div>
     <div class="col d-flex">
@@ -26,17 +76,66 @@
     </div>
   </div>
     <div class="col d-flex">
+        <div class="hover-target" (mouseenter)="onMouseEnter('I')" (mouseleave)="showInprogressPanel = false">
     <div class="p-3 text-white rounded-4 flex-fill d-flex flex-column justify-content-between"
          style="background: conic-gradient(from 140deg at 70.81% 15.58%, #D7D733 0deg, #909021 360deg);">
       <div class="label-class">In Progress Assignment</div>
-      <h3 class="mt-2 mb-0 fw-bold">{{carddashboard.pendingLot}}</h3>
+      <h3 class="mt-2 mb-0 fw-bold">
+
+      
+      
+         {{carddashboard.pendingLot}}
+      
+          <div class="hover-panel" *ngIf="showInprogressPanel">
+            <table>
+              <!-- <thead>
+                <tr>
+                  <th>Category</th>
+                  <th>Assigment</th>
+                </tr>
+              </thead> -->
+              <tbody>
+                <tr *ngFor="let item of gridData">
+                  <td>{{item.process_Category}}</td>
+                  <td>{{item.totalAssignment}}</td>
+      
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        
+      </h3>
+    </div>
     </div>
   </div>
     <div class="col d-flex">
     <div class="p-3 text-white rounded-4 flex-fill d-flex flex-column justify-content-between"
          style="background: conic-gradient(from 140deg at 70.81% 15.58%, #D32F2F 0deg, #7B1F1F 360deg);">
       <div class="label-class">Not Allotted Assignment</div>
-      <h3 class="mt-2 mb-0 fw-bold">{{carddashboard.notAllotted}}</h3>
+      <h3 class="mt-2 mb-0 fw-bold">
+         <div class="hover-target" (mouseenter)="onMouseEnter('N')" (mouseleave)="showNotAssignmentPanel = false">
+      
+         {{carddashboard.notAllotted}}
+      
+          <div class="hover-panel" *ngIf="showNotAssignmentPanel">
+            <table>
+              <thead>
+                <tr>
+                  <th>Category</th>
+                  <th>Assigment</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of gridData">
+                  <td>{{item.process_Category}}</td>
+                  <td>{{item.totalAssignment}}</td>
+      
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </h3>
     </div>
   </div>
 
@@ -213,7 +312,7 @@
           <ng-container matColumnDef="companyShortName" sticky>
             <th mat-header-cell *matHeaderCellDef style="width: 15px;"> Customer Name </th>
             <td mat-cell *matCellDef="let element">
-               <span [matTooltipClass]="'my-tooltip'" matTooltip="{{element.company_Name}}">
+               <span [matTooltipClass]="'mat-tooltip'" matTooltip="{{element.company_Name}}">
                {{element.companyShortName}} ...
               </span>
             </td>
@@ -241,12 +340,16 @@
 
           <ng-container matColumnDef="createdOn">
             <th mat-header-cell *matHeaderCellDef> Input Submitted Date </th>
-            <td mat-cell *matCellDef="let element"> {{element.createdOn | date:'MMM d, y'}} </td>
+            <td mat-cell *matCellDef="let element"> {{element.createdOn}} </td>
+          </ng-container>
+            <ng-container matColumnDef="processDatetime">
+            <th mat-header-cell *matHeaderCellDef>Process Datetime </th>
+            <td mat-cell *matCellDef="let element"> {{element.processDatetime  }} </td>
           </ng-container>
 
           <ng-container matColumnDef="allottedDateTime">
             <th mat-header-cell *matHeaderCellDef> Assign Date</th>
-            <td mat-cell *matCellDef="let element"> {{element.allottedDateTime | date:'MMM d, y'}} </td>
+            <td mat-cell *matCellDef="let element"> {{element.allottedDateTime }} </td>
           </ng-container>
 
           <ng-container matColumnDef="assignedTo">
@@ -261,7 +364,7 @@
 
           <ng-container matColumnDef="qC_Verified_DateTime">
             <th mat-header-cell *matHeaderCellDef> Completion Date </th>
-            <td mat-cell *matCellDef="let element"> {{element.qC_Verified_DateTime | date:'MMM d, y'}} </td>
+            <td mat-cell *matCellDef="let element"> {{element.qC_Verified_DateTime  }} </td>
           </ng-container>
 
            <ng-container matColumnDef="score">
@@ -284,14 +387,14 @@
 
           <ng-container matColumnDef="invoiceGeneratedDate">
             <th mat-header-cell *matHeaderCellDef> Invoice Generated Date </th>
-            <td mat-cell *matCellDef="let element"> {{element.invoiceGeneratedDate | date:'MMM d, y'}} </td>
+            <td mat-cell *matCellDef="let element"> {{element.invoiceGeneratedDate  }} </td>
           </ng-container>
 
          
 
           <ng-container matColumnDef="customer_Confirmation_DateTime">
             <th mat-header-cell *matHeaderCellDef> Customer Confirmation DateTime </th>
-            <td mat-cell *matCellDef="let element"> {{element.customer_Confirmation_DateTime | date:'MMM d, y'}}
+            <td mat-cell *matCellDef="let element"> {{element.customer_Confirmation_DateTime }}
             </td>
           </ng-container>
 
@@ -380,12 +483,12 @@
 
           <ng-container matColumnDef="createdOn">
             <th mat-header-cell *matHeaderCellDef> Input Submitted Date </th>
-            <td mat-cell *matCellDef="let element"> {{element.createdOn | date:'MMM d, y'}} </td>
+            <td mat-cell *matCellDef="let element"> {{element.createdOn }} </td>
           </ng-container>
 
           <ng-container matColumnDef="allottedDateTime">
             <th mat-header-cell *matHeaderCellDef> Assign Date</th>
-            <td mat-cell *matCellDef="let element"> {{element.allottedDateTime | date:'MMM d, y'}} </td>
+            <td mat-cell *matCellDef="let element"> {{element.allottedDateTime }} </td>
           </ng-container>
 
           <ng-container matColumnDef="assignedTo">
@@ -400,7 +503,7 @@
 
           <ng-container matColumnDef="qC_Verified_DateTime">
             <th mat-header-cell *matHeaderCellDef> Completion Date </th>
-            <td mat-cell *matCellDef="let element"> {{element.qC_Verified_DateTime | date:'MMM d, y'}} </td>
+            <td mat-cell *matCellDef="let element"> {{element.qC_Verified_DateTime }} </td>
           </ng-container>
 
            <ng-container matColumnDef="score">
@@ -423,14 +526,14 @@
 
           <ng-container matColumnDef="invoiceGeneratedDate">
             <th mat-header-cell *matHeaderCellDef> Invoice Generated Date </th>
-            <td mat-cell *matCellDef="let element"> {{element.invoiceGeneratedDate | date:'MMM d, y'}} </td>
+            <td mat-cell *matCellDef="let element"> {{element.invoiceGeneratedDate }} </td>
           </ng-container>
 
          
 
           <ng-container matColumnDef="customer_Confirmation_DateTime">
             <th mat-header-cell *matHeaderCellDef> Customer Confirmation DateTime </th>
-            <td mat-cell *matCellDef="let element"> {{element.customer_Confirmation_DateTime | date:'MMM d, y'}}
+            <td mat-cell *matCellDef="let element"> {{element.customer_Confirmation_DateTime }}
             </td>
           </ng-container>
 

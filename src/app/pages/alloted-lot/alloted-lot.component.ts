@@ -351,7 +351,7 @@ LotestimateValidation_Old(userId)
       "revised":this.lotAssignment.revisedtime,
       "process_category":this.lotAssignment.process_Category
   }
-console.log (request)
+
   
   
   
@@ -366,6 +366,14 @@ console.log (request)
         else {
           let fileName = `${'Recon_Pay_Register'}-${this.lotAssignment.company_code} _ ${this.lotAssignment.pay_period}_ ${this.lotAssignment.lot_Number}`;
           this.downloadExcelFromBase64(base64, fileName)
+          this.isLoading = false;
+          this.isPayDisable = false;
+        }
+        if(data.incrementFile!="No" && data.incrementFile!="")
+        {
+          var increment64=data.incrementFile;
+           let fileName = `${'Recon_Pay_Register'}-${this.lotAssignment.company_code} _ ${this.lotAssignment.pay_period}_ ${this.lotAssignment.lot_Number}_Increment`;
+            this.downloadExcelFromBase64(increment64, fileName)
           this.isLoading = false;
           this.isPayDisable = false;
         }
@@ -668,8 +676,12 @@ const catg=this.AllotmentForm.get("allotemt")?.value;
     this.QCVerifyButtonDisable(res.Data.qC_Verified_Status);   
 
     if (res.Data.qC_Verified_Status) {
-      const inputType = this.lotAssignment.payroll_Input_Type;
-      const label = inputType === 'Salary' ? inputType : 'ONETIME';
+
+     //console.log(this.allotment)
+      var inputType = this.allotment.input_Category;
+      //alert(inputType)
+      const label = inputType == 'Salary' ? 'Salary' : 'ONETIME';
+
       let fileName = `${this.lotAssignment.company_code}_${this.lotAssignment.company_name}_${label}_${this.lotAssignment.pay_period}_${this.lotAssignment.lot_Number}`;
       fileName = fileName.replace(/\s+/g, '_'); 
 

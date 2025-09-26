@@ -19,4 +19,15 @@ export interface ICommonService {
     GetEmployeeBreakByDate(userId,date):Observable<APIResponse>
     AddEmployeeBreak(val):Observable<APIResponse>;
     AddBulkEmployeeBreak(val):Observable<APIResponse>;
+    GetAllManager(roleId, userId):Observable<APIResponse>;
+    GetAllTeamLeader(userId):Observable<APIResponse>;
+    GetAllEmployee(userId): Observable<APIResponse>;
+    GetAllUsers(): Observable<APIResponse>;
+     GetManagerByUserId(user_Id): Observable<APIResponse>;
+     SwapCategory(login): Observable<APIResponse> ;
+     GetCompanyCodes(userId: number): Observable<APIResponse>
+     GetPayperiodbyCompany(companyId: any): Observable<APIResponse>
+     GetCurrentPayperiod(companyId: any): Observable<APIResponse>
+     GetInvoiceType():Observable<APIResponse>;
+
 }

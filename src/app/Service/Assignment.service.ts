@@ -89,6 +89,9 @@ const config = { headers };
     GetSOP_QA(): Observable<APIResponse> {
         return this.http.get<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/GetCustomerSOPQuestionAnswer');
     }
+     RevokDetail(userId): Observable<APIResponse> {
+        return this.http.get<APIResponse>(this.environment.apiUrl + 'Assignment/AllottmentRevokDetail/'+userId);
+    }
 
     PayRegisterUpload(val: any): Observable<APIResponse> {
         var inputval = JSON.stringify(val);
@@ -99,6 +102,16 @@ const config = { headers };
         }).set('Content-Type', 'application/json')
             .set('Accept', 'application/json')
         return this.http.post<APIResponse>(this.environment.apiUrl + 'PayRegister/PayRegisterUpload', inputval, { headers: config })
+    }
+    AssignmentRevok(val): Observable<APIResponse>{
+         var inputval = JSON.stringify(val);
+           const config = new HttpHeaders({
+            'Cache-Control': 'no-cache, no-store, must-revalidate',
+            'Pragma': 'no-cache',
+            'Expires': '0'
+        }).set('Content-Type', 'application/json')
+            .set('Accept', 'application/json')
+        return this.http.post<APIResponse>(this.environment.apiUrl + 'Assignment/AssignmentRevok', inputval, { headers: config })
     }
 
     LotStatus(val): Observable<APIResponse> {
@@ -613,6 +626,7 @@ const config = { headers };
         return this.http.post<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/PostSOPAnswer4', inputval, { headers: config })
     }
 
+    
     GetSOPAnswer33(val1: string,val2: string): Observable<APIResponse> {
         return this.http.get<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/GetSOPAnswer33/'+val1+'/'+val2);
     }

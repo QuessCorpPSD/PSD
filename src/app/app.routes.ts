@@ -18,6 +18,9 @@ import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { ChangepasswordComponent } from './pages/changepassword/changepassword.component'; 
 import { BreakdetailComponent } from './pages/breakdetail/breakdetail.component';
 import { BreakComponent } from './pages/employee/break/break.component';
+import { RevokComponent } from './pages/assignment/revok/revok.component';
+import { UserListComponent } from './pages/admin/user-list/user-list.component';
+import { InitiateComponent } from './pages/Invoice/initiate/initiate.component';
 
 
 
@@ -31,8 +34,10 @@ export const routes: Routes = [
             { path: 'Break', component: BreakdetailComponent },
             // { path: 'Employee', component: BreakComponent },
              { path: 'SOP', component: SopnewComponent },
-            { path: 'user', component: UserMappingComponent },
+            { path: 'user', component: UserListComponent },
             { path: 'dashboard', component: DashboardComponent },
+            { path: 'app-revok', component: RevokComponent},
+            { path: 'invoice', component: InitiateComponent},
             { path: 'changepassword', component: ChangepasswordComponent },
          //   { path: 'UI', component: SopComponent },
             { path: '**', redirectTo: '/Home', pathMatch: 'full' }

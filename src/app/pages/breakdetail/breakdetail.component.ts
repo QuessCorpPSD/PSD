@@ -56,7 +56,7 @@ ngOnInit(): void {
   onChildUpdated(){
      this._adminService.GetBreakDetail().subscribe({
       next: res => {
-        console.log(res);
+        //console.log(res);
         this.dataSource =new MatTableDataSource<any>(res.Data); // Make sure res.Data is an array
       },
       error: err => {

@@ -1,0 +1,13 @@
+/* control entire dropdown height */
+::ng-deep .mat-mdc-autocomplete-panel {
+  max-height: 20px !important;  /* overall dropdown */
+  padding: 0 !important;
+}
+
+/* control each option row */
+::ng-deep .mat-mdc-autocomplete-panel .mat-mdc-option {
+  min-height: 24px !important;   /* row height */
+  line-height: 24px !important;
+  padding: 0 8px !important;
+  font-size: 12px !important;
+}

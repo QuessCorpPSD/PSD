@@ -73,9 +73,15 @@ username:string = ''
     // localStorage.clear();
   //sessionStorage.clear();
 
-  this.sessionStorageService.removeItem('UserProfile');
+  // this.sessionStorageService.removeItem('UserProfile');
+  // this.sessionStorageService.clear();
+  // this.tokenservice.clearTokens();
+
+  if (this.sessionStorageService.getItem('UserProfile')) {
+   this.sessionStorageService.removeItem('UserProfile');
   this.sessionStorageService.clear();
   this.tokenservice.clearTokens();
+}
  if (!this.router.navigated) {
     location.reload(); // Only if you need hard reload
   }
@@ -125,7 +131,7 @@ username:string = ''
     });
   }
    roleIdGroups: Record<Role, number[]> = {
-  [Role.Admin]: [1,12, 14, 20,38, 52, 263],
+  [Role.Admin]: [1,12, 14,11, 20,38, 52, 263],
   [Role.SOP]: [0],
   [Role.Manager]: [] // fallback
 };
