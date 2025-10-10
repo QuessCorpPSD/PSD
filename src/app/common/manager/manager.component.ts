@@ -13,21 +13,18 @@ import { SessionStorageService } from '../../Shared/SessionStorageService';
 import { EncryptionService } from '../../Shared/encryption.service';
 
 @Component({
-  selector: 'app-manager',
-  standalone: true,
-  imports: [    CommonModule,
-    ReactiveFormsModule,
-    MatAutocompleteModule,
-    MatInputModule,
-    MatFormFieldModule],
-  templateUrl: './manager.component.html',
-  styleUrl: './manager.component.css',
-      providers:[{
-        
-                provide: COMM_TOKEN,
-                useClass: CommonService,
-              
-      }]
+    selector: 'app-manager',
+    imports: [CommonModule,
+        ReactiveFormsModule,
+        MatAutocompleteModule,
+        MatInputModule,
+        MatFormFieldModule],
+    templateUrl: './manager.component.html',
+    styleUrl: './manager.component.css',
+    providers: [{
+            provide: COMM_TOKEN,
+            useClass: CommonService,
+        }]
 })
 export class ManagerComponent implements OnInit {
 searchText: string = '';

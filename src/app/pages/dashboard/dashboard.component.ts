@@ -33,22 +33,21 @@ import { AgGridModule } from 'ag-grid-angular';
 ModuleRegistry.registerModules([ AllCommunityModule ]);
 
 @Component({
-  selector: 'app-dashboard',
-  standalone: true,
-  imports: [MatCheckboxModule,MatPaginator,MatTooltipModule,CommonModule,FinancialYearComponent,
-            UserComponent,MatTableModule,MatFormFieldModule, MatDatepickerModule, FormsModule, 
-            ReactiveFormsModule,  AgGridModule],
-  templateUrl: './dashboard.component.html',
-  styleUrl: './dashboard.component.css',  
-  providers:[provideNativeDateAdapter(),{
+    selector: 'app-dashboard',
+    imports: [MatCheckboxModule, MatPaginator, MatTooltipModule, CommonModule, FinancialYearComponent,
+        UserComponent, MatTableModule, MatFormFieldModule, MatDatepickerModule, FormsModule,
+        ReactiveFormsModule, AgGridModule],
+    templateUrl: './dashboard.component.html',
+    styleUrl: './dashboard.component.css',
+    providers: [provideNativeDateAdapter(), {
             provide: DASH_TOKEN,
             useClass: DashBoardServices,
-          },
+        },
         {
             provide: AUTH_TOKEN,
             useClass: AssignmentService,
-          }]//,
-          //  encapsulation: ViewEncapsulation.None
+        }] //,
+    //  encapsulation: ViewEncapsulation.None
 })
 export class DashboardComponent implements OnInit {
 carddashboard:any;

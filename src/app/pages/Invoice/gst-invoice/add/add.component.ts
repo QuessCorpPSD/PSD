@@ -6,11 +6,10 @@ import { CompanyallComponent } from '../../../../common/CompanyAll/companyall.co
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-add',
-  standalone: true,
-  imports: [MatCardModule,MatIconModule,CompanyallComponent,CommonModule],
-  templateUrl: './add.component.html',
-  styleUrl: './add.component.css'
+    selector: 'app-add',
+    imports: [MatCardModule, MatIconModule, CompanyallComponent, CommonModule],
+    templateUrl: './add.component.html',
+    styleUrl: './add.component.css'
 })
 export class AddComponent {
 

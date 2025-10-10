@@ -6,11 +6,10 @@ import { BreakComponent } from '../../../pages/employee/break/break.component';
 import { MatDialogRef } from '@angular/material/dialog';
 
 @Component({
-  selector: 'app-breakdetails',
-  standalone: true,
-  imports: [CommonModule,MatCardModule,MatIconModule,BreakComponent],
-  templateUrl: './breakdetails.component.html',
-  styleUrl: './breakdetails.component.css'
+    selector: 'app-breakdetails',
+    imports: [CommonModule, MatCardModule, MatIconModule, BreakComponent],
+    templateUrl: './breakdetails.component.html',
+    styleUrl: './breakdetails.component.css'
 })
 export class BreakdetailsComponent {
   constructor(@Optional()  private dialogRef: MatDialogRef<BreakdetailsComponent>){}

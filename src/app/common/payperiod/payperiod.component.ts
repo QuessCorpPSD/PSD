@@ -13,24 +13,21 @@ import { Payperiodclass } from '../../Models/Common';
 export const COMM_TOKEN = new InjectionToken<ICommonService>('COMM_TOKEN');
 
 @Component({
-  selector: 'PayPeriod',
-  standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    MatAutocompleteModule,
-    MatInputModule,
-    MatFormFieldModule
-  ],
-  templateUrl: './payperiod.component.html',
-  styleUrl: './payperiod.component.css',
-  encapsulation: ViewEncapsulation.None,
-  providers: [{
-
-    provide: COMM_TOKEN,
-    useClass: CommonService,
-
-  }]
+    selector: 'PayPeriod',
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        MatAutocompleteModule,
+        MatInputModule,
+        MatFormFieldModule
+    ],
+    templateUrl: './payperiod.component.html',
+    styleUrl: './payperiod.component.css',
+    encapsulation: ViewEncapsulation.None,
+    providers: [{
+            provide: COMM_TOKEN,
+            useClass: CommonService,
+        }]
 })
 export class PayPeriodComponent implements OnChanges {
   @Input() selectedCompanyId?: number;

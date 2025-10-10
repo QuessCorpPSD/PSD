@@ -17,18 +17,16 @@ import { SessionStorageService } from '../../../Shared/SessionStorageService';
 
 export const Invoice_TOKEN = new InjectionToken<IInvoiceRepository>('Invoice_TOKEN');
 @Component({
-  selector: 'app-initiate',
-  standalone: true,
-  imports: [CommonModule,MatCheckboxModule,InvoicetypeComponent,CompanyallComponent,PayPeriodComponent,MatIconModule,MatTableModule],
-  templateUrl: './initiate.component.html',
-  styleUrl: './initiate.component.css',
-   providers: [
+    selector: 'app-initiate',
+    imports: [CommonModule, MatCheckboxModule, InvoicetypeComponent, CompanyallComponent, PayPeriodComponent, MatIconModule, MatTableModule],
+    templateUrl: './initiate.component.html',
+    styleUrl: './initiate.component.css',
+    providers: [
         {
-    
-          provide: Invoice_TOKEN,
-          useClass: InvoiceRepository,
-    
-        }]
+            provide: Invoice_TOKEN,
+            useClass: InvoiceRepository,
+        }
+    ]
 })
 export class InitiateComponent implements OnInit {
   selectedCompanyId!: number;

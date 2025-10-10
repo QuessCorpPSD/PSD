@@ -11,12 +11,11 @@ import { AddComponent } from './add/add.component';
 import { MatDialog } from '@angular/material/dialog';
 
 @Component({
-  selector: 'app-gst-invoice',
-  standalone: true,
-  imports: [MatTableModule, MatFormFieldModule, ReactiveFormsModule, MatCheckboxModule,
-    MatInputModule, MatIconModule, MatTooltip],
-  templateUrl: './gst-invoice.component.html',
-  styleUrl: './gst-invoice.component.css'
+    selector: 'app-gst-invoice',
+    imports: [MatTableModule, MatFormFieldModule, ReactiveFormsModule, MatCheckboxModule,
+        MatInputModule, MatIconModule, MatTooltip],
+    templateUrl: './gst-invoice.component.html',
+    styleUrl: './gst-invoice.component.css'
 })
 export class GstInvoiceComponent {
   dataSource:any;

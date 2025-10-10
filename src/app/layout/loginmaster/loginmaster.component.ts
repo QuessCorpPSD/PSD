@@ -20,17 +20,16 @@ import { MatDialog } from '@angular/material/dialog';
     
 const auth= InjectionToken<IAuthServiceService>;
 @Component({
-  selector: 'app-loginmaster',
-  standalone: true,
-  imports: [FormsModule,CommonModule,RouterLink,BreakdetailsComponent ],
-  templateUrl: './loginmaster.component.html',
-  styleUrl: './loginmaster.component.css',
-  encapsulation: ViewEncapsulation.None ,
-  providers: [
-      {
-        provide: auth,
-        useClass: AuthServiceService,
-      }
+    selector: 'app-loginmaster',
+    imports: [FormsModule, CommonModule, RouterLink, BreakdetailsComponent],
+    templateUrl: './loginmaster.component.html',
+    styleUrl: './loginmaster.component.css',
+    encapsulation: ViewEncapsulation.None,
+    providers: [
+        {
+            provide: auth,
+            useClass: AuthServiceService,
+        }
     ]
 })
 export class LoginmasterComponent {

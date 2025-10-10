@@ -30,38 +30,35 @@ import { TokenService } from '../../Shared/TokenService';
 
 const auth= InjectionToken<IAssignmentService>;
 @Component({
-  selector: 'app-alloted-lot',
-  standalone: true,
-  imports: [CommonModule,ReactiveFormsModule,SharepayregisterComponent,TimerComponent,ReactiveFormsModule,MatStepperModule,MatButtonModule,MatInputModule],
-  templateUrl: './alloted-lot.component.html',
-  styleUrl: './alloted-lot.component.css',
-  schemas:[CUSTOM_ELEMENTS_SCHEMA],
-   providers: [
-          {
+    selector: 'app-alloted-lot',
+    imports: [CommonModule, ReactiveFormsModule, SharepayregisterComponent, TimerComponent, ReactiveFormsModule, MatStepperModule, MatButtonModule, MatInputModule],
+    templateUrl: './alloted-lot.component.html',
+    styleUrl: './alloted-lot.component.css',
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    providers: [
+        {
             provide: auth,
             useClass: AssignmentService,
-          }
-        ],
-  animations: [
-    trigger('growOnHover', [
-      state('default', style({
-        transform: 'scale(1)'
-        
-      })),
-      state('hovered', style({
-        transform: 'scale(5,5)',
-        backgroundColor: 'White',
-        borderRadius: '2px',
-        boxShadow: '0 15px 40px rgba(0,0,0,0.3)',
-        border:'1px solid #ccc',
-        height:'15px',
-        width:'10px',
-        fontSize:'0.5em'
-        
-      })),
-      transition('default <=> hovered', animate('300ms ease-in-out')),
-    ])
-  ]
+        }
+    ],
+    animations: [
+        trigger('growOnHover', [
+            state('default', style({
+                transform: 'scale(1)'
+            })),
+            state('hovered', style({
+                transform: 'scale(5,5)',
+                backgroundColor: 'White',
+                borderRadius: '2px',
+                boxShadow: '0 15px 40px rgba(0,0,0,0.3)',
+                border: '1px solid #ccc',
+                height: '15px',
+                width: '10px',
+                fontSize: '0.5em'
+            })),
+            transition('default <=> hovered', animate('300ms ease-in-out')),
+        ])
+    ]
 })
 
 export class AllotedLotComponent implements OnInit {

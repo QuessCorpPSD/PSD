@@ -17,26 +17,23 @@ import { AssignmentService } from '../../../Service/Assignment.service';
 
 export  const COMM_TOKEN=new InjectionToken<IAssignmentService>('COMM_TOKEN');
 @Component({
-  selector: 'app-revok',
-  standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    MatAutocompleteModule,
-    MatInputModule,
-    MatFormFieldModule,
-    ManagerComponent,
-    TeamleaderComponent,
-    EmployeeComponent
-],
-  templateUrl: './revok.component.html',
-  styleUrl: './revok.component.css',
-    providers:[{
-      
-              provide: COMM_TOKEN,
-              useClass: AssignmentService,
-            
-    }]
+    selector: 'app-revok',
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        MatAutocompleteModule,
+        MatInputModule,
+        MatFormFieldModule,
+        ManagerComponent,
+        TeamleaderComponent,
+        EmployeeComponent
+    ],
+    templateUrl: './revok.component.html',
+    styleUrl: './revok.component.css',
+    providers: [{
+            provide: COMM_TOKEN,
+            useClass: AssignmentService,
+        }]
 })
 export class RevokComponent implements OnInit {
 teamlederId!:any;

@@ -8,13 +8,11 @@ import { SessionStorageService } from '../../Shared/SessionStorageService';
 import { EncryptionService } from '../../Shared/encryption.service';
 import { TokenService } from '../../Shared/TokenService';
 @Component({
-  selector: 'app-master',
-  standalone: true,
-  imports: [CommonModule, RouterModule,AppHeaderComponent ],
-  templateUrl: './master.component.html',
-  styleUrl: './master.component.css',  
-  schemas:[CUSTOM_ELEMENTS_SCHEMA ]
-  
+    selector: 'app-master',
+    imports: [CommonModule, RouterModule, AppHeaderComponent],
+    templateUrl: './master.component.html',
+    styleUrl: './master.component.css',
+    schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class MasterComponent implements  OnInit {
   username = '';

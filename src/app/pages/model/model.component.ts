@@ -1,11 +1,10 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 @Component({
-  selector: 'app-model',
-  standalone: true,
-  imports: [],
-  templateUrl: './model.component.html',
-  styleUrl: './model.component.css'
+    selector: 'app-model',
+    imports: [],
+    templateUrl: './model.component.html',
+    styleUrl: './model.component.css'
 })
 export class ModelComponent implements OnInit {
    @Input() message!:string;

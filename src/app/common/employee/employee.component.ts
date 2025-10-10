@@ -13,20 +13,17 @@ import { CommonService } from '../../Service/CommonService';
 
 export  const COMM_TOKEN=new InjectionToken<ICommonService>('COMM_TOKEN');
 @Component({
-  selector: 'app-employee',
-  standalone: true,
-  imports: [CommonModule,
-      ReactiveFormsModule,
-      MatAutocompleteModule,
-      MatInputModule,
-      MatFormFieldModule],
-  templateUrl: './employee.component.html',
-  styleUrl: './employee.component.css',
-  providers:[{
-          
-                  provide: COMM_TOKEN,
-                  useClass: CommonService,
-                
+    selector: 'app-employee',
+    imports: [CommonModule,
+        ReactiveFormsModule,
+        MatAutocompleteModule,
+        MatInputModule,
+        MatFormFieldModule],
+    templateUrl: './employee.component.html',
+    styleUrl: './employee.component.css',
+    providers: [{
+            provide: COMM_TOKEN,
+            useClass: CommonService,
         }]
 })
 export class EmployeeComponent implements OnInit {

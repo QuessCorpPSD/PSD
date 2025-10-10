@@ -17,21 +17,20 @@ import { EncryptionService } from '../../../Shared/encryption.service';
 
 export  const COMM_TOKEN=new InjectionToken<ICommonService>('COMM_TOKEN');
 @Component({
-  selector: 'app-user-list',
-  standalone: true,
-  imports: [CommonModule,
-      ReactiveFormsModule,
-      MatAutocompleteModule,FormsModule,
-      MatInputModule,MatPaginatorModule,MatIconModule,MatDialogModule,
-      MatFormFieldModule,MatTableModule],
-  templateUrl: './user-list.component.html',
-  styleUrl: './user-list.component.css',
-  providers: [
-            {
-              provide: COMM_TOKEN,
-              useClass: CommonService,
-            }
-          ]
+    selector: 'app-user-list',
+    imports: [CommonModule,
+        ReactiveFormsModule,
+        MatAutocompleteModule, FormsModule,
+        MatInputModule, MatPaginatorModule, MatIconModule, MatDialogModule,
+        MatFormFieldModule, MatTableModule],
+    templateUrl: './user-list.component.html',
+    styleUrl: './user-list.component.css',
+    providers: [
+        {
+            provide: COMM_TOKEN,
+            useClass: CommonService,
+        }
+    ]
 })
 export class UserListComponent implements OnInit,AfterViewInit  {
 

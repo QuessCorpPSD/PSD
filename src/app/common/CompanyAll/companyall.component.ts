@@ -16,28 +16,25 @@ import { SessionStorageService } from '../../Shared/SessionStorageService';
 export const COMM_TOKEN = new InjectionToken<ICommonService>('COMM_TOKEN');
 
 @Component({
-  selector: 'companyall',
-  standalone:true,
-  imports: [CommonModule,
-    ReactiveFormsModule,
-    MatAutocompleteModule,
-    MatInputModule,
-    MatFormFieldModule],
-  templateUrl: './companyall.component.html',
-  styleUrl: './companyall.component.css',
-  encapsulation: ViewEncapsulation.None,
+    selector: 'companyall',
+    imports: [CommonModule,
+        ReactiveFormsModule,
+        MatAutocompleteModule,
+        MatInputModule,
+        MatFormFieldModule],
+    templateUrl: './companyall.component.html',
+    styleUrl: './companyall.component.css',
+    encapsulation: ViewEncapsulation.None,
     providers: [
-      {
-  
-        provide: COMM_TOKEN,
-        useClass: CommonService,
-  
-      },
-      {
-        provide: NG_VALUE_ACCESSOR,
-        useExisting: forwardRef(() => CompanyallComponent),
-        multi: true
-      }
+        {
+            provide: COMM_TOKEN,
+            useClass: CommonService,
+        },
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => CompanyallComponent),
+            multi: true
+        }
     ]
 })
 export class CompanyallComponent {

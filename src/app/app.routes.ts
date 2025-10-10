@@ -1,7 +1,4 @@
 import { provideRouter, Routes } from '@angular/router';
-
-import { IndexComponent } from './account/index/index.component';
-
 import { NotAuthorizedComponent } from './not-authorized/not-authorized.component';
 import { AuthGuard } from './Shared/auth-guard.service';
 import { MasterComponent } from './layout/master/master.component';
@@ -47,24 +44,7 @@ export const routes: Routes = [
         ],
 
     },
-    // {
-    //     path: '',
-    //     redirectTo: 'dashboard',
-    //     pathMatch: 'full'
-    //   },
-    // {
-    //     path:'',
-    //     component:MasterComponent, 
-    //     data:{
-    //         title:'Master'
-    //     }  ,             
-    //     children:[
-    //         {
-    //             loadChildren:()=>import('./pages/routes').then(m=>m.routes)
-    //         }
-    //     ]
-    // },
-
+   
     {path:'Login',loadComponent:()=>import('./layout/loginmaster/loginmaster.component').then((c)=>c.LoginmasterComponent)},
      {path:'forgot',loadComponent:()=>import('./pages/forgot/forgot.component').then((c)=>c.ForgotComponent)},
     {path:'**',redirectTo:'Login',pathMatch:'full'}

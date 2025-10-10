@@ -14,19 +14,17 @@ import { SessionStorageService } from '../../Shared/SessionStorageService';
 const auth= InjectionToken<IAssignmentService>;
 
 @Component({
-  selector: 'assignment',
-  standalone: true,
-  imports: [CommonModule,MatTabsModule,GridviewComponent,ListviewComponent],
-  templateUrl: './assignment.component.html',
-  styleUrl: './assignment.component.css',
-   providers: [
+    selector: 'assignment',
+    imports: [CommonModule, MatTabsModule, GridviewComponent, ListviewComponent],
+    templateUrl: './assignment.component.html',
+    styleUrl: './assignment.component.css',
+    providers: [
         {
-          provide: auth,
-          useClass: AssignmentService,
+            provide: auth,
+            useClass: AssignmentService,
         }
-      ],
-  
-  schemas:[CUSTOM_ELEMENTS_SCHEMA]
+    ],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 
 export class AssignmentComponent implements OnInit, AfterViewInit {

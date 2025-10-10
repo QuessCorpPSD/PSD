@@ -14,17 +14,16 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 const common= InjectionToken<ICommonService>;
 @Component({
-  selector: 'app-edit-user',
-  standalone: true,
-  imports: [MatFormFieldModule,MatSelectModule,CommonModule,MatInputModule,ReactiveFormsModule,FormsModule],
-  templateUrl: './edit-user.component.html',
-  styleUrl: './edit-user.component.css',
+    selector: 'app-edit-user',
+    imports: [MatFormFieldModule, MatSelectModule, CommonModule, MatInputModule, ReactiveFormsModule, FormsModule],
+    templateUrl: './edit-user.component.html',
+    styleUrl: './edit-user.component.css',
     providers: [
-          {
+        {
             provide: common,
             useClass: CommonService,
-          }
-        ]
+        }
+    ]
 })
 export class EditUserComponent {
 AddUser!:FormGroup;

@@ -12,15 +12,14 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
-  selector: 'fromtodate',
-  standalone: true,
-  imports: [MatCheckboxModule,MatTooltipModule,CommonModule,
-              MatTableModule,MatFormFieldModule, MatDatepickerModule, FormsModule, 
-              ReactiveFormsModule],
-  templateUrl: './fromtodate.component.html',
-  styleUrl: './fromtodate.component.css',
-  encapsulation: ViewEncapsulation.None ,
-  providers:[provideNativeDateAdapter()]
+    selector: 'fromtodate',
+    imports: [MatCheckboxModule, MatTooltipModule, CommonModule,
+        MatTableModule, MatFormFieldModule, MatDatepickerModule, FormsModule,
+        ReactiveFormsModule],
+    templateUrl: './fromtodate.component.html',
+    styleUrl: './fromtodate.component.css',
+    encapsulation: ViewEncapsulation.None,
+    providers: [provideNativeDateAdapter()]
 })
 export class FromtodateComponent implements OnInit {
     @Output() from_Date = new EventEmitter<any>();

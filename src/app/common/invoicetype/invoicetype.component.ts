@@ -14,20 +14,17 @@ import { CommonModule } from '@angular/common';
 export const COMM_TOKEN = new InjectionToken<ICommonService>('COMM_TOKEN');
 
 @Component({
-  selector: 'invoicetype',
-  standalone: true,
-  imports: [CommonModule,
-      ReactiveFormsModule,
-      MatAutocompleteModule,
-      MatInputModule,
-      MatFormFieldModule],
-  templateUrl: './invoicetype.component.html',
-  styleUrl: './invoicetype.component.css',
-  providers:[ {
-    
-          provide: COMM_TOKEN,
-          useClass: CommonService,
-    
+    selector: 'invoicetype',
+    imports: [CommonModule,
+        ReactiveFormsModule,
+        MatAutocompleteModule,
+        MatInputModule,
+        MatFormFieldModule],
+    templateUrl: './invoicetype.component.html',
+    styleUrl: './invoicetype.component.css',
+    providers: [{
+            provide: COMM_TOKEN,
+            useClass: CommonService,
         }]
 })
 export class InvoicetypeComponent {

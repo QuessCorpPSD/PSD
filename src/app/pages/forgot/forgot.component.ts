@@ -3,11 +3,10 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 
 @Component({
-  selector: 'app-forgot',
-  standalone: true,
-  imports: [CommonModule,FormsModule,ReactiveFormsModule],
-  templateUrl: './forgot.component.html',
-  styleUrl: './forgot.component.css'
+    selector: 'app-forgot',
+    imports: [CommonModule, FormsModule, ReactiveFormsModule],
+    templateUrl: './forgot.component.html',
+    styleUrl: './forgot.component.css'
 })
 export class ForgotComponent implements OnInit{
   forgotForm!:FormGroup

@@ -4,13 +4,12 @@ import { Router, RouterLink, RouterOutlet  } from '@angular/router';
 import { EncryptionService } from '../../../Shared/encryption.service';
 declare var bootstrap: any;
 @Component({
-  selector: 'app-gridview',
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: './gridview.component.html',
-  styleUrl: './gridview.component.css',
-  schemas:[CUSTOM_ELEMENTS_SCHEMA],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'app-gridview',
+    imports: [CommonModule],
+    templateUrl: './gridview.component.html',
+    styleUrl: './gridview.component.css',
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class GridviewComponent implements OnInit,AfterViewInit  {

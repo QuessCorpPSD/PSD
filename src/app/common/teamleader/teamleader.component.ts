@@ -13,20 +13,17 @@ import { EncryptionService } from '../../Shared/encryption.service';
 
 export  const COMM_TOKEN=new InjectionToken<ICommonService>('COMM_TOKEN');
 @Component({
-  selector: 'app-teamleader',
-  standalone: true,
-  imports: [CommonModule,
-      ReactiveFormsModule,
-      MatAutocompleteModule,
-      MatInputModule,
-      MatFormFieldModule],
-  templateUrl: './teamleader.component.html',
-  styleUrl: './teamleader.component.css',
-  providers:[{
-          
-                  provide: COMM_TOKEN,
-                  useClass: CommonService,
-                
+    selector: 'app-teamleader',
+    imports: [CommonModule,
+        ReactiveFormsModule,
+        MatAutocompleteModule,
+        MatInputModule,
+        MatFormFieldModule],
+    templateUrl: './teamleader.component.html',
+    styleUrl: './teamleader.component.css',
+    providers: [{
+            provide: COMM_TOKEN,
+            useClass: CommonService,
         }]
 })
 export class TeamleaderComponent implements OnInit{

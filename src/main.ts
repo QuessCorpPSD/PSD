@@ -23,8 +23,11 @@ bootstrapApplication(AppComponent, {
     provideRouter(routes),
     provideAnimations(),
     provideHttpClient(withInterceptors([authInterceptor])),
-    provideToastr(), // 
+    provideToastr(),
+   // provideAgGrid(), // 
     { provide: LocationStrategy, useClass: HashLocationStrategy }
     
 ]
 }).catch(err => console.error(err));
+
+

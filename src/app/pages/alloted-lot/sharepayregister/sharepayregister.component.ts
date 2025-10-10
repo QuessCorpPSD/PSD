@@ -11,18 +11,17 @@ import { EncryptionService } from '../../../Shared/encryption.service';
 
 const auth= InjectionToken<IAssignmentService>;
 @Component({
-  selector: 'sharepayregister',
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: './sharepayregister.component.html',
-  styleUrl: './sharepayregister.component.css',
-  schemas:[CUSTOM_ELEMENTS_SCHEMA],
-   providers: [
-            {
-              provide: auth,
-              useClass: AssignmentService,
-            }
-          ]
+    selector: 'sharepayregister',
+    imports: [CommonModule],
+    templateUrl: './sharepayregister.component.html',
+    styleUrl: './sharepayregister.component.css',
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    providers: [
+        {
+            provide: auth,
+            useClass: AssignmentService,
+        }
+    ]
 })
 export class SharepayregisterComponent {
   @Output() close = new EventEmitter<void>();

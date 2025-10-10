@@ -10,24 +10,21 @@ import { CommonService } from '../../Service/CommonService';
 import { FinancialYear } from '../../Models/Financeyear';
 export  const COMM_TOKEN=new InjectionToken<ICommonService>('COMM_TOKEN');
 @Component({
-  selector: 'financial-year',
-  standalone: true,
+    selector: 'financial-year',
     imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    MatAutocompleteModule,
-    MatInputModule,
-    MatFormFieldModule
-  ],
-  templateUrl: './financial-year.component.html',
-  styleUrl: './financial-year.component.css',
-  encapsulation: ViewEncapsulation.None ,
-  providers:[{
-    
+        CommonModule,
+        ReactiveFormsModule,
+        MatAutocompleteModule,
+        MatInputModule,
+        MatFormFieldModule
+    ],
+    templateUrl: './financial-year.component.html',
+    styleUrl: './financial-year.component.css',
+    encapsulation: ViewEncapsulation.None,
+    providers: [{
             provide: COMM_TOKEN,
             useClass: CommonService,
-          
-  }]
+        }]
 })
 export class FinancialYearComponent implements OnInit {
   searchText: string = '';

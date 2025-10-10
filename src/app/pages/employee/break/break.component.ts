@@ -18,15 +18,14 @@ import { MatSelectModule } from '@angular/material/select';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 export  const Admin_TOKEN=new InjectionToken<ICommonService>('Admin_TOKEN');
 @Component({
-  selector: 'app-break',
-  standalone: true,
-  imports: [CommonModule,MatFormFieldModule,MatSelectModule ,FormsModule,MatTableModule,MatInputModule,MatIconModule,MatButtonModule,ReactiveFormsModule],
-  templateUrl: './break.component.html',
-  styleUrl: './break.component.css',
-    providers:[{
-                provide: Admin_TOKEN,
-                useClass: CommonService,
-              }]
+    selector: 'app-break',
+    imports: [CommonModule, MatFormFieldModule, MatSelectModule, FormsModule, MatTableModule, MatInputModule, MatIconModule, MatButtonModule, ReactiveFormsModule],
+    templateUrl: './break.component.html',
+    styleUrl: './break.component.css',
+    providers: [{
+            provide: Admin_TOKEN,
+            useClass: CommonService,
+        }]
 })
 
 export class BreakComponent implements OnInit {

@@ -9,15 +9,14 @@ import { CommonService } from '../../../Service/CommonService';
 import { ModelComponent } from '../../model/model.component';
 export  const Admin_TOKEN=new InjectionToken<ICommonService>('Admin_TOKEN');
 @Component({
-  selector: 'app-break-add',
-  standalone: true,
-  imports: [CommonModule,ReactiveFormsModule,ModelComponent],
-  templateUrl: './break-add.component.html',
-  styleUrl: './break-add.component.css',
-  providers:[{
-                provide: Admin_TOKEN,
-                useClass: CommonService,
-              }]
+    selector: 'app-break-add',
+    imports: [CommonModule, ReactiveFormsModule, ModelComponent],
+    templateUrl: './break-add.component.html',
+    styleUrl: './break-add.component.css',
+    providers: [{
+            provide: Admin_TOKEN,
+            useClass: CommonService,
+        }]
 })
 export class BreakAddComponent implements OnInit {
  isModalOpen = false;
