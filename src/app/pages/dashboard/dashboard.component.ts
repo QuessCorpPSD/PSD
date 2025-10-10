@@ -13,6 +13,7 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import { MatTableModule,MatTableDataSource  } from '@angular/material/table';
 import * as XLSX from 'xlsx';
 import * as FileSaver from 'file-saver';
+import { AllCommunityModule, ColDef, GridOptions, GridReadyEvent, ModuleRegistry, Theme, themeBalham, themeQuartz } from "ag-grid-community";
 
 export  const DASH_TOKEN=new InjectionToken<IDashBoardServices>('DASH_TOKEN');
 export  const AUTH_TOKEN=new InjectionToken<IAssignmentService>('AUTH_TOKEN');
@@ -26,15 +27,17 @@ import { AssignmentService } from '../../Service/Assignment.service';
 import { IAssignmentService } from '../../Repository/IAssignment.service';
 import { ToastrService } from 'ngx-toastr';
 
-import { MatSortModule } from '@angular/material/sort';
 
+import { AgGridModule } from 'ag-grid-angular';
+
+ModuleRegistry.registerModules([ AllCommunityModule ]);
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
   imports: [MatCheckboxModule,MatPaginator,MatTooltipModule,CommonModule,FinancialYearComponent,
             UserComponent,MatTableModule,MatFormFieldModule, MatDatepickerModule, FormsModule, 
-            ReactiveFormsModule],
+            ReactiveFormsModule,  AgGridModule],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css',  
   providers:[provideNativeDateAdapter(),{
@@ -44,13 +47,14 @@ import { MatSortModule } from '@angular/material/sort';
         {
             provide: AUTH_TOKEN,
             useClass: AssignmentService,
-          }],
-           encapsulation: ViewEncapsulation.None
+          }]//,
+          //  encapsulation: ViewEncapsulation.None
 })
 export class DashboardComponent implements OnInit {
 carddashboard:any;
 dataSource:any
 pendingLots:any;
+ myTheme = themeBalham.withParams({ accentColor: 'red' });
 @ViewChild('PeningLotPaginator') PeningLot_paginator!: MatPaginator;
 
 financialyear:any;
@@ -89,14 +93,18 @@ displayedPeningColumns: string[] =  ['companyShortName','lot_Number',
     showInprogressPanel = false;
     showNotAssignmentPanel = false;
     gridData:any;
+    rowData:any;
+     modules = [AllCommunityModule];
 constructor(@Inject(DASH_TOKEN) private dashService: IDashBoardServices,
     @Inject(AUTH_TOKEN) private _authService: IAssignmentService,
     private _decrypt:EncryptionService,
     private _sessionStoreage:SessionStorageService,
   private toastr: ToastrService ){}
     selection = new SelectionModel<AdminDashboardDetailUI>(true, []);
-    
+
+ 
   ngOnInit(): void {
+    this.PendingLots();
   this.BindDashBoard();
 
   const request = {
@@ -110,6 +118,138 @@ constructor(@Inject(DASH_TOKEN) private dashService: IDashBoardServices,
   this.BindDashboardDetail(request);
   this.BindPendingLot();
 }
+    
+  PendingLots():void
+  {
+   this.dashService.GetPendingLotDetail().subscribe({
+    next:res=>{this.rowData=res.Data; console.log(this.rowData)},
+    error:err=>{console.log(err)}
+   }) ;
+  }
+
+
+ public defaultColDef: ColDef = {
+    flex: 1,
+    minWidth: 150,
+    filter: true,
+    sortable: true,
+    floatingFilter: true
+  };
+
+
+
+   columnDefs = [
+    { 
+      field: "company_Code",
+      filter: 'agTextColumnFilter',
+    },
+    { 
+      field: "entity_Name",
+      filter: 'agTextColumnFilter',
+    },    
+    { 
+      field: "location",
+      filter: 'agTextColumnFilter',
+    }
+    ,
+    { 
+      field: "company_Name",
+      filter: 'agTextColumnFilter',
+    }
+    ,
+    { 
+      field: "pay_period",
+      filter: 'agTextColumnFilter',
+    }
+    ,
+    { 
+      field: "lot_Number",
+      filter: 'agTextColumnFilter',
+    }
+    ,
+    { 
+      field: "process_Category",
+      filter: 'agTextColumnFilter',
+    }
+    ,
+    { 
+      field: "payroll_Input_Type",
+      filter: 'agTextColumnFilter',
+    }
+    ,
+    { 
+      field: "input_Headcount",
+      filter: 'agTextColumnFilter',
+    }
+    ,
+    { 
+      field: "inputSubmittedDate",
+      filter: 'agTextColumnFilter',
+    }
+    ,
+    { 
+      field: "integratedDatetime",
+      filter: 'agTextColumnFilter',
+    }
+    ,
+    { 
+      field: "processDatetime",
+      filter: 'agTextColumnFilter',
+    }
+    ,
+    { 
+      field: "reconDatetime",
+      filter: 'agTextColumnFilter',
+    }
+    ,
+    { 
+      field: "allottedDateTime",
+      filter: 'agTextColumnFilter',
+    }
+    ,
+    { 
+      field: "qC_Verified_DateTime",
+      filter: 'agTextColumnFilter',
+    }
+    ,
+    { 
+      field: "user_Id",
+      filter: 'agTextColumnFilter',
+    }
+    ,
+    { 
+      field: "reportingManager",
+      filter: 'agTextColumnFilter',
+    }
+    ,
+    { 
+      field: "asssignedTo",
+      filter: 'agTextColumnFilter',
+    }
+    ,
+    { 
+      field: "timeTaken",
+      filter: 'agTextColumnFilter',
+    }
+    ,
+    { 
+      field: "score",
+      filter: 'agTextColumnFilter',
+    }
+  ];
+    gridOptions: GridOptions = {
+    getRowClass: (params) => {
+      return 'custom-row-border';
+    },
+    defaultColDef: {
+     flex: 1,
+    minWidth: 150,
+    filter: true,
+    sortable: true,
+    floatingFilter: true
+    }
+  };
+
 onMouseEnter(assignmentType: 'T' | 'C' | 'O' | 'I' | 'N'):void{
   this.BindDashBoard();
   this.showPanel = false;

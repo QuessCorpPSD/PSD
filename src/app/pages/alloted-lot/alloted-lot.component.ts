@@ -680,7 +680,7 @@ const catg=this.AllotmentForm.get("allotemt")?.value;
      //console.log(this.allotment)
       var inputType = this.allotment.input_Category;
       //alert(inputType)
-      const label = inputType == 'Salary' ? 'Salary' : 'ONETIME';
+      const label = (inputType === 'Salary' || inputType === 'Revised') ? 'Salary' : 'ONETIME';
 
       let fileName = `${this.lotAssignment.company_code}_${this.lotAssignment.company_name}_${label}_${this.lotAssignment.pay_period}_${this.lotAssignment.lot_Number}`;
       fileName = fileName.replace(/\s+/g, '_'); 

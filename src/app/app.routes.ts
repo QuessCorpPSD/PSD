@@ -21,6 +21,7 @@ import { BreakComponent } from './pages/employee/break/break.component';
 import { RevokComponent } from './pages/assignment/revok/revok.component';
 import { UserListComponent } from './pages/admin/user-list/user-list.component';
 import { InitiateComponent } from './pages/Invoice/initiate/initiate.component';
+import { GstInvoiceComponent } from './pages/Invoice/gst-invoice/gst-invoice.component';
 
 
 
@@ -38,6 +39,7 @@ export const routes: Routes = [
             { path: 'dashboard', component: DashboardComponent },
             { path: 'app-revok', component: RevokComponent},
             { path: 'invoice', component: InitiateComponent},
+            { path: 'gstinvoice', component: GstInvoiceComponent},
             { path: 'changepassword', component: ChangepasswordComponent },
          //   { path: 'UI', component: SopComponent },
             { path: '**', redirectTo: '/Home', pathMatch: 'full' }

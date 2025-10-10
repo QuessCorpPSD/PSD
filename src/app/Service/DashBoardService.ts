@@ -51,6 +51,17 @@ export class DashBoardServices implements IDashBoardServices {
             const config = { headers };
         return this.http.get<APIResponse>(this.environment.apiUrl+'DashBoard/CategoryLotDetail/'+assignmentType,config)
     }
+    GetPendingLotDetail():Observable<APIResponse>{
+        const headers  = new HttpHeaders({
+            'Cache-Control': 'no-cache, no-store, must-revalidate',
+            'Pragma': 'no-cache',
+            'Expires': '0'
+        }).set('Content-Type', 'application/json')
+            .set('Accept', 'application/json');
+
+            const config = { headers };
+        return this.http.get<APIResponse>(this.environment.apiUrl+'DashBoard/GetPendingLotDetail',config)
+    }
     getadmindashboard():Observable<APIResponse>
     {
            const headers  = new HttpHeaders({

@@ -9,4 +9,5 @@ export interface IDashBoardServices {
     getadmindashboarddetail(val):Observable<APIResponse>
     getadminPendingLot():Observable<APIResponse>
     getCategoryLotDetail(assignmentType):Observable<APIResponse>
+    GetPendingLotDetail():Observable<APIResponse>
 }
