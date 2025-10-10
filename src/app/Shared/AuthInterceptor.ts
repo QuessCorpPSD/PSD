@@ -1,10 +1,4 @@
-import {
-  HttpClient,
-  HttpEvent,
-  HttpHandlerFn,
-  HttpInterceptorFn,
-  HttpRequest
-} from '@angular/common/http';
+import { HttpClient, HttpEvent, HttpHandlerFn, HttpInterceptorFn, HttpRequest } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { catchError, Observable, switchMap, throwError } from 'rxjs';
 import { TokenService } from './TokenService';
