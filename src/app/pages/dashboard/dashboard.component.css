@@ -4,7 +4,7 @@
  font-family: Nunito Sans;
 
 }
-.ag-theme-quartz {
+/* .ag-theme-quartz {
     --ag-foreground-color: red;
 }
 .ag-theme-quartz .ag-header-cell {
@@ -12,7 +12,7 @@
 }
 .ag-header {
     font-family: Nunito Sans;
-    border: 1px solid #ccc; /* Optional: nicer border */
+    border: 1px solid #ccc; 
     background-color:#ccc ;
 }
 .ag-header-group-cell {
@@ -23,9 +23,9 @@
     font-size: 18px;
 }
 .ag-theme-alpine .ag-header-cell .ag-filter-body input.ag-input-field-input {
-    border-radius: 8px; /* Adjust as needed */
+    border-radius: 8px;
     padding: 4px 8px;
-    border: 1px solid #ccc; /* Optional: nicer border */
+    border: 1px solid #ccc;
 }
 :host ::ng-deep .ag-theme-alpine .ag-header-cell .ag-filter-body input.ag-input-field-input {
     border-radius: 8px;
@@ -41,10 +41,39 @@
     border-bottom: 1px solid #ccc;
 }
 .ag-theme-alpine .ag-cell {
-    border-right: 1px solid #ccc; /* vertical borders */
+    border-right: 1px solid #ccc; 
 }
 .ag-theme-alpine .ag-row {
-    border-bottom: 1px solid #ccc; /* horizontal borders */
+    border-bottom: 1px solid #ccc; 
+} */
+ .ag-theme-alpine .ag-header-cell {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  height: 50px; /* optional */
+}
+.ag-theme-alpine .ag-header {
+  min-height: 100px;
+}
+.ag-theme-alpine .ag-row {
+  border-bottom: 1px solid #ccc !important;
+}
+.ag-theme-alpine .ag-cell {
+  border-bottom: 2px solid #ccc;
+}
+.ag-header {
+    font-family: Nunito Sans;
+    border: 1px solid #ccc; 
+    background-color:#d5d4dd ;
+     color-scheme: white;
+     height: 100px;
+}
+.ag-theme-quartz .ag-input-field-input,
+.ag-theme-alpine .ag-input-field-input {
+  margin-top: 2px !important;
+  border-radius: 10px !important;  /* round corners */
+  border: 1px solid #ccc !important; /* optional */
+  padding: 4px 8px !important; /* make it look nicer */
+ 
 }
 table {
   width: 100%;

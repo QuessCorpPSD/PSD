@@ -69,22 +69,16 @@ username:string = ''
     }
    
   ngOnInit(): void {
-    // localStorage.clear();
-  //sessionStorage.clear();
 
-  // this.sessionStorageService.removeItem('UserProfile');
-  // this.sessionStorageService.clear();
-  // this.tokenservice.clearTokens();
-
-  if (this.sessionStorageService.getItem('UserProfile')) {
-   this.sessionStorageService.removeItem('UserProfile');
-  this.sessionStorageService.clear();
-  this.tokenservice.clearTokens();
-}
- if (!this.router.navigated) {
-    location.reload(); // Only if you need hard reload
-  }
-   $.ajax({
+    if (this.sessionStorageService.getItem('UserProfile')) {
+      this.sessionStorageService.removeItem('UserProfile');
+      this.sessionStorageService.clear();
+      this.tokenservice.clearTokens();
+    }
+    if (!this.router.navigated) {
+      location.reload(); // Only if you need hard reload
+    }
+    $.ajax({
       url: 'http://localhost:7000',
       type: 'GET',
       cache: false,
@@ -96,27 +90,6 @@ username:string = ''
         console.error('Error fetching data:', error);
       }
     });
-//    const APIURL:string = 'http://localhost:7000';
-
-//    const config = {
-//   headers: new HttpHeaders({
-//     'Cache-Control': 'no-cache, no-store, must-revalidate',
-//     'Pragma': 'no-cache',
-//     'Expires': '0'
-//   }),
-//   responseType: 'text' as const  // 👈 ensures type safety
-// };
-//    this.http.get(APIURL, config)
-//   .subscribe({
-//     next: (response: string) => {
-//       this.computername = response;
-//        console.log("Computer Name: " + this.computername);
-//     },
-//     error: (error) => {
-//       console.error('Error fetching data', error);
-//     }
-//   });
-    //console.log(this.deviceInfo);
   }
  
  getIpAddress(): void {
@@ -125,7 +98,7 @@ username:string = ''
         this.ipAddress = res.ip;
       },
       error: (err) => {
-        console.error('Error fetching IP:', err);
+        console.log('Error fetching IP:', err);
       }
     });
   }
@@ -198,7 +171,7 @@ getUserRole(roleId: number): Role {
         }
       } else {
         this.toastr.error(data.error_Message || "Invalid credentials", "Error");
-        this.router.navigate(['/Login']);
+       // this.router.navigate(['/Login']);
       }
     },
     error: (err) => {

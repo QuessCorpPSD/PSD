@@ -38,7 +38,7 @@ ModuleRegistry.registerModules([ AllCommunityModule ]);
         UserComponent, MatTableModule, MatFormFieldModule, MatDatepickerModule, FormsModule,
         ReactiveFormsModule, AgGridModule],
     templateUrl: './dashboard.component.html',
-    styleUrl: './dashboard.component.css',
+    styleUrls: ['./dashboard.component.css'],
     providers: [provideNativeDateAdapter(), {
             provide: DASH_TOKEN,
             useClass: DashBoardServices,
@@ -46,8 +46,8 @@ ModuleRegistry.registerModules([ AllCommunityModule ]);
         {
             provide: AUTH_TOKEN,
             useClass: AssignmentService,
-        }] //,
-    //  encapsulation: ViewEncapsulation.None
+        }] ,//,
+      encapsulation: ViewEncapsulation.None
 })
 export class DashboardComponent implements OnInit {
 carddashboard:any;

@@ -50,7 +50,7 @@ ngOnInit(): void {
     });
   }
   else{
-     this.router.navigate(['/Login']);
+     //this.router.navigate(['/Login']);
   }
   }
   onChildUpdated(){

@@ -48,7 +48,7 @@ constructor( private _sessionStoreage:SessionStorageService,
   this.userRole=this.getUserRole(user.role_Id);
   }
   else{
-     this.router.navigate(['/Login']);
+    // this.router.navigate(['/Login']);
   }
   
     

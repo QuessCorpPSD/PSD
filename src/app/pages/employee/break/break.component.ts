@@ -49,7 +49,7 @@ private router:Router,
      this._sessionStoreage.removeItem('UserProfile');
   this._sessionStoreage.clear();
   
-  this.router.navigateByUrl('/Login');
+  //this.router.navigateByUrl('/Login');
   }
   else {
     const user = JSON.parse(this.decry.decrypt(userdetail));

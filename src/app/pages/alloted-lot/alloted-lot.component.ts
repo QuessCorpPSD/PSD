@@ -388,7 +388,8 @@ ngOnInit(): void {
      this._sessionStoreage.removeItem('UserProfile');
   this._sessionStoreage.clear();
   this.tokenservice.clearTokens();
-    this.router.navigateByUrl('/Login')}
+    //this.router.navigateByUrl('/Login')
+    }
   else{
   const user = JSON.parse(this.decry.decrypt(userdetail));  
   this.route.queryParams.subscribe(params => {

@@ -25,6 +25,29 @@ export class InvoiceRepository implements IInvoiceRepository {
             .set('Accept', 'application/json')
         return this.http.post<APIResponse>(url, JSON.stringify(val), { headers });
     }
+
+      InitialSearch(val): Observable<APIResponse> {
+
+        const url = `${this.environment.apiUrl}InvoiceInitiation/InitiationSearch`;
+        const headers = new HttpHeaders({
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        });
+        const config = new HttpHeaders().set('Content-Type', 'application/json')
+            .set('Accept', 'application/json')
+        return this.http.post<APIResponse>(url, JSON.stringify(val), { headers });
+    }
+    InitiationSearchExport(val): Observable<APIResponse> {
+
+        const url = `${this.environment.apiUrl}InvoiceInitiation/InitiationSearchExport`;
+        const headers = new HttpHeaders({
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        });
+        const config = new HttpHeaders().set('Content-Type', 'application/json')
+            .set('Accept', 'application/json')
+        return this.http.post<APIResponse>(url, JSON.stringify(val), { headers });
+    }
     InvoiceInitiate(val): Observable<APIResponse> {
 
         const url = `${this.environment.apiUrl}InvoiceInitiation/InvoiceInitiate`;
@@ -37,8 +60,6 @@ export class InvoiceRepository implements IInvoiceRepository {
         return this.http.post<APIResponse>(url, JSON.stringify(val), { headers });
     }
     ExportToExcel(val): Observable<APIResponse> {
-        
-
         const url = `${this.environment.apiUrl}InvoiceInitiation/ExportToExcel`;
         const headers = new HttpHeaders({
             'Content-Type': 'application/json',
@@ -48,5 +69,8 @@ export class InvoiceRepository implements IInvoiceRepository {
             .set('Accept', 'application/json')
         return this.http.post<APIResponse>(url, JSON.stringify(val), { headers });
     }
+
+
+
 
 }

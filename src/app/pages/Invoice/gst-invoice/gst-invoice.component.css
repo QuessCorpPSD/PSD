@@ -30,7 +30,24 @@ table {
 ::ng-deep .custom-field .mat-mdc-form-field-focus-overlay {
   background: transparent !important; /* removes hover/focus overlay */
 }
-
+.mat-elevation-z8{
+    border-radius: 4px;
+}
+.custom-table {
+  border-radius: 8px;
+  /* ensures rounding applies to inner elements */
+    max-height: 500px;
+  overflow: auto;
+}
+.table-wrapper {
+  border-radius: 8px;
+  overflow: hidden; /* 🔑 Required to enforce border-radius */
+  background: white; /* Optional: helps visual distinction */
+  margin: 1rem 0;
+}
+.custom-table th, .custom-table td {
+  border: 1px solid #e0e0e0;
+}
 .mat-column-action {
   width: 100px;   /* Fixed column width */
   max-width: 100px;

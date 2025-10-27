@@ -1,5 +1,5 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { provideRouter } from '@angular/router';
+import { provideRouter, withHashLocation } from '@angular/router';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { LocationStrategy, HashLocationStrategy } from '@angular/common';
@@ -7,6 +7,8 @@ import { provideToastr } from 'ngx-toastr'; // if you're using ngx-toastr
 import { AppComponent } from './app/app.component';
 import { routes } from './app/app.routes';
 import { authInterceptor } from './app/Shared/AuthInterceptor';
+import { provideGlobalGridOptions } from 'ag-grid-community/dist/types/src/globalGridOptions';
+import { enableProdMode } from '@angular/core';
 ;
 
  // update path as needed
@@ -17,13 +19,17 @@ import { authInterceptor } from './app/Shared/AuthInterceptor';
     }
   });
 }
+if ((window as any).ENABLE_PROD_MODE) {
+    enableProdMode();
+}
 
 bootstrapApplication(AppComponent, {
   providers: [
-    provideRouter(routes),
+    provideRouter(routes,withHashLocation()),
     provideAnimations(),
     provideHttpClient(withInterceptors([authInterceptor])),
     provideToastr(),
+  
    // provideAgGrid(), // 
     { provide: LocationStrategy, useClass: HashLocationStrategy }
     
