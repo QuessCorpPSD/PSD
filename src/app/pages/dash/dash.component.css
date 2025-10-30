@@ -1,9 +1,48 @@
+
+    
 .example-wrapper {
     display: flex;
     flex-direction: column;
     height: 100%;
 }
+/* styles.css */
+ .ag-theme-quartz .ag-floating-filter-input {
+  padding: 6px 8px !important;  /* ← your desired padding */
+  border: none !important;
+  background-color: #fafafa !important;
+  border-radius: 4px !important;
+  box-shadow: none !important;
+}
 
+input.ag-floating-filter-input {
+  all: unset;
+}
+
+.ag-theme-quartz .ag-floating-filter-input:focus {
+  outline: none !important;
+  box-shadow: none !important;
+  border: 1px solid #ddd !important;
+}
+.ag-root-wrapper-body {
+  overflow-x: auto !important;
+}
+.ag-theme-quartz .ag-cell, 
+.ag-theme-quartz .ag-header-cell {
+  border-right: 1px solid #ccc !important;
+  border-bottom: 1px solid #ccc !important;
+}
+
+.ag-theme-quartz .ag-row {
+  border-bottom: 1px solid #ccc !important;
+}
+.ag-tooltip {
+  background-color: #5353c1;
+  color: #fff;
+  border-radius: 6px;
+  padding: 8px 10px;
+  font-size: 13px;
+  white-space: pre-line; 
+}
 #myGrid {
     flex: 1 1 0px;
     width: 100%;

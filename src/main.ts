@@ -7,9 +7,11 @@ import { provideToastr } from 'ngx-toastr'; // if you're using ngx-toastr
 import { AppComponent } from './app/app.component';
 import { routes } from './app/app.routes';
 import { authInterceptor } from './app/Shared/AuthInterceptor';
-import { provideGlobalGridOptions } from 'ag-grid-community/dist/types/src/globalGridOptions';
-import { enableProdMode } from '@angular/core';
-;
+
+import { enableProdMode, importProvidersFrom } from '@angular/core';
+
+
+import { themeQuartz } from 'ag-grid-community';
 
  // update path as needed
  if ('serviceWorker' in navigator) {
@@ -29,8 +31,21 @@ bootstrapApplication(AppComponent, {
     provideAnimations(),
     provideHttpClient(withInterceptors([authInterceptor])),
     provideToastr(),
-  
-   // provideAgGrid(), // 
+    //  provideGlobalGridOptions({
+    //   theme: themeQuartz.withParams({
+    //     // customize new theme system
+    //     headerBackgroundColor: '#f5f5f5',
+    //     headerTextColor: '#333',
+    //     inputBorder: '1px solid #ccc',
+    //     inputBorderRadius: 6,
+    //   }),
+    //   defaultColDef: {
+    //     sortable: true,
+    //     resizable: true,
+    //     floatingFilter: true,
+    //     filter: 'agTextColumnFilter'
+    //   }
+    // }),
     { provide: LocationStrategy, useClass: HashLocationStrategy }
     
 ]

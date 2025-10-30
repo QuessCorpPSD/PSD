@@ -1,0 +1,8 @@
+::ng-deep .mat-mdc-tab-labels {
+  background-color: #fff;
+   width: 35%;
+}
+::ng-deep .custom-tabs .mat-mdc-tab.mdc-tab--active {
+  background-color: #C4D5F5 !important;
+  color: #282727 !important;
+}

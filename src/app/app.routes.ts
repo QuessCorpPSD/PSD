@@ -22,6 +22,7 @@ import { GstInvoiceComponent } from './pages/Invoice/gst-invoice/gst-invoice.com
 import { DraftInvoiceComponent } from './pages/Invoice/draft-invoice/draft-invoice.component';
 import { LoginmasterComponent } from './layout/loginmaster/loginmaster.component';
 import { DashComponent } from './pages/dash/dash.component';
+import { ReprocessComponent } from './pages/process/reprocess/reprocess.component';
 
 
 
@@ -52,19 +53,20 @@ export const routes: Routes = [
             { path: 'Break', component: BreakdetailComponent },
             { path: 'SOP', component: SopnewComponent },
             { path: 'user', component: UserListComponent },
-            { path: 'dashboard', component: DashComponent },
+            { path: 'dashboard', component: DashboardComponent },
             { path: 'app-revok', component: RevokComponent },
             { path: 'invoice', component: InitiateComponent },
             { path: 'draft-invoice', component: DraftInvoiceComponent },
             { path: 'gstinvoice', component: GstInvoiceComponent },
+            { path: 'process', component: ReprocessComponent },
             { path: 'changepassword', component: ChangepasswordComponent },
             // Wildcard inside children
             { path: '**', redirectTo: 'Home', pathMatch: 'full' }
         ]
     },
-  //  { path: '', redirectTo: 'Login', pathMatch: 'full' },
+    //{ path: '', redirectTo: 'Login', pathMatch: 'full' },
 // Wildcard route
- // { path: '**', redirectTo: 'Login' }
+  // { path: '**', redirectTo: 'Login' }
     
 ];
 

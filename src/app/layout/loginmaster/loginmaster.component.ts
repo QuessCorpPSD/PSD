@@ -7,7 +7,7 @@ import { IAuthServiceService } from '../../Repository/iauth-service.service';
 import { AuthServiceService } from '../../Service/auth-service.service';
       
 
-import { NgOptimizedImage } from '@angular/common'
+
 import { EncryptionService } from '../../Shared/encryption.service';
 import { SessionStorageService } from '../../Shared/SessionStorageService';
 import { TokenService } from '../../Shared/TokenService';
