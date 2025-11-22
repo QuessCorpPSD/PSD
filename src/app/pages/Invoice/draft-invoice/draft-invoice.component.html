@@ -6,7 +6,7 @@
                 <!-- <div class="row">
                     <h2>Draft Invoice</h2>
                 </div> -->
-                <div class="row p-1">
+                <!-- <div class="row p-1">
                     <div class="col-4">
                         <label class="form-label text-muted small">Company Code</label>
                         <companyall (companyEmit)="handleCompanyEvent($event)"></companyall>
@@ -16,17 +16,21 @@
                         <PayPeriod [selectedCompanyId]="selectedCompanyId" [payPeriodType]="payPeriodType"
                             (payperiodEmit)="handlePayperiodEvent($event)"></PayPeriod>
                     </div>
-                    <div class="col-2">
-                        <label class="form-label text-muted small">Invoice Type</label>
-                        <invoicetype (invoicetypeEmit)="onOptionSelected($event)"></invoicetype>
+                    <div class="col-2 d-flex gap-2 py-2">
+                        
+                       <input matInput placeholder="Search..." (keyup)="applyFilter($event)" class="small-input"
+                            style="margin-bottom: 10px;" />
+                    
                     </div>
+                    
                     <div class="col-3 d-flex gap-2 py-1">
                         <label class="form-label text-muted small"></label>
+                         
                         <button (click)="InvoiceSearch()" [disabled]="issearch" style="height: 35px;margin-top: 20px;"
                             class="btn btn-primary btn-sm d-flex align-items-center justify-content-center">
                             <mat-icon>search</mat-icon> Search
                         </button>
-                        <button (click)="Invoiceintiate()" style="height: 35px;margin-top: 20px;" [disabled]="isdisabled"
+                        <button (click)="openDialog()" style="height: 35px;margin-top: 20px;" [disabled]="isdisabled"
                             class="btn btn-primary btn-sm btn-xs d-flex align-items-center">
                             Initiate
                         </button>
@@ -36,8 +40,48 @@
                         </button>
                     </div>
     
-                </div>
-                <!-- <ng-template #editDialog>
+                </div> -->
+                <div class="row g-2 align-items-end p-1">
+
+    <div class="col-4">
+        <label class="form-label text-muted small">Company Code</label>
+        <companyall (companyEmit)="handleCompanyEvent($event)"></companyall>
+    </div>
+
+    <div class="col-3">
+        <label class="form-label text-muted small">Pay Period</label>
+        <PayPeriod [selectedCompanyId]="selectedCompanyId"
+                   [payPeriodType]="payPeriodType"
+                   (payperiodEmit)="handlePayperiodEvent($event)">
+        </PayPeriod>
+    </div>
+
+    <div class="col-2">
+        <label class="form-label text-muted small">Search</label>
+        <input matInput placeholder="Search..." (keyup)="applyFilter($event)"
+               class="form-control form-control-sm" />
+    </div>
+
+    <div class="col-3 d-flex gap-2">
+        <button (click)="InvoiceSearch()" [disabled]="issearch"
+            class="btn btn-primary btn-sm d-flex align-items-center">
+            <mat-icon>search</mat-icon> Search
+        </button>
+
+        <button (click)="openDialog()" [disabled]="isdisabled"
+            class="btn btn-primary btn-sm d-flex align-items-center">
+            Initiate
+        </button>
+
+        <button (click)="InitiationSearchExport()"
+            class="btn btn-primary btn-sm d-flex align-items-center">
+            <mat-icon>export</mat-icon> Export
+        </button>
+    </div>
+
+</div>
+
+                <ng-template #editDialog>
             <mat-card>
                 <mat-card-header>
                     <mat-card-title>Remarks</mat-card-title>
@@ -45,13 +89,13 @@
         
                 <mat-card-content>
                     <mat-form-field appearance="outline" class="w-100">
-                        <mat-label>Remark</mat-label>
+                        <mat-label>Key Note</mat-label>
                         <input type="text" matInput [(ngModel)]="remarks" class="form-control" placeholder="Enter Remarks" />
                     </mat-form-field>
                 </mat-card-content>
         
                 <mat-card-actions style="display: flex; justify-content: flex-end; gap: 10px;">
-                    <button class="btn text-white fw-semibold w-40"
+                    <button class="btn text-white fw-semibold w-40" (click)="Invoiceintiate()"
                         style="height: 36px; background-color: #302CB3; border-radius: 6px; font-size: 12px; font-family: 'Nunito Sans'; letter-spacing: 0.24px;">
                         Initiate
                     </button>
@@ -62,7 +106,7 @@
                     </button>
                 </mat-card-actions>
             </mat-card>
-        </ng-template> -->
+        </ng-template> 
     
     
                 <div class="table-container">

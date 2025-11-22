@@ -383,6 +383,54 @@ th.mat-column-position, td.mat-column-position {
   background-color: #C4D5F5 !important;
   color: #282727 !important;
 }
+.small-input {
+  height: 30px !important;
+  padding: 2px 8px !important;
+  line-height: 28px;
+}
+.search-container {
+  position: relative;
+  width: 250px;
+}
+.search-field .mdc-text-field {
+  height: 28px !important;
+}
+/* Reduce height */
+.small-search .mdc-text-field {
+  height: 32px !important; /* adjust as needed */
+  padding: 0 !important;
+}
+
+/* Reduce vertical padding inside input */
+.small-search .mat-mdc-form-field-infix {
+  padding-top: 2px !important;
+  padding-bottom: 2px !important;
+}
+
+/* Reduce outline label spacing */
+.small-search .mdc-notched-outline__notch {
+  padding: 0 !important;
+}
+
+.search-field .mat-mdc-form-field-infix {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+.search-container .search-icon {
+  position: absolute;
+  top: 50%;
+  left: 8px;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: #777;
+}
+
+.search-input {
+  padding-left: 35px !important; /* space for icon */
+  height: 32px;
+  font-size: 14px;
+}
+
 ::ng-deep .mat-mdc-tab-label.mat-mdc-tab-label-active {
   color: #222425;
   font-weight: 600;

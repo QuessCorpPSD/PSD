@@ -22,12 +22,14 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
 import { GstInvoiceComponent } from '../gst-invoice/gst-invoice.component';
+import { MatInputModule } from '@angular/material/input';
 
 
 export const Invoice_TOKEN = new InjectionToken<IInvoiceRepository>('Invoice_TOKEN');
 @Component({
   selector: 'app-draft-invoice',
-  imports: [CommonModule,GstInvoiceComponent,  MatTabsModule,MatPaginatorModule,FormsModule,MatFormFieldModule, MatCardModule,MatCheckboxModule, InvoicetypeComponent, CompanyallComponent, PayPeriodComponent, MatIconModule, MatTableModule],
+  imports: [CommonModule,GstInvoiceComponent, MatFormFieldModule,
+    MatInputModule, MatTabsModule,MatPaginatorModule,FormsModule,MatFormFieldModule, MatCardModule,MatCheckboxModule,  CompanyallComponent, PayPeriodComponent, MatIconModule, MatTableModule],
   templateUrl: './draft-invoice.component.html',
   styleUrl: './draft-invoice.component.css',
    providers: [
@@ -44,7 +46,7 @@ export class DraftInvoiceComponent implements OnInit {
   payPeriodType!: string;
   remarks = '';
   dataSource=new MatTableDataSource<any>([]);;
-  invoiceType:any;
+  invoiceType:number=0;
   selection = new SelectionModel<any>(true, []);
   userdetail:any;
   currentElement:any;
@@ -53,6 +55,7 @@ export class DraftInvoiceComponent implements OnInit {
   @ViewChild('editDialog') editDialog!: TemplateRef<any>;
   dialogRef!: MatDialogRef<any>;
   isLoading:boolean= false;
+  @ViewChild(PayPeriod) PayPeriodComponent!: Payperiodclass;
   displayColumns=['action','serial_No','map_name','net_CTC','netPay','lotNo','input_No','pO_Number','employee_Head_Count','service_Charge','serviceChargeAmount','service_Charge_Master','service_Charge_Type','bgvbl','astfee','discT1','discT2','idcard','email','regfee','trnfee','ggdbt','ppekit','vmsfee','edufee','ntpry','renmac','draded','othdd','mbapp','calcrg','calrt','narration']
   constructor(@Inject(Invoice_TOKEN) private _invoiceService: IInvoiceRepository,private _decrypt:EncryptionService,
   private _sessionStoreage:SessionStorageService,private dialog: MatDialog){
@@ -66,7 +69,10 @@ export class DraftInvoiceComponent implements OnInit {
       data: "text"
     });
   }
-  
+  applyFilter(event: Event) {
+  const filterValue = (event.target as HTMLInputElement).value;
+  this.dataSource.filter = filterValue.trim().toLowerCase();
+}
   Invoiceintiate():void{
       if(this.selectedCompanyId==undefined)
       {
@@ -79,6 +85,7 @@ export class DraftInvoiceComponent implements OnInit {
         alert("Select PayPeriod ");
         return;
       }
+      //this.invoiceType=1
       if(this.invoiceType==undefined)
       {
         alert("Select Invoice Type ");
@@ -93,7 +100,7 @@ export class DraftInvoiceComponent implements OnInit {
      this.isLoading=true;
       const request={
         "invoiceInitiations":this.selection.selected,
-        "TaxTypeId":this.invoiceType.geN_iID,
+        "TaxTypeId":this.invoiceType,
         "CreatedBy":this.userdetail.user_Id,
       }
       this._invoiceService.InvoiceInitiate(request).subscribe({
@@ -101,6 +108,8 @@ export class DraftInvoiceComponent implements OnInit {
           alert(res.Data.error_Message);
          this.isdisabled=false;
          this.InvoiceSearch();
+         this.selection.clear();
+         this.selection = new SelectionModel<any>(true, []);
          this.isLoading=false;
         },
         error:err=>{console.log(err);
@@ -183,6 +192,7 @@ export class DraftInvoiceComponent implements OnInit {
     handleCompanyEvent(company)
     {
       this.selectedCompanyId = company.companyId;
+      this.payPeriod.;
     }
     handlePayperiodEvent(payperiod: Payperiodclass){
       this.payPeriod = payperiod;
@@ -247,13 +257,17 @@ export class DraftInvoiceComponent implements OnInit {
            this.dataSource.paginator=this.PeningLot_paginator;
            this.issearch=false;
            this.isLoading=false;
-         // this.dataSource=new MatTableDataSource<any[]>(res.Data);
-          //console.log(JSON.stringify(res.Data));
+         
         },
         error:err=>{this.issearch=false;}
       });
     }
+    ngOnChanges() {
+  if (!this.payPeriodType) {
+    
+  }
+}
     onOptionSelected(event:InvoiceType){
-     this.invoiceType =event;
+     //this.invoiceType =event;
     }
 }

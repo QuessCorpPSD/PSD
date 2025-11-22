@@ -653,6 +653,7 @@ QCVerify(){
   var user = JSON.parse(this.decry.decrypt(userdetail!));  
   this.isDisable=true;
 const catg=this.AllotmentForm.get("allotemt")?.value;   
+console.log()
   var request={
     "Company_Id":this.lotAssignment.company_Id,
     "CompanyCode":this.lotAssignment.company_code,
@@ -675,10 +676,10 @@ const catg=this.AllotmentForm.get("allotemt")?.value;
 
     if (res.Data.qC_Verified_Status) {
 
-     //console.log(this.allotment)
-      var inputType = this.allotment.input_Category;
+     //console.log("QC Verifed" + JSON.stringify(this.allotment));
+      var inputType = this.lotAssignment.payroll_Input_Type;
       //alert(inputType)
-      const label = (inputType === 'Salary' || inputType === 'Revised') ? 'Salary' : 'ONETIME';
+      const label = (inputType == 'Salary' || inputType == 'Revised') ? 'Salary' : 'Onetime';
 
       let fileName = `${this.lotAssignment.company_code}_${this.lotAssignment.company_name}_${label}_${this.lotAssignment.pay_period}_${this.lotAssignment.lot_Number}`;
       fileName = fileName.replace(/\s+/g, '_'); 
