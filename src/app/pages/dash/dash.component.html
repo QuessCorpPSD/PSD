@@ -121,7 +121,7 @@
         </div>
       </div>
       <div class="stat-card stat-card-purple">
-        <div class="stat-number">1094</div>
+        <div class="stat-number">{{carddashboard.overdue_lot}}</div>
         <div class="stat-label">Overdue</div>
       </div>
       <div class="stat-card stat-card-yellow">
@@ -178,7 +178,7 @@
   <div id="myGrid" class="ag-theme-quartz" style="width: 100%;  overflow-x: auto;border-radius: 8px; ">
     
     <div class="download-btn-container">
-      <button class="download-btn" (click)="onExport()">⬇️ Export</button>
+      <button class="download-btn" style="height: 32px; padding: 0 5px; background-color: #302CB3; border-radius: 6px; font-size: 12px; font-family: 'Nunito Sans'; letter-spacing: 0.24px;color: #ffff;"  (click)="onExport()">⬇️ Export</button>
     </div>
 
     <ag-grid-angular class="ag-theme-quartz" [pagination]="true" [paginationPageSize]="100" [rowData]="rowData"

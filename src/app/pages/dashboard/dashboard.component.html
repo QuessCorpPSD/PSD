@@ -1,9 +1,9 @@
 <div class="container py-4">
  
 
-<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-5 g-3" *ngIf="carddashboard">
+<!-- <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-5 g-3" *ngIf="carddashboard">
 
-  <!-- Each card -->
+
   <div class="col d-flex">
     <div class="p-3 text-white rounded-4 flex-fill d-flex flex-column justify-content-between"
          style="background: conic-gradient(from 140deg at 70.81% 15.58%, #4446CE 0deg, #212784 360deg);">
@@ -15,12 +15,7 @@
       
           <div class="hover-panel" *ngIf="showPanel">
             <table class="table-boderless">
-              <!-- <thead>
-                <tr>
-                  <th>Category</th>
-                  <th>Assigment</th>
-                </tr>
-              </thead> -->
+              
               <tbody>
                 <tr *ngFor="let item of gridData">
                   <td>{{item.process_Category}}</td>
@@ -47,12 +42,7 @@
       
           <div class="hover-panel" *ngIf="showCompletedPanel">
             <table>
-              <!-- <thead>
-                <tr>
-                  <th>Category</th>
-                  <th>Assigment</th>
-                </tr>
-              </thead> -->
+             
               <tbody>
                 <tr *ngFor="let item of gridData">
                   <td>{{item.process_Category}}</td>
@@ -86,12 +76,7 @@
       
           <div class="hover-panel" *ngIf="showInprogressPanel">
             <table>
-              <!-- <thead>
-                <tr>
-                  <th>Category</th>
-                  <th>Assigment</th>
-                </tr>
-              </thead> -->
+              
               <tbody>
                 <tr *ngFor="let item of gridData">
                   <td>{{item.process_Category}}</td>
@@ -137,8 +122,113 @@
     </div>
   </div>
 
-  <!-- Repeat same col for others -->
-</div>
+
+</div> -->
+
+  <main class="dashboard-content" *ngIf="carddashboard">
+  
+    <!-- Stats Grid -->
+    <div class="stats-grid">
+      <div class="stat-card stat-card-blue">      
+        <div class="hover-target" (mouseenter)="onMouseEnter('T')" (mouseleave)="showPanel = false">
+      
+          <div class="stat-number"> {{carddashboard.totalLot}}</div>
+          <div class="stat-label py-2">Total</div>
+      
+          <div class="hover-panel" *ngIf="showPanel">
+            <table class="table-boderless">
+              <!-- <thead>
+                                <tr>
+                                  <th>Category</th>
+                                  <th>Assigment</th>
+                                </tr>
+                              </thead> -->
+              <tbody>
+                <tr *ngFor="let item of gridData">
+                  <td>{{item.process_Category}}</td>
+                  <td>{{item.totalAssignment}}</td>
+      
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="stat-card stat-card-green">
+        
+         <div class="hover-target" (mouseenter)="onMouseEnter('C')" (mouseleave)="showCompletedPanel = false">
+      
+        
+         <div class="stat-number"> {{carddashboard.completedLot}}</div>
+        <div class="stat-label py-2">Completed</div>
+      
+          <div class="hover-panel" *ngIf="showCompletedPanel">
+            <table>
+              
+              <tbody>
+                <tr *ngFor="let item of gridData">
+                  <td>{{item.process_Category}}</td>
+                  <td>{{item.totalAssignment}}</td>
+      
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="stat-card stat-card-purple">
+        <div class="stat-number">{{carddashboard.overdue_lot}}</div>
+        <div class="stat-label">Overdue</div>
+      </div>
+      <div class="stat-card stat-card-yellow">
+      
+        <div class="hover-target" (mouseenter)="onMouseEnter('I')" (mouseleave)="showInprogressPanel = false">
+          <div class="stat-number">{{carddashboard.pendingLot}}</div>
+          <div class="stat-label py-2">In-Progress</div>
+          <div class="hover-panel" *ngIf="showInprogressPanel">
+            <table>
+              <!-- <thead>
+                      <tr>
+                        <th>Category</th>
+                        <th>Assigment</th>
+                      </tr>
+                    </thead> -->
+              <tbody>
+                <tr *ngFor="let item of gridData">
+                  <td>{{item.process_Category}}</td>
+                  <td>{{item.totalAssignment}}</td>
+      
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="stat-card stat-card-red">
+        <div class="hover-target" (mouseenter)="onMouseEnter('N')" (mouseleave)="showNotAssignmentPanel = false">
+          <div class="stat-number"> {{carddashboard.notAllotted}}</div>
+          <div class="stat-label py-2">Not-Allotted</div>
+          <div class="hover-panel" *ngIf="showNotAssignmentPanel">
+            <table>
+              
+              <tbody>
+                <tr *ngFor="let item of gridData">
+                  <td>{{item.process_Category}}</td>
+                  <td>{{item.totalAssignment}}</td>
+      
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="stat-card stat-card-violet">
+        <div class="stat-number">{{carddashboard.yettocome}}</div>
+        <div class="stat-label">Yet to Come</div>
+      </div>
+    </div>
+  
+  </main>
   <form [formGroup]="range">
     <div class="row g-3 py-2">
       <!-- Financial Year -->
@@ -263,19 +353,16 @@
         <table mat-table [dataSource]="dataSource" class="custom-table mat-elevation-z8 custom-table">
 
 
-          <ng-container matColumnDef="all" sticky>
-            <th mat-header-cell *matHeaderCellDef style="max-width: 10px;" sticky></th>
-            <!-- <th mat-header-cell *matHeaderCellDef style="max-width: 10px;"> <mat-checkbox
-                (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()"
-                [indeterminate]="selection.hasValue() && !isAllSelected()">
-              </mat-checkbox> </th> -->
+          <ng-container matColumnDef="all" >
+            <th mat-header-cell *matHeaderCellDef style="max-width: 10px;" ></th>
+           
             <td mat-cell *matCellDef="let element"> <mat-checkbox (click)="$event.stopPropagation()"
                 (change)="$event ? selection.toggle(element) : null" [checked]="selection.isSelected(element)">
               </mat-checkbox> </td>
           </ng-container>
 
 
-          <ng-container matColumnDef="input" sticky>
+          <ng-container matColumnDef="input" >
             <th mat-header-cell *matHeaderCellDef> Input </th>
             <td mat-cell *matCellDef="let element">
               <i (click)="InputDownload(element)"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"
@@ -290,7 +377,7 @@
             </td>
           </ng-container>
 
-          <ng-container matColumnDef="output" sticky>
+          <ng-container matColumnDef="output" >
             <th mat-header-cell *matHeaderCellDef> Output
             
                  <!-- <div>
@@ -312,7 +399,7 @@
 
         
 
-          <ng-container matColumnDef="companyShortName" sticky>
+          <ng-container matColumnDef="companyShortName" >
             <th mat-header-cell *matHeaderCellDef style="width: 15px;"> Customer Name </th>
             <td mat-cell *matCellDef="let element">
                <span [matTooltipClass]="'mat-tooltip'" matTooltip="{{element.company_Name}}">
@@ -321,12 +408,12 @@
             </td>
           </ng-container>
 
-            <ng-container matColumnDef="lot_Number" sticky>
+            <ng-container matColumnDef="lot_Number" >
             <th mat-header-cell *matHeaderCellDef> Lot No </th>
             <td mat-cell *matCellDef="let element"> {{element.lot_Number}} </td>
           </ng-container>
 
-          <ng-container matColumnDef="headCount" sticky>
+          <ng-container matColumnDef="headCount" >
             <th mat-header-cell *matHeaderCellDef> HeadCount </th>
             <td mat-cell *matCellDef="let element"> {{element.headCount}} </td>
           </ng-container>
@@ -410,7 +497,7 @@
           <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
         </table>
         <mat-paginator class="mat-footer-paginator" [pageSizeOptions]="[5,10, 25, 100]" showFirstLastButtons
-          stickyEnd></mat-paginator>
+          ></mat-paginator>
       </div>
     </div>
 
@@ -451,7 +538,7 @@
       <div class="example-container mat-elevation-z8">
         <table mat-table [dataSource]="pendingLots" class="custom-table mat-elevation-z8 custom-table">
         
-             <ng-container matColumnDef="companyShortName" sticky>
+             <ng-container matColumnDef="companyShortName" >
             <th mat-header-cell *matHeaderCellDef style="width: 15px;"> Customer Name </th>
             <td mat-cell *matCellDef="let element">
               
@@ -464,12 +551,12 @@
             </td>
           </ng-container>
 
-            <ng-container matColumnDef="lot_Number" sticky>
+            <ng-container matColumnDef="lot_Number" >
             <th mat-header-cell *matHeaderCellDef> Lot No </th>
             <td mat-cell *matCellDef="let element"> {{element.lot_Number}} </td>
           </ng-container>
 
-          <ng-container matColumnDef="headCount" sticky>
+          <ng-container matColumnDef="headCount" >
             <th mat-header-cell *matHeaderCellDef> HeadCount </th>
             <td mat-cell *matCellDef="let element"> {{element.headCount}} </td>
           </ng-container>
@@ -550,7 +637,7 @@
           <tr mat-header-row *matHeaderRowDef="displayedPeningColumns"></tr>
           <tr mat-row *matRowDef="let row; columns: displayedPeningColumns;"></tr>
         </table>
-        <mat-paginator class="mat-footer-paginator" #PeningLotPaginator [pageSizeOptions]="[5,10, 25, 100]" showFirstLastButtons stickyEnd></mat-paginator>
+        <mat-paginator class="mat-footer-paginator" #PeningLotPaginator [pageSizeOptions]="[5,10, 25, 100]" showFirstLastButtons ></mat-paginator>
       </div>
     </div> 
 

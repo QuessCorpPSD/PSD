@@ -23,13 +23,13 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
 import { GstInvoiceComponent } from '../gst-invoice/gst-invoice.component';
 import { MatInputModule } from '@angular/material/input';
-
+import { MatRadioModule } from '@angular/material/radio';
 
 export const Invoice_TOKEN = new InjectionToken<IInvoiceRepository>('Invoice_TOKEN');
 @Component({
   selector: 'app-draft-invoice',
   imports: [CommonModule,GstInvoiceComponent, MatFormFieldModule,
-    MatInputModule, MatTabsModule,MatPaginatorModule,FormsModule,MatFormFieldModule, MatCardModule,MatCheckboxModule,  CompanyallComponent, PayPeriodComponent, MatIconModule, MatTableModule],
+    MatInputModule,MatRadioModule , MatTabsModule,MatPaginatorModule,FormsModule,MatFormFieldModule, MatCardModule,MatCheckboxModule,  CompanyallComponent, PayPeriodComponent, MatIconModule, MatTableModule],
   templateUrl: './draft-invoice.component.html',
   styleUrl: './draft-invoice.component.css',
    providers: [
@@ -45,7 +45,7 @@ export class DraftInvoiceComponent implements OnInit {
   payPeriod!: Payperiodclass;
   payPeriodType!: string;
   remarks = '';
-  dataSource=new MatTableDataSource<any>([]);;
+  dataSource=new MatTableDataSource<any>([]);
   invoiceType:number=0;
   selection = new SelectionModel<any>(true, []);
   userdetail:any;
@@ -55,7 +55,8 @@ export class DraftInvoiceComponent implements OnInit {
   @ViewChild('editDialog') editDialog!: TemplateRef<any>;
   dialogRef!: MatDialogRef<any>;
   isLoading:boolean= false;
-  @ViewChild(PayPeriod) PayPeriodComponent!: Payperiodclass;
+  Modelpopup:boolean=false;
+  //@ViewChild(PayPeriod) PayPeriodComponent!: Payperiodclass;
   displayColumns=['action','serial_No','map_name','net_CTC','netPay','lotNo','input_No','pO_Number','employee_Head_Count','service_Charge','serviceChargeAmount','service_Charge_Master','service_Charge_Type','bgvbl','astfee','discT1','discT2','idcard','email','regfee','trnfee','ggdbt','ppekit','vmsfee','edufee','ntpry','renmac','draded','othdd','mbapp','calcrg','calrt','narration']
   constructor(@Inject(Invoice_TOKEN) private _invoiceService: IInvoiceRepository,private _decrypt:EncryptionService,
   private _sessionStoreage:SessionStorageService,private dialog: MatDialog){
@@ -63,10 +64,11 @@ export class DraftInvoiceComponent implements OnInit {
  
 
   openDialog(): void {
-    //this.currentElement = { ...element }; // make copy for editing
+      this.isLoading = false;
+      //this.Modelpopup=true;
     this.dialogRef = this.dialog.open(this.editDialog, {
       width: '400px',
-      data: "text"
+     // data: "text"
     });
   }
   applyFilter(event: Event) {
@@ -104,13 +106,15 @@ export class DraftInvoiceComponent implements OnInit {
         "CreatedBy":this.userdetail.user_Id,
       }
       this._invoiceService.InvoiceInitiate(request).subscribe({
-        next:res=>{ console.log(res);
+        next:res=>{ 
           alert(res.Data.error_Message);
          this.isdisabled=false;
          this.InvoiceSearch();
          this.selection.clear();
          this.selection = new SelectionModel<any>(true, []);
          this.isLoading=false;
+         this.dialogRef.close();
+         this.remarks='';
         },
         error:err=>{console.log(err);
           this.isdisabled=false;
@@ -192,7 +196,7 @@ export class DraftInvoiceComponent implements OnInit {
     handleCompanyEvent(company)
     {
       this.selectedCompanyId = company.companyId;
-      this.payPeriod.;
+      //this.payPeriod.;
     }
     handlePayperiodEvent(payperiod: Payperiodclass){
       this.payPeriod = payperiod;
@@ -207,7 +211,7 @@ export class DraftInvoiceComponent implements OnInit {
       "InvoiceType": 0,
       "ActionType": "A"
     }
-    
+    this.dataSource=new MatTableDataSource<any>([]);
     // this._invoiceService.InitialSearch(request).subscribe({
     //   next: res => {
         

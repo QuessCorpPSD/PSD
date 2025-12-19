@@ -86,24 +86,27 @@ userList:any;
     return;
   }
 const request = {
-  FilterType: '',
+  FilterType: 'A',
   FinancialYear: this.financialyear ? this.financialyear.financial_Year_Name : null,
   UserId: this.user ? this.user.user_Id : null,
   FromDate: fromdates,
   ToDate: Todates
 };
 
- //this.BindDashboardDetail(request);
+ this.BindDashboardDetail(request);
 }
-// BindDashboardDetail(val){
-//   this.dashService.getadmindashboarddetail(val).subscribe({
-//       next:res=>{
+BindDashboardDetail(val){
+
+  console.log (val)
+  this.dashService.getadmindashboarddetail(val).subscribe({
+      next:res=>{
         
-//         this.dataSource= new MatTableDataSource<AdminDashboardDetailUI>(res.Data);
-//       this.dataSource.paginator = this.paginator;},
-//       error:err=>{console.log(err.message)}
-//     })
-// }
+      //   this.dataSource= new MatTableDataSource<AdminDashboardDetailUI>(res.Data);
+      // this.dataSource.paginator = this.paginator;
+    },
+      error:err=>{console.log(err.message)}
+    })
+}
 handlefinancialYearEvent(financialYear:any)
 {
  this.financialyear=financialYear;

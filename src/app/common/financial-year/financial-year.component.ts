@@ -62,7 +62,7 @@ BindFinancialYear() {
   })
 );
       },
-      error: err => console.error(err.message)
+      error: err => {}
     });
   }
 

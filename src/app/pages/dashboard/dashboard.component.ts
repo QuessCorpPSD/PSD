@@ -121,7 +121,7 @@ constructor(@Inject(DASH_TOKEN) private dashService: IDashBoardServices,
   PendingLots():void
   {
    this.dashService.GetPendingLotDetail().subscribe({
-    next:res=>{this.rowData=res.Data; console.log(this.rowData)},
+    next:res=>{this.rowData=res.Data; },
     error:err=>{console.log(err)}
    }) ;
   }
@@ -353,7 +353,7 @@ getScoreColor(element: any): string {
       }
     },
     error: (err) => {
-      console.error('Failed to fetch pending lots:', err);
+     // console.error('Failed to fetch pending lots:', err);
       //this.toastr.error('Unable to load pending lots. Please try again later.', 'Error');
     },
     complete: () => {

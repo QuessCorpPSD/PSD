@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { AppBodyComponent } from '../app-body/app-body.component';
 @Component({
     selector: 'app-pageheader',
-    imports: [CommonModule, AppBodyComponent],
+    imports: [CommonModule],
     templateUrl: './pageheader.component.html',
     styleUrl: './pageheader.component.css'
 })

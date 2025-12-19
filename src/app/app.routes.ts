@@ -23,6 +23,7 @@ import { DraftInvoiceComponent } from './pages/Invoice/draft-invoice/draft-invoi
 import { LoginmasterComponent } from './layout/loginmaster/loginmaster.component';
 import { DashComponent } from './pages/dash/dash.component';
 import { ReprocessComponent } from './pages/process/reprocess/reprocess.component';
+import { UnauthendicationComponent } from './pages/unauthendication/unauthendication.component';
 
 
 
@@ -37,6 +38,7 @@ export const routes: Routes = [
         loadComponent: () => import('./layout/loginmaster/loginmaster.component')
             .then(c => c.LoginmasterComponent)
     },
+    { path: 'unauthendicate', component: UnauthendicationComponent },
     {
         path:'forgot',
         loadComponent: () => import('./pages/forgot/forgot.component')
@@ -60,6 +62,7 @@ export const routes: Routes = [
             { path: 'gstinvoice', component: GstInvoiceComponent },
             { path: 'process', component: ReprocessComponent },
             { path: 'changepassword', component: ChangepasswordComponent },
+            
             // Wildcard inside children
             { path: '**', redirectTo: 'Home', pathMatch: 'full' }
         ]
