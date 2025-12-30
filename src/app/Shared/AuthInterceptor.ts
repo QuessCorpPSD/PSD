@@ -27,7 +27,8 @@ const apiurl=environment;
   //const user = encryptedUser ? decryptionService.decrypt(encryptedUser) : null;  
 
   const encryptedToken = tokenService.getAccessToken();
-  const accessToken = encryptedToken ? decryptionService.decrypt(encryptedToken) : null;  
+  const accessTokens = encryptedToken ? decryptionService.decrypt(encryptedToken) : null;  
+  let accessToken = accessTokens?accessTokens:'';
   const headersConfig: Record<string, string> = {
     'Cache-Control': 'no-cache, no-store, must-revalidate',
     'Pragma': 'no-cache',
@@ -46,7 +47,7 @@ const apiurl=environment;
       if (err.status === 401) {
        
         const refresh = tokenService.getRefreshToken();
-        const refreshToken = refresh ? decryptionService.decrypt(refresh) : '';   
+        const refreshToken =refresh ? decryptionService.decrypt(refresh) : '';   
          if (!refreshToken) {        
           tokenService.clearTokens();
           router.navigate(['/unauthendicate']);
@@ -61,8 +62,8 @@ const apiurl=environment;
   }
         const request={  
           "User_Id":users?.user_Id,        
-          "AccessToken":"",
-          "RefreshToken":""
+          "AccessToken":accessToken,
+          "RefreshToken":refreshToken
         }
         // if (!refreshToken) return throwError(() => err);
         // alert('refresh token eeoe');

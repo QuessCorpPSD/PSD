@@ -14,7 +14,7 @@ export class EncryptionService {
   }
 
   // Decrypt Data
-  decrypt(ciphertext: string): any {
+  decrypt(ciphertext: string): string {
     const bytes = CryptoJS.AES.decrypt(ciphertext, this.secretKey);
     return bytes.toString(CryptoJS.enc.Utf8);
   }

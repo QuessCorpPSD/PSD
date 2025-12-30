@@ -55,7 +55,7 @@ export const routes: Routes = [
             { path: 'Break', component: BreakdetailComponent },
             { path: 'SOP', component: SopnewComponent },
             { path: 'user', component: UserListComponent },
-            { path: 'dashboard', component: DashboardComponent },
+            { path: 'dashboard', component: DashComponent },
             { path: 'app-revok', component: RevokComponent },
             { path: 'invoice', component: InitiateComponent },
             { path: 'draft-invoice', component: DraftInvoiceComponent },

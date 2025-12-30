@@ -79,13 +79,14 @@ private destroy$ = new Subject<void>();
   allotment:any=[];
   lotStatus:any;
   isLoading=false;
-  isDisable=false;
-  isPayDisable=false;
+  isDisable=true;
+  isPayDisable=true;
    allot:any=[];
    ismatching:boolean=false;
    isRevised:boolean=false;
    InputText:string="";
    showNodification:boolean=false; 
+    selectedFile!: File;
   constructor(private route:ActivatedRoute,
     private router:Router,
     private decry:EncryptionService,
@@ -112,6 +113,9 @@ private destroy$ = new Subject<void>();
     else{
       return false;
     }
+  }
+  downloadFile():void{
+
   }
   GetAllotmentByLots():FormArray
 {
@@ -334,6 +338,12 @@ LotestimateValidation_Old(userId)
     downloadLink.download = filename;
     downloadLink.click();
   }
+  onFileSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      this.selectedFile = input.files[0];
+    }
+  }
   PayregisterDownload()
   {
     this.isLoading=true;
@@ -400,6 +410,7 @@ ngOnInit(): void {
     // Set input label and revised flag
     this.InputText = this.lotAssignment.revisedtime > 0 ? "Revised Input" : "Input";
     this.isRevised = this.lotAssignment.revisedtime > 0;
+    this.isPayDisable=this.lotAssignment.revisedtime==0 ? false:true;
 
     // Start validation and data loading
   //  this.LotestimateValidation(user.user_Id);
@@ -539,8 +550,7 @@ EstimateValidation(userId: number) {
       next: (res) => {
         if (this.userresponses) {
           if (this.userresponses.remainingMinutes) {
-            this.userresponses = res.Data;
-            console.log(this.userresponses);
+            this.userresponses = res.Data;            
             this.countdown = (this.userresponses.remainingMinutes || 0) * 60;
             interval(5000).pipe(
               takeUntil(this.destroy$),
@@ -647,13 +657,39 @@ QCVerifyButtonDisable(val)
 {
   this.isDisable=val;
 }
+convertFileToBase64(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+
+    reader.readAsDataURL(file);
+
+    reader.onload = () => {
+      // Removes: data:application/pdf;base64,
+      const base64 = (reader.result as string).split(',')[1];
+      resolve(base64);
+    };
+
+    reader.onerror = error => reject(error);
+  });
+}
 QCVerify(){
   this.isLoading=true;
   const userdetail= this._sessionStoreage.getItem('UserProfile');
   var user = JSON.parse(this.decry.decrypt(userdetail!));  
   this.isDisable=true;
-const catg=this.AllotmentForm.get("allotemt")?.value;   
-console.log()
+  
+  if(this.selectedFile == undefined || this.selectedFile.name=='')
+  {
+    alert('select the checkin sheet');
+    this.isLoading = false;
+    this.isDisable=false;
+    return;
+  }
+  if(this.selectedFile!=undefined)
+  {
+    this.convertFileToBase64(this.selectedFile).then(base64 => {
+    //console.log('Base64:', base64);
+    const catg=this.AllotmentForm.get("allotemt")?.value;
   var request={
     "Company_Id":this.lotAssignment.company_Id,
     "CompanyCode":this.lotAssignment.company_code,
@@ -666,7 +702,8 @@ console.log()
     "userId":user.user_Id,
     "allotments":catg,
     "RaiseQuery":this.AllotmentForm.get("RaiseQuery")?.value ,
-    "revised":this.lotAssignment.revised
+    "revised":this.lotAssignment.revised,
+    "CheckinFile":base64
 }
 
  this._authService.QCLotVerify(request).subscribe({
@@ -686,6 +723,7 @@ console.log()
 
       if(this.lotStatus.fileResponse.file!="No")
       {
+        this.selectedFile.slice();
         this.downloadExcelFromBase64(this.lotStatus.fileResponse.file, fileName);
       }
       else {
@@ -724,6 +762,9 @@ console.log()
     window.alert(errorMessage);
   }
 });
+  });
+  }
+
 
 }
 
@@ -768,7 +809,7 @@ const userdetail= this._sessionStoreage.getItem('UserProfile');
 
   this._authService.LotStatus(request).subscribe({
     next: res => { this.lotStatus = res.Data;
-      this.QCVerifyButtonDisable(res.Data.qC_Verified_Status);
+      //this.QCVerifyButtonDisable(res.Data.qC_Verified_Status);
     },
     error: error => console.error('Error:', error)
   });

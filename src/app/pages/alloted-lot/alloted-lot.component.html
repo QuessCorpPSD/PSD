@@ -437,11 +437,39 @@
                         <td colspan="3">
                             <input type="text" maxlength="1500" class="form-control" formControlName="RaiseQuery">
                         </td>
-                        <td>
-                            <!-- <button (click)="QCVerify()" class="raise-query-btn d-inline-flex align-items-center gap-2">
-                                <span>Raise Query</span>
-                            </button> -->
-                        </td>
+                     <td>
+  <div class="file-actions">
+    <!-- Upload -->
+    <label class="icon-box">
+      <input
+        type="file"
+        (change)="onFileSelected($event)"
+        hidden
+        accept=".xls,.xlsx"
+      />
+
+      <svg
+        class="icon"
+        [class.file-selected]="selectedFile"
+        viewBox="0 0 24 24"
+      >
+        <path d="M12 16V4M12 4l-4 4M12 4l4 4M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2" />
+      </svg>
+
+      <span class="file-tooltip" *ngIf="selectedFile">
+        {{ selectedFile.name }}
+      </span>
+    </label>
+
+    <!-- Download -->
+    <button class="icon-box" type="button" (click)="downloadFile()">
+      <svg class="icon" viewBox="0 0 24 24">
+        <path d="M12 4v12M12 16l4-4M12 16l-4-4M4 18v2a2 2 0 002 2h12a2 2 0 002-2v-2" />
+      </svg>
+    </button>
+  </div>
+</td>
+
                     </tr>
                     <tr style="line-height: 0.1em; height: 18px;">
                         <td colspan="5">
@@ -475,7 +503,7 @@
                                                 fill="#302CB3" />
                                         </svg>
                                     </i> <span style="font-family: Nunito Sans; ">Pay Register</span> </button>&nbsp;
-                                <button class="btn rounded-2" [disabled]="isDisable" (click)="QCVerify()"
+                                <button [disabled]="isDisable" class="btn rounded-2"  (click)="QCVerify()"
                                     style="padding-top: 1px; color:#302CB3;height: 24px;font-size: 12px;border-style: solid;border-color: #302CB3;"><i>
                                         <svg width="10" height="7" viewBox="0 0 10 7" fill="none"
                                             xmlns="http://www.w3.org/2000/svg">
