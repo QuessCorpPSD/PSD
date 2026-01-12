@@ -24,12 +24,13 @@ import { BrowserModule } from '@angular/platform-browser';
 import { GstInvoiceComponent } from '../gst-invoice/gst-invoice.component';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
+import { GstinvoiceComponent } from "../gstinvoice/gstinvoice.component";
 
 export const Invoice_TOKEN = new InjectionToken<IInvoiceRepository>('Invoice_TOKEN');
 @Component({
   selector: 'app-draft-invoice',
-  imports: [CommonModule,GstInvoiceComponent, MatFormFieldModule,
-    MatInputModule,MatRadioModule , MatTabsModule,MatPaginatorModule,FormsModule,MatFormFieldModule, MatCardModule,MatCheckboxModule,  CompanyallComponent, PayPeriodComponent, MatIconModule, MatTableModule],
+  imports: [CommonModule, MatFormFieldModule,
+    MatInputModule, MatRadioModule, MatTabsModule, MatPaginatorModule, FormsModule, MatFormFieldModule, MatCardModule, MatCheckboxModule, CompanyallComponent, PayPeriodComponent, MatIconModule, MatTableModule, GstinvoiceComponent],
   templateUrl: './draft-invoice.component.html',
   styleUrl: './draft-invoice.component.css',
    providers: [
@@ -204,6 +205,7 @@ export class DraftInvoiceComponent implements OnInit {
   ngOnInit(): void {
     const userdetail = this._sessionStoreage.getItem('UserProfile');
     this.userdetail = JSON.parse(this._decrypt.decrypt(userdetail!));
+    console.log(this.userdetail);
     this.payPeriodType = "All";
     const request = {
       "Company_Id": 0,
