@@ -12,7 +12,7 @@ import { AllotedLotComponent } from './pages/alloted-lot/alloted-lot.component';
 import { SopnewComponent } from './pages/sopnew/sopnew.component';
 import { UserMappingComponent } from './pages/admin/user-mapping/user-mapping.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
-import { ChangepasswordComponent } from './pages/changepassword/changepassword.component'; 
+import { ChangepasswordComponent } from './pages/changepassword/changepassword.component';
 import { BreakdetailComponent } from './pages/breakdetail/breakdetail.component';
 import { BreakComponent } from './pages/employee/break/break.component';
 import { RevokComponent } from './pages/assignment/revok/revok.component';
@@ -22,60 +22,168 @@ import { GstInvoiceComponent } from './pages/Invoice/gst-invoice/gst-invoice.com
 import { DraftInvoiceComponent } from './pages/Invoice/draft-invoice/draft-invoice.component';
 import { LoginmasterComponent } from './layout/loginmaster/loginmaster.component';
 import { DashComponent } from './pages/dash/dash.component';
-import { ReprocessComponent } from './pages/process/reprocess/reprocess.component';
 import { UnauthendicationComponent } from './pages/unauthendication/unauthendication.component';
+import { AllowReProcessComponent } from './pages/Process/allow-re-process/allow-re-process.component';
+import { ArrearAttendanceComponent } from './pages/Process/arrear-attendance/arrear-attendance.component';
+import { AttendanceComponent } from './pages/Process/attendance/attendance.component';
+import { AttendancebatchidUpdateComponent } from './pages/Process/attendancebatchid-update/attendancebatchid-update.component';
+import { FFprocessComponent } from './pages/Process/ffprocess/ffprocess.component';
+import { FNFRevokeComponent } from './pages/Process/fnfrevoke/fnfrevoke.component';
+import { ITAdjustmentComponent } from './pages/Process/itadjustment/itadjustment.component';
+import { LockpayperiodComponent } from './pages/Process/lockpayperiod/lockpayperiod.component';
+import { LOPAdjustmentsComponent } from './pages/Process/lopadjustments/lopadjustments.component';
+import { OneTimeReplacementComponent } from './pages/Process/one-time-replacement/one-time-replacement.component';
+import { OtherincomeComponent } from './pages/Process/otherincome/otherincome.component';
+import { PayProcessComponent } from './pages/Process/pay-process/pay-process.component';
+import { PayregisteruploadComponent } from './pages/Process/payregisterupload/payregisterupload.component';
+import { PaytransactionComponent } from './pages/Process/paytransaction/paytransaction.component';
+import { ProcessComponent } from './pages/Process/process.component';
+import { ReimbrusmentcalenderComponent } from './pages/Process/reimbrusmentcalender/reimbrusmentcalender.component';
+import { ReprocessComponent } from './pages/Process/reprocess/reprocess.component';
+import { BillingubrComponent } from './pages/Reports/billingubr/billingubr.component';
+import { CreditnotebalancereportComponent } from './pages/Reports/creditnotebalancereport/creditnotebalancereport.component';
+import { EmployeeReportProcessComponent } from './pages/Reports/employee-report-process/employee-report-process.component';
+import { IncrementReportComponent } from './pages/Reports/increment-report/increment-report.component';
+import { InvoiceLeaveBalanceReportComponent } from './pages/Reports/invoice-leave-balance-report/invoice-leave-balance-report.component';
+import { InvoiceReportComponent } from './pages/Reports/invoice-report/invoice-report.component';
+import { LeaveBalanceReportComponent } from './pages/Reports/leave-balance-report/leave-balance-report.component';
+import { NetpayreportComponent } from './pages/Reports/netpayreport/netpayreport.component';
+import { OtherIncomeProcessReportComponent } from './pages/Reports/other-income-process-report/other-income-process-report.component';
+import { OtherincomeentitywisereportComponent } from './pages/Reports/otherincomeentitywisereport/otherincomeentitywisereport.component';
+import { OtherincomereportComponent } from './pages/Reports/otherincomereport/otherincomereport.component';
+import { PayregisterentitywiseComponent } from './pages/Reports/payregisterentitywise/payregisterentitywise.component';
+import { PayregisterunprocessedComponent } from './pages/Reports/payregisterunprocessed/payregisterunprocessed.component';
+import { PayslipComponent } from './pages/Reports/payslip/payslip.component';
+import { PoactiveinactivereportComponent } from './pages/Reports/poactiveinactivereport/poactiveinactivereport.component';
+import { PobalancereportComponent } from './pages/Reports/pobalancereport/pobalancereport.component';
+import { PoemployeereportComponent } from './pages/Reports/poemployeereport/poemployeereport.component';
+import { PomonthwisereportComponent } from './pages/Reports/pomonthwisereport/pomonthwisereport.component';
+import { QITSBillingReportComponent } from './pages/Reports/qits-billing-report/qits-billing-report.component';
+import { ReportsComponent } from './pages/Reports/reports.component';
+import { TimesheetReportComponent } from './pages/Reports/timesheet-report/timesheet-report.component';
+import { ReimbursementnavigationComponent } from './pages/Reimbursement/reimbursementnavigation/reimbursementnavigation.component';
+import { ReimbursementLoanPreClosureComponent } from './pages/Reimbursement/reimbursement-loan-pre-closure/reimbursement-loan-pre-closure.component';
+import { SeparationNavigationComponent } from './pages/Separation/separation-navigation/separation-navigation.component';
+import { FandFattendenceComponent } from './pages/Separation/fand-fattendence/fand-fattendence.component';
+import { FullfinalsettlementComponent } from './pages/Separation/fullfinalsettlement/fullfinalsettlement.component';
 
 
 
 export const routes: Routes = [
-    // Default redirect first
-   
+  // Default redirect first
+
   { path: '', component: LoginmasterComponent },
 
-    // Login / forgot routes (lazy-loaded)
-    {
-        path:'Login',
-        loadComponent: () => import('./layout/loginmaster/loginmaster.component')
-            .then(c => c.LoginmasterComponent)
-    },
-    { path: 'unauthendicate', component: UnauthendicationComponent },
-    {
-        path:'forgot',
-        loadComponent: () => import('./pages/forgot/forgot.component')
-            .then(c => c.ForgotComponent)
-    },
+  // Login / forgot routes (lazy-loaded)
+  {
+    path: 'Login',
+    loadComponent: () => import('./layout/loginmaster/loginmaster.component')
+      .then(c => c.LoginmasterComponent)
+  },
+  { path: 'unauthendicate', component: UnauthendicationComponent },
+  {
+    path: 'forgot',
+    loadComponent: () => import('./pages/forgot/forgot.component')
+      .then(c => c.ForgotComponent)
+  },
 
-    // Master layout with children
-    {
-        path: 'Master', component: MasterComponent, children: [
-            { path: 'Home', component: HomeComponent },
-            { path: 'Assignment', component: AssignmentComponent },
-            { path: 'Severity', component: SeverityComponent },
-            { path: 'AllottedLot', component: AllotedLotComponent },
-            { path: 'Break', component: BreakdetailComponent },
-            { path: 'SOP', component: SopnewComponent },
-            { path: 'user', component: UserListComponent },
-            { path: 'dashboard', component: DashComponent },
-            { path: 'app-revok', component: RevokComponent },
-            { path: 'invoice', component: InitiateComponent },
-            { path: 'draft-invoice', component: DraftInvoiceComponent },
-            { path: 'gstinvoice', component: GstInvoiceComponent },
-            { path: 'process', component: ReprocessComponent },
-            { path: 'changepassword', component: ChangepasswordComponent },
-            
-            // Wildcard inside children
-            { path: '**', redirectTo: 'Home', pathMatch: 'full' }
+  // Master layout with children
+  {
+    path: 'Master', component: MasterComponent, children: [
+      { path: 'Home', component: HomeComponent },
+      { path: 'Assignment', component: AssignmentComponent },
+      { path: 'Severity', component: SeverityComponent },
+      { path: 'AllottedLot', component: AllotedLotComponent },
+      { path: 'Break', component: BreakdetailComponent },
+      { path: 'SOP', component: SopnewComponent },
+      { path: 'user', component: UserListComponent },
+      { path: 'dashboard', component: DashComponent },
+      { path: 'app-revok', component: RevokComponent },
+      { path: 'invoice', component: InitiateComponent },
+      { path: 'draft-invoice', component: DraftInvoiceComponent },
+      { path: 'gstinvoice', component: GstInvoiceComponent },
+      //{ path: 'process', component: ReprocessComponent },
+      { path: 'changepassword', component: ChangepasswordComponent },
+      {
+        path: 'process',
+        component: ProcessComponent,
+        children: [
+          { path: 'reprocess', component: ReprocessComponent },
+          { path: 'attendance', component: AttendanceComponent },
+          { path: 'arrearattendance', component: ArrearAttendanceComponent },
+          { path: 'LOPAdjustment', component: LOPAdjustmentsComponent },
+          { path: 'AttendancebatchIdupdate', component: AttendancebatchidUpdateComponent },
+          { path: 'payprocess', component: PayProcessComponent },
+          { path: 'ITAdjustment', component: ITAdjustmentComponent },
+          { path: 'otherincome', component: OtherincomeComponent },
+          { path: 'app-one-time-replacement', component: OneTimeReplacementComponent },
+          { path: 'app-fnfrevoke', component: FNFRevokeComponent },
+          { path: 'FFprocess', component: FFprocessComponent },
+          { path: 'AllowReProcess', component: AllowReProcessComponent },
+          { path: "paytransaction", component: PaytransactionComponent, },
+          { path: "lockpayperiod", component: LockpayperiodComponent, },
+          { path: "payregisterupload", component: PayregisteruploadComponent, },
+          { path: "reimbrusmentcalendar", component: ReimbrusmentcalenderComponent, },
         ]
-    },
-    //{ path: '', redirectTo: 'Login', pathMatch: 'full' },
-// Wildcard route
+      },
+      {
+        path: 'reports',
+        component: ReportsComponent,
+        children: [
+          { path: 'payregisterunprocessed', component: PayregisterunprocessedComponent },
+          { path: 'payslip', component: PayslipComponent },
+          { path: 'app-invoice-leave-balance-report', component: InvoiceLeaveBalanceReportComponent },
+          { path: 'app-leave-balance-report', component: LeaveBalanceReportComponent },
+          { path: 'poactiveinactivereport', component: PoactiveinactivereportComponent },
+          { path: 'poemployeereport', component: PoemployeereportComponent },
+          { path: 'pomonthwisereport', component: PomonthwisereportComponent },
+          { path: 'app-qits-billing-report', component: QITSBillingReportComponent },
+          { path: 'app-timesheet-report', component: TimesheetReportComponent },
+          { path: 'poactiveinactivereport', component: PoactiveinactivereportComponent },
+          { path: 'app-invoice-report', component: InvoiceReportComponent },
+          { path: 'app-netpayreport', component: NetpayreportComponent },
+          { path: 'payregisterentitywise', component: PayregisterentitywiseComponent },
+          { path: 'billingubr', component: BillingubrComponent },
+          { path: 'creditnotbalancereport', component: CreditnotebalancereportComponent },
+          { path: 'pobalancereport', component: PobalancereportComponent },
+          { path: "otherincomereport", component: OtherincomereportComponent },
+          { path: 'otherincomereportentitywise', component: OtherincomeentitywisereportComponent },
+          { path: 'billingubr', component: BillingubrComponent },
+          { path: 'otherIncomeProcessReport', component: OtherIncomeProcessReportComponent },
+          { path: 'employeReportProcess', component: EmployeeReportProcessComponent },
+          { path: 'IncreamnetReport', component: IncrementReportComponent }
+        ]
+      },
+      {
+        path: 'Reimbursement',
+        component: ReimbursementnavigationComponent,
+        children: [
+          { path: 'LoanPreClosure', component: ReimbursementLoanPreClosureComponent },
+        ]
+      },
+      {
+        path: 'Separation',
+        component: SeparationNavigationComponent,
+        children: [
+          { path: 'fandfattendence', component: FandFattendenceComponent },
+          { path: 'fullfinalSettlement', component: FullfinalsettlementComponent },
+        ]
+      },
+
+      // Wildcard inside children
+      { path: '**', redirectTo: 'Home', pathMatch: 'full' }
+    ]
+  },
+
+  //{ path: '', redirectTo: 'Login', pathMatch: 'full' },
+  // Wildcard route
   // { path: '**', redirectTo: 'Login' }
-    
+
 ];
 
 
 export const appConfig = {
-    providers: [
-      provideRouter(routes,withHashLocation()),
-    ],
-  };
+  providers: [
+    provideRouter(routes, withHashLocation()),
+  ],
+};

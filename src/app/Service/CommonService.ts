@@ -12,7 +12,7 @@ export class CommonService implements ICommonService {
     constructor(private http: HttpClient) {
 
     }
-    
+
     UserCreate(login): Observable<APIResponse> {
         var inputval = JSON.stringify(login);
 
@@ -39,29 +39,28 @@ export class CommonService implements ICommonService {
         }).set('Content-Type', 'application/json')
             .set('Accept', 'application/json')
         return this.http.post<APIResponse>(this.environment.apiUrl + "Admin/SwapCategory", inputval, { headers: config })
-            
+
     }
-      GetCompanyCodes(userId: number): Observable<APIResponse> {
-    const url = `${this.environment.apiUrl}Common/GetAllCompanyCode/${userId}`;
-    //console.log(url);
-    return this.http.get<APIResponse>(url);
-  }
-   GetPayperiodbyCompany(companyId: any): Observable<APIResponse> {
-    const url = `${this.environment.apiUrl}Common/GetAllPayperiod/${companyId}`;
-    console.log(url);
-    return this.http.get<APIResponse>(url);
-  }
-  GetInvoiceType():Observable<APIResponse>
-  {
-    const url = `${this.environment.apiUrl}InvoiceInitiation/GetTaxTypes`;
-    console.log(url);
-    return this.http.get<APIResponse>(url);
-  }
-  GetCurrentPayperiod(companyId: any): Observable<APIResponse> {
-    const url = `${this.environment.apiUrl}Common/GetCurrentPayperiod/${companyId}`;
-    //console.log(url);
-    return this.http.get<APIResponse>(url);
-  }
+    GetCompanyCodes(userId: number): Observable<APIResponse> {
+        const url = `${this.environment.apiUrl}Common/GetAllCompanyCode/${userId}`;
+        //console.log(url);
+        return this.http.get<APIResponse>(url);
+    }
+    GetPayperiodbyCompany(companyId: any): Observable<APIResponse> {
+        const url = `${this.environment.apiUrl}Common/GetAllPayperiod/${companyId}`;
+        console.log(url);
+        return this.http.get<APIResponse>(url);
+    }
+    GetInvoiceType(): Observable<APIResponse> {
+        const url = `${this.environment.apiUrl}InvoiceInitiation/GetTaxTypes`;
+        console.log(url);
+        return this.http.get<APIResponse>(url);
+    }
+    GetCurrentPayperiod(companyId: any): Observable<APIResponse> {
+        const url = `${this.environment.apiUrl}Common/GetCurrentPayperiod/${companyId}`;
+        //console.log(url);
+        return this.http.get<APIResponse>(url);
+    }
     GetProcessCategory(): Observable<APIResponse> {
         const headers = new HttpHeaders({
             'Cache-Control': 'no-cache, no-store, must-revalidate',
@@ -115,9 +114,9 @@ export class CommonService implements ICommonService {
             .set('Accept', 'application/json');
 
         const config = { headers };
-        return this.http.get<APIResponse>(this.environment.apiUrl + "Admin/GetManagerByUserId/"+user_Id, config)
+        return this.http.get<APIResponse>(this.environment.apiUrl + "Admin/GetManagerByUserId/" + user_Id, config)
     }
-    
+
     GetFun_Head(): Observable<APIResponse> {
         const headers = new HttpHeaders({
             'Cache-Control': 'no-cache, no-store, must-revalidate',
@@ -291,8 +290,8 @@ export class CommonService implements ICommonService {
         const config = { headers };
         return this.http.get<APIResponse>(this.environment.apiUrl + "Admin/GetTeamLeader/" + userId, config);
     }
-     GetAllUsers(): Observable<APIResponse>{
-const headers = new HttpHeaders({
+    GetAllUsers(): Observable<APIResponse> {
+        const headers = new HttpHeaders({
             'Cache-Control': 'no-cache, no-store, must-revalidate',
             'Pragma': 'no-cache',
             'Expires': '0'
@@ -300,8 +299,8 @@ const headers = new HttpHeaders({
             .set('Accept', 'application/json');
 
         const config = { headers };
-        return this.http.get<APIResponse>(this.environment.apiUrl + "Admin/GetAllUser" , config);
-     }
+        return this.http.get<APIResponse>(this.environment.apiUrl + "Admin/GetAllUser", config);
+    }
     GetAllEmployee(userId): Observable<APIResponse> {
         const headers = new HttpHeaders({
             'Cache-Control': 'no-cache, no-store, must-revalidate',
@@ -313,4 +312,10 @@ const headers = new HttpHeaders({
         const config = { headers };
         return this.http.get<APIResponse>(this.environment.apiUrl + "Admin/GetEmployeeByUserId/" + userId, config);
     }
+    GetSitesByCompanyId(companyId: any): Observable<APIResponse> {
+        const url = `${this.environment.apiUrl}Common/GetSitesByCompanyId/${companyId}`;
+        //console.log(url);
+        return this.http.get<APIResponse>(url);
+    }
+
 }
