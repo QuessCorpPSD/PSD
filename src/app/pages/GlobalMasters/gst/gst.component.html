@@ -1,0 +1,114 @@
+<div class="page-wrapper" style="padding-top: 2%;">
+
+    <div class="scrollable-content">
+        <mat-card-title style="color: #302CB3; font-size: 22px; font-family: Montserrat; font-weight: 700;"> GST
+            List</mat-card-title>
+
+        <div class="table-wrapper1" style=" padding-top: 2%; padding-left: 10px;">
+            <div class="col-md-3 d-flex gap-2">
+                <button class="btn btn-sm d-flex align-items-center justify-content-center btn-success"
+                    matTooltip="Create" (click)="AddPOOpen()">
+                    <mat-icon>add</mat-icon>
+                </button>
+
+                <button class="btn btn-sm d-flex align-items-center justify-content-center btn-secondary"
+                    matTooltip="Export" (click)="exportToExcel()">
+                    <mat-icon>download</mat-icon>
+                </button>
+            </div>
+            <div class="table-scroll">
+                <mat-table [dataSource]="uploadedDataSource" matSort
+                    class="custom-table mat-elevation-z8 auto-fit-table">
+                    <ng-container matColumnDef="Action">
+                        <mat-header-cell *matHeaderCellDef class="header"><strong>Action</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">
+                            <div class="header">
+                                <button class="btn btn-sm d-flex align-items-center justify-content-center"
+                                    matTooltip="Delete" (click)="deleteRow(row)">
+                                    <mat-icon>delete</mat-icon>
+                                </button>
+                                <button class="btn btn-sm d-flex align-items-center justify-content-center"
+                                    matTooltip="edit" (click)="editopen(row)">
+                                    <mat-icon>edit</mat-icon>
+                                </button>
+                            </div>
+                        </mat-cell>
+                    </ng-container>
+
+                    <!-- <ng-container matColumnDef="GST Master Id">
+                        <mat-header-cell *matHeaderCellDef c><strong>GST Master Id</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['GstMasterId'] }}</mat-cell>
+                    </ng-container> -->
+
+                    <ng-container matColumnDef="Effective Date">
+                        <mat-header-cell *matHeaderCellDef><strong>Effective Date</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['EffectiveDate'] }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Quess Legal Entity">
+                        <mat-header-cell *matHeaderCellDef><strong>Quess Legal Entity</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['Quess Legal Entity'] }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Gst Type">
+                        <mat-header-cell *matHeaderCellDef><strong>Gst Type</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['Gst Type'] }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="State Name">
+                        <mat-header-cell *matHeaderCellDef><strong>State Name</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['State Name'] }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="GST Number">
+                        <mat-header-cell *matHeaderCellDef><strong>GST Number</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['GstNumber'] }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="PAN Number">
+                        <mat-header-cell *matHeaderCellDef><strong>PAN Number</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['PAN Number'] }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="TAN Number">
+                        <mat-header-cell *matHeaderCellDef><strong>TAN Number</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['TAN Number'] }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Company Name">
+                        <mat-header-cell *matHeaderCellDef><strong>Company Name</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['CompanyName'] }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Company Address">
+                        <mat-header-cell *matHeaderCellDef><strong>Company Address</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['CompanyAddress'] }}</mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="Entity">
+                        <mat-header-cell *matHeaderCellDef><strong>Quess Legal Entity</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['EntityName'] }}</mat-cell>
+                    </ng-container>
+
+
+                    <mat-header-row *matHeaderRowDef="uploadDisplayedColumns"></mat-header-row>
+                    <mat-row *matRowDef="let row; columns: uploadDisplayedColumns"></mat-row>
+                </mat-table>
+            </div>
+
+            <div *ngIf="uploadedData.length === 0" class="text-center p-4">
+                <p class="text-muted">No data to display</p>
+            </div>
+
+            <mat-paginator #paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
+                aria-label="Select page">
+            </mat-paginator>
+        </div>
+    </div>
+</div>
+<div *ngIf="isLoading" class="loading-overlay">
+    <img src="assets/Loading.gif" alt="Loading...">
+</div>
+<div *ngIf="showPopup" class="overlay">
+    <app-alertpopup *ngIf="showPopup" [message]="popupMessage" [submessage]="popupSubMessage" class="centered-popup"
+        (close)="showPopup = false"></app-alertpopup>
+</div>

@@ -1,0 +1,173 @@
+<form [formGroup]="Gsteditform" novalidate>
+    <mat-card class="custom-card">
+        <mat-card-header class="sticky-header">
+            <mat-card-title style="color: #302CB3; font-size: 22px; font-family: Montserrat; font-weight: 700;">Update
+                GST Master</mat-card-title>
+            <span class="spacer"></span>
+            <button mat-icon-button (click)="onClose()" class="no-border-icon">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-card-header>
+
+        <mat-card-content>
+            <div class="row g-3 mb-3">
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">GST Master Id</label>
+                    <span style="color: red;">*</span>
+                    <input class="form-control form-control-sm" formControlName="Gstmasterid" readonly />
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">Effective Date</label>
+                    <span style="color: red;">*</span>
+                    <input type="date" class="form-control form-control-sm" formControlName="EffectiveDate"
+                        name="EffectiveDate" />
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">GST Number</label>
+                    <span style="color: red;">*</span>
+                    <input class="form-control form-control-sm" formControlName="GSTNumber" name="GSTNumber" />
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">GST Type* <span style="color: red;">*</span></label>
+                    <select class="form-select form-select-sm" formControlName="GSTType">
+                        <option>-Select-</option>
+
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">Quess Legal Entity<span
+                            style="color: red;">*</span></label>
+                    <select class="form-select form-select-sm" formControlName="Entity">
+                        <option>-Select-</option>
+                        <option *ngFor="let pf of entity" [ngValue]="pf.Entity_Id">
+                            {{ pf.Entity_Name }}
+                        </option>
+                    </select>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">State Name <span style="color: red;">*</span></label>
+                    <select class="form-select form-select-sm" formControlName="StateName">
+                        <option>-Select-</option>
+                    </select>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">Company Name</label>
+                    <span style="color: red;">*</span>
+                    <input class="form-control form-control-sm" formControlName="CompanyName" name="CompanyName" />
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">Company Address</label>
+                    <span style="color: red;">*</span>
+                    <input class="form-control form-control-sm" formControlName="CompanyAddress"
+                        name="CompanyAddress" />
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">Pin Code</label>
+                    <span style="color: red;">*</span>
+                    <input class="form-control form-control-sm" formControlName="PinCode" name="PinCode" />
+                </div>
+            </div>
+
+            <div class="row g-3 mb-3">
+
+
+
+                <div class="row g-3 mb-3">
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">PAN Number <span style="color: red;">*</span></label>
+                        <input class="form-control form-control-sm" formControlName="PANNumber" />
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">TAN Number <span style="color: red;">*</span></label>
+                        <input class="form-control form-control-sm" formControlName="TANNumber" />
+                    </div>
+
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Location <span style="color: red;">*</span></label>
+                        <input class="form-control form-control-sm" formControlName="Location" />
+                    </div>
+
+
+                </div>
+
+            </div>
+            <div class="row g-3 mb-3">
+
+                <!-- CGST (LOCKED) -->
+                <div class="col-md-4">
+                    <div class="d-flex align-items-center mb-1">
+                        <input type="checkbox" formControlName="cgstApplicable" />
+                        <label class="form-label small ms-2">CGST Percentage</label>
+                    </div>
+                    <input type="number" class="form-control form-control-sm" formControlName="cgstPercentage" />
+                </div>
+
+                <!-- SGST -->
+                <div class="col-md-4">
+                    <div class="d-flex align-items-center mb-1">
+                        <input type="checkbox" formControlName="sgstApplicable" />
+                        <label class="form-label small ms-2">SGST Percentage</label>
+                    </div>
+                    <input type="number" class="form-control form-control-sm" formControlName="sgstPercentage" />
+                </div>
+
+                <!-- UTGST -->
+                <div class="col-md-4">
+                    <div class="d-flex align-items-center mb-1">
+                        <input type="checkbox" formControlName="utgstApplicable" />
+                        <label class="form-label small ms-2">UTGST Percentage</label>
+                    </div>
+                    <input type="number" class="form-control form-control-sm" formControlName="utgstPercentage" />
+                </div>
+
+            </div>
+
+            <div class="row g-3 mb-3">
+                <div class="col-md-4">
+                    <label class="form-label small">Cess Percentage</label>
+                    <input type="number" class="form-control form-control-sm" formControlName="cessPercentage" />
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label small">Cess Effective From</label>
+                    <input type="date" class="form-control form-control-sm" formControlName="cessFromDate" />
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label small">Cess Effective To</label>
+                    <input type="date" class="form-control form-control-sm" formControlName="cessToDate" />
+                </div>
+            </div>
+
+        </mat-card-content>
+
+
+        <mat-card-footer class="footer">
+            <div class="d-flex justify-content-end mt-3">
+                <div class="btn-1"
+                    style="display: flex; justify-content: flex-end; gap: 10px; width: 100%; padding-right: 7px;">
+
+                    <button type="cancel"
+                        style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: #f0f0f0;"
+                        (click)="onClose()">
+                        Cancel
+                    </button>
+
+                    <button type="submit"
+                        style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: blue;color: white; "
+                        (click)="SaveClick()">
+                        Update
+                    </button>
+                </div>
+            </div>
+        </mat-card-footer>
+    </mat-card>
+</form>
+<div *ngIf="isLoading" class="loading-overlay">
+    <img src="assets/Loading.gif" alt="Loading...">
+</div>
+<app-alertpopup *ngIf="showPopup" [message]="popupMessage" [submessage]="popupSubMessage" class="centered-popup"
+    (close)="showPopup = false"></app-alertpopup>
