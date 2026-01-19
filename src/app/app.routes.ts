@@ -66,6 +66,7 @@ import { ReimbursementLoanPreClosureComponent } from './pages/Reimbursement/reim
 import { SeparationNavigationComponent } from './pages/Separation/separation-navigation/separation-navigation.component';
 import { FandFattendenceComponent } from './pages/Separation/fand-fattendence/fand-fattendence.component';
 import { FullfinalsettlementComponent } from './pages/Separation/fullfinalsettlement/fullfinalsettlement.component';
+import { ReportComponent } from './pages/Reports/report/report.component';
 
 
 
@@ -151,7 +152,8 @@ export const routes: Routes = [
           { path: 'billingubr', component: BillingubrComponent },
           { path: 'otherIncomeProcessReport', component: OtherIncomeProcessReportComponent },
           { path: 'employeReportProcess', component: EmployeeReportProcessComponent },
-          { path: 'IncreamnetReport', component: IncrementReportComponent }
+          { path: 'IncreamnetReport', component: IncrementReportComponent },
+          { path: 'Report', component: ReportComponent }
         ]
       },
       {
