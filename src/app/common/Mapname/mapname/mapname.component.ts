@@ -63,13 +63,13 @@ export class MapnameComponent implements OnChanges {
               searchText = value?.mapName;
             }
 
-            return this._filter(searchText);
-          })
-        );
-      },
-      error: err => console.error(err.message)
-    });
-  }
+              return this._filter(searchText);
+            })
+          );
+        },
+        error: err => console.error(err.message)
+      });
+    }
 
   private _filter(value: string): Mapnameclass[] {
     const filterValue = value.toLowerCase();

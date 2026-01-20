@@ -63,7 +63,7 @@
                             </svg>
                         </i>
                     </label>
-                </div>
+                </div>              
                 <div style="display: inline-block;padding-top: 12px;">
                     <input type="file" #fileInput2 style="display: none;" accept=".xlsx, .xls" />
                     <label style="position: relative; display: inline-block;">
@@ -127,25 +127,29 @@
                 </div>
             </div>
 
-            <div class="table-container">
+         
            
             <div class="table-container" style="top:10px;">
                 <div class="table-scroll-window">
                     <mat-table [dataSource]="dataSource" matSort
-                        class="custom-mat-table mat-elevation-z8 auto-fit-table">
+                        class="custom-mat-table mat-elevation-z8">
                         <!--Filter Rows-->
                         <ng-container matColumnDef="filterselect">
-                            <mat-header-cell *matHeaderCellDef class="fixed-width-column" style="position: sticky;">
+                            <mat-header-cell *matHeaderCellDef class="fixed-width-column" >
                             </mat-header-cell>
                         </ng-container>
                         <ng-container matColumnDef="filterpdfdownload">
-                            <mat-header-cell *matHeaderCellDef class="fixed-width-column" style="position: sticky;">
+                            <mat-header-cell *matHeaderCellDef class="fixed-width-column" >
                             </mat-header-cell>
                         </ng-container>
                         <ng-container matColumnDef="filterinvoice_Number">
-                            <mat-header-cell *matHeaderCellDef style="position: sticky;">
+                            <mat-header-cell *matHeaderCellDef >
                                 <input style="width:100%;" class="form-control form-control-sm" placeholder="Search"
-                                    (keyup)="applyFilter($event, 'invoice_Number')" style="position: sticky;">
+                                    (keyup)="applyFilter($event, 'invoice_Number')" >
+                            </mat-header-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="filterirn_Status">
+                            <mat-header-cell *matHeaderCellDef>
                             </mat-header-cell>
                         </ng-container>
                         <ng-container matColumnDef="filtersap_Invoice_Number">
@@ -209,23 +213,35 @@
                             <mat-header-cell *matHeaderCellDef>
                             </mat-header-cell>
                         </ng-container>
+                         <ng-container matColumnDef="filterIrn_Number">
+                            <mat-header-cell *matHeaderCellDef>
+                            </mat-header-cell>
+                        </ng-container>
                         <ng-container matColumnDef="filtercrn_Number">
                             <mat-header-cell *matHeaderCellDef>
                                 <input style="width:100%;" class="form-control form-control-sm" placeholder="Search"
                                     (keyup)="applyFilter($event, 'crn_Number')">
                             </mat-header-cell>
                         </ng-container>
+                         <ng-container matColumnDef="filtercrn_IRN_Status">
+                            <mat-header-cell *matHeaderCellDef>
+                            </mat-header-cell>
+                        </ng-container>
+                         <ng-container matColumnDef="filtercrn_IRN_Number">
+                            <mat-header-cell *matHeaderCellDef>
+                            </mat-header-cell>
+                        </ng-container>
 
                         <!--Data Rows-->
                         <!-- Checkbox Column -->
                         <ng-container matColumnDef="select">
-                            <mat-header-cell *matHeaderCellDef class="fixed-width-column" style="position: sticky;">
+                            <mat-header-cell *matHeaderCellDef class="fixed-width-column" >
                                 <mat-checkbox (change)="toggleAllRows()"
                                     [checked]="selection.hasValue() && isAllSelected()"
                                     [indeterminate]="isPartialSelected()">
                                 </mat-checkbox>
                             </mat-header-cell>
-                            <mat-cell *matCellDef="let element" class="fixed-width-column" style="position: sticky;">
+                            <mat-cell *matCellDef="let element" class="fixed-width-column" >
                                 <mat-checkbox (click)="$event.stopPropagation()" (change)="toggleRow(element)"
                                     [checked]="selection.isSelected(element)">
                                 </mat-checkbox>
@@ -233,9 +249,9 @@
                         </ng-container>
                         <ng-container matColumnDef="pdfdownload">
                             <mat-header-cell *matHeaderCellDef mat-sort-header class="fixed-width-column"
-                                style="position: sticky;"></mat-header-cell>
-                            <mat-cell *matCellDef="let element" class="fixed-width-column" style="position: sticky;">
-                                <img src="assets/Icons/download_enabled.svg"
+                               ></mat-header-cell>
+                            <mat-cell *matCellDef="let element" class="fixed-width-column" >
+                                <img src="assets/icons/download_enabled.svg"
                                     (click)="DownloadInvoice(element.invoice_Id, element.invoice_Number)"
                                     matTooltip="Pdf Download" matTooltipPosition="above"
                                     style="cursor: pointer; width: 24px; height: 22px; max-width: 100px;" />
@@ -253,11 +269,14 @@
                         </ng-container>
 
                         <ng-container matColumnDef="invoice_Number">
-                            <mat-header-cell *matHeaderCellDef mat-sort-header style="position: sticky;">Invoice
-                                Number</mat-header-cell>
-                            <mat-cell *matCellDef="let element" style="position: sticky;"><span class="offer-style">{{
+                            <mat-header-cell *matHeaderCellDef mat-sort-header >Invoice Number</mat-header-cell>
+                            <mat-cell *matCellDef="let element" ><span class="offer-style">{{
                                     element.invoice_Number
                                     }}</span></mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="irN_Status">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header>Irn Status</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.irN_Status }}</mat-cell>
                         </ng-container>
 
                         <ng-container matColumnDef="sap_Invoice_Number">
@@ -333,7 +352,7 @@
 
                         </ng-container> <ng-container matColumnDef="invoice_Date">
                             <mat-header-cell *matHeaderCellDef mat-sort-header>Invoice Date</mat-header-cell>
-                            <mat-cell *matCellDef="let element">{{ element.invoice_Date | date:'dd MMM yyyy'
+                            <mat-cell *matCellDef="let element">{{ element.invoice_Date  | date:'dd MMM yyyy' 
                                 }}</mat-cell>
 
                         </ng-container> <ng-container matColumnDef="particulars">
@@ -413,8 +432,13 @@
                                 Name</mat-header-cell>
                             <mat-cell *matCellDef="let element" style="width:100px;">{{ element.group_Name
                                 }}</mat-cell>
+                                 </ng-container> 
+                          <ng-container matColumnDef="Irn_Number">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header>IRN Number</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Irn_Number }}</mat-cell>
 
-                        </ng-container> <ng-container matColumnDef="crn_Number">
+                        </ng-container> 
+                        <ng-container matColumnDef="crn_Number">
                             <mat-header-cell *matHeaderCellDef mat-sort-header>CRN Number</mat-header-cell>
                             <mat-cell *matCellDef="let element">{{ element.crn_Number }}</mat-cell>
 
@@ -506,7 +530,7 @@
                 <mat-paginator class="mat-footer-paginator" [pageSizeOptions]="[5, 10, 25, 100]" showFirstLastButtons
                     stickyEnd>
                 </mat-paginator>
-            </div>
+           
         </div>
     </div>
 </div>

@@ -16,6 +16,8 @@ import { FinancialYearComponent } from "../../../common/financial-year/financial
 import { Payperiodclass } from '../../../Models/Common';
 import { PayPeriodComponent } from "../../../common/payperiod/payperiod.component";
 import { MapnameComponent } from "../../../common/Mapname/mapname/mapname.component";
+import { CitynameComponent } from "../../../common/cityname/cityname.component";
+import { StatenameComponent } from "../../../common/statename/statename.component";
 import { GroupnameComponent } from "../../../common/groupname/groupname.component";
 import { SessionStorageService } from '../../../Shared/SessionStorageService';
 import { EncryptionService } from '../../../Shared/encryption.service';
@@ -44,7 +46,9 @@ import { EncryptionService } from '../../../Shared/encryption.service';
     FinancialYearComponent,
     PayPeriodComponent,
     MapnameComponent,
-    GroupnameComponent
+    GroupnameComponent,
+    CitynameComponent,
+    StatenameComponent
   ],
   templateUrl: './gstinvoiceadd.component.html',
   styleUrl: './gstinvoiceadd.component.css'
@@ -72,6 +76,10 @@ export class GstinvoiceaddComponent {
   companyId: number = 0;
   mapNameId: any;
   selectedMap: any;
+  cityId:any;
+  selectedCity:any;
+   stateId:any;
+  selectedState:any;
 
   constructor(private dialogRef: MatDialogRef<GstinvoiceaddComponent>, private gst: InvoiceRepository, private _decrypt: EncryptionService, private _sessionStoreage: SessionStorageService,) { }
 
@@ -107,7 +115,22 @@ export class GstinvoiceaddComponent {
       CostCenterMapping: event.mapNameId
     });
   }
-
+citynameEvent(event) {
+    this.cityId = event.City_Id;
+    this.selectedCity = event.City_Name;
+    console.log("citynameEvent", this.cityId);
+    this.addGstInvoice.patchValue({
+      CityName: event.City_Id
+    });
+  }
+  statenameEvent(event) {
+    this.stateId = event.State_Id;
+    this.selectedState = event.State_Name;
+    console.log("statenameEvent", this.stateId);
+    this.addGstInvoice.patchValue({
+      StateName: event.State_Id
+    });
+  }
   handlePayperiodEvent(payperiod: Payperiodclass) {
     this.payPeriod = payperiod;
     this.payperiodId = payperiod.payfrequencyid;
@@ -128,11 +151,14 @@ export class GstinvoiceaddComponent {
     const today = new Date();
     const formattedToday = today.toISOString().split('T')[0];
     this.addGstInvoice = new FormGroup({
-      InvoiceNumber: new FormControl('', Validators.required),
+      InvoiceNumber: new FormControl(  { value: 'NEW', disabled: true }, Validators.required),
       companyCode: new FormControl('', Validators.required),
       CompanyName: new FormControl('', Validators.required),
       GroupDetail: new FormControl(''),
       CostCenterMapping: new FormControl('', Validators.required),
+      CityName: new FormControl('', Validators.required),
+      StateName: new FormControl('', Validators.required),
+      City: new FormControl('', Validators.required),
       FinancialYear: new FormControl('', Validators.required),
       PayPeriod: new FormControl('', Validators.required),
       InvoiceType: new FormControl('', Validators.required),
@@ -260,7 +286,7 @@ export class GstinvoiceaddComponent {
       Company_Id: this.selectedCompanyId?.toString() ?? null,
       Cost_Center_Mapping_Id: this.mapNameId?.toString() ?? null,
 
-      City_Id: "76",
+      City_Id: this.cityId?.toString() ?? null,
 
       Financial_Year_Id: this.selectedFinancialYear?.toString() ?? null,
       Pay_Period_Id: this.payperiodId?.toString() ?? null,
@@ -271,9 +297,9 @@ export class GstinvoiceaddComponent {
 
       Particulars: formValue?.Particulars?.toString() ?? null,
       Amount: formValue?.Amount?.toString() ?? null,
-
-      StateId: "1",
-      InvoicingStateId: "1",
+      State_Id: this.stateId?.toString() ?? null,
+     //StateId: "1",
+      //InvoicingStateId: "1",
 
       CGST_Percentage: null,
       SGST_Percentage: null,

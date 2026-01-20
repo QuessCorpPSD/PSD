@@ -323,4 +323,14 @@ export class CommonService implements ICommonService {
         //console.log(url);
         return this.http.get<APIResponse>(url);
     }
+    GetAutoEntityLocation( companyId:any):Observable<APIResponse> {
+        const url = `${this.environment.apiUrl}Common/GetAutoEntityLocation/${companyId}`;
+        //console.log(url);
+        return this.http.get<APIResponse>(url);
+    }
+     GetAllState( companyId:any):Observable<APIResponse> {
+        const url = `${this.environment.apiUrl}Common/GetAllState/${companyId}`;
+        //console.log(url);
+        return this.http.get<APIResponse>(url);
+    }
 }

@@ -1,202 +1,211 @@
-.mat-footer-paginator {
-  position: sticky;
-  bottom: 0;
-  background: white;
-  box-shadow: 0 -1px 4px rgba(0, 0, 0, 0.1);
-  z-index: 100;
+/* ===========================
+   PAGE LAYOUT
+=========================== */
+.page-wrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
 }
-  .page-wrapper {
-      display: flex;
-      align-items: flex-start;
-      height: auto;
 
-  }
+.scrollable-content {
+  width: 100%;
+  overflow-x: hidden;
+}
 
-  .scrollable-content {
-      flex: 1 1 auto;
-      overflow-x: auto;
-      overflow-y: auto;
-      padding-left: 10px;
-  }
-.right-align {
-    display: flex;
-    justify-content: flex-end;
-    padding-right: 20px;
-    width: 100%;
-} 
+/* ===========================
+   TABLE CONTAINER
+=========================== */
+.table-container {
+  width: 100%;
+  background: #ffffff;
+  border: 1px solid #E2E2E2;
+  border-radius: 6px;
+}
+
+/* ===========================
+   SCROLL WINDOW
+=========================== */
+.table-scroll-window {
+  max-height: 500px;
+  overflow-x: auto;
+  overflow-y: auto;
+  width: 100%;
+  position: relative;
+}
+
+/* ===========================
+   MATERIAL TABLE (CRITICAL FIX)
+=========================== */
 .custom-mat-table {
-  border: 1px solid #ddd;
+  width: 100%;
+  min-width: 2800px;              /* 🔥 REQUIRED for many columns */
+  table-layout: auto;             /* 🔥 FIXES HIDDEN COLUMNS */
+  border-collapse: separate;
+  border-spacing: 0;
+  font-family: "Montserrat", sans-serif;
+  font-size: 13px;
 }
 
-.custom-mat-table th,
-.custom-mat-table td {
-  padding: 3px 5px;
+/* ===========================
+   HEADER ROW
+=========================== */
+::ng-deep .mat-mdc-header-cell {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: #FAFAFA;
+
+  font-size: 12px;
+  font-weight: 600;
+  color: #6E6E6E;
+
+  padding: 10px 12px;
+  text-align: center;
   white-space: nowrap;
+
+  border-bottom: 2px solid #DDDDDD;
+  border-right: 1px solid #E0E0E0;
 }
 
+/* ===========================
+   FILTER ROW
+=========================== */
+.filter-row .mat-mdc-header-cell {
+  position: sticky;
+  top: 44px;
+  z-index: 19;
+  background: #FFFFFF;
+  padding: 6px;
+}
+
+.filter-row input {
+  width: 100%;
+  height: 28px;
+  font-size: 12px;
+}
+
+/* ===========================
+   DATA CELLS
+=========================== */
+::ng-deep .mat-mdc-cell {
+  padding: 8px 12px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #222;
+
+  text-align: center;
+  vertical-align: middle;
+
+  white-space: nowrap;
+  overflow: visible;              /* 🔥 IMPORTANT */
+  text-overflow: unset;
+
+  border-bottom: 1px dashed #E8E8E8;
+  border-right: 1px solid #F0F0F0;
+}
+
+/* ===========================
+   ROW HOVER
+=========================== */
+::ng-deep .mat-mdc-row:hover {
+  background-color: #F7F9FF;
+}
+
+/* ===========================
+   FIXED WIDTH COLUMNS
+=========================== */
 .fixed-width-column {
-  width: 50px;
-  min-width: 30px;
-  max-width: 75px;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+  width: 60px;
+  min-width: 60px;
+  max-width: 60px;
+  text-align: center;
 }
 
+/* ===========================
+   STICKY LEFT COLUMNS
+=========================== */
+.sticky-col {
+  position: sticky;
+  left: 0;
+  z-index: 30;
+  background: #FFFFFF;
+  border-right: 1px solid #DDD;
+}
+
+/* ===========================
+   REMOVE MATERIAL SHADOW
+=========================== */
 ::ng-deep .mat-elevation-z8 {
   box-shadow: none !important;
 }
 
-::ng-deep .mat-mdc-header-cell {
-  position: sticky !important;
-  top: 0;
-  z-index: 10;
-  background: white;
-  color: #A0A0A0;
-  font-size: 12px;
-  font-family: "Montserrat";
-  font-weight: 500;
-  line-height: 19.40px;
-  word-wrap: break-word;
-  border-right: 1px solid #ddd;
-  text-align: center;
-} 
-
-::ng-deep .mat-mdc-cell {
-  font-family: "Montserrat";
-  font-size: 12px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: 22.4px;
-  letter-spacing: 0.24px;
-  color: #222;
-  border-bottom: 1px dashed #E8E8E8 !important;
-  border-right: 1px solid #ddd;
-  display: flex;
-  justify-content: center;
-  text-align: center;
-  word-wrap: break-word;
-
-} 
-
-.table-container {
-  width: 100%;
-  border: 1px solid #ddd;
-  background: white;
-}
-
-/* This is your scroll window */
-.table-scroll-window {
-  max-height: 450px;     /* Set your desired height */
-  overflow-x: auto;       /* Horizontal scroll */
-  overflow-y: auto;       /* Vertical scroll */
-  width: 100%;
-  position: relative;
-}
-
- .filter-row {
+/* ===========================
+   PAGINATOR (STICKY FOOTER)
+=========================== */
+.mat-footer-paginator {
   position: sticky;
-  top: 56px;
-  z-index: 9;
-  background: white;
+  bottom: 0;
+  z-index: 50;
+  background: #FFFFFF;
+  border-top: 1px solid #E0E0E0;
 }
 
- .header-row {
-  position: sticky !important;
-  top: 0;
-  background: white !important;
-  z-index: 100;
-}
-
-.offer-style {
-    border-radius: 6px;
-    border: 1px solid #C7F5BB;
-    background: #E9FFE3;
-    height: 22px;
-    width: 87px;
-    text-align: center;
-}
-
-.select-drop {
-  font-family: "Montserrat";
-  font-size: 12px;
-  font-weight: 500;
-  line-height: 22.4px;
-  letter-spacing: 0.24px;
-  color: #7E7E7E;
-  appearance: none;
-  -webkit-appearance: none;
-  border-radius: 10px;
-  border: 1px solid #7E7E7E;
-  width: 120px;
-  height: 40px;
-  padding: 4px 24px 4px 4px;
-  background-color: white;
-  position: relative;
-  text-align: center;
-  /* box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.12); */
-}
-
-
+/* ===========================
+   BUTTON / DROPDOWN STYLES
+=========================== */
+.select-drop,
 .select-drop1 {
   font-family: "Montserrat";
   font-size: 12px;
   font-weight: 500;
-  line-height: 22.4px;
-  letter-spacing: 0.24px;
   color: #7E7E7E;
-  appearance: none;
-  -webkit-appearance: none;
+
   border-radius: 10px;
   border: 1px solid #7E7E7E;
-  width: 160px;
-  height: 40px;
-  padding: 4px 24px 4px 4px;
   background-color: white;
-  position: relative;
+  appearance: none;
+
+  height: 40px;
+  padding: 4px 24px 4px 10px;
   text-align: center;
-  /* box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.12); */
+  cursor: pointer;
 }
 
-.previewtable {
-  width: auto;
-  table-layout: auto;
-  border-collapse: collapse;
-  font-family: "Montserrat";
-  font-size: 12px;
-  font-weight: 600;
-  line-height: 22.4px;
-  letter-spacing: 0.24px;
-  color: #7E7E7E;
-  border: 1px solid #E8E8E8;
-  /* 🔹 Full table border */
+.select-drop {
+  width: 120px;
 }
 
-.previewtable th,
-.previewtable td {
-  font-family: "Montserrat";
-  font-size: 12px;
-  font-weight: 600;
-  line-height: 22.4px;
-  letter-spacing: 0.24px;
-  white-space: nowrap;
-  padding: 8px;
-  border: 1px solid #E8E8E8;
-  /* 🔹 Cell border */
-  text-align: left;
+.select-drop1 {
+  width: 160px;
 }
 
-.previewtable th {
-  font-family: "Montserrat";
-  font-size: 12px;
-  font-weight: 600;
-  line-height: 22.4px;
-  letter-spacing: 0.24px;
-  background-color: #f9f9f9;
-  /* Optional for visibility */
-  color: #A0A0A0;
+/* ===========================
+   OFFER / HIGHLIGHT BADGE
+=========================== */
+.offer-style {
+  border-radius: 6px;
+  border: 1px solid #C7F5BB;
+  background: #E9FFE3;
+  height: 22px;
+  min-width: 80px;
+  padding: 0 8px;
+  text-align: center;
+  line-height: 22px;
 }
 
+/* ===========================
+   RIGHT ALIGN HELPERS
+=========================== */
+.right-align {
+  display: flex;
+  justify-content: flex-end;
+  padding-right: 20px;
+  width: 100%;
+}
+
+/* ===========================
+   LOADING OVERLAY
+=========================== */
 .loading-overlay {
   position: fixed;
   top: 0;
@@ -208,4 +217,11 @@
   align-items: center;
   justify-content: center;
   z-index: 9999;
+}
+
+/* ===========================
+   TOOLTIP ICON FIX
+=========================== */
+img {
+  vertical-align: middle;
 }

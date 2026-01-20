@@ -22,7 +22,6 @@ import { GstinvoiceaddComponent } from '../gstinvoiceadd/gstinvoiceadd.component
 import { MatDialog } from '@angular/material/dialog';
 import { MatIcon } from "@angular/material/icon";
 
-
 export const Invoice_TOKEN = new InjectionToken<IInvoiceRepository>('Invoice_TOKEN');
 
 @Component({
@@ -63,8 +62,7 @@ export class GstinvoiceComponent {
     'select'
     , 'pdfdownload'
     , 'invoice_Number'
-    //, 'sap_Invoice_Number'
-    //, 'sap_Account_Number'
+    ,'irN_Status'
     , 'invoice_Date'
     , 'company_Code'
     , 'pay_Period'
@@ -73,17 +71,22 @@ export class GstinvoiceComponent {
     , 'invoiceType'
     , 'net_Amount'
     , 'status'
-    //, 'sap_Cancel_Document'
-    //, 'sap_Credit_Note_Document'
+    , 'Irn_Number'
+    , 'sap_Invoice_Number'
+    , 'sap_Account_Number'
     , 'crn_Number'
+    ,'crn_IRN_Status'
+    ,'crn_IRN_Number'
+    , 'sap_Cancel_Document'
+    , 'sap_Credit_Note_Document'
   ];
 
   filterDisplayedColumns: string[] = [
     'filterselect'
     , 'filterpdfdownload'
     , 'filterinvoice_Number'
-    //, 'filtersap_Invoice_Number'
-    //, 'filtersap_Account_Number'
+    , 'filterirn_Status'
+   
     , 'filterinvoice_Date'
     , 'filtercompany_Code'
     , 'filterpay_Period'
@@ -92,9 +95,14 @@ export class GstinvoiceComponent {
     , 'filterinvoiceType'
     , 'filternet_Amount'
     , 'filterstatus'
-    //, 'filtersap_Cancel_Document'
-    //, 'filtersap_Credit_Note_Document'
+    ,'filterIrn_Number'
+    , 'filtersap_Invoice_Number'
+    , 'filtersap_Account_Number'
     , 'filtercrn_Number'
+    ,'filtercrn_IRN_Status'
+    ,'filtercrn_IRN_Number'
+    , 'filtersap_Cancel_Document'
+    , 'filtersap_Credit_Note_Document'
   ]
   TemplateOptions = [
     { value: 'reject', Text: 'Reject' },
