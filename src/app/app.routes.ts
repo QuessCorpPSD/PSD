@@ -24,6 +24,7 @@ import { LoginmasterComponent } from './layout/loginmaster/loginmaster.component
 import { DashComponent } from './pages/dash/dash.component';
 import { ReprocessComponent } from './pages/process/reprocess/reprocess.component';
 import { UnauthendicationComponent } from './pages/unauthendication/unauthendication.component';
+import { GstinvoiceComponent } from './pages/Invoice/gstinvoice/gstinvoice.component';
 
 
 
@@ -59,7 +60,7 @@ export const routes: Routes = [
             { path: 'app-revok', component: RevokComponent },
             { path: 'invoice', component: InitiateComponent },
             { path: 'draft-invoice', component: DraftInvoiceComponent },
-            { path: 'gstinvoice', component: GstInvoiceComponent },
+            { path: 'gstinvoice', component: GstinvoiceComponent },
             { path: 'process', component: ReprocessComponent },
             { path: 'changepassword', component: ChangepasswordComponent },
             

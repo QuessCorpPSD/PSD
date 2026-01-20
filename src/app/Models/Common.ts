@@ -19,6 +19,10 @@ export interface Mapnameclass {
   mapNameId: number
   mapName: string
 }
+export interface citynameclass {
+  city_Id: number
+  city_Name: string
+}
 
 export interface InputTypeclass{
   inputId: number
@@ -35,7 +39,7 @@ export interface Cityclass{
   city_Name: string
 }
 
-export interface State {
+export interface statenameclass {
   state_Id: number
   state_Name: string
 }
