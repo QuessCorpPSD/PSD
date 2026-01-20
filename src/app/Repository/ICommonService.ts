@@ -2,7 +2,7 @@ import { Observable } from "rxjs";
 import { APIResponse } from "../Models/apiresponse";
 
 export interface ICommonService {
-    GetProcessCategory(): Observable<APIResponse>
+    // GetProcessCategory(): Observable<APIResponse>
     GetReporting(): Observable<APIResponse>
     GetTeamLeader(): Observable<APIResponse>
     GetMangers(): Observable<APIResponse>
