@@ -6,8 +6,6 @@
     </div>
     <div [ngSwitch]="userRole">
       <div class="sidebar" *ngSwitchCase="'admin'">
-      <div class="sidebar" *ngSwitchCase="'admin'">
-
         <a [routerLink]="['/Master/dashboard']" class="nav-link" routerLinkActive="active"
           [routerLinkActiveOptions]="{ exact: true }"
           [ngClass]="{ 'inactive-link': !isActive('/Master/dashboard') }"><i><svg width="19" height="18"

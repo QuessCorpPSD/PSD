@@ -13,10 +13,6 @@ export class CommonService implements ICommonService {
 
   }
 
-  UserCreate(login): Observable<APIResponse> {
-    var inputval = JSON.stringify(login);
-    }
-
     UserCreate(login): Observable<APIResponse> {
         var inputval = JSON.stringify(login);
 
