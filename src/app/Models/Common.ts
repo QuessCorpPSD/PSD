@@ -10,7 +10,7 @@ export interface Payperiodclass {
   paySequenceNo: string
   payPeriod: string
   displayName: string;
-   start_At: string;
+  start_At: string;
   end_At: string;
 
 }
@@ -20,17 +20,17 @@ export interface Mapnameclass {
   mapName: string
 }
 
-export interface InputTypeclass{
+export interface InputTypeclass {
   inputId: number
   inputType: string
 }
 
-export interface Groupnameclass{
+export interface Groupnameclass {
   siteCode: string
   siteName: string
 }
 
-export interface Cityclass{
+export interface Cityclass {
   city_Id: string
   city_Name: string
 }
@@ -38,4 +38,10 @@ export interface Cityclass{
 export interface State {
   state_Id: number
   state_Name: string
+}
+
+export interface Paycodelist {
+  paycode_Id: number
+  paycode_Code: string
+  description: string
 }
