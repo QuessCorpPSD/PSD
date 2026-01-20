@@ -23,23 +23,7 @@ import { DraftInvoiceComponent } from './pages/Invoice/draft-invoice/draft-invoi
 import { LoginmasterComponent } from './layout/loginmaster/loginmaster.component';
 import { DashComponent } from './pages/dash/dash.component';
 import { UnauthendicationComponent } from './pages/unauthendication/unauthendication.component';
-// import { AllowReProcessComponent } from './pages/Process/allow-re-process/allow-re-process.component';
-// import { ArrearAttendanceComponent } from './pages/Process/arrear-attendance/arrear-attendance.component';
-// import { AttendanceComponent } from './pages/Process/attendance/attendance.component';
-// import { AttendancebatchidUpdateComponent } from './pages/Process/attendancebatchid-update/attendancebatchid-update.component';
-// import { FFprocessComponent } from './pages/Process/ffprocess/ffprocess.component';
-// import { FNFRevokeComponent } from './pages/Process/fnfrevoke/fnfrevoke.component';
-// import { ITAdjustmentComponent } from './pages/Process/itadjustment/itadjustment.component';
-// import { LockpayperiodComponent } from './pages/Process/lockpayperiod/lockpayperiod.component';
-// import { LOPAdjustmentsComponent } from './pages/Process/lopadjustments/lopadjustments.component';
-// import { OneTimeReplacementComponent } from './pages/Process/one-time-replacement/one-time-replacement.component';
-// import { OtherincomeComponent } from './pages/Process/otherincome/otherincome.component';
-// import { PayProcessComponent } from './pages/Process/pay-process/pay-process.component';
-// import { PayregisteruploadComponent } from './pages/Process/payregisterupload/payregisterupload.component';
-// import { PaytransactionComponent } from './pages/Process/paytransaction/paytransaction.component';
-// import { ProcessComponent } from './pages/Process/process.component';
-// import { ReimbrusmentcalenderComponent } from './pages/Process/reimbrusmentcalender/reimbrusmentcalender.component';
-// import { ReprocessComponent } from './pages/Process/reprocess/reprocess.component';
+
 import { BillingubrComponent } from './pages/Reports/billingubr/billingubr.component';
 import { CreditnotebalancereportComponent } from './pages/Reports/creditnotebalancereport/creditnotebalancereport.component';
 import { EmployeeReportProcessComponent } from './pages/Reports/employee-report-process/employee-report-process.component';
@@ -143,37 +127,8 @@ import { ReprocessComponent } from './pages/process/reprocess/reprocess.componen
 
 export const routes: Routes = [
   // Default redirect first
-
-  // Default redirect first
-
-  // Default redirect first
-
   { path: '', component: LoginmasterComponent },
 
-  // Login / forgot routes (lazy-loaded)
-  {
-    path: 'Login',
-    loadComponent: () => import('./layout/loginmaster/loginmaster.component')
-      .then(c => c.LoginmasterComponent)
-  },
-  { path: 'unauthendicate', component: UnauthendicationComponent },
-  {
-    path: 'forgot',
-    loadComponent: () => import('./pages/forgot/forgot.component')
-      .then(c => c.ForgotComponent)
-  },
-  // Login / forgot routes (lazy-loaded)
-  {
-    path: 'Login',
-    loadComponent: () => import('./layout/loginmaster/loginmaster.component')
-      .then(c => c.LoginmasterComponent)
-  },
-  { path: 'unauthendicate', component: UnauthendicationComponent },
-  {
-    path: 'forgot',
-    loadComponent: () => import('./pages/forgot/forgot.component')
-      .then(c => c.ForgotComponent)
-  },
   // Login / forgot routes (lazy-loaded)
   {
     path: 'Login',
@@ -267,22 +222,7 @@ export const routes: Routes = [
 
 
 
-      // {
-      //   path: 'Master', component: MasterComponent, children: [
-      //     { path: 'Home', component: HomeComponent },
-      //     { path: 'Assignment', component: AssignmentComponent },
-      //     { path: 'Severity', component: SeverityComponent },
-      //     { path: 'AllottedLot', component: AllotedLotComponent },
-      //     { path: 'Break', component: BreakdetailComponent },
-      //     { path: 'SOP', component: SopnewComponent },
-      //     { path: 'user', component: UserListComponent },
-      //     { path: 'dashboard', component: DashComponent },
-      //     { path: 'app-revok', component: RevokComponent },
-      //     { path: 'invoice', component: InitiateComponent },
-      //     { path: 'draft-invoice', component: DraftInvoiceComponent },
-      //     { path: 'gstinvoice', component: GstInvoiceComponent },
-      //     { path: 'process', component: ReprocessComponent },
-      //     { path: 'changepassword', component: ChangepasswordComponent },
+
       {
         path: 'navigationglobal', component: GlobalmasternavigationComponent,
         children: [
@@ -341,24 +281,6 @@ export const routes: Routes = [
 
         ]
       },
-
-
-
-      // {
-      //   path: 'Master', component: MasterComponent, children: [
-      //     { path: 'Home', component: HomeComponent },
-      //     { path: 'Assignment', component: AssignmentComponent },
-      //     { path: 'Severity', component: SeverityComponent },
-      //     { path: 'AllottedLot', component: AllotedLotComponent },
-      //     { path: 'Break', component: BreakdetailComponent },
-      //     { path: 'SOP', component: SopnewComponent },
-      //     { path: 'user', component: UserListComponent },
-      //     { path: 'dashboard', component: DashComponent },
-      //     { path: 'app-revok', component: RevokComponent },
-      //     { path: 'invoice', component: InitiateComponent },
-      //     { path: 'draft-invoice', component: DraftInvoiceComponent },
-      //     { path: 'gstinvoice', component: GstInvoiceComponent },
-      //     { path: 'process', component: ReprocessComponent },
       {
         path: 'admin', component: AdminnavigationComponent,
         children: [
