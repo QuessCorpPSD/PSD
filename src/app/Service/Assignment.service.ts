@@ -727,6 +727,16 @@ const config = { headers };
             .set('Accept', 'application/json')
         return this.http.post<APIResponse>(this.environment.apiUrl+'Assignment/UserLotStatusValidation',inputval,{ headers: config })
     }
+       CheckINFileDownload(val):Observable<APIResponse>{
+          var inputval = JSON.stringify(val);         
+           const config = new HttpHeaders({
+            'Cache-Control': 'no-cache, no-store, must-revalidate',
+            'Pragma': 'no-cache',
+            'Expires': '0'
+        }).set('Content-Type', 'application/json')
+            .set('Accept', 'application/json')
+        return this.http.post<APIResponse>(this.environment.apiUrl+'Assignment/CheckINFileDownload',inputval,{ headers: config })
+    }
     FeedBackMail(val):Observable<APIResponse>{
           var inputval = JSON.stringify(val);
            const config = new HttpHeaders({

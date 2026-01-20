@@ -115,7 +115,31 @@ private destroy$ = new Subject<void>();
     }
   }
   downloadFile():void{
-
+    this.isLoading=true;
+    const request = {
+      "CompanyCode": this.lotAssignment.company_code,
+      "CompanyName": this.lotAssignment.company_name,
+      "PayPeriod": this.lotAssignment.pay_period,
+      "LotNo": this.lotAssignment.lot_Number,
+      "Revised": this.lotAssignment.revisedtime,
+    }
+    this._authService.CheckINFileDownload(request).subscribe({
+      next:res=>{
+        const files=res.Data;
+        if(files.file!="N")
+        {
+          this.downloadExcelFromBase64(files.file,this.lotAssignment.company_name);
+          this.isLoading=false;
+        }
+        else{
+          alert('File Not exists');
+          this.isLoading=false;
+        }
+      },
+      error:err=>{
+        this.isLoading=false;
+      }
+    })
   }
   GetAllotmentByLots():FormArray
 {
@@ -342,8 +366,10 @@ LotestimateValidation_Old(userId)
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
       this.selectedFile = input.files[0];
+      this.isDisable=false;
     }
   }
+
   PayregisterDownload()
   {
     this.isLoading=true;
@@ -690,6 +716,9 @@ QCVerify(){
     this.convertFileToBase64(this.selectedFile).then(base64 => {
     //console.log('Base64:', base64);
     const catg=this.AllotmentForm.get("allotemt")?.value;
+    console.log(this.AllotmentForm);
+    const RaiseQuery = this.AllotmentForm.get('RaiseQuery')?.value;
+    console.log(RaiseQuery)
   var request={
     "Company_Id":this.lotAssignment.company_Id,
     "CompanyCode":this.lotAssignment.company_code,
@@ -701,7 +730,7 @@ QCVerify(){
     "createdon":this.lotAssignment.createdOn,
     "userId":user.user_Id,
     "allotments":catg,
-    "RaiseQuery":this.AllotmentForm.get("RaiseQuery")?.value ,
+    "RaiseQuery":RaiseQuery,
     "revised":this.lotAssignment.revised,
     "CheckinFile":base64
 }

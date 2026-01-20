@@ -1,6 +1,6 @@
 import { HttpClient, HttpEvent, HttpHandlerFn, HttpHeaders, HttpInterceptorFn, HttpRequest } from '@angular/common/http';
 import { inject } from '@angular/core';
-import { catchError, Observable, switchMap, throwError } from 'rxjs';
+import { catchError, Observable, switchMap, throwError, timeout } from 'rxjs';
 import { TokenService } from './TokenService';
 import { EncryptionService } from './encryption.service';
 import { APIResponse } from '../Models/apiresponse';
@@ -42,6 +42,7 @@ const apiurl=environment;
   const cloned = req.clone({ setHeaders: headersConfig });
 
   return next(cloned).pipe(
+     timeout(1800000),
     catchError(err => {
      
       if (err.status === 401) {
@@ -77,7 +78,7 @@ const apiurl=environment;
           switchMap((res: any) => {
             const refreshUrl = `${apiurl.apiUrl}/api/Authendicate/refresh`;
           
-            tokenService.setTokens(res.Data.accessToken, res.Data.refreshToken);
+            tokenService.setTokens(decryptionService.encrypt(res.Data.accessToken),decryptionService.encrypt(res.Data.refreshToken));
 
             // Re-attach new token with no-cache headers
             const retried = req.clone({

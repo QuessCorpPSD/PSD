@@ -437,36 +437,44 @@
                         <td colspan="3">
                             <input type="text" maxlength="1500" class="form-control" formControlName="RaiseQuery">
                         </td>
-                     <td>
-  <div class="file-actions">
-    <!-- Upload -->
-    <label class="icon-box">
-      <input
-        type="file"
-        (change)="onFileSelected($event)"
-        hidden
-        accept=".xls,.xlsx"
-      />
+                  <td>
+  <div class="file-actions-wrapper">
+    <div class="file-heading">Checking sheet</div>
 
-      <svg
-        class="icon"
-        [class.file-selected]="selectedFile"
-        viewBox="0 0 24 24"
-      >
-        <path d="M12 16V4M12 4l-4 4M12 4l4 4M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2" />
-      </svg>
+    <div class="file-actions">
+      <!-- Upload -->
+      <label class="icon-box">
+        <input
+          type="file"
+          (change)="onFileSelected($event)"
+          hidden
+          accept=".xls,.xlsx"
+        />
 
-      <span class="file-tooltip" *ngIf="selectedFile">
-        {{ selectedFile.name }}
-      </span>
-    </label>
+        <svg
+          class="icon"
+          [class.file-selected]="selectedFile"
+          viewBox="0 0 24 24"
+        >
+          <path
+            d="M12 16V4M12 4l-4 4M12 4l4 4M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2"
+          />
+        </svg>
 
-    <!-- Download -->
-    <button class="icon-box" type="button" (click)="downloadFile()">
-      <svg class="icon" viewBox="0 0 24 24">
-        <path d="M12 4v12M12 16l4-4M12 16l-4-4M4 18v2a2 2 0 002 2h12a2 2 0 002-2v-2" />
-      </svg>
-    </button>
+        <span class="file-tooltip" *ngIf="selectedFile">
+          {{ selectedFile.name }}
+        </span>
+      </label>
+
+      <!-- Download -->
+      <button class="icon-box" type="button" (click)="downloadFile()">
+        <svg class="icon" viewBox="0 0 24 24">
+          <path
+            d="M12 4v12M12 16l4-4M12 16l-4-4M4 18v2a2 2 0 002 2h12a2 2 0 002-2v-2"
+          />
+        </svg>
+      </button>
+    </div>
   </div>
 </td>
 

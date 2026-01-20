@@ -165,9 +165,15 @@ button:disabled {
   transition: stroke 0.3s ease;
 }
 .icon.file-selected {
-  stroke: #4caf50;     /* green */
+  stroke: #2626a3;     /* green */
 }
-
+.file-heading {
+  font-size: 10px;
+  font-weight: 600;
+  margin-bottom: 4px;
+  text-align: left;
+  color: #555;
+}
 /* Tooltip */
 .file-tooltip {
   position: absolute;

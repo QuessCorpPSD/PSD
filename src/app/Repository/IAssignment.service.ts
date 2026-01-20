@@ -12,6 +12,7 @@ export interface IAssignmentService {
       PayRegisterUpload(val):Observable<APIResponse>
       LotStatus(val):Observable<APIResponse>
       QCLotVerify(val):Observable<APIResponse>
+      CheckINFileDownload(val):Observable<APIResponse>
       InputFileDownload(val):Observable<APIResponse>
       OutPutFileDownload(val):Observable<APIResponse>
       LotValidationEstimate(val):Observable<APIResponse>

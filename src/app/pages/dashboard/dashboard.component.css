@@ -292,17 +292,17 @@ th.mat-column-position, td.mat-column-position {
 
 @media (min-width: 1024px) {
     .stats-grid {
-        grid-template-columns: repeat(6, 1fr);
+        grid-template-columns: repeat(7, 1fr);
         gap: 21px;
     }
 }
 
 /* Stat Cards */
 .stat-card {
-    min-width: 151px;
+    min-width: 100px;
     height: 80px;
     border-radius: 10px;
-    padding: 16px 10px;
+    padding: 10px 8px;
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -332,9 +332,17 @@ th.mat-column-position, td.mat-column-position {
 .stat-card-violet {
     background: conic-gradient(from 90deg, rgba(135, 68, 206, 1) 0%, rgba(108, 51, 169, 1) 50%, rgba(81, 33, 132, 1) 100%);
 }
+.stat-card-orange {
+    background: conic-gradient(
+        from 90deg,
+        rgba(255, 159, 67, 1) 0%,
+        rgba(255, 140, 0, 1) 50%,
+        rgba(230, 92, 0, 1) 100%
+    );
+}
 
 .stat-number {
-    font-size: 24px;
+    font-size: 18px;
     font-weight: 700;
     line-height: 22px;
 }
