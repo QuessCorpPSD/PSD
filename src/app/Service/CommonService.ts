@@ -168,6 +168,7 @@ export class CommonService implements ICommonService {
         return this.http.get<APIResponse>(this.environment.apiUrl + "Admin/GetManagerByUserId/" + user_Id, config)
     }
 
+
     GetFun_Head(): Observable<APIResponse> {
         const headers = new HttpHeaders({
             'Cache-Control': 'no-cache, no-store, must-revalidate',

@@ -515,6 +515,24 @@
             </svg>
           </i><span style="font-family: Nunito Sans;">SOP</span> </a>
 
+        <a [routerLink]="['/Master/Home']" class="nav-link" routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }" [ngClass]="{ 'inactive-link': !isActive('/Master/Home') }"><i><svg
+              width="19" height="18" viewBox="0 0 19 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" clip-rule="evenodd"
+                d="M9.50538 0.907986C9.23454 0.697338 8.8553 0.697338 8.58447 0.907986L1.83447 6.15799C1.65178 6.30008 1.54492 6.51856 1.54492 6.75V15C1.54492 16.2426 2.55228 17.25 3.79492 17.25H14.2949C15.5376 17.25 16.5449 16.2426 16.5449 15V6.75C16.5449 6.51856 16.4381 6.30008 16.2554 6.15799L9.50538 0.907986ZM12.0449 15.75H14.2949C14.7091 15.75 15.0449 15.4142 15.0449 15V7.11681L9.04492 2.45015L3.04492 7.11681V15C3.04492 15.4142 3.38071 15.75 3.79492 15.75H6.04492V9C6.04492 8.58579 6.38071 8.25 6.79492 8.25H11.2949C11.7091 8.25 12.0449 8.58579 12.0449 9V15.75ZM7.54492 15.75V9.75H10.5449V15.75H7.54492Z"
+                [attr.fill]="isActive('/Master/Home')?'#302CB3':'#A9ACB1'" />
+            </svg>
+          </i> Home</a>
+
+        <a [routerLink]="['/Master/SOP']" class="nav-link" routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }" [ngClass]="{ 'inactive-link': !isActive('/Master/SOP') }"><i>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-hexagon"
+              viewBox="0 0 16 16">
+              <path
+                d="M14 4.577v6.846L8 15l-6-3.577V4.577L8 1zM8.5.134a1 1 0 0 0-1 0l-6 3.577a1 1 0 0 0-.5.866v6.846a1 1 0 0 0 .5.866l6 3.577a1 1 0 0 0 1 0l6-3.577a1 1 0 0 0 .5-.866V4.577a1 1 0 0 0-.5-.866z" />
+            </svg>
+          </i><span style="font-family: Nunito Sans;">SOP</span> </a>
+
 
         <a (click)="Logout()"><i>
             <svg width="19" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
