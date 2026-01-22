@@ -6,14 +6,13 @@ import { environment } from "../../environments/environment.development";
 import { HttpClient, HttpHeaders, HttpResponse } from "@angular/common/http";
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class InvoiceRepository implements IInvoiceRepository {
-     environment=environment;
-        constructor(private http:HttpClient)
-        {
-    
-        }
+    environment = environment;
+    constructor(private http: HttpClient) {
+
+    }
     Search(val): Observable<APIResponse> {
 
         const url = `${this.environment.apiUrl}InvoiceInitiation/Search`;
@@ -26,9 +25,21 @@ export class InvoiceRepository implements IInvoiceRepository {
         return this.http.post<APIResponse>(url, JSON.stringify(val), { headers });
     }
 
-      InitialSearch(val): Observable<APIResponse> {
+    InitialSearch(val): Observable<APIResponse> {
 
         const url = `${this.environment.apiUrl}InvoiceInitiation/InitiationSearch`;
+        const headers = new HttpHeaders({
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        });
+        const config = new HttpHeaders().set('Content-Type', 'application/json')
+            .set('Accept', 'application/json')
+        return this.http.post<APIResponse>(url, JSON.stringify(val), { headers });
+    }
+
+    InitialSearchAllot(val): Observable<APIResponse> {
+
+        const url = `${this.environment.apiUrl}InvoiceInitiation/InitiationSearchAllot`;
         const headers = new HttpHeaders({
             'Content-Type': 'application/json',
             'Accept': 'application/json'
@@ -109,6 +120,13 @@ export class InvoiceRepository implements IInvoiceRepository {
 
     addGstInvoice(payload: any): Observable<string> {
         return this.http.post(this.environment.apiUrl + 'GSTInvoice/Create', payload, { responseType: 'text' })
+    }
+
+    GetAllInvoiceAllotDetails(payload: any): Observable<APIResponse> {
+        return this.http.post<APIResponse>(
+            this.environment.apiUrl + 'InvoiceInitiation/GetAllInvoiceAllotDetails',
+            payload
+        );
     }
 
 

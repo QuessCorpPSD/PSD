@@ -1,54 +1,54 @@
 <div class="container-fluid py-4">
-<div class="row">
-<form [formGroup]="range">
-    <div class="row g-3 py-2">
-      <!-- Financial Year -->
-      <div class="col-12 col-md-3">
-        <div class="d-flex flex-column">
-          <label class="form-label fw-semibold" style="font-size: 12px; color: #222;">Financial year</label>
-          <div class="input-group">
-            <financial-year (financialEmit)="handlefinancialYearEvent($event)"></financial-year>
+  <div class="row">
+    <form [formGroup]="range">
+      <div class="row g-3 py-2">
+        <!-- Financial Year -->
+        <div class="col-12 col-md-3">
+          <div class="d-flex flex-column">
+            <label class="form-label fw-semibold" style="font-size: 12px; color: #222;">Financial year</label>
+            <div class="input-group">
+              <financial-year (financialEmit)="handlefinancialYearEvent($event)"></financial-year>
+            </div>
           </div>
         </div>
-      </div>
-  
-      <!-- User List -->
-      <div class="col-12 col-md-3">
-        <div class="d-flex flex-column">
-          <label class="form-label fw-semibold" style="font-size: 12px; color: #222;">User List</label>
-          <div class="input-group w-100">
-            <user (userEmit)="handleuserEvent($event)"></user>
+
+        <!-- User List -->
+        <div class="col-12 col-md-3">
+          <div class="d-flex flex-column">
+            <label class="form-label fw-semibold" style="font-size: 12px; color: #222;">User List</label>
+            <div class="input-group w-100">
+              <user (userEmit)="handleuserEvent($event)"></user>
+            </div>
           </div>
         </div>
-      </div>
-  
-      <!-- Date Range -->
-  
-      <div class="col-12 col-md-4">
-  <label class="form-label fw-semibold" style="font-size: 12px; color: #222;">From and To Date</label>
-  
-  <div class="d-flex align-items-center gap-2">
-    <!-- Date Range Picker -->
-    <mat-form-field appearance="outline" class="compact-range flex-grow-1 m-0">
-      <mat-date-range-input [rangePicker]="picker">
-        <input matStartDate matInput placeholder="Start date" />
-        <input matEndDate matInput placeholder="End date" />
-      </mat-date-range-input>
-      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-      <mat-date-range-picker #picker></mat-date-range-picker>
-    </mat-form-field>
 
-    <!-- Search Button -->
-    <button (click)="GetDatashboardByFilter()" matTooltip="Search"
-      class="btn text-white fw-semibold d-flex align-items-center justify-content-center"
-      style="height: 32px; padding: 0 10px; background-color: #302CB3; border-radius: 6px; font-size: 12px; font-family: 'Nunito Sans'; letter-spacing: 0.24px;">
-      <mat-icon >search</mat-icon> 
-      
-    </button>
-  </div>
-</div>
+        <!-- Date Range -->
 
-      <!-- <div class="col-12 col-md-2">
+        <div class="col-12 col-md-4">
+          <label class="form-label fw-semibold" style="font-size: 12px; color: #222;">From and To Date</label>
+
+          <div class="d-flex align-items-center gap-2">
+            <!-- Date Range Picker -->
+            <mat-form-field appearance="outline" class="compact-range flex-grow-1 m-0">
+              <mat-date-range-input [rangePicker]="picker">
+                <input matStartDate matInput placeholder="Start date" />
+                <input matEndDate matInput placeholder="End date" />
+              </mat-date-range-input>
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-date-range-picker #picker></mat-date-range-picker>
+            </mat-form-field>
+
+            <!-- Search Button -->
+            <button (click)="GetDatashboardByFilter()" matTooltip="Search"
+              class="btn text-white fw-semibold d-flex align-items-center justify-content-center"
+              style="height: 32px; padding: 0 10px; background-color: #302CB3; border-radius: 6px; font-size: 12px; font-family: 'Nunito Sans'; letter-spacing: 0.24px;">
+              <mat-icon>search</mat-icon>
+
+            </button>
+          </div>
+        </div>
+
+        <!-- <div class="col-12 col-md-2">
   
         <div class="d-flex flex-column">
           <label class="form-label fw-semibold" style="font-size: 12px; color: #222;"> To Date</label>
@@ -57,28 +57,28 @@
           </div>
         </div>
       </div> -->
-  
-  
-  
-      <!-- Search Button -->
-      <div class="col-12 col-md-1 d-flex align-items-center">
-       
+
+
+
+        <!-- Search Button -->
+        <div class="col-12 col-md-1 d-flex align-items-center">
+
+        </div>
+
       </div>
-  
-    </div>
-  </form>
-</div>
+    </form>
+  </div>
 
   <main class="dashboard-content" *ngIf="carddashboard">
-  
+
     <!-- Stats Grid -->
     <div class="stats-grid">
-      <div class="stat-card stat-card-blue">      
+      <div class="stat-card stat-card-blue">
         <div class="hover-target" (mouseenter)="onMouseEnter('T')" (mouseleave)="showPanel = false">
-      
+
           <div class="stat-number"> {{carddashboard.totalLot}}</div>
           <div class="stat-label py-2">Total</div>
-      
+
           <div class="hover-panel" *ngIf="showPanel">
             <table class="table-boderless">
               <!-- <thead>
@@ -91,7 +91,7 @@
                 <tr *ngFor="let item of gridData">
                   <td>{{item.process_Category}}</td>
                   <td>{{item.totalAssignment}}</td>
-      
+
                 </tr>
               </tbody>
             </table>
@@ -99,21 +99,21 @@
         </div>
       </div>
       <div class="stat-card stat-card-green">
-        
-         <div class="hover-target" (mouseenter)="onMouseEnter('C')" (mouseleave)="showCompletedPanel = false">
-      
-        
-         <div class="stat-number"> {{carddashboard.completedLot}}</div>
-        <div class="stat-label py-2">Completed</div>
-      
+
+        <div class="hover-target" (mouseenter)="onMouseEnter('C')" (mouseleave)="showCompletedPanel = false">
+
+
+          <div class="stat-number"> {{carddashboard.completedLot}}</div>
+          <div class="stat-label py-2">Completed</div>
+
           <div class="hover-panel" *ngIf="showCompletedPanel">
             <table>
-              
+
               <tbody>
                 <tr *ngFor="let item of gridData">
                   <td>{{item.process_Category}}</td>
                   <td>{{item.totalAssignment}}</td>
-      
+
                 </tr>
               </tbody>
             </table>
@@ -125,7 +125,7 @@
         <div class="stat-label">Overdue</div>
       </div>
       <div class="stat-card stat-card-yellow">
-      
+
         <div class="hover-target" (mouseenter)="onMouseEnter('I')" (mouseleave)="showInprogressPanel = false">
           <div class="stat-number">{{carddashboard.pendingLot}}</div>
           <div class="stat-label py-2">In-Progress</div>
@@ -141,7 +141,7 @@
                 <tr *ngFor="let item of gridData">
                   <td>{{item.process_Category}}</td>
                   <td>{{item.totalAssignment}}</td>
-      
+
                 </tr>
               </tbody>
             </table>
@@ -154,12 +154,12 @@
           <div class="stat-label py-2">Not-Allotted</div>
           <div class="hover-panel" *ngIf="showNotAssignmentPanel">
             <table>
-              
+
               <tbody>
                 <tr *ngFor="let item of gridData">
                   <td>{{item.process_Category}}</td>
                   <td>{{item.totalAssignment}}</td>
-      
+
                 </tr>
               </tbody>
             </table>
@@ -171,40 +171,156 @@
         <div class="stat-label">Yet to Come</div>
       </div>
     </div>
-  
+
   </main>
- 
-<div class="container rounded-2 py-1">
-  <div id="myGrid" class="ag-theme-quartz" style="width: 100%;  overflow-x: auto;border-radius: 8px; ">
-    
-    <div class="download-btn-container">
-      <button class="download-btn" style="height: 32px; padding: 0 5px; background-color: #302CB3; border-radius: 6px; font-size: 12px; font-family: 'Nunito Sans'; letter-spacing: 0.24px;color: #ffff;"  (click)="onExport()">⬇️ Export</button>
+
+  <div class="container rounded-2 py-1">
+    <div id="myGrid" class="ag-theme-quartz" style="width: 100%;  overflow-x: auto;border-radius: 8px; ">
+
+      <div class="download-btn-container">
+        <button class="download-btn"
+          style="height: 32px; padding: 0 5px; background-color: #302CB3; border-radius: 6px; font-size: 12px; font-family: 'Nunito Sans'; letter-spacing: 0.24px;color: #ffff;"
+          (click)="onExport()">⬇️ Export</button>
+      </div>
+
+      <ag-grid-angular class="ag-theme-quartz" [pagination]="true" [paginationPageSize]="100"
+        [rowData]="rowCompletedData" [columnDefs]="columnDefs" [defaultColDef]="defaultColDef"
+        [domLayout]="'autoHeight'" [gridOptions]="gridOptions" [pagination]="true" [paginationPageSize]="pageSize"
+        [paginationPageSizeSelector]="pageSizeOptions" (paginationChanged)="onPaginationChanged($event)"
+        (gridReady)="onGridReady($event)">
+      </ag-grid-angular>
+
+
+
     </div>
-
-    <ag-grid-angular class="ag-theme-quartz" [pagination]="true" [paginationPageSize]="100" [rowData]="rowCompletedData"
-      [columnDefs]="columnDefs" [defaultColDef]="defaultColDef" [domLayout]="'autoHeight'" [gridOptions]="gridOptions"
-      [pagination]="true" [paginationPageSize]="pageSize" [paginationPageSizeSelector]="pageSizeOptions"
-      (paginationChanged)="onPaginationChanged($event)" (gridReady)="onGridReady($event)">
-    </ag-grid-angular>
-
-
-
-  </div>
   </div>
   <div class="container py-1">
-  <div id="myGrid" class="ag-theme-quartz" style="width: 100%;  overflow-x: auto; ">
-    <div class="download-btn-container">
-      <button class="download-btn" (click)="onExport()">⬇️ Export</button>
+    <div id="myGrid" class="ag-theme-quartz" style="width: 100%;  overflow-x: auto; ">
+      <div class="download-btn-container">
+        <button class="download-btn" (click)="onExport()">⬇️ Export</button>
+      </div>
+
+      <ag-grid-angular class="ag-theme-quartz" [pagination]="true" [paginationPageSize]="100" [rowData]="rowPendingData"
+        [columnDefs]="columnDefs" [defaultColDef]="defaultColDef" [domLayout]="'autoHeight'" [gridOptions]="gridOptions"
+        [pagination]="true" [paginationPageSize]="pageSize" [paginationPageSizeSelector]="pageSizeOptions"
+        (paginationChanged)="onPaginationChanged($event)" (gridReady)="onGridReady($event)">
+      </ag-grid-angular>
+
+
+
     </div>
-
-    <ag-grid-angular class="ag-theme-quartz" [pagination]="true" [paginationPageSize]="100" [rowData]="rowPendingData"
-      [columnDefs]="columnDefs" [defaultColDef]="defaultColDef" [domLayout]="'autoHeight'" [gridOptions]="gridOptions"
-      [pagination]="true" [paginationPageSize]="pageSize" [paginationPageSizeSelector]="pageSizeOptions"
-      (paginationChanged)="onPaginationChanged($event)" (gridReady)="onGridReady($event)">
-    </ag-grid-angular>
-
-
-
   </div>
+  <div class="container py-1">
+    <div class="download-btn-container">
+        <button class="download-btn" (click)="onExportInvoice()">⬇️ Export</button>
+      </div>
+    <div id="myGrid" class="ag-theme-quartz" style="width: 100%;  overflow-x: auto; ">
+      <div class="card-body rounded-4">
+        <div class="example-container mat-elevation-z8">
+          <table mat-table [dataSource]="InvoiceAlloted" class="custom-table mat-elevation-z8 custom-table">
+
+            <ng-container matColumnDef="Serial_No" sticky>
+              <th mat-header-cell *matHeaderCellDef> Serial_No </th>
+              <td mat-cell *matCellDef="let element"> {{element.serial_No}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="Req_No" sticky>
+              <th mat-header-cell *matHeaderCellDef> Req_No </th>
+              <td mat-cell *matCellDef="let element"> {{element.req_No}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="Company_Code" sticky>
+              <th mat-header-cell *matHeaderCellDef> Company_Code </th>
+              <td mat-cell *matCellDef="let element"> {{element.company_Code}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="Pay_Period" sticky>
+              <th mat-header-cell *matHeaderCellDef> Pay_Period </th>
+              <td mat-cell *matCellDef="let element"> {{element.pay_Period}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="Map_name" sticky>
+              <th mat-header-cell *matHeaderCellDef> Map_name </th>
+              <td mat-cell *matCellDef="let element"> {{element.map_name }} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="Employee_Head_Count">
+              <th mat-header-cell *matHeaderCellDef> Employee_Head_Count</th>
+              <td mat-cell *matCellDef="let element"> {{element.employee_Head_Count }} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="Net_CTC">
+              <th mat-header-cell *matHeaderCellDef> Net_CTC </th>
+              <td mat-cell *matCellDef="let element"> {{element.net_CTC}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="NetPay">
+              <th mat-header-cell *matHeaderCellDef> NetPay </th>
+              <td mat-cell *matCellDef="let element"> {{element.netPay}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="Invoice_Category">
+              <th mat-header-cell *matHeaderCellDef> Invoice_Category </th>
+              <td mat-cell *matCellDef="let element"> {{element.invoice_Category }} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="Invoice_Type">
+              <th mat-header-cell *matHeaderCellDef> Invoice_Type </th>
+              <td mat-cell *matCellDef="let element"> {{element.invoice_Type}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="State_name">
+              <th mat-header-cell *matHeaderCellDef> State_name </th>
+              <td mat-cell *matCellDef="let element"> {{element.state_name}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="RequestedBy">
+              <th mat-header-cell *matHeaderCellDef> RequestedBy </th>
+              <td mat-cell *matCellDef="let element"> {{element.requestedBy }} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="RequestedDate">
+              <th mat-header-cell *matHeaderCellDef> RequestedDate </th>
+              <td mat-cell *matCellDef="let element"> {{element.requestedDate }} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="Initiation_Remarks">
+              <th mat-header-cell *matHeaderCellDef> Initiation_Remarks </th>
+              <td mat-cell *matCellDef="let element"> {{element.initiation_Remarks }} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="AssignedTo">
+              <th mat-header-cell *matHeaderCellDef> AssignedTo </th>
+              <td mat-cell *matCellDef="let element"> {{element.assignedTo }} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="Rejected_On">
+              <th mat-header-cell *matHeaderCellDef> Rejected_On </th>
+              <td mat-cell *matCellDef="let element"> {{element.rejected_On }} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="Rejected_By">
+              <th mat-header-cell *matHeaderCellDef> Rejected_By </th>
+              <td mat-cell *matCellDef="let element"> {{element.rejected_By }} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="InvoiceCreatedOn">
+              <th mat-header-cell *matHeaderCellDef> InvoiceCreatedOn </th>
+              <td mat-cell *matCellDef="let element"> {{element.invoiceCreatedOn }} </td>
+            </ng-container>
+            
+            <tr mat-header-row *matHeaderRowDef="displayedInvoiceColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedInvoiceColumns;"></tr>
+          </table>
+          <mat-paginator class="mat-footer-paginator" #InvoiceAlotPaginator [pageSizeOptions]="[5,10, 25, 100]"
+            showFirstLastButtons></mat-paginator>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
+<br>
+<br>
+<br>
+<br>
+<br>

@@ -1,4 +1,9 @@
-
+.mat-footer-paginator {
+  position: sticky;
+  bottom: 0;
+  z-index: 100;
+  background: #fff; /* important to avoid transparency */
+}
     
 .example-wrapper {
     display: flex;
