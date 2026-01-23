@@ -77,23 +77,23 @@ export class DraftInvoiceComponent implements OnInit {
   this.dataSource.filter = filterValue.trim().toLowerCase();
 }
   Invoiceintiate():void{
-      if(this.selectedCompanyId==undefined)
-      {
-        alert("Select Company ");
-        return;
-      }
+      // if(this.selectedCompanyId==undefined)
+      // {
+      //   alert("Select Company ");
+      //   return;
+      // }
   
-      if(this.payPeriod==undefined)
-      {
-        alert("Select PayPeriod ");
-        return;
-      }
-      //this.invoiceType=1
-      if(this.invoiceType==undefined)
-      {
-        alert("Select Invoice Type ");
-        return;
-      }
+      // if(this.payPeriod==undefined)
+      // {
+      //   alert("Select PayPeriod ");
+      //   return;
+      // }
+      // //this.invoiceType=1
+      // if(this.invoiceType==undefined)
+      // {
+      //   alert("Select Invoice Type ");
+      //   return;
+      // }
      if(this.selection.selected.length==0)
      {
       alert("Please Select atleast one row");
