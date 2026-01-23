@@ -145,6 +145,7 @@ import { ReimbrusmentcalenderComponent } from './pages/process/reimbrusmentcalen
 import { ReprocessComponent } from './pages/process/reprocess/reprocess.component';
 import { UpfrontmatrixComponent } from './pages/upfrontprocess/upfrontmatrix/upfrontmatrix.component';
 import { EmployeeComponents } from './pages/customers/employee/employee.component';
+import { TaxRemittanceGenerationComponent } from './pages/E-TDSProcess/tax-remittance-generation/tax-remittance-generation.component';
 
 
 
@@ -321,6 +322,7 @@ export const routes: Routes = [
         path: 'etdsprocess', component: ETDSProcessnavigationComponent,
         children: [
           { path: "legalentitymapping", component: LegalEntityMappingComponent },
+          { path: "taxremittancegeneration", component: TaxRemittanceGenerationComponent }
 
 
 
