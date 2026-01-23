@@ -32,5 +32,6 @@ export interface IEmployeeservice {
     GetEmployeesByCompanyId(payload: any): Observable<any>;
     SalarySearch(Employeeid: any,): Observable<APIResponse>;
     GetInvoiceLegalEntity(): Observable<APIResponse>;
+    Getworkpass(): Observable<APIResponse>;
 
 }

@@ -31,5 +31,5 @@ export interface ICommonService {
     GetInvoiceType(): Observable<APIResponse>;
     GetSitesByCompanyId(companyId: any): Observable<APIResponse>;
     GetMapNamebyCompany(companyId: any): Observable<APIResponse>;
-
+    GetAllState(): Observable<APIResponse>;
 }
