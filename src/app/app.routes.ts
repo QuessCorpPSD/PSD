@@ -103,6 +103,20 @@ import { AdminnavigationComponent } from './pages/admin/adminnavigation/adminnav
 import { CompanypermissionComponent } from './pages/admin/companypermission/companypermission.component';
 import { PasswordunlockComponent } from './pages/admin/passwordunlock/passwordunlock.component';
 import { PayperiodunlockComponent } from './pages/admin/payperiodunlock/payperiodunlock.component';
+import { BillableDaysComponent } from './pages/Invoice/billable-days/billable-days.component';
+import { BillingpayfrequencyComponent } from './pages/Invoice/billingpayfrequency/billingpayfrequency.component';
+import { ClientbillablereportsdatewiseComponent } from './pages/Invoice/clientbillablereportsdatewise/clientbillablereportsdatewise.component';
+import { CompanyinvoiceformatComponent } from './pages/Invoice/companyinvoiceformat/companyinvoiceformat.component';
+import { CreditnoteComponent } from './pages/Invoice/creditnote/creditnote.component';
+import { CreditnoteapproveComponent } from './pages/Invoice/creditnoteapprove/creditnoteapprove.component';
+import { CreditnoteupdateComponent } from './pages/Invoice/creditnoteupdate/creditnoteupdate.component';
+import { GstinvoiceComponent } from './pages/Invoice/gstinvoice/gstinvoice.component';
+import { InvoiceCultureComponent } from './pages/Invoice/invoice-culture/invoice-culture.component';
+import { InvoicenavigationComponent } from './pages/Invoice/invoicenavigation/invoicenavigation.component';
+import { PerfomainvoiceComponent } from './pages/Invoice/perfomainvoice/perfomainvoice.component';
+import { POInitiateComponent } from './pages/Invoice/poinitiate/poinitiate.component';
+import { ProvisionalinvoiceComponent } from './pages/Invoice/provisionalinvoice/provisionalinvoice.component';
+
 //import { ReimbrusementnavigationComponent } from './pages/reimbruements/reimbrusementnavigation/reimbrusementnavigation.component';
 import { ReimbrusementComponent } from './pages/Reimbursement/reimbrusement/reimbrusement.component';
 import { AllowReProcessComponent } from './pages/process/allow-re-process/allow-re-process.component';
@@ -351,6 +365,28 @@ export const routes: Routes = [
           { path: "employee", component: EmployeeComponents },
           { path: "cancelledinvoicerepository", component: CancelledinvoicerepositoryComponent },
           { path: "Company", component: CompanyComponent },
+
+        ]
+      },
+      {
+        path: 'invoicenavigation',
+        component: InvoicenavigationComponent,
+        children: [
+          { path: 'initiate', component: InitiateComponent },
+          { path: 'provisionalinvoice', component: ProvisionalinvoiceComponent },
+          { path: 'perfomainvoice', component: PerfomainvoiceComponent },
+          { path: 'billabledays', component: BillableDaysComponent },
+          { path: 'gstinvoice', component: GstinvoiceComponent },
+          { path: 'billingpayfrequency', component: BillingpayfrequencyComponent },
+          { path: 'gstinvoice', component: GstinvoiceComponent },
+          { path: 'poinitiate', component: POInitiateComponent },
+          { path: 'app-invoice-culture', component: InvoiceCultureComponent },
+          { path: 'ClientBillableReportDatewise', component: ClientbillablereportsdatewiseComponent },
+          { path: 'creditnote', component: CreditnoteComponent },
+          { path: 'creditnoteapprove', component: CreditnoteapproveComponent },
+          { path: 'creditnoteupdate', component: CreditnoteupdateComponent },
+          { path: 'companyinvoiceformat', component: CompanyinvoiceformatComponent },
+          { path: 'OtherIncome', component: OtherincomeComponent },
 
         ]
       },

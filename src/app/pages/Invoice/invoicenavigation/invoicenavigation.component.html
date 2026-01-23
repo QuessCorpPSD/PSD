@@ -1,0 +1,70 @@
+<div class="headerSOP">
+        <div style="width: 50%;"> <img src="../../../assets/Forward File 1.svg" /><b class="customer-sop">Invoice</b>
+        </div>
+</div>
+<div class="contentCategory">
+        <div style="width: 100%;">
+                <div class="Categorylist">
+                        <ul class="horizontal-list">
+                                <!-- <li><a [routerLink]="['/Master/invoicenavigation/perfomainvoice']" class="nav-link"
+                                                routerLinkActive="selectedInput"
+                                                [routerLinkActiveOptions]="{ exact: true }">Invoice Request</a></li>  -->
+                                <li><a [routerLink]="['/Master/invoicenavigation/provisionalinvoice']" class="nav-link"
+                                                routerLinkActive="selectedInput"
+                                                [routerLinkActiveOptions]="{ exact: true }">Provisional Invoice</a></li>
+
+                                <li><a [routerLink]="['/Master/invoicenavigation/billabledays']" class="nav-link"
+                                                routerLinkActive="selectedInput"
+                                                [routerLinkActiveOptions]="{ exact: true }">Billable days</a></li>
+
+
+                                <li><a [routerLink]="['/Master/invoicenavigation/poinitiate']" class="nav-link"
+                                                routerLinkActive="selectedInput"
+                                                [routerLinkActiveOptions]="{ exact: true }">PO Invoice Initiation</a>
+                                </li>
+
+                                <li><a [routerLink]="['/Master/invoicenavigation/initiate']" class="nav-link"
+                                                routerLinkActive="selectedInput"
+                                                [routerLinkActiveOptions]="{ exact: true }">Draft Invoice</a></li>
+
+                                <li><a [routerLink]="['/Master/invoicenavigation/gstinvoice']" class="nav-link"
+                                                routerLinkActive="selectedInput"
+                                                [routerLinkActiveOptions]="{ exact: true }">GST Invoice</a></li>
+                                <li><a [routerLink]="['/Master/invoicenavigation/billingpayfrequency']" class="nav-link"
+                                                routerLinkActive="selectedInput"
+                                                [routerLinkActiveOptions]="{ exact: true }">Billing Pay Frequency</a>
+                                </li>
+                                <li><a [routerLink]="['/Master/invoicenavigation/creditnote']" class="nav-link"
+                                                routerLinkActive="selectedInput"
+                                                [routerLinkActiveOptions]="{ exact: true }">Credit Note Request</a>
+                                </li>
+                                <li><a [routerLink]="['/Master/invoicenavigation/creditnoteapprove']" class="nav-link"
+                                                routerLinkActive="selectedInput"
+                                                [routerLinkActiveOptions]="{ exact: true }">Credit Note Approval</a>
+                                </li>
+                                <li><a [routerLink]="['/Master/invoicenavigation/creditnoteupdate']" class="nav-link"
+                                                routerLinkActive="selectedInput"
+                                                [routerLinkActiveOptions]="{ exact: true }">Credit Note Update</a>
+                                </li>
+                                <li><a [routerLink]="['/Master/invoicenavigation/app-invoice-culture']" class="nav-link"
+                                                routerLinkActive="selectedInput"
+                                                [routerLinkActiveOptions]="{ exact: true }">Invoice Culture</a>
+                                </li>
+                                <li><a [routerLink]="['/Master/invoicenavigation/companyinvoiceformat']"
+                                                class="nav-link" routerLinkActive="selectedInput"
+                                                [routerLinkActiveOptions]="{ exact: true }">Company Invoice Format</a>
+                                </li>
+                                <li><a [routerLink]="['/Master/invoicenavigation/ClientBillableReportDatewise']"
+                                                class="nav-link" routerLinkActive="selectedInput"
+                                                [routerLinkActiveOptions]="{ exact: true }">Client Billable Report
+                                                Datewise</a>
+                                </li>
+                                <li><a [routerLink]="['/Master/invoicenavigation/OtherIncome']"
+                                                class="nav-link" routerLinkActive="selectedInput"
+                                                [routerLinkActiveOptions]="{ exact: true }">Other Income Culture</a>
+                                </li>
+                        </ul>
+                </div>
+        </div>
+</div>
+<router-outlet></router-outlet>

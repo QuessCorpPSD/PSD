@@ -14,7 +14,7 @@
           "builder": "@angular-devkit/build-angular:application",
           "options": {
             "outputPath": "dist/SPD_Web_UI/browser",
-            "index": "src/index.html",          
+            "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
               "zone.js"
@@ -26,19 +26,17 @@
               "src/manifest.webmanifest"
             ],
             "styles": [
-              
-            "node_modules/ag-grid-community/styles/ag-grid.css",
-"node_modules/ag-grid-community/styles/ag-theme-quartz.css",
-"src/styles.css",
+              "node_modules/ag-grid-community/styles/ag-grid.css",
+              "node_modules/ag-grid-community/styles/ag-theme-quartz.css",
+              "src/styles.css",
               "node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
               "node_modules/ngx-toastr/toastr.css",
               "node_modules/bootstrap/dist/css/bootstrap.min.css"
-         
             ],
-            "scripts": [              
+            "scripts": [
               "node_modules/jquery/dist/jquery.min.js",
-           "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"
-          ],
+              "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"
+            ],
             "server": "src/main.server.ts",
             "prerender": false,
             "ssr": {
@@ -60,7 +58,6 @@
                 }
               ],
               "outputHashing": "all"
-              
             },
             "development": {
               "optimization": false,
@@ -107,7 +104,6 @@
             "assets": [
               "src/favicon.ico",
               "src/assets"
-              
             ],
             "styles": [
               "src/styles.css"
@@ -119,6 +115,9 @@
     }
   },
   "cli": {
-    "analytics": "4cadd8be-1376-4d70-8547-d627daeaff94"
+    "analytics": "4cadd8be-1376-4d70-8547-d627daeaff94",
+    "cache": {
+      "enabled": false
+    }
   }
 }
