@@ -11,14 +11,14 @@
         <mat-card-content class="scroll-content" style="padding-top: 10px;">
             <!-- Row 1 -->
             <div class="row g-3 mb-3">
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <label class="form-label">Company Code<span class="text-danger"></span></label>
                     <input type="text" class="form-control" formControlName="CompanyCode" />
                     <!-- <select class="form-select" formControlName="CompanyName">
                         <option value="">-- Select --</option>
                     </select> -->
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <label class="form-label">Comapny Name<span class="text-danger">*</span></label>
                     <!-- <input type="date" class="form-control" formControlName="EffectiveDate" />-->
                     <select class="form-select" formControlName="ComapnyName">
@@ -29,17 +29,14 @@
                         Company Name is required
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <label class="form-label">MIS Name<span class="text-danger"></span></label>
                     <!-- <select class="form-select" formControlName="MISName">
                         <option value="">-- Select --</option>
                     </select> -->
                     <input type="text" class="form-control" formControlName="MISName" />
                 </div>
-            </div>
-            <!-- Row 2 -->
-            <div class="row g-3 mb-3">
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <label class="form-label">Business Unit Name/Entity<span class="text-danger">*</span></label>
                     <select class="form-select" formControlName="BusinessUnitName" (change)="OnEntitychange($event)">
                         <option *ngFor="let p of entityName" [value]="p.value">{{p.name}} </option>
@@ -49,23 +46,22 @@
                         BusinessUnitNameis required
                     </div>
                 </div>
-                <div class="col-md-4">
+            </div>
+            <!-- Row 2 -->
+            <div class="row g-3 mb-3">
+
+                <div class="col-md-3">
                     <label class="form-label">Business Unit Location<span class="text-danger"></span></label>
                     <select class="form-select" formControlName="BusinessUnitLocation">
                         <option *ngFor="let p of BusinessUnitLocation" [value]="p.CITY_ID">{{p.CITY_NAME}} </option>
                     </select>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <label class="form-label">Zone<span class="text-danger"></span></label>
                     <input type="text" class="form-control" formControlName="Zone" />
-                    <!-- <select class="form-select" formControlName="Zone">
-                        <option value="">-- Select --</option>
-                    </select> -->
+
                 </div>
-            </div>
-            <!-- row3 -->
-            <div class="row g-3 mb-3">
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <label class="form-label">Company Group Code<span class="text-danger">*</span></label>
                     <select class="form-select" formControlName="CompanyGroupCode">
                         <option *ngFor="let p of groupCode" [value]="p.value">{{p.name}} </option>
@@ -75,14 +71,12 @@
                         CompanyGroupCode is required
                     </div>
                 </div>
-                <!-- disable -->
-                <div class="col-md-4" style="display: none;">
-                    <label class="form-label">Company Group Name<span class="text-danger"></span></label>
-                    <select class="form-select" formControlName="CompanyGroupName">
-                        <option value="">-- Select --</option>
-                    </select>
+                <div class="col-md-3">
+                    <label class="form-label">Company Group Name</label>
+                    <input class="form-control" formControlName="CompanyGroupName" />
                 </div>
-                <div class="col-md-4">
+
+                <div class="col-md-3">
                     <label class="form-label d-block">
                         Payroll Type<span class="text-danger">*</span>
                     </label>
@@ -106,7 +100,10 @@
                         PayrollType is required
                     </div>
                 </div>
-                <div class="col-md-4">
+
+
+
+                <div class="col-md-3">
                     <label class="form-label">WBS Code<span class="text-danger">*</span></label>
                     <input type="text" class="form-control" formControlName="WBSCode" />
                     <div class="text-danger small" *ngIf="CompanyAddForm.get('WBSCode')?.touched 
@@ -115,11 +112,8 @@
                     </div>
                 </div>
 
-            </div>
-            <!-- row 4 -->
-            <div class="row g-3 mb-3">
 
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <label class="form-label">Client Since<span class="text-danger">*</span></label>
                     <input type="date" class="form-control" formControlName="ClientSince" />
                     <div class="text-danger small" *ngIf="CompanyAddForm.get('ClientSince')?.touched 
@@ -127,7 +121,7 @@
                         ClientSince is required
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <label class="form-label">Contract Start Type<span class="text-danger">*</span></label>
                     <input type="date" class="form-control" formControlName="ContractStartType" />
                     <div class="text-danger small" *ngIf="CompanyAddForm.get('ContractStartType')?.touched 
@@ -136,9 +130,9 @@
                     </div>
                 </div>
             </div>
-            <!-- row 5 -->
+            <!-- row3 -->
             <div class="row g-3 mb-3">
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <label class="form-label">Contract Expiry Type<span class="text-danger">*</span></label>
                     <input type="date" class="form-control" formControlName="ContractExpiryType" />
                     <div class="text-danger small" *ngIf="CompanyAddForm.get('ContractExpiryType')?.touched 
@@ -146,24 +140,88 @@
                         ContractExpiryType is required
                     </div>
                 </div>
-                <div class="col-md-4">
+
+
+                <div class="col-md-3">
                     <label class="form-label">Active<span class="text-danger"></span></label>
                     <select class="form-select" formControlName="Active">
                         <option value="1">Yes</option>
                         <option value="0">No</option>
                     </select>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <label class="form-label">F&F PayMode<span class="text-danger"></span></label>
                     <select class="form-select" formControlName="FPayMode">
                         <option value="1">Cheque</option>
                         <option value="2">E-Transfer</option>
                     </select>
                 </div>
+                <div class="col-md-3">
+                    <label class="form-label">Invoice Type<span class="text-danger"></span></label>
+                    <select class="form-select" formControlName="invoicetype">
+                        <option value="">Select</option>
+                    </select>
+                </div>
+
             </div>
-            <!-- row 6 -->
+            <!-- row 4 -->
             <div class="row g-3 mb-3">
-                <div class="col-md-4" style="display: none;">
+                <div class="col-md-3">
+                    <label class="form-label d-block">Is Insurance Applicable<span class="text-danger"></span></label>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="InsuranceApplicable" value="1"
+                            formControlName="InsuranceApplicable" id="InsuranceApplicableYes">
+                        <label class="form-check-label" for="InsuranceApplicableyes">
+                            Yes
+                        </label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="InsuranceApplicable" value="0"
+                            formControlName="InsuranceApplicable" id="InsuranceApplicableNo">
+                        <label class="form-check-label" for="InsuranceApplicableNo">
+                            No
+                        </label>
+                    </div>
+
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label d-block">Month Days<span class="text-danger"></span></label>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="MonthDays" value="1"
+                            formControlName="MonthDays" id="MonthDaysYes">
+                        <label class="form-check-label" for="MonthDaysyes">
+                            Yes
+                        </label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="MonthDays" value="0"
+                            formControlName="MonthDays" id="MonthDaysNo">
+                        <label class="form-check-label" for="MonthDaysNo">
+                            No
+                        </label>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Attendance Cycle Form<span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" formControlName="AttendanceCycleForm" />
+                    <div class="text-danger small" *ngIf="CompanyAddForm.get('AttendanceCycleForm')?.touched 
+             && CompanyAddForm.get('AttendanceCycleForm')?.hasError('required')">
+                        AttendanceCycleForm is required
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Attendance Cycle To<span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" formControlName="AttendanceCycleTo" />
+                    <div class="text-danger small" *ngIf="CompanyAddForm.get('AttendanceCycleTo')?.touched 
+             && CompanyAddForm.get('AttendanceCycleTo')?.hasError('required')">
+                        AttendanceCycleTo is required
+                    </div>
+                </div>
+            </div>
+            <!-- row 5-->
+            <div class="row g-3 mb-3">
+                <div class="col-md-3" style="display: none;">
                     <label class="form-label d-block">Invoice Type<span class="text-danger">*</span></label>
                     <!-- <div class="form-check form-check-inline">
                         <input class="form-check-input" type="radio" name="InvoiceType" value="Single"
@@ -184,151 +242,125 @@
                         InvoiceType is required
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <label class="form-label">Upload Contract Details<span class="text-danger"></span></label>
-                    <!-- <select class="form-select" formControlName="F&UploadContractDetails">
-                        <option value="1">Cheque</option>
-                        <option value="2">E-Transfer</option>
-                    </select> -->
-                </div>
-                <div class="col-md-4">
-                    <label class="form-label d-block">Is Insurance Applicable<span class="text-danger"></span></label>
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="InsuranceApplicable" value="1"
-                            formControlName="InsuranceApplicable" id="InsuranceApplicableYes">
-                        <label class="form-check-label" for="InsuranceApplicableyes">
-                            Yes
-                        </label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="InsuranceApplicable" value="0"
-                            formControlName="InsuranceApplicable" id="InsuranceApplicableNo">
-                        <label class="form-check-label" for="InsuranceApplicableNo">
-                            No
-                        </label>
-                    </div>
-                </div>
+
+
+
             </div>
             <div *ngIf="CompanyAddForm.get('InvoiceType')?.value === 'Single'" class="border p-3 mt-3"
                 style="display: none;">
                 <div class="row g-3 mb-3">
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <label class="form-label">City<span class="text-danger">*</span></label>
                         <input type="text" class="form-control" formControlName="City" />
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <label class="form-label">State<span class="text-danger"></span></label>
                         <input type="date" class="form-control" formControlName="State" />
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <label class="form-label">Pin Code<span class="text-danger">*</span></label>
                         <input type="date" class="form-control" formControlName="PinCode" />
                     </div>
                 </div>
                 <div class="row g-3 mb-3">
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <label class="form-label">Phone No<span class="text-danger"></span></label>
                         <input type="number" class="form-control" formControlName="PhoneNo" />
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <label class="form-label">PT Code<span class="text-danger"></span></label>
                         <input type="text" class="form-control" formControlName="PTCode" />
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                     </div>
                 </div>
                 <div class="row g-3 mb-3">
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <label class="form-label">Service Tax<span class="text-danger"></span></label>
                         <input type="text" class="form-control" formControlName="ServiceTax" />
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <label class="form-label">Email Id<span class="text-danger"></span></label>
                         <input type="text" class="form-control" formControlName="EmailId" />
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <label class="form-label">Certificate No<span class="text-danger"></span></label>
                         <input type="text" class="form-control" formControlName="CertificateNo" />
                     </div>
                 </div>
                 <div class="row g-3 mb-3">
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <label class="form-label">Fax No<span class="text-danger"></span></label>
                         <input type="text" class="form-control" formControlName="FaxNo" />
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <label class="form-label">Website<span class="text-danger"></span></label>
                         <input type="text" class="form-control" formControlName="Website" />
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <label class="form-label">Address<span class="text-danger">*</span></label>
                         <input type="text" class="form-control" formControlName="Address" />
                     </div>
-                </div>
-                <div class="row g-3 mb-3">
-                    <div class="col-md-4">
+                    <div class="col-md-3" style="display:none">
                         <label class="form-label">ESI Code<span class="text-danger"></span></label>
                         <input type="text" class="form-control" formControlName="ESICode" />
                     </div>
                 </div>
             </div>
-            <!-- row 7 -->
             <div class="row g-3 mb-3">
-                <div class="col-md-4">
-                    <label class="form-label d-block">Month Days<span class="text-danger"></span></label>
+
+                <div class="col-md-3">
+                    <label class="form-label d-block">Work Days based on</label>
+
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="MonthDays" value="1"
-                            formControlName="MonthDays" id="MonthDaysYes">
-                        <label class="form-check-label" for="MonthDaysyes">
-                            Yes
-                        </label>
+                        <input class="form-check-input" type="radio" value="1" formControlName="wbc">
+                        <label class="form-check-label">Attendance</label>
                     </div>
+
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="MonthDays" value="0"
-                            formControlName="MonthDays" id="MonthDaysNo">
-                        <label class="form-check-label" for="MonthDaysNo">
-                            No
-                        </label>
+                        <input class="form-check-input" type="radio" value="0" formControlName="wbc">
+                        <label class="form-check-label">Lop</label>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <label class="form-label">Attendance Cycle Form<span class="text-danger">*</span></label>
-                    <input type="text" class="form-control" formControlName="AttendanceCycleForm" />
-                    <div class="text-danger small" *ngIf="CompanyAddForm.get('AttendanceCycleForm')?.touched 
-             && CompanyAddForm.get('AttendanceCycleForm')?.hasError('required')">
-                        AttendanceCycleForm is required
+                <div class="col-md-3">
+                    <label class="form-label d-block">CTC</label>
+
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" value="1" formControlName="CTC">
+                        <label class="form-check-label">Annum</label>
+                    </div>
+
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" value="0" formControlName="CTC">
+                        <label class="form-check-label">Monthly</label>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <label class="form-label">Attendance Cycle To<span class="text-danger">*</span></label>
-                    <input type="text" class="form-control" formControlName="AttendanceCycleTo" />
-                    <div class="text-danger small" *ngIf="CompanyAddForm.get('AttendanceCycleTo')?.touched 
-             && CompanyAddForm.get('AttendanceCycleTo')?.hasError('required')">
-                        AttendanceCycleTo is required
-                    </div>
+                <div class="col-md-3">
+                    <label class="form-label">Onboarding Category</label>
+                    <select class="form-select" formControlName="OnboardingCategory">
+                        <option value="">--select---</option>
+                        <option value="1064">Single</option>
+                        <option value="1065">Separate</option>
+                    </select>
                 </div>
-            </div>
-            <!-- ROW 1: Work Days + CTC -->
-            <div class="row g-3 mb-3 position-relative">
-                <div class="col-md-4">
-                    <label class="form-label d-block">Work Days based on<span class="text-danger"></span></label>
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="WorkDaysbased" value="1"
-                            formControlName="WorkDaysbased" id="attendance">
-                        <label class="form-check-label" for="attendance">
-                            Attendance
-                        </label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="WorkDaysbased" value="0"
-                            formControlName="WorkDaysbased" id="lop">
-                        <label class="form-check-label" for="lop">
-                            LOP
-                        </label>
+                <div class="col-md-3">
+                    <label class="form-label">Onboarding Charges</label>
+                    <div class="d-flex">
+                        <select class="form-select me-2" style="width:40%" formControlName="OnboardingChargesValue">
+                            <option value="">Select</option>
+                            <option value="1">%</option>
+                            <option value="0">Rs.</option>
+                        </select>
+                        <input type="text" class="form-control" formControlName="OnboardingCharges">
                     </div>
                 </div>
 
-                <div class="col-md-4" [formGroup]="CompanyAddForm">
+            </div>
+
+            <!-- <div class="row g-3 mb-3 position-relative">
+
+
+                <div class="col-md-3" [formGroup]="CompanyAddForm">
                     <label class="form-label d-block">CTC</label>
 
                     <div class="form-check form-check-inline">
@@ -343,6 +375,107 @@
                         <label class="form-check-label" for="monthly">Monthly</label>
                     </div>
                 </div>
+                <div class="col-md-3">
+                    <div class="bank-box">
+                        <div class="border p-3 rounded">
+                            <h5 class="fw-bold mb-3">Bank Details</h5>
+
+                            <div class="mb-3">
+                                <label class="form-label">Bank Name <span class="text-danger">*</span></label>
+                                <select class="form-control" formControlName="BankName" (change)="onBankChange($event)">
+                                    <option value="">---Select---</option>
+                                    <option *ngFor="let p of BankName" [value]="p.Bank_Id">{{p.Bank_Name}} </option>
+                                </select>
+                                <div class="text-danger small" *ngIf="CompanyAddForm.get('BankName')?.touched 
+             && CompanyAddForm.get('BankName')?.hasError('required')">
+                                    BankName is required
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">A/C No <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" formControlName="AccountNo">
+                                <div class="text-danger small" *ngIf="CompanyAddForm.get('AccountNo')?.touched 
+             && CompanyAddForm.get('AccountNo')?.hasError('required')">
+                                    AccountNo is required
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Swift Code <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" formControlName="SwiftCode"
+                                    placeholder="Enter Swift Code">
+                                <div class="text-danger small" *ngIf="CompanyAddForm.get('SwiftCode')?.touched 
+             && CompanyAddForm.get('SwiftCode')?.hasError('required')">
+                                    SwiftCode is required
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Branch <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" formControlName="Branch">
+                                <div class="text-danger small" *ngIf="CompanyAddForm.get('Branch')?.touched 
+             && CompanyAddForm.get('Branch')?.hasError('required')">
+                                    Branch is required
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Branch Code <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" formControlName="BranchCode"
+                                    placeholder="Enter Branch Code">
+                                <div class="text-danger small" *ngIf="CompanyAddForm.get('BranchCode')?.touched 
+             && CompanyAddForm.get('BranchCode')?.hasError('required')">
+                                    BranchCode is required
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Bank Code <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" formControlName="BankCode"
+                                    placeholder="Enter Bank Code">
+                                <div class="text-danger small" *ngIf="CompanyAddForm.get('BankCode')?.touched 
+             && CompanyAddForm.get('BankCode')?.hasError('required')">
+                                    BankCode is required
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Bank Address <span class="text-danger">*</span></label>
+                                <textarea class="form-control" formControlName="BankAddress" style="height: 80px;"
+                                    placeholder="Enter Bank Address"></textarea>
+                                <div class="text-danger small" *ngIf="CompanyAddForm.get('BankAddress')?.touched 
+             && CompanyAddForm.get('BankAddress')?.hasError('required')">
+                                    BankAddress is required
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+            <div class="row g-3 mb-3">
+                <div class="col-md-4" [formGroup]="CompanyAddForm">
+                    <label class="form-label">Inedge Category<span class="text-danger"></span></label>
+                    <select class="form-select" formControlName="InedgeCategory">
+                        <option value="">--select---</option>
+                        <option value="1064">Single</option>
+                        <option value="1065s">Separate</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Inedge/WorQ Charges<span class="text-danger"></span></label>
+                    <div class="d-flex">
+                        <select class="form-select me-2" style="width: 40%;" formControlName="InedgeChargesValue">
+                            <option value="">Select</option>
+                            <option value="1">%</option>
+                            <option value="0">Rs.</option>
+                        </select>
+                        <input type="text" class="form-control" formControlName="InedgeCharges" />
+                    </div>
+                </div>
+
+
+
                 <div class="col-md-4">
                     <div class="bank-box">
                         <div class="border p-3 rounded">
@@ -373,47 +506,14 @@
 
                             <!-- Swift Code -->
                             <div class="mb-3">
-                                <label class="form-label">Swift Code <span class="text-danger">*</span></label>
+                                <label class="form-label">IFSC Code <span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" formControlName="SwiftCode"
-                                    placeholder="Enter Swift Code">
+                                    placeholder="Enter IFSC Code">
                                 <div class="text-danger small" *ngIf="CompanyAddForm.get('SwiftCode')?.touched 
              && CompanyAddForm.get('SwiftCode')?.hasError('required')">
-                                    SwiftCode is required
+                                    IFSC Code is required
                                 </div>
                             </div>
-
-                            <!-- Branch -->
-                            <div class="mb-3">
-                                <label class="form-label">Branch <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" formControlName="Branch">
-                                <div class="text-danger small" *ngIf="CompanyAddForm.get('Branch')?.touched 
-             && CompanyAddForm.get('Branch')?.hasError('required')">
-                                    Branch is required
-                                </div>
-                            </div>
-
-                            <!-- Branch Code -->
-                            <div class="mb-3">
-                                <label class="form-label">Branch Code <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" formControlName="BranchCode"
-                                    placeholder="Enter Branch Code">
-                                <div class="text-danger small" *ngIf="CompanyAddForm.get('BranchCode')?.touched 
-             && CompanyAddForm.get('BranchCode')?.hasError('required')">
-                                    BranchCode is required
-                                </div>
-                            </div>
-
-                            <!-- Bank Code -->
-                            <div class="mb-3">
-                                <label class="form-label">Bank Code <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" formControlName="BankCode"
-                                    placeholder="Enter Bank Code">
-                                <div class="text-danger small" *ngIf="CompanyAddForm.get('BankCode')?.touched 
-             && CompanyAddForm.get('BankCode')?.hasError('required')">
-                                    BankCode is required
-                                </div>
-                            </div>
-
                             <!-- Bank Address -->
                             <div class="mb-3">
                                 <label class="form-label">Bank Address <span class="text-danger">*</span></label>
@@ -427,56 +527,10 @@
                         </div>
                     </div>
                 </div>
+
             </div>
+
             <div class="row g-3 mb-3">
-                <div class="col-md-4">
-                    <label class="form-label">Onboarding Category</label>
-                    <select class="form-select" formControlName="OnboardingCategory">
-                        <option value="">--select---</option>
-                        <option value="1064">Single</option>
-                        <option value="1065">Separate</option>
-                    </select>
-                </div>
-                <div class="col-md-4">
-                    <label class="form-label">Onboarding Charges</label>
-                    <div class="d-flex">
-                        <select class="form-select me-2" style="width:40%" formControlName="OnboardingChargesValue">
-                            <option value="">Select</option>
-                            <option value="1">%</option>
-                            <option value="0">Rs.</option>
-                        </select>
-                        <input type="text" class="form-control" formControlName="OnboardingCharges">
-                    </div>
-                </div>
-            </div>
-            <div class="row g-3 mb-3">
-                <div class="col-md-4">
-                    <label class="form-label">Inedge Category<span class="text-danger"></span></label>
-                    <select class="form-select" formControlName="InedgeCategory">
-                        <option value="">--select---</option>
-                        <option value="1064">Single</option>
-                        <option value="1065s">Separate</option>
-                    </select>
-                </div>
-                <div class="col-md-4">
-                    <label class="form-label">Inedge/WorQ Charges<span class="text-danger"></span></label>
-                    <div class="d-flex">
-                        <select class="form-select me-2" style="width: 40%;" formControlName="InedgeChargesValue">
-                            <option value="">Select</option>
-                            <option value="1">%</option>
-                            <option value="0">Rs.</option>
-                        </select>
-                        <input type="text" class="form-control" formControlName="InedgeCharges" />
-                    </div>
-                </div>
-            </div>
-            <div class="row g-3 mb-3">
-                <div class="col-md-4" style="display: none;">
-                    <label class="form-label">Incentive Type<span class="text-danger"></span></label>
-                    <select class="form-select" formControlName="IncentiveType">
-                        <option value="">-- Select --</option>
-                    </select>
-                </div>
                 <div class="col-md-4">
                     <label class="form-label">Qdemy Charges<span class="text-danger"></span></label>
                     <div class="d-flex">
@@ -488,8 +542,41 @@
                         <input type="text" class="form-control" formControlName="QdemyCharges" />
                     </div>
                 </div>
+                <div class="col-md-4">
+                    <label class="form-label">Absorption Fee<span class="text-danger"></span></label>
+                    <div class="d-flex">
+                        <select class="form-select me-2" style="width: 40%;" formControlName="QdemyChargesValue">
+                            <option value="">Select</option>
+                            <option value="1">%</option>
+                            <option value="0">Rs.</option>
+                        </select>
+                        <input type="text" class="form-control" formControlName="absorptionfee" />
+                    </div>
+                </div>
+
+
             </div>
             <div class="row g-3 mb-3">
+                <div class="col-md-4">
+                    <label class="form-label">Incentive Type<span class="text-danger"></span></label>
+                    <select class="form-select" formControlName="IncentiveType">
+                        <option value="">-- Select --</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Portal Type<span class="text-danger"></span></label>
+                    <div class="d-flex">
+
+                        <input type="text" class="form-control" formControlName="Portal_Type" />
+                    </div>
+                </div>
+
+            </div>
+            <div class="row g-3 mb-3">
+                <div class="col-md-4">
+                    <label class="form-label">Onboarding TAT(In Days)<span class="text-danger"></span></label>
+                    <input type="text" class="form-control" formControlName="onboardingtat" />
+                </div>
                 <div class="col-md-4">
                     <label class="form-label d-block">PO Applicable<span class="text-danger"></span></label>
                     <div class="form-check form-check-inline">
@@ -507,20 +594,22 @@
                         </label>
                     </div>
                 </div>
+
+
+            </div>
+            <div class="row g-3 mb-3">
                 <div class="col-md-4">
-                    <label class="form-label">Tech Subscription Charges<span class="text-danger"></span></label>
+                    <label class="form-label">Portal Charges<span class="text-danger"></span></label>
                     <div class="d-flex">
-                        <select class="form-select me-2" style="width: 40%;"
+                        <select class="form-select me-4" style="width: 45%;"
                             formControlName="TechSubscriptionChargesvalue">
                             <option value="">Select</option>
-                            <option value="1">%</option>
-                            <option value="0">Rs.</option>
+                            <option value="1">Percentage</option>
+                            <option value="0">Fixed</option>
                         </select>
                         <input type="text" class="form-control" formControlName="TechSubscriptionCharges" />
                     </div>
                 </div>
-            </div>
-            <div class="row g-3 mb-3">
                 <div class="col-md-4">
                     <label class="form-label d-block">PO Wise Batch<span class="text-danger"></span></label>
                     <div class="form-check form-check-inline">
@@ -538,19 +627,20 @@
                         </label>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <mat-checkbox formControlName="IsNewJoinee">
-                        Is New Joinee
-                    </mat-checkbox>
-                </div>
 
-                <!-- <div class="col-md-4">
+
+                <!-- <div class="col-md-3">
                     <label class="form-label">Is New Joinee</label>
                     <input type="checkbox" class="form-control" formControlName="IsNewJoinee"
                         style="width: 18px; height: 18px;" />
                 </div> -->
             </div>
             <div class="row g-3 mb-3">
+                <div class="col-md-4">
+                    <mat-checkbox formControlName="IsNewJoinee">
+                        Is New Joinee
+                    </mat-checkbox>
+                </div>
                 <div class="col-md-4">
                     <label class="form-label">Dues Based on<span class="text-danger"></span></label>
                     <select class="form-select" formControlName="FDuesBasedon">
@@ -559,7 +649,11 @@
                         <option value="2">DR</option>
                     </select>
                 </div>
-                <div class="col-md-4">
+
+
+            </div>
+            <div class="row g-3 mb-3">
+                <div class="col-md-3">
                     <label class="form-label">Sourcing/OB Applicable<span class="text-danger"></span></label>
                     <select class="form-select" formControlName="SourcingOBApplicable">
                         <option value="">--select---</option>
@@ -567,9 +661,13 @@
                         <option value="0">No</option>
                     </select>
                 </div>
-            </div>
-            <div class="row g-3 mb-3">
-                <div class="col-md-4" style="display: none;">
+                <div class="col-md-3">
+                    <label class="form-label">Invoice Formats<span class="text-danger"></span></label>
+                    <select class="form-select" formControlName="ReimbInvoiceFormat">
+                        <option value="">--select---</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
                     <label class="form-label">Insurance<span class="text-danger"></span></label>
                     <select class="form-select" formControlName="Insurance">
                         <option value="">--select---</option>
@@ -577,9 +675,23 @@
                         <option value="0">No</option>
                     </select>
                 </div>
-            </div>
-            <div class="row g-3 mb-3">
-                <div class="col-md-4">
+
+
+                <div class="col-md-3">
+                    <label class="form-label">Reimb Invoice Format<span class="text-danger"></span></label>
+                    <select class="form-select" formControlName="ReimbInvoiceFormat">
+                        <option value="">--select---</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Billing Type<span class="text-danger"></span></label>
+                    <select class="form-select" formControlName="billingType">
+                        <option value="">--select---</option>
+                    </select>
+                </div>
+
+
+                <div class="col-md-3">
                     <label class="form-label">Segment<span class="text-danger">*</span></label>
                     <select class="form-select" formControlName="Segment">
                         <option value="">--select---</option>
@@ -590,31 +702,14 @@
                         Segment is required
                     </div>
                 </div>
-                <div class="col-md-4" style="display: none;">
-                    <label class="form-label">Reimb Invoice Format<span class="text-danger"></span></label>
-                    <select class="form-select" formControlName="ReimbInvoiceFormat">
-                        <option value="">--select---</option>
-                    </select>
-                </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <label class="form-label">Sub Segment<span class="text-danger"></span></label>
                     <select class="form-select" formControlName="SubSegment">
                         <option value="">--select---</option>
                         <option *ngFor="let p of subSegmentName" [value]="p.value">{{p.name}} </option>
                     </select>
                 </div>
-            </div>
-            <div class="row g-3 mb-3">
-
-                <div class="col-md-4" style="display: none;">
-                    <label class="form-label">PaySlip Formats<span class="text-danger"></span></label>
-                    <select class="form-select" formControlName="PaySlipFormats">
-                        <option value="">--select---</option>
-                    </select>
-                </div>
-            </div>
-            <div class="row g-3 mb-3">
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <label class="form-label">Mode of payment<span class="text-danger"></span></label>
                     <select class="form-select" formControlName="Modeofpayment">
                         <option value="">--select---</option>
@@ -622,30 +717,47 @@
                         <option value="1">Upfront</option>
                     </select>
                 </div>
-                <div class="col-md-4" style="display: none;">
+            </div>
+            <div class="row g-3 mb-3">
+                <div class="col-md-3">
+                    <label class="form-label">Incharge<span class="text-danger"></span></label>
+                    <input type="text" class="form-control" formControlName="Incharge" />
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label">PaySlip Formats<span class="text-danger"></span></label>
+                    <select class="form-select" formControlName="PaySlipFormats">
+                        <option value="">--select---</option>
+                    </select>
+                </div>
+
+                <div class="col-md-3">
                     <label class="form-label">Portal PaySlip Format<span class="text-danger"></span></label>
                     <select class="form-select" formControlName="PortalPaySlipFormat">
                         <option value="">--select---</option>
                     </select>
                 </div>
-                <div class="col-md-4">
-                    <label class="form-label">Incharge<span class="text-danger"></span></label>
-                    <input type="text" class="form-control" formControlName="Incharge" />
+
+                <div class="col-md-3">
+                    <label class="form-label">Reimbrusement Date<span class="text-danger"></span></label>
+                    <input type="date" class="form-control" formControlName="Reimbrusementdate" />
                 </div>
-            </div>
-            <div class="row g-3 mb-3">
-                <div class="col-md-4">
+
+                <div class="col-md-3">
                     <label class="form-label">Round Off Applicable<span class="text-danger"></span></label>
                     <select class="form-select" formControlName="RoundOffApplicable">
                         <option value="1">Yes</option>
                         <option value="0">No</option>
                     </select>
                 </div>
-                <div class="col-md-4">
+
+
+                <div class="col-md-3">
                     <label class="form-label">TAT(In Days)<span class="text-danger"></span></label>
                     <input type="text" class="form-control" formControlName="TAT" />
                 </div>
-                <div class="col-md-4">
+
+                <div class="col-md-3">
                     <label class="form-label">Valid Date<span class="text-danger">*</span></label>
                     <input type="date" class="form-control" formControlName="ValidDate" />
                     <div class="text-danger small" *ngIf="CompanyAddForm.get('ValidDate')?.touched 
@@ -653,13 +765,15 @@
                         ValidDate is required
                     </div>
                 </div>
-            </div>
-            <div class="row g-3 mb-3">
-                <div class="col-md-4">
+
+
+                <div class="col-md-3">
                     <label class="form-label">Incentive Date<span class="text-danger"></span></label>
                     <input type="text" class="form-control" formControlName="IncentiveDate" />
                 </div>
-                <div class="col-md-4">
+            </div>
+            <div class="row g-3 mb-3">
+                <div class="col-md-3">
                     <label class="form-label">Deviation<span class="text-danger"></span></label>
                     <select class="form-select" formControlName="Deviation">
                         <option value="">--select---</option>
@@ -667,19 +781,15 @@
                         <option value="0">No</option>
                     </select>
                 </div>
-                <div class="col-md-4">
-                    <label class="form-label">Upload Service Tax Details<span class="text-danger"></span></label>
-                    <!-- <input type="date" class="form-control" formControlName="ValidDate" /> -->
-                </div>
-            </div>
-            <div class="row g-3 mb-3">
-                <div class="col-md-4" style="display: none;">
+
+
+                <div class="col-md-3">
                     <label class="form-label">Reimbursement Type<span class="text-danger"></span></label>
                     <select class="form-select" formControlName="ReimbursementType">
                         <option value="">Select</option>
                     </select>
                 </div>
-                <div class="col-md-4" style="display: none;">
+                <div class="col-md-3">
                     <label class="form-label">Salary SMS<span class="text-danger"></span></label>
                     <!-- <input type="text" class="form-control" formControlName="SalarySMS" /> -->
                     <select class="form-select" formControlName="SalarySMS">
@@ -688,7 +798,7 @@
                         <option value="0">No</option>
                     </select>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <label class="form-label">Effective Date<span class="text-danger">*</span></label>
                     <input type="date" class="form-control" formControlName="EffectiveDate" />
                     <div class="text-danger small" *ngIf="CompanyAddForm.get('EffectiveDate')?.touched 
@@ -696,32 +806,39 @@
                         EffectiveDate is required
                     </div>
                 </div>
-                <div class="col-md-4">
+            </div>
+            <div class="row g-3 mb-3">
+                <div class="col-md-3">
                     <label class="form-label">Sales Person<span class="text-danger"></span></label>
                     <input type="text" class="form-control" formControlName="SalesPerson" />
                 </div>
-                <div class="col-md-4">
+
+
+
+                <div class="col-md-3">
                     <label class="form-label">Branch Location<span class="text-danger"></span></label>
                     <input type="text" class="form-control" formControlName="BranchLocation" />
                 </div>
-            </div>
-            <div class="row g-3 mb-3">
-                <div class="col-md-4" style="display: none;">
-                    <label class="form-label">Reimbrusement Date<span class="text-danger"></span></label>
-                    <input type="date" class="form-control" formControlName="ReimbrusementDate" />
+                <div class="col-md-3">
+                    <label class="form-label">PF Code<span class="text-danger"></span></label>
+                    <!-- <input type="text" class="form-control" formControlName="SalarySMS" /> -->
+                    <select class="form-select" formControlName="pfcode">
+                        <option value="">--select---</option>
+
+                    </select>
                 </div>
-                <div class="col-md-4">
+
+                <div class="col-md-3">
                     <label class="form-label">Profit Center Code<span class="text-danger"></span></label>
                     <input type="text" class="form-control" formControlName="ProfitCenterCode" />
                 </div>
-                <div class="col-md-4">
+            </div>
+            <div class="row g-3 mb-3">
+                <div class="col-md-3">
                     <label class="form-label">Particulars<span class="text-danger"></span></label>
                     <input type="text" class="form-control" formControlName="Particulars" />
                 </div>
-            </div>
-            <div class="row g-3 mb-3">
-
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <label class="form-label">Sap Customer Code<span class="text-danger">*</span></label>
                     <input type="text" class="form-control" formControlName="SapCustomerCode" />
                     <div class="text-danger small" *ngIf="CompanyAddForm.get('SapCustomerCode')?.touched 
@@ -729,9 +846,11 @@
                         SapCustomerCode is required
                     </div>
                 </div>
-            </div>
-            <div class="row g-3 mb-3">
-                <div class="col-md-4">
+
+
+
+
+                <div class="col-md-3">
                     <label class="form-label d-block">Is NonInvoice</label>
 
                     <div class="form-check form-check-inline">
@@ -746,58 +865,55 @@
                         <label class="form-check-label" for="invoice">Invoice</label>
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <!-- <label class="form-label">Header & Footer</label> -->
                     <mat-checkbox formControlName="HeaderFooter">
                         Header & Footer
                     </mat-checkbox>
                 </div>
-                <div class="col-md-4">
+            </div>
+            <div class="row g-3 mb-3">
+                <div class="col-md-3">
                     <!-- <label class="form-label">Minimum Wages Applicability</label> -->
                     <mat-checkbox formControlName="MinimumWagesApplicability">
                         Minimum Wages Applicability
                     </mat-checkbox>
                 </div>
-            </div>
-            <div class="row g-3 mb-3">
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <!-- <label class="form-label">Is Extra Working Days Service Fee</label> -->
                     <mat-checkbox formControlName="WorkingDaysServiceFee">
                         Is Extra Working Days Service Fee
                     </mat-checkbox>
                 </div>
-                <div class="col-md-4">
+
+
+                <div class="col-md-3">
                     <!-- <label class="form-label">Is Bonus Pay Through FF</label> -->
                     <mat-checkbox formControlName="IsBonusPayThroughFF">
                         Is Bonus Pay Through FF
                     </mat-checkbox>
                 </div>
-                <div class="col-md-4">
-                    <label class="form-label">Reimbursement Format Type</label>
-                    <!-- <input type="checkbox" class="form-control" formControlName="Minimum Wages Applicability"
-                        style="width: 18px; height: 18px;" /> -->
-                </div>
-            </div>
-            <div class="row g-3 mb-3">
-                <div class="col-md-4">
+
+
+                <div class="col-md-3">
                     <!-- <label class="form-label">Attendance Input with Leave</label> -->
                     <mat-checkbox formControlName="AttendanceInputwithLeave">
                         Attendance Input with Leave
                     </mat-checkbox>
                 </div>
-                <div class="col-md-4">
+            </div>
+            <div class="row g-3 mb-3">
+                <div class="col-md-3">
                     <label class="form-label">Management MIS</label>
                     <input type="date" class="form-control" formControlName="ManagementMIS" />
                 </div>
-                <!-- <div class="col-md-4">
+                <!-- <div class="col-md-3">
                     <label class="form-label">Pf Code<span class="text-danger">*</span></label>
                     <select class="form-select" formControlName="PfCode">
                         <option value="">--select---</option>
                     </select>
                 </div> -->
-            </div>
-            <div class="row g-3 mb-3">
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <label class="form-label">Payroll With Decimal<span class="text-danger">*</span></label>
                     <select class="form-select" formControlName="PayrollWithDecimal">
                         <option value="">--select---</option>
@@ -808,13 +924,16 @@
                         PayrollWithDecimal is required
                     </div>
                 </div>
-                <div class="col-md-4">
+
+
+
+                <div class="col-md-3">
                     <!-- <label class="form-label">Is Decimal</label> -->
                     <mat-checkbox formControlName="IsDecimal">
                         Is Decimal
                     </mat-checkbox>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <label class="form-label">Company Type<span class="text-danger">*</span></label>
                     <select class="form-select" formControlName="CompanyType">
                         <option *ngFor="let p of companyType" [value]="p.value">{{p.name}} </option>
@@ -826,7 +945,8 @@
                 </div>
             </div>
             <div class="row g-3 mb-3">
-                <div class="col-md-4">
+
+                <div class="col-md-3">
                     <label class="form-label">Service Fee With Decimal<span class="text-danger">*</span></label>
                     <select class="form-select" formControlName="ServiceFeeWithDecimal">
                         <option *ngFor="let p of servicefee" [value]="p.value">{{p.name}} </option>
@@ -836,13 +956,52 @@
                         ServiceFeeWithDecimal is required
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <!-- <label class="form-label">Manual New Joinee</label> -->
                     <mat-checkbox formControlName="ManualNewJoinee">
                         Manual New Joinee
                     </mat-checkbox>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
+                    <label class="form-label">Pan No<span class="text-danger"></span></label>
+                    <input type="text" class="form-control" formControlName="PanNo" />
+                    <div class="text-danger small" *ngIf="CompanyAddForm.get('PanNo')?.touched 
+             && CompanyAddForm.get('PanNo')?.hasError('required')">
+                        Pan No is required
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Bank Advice<span class="text-danger">*</span></label>
+                    <select class="form-select" formControlName="BankAdvice">
+                        <option *ngFor="let p of bankAdvice" [value]="p.value">{{p.name}} </option>
+                    </select>
+                    <div class="text-danger small" *ngIf="CompanyAddForm.get('BankAdvice')?.touched 
+             && CompanyAddForm.get('BankAdvice')?.hasError('required')">
+                        BankAdvice is required
+                    </div>
+                </div>
+            </div>
+            <div class="row g-3 mb-3">
+                <div class="col-md-3">
+                    <label class="form-label">PF Category<span class="text-danger">*</span></label>
+                    <select class="form-select" formControlName="pfcategory">
+                        <!-- <option *ngFor="let p of reimPayment" [value]="p.value">{{p.name}} </option> -->
+                    </select>
+                    <div class="text-danger small" *ngIf="CompanyAddForm.get('pfcategory')?.touched 
+             && CompanyAddForm.get('pfcategory')?.hasError('required')">
+                        PF Category is required
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Tan No<span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" formControlName="TanNo" />
+                    <div class="text-danger small" *ngIf="CompanyAddForm.get('TanNo')?.touched 
+             && CompanyAddForm.get('TanNo')?.hasError('required')">
+                        Tan No is required
+                    </div>
+                </div>
+
+                <div class="col-md-3">
                     <label class="form-label">Reimb Payment<span class="text-danger">*</span></label>
                     <select class="form-select" formControlName="ReimbPayment">
                         <option *ngFor="let p of reimPayment" [value]="p.value">{{p.name}} </option>
@@ -852,15 +1011,7 @@
                         ReimbPayment is required
                     </div>
                 </div>
-            </div>
-            <div class="row g-3 mb-3">
-                <div class="col-md-4" style="display: none;">
-                    <label class="form-label">Vertial</label>
-                    <select class="form-select" formControlName="Vertial">
-                        <option value="">--select---</option>
-                    </select>
-                </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <label class="form-label">Digital Platform Consent<span class="text-danger">*</span></label>
                     <select class="form-select" formControlName="DigitalPlatformConsent">
                         <option value="">--select---</option>
@@ -872,49 +1023,62 @@
                         DigitalPlatformConsent is required
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <!-- <label class="form-label">Is Proforma</label> -->
                     <mat-checkbox formControlName="IsProforma">
                         Is Proforma
                     </mat-checkbox>
                 </div>
-            </div>
-            <div class="row g-3 mb-3">
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <label class="form-label">IsOneTouchInvoicing</label>
                     <select class="form-select" formControlName="IsOneTouchInvoicing">
                         <option value="">--select---</option>
                         <option value="1">Yes</option>
                         <option value="0">No</option>
                     </select>
+
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
+                    <label class="form-label">Vertial</label>
+                    <select class="form-select" formControlName="Vertial">
+                        <option value="">--select---</option>
+                    </select>
+                </div>
+
+
+
+                <div class="col-md-3">
                     <label class="form-label">Working Hours<span class="text-danger"></span></label>
-                    <input type="texct" class="form-control" formControlName="WorkingHours" />
+                    <input type="text" class="form-control" formControlName="WorkingHours" />
                 </div>
-                <div class="col-md-4">
+            </div>
+
+            <div class="row g-3 mb-3">
+                <div class="col-md-3">
                     <!-- <label class="form-label">Is Signature</label> -->
                     <mat-checkbox formControlName="IsSignature">
                         Is Signature
                     </mat-checkbox>
                 </div>
-            </div>
-            <div class="row g-3 mb-3">
-                <div class="col-md-4">
-                    <label class="form-label">IsInovicePoBased</label>
+                <div class="col-md-3">
+                    <label class="form-label">IsInvoicePoBased</label>
                     <select class="form-select" formControlName="IsInovicePoBased">
                         <option value="">--select---</option>
                         <option value="1">Yes</option>
                         <option value="0">No</option>
                     </select>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <!-- <label class="form-label">Is 40 Billing Model<span class="text-danger"></span></label> -->
                     <mat-checkbox formControlName="Is40BillingModel">
                         Is 40 Billing Model
                     </mat-checkbox>
                 </div>
-                <div class="col-md-4">
+
+
+
+
+                <div class="col-md-3">
                     <!-- <label class="form-label">Is Currency Conversion</label> -->
                     <mat-checkbox formControlName="IsCurrencyConversion">
                         Is Currency Conversion
@@ -922,31 +1086,31 @@
                 </div>
             </div>
             <div class="row g-3 mb-3">
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <label class="form-label">60% Billing Model</label>
                     <select class="form-select" formControlName="BillingModel">
                         <option *ngFor="let p of billingModel" [value]="p.value">{{p.name}} </option>
                     </select>
                 </div>
-                <div class="col-md-4">
-                    <label class="form-label">Bank Advice<span class="text-danger">*</span></label>
-                    <select class="form-select" formControlName="BankAdvice">
-                        <option *ngFor="let p of bankAdvice" [value]="p.value">{{p.name}} </option>
-                    </select>
-                    <div class="text-danger small" *ngIf="CompanyAddForm.get('BankAdvice')?.touched 
-             && CompanyAddForm.get('BankAdvice')?.hasError('required')">
-                        BankAdvice is required
-                    </div>
-                </div>
-                <div class="col-md-4">
+
+                <div class="col-md-3">
                     <label class="form-label">ServiceCharge Clubbing</label>
                     <select class="form-select" formControlName="ServiceChargeClubbing">
                         <option *ngFor="let p of serviceClubbing" [value]="p.value">{{p.name}} </option>
                     </select>
                 </div>
+                <div class="col-md-3">
+                    <label class="form-label">VMS Fee<span class="text-danger"></span></label>
+                    <input type="text" class="form-control" formControlName="VMSFee" />
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label">MSP Fee<span class="text-danger"></span></label>
+                    <input type="text" class="form-control" formControlName="MSPFee" />
+                </div>
             </div>
             <div class="row g-3 mb-3">
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <label class="form-label">DGPSF<span class="text-danger">*</span></label>
                     <select class="form-select" formControlName="DGPSF">
                         <option value="">--select---</option>
@@ -958,7 +1122,7 @@
                         DGPSF is required
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <label class="form-label">Sector<span class="text-danger">*</span></label>
                     <select class="form-select" formControlName="Sector">
                         <option value="">--select Sector---</option>
@@ -969,6 +1133,27 @@
              && CompanyAddForm.get('Sector')?.hasError('required')">
                         Sector is required
                     </div>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Is ESI Split</label>
+                    <select class="form-select" formControlName="isesiSplit">
+                        <option value="">--select---</option>
+
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">VMS Type</label>
+                    <select class="form-select" formControlName="VMSType">
+                        <option value="">--select---</option>
+
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">MSP Type</label>
+                    <select class="form-select" formControlName="MSPType">
+                        <option value="">--select---</option>
+
+                    </select>
                 </div>
             </div>
         </mat-card-content>

@@ -54,14 +54,41 @@ export class EmployeeContactdetailsComponent {
     }
 
     this.contactForm = this.fb.group({
-      address: [this.rowData.Address ?? '', Validators.required],
-      pincode: [this.rowData.Pin_Code ?? '', [Validators.required, Validators.pattern(/^\d{6}$/)]],
-      country: [this.rowData.Country ?? ''],
-      mobile: [this.rowData.Mobile_Number ?? '', [Validators.required, Validators.pattern(/^[0-9]{10}$/)]],
-      email: [this.rowData.Email_Id ?? '', [Validators.required, Validators.email]],
-      contactperson: [this.rowData.Contact_Person ?? ''],
-      emergencycontact: [this.rowData.Emergency_Contact_Person ?? '']
+      address: [this.rowData?.Address ?? '', Validators.required],
+      city: [this.rowData?.City ?? ''],
+      state: [this.rowData?.State ?? ''],
+
+      pincode: [
+        this.rowData?.Pin_Code ?? '',
+        [Validators.required, Validators.pattern(/^\d{6}$/)]
+      ],
+
+      country: [this.rowData?.Country ?? ''],
+
+      mobile: [
+        this.rowData?.Mobile_Number ?? '',
+        [Validators.required, Validators.pattern(/^[0-9]{10}$/)]
+      ],
+
+      telephone: [
+        this.rowData?.Telephone ?? ''
+      ],
+
+      email: [
+        this.rowData?.Email_Id ?? '',
+        [Validators.required, Validators.email]
+      ],
+
+      contactperson: [this.rowData?.Contact_Person ?? ''],
+      emergencycontact: [this.rowData?.Emergency_Contact_Person ?? ''],
+
+      lapprovername: [this.rowData?.L1_Approver_Name ?? ''],
+      laaprovername: [this.rowData?.L2_Approver_Name ?? ''],
+
+      lapproveremail: [this.rowData?.L1_Approver_Email ?? ''],
+      laaproveremail: [this.rowData?.L2_Approver_Email ?? '']
     });
+
   }
 
 

@@ -98,7 +98,6 @@ import { ITcalenderComponent } from './pages/customers/itcalender/itcalender.com
 import { PayfrequencyComponent } from './pages/customers/payfrequency/payfrequency.component';
 import { ServiceChargeComponent } from './pages/customers/ServiceChargeMaster/service-charge/service-charge.component';
 
-import { EmployeeComponents } from './pages/customers/employee/employee.component';
 import { AdminnavigationComponent } from './pages/admin/adminnavigation/adminnavigation.component';
 import { CompanypermissionComponent } from './pages/admin/companypermission/companypermission.component';
 import { PasswordunlockComponent } from './pages/admin/passwordunlock/passwordunlock.component';
@@ -144,6 +143,8 @@ import { PaytransactionComponent } from './pages/process/paytransaction/paytrans
 import { ProcessComponent } from './pages/process/process.component';
 import { ReimbrusmentcalenderComponent } from './pages/process/reimbrusmentcalender/reimbrusmentcalender.component';
 import { ReprocessComponent } from './pages/process/reprocess/reprocess.component';
+import { UpfrontmatrixComponent } from './pages/upfrontprocess/upfrontmatrix/upfrontmatrix.component';
+import { EmployeeComponents } from './pages/customers/employee/employee.component';
 
 
 
@@ -287,6 +288,7 @@ export const routes: Routes = [
         path: 'tools', component: ToolsnavigationComponent,
         children: [
           { path: "dynamiupload", component: DynamicuploadComponent },
+          { path: "upfrontmatrix", component: UpfrontmatrixComponent }
         ]
       },
       {
