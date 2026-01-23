@@ -8,6 +8,7 @@ export interface IInvoiceRepository {
     InvoiceInitiate(val): Observable<APIResponse>;
     ExportToExcel(val): Observable<APIResponse>;
     InitialSearch(val): Observable<APIResponse>;
+    InitialSearchAllot(val): Observable<APIResponse>;
     InitiationSearchExport(val): Observable<APIResponse>;
     UploadCancel(formData): Observable<string>;
     GetGSTInvoice(userId: number): Observable<APIResponse>;
@@ -18,4 +19,5 @@ export interface IInvoiceRepository {
     getBillingType(): Observable<APIResponse>;
     getNetDeductionType(): Observable<APIResponse>;
     addGstInvoice(payload: any): Observable<string>;
+    GetAllInvoiceAllotDetails(payload: any) :Observable<APIResponse>;
 }

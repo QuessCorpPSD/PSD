@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, Inject, InjectionToken, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
-
+import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { AgGridAngular } from "ag-grid-angular";
 import type { ColDef, GridApi, GridOptions, GridReadyEvent, PaginationChangedEvent, RowClickedEvent } from "ag-grid-community";
 import {
@@ -15,7 +15,6 @@ import {
 } from "ag-grid-community";
 import { IDashBoardServices } from '../../Repository/IDashBoardService';
 import { DashBoardServices } from '../../Service/DashBoardService';
-import { MatTableDataSource } from '@angular/material/table';
 import { AdminDashboardDetailUI } from '../../Models/AdminDashboardDetailUI';
 import { FinancialYearComponent } from '../../common/financial-year/financial-year.component';
 import { UserComponent } from '../../common/user/user.component';
@@ -27,15 +26,21 @@ import { MatTooltip } from "@angular/material/tooltip";
 import { IAssignmentService } from '../../Repository/IAssignment.service';
 import { AssignmentService } from '../../Service/Assignment.service';
 import { ToastrService } from 'ngx-toastr';
-import { MatPaginator } from '@angular/material/paginator';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { filter } from 'rxjs';
+import { IInvoiceRepository } from '../../Repository/IInvoiceRepository';
+import { EncryptionService } from '../../Shared/encryption.service';
+import { SessionStorageService } from '../../Shared/SessionStorageService';
+import { InvoiceRepository } from '../../Service/InvoiceRepository';
 export const DASH_TOKEN = new InjectionToken<IDashBoardServices>('DASH_TOKEN');
 export const AUTH_TOKEN = new InjectionToken<IAssignmentService>('AUTH_TOKEN');
+export const Invoice_TOKEN = new InjectionToken<IInvoiceRepository>('Invoice_TOKEN');
+import * as XLSX from 'xlsx';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 @Component({
   selector: 'app-dash',
-  imports: [AgGridAngular, FormsModule, MatIconModule, MatFormFieldModule, MatDatepickerModule, CommonModule, ReactiveFormsModule, FinancialYearComponent, UserComponent, MatTooltip],
+  imports: [AgGridAngular, FormsModule, MatTableModule, MatIconModule, MatFormFieldModule, MatDatepickerModule, CommonModule, ReactiveFormsModule, FinancialYearComponent, UserComponent, MatTooltip, MatPaginatorModule],
   templateUrl: './dash.component.html',
   styleUrl: './dash.component.css',
   providers: [provideNativeDateAdapter(),
@@ -46,6 +51,10 @@ ModuleRegistry.registerModules([AllCommunityModule]);
   {
     provide: AUTH_TOKEN,
     useClass: AssignmentService,
+  },
+  {
+    provide: Invoice_TOKEN,
+    useClass: InvoiceRepository,
   }
   ],
   encapsulation: ViewEncapsulation.None
@@ -70,18 +79,43 @@ export class DashComponent implements OnInit {
   showNotAssignmentPanel: boolean = false;
   financialyear: any;
   user: any;
+  userdetail: any;
   pendingLots: any;
+  InvoiceAlloted: any;
   @ViewChild('PeningLotPaginator') PeningLot_paginator!: MatPaginator;
-
+  @ViewChild('InvoiceAlotPaginator') InvoiceAlot_paginator!: MatPaginator;
   userList: any;
   readonly range = new FormGroup({
     start: new FormControl<Date | null>(null),
     end: new FormControl<Date | null>(null),
   });
   isLoading: boolean = false;
-  constructor(@Inject(DASH_TOKEN) private dashService: IDashBoardServices, @Inject(AUTH_TOKEN) private _authService: IAssignmentService, private toastr: ToastrService) {
+  constructor(@Inject(DASH_TOKEN) private dashService: IDashBoardServices, @Inject(Invoice_TOKEN) private _invoiceService: IInvoiceRepository,
+    @Inject(AUTH_TOKEN) private _authService: IAssignmentService, private toastr: ToastrService
+    , private _decrypt: EncryptionService,
+    private _sessionStoreage: SessionStorageService,) {
 
   }
+
+  displayedInvoiceColumns: string[] = ['Serial_No'
+    , 'Req_No'
+    , 'Company_Code'
+    , 'Pay_Period'
+    , 'Map_name'
+    , 'Employee_Head_Count'
+    , 'Net_CTC'
+    , 'NetPay'
+    , 'Invoice_Category'
+    , 'Invoice_Type'
+    , 'State_name'
+    , 'RequestedBy'
+    , 'RequestedDate'
+    , 'Initiation_Remarks'
+    , 'AssignedTo'
+    , 'Rejected_On'
+    , 'Rejected_By'
+    , 'InvoiceCreatedOn'
+  ]
   onRowClicked(event: RowClickedEvent) {
     console.log('Row clicked:', event.data);
     alert(`You clicked on ${event.data.make} (${event.data.model})`);
@@ -113,12 +147,49 @@ export class DashComponent implements OnInit {
     console.log(val)
     this.dashService.getadmindashboarddetail(val).subscribe({
       next: res => {
-        this.rowCompletedData=res.Data;
+        this.rowCompletedData = res.Data;
         //   this.dataSource= new MatTableDataSource<AdminDashboardDetailUI>(res.Data);
         // this.dataSource.paginator = this.paginator;
       },
       error: err => { console.log(err.message) }
     })
+  }
+
+
+  BindInvoiceAllot() {
+    console.log('BindInvoiceAllot');
+    const request = {
+      "InvoiceType": 0,
+      "ActionType": "E",
+      "userId": this.userdetail.user_Id
+    }
+    console.log(request);
+    this._invoiceService.GetAllInvoiceAllotDetails(request).subscribe({
+      next: res => {
+        console.log(res.Data.data);
+        this.InvoiceAlloted = new MatTableDataSource<any>(Array.isArray(res.Data.data) ? res.Data.data : []);
+        this.InvoiceAlloted.paginator = this.InvoiceAlot_paginator;
+      },
+      error: err => { }
+    });
+  }
+  onExportInvoice() {
+    const request = {
+      "InvoiceType": 0,
+      "ActionType": "E",
+      "userId": this.userdetail.user_Id
+    }
+    console.log(request);
+    this._invoiceService.GetAllInvoiceAllotDetails(request).subscribe({
+      next: res => {
+        console.log(res.Data.data);
+        const ws = XLSX.utils.json_to_sheet(res.Data.data);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, "Table");
+        XLSX.writeFile(wb, "InvoiceAllotExport.xlsx");
+      },
+      error: err => { }
+    });
   }
   handlefinancialYearEvent(financialYear: any) {
     this.financialyear = financialYear;
@@ -214,6 +285,8 @@ export class DashComponent implements OnInit {
   }
   columnDefs: any;
   ngOnInit(): void {
+    const userdetail = this._sessionStoreage.getItem('UserProfile');
+    this.userdetail = JSON.parse(this._decrypt.decrypt(userdetail!));
     this.PendingLots();
     this.BindDashBoard();
 
@@ -227,6 +300,7 @@ export class DashComponent implements OnInit {
 
     this.BindDashboardDetail(request);
     this.BindPendingLot();
+    this.BindInvoiceAllot();
   }
 
   BindPendingLot(): void {
@@ -306,7 +380,7 @@ export class DashComponent implements OnInit {
         headerName: 'Input',
         width: 90,
         pinned: 'left',
-        filter:false,
+        filter: false,
         cellRenderer: () => `
     <span style="cursor:pointer; display:inline-flex; align-items:center;">
       <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
@@ -326,7 +400,7 @@ export class DashComponent implements OnInit {
         headerName: 'Output',
         width: 30,
         pinned: 'left',
-        filter:false,
+        filter: false,
         cellRenderer: () => `
     <span style="cursor:pointer; display:inline-flex; align-items:center;">
       <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
@@ -505,9 +579,5 @@ export class DashComponent implements OnInit {
     floatingFilter: true,
     tooltipComponentParams: { color: '#1976d2' }
   };
-
-
-
-
 
 }

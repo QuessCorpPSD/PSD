@@ -30,7 +30,7 @@ export const Invoice_TOKEN = new InjectionToken<IInvoiceRepository>('Invoice_TOK
 @Component({
   selector: 'app-draft-invoice',
   imports: [CommonModule, MatFormFieldModule,
-    MatInputModule, MatRadioModule, MatTabsModule, MatPaginatorModule, FormsModule, MatFormFieldModule, MatCardModule, MatCheckboxModule, CompanyallComponent, PayPeriodComponent, MatIconModule, MatTableModule, GstinvoiceComponent],
+    MatInputModule, MatRadioModule, MatTabsModule, MatPaginatorModule, FormsModule, MatFormFieldModule, MatCardModule, MatCheckboxModule, MatIconModule, MatTableModule, GstinvoiceComponent],
   templateUrl: './draft-invoice.component.html',
   styleUrl: './draft-invoice.component.css',
    providers: [
@@ -208,12 +208,14 @@ export class DraftInvoiceComponent implements OnInit {
     console.log(this.userdetail);
     this.payPeriodType = "All";
     const request = {
-      "Company_Id": 0,
-      "PayPeriod_Id": 0,
+      // "Company_Id": 0,
+      // "PayPeriod_Id": 0,
       "InvoiceType": 0,
-      "ActionType": "A"
+      "ActionType": "A",
+      "userId": this.userdetail.user_Id
     }
     this.dataSource=new MatTableDataSource<any>([]);
+    this.InvoiceSearch();
     // this._invoiceService.InitialSearch(request).subscribe({
     //   next: res => {
         
@@ -227,22 +229,22 @@ export class DraftInvoiceComponent implements OnInit {
   
     InvoiceSearch(){
   
-      if(this.selectedCompanyId==undefined)
-      {
-        alert("Select Company ");
-        return;
-      }
+      // if(this.selectedCompanyId==undefined)
+      // {
+      //   alert("Select Company ");
+      //   return;
+      // }
   
-      if(this.payPeriod==undefined)
-      {
-        alert("Select PayPeriod ");
-        return;
-      }
-      if(this.invoiceType==undefined)
-      {
-        alert("Select Invoice Type ");
-        return;
-      }
+      // if(this.payPeriod==undefined)
+      // {
+      //   alert("Select PayPeriod ");
+      //   return;
+      // }
+      // if(this.invoiceType==undefined)
+      // {
+      //   alert("Select Invoice Type ");
+      //   return;
+      // }
       // const request={
       //   "companyId":this.selectedCompanyId,
       //   "Pay_Period":this.payPeriod.payPeriod,
@@ -252,12 +254,13 @@ export class DraftInvoiceComponent implements OnInit {
       this.issearch=true;
       this.isLoading=true;
       const request = {
-        "Company_Id": this.selectedCompanyId,
-        "PayPeriod_Id": this.payPeriod.payfrequencyid,
+        // "Company_Id": this.selectedCompanyId,
+        // "PayPeriod_Id": this.payPeriod.payfrequencyid,
         "InvoiceType": 0,
-        "ActionType": "S"
+        "ActionType": "S",
+        "userId":this.userdetail.user_Id
       }
-      this._invoiceService.InitialSearch(request).subscribe({
+      this._invoiceService.InitialSearchAllot(request).subscribe({
         next:res=>{
            this.dataSource = new MatTableDataSource<any>(Array.isArray(res.Data) ? res.Data : []);
            this.dataSource.paginator=this.PeningLot_paginator;
