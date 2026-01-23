@@ -59,6 +59,7 @@ export class EmployeePreviousemploymentComponent {
     this.prevEmploymentForm = this.fb.group({
       companyName: ['', Validators.required],
       designation: ['', Validators.required],
+      billingDesignation: [''],
       experience: [this.rowData.Experience_In_Years ?? '', Validators.required],
 
       startDate: [

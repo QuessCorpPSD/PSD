@@ -34,6 +34,7 @@ export const Pay_TOKEN = new InjectionToken<IEmployeeservice>('Pay_TOKEN');
 export class EmployeeComponents {
   selectedCompanyId: any;
   selectedCompanyCode: any;
+  empid: any;
   employee!: FormGroup
   message: string = '';
   popupMessage: string = '';
@@ -55,12 +56,10 @@ export class EmployeeComponents {
   uploadedDataSource = new MatTableDataSource(this.uploadedData);
   UploadedResponse: any;
   UploadedResponseSalary: any;
-
   @ViewChild('paginator') paginator!: MatPaginator;
+
   constructor(private dialog: MatDialog, @Inject(Pay_TOKEN) private service: IEmployeeservice, private decry: EncryptionService,
     private _sessionStoreage: SessionStorageService, private fb: FormBuilder) { }
-
-
 
 
   ngOnInit(): void {
@@ -87,7 +86,7 @@ export class EmployeeComponents {
     this.popupMessage = '';
     this.popupSubMessage = '';
   }
-  
+
   BindEmployeeCode() {
     const payload = { CompanyId: this.selectedCompanyId?.toString() };
 
@@ -103,46 +102,57 @@ export class EmployeeComponents {
     this.selectedCompanyCode = company.companyCode;
     this.BindEmployeeCode();
   }
-
+  addpooen() {
+    this.dialog.open(EmployeeAddComponent, {
+      width: '83%',
+      height: '87vh',
+      disableClose: true,
+    });
+  }
 
   onsearch() {
     if (!this.selectedCompanyId) {
-      alert('Please Select Company')
+      alert('Please Select Company');
       return;
     }
+
     this.isLoading = true;
     this.isUploadGridVisible = true;
 
-    const form = this.employee.getRawValue();
     const Companyid = this.selectedCompanyId;
-    const eactive = form.EActive;
-    this.service.search(Companyid, eactive).subscribe({
-      next: (res) => {
-        this.isLoading = false;
-        this.employeedata = res?.Data?.data?.Table0;
+    const empid = this.empid || 0;
 
-        if (!this.employeedata) {
-          this.isLoading = false;
-          alert(res.Data.message)
-        }
-        if (this.employeedata && this.employeedata.length > 0) {
-          this.isLoading = false;
+    this.service.search(Companyid, empid).subscribe({
+      next: (res) => {
+        this.employeedata = res?.Data?.data?.Table0 || [];
+
+        if (this.employeedata.length > 0) {
           this.dataSource = new MatTableDataSource(this.employeedata);
           this.dataSource.paginator = this.paginator;
           this.dataSource.sort = this.sort;
+
           this.uploadDisplayedColumns = [
-            'Action', 'SNo', 'EMPNO', 'EMPNAME', 'CompanyCode', 'DOB', 'Active', 'ORIHIREDDATE', 'SEX', 'Department', 'OCCUPATIONCODE'];
-        } else {
-          this.isLoading = false;
-          this.dataSource.data = [];
+            'Action',
+            'SNo',
+            'EMPNO',
+            'EMPNAME',
+            'CompanyCode',
+            'DOB',
+            'Active',
+            'ORIHIREDDATE',
+            'SEX',
+            'Department',
+            'OCCUPATIONCODE'
+          ];
         }
+
+        this.isLoading = false; //  stop loader AFTER success
       },
       error: (err) => {
-        console.error('Error loading Companypaycode release data', err);
-        this.isLoading = false;
-      },
+        console.error('Error loading employee data', err);
+        this.isLoading = false; //  stop loader on error
+      }
     });
-    this.isLoading = false;
   }
 
   exportToExcel(): void {

@@ -52,42 +52,41 @@ export class EmployeeBankdetailsComponent {
       console.warn('UserProfile not found in session storage');
     }
     this.bankForm = this.fb.group({
-      bankname: ['', Validators.required],
-      Branchname: ['', Validators.required],
-      bankacno: ['', [Validators.required, Validators.pattern(/^[0-9]{6,20}$/)]],
+      // Main Bank
+      bankname: [this.rowData?.Employee_Bank_Id ?? '', Validators.required],
+      Branchname: [this.rowData?.Branch_Name ?? '', Validators.required],
 
-      swiftcode: ['', Validators.required],
-      Backcode: ['', Validators.required],
-      Branchcode: ['', Validators.required],
+      bankacno: [
+        this.rowData?.Bank_Account_Number ?? '',
+        [Validators.required, Validators.pattern(/^[0-9]{6,20}$/)]
+      ],
 
-      nomineename: [''],
-      nomineerelationship: [''],
-      nomineeage: ['', Validators.pattern(/^[0-9]+$/)],
+      swiftcode: [this.rowData?.SWIFT_CODE ?? '', Validators.required],
 
-      nomineeswiftcode: [''],
-      Nomineebankname: [''],
-      nomineeaccountno: ['', Validators.pattern(/^[0-9]*$/)],
-      nomineebankcode: [''],
-      nomineebranchcode: ['']
+      // Nominee Details
+      nomineename: [this.rowData?.Nominee_Name ?? ''],
+      nomineerelationship: [this.rowData?.Nominee_Relationship ?? ''],
+
+      nomineeage: [
+        this.rowData?.Nominee_Age ?? '',
+        Validators.pattern(/^[0-9]+$/)
+      ],
+
+      nomineeswiftcode: [this.rowData?.NOMINEE_SWIFT_CODE ?? ''],
+      Nomineebankname: [this.rowData?.Nominee_Bank_Id ?? ''],
+
+      nomineeaccountno: [
+        this.rowData?.Nominee_Bank_Account_Number ?? '',
+        Validators.pattern(/^[0-9]*$/)
+      ],
+
+      // Alternate Bank (from HTML)
+      alternatebank: [this.rowData?.Alternate_Bank_Id ?? ''],
+      alternateaccountno: [this.rowData?.Alternate_Account_No ?? ''],
+      alternateifsccode: [this.rowData?.Alternate_IFSC_Code ?? '']
     });
-    this.bankForm = this.fb.group({
-      bankname: [this.rowData.Employee_Bank_Id],
-      Branchname: [this.rowData.Branch_Name],
-      bankacno: [this.rowData.Bank_Account_Number],
 
-      swiftcode: [this.rowData.SWIFT_CODE],
-      Backcode: [this.rowData.Bank_code],
-      Branchcode: [this.rowData.Branch_code],
 
-      nomineename: [this.rowData.Nominee_Name],
-      nomineerelationship: [this.rowData.Nominee_Relationship],
-      nomineeage: [this.rowData.Nominee_Age],
-      nomineeswiftcode: [this.rowData.NOMINEE_SWIFT_CODE],
-      Nomineebankname: [Number(this.rowData.Nominee_Bank_Account)],
-      nomineeaccountno: [this.rowData.Nominee_Bank_Account_Number],
-      nomineebankcode: [''],
-      nomineebranchcode: ['']
-    });
     this.BindBankname();
     this.BindNomineeBankname();
   }
