@@ -105,6 +105,25 @@ import { PasswordunlockComponent } from './pages/admin/passwordunlock/passwordun
 import { PayperiodunlockComponent } from './pages/admin/payperiodunlock/payperiodunlock.component';
 //import { ReimbrusementnavigationComponent } from './pages/reimbruements/reimbrusementnavigation/reimbrusementnavigation.component';
 import { ReimbrusementComponent } from './pages/Reimbursement/reimbrusement/reimbrusement.component';
+import { AllowReProcessComponent } from './pages/process/allow-re-process/allow-re-process.component';
+import { ArrearAttendanceComponent } from './pages/process/arrear-attendance/arrear-attendance.component';
+import { AttendanceComponent } from './pages/process/attendance/attendance.component';
+import { AttendancebatchidUpdateComponent } from './pages/process/attendancebatchid-update/attendancebatchid-update.component';
+import { FFprocessComponent } from './pages/process/ffprocess/ffprocess.component';
+import { FNFRevokeComponent } from './pages/process/fnfrevoke/fnfrevoke.component';
+import { ITAdjustmentComponent } from './pages/process/itadjustment/itadjustment.component';
+import { LockpayperiodComponent } from './pages/process/lockpayperiod/lockpayperiod.component';
+import { LOPAdjustmentsComponent } from './pages/process/lopadjustments/lopadjustments.component';
+import { OneTimeReplacementComponent } from './pages/process/one-time-replacement/one-time-replacement.component';
+import { OtherincomeComponent } from './pages/process/otherincome/otherincome.component';
+import { PayProcessComponent } from './pages/process/pay-process/pay-process.component';
+import { PayregisteruploadComponent } from './pages/process/payregisterupload/payregisterupload.component';
+import { PaytransactionComponent } from './pages/process/paytransaction/paytransaction.component';
+import { ProcessComponent } from './pages/process/process.component';
+import { ReimbrusmentcalenderComponent } from './pages/process/reimbrusmentcalender/reimbrusmentcalender.component';
+import { ReprocessComponent } from './pages/process/reprocess/reprocess.component';
+import { ETDSProcessnavigationComponent } from './pages/E-TDSProcess/e-tdsprocessnavigation/e-tdsprocessnavigation.component';
+import { LegalEntityMappingComponent } from './pages/E-TDSProcess/legal-entity-mapping/legal-entity-mapping.component';
 import { AllowReProcessComponent } from './pages/Process/allow-re-process/allow-re-process.component';
 import { ArrearAttendanceComponent } from './pages/Process/arrear-attendance/arrear-attendance.component';
 import { AttendanceComponent } from './pages/Process/attendance/attendance.component';
@@ -293,6 +312,15 @@ export const routes: Routes = [
           { path: "loanandadvance", component: LoanandadvanceComponent },
           { path: 'loanpreclosure', component: ReimbursementLoanPreClosureComponent },
           { path: 'reimbursement', component: ReimbrusementComponent }
+
+
+        ]
+      },
+      {
+        path: 'etdsprocess', component: ETDSProcessnavigationComponent,
+        children: [
+          { path: "legalentitymapping", component: LegalEntityMappingComponent },
+
 
 
         ]

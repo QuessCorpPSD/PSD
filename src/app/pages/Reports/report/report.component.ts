@@ -49,7 +49,6 @@ export class ReportComponent {
   fromDate: string = '';
   toDate: string = '';
   Date: string = '';
-  
   constructor(@Inject(Pay_TOKEN) private service: IreportService, private decry: EncryptionService,
     private _sessionStoreage: SessionStorageService,) { }
   ngOnInit(): void {
