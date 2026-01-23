@@ -36,11 +36,14 @@ export const DASH_TOKEN = new InjectionToken<IDashBoardServices>('DASH_TOKEN');
 export const AUTH_TOKEN = new InjectionToken<IAssignmentService>('AUTH_TOKEN');
 export const Invoice_TOKEN = new InjectionToken<IInvoiceRepository>('Invoice_TOKEN');
 import * as XLSX from 'xlsx';
+import { SelectionModel } from '@angular/cdk/collections';
+import { MatCheckboxModule } from "@angular/material/checkbox";
+import { MatCardModule } from "@angular/material/card";
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 @Component({
   selector: 'app-dash',
-  imports: [AgGridAngular, FormsModule, MatTableModule, MatIconModule, MatFormFieldModule, MatDatepickerModule, CommonModule, ReactiveFormsModule, FinancialYearComponent, UserComponent, MatTooltip, MatPaginatorModule],
+  imports: [AgGridAngular, FormsModule, MatTableModule, MatIconModule, MatFormFieldModule, MatDatepickerModule, CommonModule, ReactiveFormsModule, FinancialYearComponent, UserComponent, MatTooltip, MatPaginatorModule, MatCheckboxModule, MatCardModule],
   templateUrl: './dash.component.html',
   styleUrl: './dash.component.css',
   providers: [provideNativeDateAdapter(),
@@ -82,9 +85,12 @@ export class DashComponent implements OnInit {
   userdetail: any;
   pendingLots: any;
   InvoiceAlloted: any;
+  iseditClicked = false;
+  reqNo: string = '';
   @ViewChild('PeningLotPaginator') PeningLot_paginator!: MatPaginator;
   @ViewChild('InvoiceAlotPaginator') InvoiceAlot_paginator!: MatPaginator;
   userList: any;
+  AllotedTo?: number;
   readonly range = new FormGroup({
     start: new FormControl<Date | null>(null),
     end: new FormControl<Date | null>(null),
@@ -97,7 +103,7 @@ export class DashComponent implements OnInit {
 
   }
 
-  displayedInvoiceColumns: string[] = ['Serial_No'
+  displayedInvoiceColumns: string[] = ['edit', 'Serial_No'
     , 'Req_No'
     , 'Company_Code'
     , 'Pay_Period'
@@ -116,6 +122,39 @@ export class DashComponent implements OnInit {
     , 'Rejected_By'
     , 'InvoiceCreatedOn'
   ]
+
+  selection = new SelectionModel<any>(true, []);
+
+  isAnyFilteredRowSelected(): boolean {
+    return this.selection.selected.some(sel =>
+      this.InvoiceAlloted.filteredData.some(row => row.Req_No === sel.Req_No
+      )
+    );
+  }
+
+  isAllSelected() {
+    const numSelected = this.selection.selected.length;
+    const numRows = this.InvoiceAlloted.data.length;
+    return numSelected === numRows;
+  }
+
+  isPartialSelected() {
+    const numSelected = this.selection.selected.length;
+    const numRows = this.InvoiceAlloted.data.length;
+    return numSelected > 0 && numSelected < numRows;
+  }
+  toggleAllRows() {
+    if (this.isAllSelected()) {
+      this.selection.clear();
+    } else {
+      this.InvoiceAlloted.data.forEach((row: any) => this.selection.select(row));
+    }
+  }
+
+  toggleRow(row: any) {
+    this.selection.toggle(row);
+  }
+
   onRowClicked(event: RowClickedEvent) {
     console.log('Row clicked:', event.data);
     alert(`You clicked on ${event.data.make} (${event.data.model})`);
@@ -191,11 +230,48 @@ export class DashComponent implements OnInit {
       error: err => { }
     });
   }
+  closeclick() {
+    this.iseditClicked = false;
+  }
+
+  EditClick(reqNo: string, userId: number) {
+    this.AllotedTo = userId;
+    this.reqNo = reqNo;
+    this.iseditClicked = true;
+  }
+
+  Save() {
+    if (!this.reqNo) {
+      alert('Request No cannot be null');
+      return;
+    }
+    if (!this.user.user_Id) {
+      alert('UserId cannot be null');
+      return;
+    }
+    this.dashService.SaveInvoiceAllotEdit(this.reqNo, this.user.user_Id).subscribe({
+      next: res => {
+        const error = res.Data;
+        const message = error?.[0]?.[""];
+        console.log(message);
+
+        if (message === 'Updated successfully') {
+          alert('Updated successfully');
+        }
+        else {
+          alert('Update Failed.');
+        }
+      },
+      error: err => { console.error(err); }
+    });
+  }
+
   handlefinancialYearEvent(financialYear: any) {
     this.financialyear = financialYear;
   }
   handleuserEvent(user: any) {
     this.user = user;
+    console.log(this.user);
   }
   onMouseEnter(assignmentType: 'T' | 'C' | 'O' | 'I' | 'N'): void {
     this.BindDashBoard();

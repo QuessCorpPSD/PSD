@@ -10,4 +10,5 @@ export interface IDashBoardServices {
     getadminPendingLot():Observable<APIResponse>
     getCategoryLotDetail(assignmentType):Observable<APIResponse>
     GetPendingLotDetail():Observable<APIResponse>
+    SaveInvoiceAllotEdit(reqNo: string, userId: number):Observable<APIResponse>;
 }
