@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment.development';
 import { APIResponse } from '../../Models/apiresponse';
-import { IPreviousEmployment } from '../../Repository/Taxandsavings/IPreviousEmployment.service';
+import { IPreviousEmployment } from '../../Repository/TaxAndSavings/IPreviousEmployment.service';
 
 @Injectable({
   providedIn: 'root'

@@ -1,7 +1,7 @@
 <div class="page-wrapper">
     <div class="scrollable-content">
         <div
-            style="color: #302CB3; font-size: 22px; font-family: Nunito Sans; font-weight: 700; min-width: 960px;padding-top: 12px;">
+            style="color: #302CB3; font-size: 22px; font-family: Montserrat; font-weight: 700; min-width: 960px;padding-top: 12px;">
             One Time Replacement
         </div>
         <div class="container py-1">
@@ -25,7 +25,7 @@
                 <!-- Employee Code -->
                 <div class="col-md-3 small-input">
                     <label for="employeeSelect" class="form-label text-muted small">Employee Code</label>
-                    <select id="employeeSelect" class="form-select">
+                    <select id="employeeSelect" class="form-select" [(ngModel)]="Employee_Id">
                         <option value="">select</option>
                         <option *ngFor="let cat of EmployeeList" [value]="cat.Employee_Id">
                             {{cat.Employee_Code}}
@@ -68,7 +68,7 @@
                 <mat-table [dataSource]="uploadedDataSource" matSort
                     class="custom-table mat-elevation-z8 auto-fit-table">
 
-                    <ng-container matColumnDef="Action">
+                    <!-- <ng-container matColumnDef="Action">
                         <mat-header-cell *matHeaderCellDef><strong>Action</strong></mat-header-cell>
                         <mat-cell *matCellDef="let row">
                             <div class="header"></div>
@@ -79,13 +79,13 @@
                             <!-- <button class="btn btn-sm d-flex align-items-center justify-content-center"
                                 matTooltip="Edit">
                                 <mat-icon>edit</mat-icon>
-                            </button> -->
+                            </button> 
                         </mat-cell>
-                    </ng-container>
+                    </ng-container> -->
                     <!-- SNo -->
                     <ng-container matColumnDef="SNo">
-                        <mat-header-cell *matHeaderCellDef class="SNO"><strong>SNo</strong></mat-header-cell>
-                        <mat-cell *matCellDef="let row" class="SNO">{{ row['SNo'] }}</mat-cell>
+                        <mat-header-cell *matHeaderCellDef><strong>SNo</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['SNo'] }}</mat-cell>
                     </ng-container>
 
                     <!-- Company_Code -->
@@ -113,10 +113,10 @@
                     </ng-container>
 
                     <!-- Pay_Sequence_Number -->
-                    <ng-container matColumnDef="Pay_Sequence_Number">
+                    <!-- <ng-container matColumnDef="Pay_Sequence_Number">
                         <mat-header-cell *matHeaderCellDef><strong>Pay Sequence Number</strong></mat-header-cell>
                         <mat-cell *matCellDef="let row">{{ row['Pay_Sequence_Number'] }}</mat-cell>
-                    </ng-container>
+                    </ng-container> -->
 
                     <!-- Pay_Period -->
                     <ng-container matColumnDef="Pay_Period">
@@ -151,11 +151,14 @@
                     </ng-container>
 
                     <!-- Arrear Pay Sequence Number Column -->
+
+                    <!-- Arrear_Pay_Sequence_Number -->
                     <ng-container matColumnDef="Arrear_Pay_Sequence_Number">
                         <mat-header-cell *matHeaderCellDef><strong>Arrear Pay Sequence Number</strong></mat-header-cell>
                         <mat-cell *matCellDef="let row" [style.display]="showArrearPaySequenceColumn ? '' : 'none'">{{
                             row['Arrear_Pay_Sequence_Number'] }}</mat-cell>
                     </ng-container>
+
 
                     <!-- Arrear Pay Period Column -->
                     <ng-container matColumnDef="Arrear_Pay_Period">
@@ -171,27 +174,22 @@
                     <mat-row *matRowDef="let row; columns: uploadDisplayedColumns;"></mat-row>
 
                 </mat-table>
-
-                <div *ngIf="uploadedData.length === 0" class="text-center p-4">
-                    <p class="text-muted">No data to display</p>
-                </div>
-
             </div>
-
-            <mat-paginator #paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 20]"
-                showFirstLastButtons>
+            <div *ngIf="uploadedData.length === 0" class="text-center p-4">
+                <p class="text-muted">No data to display</p>
+            </div>
+            <mat-paginator #paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons>
             </mat-paginator>
-
         </div>
-
-        <div *ngIf="isLoading" class="loading-overlay">
-            <img src="assets/Loading.gif" alt="Loading...">
-        </div>
-
-
-        <div *ngIf="showPopup" class="overlay"></div>
-        <app-alertpopup *ngIf="showPopup" [message]="popupMessage" [submessage]="popupSubMessage" class="centered-popup"
-            (close)="closePopup()">
-        </app-alertpopup>
     </div>
 </div>
+
+<div *ngIf="isLoading" class="loading-overlay">
+    <img src="assets/Loading.gif" alt="Loading...">
+</div>
+
+
+<div *ngIf="showPopup" class="overlay"></div>
+<app-alertpopup *ngIf="showPopup" [message]="popupMessage" [submessage]="popupSubMessage" class="centered-popup"
+    (close)="closePopup()">
+</app-alertpopup>

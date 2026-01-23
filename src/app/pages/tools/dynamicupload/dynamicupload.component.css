@@ -30,8 +30,8 @@
     flex-direction: column;
     gap: 8px;
     padding: 0px 24px 0 35px;
-    width: 400px !important;
-    min-width: 400px !important;
+    width: 450px !important;
+    min-width: 450px !important;
 }
 
 .table-scroll {

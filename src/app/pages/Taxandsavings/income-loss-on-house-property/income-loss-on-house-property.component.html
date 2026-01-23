@@ -91,10 +91,10 @@
 
                         <!-- Edit -->
                         <ng-container matColumnDef="edit">
-                            <mat-header-cell *matHeaderCellDef class="fixed-width-column"></mat-header-cell>
+                            <mat-header-cell *matHeaderCellDef mat-sort-header
+                                class="fixed-width-column"></mat-header-cell>
                             <mat-cell *matCellDef="let element" class="fixed-width-column">
-                                <img src="assets/Icons/edit.svg" style="cursor:pointer;width:24px;height:22px"
-                                    (click)="EditClick(element)" />
+                                <img src="assets/Icons/edit.svg" style="cursor: pointer; width: 24px; height: 22px;" />
                             </mat-cell>
                         </ng-container>
 

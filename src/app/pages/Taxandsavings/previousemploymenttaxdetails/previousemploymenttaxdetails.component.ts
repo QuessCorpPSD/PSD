@@ -8,11 +8,11 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { CompanyallComponent } from '../../../common/CompanyAll/companyall.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { PreviousemploymenttaxdetailsService } from '../../../Service/Taxandsavings/previousemploymenttaxdetails.service';
-import { IPreviousEmployment } from '../../../Repository/Taxandsavings/IPreviousEmployment.service';
 import * as XLSX from 'xlsx';
 import { EncryptionService } from '../../../Shared/encryption.service';
 import { SessionStorageService } from '../../../Shared/SessionStorageService';
+import { IPreviousEmployment } from '../../../Repository/TaxAndSavings/IPreviousEmployment.service';
+import { PreviousemploymenttaxdetailsService } from '../../../Service/TaxAndSavings/previousemploymenttaxdetails.service';
 export const Pay_Token = new InjectionToken<IPreviousEmployment>('Pay_Token');
 
 @Component({
@@ -189,41 +189,101 @@ export class PreviousemploymenttaxdetailsComponent {
   }
 
 
+  // onSearch() {
+  //   this.showTable = true;
+  //   // this.isLoading = true;
+  //   const companyId = this.CompanyId || 0
+  //   const EmployeeId = this.EmpCode || 0
+  //   console.log("employeeId", EmployeeId)
+
+  //   this.service.search(companyId, EmployeeId).subscribe({
+
+  //     next: (res) => {
+  //       this.search = res.Data.data.Table0;
+  //       console.log(this.search)
+  //       if (this.search && this.search.length > 0) {
+  //         this.dataSource = new MatTableDataSource(this.search);
+  //         this.dataSource.paginator = this.paginator;
+  //         this.displayedColumns = [
+  //           "delete", "edit", "sno", "companyCode", "employeeCode", "employeeName", "dateOfJoining", "financialYear", "date"
+  //           , "income", "totalTaxPaid", "type"
+  //         ];
+  //       } else {
+  //         this.dataSource.data = [];
+  //         alert('No data found for the selected criteria');
+  //       }
+  //       // this.isLoading = false;
+  //     },
+  //     error: (err) => {
+  //       console.error('Error loading data', err);
+  //       alert('Failed to load data');
+  //       // this.isLoading = false;
+  //     },
+  //   });
+  // }
   onSearch() {
+
+    // ✅ Company validation
+    if (!this.CompanyId) {
+      alert('Please Select Company');
+      this.showTable = false;
+      return;
+    }
+
     this.showTable = true;
-    // this.isLoading = true;
-    const companyId = this.CompanyId || 0
-    const EmployeeId = this.EmpCode || 0
-    console.log("employeeId", EmployeeId)
+
+    const companyId = this.CompanyId;
+    const EmployeeId = this.EmpCode || 0;
+
+    console.log("employeeId", EmployeeId);
 
     this.service.search(companyId, EmployeeId).subscribe({
-
       next: (res) => {
-        this.search = res.Data.data.Table0;
-        console.log(this.search)
-        if (this.search && this.search.length > 0) {
+
+
+        if (res?.Data?.statusCode === '400') {
+          alert(res.Data.messag);
+          this.dataSource.data = [];
+          return;
+        }
+
+        this.search = res?.Data?.data?.Table0 ?? [];
+        console.log(this.search);
+
+        if (this.search.length > 0) {
           this.dataSource = new MatTableDataSource(this.search);
           this.dataSource.paginator = this.paginator;
+
           this.displayedColumns = [
-            "delete", "edit", "sno", "companyCode", "employeeCode", "employeeName", "dateOfJoining", "financialYear", "date"
-            , "income", "totalTaxPaid", "type"
+            "delete",
+            "edit",
+            "sno",
+            "companyCode",
+            "employeeCode",
+            "employeeName",
+            "dateOfJoining",
+            "financialYear",
+            "date",
+            "income",
+            "totalTaxPaid",
+            "type"
           ];
         } else {
           this.dataSource.data = [];
           alert('No data found for the selected criteria');
         }
-        // this.isLoading = false;
       },
       error: (err) => {
         console.error('Error loading data', err);
         alert('Failed to load data');
-        // this.isLoading = false;
-      },
+      }
     });
   }
 
+
   exportToExcel(): void {
     // this.isLoading = true;
+
     const companyId = this.CompanyId || 0
     const EmployeeId = this.EmpCode || 0
 
@@ -262,6 +322,64 @@ export class PreviousemploymenttaxdetailsComponent {
       },
     });
   }
+
+  // exportToExcel(): void {
+
+  //   if (!this.CompanyId) {
+  //     alert('Please Select Company');
+
+  //     return;
+  //   }
+
+
+  //   const companyId = this.CompanyId;
+  //   const employeeId = this.EmpCode || 0;
+
+  //   this.service.exportToExcel(companyId, employeeId).subscribe({
+  //     next: (res) => {
+  //       try {
+
+
+  //         if (res?.Data?.statusCode === '400') {
+  //           alert(res.Data.message);
+
+  //           return;
+  //         }
+
+  //         const jsonData = res?.Data?.data?.Table0;
+
+  //         if (!jsonData || !Array.isArray(jsonData) || jsonData.length === 0) {
+  //           alert('No data available.');
+
+  //           return;
+  //         }
+
+  //         // Create Excel file
+  //         const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(jsonData);
+  //         const wb: XLSX.WorkBook = XLSX.utils.book_new();
+
+  //         XLSX.utils.book_append_sheet(wb, ws, 'Ltacalculation');
+
+  //         const timestamp = new Date().toISOString().split('T')[0];
+  //         const fileName = `previousemploymenttaxdetail_${timestamp}.xlsx`;
+
+  //         XLSX.writeFile(wb, fileName);
+
+  //       } catch (err) {
+  //         console.error('Error exporting to Excel:', err);
+  //         alert('An error occurred while exporting data.');
+  //       } finally {
+
+  //       }
+  //     },
+  //     error: (err) => {
+  //       console.error('Error loading data for export', err);
+  //       alert('Failed to load data from server.');
+
+  //     }
+  //   });
+  // }
+
 
   ImportClick(fileInput: HTMLInputElement): void {
     fileInput.click();

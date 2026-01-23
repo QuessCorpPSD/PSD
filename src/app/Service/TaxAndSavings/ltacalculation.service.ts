@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment.development';
 import { APIResponse } from '../../Models/apiresponse';
-import { ILtaCalculation } from '../../Repository/Taxandsavings/Ilta.service';
+import { ILtaCalculation } from '../../Repository/TaxAndSavings/Ilta.service';
 
 @Injectable({
   providedIn: 'root'

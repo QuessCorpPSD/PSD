@@ -4,7 +4,7 @@
 
     <div class="scrollable-content">
         <div
-            style="color: #302CB3; font-size: 22px; font-family: Nunito Sans; font-weight: 700; min-width: 800px; padding-left: 25px;padding-top: 8px;">
+            style="color: #302CB3; font-size: 22px; font-family: Montserrat; font-weight: 700; min-width: 800px; padding-left: 25px;padding-top: 8px;">
             LOP Adjustments
         </div>
 
@@ -59,28 +59,29 @@
             </div>
         </div>
 
-        <div class="table-wrapper1" *ngIf="isUploadGridVisible" style="min-width: 700px;">
+        <div class="table-wrapper1" [hidden]="!isUploadGridVisible">
             <div class="table-scroll">
-                <mat-table [dataSource]="dataSource" matSort class="custom-table mat-elevation-z8 auto-fit-table">
+                <mat-table [dataSource]="dataSource" matSort class="custom-table mat-elevation-z8 ">
 
                     <ng-container matColumnDef="Action">
-                        <mat-header-cell *matHeaderCellDef class="Action"><strong>Action</strong></mat-header-cell>
-                        <mat-cell *matCellDef="let row" class="Action">
-                            <div class="header"></div>
-                            <button class="btn btn-sm d-flex align-items-center justify-content-center"
-                                matTooltip="Delete">
-                                <mat-icon>delete</mat-icon>
-                            </button>
-                            <button class="btn btn-sm d-flex align-items-center justify-content-center"
+                        <mat-header-cell *matHeaderCellDef><strong>Action</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">
+                            <div class="header">
+                                <button class="btn btn-sm d-flex align-items-center justify-content-center"
+                                    matTooltip="Delete" (click)="deleteClick(row)">
+                                    <mat-icon>delete</mat-icon>
+                                </button>
+                                <!-- <button class="btn btn-sm d-flex align-items-center justify-content-center"
                                 matTooltip="Edit">
                                 <mat-icon>edit</mat-icon>
-                            </button>
+                            </button> -->
+                            </div>
                         </mat-cell>
                     </ng-container>
 
                     <ng-container matColumnDef="SNo">
-                        <mat-header-cell *matHeaderCellDef class="SNo"><strong>SNo</strong></mat-header-cell>
-                        <mat-cell *matCellDef="let row" lass="SNo">{{ row['Serial_No'] }}</mat-cell>
+                        <mat-header-cell *matHeaderCellDef><strong>SNo</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['Serial_No'] }}</mat-cell>
                     </ng-container>
 
                     <ng-container matColumnDef="CompanyCode">
@@ -112,8 +113,8 @@
                 <p class="text-muted">No data to display</p>
             </div>
 
-            <mat-paginator [length]="uploadedData.length" [pageSize]="10" [pageSizeOptions]="[5, 10, 20]"
-                showFirstLastButtons aria-label="Select page">
+            <mat-paginator #paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
+                aria-label="Select page">
             </mat-paginator>
         </div>
 

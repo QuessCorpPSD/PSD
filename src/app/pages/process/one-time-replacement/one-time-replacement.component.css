@@ -41,7 +41,7 @@
       background-color: #ffffff !important;
       color: #000000 !important;
       font-size: 13px;
-      font-family: "Nunito Sans", sans-serif;
+      font-family: "Montserrat", sans-serif;
       font-weight: 500 !important;
       border-right: 1px solid #ddd;
       position: sticky;
@@ -57,7 +57,7 @@
 
   /* Body Cells */
   ::ng-deep .mat-mdc-cell {
-      font-family: "Nunito Sans", sans-serif;
+      font-family: "Montserrat", sans-serif;
       font-size: 12px;
       font-weight: 400 !important;
       color: #222;
@@ -69,6 +69,7 @@
       text-align: center;
       padding: 0 10px;
       height: 30px;
+      vertical-align: middle;
   }
 
   /* Hover effect for rows */
@@ -147,7 +148,7 @@
       background-color: #ffffff !important;
       color: #000000 !important;
       font-size: 13px;
-      font-family: "Nunito Sans", sans-serif;
+      font-family: "Montserrat", sans-serif;
       font-weight: 500 !important;
       border-right: 1px solid #ddd;
       display: flex;
@@ -163,7 +164,7 @@
 
   /* ===== Body Cells ===== */
   ::ng-deep .mat-mdc-cell {
-      font-family: "Nunito Sans", sans-serif;
+      font-family: "Montserrat", sans-serif;
       font-size: 12px;
       font-weight: 500 !important;
       color: #222;
@@ -297,12 +298,6 @@
   .btn-download {
       background-color: #20c997;
       color: #fff;
-  }
-
-  .SNo {
-      width: 80px !important;
-      min-width: 80px !important;
-      max-width: 80px !important;
   }
 
   ::ng-deep .mat-mdc-table {

@@ -238,14 +238,14 @@ export class ITAdjustmentComponent {
 
         if (!res || !res.Data) {
           this.isLoading = false;
-          this.showAlertPopup('Upload request processed. Server did not return any data.');
+          alert('Upload request processed. Server did not return any data.');
           return;
         }
 
 
         if (res?.Data?.response?.includes("Row(s) Uploaded Successfully.")) {
           this.isLoading = false;
-          this.showAlertPopup('RowS Uploaded Successfully')
+          alert('RowS Uploaded Successfully')
           return;
         }
 
@@ -260,7 +260,7 @@ export class ITAdjustmentComponent {
 
         if (res?.StatusCode === 200 && successMatch) {
           this.isLoading = false;
-          this.showAlertPopup(successMatch);
+          alert(successMatch);
 
           return;
         }

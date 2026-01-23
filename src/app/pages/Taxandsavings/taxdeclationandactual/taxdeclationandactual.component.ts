@@ -7,12 +7,14 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { CompanyallComponent } from '../../../common/CompanyAll/companyall.component';
-import { TaxdeclarationandactualService } from '../../../Service/Taxandsavings/taxdeclarationandactual.service';
-import { ITaxdeclarationandactual } from '../../../Repository/Taxandsavings/ITaxdecalarationandactual.service';
+
 import * as XLSX from 'xlsx';
 import { EncryptionService } from '../../../Shared/encryption.service';
 import { SessionStorageService } from '../../../Shared/SessionStorageService';
 import { stringify } from 'querystring';
+import { ITaxdeclarationandactual } from '../../../Repository/TaxAndSavings/ITaxdecalarationandactual.service';
+import { TaxdeclarationandactualService } from '../../../Service/TaxAndSavings/taxdeclarationandactual.service';
+
 export const Pay_Token = new InjectionToken<ITaxdeclarationandactual>('Pay_Token');
 
 @Component({
