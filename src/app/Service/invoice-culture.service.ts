@@ -51,11 +51,13 @@ export class InvoiceCultureService implements Iinvoiceculture {
       this.env.apiUrl + 'InvoiceCulture/GetAllInvoiceCategories'
     );
   }
-  InvoicecultureSearch(companyId: number): Observable<APIResponse> {
-    return this.http.get<APIResponse>(
-      environment.apiUrl + `InvoiceCulture/GetAllInvoiceCulture/` + companyId);
 
+  InvoicecultureSearch(companyId: number, spiltTypeId: number): Observable<APIResponse> {
+    return this.http.get<APIResponse>(
+      `${environment.apiUrl}InvoiceCulture/GetAllInvoiceCulture/${companyId}/${spiltTypeId}`
+    );
   }
+
 
   UploadInvoiceCulture(formData: FormData): Observable<APIResponse> {
     const url = `${environment.apiUrl}InvoiceCulture/PostUploadInvoiceCulture`;
@@ -67,6 +69,13 @@ export class InvoiceCultureService implements Iinvoiceculture {
     return this.http.get<APIResponse>(
       environment.apiUrl + `InvoiceCulture/InvoiceCultureExport/` + userId);
   }
+
+  getAllPaycode(companyId: number): Observable<APIResponse> {
+    return this.http.get<APIResponse>(
+      `${environment.apiUrl}InvoiceCulture/GetAllPayCodeFromCompanyOI/${companyId}`
+    );
+  }
+
 }
 
 

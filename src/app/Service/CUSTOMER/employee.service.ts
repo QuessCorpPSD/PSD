@@ -150,9 +150,14 @@ export class EmployeeService implements IEmployeeservice {
       payload
     );
   }
-    GetInvoiceLegalEntity(): Observable<APIResponse> {
+  GetInvoiceLegalEntity(): Observable<APIResponse> {
     return this.http.get<APIResponse>(
       this.env.apiUrl + 'Employee/GetLegalEntity');
+  }
+
+  Getworkpass(): Observable<APIResponse> {
+    return this.http.get<APIResponse>(
+      this.env.apiUrl + 'Employee/GetWorkpass');
   }
 
 }
