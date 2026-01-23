@@ -11,8 +11,8 @@ import { IInvoiceLeaveBalanceReport } from '../../../Repository/Reports/iinvoice
 import { APIResponse } from '../../../Models/apiresponse';
 import FileSaver from 'file-saver';
 import * as XLSX from 'xlsx';
-import { ICommonService } from '../../../Repository/ICommonService';
-export const COMM_TOKEN = new InjectionToken<ICommonService>('COMM_TOKEN');
+export const Common_TOKEN = new InjectionToken<IInvoiceLeaveBalanceReport>('Pay_TOKEN');
+
 
 @Component({
   selector: 'app-invoice-leave-balance-report',
@@ -26,7 +26,7 @@ export const COMM_TOKEN = new InjectionToken<ICommonService>('COMM_TOKEN');
     FormsModule,
     ReactiveFormsModule],
   providers: [
-    { provide: COMM_TOKEN, useClass: InvoiceLeaveBalanceReportService }
+    { provide: Common_TOKEN, useClass: InvoiceLeaveBalanceReportService }
   ],
   templateUrl: './invoice-leave-balance-report.component.html',
   styleUrl: './invoice-leave-balance-report.component.css'
@@ -57,7 +57,7 @@ export class InvoiceLeaveBalanceReportComponent {
   selectedFromMonth: string = '';
   selectedToMonth: string = '';
 
-  constructor(@Inject(COMM_TOKEN) private leave: IInvoiceLeaveBalanceReport) { }
+  constructor(@Inject(Common_TOKEN) private leave: IInvoiceLeaveBalanceReport) { }
 
   onFromMonthChange(event: any) {
     this.selectedFromMonth = event.target.value;

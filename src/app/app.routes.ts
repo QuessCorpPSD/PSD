@@ -122,6 +122,8 @@ import { PaytransactionComponent } from './pages/process/paytransaction/paytrans
 import { ProcessComponent } from './pages/process/process.component';
 import { ReimbrusmentcalenderComponent } from './pages/process/reimbrusmentcalender/reimbrusmentcalender.component';
 import { ReprocessComponent } from './pages/process/reprocess/reprocess.component';
+import { ETDSProcessnavigationComponent } from './pages/E-TDSProcess/e-tdsprocessnavigation/e-tdsprocessnavigation.component';
+import { LegalEntityMappingComponent } from './pages/E-TDSProcess/legal-entity-mapping/legal-entity-mapping.component';
 
 
 
@@ -277,6 +279,15 @@ export const routes: Routes = [
           { path: "loanandadvance", component: LoanandadvanceComponent },
           { path: 'LoanPreClosure', component: ReimbursementLoanPreClosureComponent },
           { path: 'reimbursement', component: ReimbrusementComponent }
+
+
+        ]
+      },
+      {
+        path: 'etdsprocess', component: ETDSProcessnavigationComponent,
+        children: [
+          { path: "legalentitymapping", component: LegalEntityMappingComponent },
+
 
 
         ]
