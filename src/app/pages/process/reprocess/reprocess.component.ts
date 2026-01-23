@@ -28,7 +28,7 @@ export const Pay_TOKEN = new InjectionToken<IPayProcessRepository>('Pay_TOKEN');
   standalone: true,
   imports: [CommonModule, MatTabsModule, CompanyallComponent,
     PayperiodsequenceComponent, MatIconModule, FormsModule, MatCardModule, MatFormFieldModule,
-    MatSelectModule, AlertpopupComponent, PayprocesstypeComponent],
+    MatSelectModule, AlertpopupComponent],
   templateUrl: './reprocess.component.html',
   styleUrl: './reprocess.component.css',
   providers: [DatePipe,

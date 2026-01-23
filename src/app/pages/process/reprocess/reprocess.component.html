@@ -5,30 +5,25 @@
                 style="color: #302CB3; font-size: 22px; font-family: Nunito Sans; font-weight: 700; min-width: 960px; padding-left: 3px;padding-top:12px;">
                 Pay Process
             </div>
+            
             <div class="row  align-items-end ">
-                <!-- Company Code -->
                 <div class="col-12 col-md-6">
                     <label for="companySelect" class="form-label text-muted small">Company Code<span
                             style="color: red;">*</span></label>
-                    <!-- keep your custom component; add an id for accessibility -->
                     <companyall id="companySelect" (companyEmit)="handleCompanyEvent($event)"></companyall>
                 </div>
 
-                <!-- Pay Period -->
                 <div class="col-12 col-md-3">
                     <label for="payPeriod" class="form-label text-muted small">Pay Period<span
                             style="color: red;">*</span></label>
-                    <!-- pass inputs as before -->
                     <payperiodsequence id="payPeriod" [selectedCompanyId]="selectedCompanyId"
                         [payPeriodType]="payPeriodType" (payperiodEmit)="handlePayperiodEvent($event)">
                     </payperiodsequence>
                 </div>
 
-                <!-- Date (responsive) -->
                 <div class="col-12 col-md-3">
                     <label for="dateInput" class="form-label text-muted small">Date</label>
                     <div class="input-group">
-                        <!-- use native date control for better UX; fallback to text if not desired -->
                         <input id="dateInput" type="text" class="form-control" [(ngModel)]="selectedDate"
                             aria-label="Date" disabled />
                     </div>
@@ -37,9 +32,7 @@
             <div class="row align-items-end ">
                 <div class="col-12 col-md-3">
                     <label for="companySelect" class="form-label text-muted small">Actual / Declared</label>
-                    <!-- keep your custom component; add an id for accessibility -->
                     <div class="input-group">
-                        <!-- use native date control for better UX; fallback to text if not desired -->
                         <input id="actualOrdelcare" type="text" class="form-control" [(ngModel)]="actual_Or_delcare"
                             disabled />
                     </div>
@@ -47,7 +40,6 @@
                 <div class="col-12 col-md-3">
                     <label for="companySelect" class="form-label text-muted small">Type</label>
 
-                    <!-- keep your custom component; add an id for accessibility -->
                     <div class="input-group">
                         <select class="form-control" [(ngModel)]="selectoption">
                             <option value="PP">Regular</option>
