@@ -18,4 +18,7 @@ export interface IInvoiceRepository {
     getBillingType(): Observable<APIResponse>;
     getNetDeductionType(): Observable<APIResponse>;
     addGstInvoice(payload: any): Observable<string>;
+    GetAllInvoiceCancelDetails(val): Observable<APIResponse>;
+    BulkApproveInvoice(val): Observable<APIResponse>;
+    
 }

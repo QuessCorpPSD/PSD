@@ -1,0 +1,226 @@
+/* ===========================
+   PAGE LAYOUT
+=========================== */
+.page-wrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.container-fluid {
+  background: #f8f9fa;
+  padding: 4px !important; /* reduced padding */
+}
+
+/* ===========================
+   FILTER ROW (TOP CONTROLS)
+=========================== */
+.row.g-2 {
+  gap: 4px;
+}
+
+.form-label.small {
+  font-size: 10px;
+  font-weight: 500;
+  margin-bottom: 2px;
+}
+
+.btn-sm {
+  height: 28px;
+  padding: 2px 10px;
+  font-size: 10px;
+}
+
+/* ===========================
+   TABLE CONTAINER
+=========================== */
+.table-container {
+  width: 100%;
+  background: #ffffff;
+  border: 1px solid #e2e2e2;
+  border-radius: 6px;
+}
+
+/* ===========================
+   SCROLL WINDOW
+=========================== */
+.table-scroll-window {
+  overflow-x: auto !important; ;
+  overflow-y: auto;
+  width: 100%;
+}
+
+/* ===========================
+   MATERIAL TABLE
+=========================== */
+.custom-mat-table {
+  width: 100%;
+  min-width: 800px; /* reduced min width */
+  table-layout: auto !important;
+  border-collapse: collapse;
+  font-size: 10px; /* smaller font */
+}
+
+/* ===========================
+   HEADER CELLS WITH FILTER
+=========================== */
+::ng-deep .mat-mdc-header-cell {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: #fafafa;
+  font-weight: 600;
+  padding: 2px 4px !important; /* reduced padding */
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  border-bottom: 1px solid #ddd; /* thinner border */
+  border-right: 1px solid #e0e0e0;
+  height: 30px; /* reduced header height */
+}
+
+.header-with-filter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.header-with-filter span {
+  font-weight: 600;
+  font-size: 10px; /* smaller header font */
+  margin-bottom: 1px;
+}
+
+.filter-input {
+  width: 100%;
+  height: 20px; /* smaller input */
+  font-size: 9.5px; /* smaller text */
+  padding: 1px 2px;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+/* ===========================
+   DATA CELLS
+=========================== */
+::ng-deep .mat-mdc-cell {
+  padding: 1px 4px !important; /* tighter padding */
+  font-size: 10px; /* smaller text */
+  text-align: center;
+  white-space: normal;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  border-bottom: 1px dashed #e5e5e5;
+  border-right: 1px solid #f0f0f0;
+  height: 24px; /* reduced row height */
+}
+
+::ng-deep .mat-mdc-row {
+  height: 24px !important;
+}
+
+/* ===========================
+   FIXED WIDTH COLUMNS
+=========================== */
+.fixed-width-column {
+  width: 30px !important;
+  min-width: 30px !important;
+  max-width: 30px !important;
+}
+
+.fixed-width-column2 {
+  width: 80px !important;
+  min-width: 80px !important;
+  max-width: 80px !important;
+}
+
+.fixed-width-column3 {
+  width: 120px !important;
+  min-width: 120px !important;
+  max-width: 120px !important;
+}
+
+/* ===========================
+   COLUMN WIDTHS
+=========================== */
+.mat-column-invoice_Number { width: 120px !important; }
+.mat-column-invoice_Date { width: 120px !important; }
+.mat-column-status { width: 100px !important; }
+.mat-column-map_Name {
+  min-width: 100px !important;  /* wider column */
+  max-width: 120px !important;  /* optional max */
+  white-space: nowrap !important; /* keep single line */
+  overflow: hidden;
+  text-overflow: ellipsis; /* shows "..." if still too long */
+}
+.mat-column-state_Name {
+  min-width: 100px !important;  /* wider column */
+  max-width: 120px !important;  /* optional max */
+  white-space: nowrap !important; /* keep single line */
+  overflow: hidden;
+  text-overflow: ellipsis; /* shows "..." if still too long */
+}
+.mat-column-invoiceType { width: 120px !important; }
+.mat-column-creditNote_Status { width: 140px !important; }
+.mat-column-creditNoteNumber {
+  min-width: 100px !important;  /* wider column */
+  max-width: 120px !important;  /* optional max */
+  white-space: nowrap !important; 
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ===========================
+   CHECKBOX COLUMN CENTERING
+=========================== */
+.mat-column-select {
+  text-align: center !important;
+}
+.mat-column-select .mat-mdc-checkbox {
+  margin: 0 auto !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+::ng-deep .mat-mdc-header-cell.mat-column-select,
+::ng-deep .mat-mdc-cell.mat-column-select {
+  justify-content: center !important;
+}
+
+/* ===========================
+   PAGINATOR
+=========================== */
+.mat-footer-paginator {
+  position: sticky;
+  bottom: 0;
+  background: #fff;
+  border-top: 1px solid #e0e0e0;
+  font-size: 10px;
+  height: 28px;
+}
+
+/* ===========================
+   LOADING OVERLAY
+=========================== */
+.loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255,255,255,0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 50;
+}
+/* Left align checkboxes in table */
+table td:first-child,
+table th:first-child {
+  text-align: left;
+  padding-left: 8px; /* optional: add some spacing from edge */
+}
+
+table td:first-child input[type="checkbox"] {
+  margin: 0; /* remove any default margin */
+}
