@@ -26,12 +26,11 @@ export const Invoice_TOKEN = new InjectionToken<IInvoiceRepository>('Invoice_TOK
 
 @Component({
   selector: 'gstinvoice',
-imports: [CommonModule, MatTableModule, MatCheckboxModule, MatPaginatorModule, MatSort, MatSelectModule, MatInputModule, MatFormFieldModule, ReactiveFormsModule, FormsModule, MatDatepickerModule, MatNativeDateModule],
- 
-    templateUrl: './gstinvoice.component.html',
-  styleUrl: './gstinvoice.component.css',
   standalone: true,
-  providers:[{
+  imports: [CommonModule, MatTableModule, MatCheckboxModule, MatPaginatorModule, MatSort, MatSelectModule, MatInputModule, MatFormFieldModule, ReactiveFormsModule, FormsModule, MatDatepickerModule, MatNativeDateModule],
+  templateUrl: './gstinvoice.component.html',
+  styleUrl: './gstinvoice.component.css',
+  providers: [{
     provide: Invoice_TOKEN,
     useClass: InvoiceRepository
   }]
@@ -100,9 +99,15 @@ export class GstinvoiceComponent {
     , 'filtersap_Invoice_Number'
     , 'filtersap_Account_Number'
     , 'filtercrn_Number'
+    ,'filtercrn_IRN_Status'
     ,'filtercrn_IRN_Number'
     , 'filtersap_Cancel_Document'
     , 'filtersap_Credit_Note_Document'
+  ]
+  TemplateOptions = [
+    { value: 'reject', Text: 'Reject' },
+    { value: 'cancel', Text: 'Cancel' },
+    { value: 'clear', Text: 'Clear' }
   ];
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
