@@ -70,10 +70,10 @@ body {
 
   .content {
     padding-bottom: 25px;
-    height: calc(100vh - 60px);   /* adjust based on header */
+    height: calc(100vh - 63px);   /* adjust based on header */
     width: 95%;
     margin-left:10.7em;  
-    margin-top: 3.9em;  
+    margin-top: 2.4em;  
     background: #ffffff;
     font-family: Montserrat;
     color: #302CB3;
