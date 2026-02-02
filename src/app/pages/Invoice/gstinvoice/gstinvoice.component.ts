@@ -26,7 +26,11 @@ export const Invoice_TOKEN = new InjectionToken<IInvoiceRepository>('Invoice_TOK
 
 @Component({
   selector: 'gstinvoice',
+  imports:[MatTableModule,CommonModule],
+    templateUrl: './gstinvoice.component.html',
+  styleUrl: './gstinvoice.component.css',
   standalone: true,
+  providers:[{
     provide: Invoice_TOKEN,
     useClass: InvoiceRepository
   }]

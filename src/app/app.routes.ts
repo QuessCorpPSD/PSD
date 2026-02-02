@@ -147,7 +147,7 @@ import { UpfrontmatrixComponent } from './pages/upfrontprocess/upfrontmatrix/upf
 import { EmployeeComponents } from './pages/customers/employee/employee.component';
 import { TaxRemittanceGenerationComponent } from './pages/E-TDSProcess/tax-remittance-generation/tax-remittance-generation.component';
 
-import { GstinvoiceComponent } from './pages/Invoice/gstinvoice/gstinvoice.component';
+
 
 
 
