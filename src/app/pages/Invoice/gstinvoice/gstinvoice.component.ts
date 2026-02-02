@@ -26,7 +26,8 @@ export const Invoice_TOKEN = new InjectionToken<IInvoiceRepository>('Invoice_TOK
 
 @Component({
   selector: 'gstinvoice',
-  imports:[MatTableModule,CommonModule],
+imports: [CommonModule, MatTableModule, MatCheckboxModule, MatPaginatorModule, MatSort, MatSelectModule, MatInputModule, MatFormFieldModule, ReactiveFormsModule, FormsModule, MatDatepickerModule, MatNativeDateModule],
+ 
     templateUrl: './gstinvoice.component.html',
   styleUrl: './gstinvoice.component.css',
   standalone: true,

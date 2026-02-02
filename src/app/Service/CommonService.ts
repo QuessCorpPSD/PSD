@@ -322,11 +322,11 @@ export class CommonService implements ICommonService {
     //     //console.log(url);
     //     return this.http.get<APIResponse>(url);
     // }
-    // GetAllState(): Observable<APIResponse> {
-    //     const url = `${this.environment.apiUrl}Common/GetAllState`;
-    //     //console.log(url);
-    //     return this.http.get<APIResponse>(url);
-    // } 
+    GetAllState(): Observable<APIResponse> {
+        const url = `${this.environment.apiUrl}Common/GetAllState`;
+        //console.log(url);
+        return this.http.get<APIResponse>(url);
+    } 
 
     GetPayCodes(): Observable<APIResponse> {
         const url = `${this.environment.apiUrl}Common/GetPayPeriod`;
