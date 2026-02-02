@@ -14,6 +14,7 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { EditUserComponent } from './edit-user/edit-user.component';
 import { SessionStorageService } from '../../../Shared/SessionStorageService';
 import { EncryptionService } from '../../../Shared/encryption.service';
+import { MatTabsModule } from '@angular/material/tabs';
 
 export  const COMM_TOKEN=new InjectionToken<ICommonService>('COMM_TOKEN');
 @Component({
@@ -22,7 +23,7 @@ export  const COMM_TOKEN=new InjectionToken<ICommonService>('COMM_TOKEN');
         ReactiveFormsModule,
         MatAutocompleteModule, FormsModule,
         MatInputModule, MatPaginatorModule, MatIconModule, MatDialogModule,
-        MatFormFieldModule, MatTableModule],
+        MatFormFieldModule, MatTableModule,MatTabsModule],
     templateUrl: './user-list.component.html',
     styleUrl: './user-list.component.css',
     providers: [
