@@ -1,0 +1,130 @@
+<form [formGroup]="personalForm" novalidate>
+    <mat-card class="custom-card">
+        <mat-card-header class="sticky-header">
+            <mat-card-title style="color:#302CB3;">Personal Details</mat-card-title>
+
+
+            <span class="spacer"></span>
+            <button mat-icon-button (click)="onClose()" class="no-border-icon">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-card-header>
+
+        <mat-card-content>
+
+            <!-- Row 1 -->
+            <div class="row g-3 mb-3">
+                <!-- Birth Place -->
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">Birth Place<span style="color:red">*</span></label>
+                    <input class="form-control form-control-sm" formControlName="birthPlace">
+
+                    <small *ngIf="personalForm.get('birthPlace')?.invalid && 
+                                  (personalForm.get('birthPlace')?.touched || submitted)" style="color:red">
+                        Birth Place is required
+                    </small>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">Home state</label>
+                    <select class="form-select form-select-sm" formControlName="Homestate">
+                        <option value="" disabled>Select</option>
+
+                    </select>
+
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">Nominee</label>
+                    <input class="form-control form-control-sm" formControlName="nominee">
+
+
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">Relationship<span style="color:red">*</span></label>
+                    <input class="form-control form-control-sm" formControlName="relationship">
+
+                    <small *ngIf="personalForm.get('relationship')?.invalid && 
+                                  (personalForm.get('relationship')?.touched || submitted)" style="color:red">
+                        Relationship is required
+                    </small>
+                </div>
+
+
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">Religion</label>
+                    <select class="form-select form-select-sm" formControlName="religion">
+                        <option value="" disabled>Select</option>
+
+                    </select>
+
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">Nationality</label>
+                    <input class="form-control form-control-sm" formControlName="Nationality">
+
+                    <!-- <select class="form-select form-select-sm" formControlName="Nationalcode">
+                        <option value="" disabled>Select</option>
+                    </select> -->
+
+
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">Recuriters Name<span style="color:red">*</span></label>
+                    <select class="form-select form-select-sm" formControlName="recuritersname">
+                        <option value="" disabled>Select</option>
+
+                    </select>
+
+
+                </div>
+
+
+                <div class="col-md-4">
+                    <label class="form-label text-muted small d-block">Ex Service</label>
+
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" formControlName="exservice" value="Y"
+                            id="exServiceYes" />
+                        <label class="form-check-label" for="exServiceYes">
+                            Yes
+                        </label>
+                    </div>
+
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" formControlName="exservice" value="N"
+                            id="exServiceNo" />
+                        <label class="form-check-label" for="exServiceNo">
+                            No
+                        </label>
+                    </div>
+                </div>
+
+
+
+            </div>
+
+        </mat-card-content>
+
+        <mat-card-footer class="footer">
+            <div class="d-flex justify-content-end mt-3">
+                <div class="btn-1"
+                    style="display:flex; justify-content:flex-end; gap:10px; width:100%; padding-right:7px;">
+
+                    <button type="button"
+                        style="border:none; border-radius:7px; width:80px; height:30px; background:#f0f0f0;"
+                        (click)="onClose()">
+                        Cancel
+                    </button>
+
+                    <button type="submit" (click)="onSubmit()"
+                        style="border:none; border-radius:7px; width:80px; height:30px; background:blue; color:white;">
+                        Save
+                    </button>
+
+                </div>
+            </div>
+        </mat-card-footer>
+    </mat-card>
+</form>

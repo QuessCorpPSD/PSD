@@ -1,0 +1,324 @@
+<div class="page-wrapper">
+    <div class="scrollable-content">
+
+        <mat-card-title
+            style="color: #302CB3; font-size: 22px; font-family: Nunito Sans; font-weight: 600;padding-top: 12px;">Loan
+            Pre Closure</mat-card-title>
+        <div class="container py-2">
+            <div class="row g-3 align-items-end">
+
+                <div class="col-md-3">
+                    <label for="companySelect" class="form-label text-muted small">Company Code<span
+                            style="color: red;">*</span></label>
+                    <companyall id="companySelect" (companyEmit)="handleCompanyEvent($event)"></companyall>
+                </div>
+
+
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Employee Code</label>
+                    <select class="form-select form-select-sm">
+                        <option>Select</option>
+                    </select>
+                </div>
+
+                <div class="col-md-3 d-flex gap-2">
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-search"
+                        matTooltip="Search" (click)="onSearchClick()">
+                        <mat-icon>search</mat-icon>
+                    </button>
+                    <button class="btn btn-success btn-sm d-flex align-items-center justify-content-center"
+                        matTooltip="Add" (click)="AddPOOpen()">
+                        <mat-icon>add</mat-icon>
+                    </button>
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-secondary"
+                        matTooltip="ExportToExcel">
+                        <mat-icon>download</mat-icon>
+                    </button>
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-download"
+                        matTooltip="Template">
+                        <mat-icon>cloud_download</mat-icon>
+                    </button>
+                    <!-- Upload Button -->
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-upload"
+                        matTooltip="Upload">
+                        <mat-icon>cloud_upload</mat-icon>
+                    </button>
+
+                    <!-- <input type="file" #fileInput style="display: none;" accept=".xlsx,.xls"
+                        (change)="onFileChange($event)" /> -->
+                </div>
+
+            </div>
+
+            <div class="table-container" style="top:30px;" *ngIf="showTable">
+                <div class=" table-scroll-window">
+
+                    <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+
+                        <!-- Delete -->
+                        <ng-container matColumnDef="delete">
+                            <mat-header-cell *matHeaderCellDef class="fixed-width-column"></mat-header-cell>
+                            <mat-cell *matCellDef="let element" class="fixed-width-column">
+                                <img src="assets/delete.svg" style="cursor:pointer;width:24px;height:22px" />
+                            </mat-cell>
+                        </ng-container>
+
+                        <!-- Edit -->
+                        <ng-container matColumnDef="edit">
+                            <mat-header-cell *matHeaderCellDef class="fixed-width-column"></mat-header-cell>
+                            <mat-cell *matCellDef="let element" class="fixed-width-column">
+                                <img src="assets/Icons/edit.svg" style="cursor:pointer;width:24px;height:22px" />
+                            </mat-cell>
+                        </ng-container>
+
+                        <!-- SNo -->
+                        <ng-container matColumnDef="SNo">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header>SNo</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.SNo }}</mat-cell>
+                        </ng-container>
+
+                        <!-- Company Code -->
+                        <ng-container matColumnDef="CompanyCode">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header>Company Code</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.CompanyCode }}</mat-cell>
+                        </ng-container>
+
+                        <!-- Employee Code -->
+                        <ng-container matColumnDef="EmployeeCode">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header>Employee Code</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.EmployeeCode }}</mat-cell>
+                        </ng-container>
+
+                        <!-- Loan Pre Close Date -->
+                        <ng-container matColumnDef="LoanPreCloseDate">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header>Loan Pre Close Date</mat-header-cell>
+                            <mat-cell *matCellDef="let element">
+                                {{ element.LoanPreCloseDate | date:'dd-MM-yyyy' }}
+                            </mat-cell>
+                        </ng-container>
+
+                        <!-- Loan Number -->
+                        <ng-container matColumnDef="Loan Number">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header>Loan Number</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element['Loan Number'] }}</mat-cell>
+                        </ng-container>
+
+                        <!-- Loan Amount -->
+                        <ng-container matColumnDef="Loan Amount">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header>Loan Amount</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element['Loan Amount'] }}</mat-cell>
+                        </ng-container>
+
+                        <!-- EMI -->
+                        <ng-container matColumnDef="EMI">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header>EMI</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.EMI }}</mat-cell>
+                        </ng-container>
+
+                        <!-- Balance Amount -->
+                        <ng-container matColumnDef="Balance Amount">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header>Balance Amount</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element['Balance Amount'] }}</mat-cell>
+                        </ng-container>
+
+                        <!-- PreClose Amount -->
+                        <ng-container matColumnDef="PreClose Amount">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header>PreClose Amount</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element['PreClose Amount'] }}</mat-cell>
+                        </ng-container>
+
+                        <!-- Adjustment -->
+                        <ng-container matColumnDef="Adjustment">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header>Adjustment</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Adjustment }}</mat-cell>
+                        </ng-container>
+
+                        <!-- Header & Row -->
+                        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+
+                    </table>
+                </div>
+
+                <mat-paginator [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons></mat-paginator>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<br><br><br><br><br><br>
+
+<div *ngIf="isAddclicked" class="popup-overlay" (keydown.escape)="closeclick()">
+    <mat-card class="popup-card">
+        <mat-card-header class="popup-header">
+            <mat-card-title class="d-flex justify-content-center align-items-center">
+                {{ isEditMode ? 'Edit Loan Pre Closure
+                ' : 'Add Loan Pre Closure
+                ' }}
+            </mat-card-title>
+
+            <button class="close-btn" matTooltip="Close" (click)="closeclick()">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-card-header>
+
+        <mat-card-content class="scroll-content">
+
+            <form [formGroup]="LoanPreForm">
+                <div class="row g-3 align-items-end">
+
+                    <!-- Company Code -->
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">
+                            Company Code <span style="color: red;">*</span>
+                        </label>
+
+                        <companyall formControlName="Company_Code" (companyEmit)="handleCompanyEvent2($event)">
+                        </companyall>
+
+                        <div *ngIf="LoanPreForm.get('Company_Code')?.touched 
+                        && LoanPreForm.get('Company_Code')?.hasError('required')" class="text-danger small mt-1">
+                            Company Code is required
+                        </div>
+                    </div>
+
+                    <!-- PreClosure Date -->
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">
+                            PreClosure Date <span class="text-danger">*</span>
+                        </label>
+
+                        <input type="date" class="form-control" formControlName="PreClosure_Date">
+
+                        <div *ngIf="LoanPreForm.get('PreClosure_Date')?.touched 
+                        && LoanPreForm.get('PreClosure_Date')?.hasError('required')" class="text-danger small mt-1">
+                            PreClosure Date is required
+                        </div>
+                    </div>
+
+                    <!-- Employee Code -->
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">
+                            Employee Code <span class="text-danger">*</span>
+                        </label>
+
+                        <select formControlName="Employee_Code" class="form-control">
+                            <option value="" disabled selected>Select</option>
+
+                        </select>
+
+                        <div *ngIf="LoanPreForm.get('Employee_Code')?.touched 
+                        && LoanPreForm.get('Employee_Code')?.hasError('required')" class="text-danger small mt-1">
+                            Employee Code is required
+                        </div>
+                    </div>
+
+                    <!-- Employee Name -->
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">
+                            Employee Name
+                        </label>
+
+                        <input type="text" class="form-control" formControlName="Employee_Name" readonly>
+                    </div>
+
+                    <!-- Loan Number -->
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">
+                            Loan Number <span class="text-danger">*</span>
+                        </label>
+
+                        <select formControlName="Loan_Number" class="form-control">
+                            <option value="" disabled selected>Select</option>
+
+                        </select>
+
+                        <div *ngIf="LoanPreForm.get('Loan_Number')?.touched 
+                        && LoanPreForm.get('Loan_Number')?.hasError('required')" class="text-danger small mt-1">
+                            Loan Number is required
+                        </div>
+                    </div>
+
+                    <!-- Loan Amount -->
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">
+                            Loan Amount
+                        </label>
+
+                        <input type="text" class="form-control" formControlName="Loan_Amount" readonly>
+                    </div>
+
+                    <!-- EMI -->
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">
+                            EMI
+                        </label>
+
+                        <input type="text" class="form-control" formControlName="EMI" readonly>
+                    </div>
+
+                    <!-- Adjustable -->
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">
+                            Adjustable <span class="text-danger">*</span>
+                        </label>
+
+                        <select formControlName="Adjustable" class="form-control">
+                            <option value="" disabled selected>Select</option>
+                        </select>
+
+                        <div *ngIf="LoanPreForm.get('Adjustable')?.touched 
+                        && LoanPreForm.get('Adjustable')?.hasError('required')" class="text-danger small mt-1">
+                            Adjustable is required
+                        </div>
+                    </div>
+
+                    <!-- Paid Amount -->
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">
+                            Paid Amount
+                        </label>
+
+                        <input type="text" class="form-control" formControlName="Paid_Amount" readonly>
+                    </div>
+
+                    <!-- Balance Amount -->
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">
+                            Balance Amount
+                        </label>
+
+                        <input type="text" class="form-control" formControlName="Balance_Amount" readonly>
+                    </div>
+
+                    <!-- PreClosed Amount -->
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">
+                            PreClosed Amount
+                        </label>
+
+                        <input type="text" class="form-control" formControlName="PreClosed_Amount">
+                    </div>
+
+                </div>
+            </form>
+
+        </mat-card-content>
+
+        <div class="d-flex justify-content-end mt-3" style="gap: 15px; padding-right: 20px;">
+
+            <button type="button" style="border: none; border-radius: 7px; width: 80px; height: 30px;
+                           cursor: pointer; background-color: #f0f0f0; color: black;" (click)="closeclick()">
+                Cancel
+            </button>
+
+            <button type="button"
+                style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: blue; color: white;">
+                {{ isEditMode ? 'Update' : 'Save' }}
+            </button>
+
+        </div>
+
+    </mat-card>
+</div>

@@ -1,0 +1,109 @@
+<div class="page-wrapper" style="padding-top: 10px;">
+    <div class="scrollable-content">
+        <div style="color: #302CB3; font-size: 22px; font-family: Nunito Sans; font-weight: 700;">
+            Company Permission
+        </div>
+        <div class="container py-2">
+            <div class="row g-3 align-items-end">
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Employee Id</label>
+                    <!-- <input type="text" class="form-control form-control-sm" formControlName="CompanyCode" /> -->
+                    <select class="form-select form-select-sm" [ngModel]="EmployeeId">
+                        <option value="">--Select--</option>
+                        <!-- <option *ngFor="let pay of paytype" [value]="pay.PayType_Id">{{pay.PayType}}</option> -->
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label text-muted small" n style="white-space: nowrap;">Business Unit
+                        Name/Entity</label>
+                    <select class="form-select form-select-sm" [ngModel]="BusinessUnitNames">
+                        <option value="">--Select--</option>
+                        <!-- <option *ngFor="let pay of paytype" [value]="pay.PayType_Id">{{pay.PayType}}</option> -->
+                    </select>
+                </div>
+                <div class="col-md-2 d-flex gap-2">
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-search"
+                        matTooltip="Search" (click)="onsearch()">
+                        <mat-icon>search</mat-icon>
+                    </button>
+                    <button class="btn btn-secondary btn-sm d-flex align-items-center justify-content-center"
+                        matTooltip="export to excel">
+                        <mat-icon>download</mat-icon>
+                    </button>
+                    <!-- <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="import">
+                            <mat-icon>cloud_upload</mat-icon>
+                        </button>
+                        <button class="btn btn-sm d-flex align-items-center justify-content-center"
+                            matTooltip="downlaod">
+                            <mat-icon>cloud_download</mat-icon>
+                        </button> -->
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-add" matTooltip="Add"
+                        (click)="companyPermissionAdd()">
+                        <mat-icon>add</mat-icon>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="table-wrapper1" *ngIf="showTable">
+            <div class="table-scroll">
+                <table mat-table [dataSource]="uploadedData" class="mat-elevation-z8 custom-table">
+
+                    <!--  Action -->
+                    <!-- 🔹 Sl.No -->
+                    <ng-container matColumnDef="slNo">
+                        <mat-header-cell *matHeaderCellDef>Sl.No</mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.SNo }}</mat-cell>
+                    </ng-container>
+
+                    <!-- 🔹 Pay Code -->
+                    <ng-container matColumnDef="username">
+                        <mat-header-cell *matHeaderCellDef>User Name</mat-header-cell>
+                        <!-- <mat-cell *matCellDef="let row">{{ row.companycode }}</mat-cell> -->
+                    </ng-container>
+
+                    <!-- 🔹 Description -->
+                    <ng-container matColumnDef="employeeid">
+                        <mat-header-cell *matHeaderCellDef>Employee Id</mat-header-cell>
+                        <!-- <mat-cell *matCellDef="let row">{{ row.employeecode }}</mat-cell> -->
+                    </ng-container>
+
+                    <ng-container matColumnDef="companycode">
+                        <mat-header-cell *matHeaderCellDef>Company Code</mat-header-cell>
+                        <!-- <mat-cell *matCellDef="let row">{{ row.employeename }}</mat-cell> -->
+                    </ng-container>
+
+                    <!-- 🔹 Pay Type -->
+                    <ng-container matColumnDef="companyname">
+                        <mat-header-cell *matHeaderCellDef>Company Name</mat-header-cell>
+                        <!-- <mat-cell *matCellDef="let row">{{ row.paysequenceno }}</mat-cell> -->
+                    </ng-container>
+
+                    <!-- 🔹 Taxable -->
+                    <ng-container matColumnDef="businessunitname">
+                        <mat-header-cell *matHeaderCellDef>Business Unit Name</mat-header-cell>
+                        <!-- <mat-cell *matCellDef="let row">{{ row.payperiod }}</mat-cell> -->
+                    </ng-container>
+
+                    <ng-container matColumnDef="permissionaccess">
+                        <mat-header-cell *matHeaderCellDef>Permission Access</mat-header-cell>
+                        <!-- <mat-cell *matCellDef="let row">{{ row.monthdays }}</mat-cell> -->
+                    </ng-container>
+
+                    <!-- Header Rows -->
+                    <mat-header-row *matHeaderRowDef="uploadDisplayedColumns"></mat-header-row>
+
+                    <!-- Data Rows -->
+                    <mat-row *matRowDef="let row; columns: uploadDisplayedColumns"></mat-row>
+
+                </table>
+            </div>
+
+            <div *ngIf="uploadedData.length === 0" class="text-center p-4">
+                <p class="text-muted">No data to display</p>
+            </div>
+
+            <mat-paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons  style="border-top: 1px solid #ddd;"></mat-paginator>
+        </div>
+
+    </div>
+</div>

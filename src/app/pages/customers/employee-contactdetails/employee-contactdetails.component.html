@@ -1,0 +1,143 @@
+<form [formGroup]="contactForm" novalidate>
+    <mat-card class="custom-card">
+
+        <mat-card-header class="sticky-header">
+            <mat-card-title style="color:#302CB3;">Contact Details</mat-card-title>
+
+            <span class="spacer"></span>
+            <button mat-icon-button (click)="onClose()" class="no-border-icon">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-card-header>
+
+        <mat-card-content>
+
+            <div class="row g-3 mb-3">
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">Address </label>
+                    <input type="text" class="form-control form-control-sm" formControlName="address">
+
+
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">City </label>
+                    <input type="text" class="form-control form-control-sm" formControlName="city">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">State</label>
+                    <input type="text" class="form-control form-control-sm" formControlName="state">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">PIN Code </label>
+                    <input type="text" maxlength="6" class="form-control form-control-sm" formControlName="pincode"
+                        onkeypress="return event.charCode>=48 && event.charCode<=57">
+
+
+
+                    <small *ngIf="contactForm.get('pincode')?.errors?.['pattern']
+                                  && (contactForm.get('pincode')?.touched || submitted)" style="color:red">
+                        Enter valid 6-digit PIN Code
+                    </small>
+                </div>
+
+                <!-- Country -->
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">Country</label>
+                    <input type="text" class="form-control form-control-sm" formControlName="country" readonly>
+                </div>
+
+                <!-- Mobile -->
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">Mobile</label>
+                    <input type="text" maxlength="10" class="form-control form-control-sm" formControlName="mobile"
+                        onkeypress="return event.charCode>=48 && event.charCode<=57">
+
+                    <small *ngIf="contactForm.get('mobile')?.errors?.['required']
+                                  && (contactForm.get('mobile')?.touched || submitted)" style="color:red">
+                        Mobile number is required
+                    </small>
+
+
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">Telephone</label>
+                    <input type="text" maxlength="10" class="form-control form-control-sm" formControlName="telephone"
+                        onkeypress="return event.charCode>=48 && event.charCode<=57">
+
+                    <small *ngIf="contactForm.get('telephone')?.errors?.['required']
+                                  && (contactForm.get('telephone')?.touched || submitted)" style="color:red">
+                        Mobile number is required
+                    </small>
+
+
+                </div>
+
+                <!-- Email -->
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">Email</label>
+                    <input type="email" class="form-control form-control-sm" formControlName="email">
+
+                    <small *ngIf="contactForm.get('email')?.errors?.['required']
+                                  && (contactForm.get('email')?.touched || submitted)" style="color:red">
+                        Email is required
+                    </small>
+
+
+                </div>
+
+                <!-- Contact Person -->
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">Contact Person</label>
+                    <input type="text" class="form-control form-control-sm" formControlName="contactperson">
+                </div>
+
+
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">Emergency Contact Person</label>
+                    <input type="text" class="form-control form-control-sm" formControlName="emergencycontact">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">L1 Approver Name</label>
+                    <input type="text" class="form-control form-control-sm" formControlName="lapprovername">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">L2 Approver Name</label>
+                    <input type="text" class="form-control form-control-sm" formControlName="laaprovername">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">L1 Approver Email_Id</label>
+                    <input type="text" class="form-control form-control-sm" formControlName="lapproveremail">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">L2 Approver Email_Id</label>
+                    <input type="text" class="form-control form-control-sm" formControlName="laaproveremail">
+                </div>
+            </div>
+
+
+        </mat-card-content>
+
+        <!-- FOOTER -->
+        <mat-card-footer class="footer">
+            <div class="d-flex justify-content-end mt-3">
+                <div class="btn-1"
+                    style="display:flex; justify-content:flex-end; gap:10px; width:100%; padding-right:7px;">
+
+                    <button type="button"
+                        style="border:none; border-radius:7px; width:80px; height:30px; background:#f0f0f0;"
+                        (click)="onClose()">
+                        Cancel
+                    </button>
+
+                    <button type="submit"
+                        style="border:none; border-radius:7px; width:80px; height:30px; background:blue; color:white;"
+                        (click)="onSubmit()">
+                        Save
+                    </button>
+
+                </div>
+            </div>
+        </mat-card-footer>
+
+    </mat-card>
+</form>

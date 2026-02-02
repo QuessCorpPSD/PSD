@@ -5,10 +5,11 @@ export interface APIResponse {
   Message: string
   Data: any
   Error: any
-    
+  data: any
+
 }
 
-export interface ErrorMessage{
-    ErrorCode:number;
-    ErrorMessages:string;
+export interface ErrorMessage {
+  ErrorCode: number;
+  ErrorMessages: string;
 }  

@@ -1,0 +1,68 @@
+<div class="page-wrapper" style="padding-top: 10px;">
+    <div class="scrollable-content">
+        <div style="color: #302CB3; font-size: 22px; font-family: Nunito Sans; font-weight: 700;">
+            Pay Process Admin
+        </div>
+        <div class="table-wrapper1">
+            <div class="table-scroll">
+                <mat-table [dataSource]="uploadedData" class="mat-elevation-z8 custom-table">
+
+                    <!--  Action -->
+                    <!-- 🔹 Sl.No -->
+                    <ng-container matColumnDef="slNo">
+                        <mat-header-cell *matHeaderCellDef><strong>Sl.No</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.SNo }}</mat-cell>
+                    </ng-container>
+
+                    <!-- 🔹 Pay Code -->
+                    <ng-container matColumnDef="companycode">
+                        <mat-header-cell *matHeaderCellDef><strong>Company Code</strong></mat-header-cell>
+                        <!-- <mat-cell *matCellDef="let row">{{ row.companycode }}</mat-cell> -->
+                    </ng-container>
+
+                    <!-- 🔹 Description -->
+                    <ng-container matColumnDef="payperiod">
+                        <mat-header-cell *matHeaderCellDef><strong>Pay Period</strong></mat-header-cell>
+                        <!-- <mat-cell *matCellDef="let row">{{ row.employeecode }}</mat-cell> -->
+                    </ng-container>
+
+                    <ng-container matColumnDef="name">
+                        <mat-header-cell *matHeaderCellDef><strong>Name</strong></mat-header-cell>
+                        <!-- <mat-cell *matCellDef="let row">{{ row.employeename }}</mat-cell> -->
+                    </ng-container>
+
+                    <!-- 🔹 Pay Type -->
+                    <ng-container matColumnDef="loginid">
+                        <mat-header-cell *matHeaderCellDef><strong>Login Id</strong></mat-header-cell>
+                        <!-- <mat-cell *matCellDef="let row">{{ row.paysequenceno }}</mat-cell> -->
+                    </ng-container>
+
+                    <ng-container matColumnDef="lasttriggered">
+                        <mat-header-cell *matHeaderCellDef><strong>Last Triggered</strong></mat-header-cell>
+                        <!-- <mat-cell *matCellDef="let row">{{ row.monthdays }}</mat-cell> -->
+                    </ng-container>
+
+                    <ng-container matColumnDef="release">
+                        <mat-header-cell *matHeaderCellDef><strong>Release</strong></mat-header-cell>
+                        <!-- <mat-cell *matCellDef="let row">{{ row.monthdays }}</mat-cell> -->
+                    </ng-container>
+
+
+                    <!-- Header Rows -->
+                    <mat-header-row *matHeaderRowDef="uploadDisplayedColumns"></mat-header-row>
+
+                    <!-- Data Rows -->
+                    <mat-row *matRowDef="let row; columns: uploadDisplayedColumns"></mat-row>
+
+                </mat-table>
+            </div>
+
+            <div *ngIf="uploadedData.length === 0" class="text-center p-4">
+                <p class="text-muted">No data to display</p>
+            </div>
+
+            <mat-paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+        </div>
+
+    </div>
+</div>

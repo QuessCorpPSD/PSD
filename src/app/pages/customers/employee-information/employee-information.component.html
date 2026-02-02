@@ -1,0 +1,130 @@
+<form [formGroup]="infoForm" novalidate>
+    <mat-card class="custom-card">
+        <mat-card-header class="sticky-header">
+
+            <mat-card-title style="color:#302CB3;">Information</mat-card-title>
+
+            <span class="spacer"></span>
+            <button mat-icon-button (click)="onClose()" class="no-border-icon">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-card-header>
+
+        <mat-card-content>
+
+            <!-- Row 1 -->
+            <div class="row g-3 mb-3">
+                <div class="col-md-4">
+                    <label class="form-label small">PassPort No</label>
+                    <input class="form-control form-control-sm" formControlName="passportNo">
+
+
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label small">PassPort Expiry Date</label>
+                    <input class="form-control form-control-sm" type="date" formControlName="passportExpiry">
+
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label small">Place Of Issue</label>
+                    <input class="form-control form-control-sm" formControlName="placeOfIssue">
+
+
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label small">PAN No</label>
+                    <input class="form-control form-control-sm" formControlName="panno">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label small">Gun License No</label>
+                    <input class="form-control form-control-sm" formControlName="gunLicenseNo">
+
+
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label small">Driving License No</label>
+                    <input class="form-control form-control-sm" formControlName="drivingLicenseNo">
+
+
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label small">ESI No</label>
+                    <input class="form-control form-control-sm" formControlName="ESIno">
+
+
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label small">PF No</label>
+                    <input class="form-control form-control-sm" formControlName="pfno">
+
+
+
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label small">UAN No</label>
+                    <input class="form-control form-control-sm" formControlName="Uanno">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label small">PF No_Backup</label>
+                    <input class="form-control form-control-sm" formControlName="pfnobackup">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label small">Aadhar No</label>
+                    <input class="form-control form-control-sm" formControlName="aadharno">
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label small">Insurance Number</label>
+                    <input class="form-control form-control-sm" type="date" formControlName="insuranceNumber">
+
+
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label small">PRAN Number</label>
+                    <input class="form-control form-control-sm" type="date" formControlName="Prannumber">
+
+
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label small">PRAN Number</label>
+                    <input class="form-control form-control-sm" type="date" formControlName="Prannumber">
+
+
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">UAN Type</label>
+                    <select class="form-select form-select-sm" formControlName="UANtype">
+                        <option value="" disabled>Select</option>
+                    </select>
+                </div>
+
+            </div>
+
+        </mat-card-content>
+
+        <mat-card-footer class="footer">
+            <div class="d-flex justify-content-end mt-3">
+                <div class="btn-1" style="display:flex; justify-content:end; gap:10px; width:100%; padding-right:7px;">
+
+                    <button type="button"
+                        style="border:none; border-radius:7px; width:80px; height:30px; background:#f0f0f0;"
+                        (click)="onClose()">
+                        Cancel
+                    </button>
+
+                    <button type="submit" (click)="onSubmit()"
+                        style="border:none; border-radius:7px; width:80px; height:30px; background:blue; color:white;">
+                        Save
+                    </button>
+
+                </div>
+            </div>
+        </mat-card-footer>
+    </mat-card>
+</form>
