@@ -51,7 +51,7 @@ export interface IESIBlockDetail {
     MatIconModule,
     MatTooltipModule,
     MatTableModule,
-    MatPaginator,
+  
     MatDialogModule,
     MatCardModule
   ],

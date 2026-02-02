@@ -4,7 +4,10 @@ export interface Company {
   companyName: string
   displayName: string
 }
-
+export interface State {
+  state_Id: number
+  state_Name: string
+}
 export interface Payperiodclass {
   payfrequencyid: number
   paySequenceNo: string
