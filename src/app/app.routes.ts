@@ -362,14 +362,15 @@ export const routes: Routes = [
         path: 'invoicenavigation',
         component: InvoicenavigationComponent,
         children: [
-          { path: 'initiate', component: InitiateComponent },
+          { path: 'initiate', component: DraftInvoiceComponent },
           { path: 'provisionalinvoice', component: ProvisionalinvoiceComponent },
           { path: 'perfomainvoice', component: PerfomainvoiceComponent },
           { path: 'billabledays', component: BillableDaysComponent },
           { path: 'gstinvoice', component: GstinvoiceComponent },
           { path: 'billingpayfrequency', component: BillingpayfrequencyComponent },
-          { path: 'gstinvoice', component: GstinvoiceComponent },
+          
           { path: 'poinitiate', component: POInitiateComponent },
+          //{path:'einvoicecanllation',component:invoice}
           { path: 'app-invoice-culture', component: InvoiceCultureComponent },
           { path: 'ClientBillableReportDatewise', component: ClientbillablereportsdatewiseComponent },
           { path: 'creditnote', component: CreditnoteComponent },

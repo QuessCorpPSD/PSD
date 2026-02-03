@@ -31,7 +31,7 @@ export const Invoice_TOKEN = new InjectionToken<IInvoiceRepository>('Invoice_TOK
 @Component({
   selector: 'app-draft-invoice',
   imports: [CommonModule, MatFormFieldModule,
-    MatInputModule, MatRadioModule, MatTabsModule, MatPaginatorModule, FormsModule, MatFormFieldModule, MatCardModule, MatCheckboxModule, CompanyallComponent, PayPeriodComponent, MatIconModule, MatTableModule, GstinvoiceComponent,InvoiceCancelComponent],
+    MatInputModule, MatRadioModule, MatTabsModule, MatPaginatorModule, FormsModule, MatFormFieldModule, MatCardModule, MatCheckboxModule, MatIconModule, MatTableModule],
   templateUrl: './draft-invoice.component.html',
   styleUrl: './draft-invoice.component.css',
    providers: [
@@ -59,7 +59,7 @@ export class DraftInvoiceComponent implements OnInit {
   isLoading:boolean= false;
   Modelpopup:boolean=false;
   //@ViewChild(PayPeriod) PayPeriodComponent!: Payperiodclass;
-  displayColumns=['action','serial_No','map_name','net_CTC','netPay','lotNo','input_No','pO_Number','employee_Head_Count','service_Charge','serviceChargeAmount','service_Charge_Master','service_Charge_Type','bgvbl','astfee','discT1','discT2','idcard','email','regfee','trnfee','ggdbt','ppekit','vmsfee','edufee','ntpry','renmac','draded','othdd','mbapp','calcrg','calrt','narration']
+  displayColumns=['action','serial_No', 'Req_No','map_name','net_CTC','netPay','lotNo','input_No','pO_Number','employee_Head_Count','service_Charge','serviceChargeAmount','service_Charge_Master','service_Charge_Type','bgvbl','astfee','discT1','discT2','idcard','email','regfee','trnfee','ggdbt','ppekit','vmsfee','edufee','ntpry','renmac','draded','othdd','mbapp','calcrg','calrt','narration']
   constructor(@Inject(Invoice_TOKEN) private _invoiceService: IInvoiceRepository,private _decrypt:EncryptionService,
   private _sessionStoreage:SessionStorageService,private dialog: MatDialog){
   }
@@ -78,23 +78,23 @@ export class DraftInvoiceComponent implements OnInit {
   this.dataSource.filter = filterValue.trim().toLowerCase();
 }
   Invoiceintiate():void{
-      if(this.selectedCompanyId==undefined)
-      {
-        alert("Select Company ");
-        return;
-      }
+      // if(this.selectedCompanyId==undefined)
+      // {
+      //   alert("Select Company ");
+      //   return;
+      // }
   
-      if(this.payPeriod==undefined)
-      {
-        alert("Select PayPeriod ");
-        return;
-      }
-      //this.invoiceType=1
-      if(this.invoiceType==undefined)
-      {
-        alert("Select Invoice Type ");
-        return;
-      }
+      // if(this.payPeriod==undefined)
+      // {
+      //   alert("Select PayPeriod ");
+      //   return;
+      // }
+      // //this.invoiceType=1
+      // if(this.invoiceType==undefined)
+      // {
+      //   alert("Select Invoice Type ");
+      //   return;
+      // }
      if(this.selection.selected.length==0)
      {
       alert("Please Select atleast one row");
@@ -135,22 +135,22 @@ export class DraftInvoiceComponent implements OnInit {
     }
     InitiationSearchExport():void{
       
-      // if(this.selectedCompanyId==undefined)
-      // {
-      //   alert("Select Company ");
-      //   return;
-      // }
+      if(this.selectedCompanyId==undefined)
+      {
+        alert("Select Company ");
+        return;
+      }
   
-      // if(this.payPeriod==undefined)
-      // {
-      //   alert("Select PayPeriod ");
-      //   return;
-      // }
-      // if(this.invoiceType==undefined)
-      // {
-      //   alert("Select Invoice Type ");
-      //   return;
-      // }
+      if(this.payPeriod==undefined)
+      {
+        alert("Select PayPeriod ");
+        return;
+      }
+      if(this.invoiceType==undefined)
+      {
+        alert("Select Invoice Type ");
+        return;
+      }
       this.isLoading=true;
        const request = {
         "Company_Id": this.selectedCompanyId,
@@ -209,12 +209,14 @@ export class DraftInvoiceComponent implements OnInit {
     console.log(this.userdetail);
     this.payPeriodType = "All";
     const request = {
-      "Company_Id": 0,
-      "PayPeriod_Id": 0,
+      // "Company_Id": 0,
+      // "PayPeriod_Id": 0,
       "InvoiceType": 0,
-      "ActionType": "A"
+      "ActionType": "A",
+      "userId": this.userdetail.user_Id
     }
     this.dataSource=new MatTableDataSource<any>([]);
+    this.InvoiceSearch();
     // this._invoiceService.InitialSearch(request).subscribe({
     //   next: res => {
         
@@ -228,22 +230,22 @@ export class DraftInvoiceComponent implements OnInit {
   
     InvoiceSearch(){
   
-      if(this.selectedCompanyId==undefined)
-      {
-        alert("Select Company ");
-        return;
-      }
+      // if(this.selectedCompanyId==undefined)
+      // {
+      //   alert("Select Company ");
+      //   return;
+      // }
   
-      if(this.payPeriod==undefined)
-      {
-        alert("Select PayPeriod ");
-        return;
-      }
-      if(this.invoiceType==undefined)
-      {
-        alert("Select Invoice Type ");
-        return;
-      }
+      // if(this.payPeriod==undefined)
+      // {
+      //   alert("Select PayPeriod ");
+      //   return;
+      // }
+      // if(this.invoiceType==undefined)
+      // {
+      //   alert("Select Invoice Type ");
+      //   return;
+      // }
       // const request={
       //   "companyId":this.selectedCompanyId,
       //   "Pay_Period":this.payPeriod.payPeriod,
@@ -253,12 +255,13 @@ export class DraftInvoiceComponent implements OnInit {
       this.issearch=true;
       this.isLoading=true;
       const request = {
-        "Company_Id": this.selectedCompanyId,
-        "PayPeriod_Id": this.payPeriod.payfrequencyid,
+        // "Company_Id": this.selectedCompanyId,
+        // "PayPeriod_Id": this.payPeriod.payfrequencyid,
         "InvoiceType": 0,
-        "ActionType": "S"
+        "ActionType": "S",
+        "userId":this.userdetail.user_Id
       }
-      this._invoiceService.InitialSearch(request).subscribe({
+      this._invoiceService.InitialSearchAllot(request).subscribe({
         next:res=>{
            this.dataSource = new MatTableDataSource<any>(Array.isArray(res.Data) ? res.Data : []);
            this.dataSource.paginator=this.PeningLot_paginator;
