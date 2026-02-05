@@ -1,0 +1,23 @@
+export interface EInvoiceGrid{
+    Invoice_Id: number,
+    Invoice_Number: string,
+    IRN_Status: string,
+    Company_Id: number,
+    Company_Code: string,
+    Cost_Center_Mapping_Id: number,
+    Map_Name: string,
+    Pay_Period_Id: number,
+    Pay_Period: string,
+    Invoice_Type_Id: number,
+    InvoiceType: string,
+    StateId: number,
+    State_Name: string,
+    Net_Amount: string,
+    Status: string,
+    IRN_Number: string,
+    BatchFile: string,
+    CGST_Amount: number,
+    SGST_Amount: number,
+    IGST_Amount: number,
+    Invoice_Category: string
+}

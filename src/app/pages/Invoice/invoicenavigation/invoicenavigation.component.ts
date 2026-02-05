@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
@@ -6,8 +7,9 @@ import { RouterModule } from '@angular/router';
   standalone: true,
   imports: [RouterModule],
   templateUrl: './invoicenavigation.component.html',
-  styleUrl: './invoicenavigation.component.css'
+  styleUrl: './invoicenavigation.component.css',
+  
 })
-export class InvoicenavigationComponent {
-
+export class InvoicenavigationComponent  {
+ 
 }

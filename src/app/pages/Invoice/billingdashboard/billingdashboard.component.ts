@@ -1,0 +1,143 @@
+
+import { Component, Inject, InjectionToken, OnInit, ViewChild } from '@angular/core';
+import { RouterModule } from '@angular/router';
+import { UserComponent } from '../../../common/user/user.component';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatCardModule } from '@angular/material/card';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { IDashBoardServices } from '../../../Repository/IDashBoardService';
+import { IAssignmentService } from '../../../Repository/IAssignment.service';
+import { IInvoiceRepository } from '../../../Repository/IInvoiceRepository';
+import { DashBoardServices } from '../../../Service/DashBoardService';
+import { InvoiceRepository } from '../../../Service/InvoiceRepository';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { SelectionModel } from '@angular/cdk/collections';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { EncryptionService } from '../../../Shared/encryption.service';
+import { SessionStorageService } from '../../../Shared/SessionStorageService';
+import { CommonModule } from '@angular/common';
+export const DASH_TOKEN = new InjectionToken<IDashBoardServices>('DASH_TOKEN');
+export const AUTH_TOKEN = new InjectionToken<IAssignmentService>('AUTH_TOKEN');
+export const Invoice_TOKEN = new InjectionToken<IInvoiceRepository>('Invoice_TOKEN');
+@Component({
+  selector: 'app-billingdashboard',
+  imports: [MatPaginatorModule,CommonModule,UserComponent,MatTableModule,MatCardModule,MatTooltipModule,MatCheckboxModule],
+  templateUrl: './billingdashboard.component.html',
+  styleUrl: './billingdashboard.component.css',
+  providers:[
+    {
+        provide: DASH_TOKEN,
+        useClass: DashBoardServices,
+      },
+    
+      {
+        provide: Invoice_TOKEN,
+        useClass: InvoiceRepository,
+      }
+  ]
+})
+export class BillingdashboardComponent implements OnInit {
+ userList: any;
+  AllotedTo?: number;
+  InvoiceAlloted: any;
+  iseditClicked = false;
+  userdetail: any;
+  reqNo: string = '';
+  user: any;
+  selection = new SelectionModel<any>(true, []);
+  @ViewChild('InvoiceAlotPaginator') InvoiceAlot_paginator!: MatPaginator;
+  constructor(@Inject(DASH_TOKEN) private dashService: IDashBoardServices, @Inject(Invoice_TOKEN) private _invoiceService: IInvoiceRepository,
+    private _decrypt: EncryptionService,
+    private _sessionStoreage: SessionStorageService) { }
+  displayedInvoiceColumns: string[] = ['edit'
+    , 'Req_No'
+    , 'RequestDatetime'
+    , 'Company_Code'
+    , 'Company_Name'
+    , 'LotNo'
+    , 'HC'
+    , 'ReqUserName'
+    , 'AssignedTo'
+    , 'AllocationDatetime'
+    , 'Invoice_Created_Date'
+  ]
+  ngOnInit(): void {
+    const userdetail = this._sessionStoreage.getItem('UserProfile');
+    this.userdetail = JSON.parse(this._decrypt.decrypt(userdetail!));
+    this.BindInvoiceAllot();
+  }
+  BindInvoiceAllot() {
+    console.log('BindInvoiceAllot');
+    console.log(this.userdetail)
+   
+ const loggedInUser =  this.userdetail.user_Id === 263 ? 0 : this.userdetail.user_Id;
+ console.log(loggedInUser)
+    this._invoiceService.BillingDashboard(loggedInUser).subscribe({
+      next: res => {
+        console.log(res.Data);
+        this.InvoiceAlloted = new MatTableDataSource<any>(Array.isArray(res.Data) ? res.Data : []);
+        this.InvoiceAlloted.paginator = this.InvoiceAlot_paginator;
+      },
+      error: err => { }
+    });
+  }
+  handleuserEvent(user: any) {
+    this.user = user;
+    console.log(this.user);
+  }
+  isAllSelected() {
+    const numSelected = this.selection.selected.length;
+    const numRows = this.InvoiceAlloted.data.length;
+    return numSelected === numRows;
+  }
+
+  isPartialSelected() {
+    const numSelected = this.selection.selected.length;
+    const numRows = this.InvoiceAlloted.data.length;
+    return numSelected > 0 && numSelected < numRows;
+  }
+  EditClick(reqNo: string, userId: number) {
+    this.AllotedTo = userId;
+    this.reqNo = reqNo;
+    this.iseditClicked = true;
+  }
+  closeclick() {
+    this.iseditClicked = false;
+  }
+  toggleAllRows() {
+    if (this.isAllSelected()) {
+      this.selection.clear();
+    } else {
+      this.InvoiceAlloted.data.forEach((row: any) => this.selection.select(row));
+    }
+  }
+
+  toggleRow(row: any) {
+    this.selection.toggle(row);
+  }
+  Save() {
+    if (!this.reqNo) {
+      alert('Request No cannot be null');
+      return;
+    }
+    if (!this.user.user_Id) {
+      alert('UserId cannot be null');
+      return;
+    }
+    this.dashService.SaveInvoiceAllotEdit(this.reqNo, this.user.user_Id).subscribe({
+      next: res => {
+        const error = res.Data;
+        const message = error?.[0]?.[""];
+        console.log(message);
+
+        if (message === 'Updated successfully') {
+          alert('Updated successfully');
+        }
+        else {
+          alert('Update Failed.');
+        }
+      },
+      error: err => { console.error(err); }
+    });
+  }
+}

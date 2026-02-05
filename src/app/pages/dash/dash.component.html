@@ -214,7 +214,7 @@
     <div class="download-btn-container">
       <button class="download-btn" (click)="onExportInvoice()">⬇️ Export</button>
     </div>
-    <div id="myGrid" class="ag-theme-quartz" style="width: 100%;  overflow-x: auto; ">
+    <!-- <div id="myGrid" class="ag-theme-quartz" style="width: 100%;  overflow-x: auto; ">
       <div class="card-body rounded-4">
         <div class="example-container mat-elevation-z8">
           <table mat-table [dataSource]="InvoiceAlloted" class="mat-elevation-z8">
@@ -231,14 +231,7 @@
               </mat-cell>
             </ng-container>
 
-            <!-- <ng-container matColumnDef="edit">
-              <mat-header-cell *matHeaderCellDef mat-sort-header></mat-header-cell>
-              <mat-cell *matCellDef="let element">
-                <img src="assets\icons\edit.svg" alt="edit"
-                  style="cursor: pointer; width: 24px; height: 22px;"
-                  (click)="EditClick(element.req_No)" />
-              </mat-cell>
-            </ng-container> -->
+            
 
             <ng-container matColumnDef="edit" sticky>
               <th mat-header-cell *matHeaderCellDef>Edit</th>
@@ -347,11 +340,11 @@
             showFirstLastButtons></mat-paginator>
         </div>
       </div>
-    </div>
+    </div> -->
   </div>
 </div>
 
-<div *ngIf="iseditClicked" class="popup-overlay">
+<!-- <div *ngIf="iseditClicked" class="popup-overlay">
     <mat-card class="popup-card">
         <mat-card-header style="border-bottom: 1px solid #89898B; gap:400px; padding: 15px 15px 15px 15px">
             <mat-card-title style="color: #302CB3;">Change Assignment</mat-card-title>
@@ -387,7 +380,7 @@
             </button>
         </mat-card-actions>
     </mat-card>
-</div>
+</div> -->
 <br>
 <br>
 <br>

@@ -22,5 +22,18 @@ export interface IInvoiceRepository {
     GetAllInvoiceAllotDetails(payload: any) :Observable<APIResponse>;
     GetAllInvoiceCancelDetails(val): Observable<APIResponse>;
     BulkApproveInvoice(val): Observable<APIResponse>;
-    
+    BillingDashboard(user_Id): Observable<APIResponse>;
+    DraftInvoiceEmployeeByRequestId(reqNo): Observable<APIResponse>;
+    //GetAllInvoiceDetails(companyId: number, payPeriodId: number,userId): Observable<APIResponse>;
+    GetAllAttributeAddAndUpdate(val): Observable<APIResponse>;
+    GetAllAttribute(val): Observable<APIResponse>
+    GetIRNColors(): Observable<APIResponse>
+    GetAllInvoiceDetailsByCompanyId(companyId: number, payPeriodId: number): Observable<APIResponse> ;
+    GetExportData(companyId: number, payPeriodId: number): Observable<APIResponse>;
+    InitiateIRN(InitiateIRN: any): Observable<APIResponse>;
+    GetEInvoiceError(invoiceId): Observable<APIResponse>
+    GetEInvoiceErrorHover(invoiceId): Observable<APIResponse>;
+    UploadAttributesGST(formData: FormData): Observable<APIResponse>;
+    GetConsolidatedPayRegister(payload: any): Observable<APIResponse>
+    GetConsolidateInvoiceSummary(payload: any): Observable<APIResponse>
 }

@@ -1,155 +1,446 @@
-<div class="container-fluid w-100">
-    <div class="card-body">
-        <div class="row g-3 align-items-end w-100">
-
-            <!-- Company Code -->
-            <div class="col-md-4">
-                <label class="form-label text-muted small">Company Code</label>
-                <companyall (companyEmit)="handleCompanyEvent($event)" style="width: 300px;"></companyall>
+<div>
+    <!-- <onboarding [visibleDropdowns]="[1, 2]" [showSearchButton]="true"
+        [payPeriodTypefromParent]="payPeriodTypefromParent" (companyUI)="handleCompanyEvent($event)"
+        (payperiodUI)="handlePayperiodEvent($event)" (searchClicked)="searchClick()">
+    </onboarding> -->
+</div>
+<div
+    style="width: 1232px; height:1200px ;left: 24px; top: 230px; position: absolute; background: white; border-radius: 12px; border: 1px #E8E8E8 solid;">
+    <div
+        style="width: 1182px; left: 25px; top: 25px; position: absolute; justify-content: flex-start; align-items: flex-start;">
+        <div
+            style=" position: absolute; color: #302CB3; font-size: 22px; font-family: Nunito Sans; font-weight: 700; word-wrap: break-word">
+            GST Invoice List</div>
+        <div style="float:right; gap:10px;">
+            <div
+                style="display: inline-block; margin-right: 10px; align-items: center; border-radius: 10px; border: 1px solid #e9e9e9; width: 200px; height: 35px; background-color: white; padding: 0px 10px 0px 10px; box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.12);">
+                <i style="margin-right: 6px;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 12 12" fill="none">
+                        <path fill-rule="evenodd" clip-rule="evenodd"
+                            d="M8.30883 9.01596C7.539 9.63177 6.5625 10 5.5 10C3.01472 10 1 7.98528 1 5.5C1 3.01472 3.01472 1 5.5 1C7.98528 1 10 3.01472 10 5.5C10 6.56251 9.63176.53901 9.01594 8.30885L10.8535 10.1465C11.0488 10.3417 11.0488 10.6583 10.8535 10.8536C10.6583 11.0488 10.3417 11.0488 10.1464 10.8536L8.30883 9.01596ZM2 5.5C2 3.567 3.567 2 5.5 2C7.433 2 9 3.567 9 5.5C9 6.44299 8.62707 7.29888 8.02066 7.92823C8.00355 7.94139 7.98711 7.95579 7.97144 7.97146C7.95578 7.98712 7.94137 8.00357 7.92822 8.02067C7.29887 8.62708 6.44299 9 5.5 9C3.567 9 2 7.433 2 5.5Z"
+                            fill="#7E7E7E" />
+                    </svg>
+                </i>
+                <input type="text" [(ngModel)]="searchText" #searchBox (keyup)="applyFilter(searchBox.value)"
+                    placeholder="Search"
+                    style="border: none; outline: none; width: 80%; font-size: 12px; background-color: transparent;" />
             </div>
+            <div style="display: inline-block; margin-right: 10px;">
+                <label style="position: relative; display: inline-block;">
 
-            <!-- Site Name -->
-            <div class="col-md-3">
-                <label class="form-label text-muted small">Pay Period</label>
-                <PayPeriod [selectedCompanyId]="selectedCC" [payPeriodType]="payPeriodTypetoChild"
-                    (payperiodEmit)="handlePayperiodEvent($event)"></PayPeriod>
+                    <select [(ngModel)]="selectedTemplate" (change)="onTemplateChange()" class="select-drop">
+                        <option value="" disabled selected hidden>Filter</option>
+                        <option *ngFor="let item of TemplateOptions" [value]="item.value">{{ item.Text }}</option>
+                    </select>
+                    <i
+                        style="position: absolute; top: 50%; right: 15px; transform: translateY(-50%); pointer-events: none;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
+
+                            <path
+                                d="M1.5 2.5C1.22386 2.5 1 2.72386 1 3C1 3.27614 1.22386 3.5 1.5 3.5H10.5C10.7761 3.5 11 3.27614 11 3C11 2.72386 10.7761 2.5 10.5 2.5H1.5Z"
+                                fill="#7E7E7E" />
+
+                            <path
+                                d="M3.5 5.5C3.22386 5.5 3 5.72386 3 6C3 6.27614 3.22386 6.5 3.5 6.5H8.5C8.77614 6.5 9 6.27614 9 6C9 5.72386 8.77614 5.5 8.5 5.5H3.5Z"
+                                fill="#7E7E7E" />
+
+                            <path
+                                d="M5.5 8.5C5.22386 8.5 5 8.72386 5 9C5 9.27614 5.22386 9.5 5.5 9.5H6.5C6.77614 9.5 7 9.27614 7 9C7 8.72386 6.77614 8.5 6.5 8.5H5.5Z"
+                                fill="#7E7E7E" />
+                        </svg>
+
+                    </i>
+                </label>
             </div>
-
-            <!-- Action Buttons -->
-            <div class="col-md-5 d-flex gap-2">
-                <button class="btn btn-primary btn-sm d-flex align-items-center justify-content-center"
-                    (click)="searchClick()" matTooltip="Search">
-                    <mat-icon>search</mat-icon>
+            <div style="display: inline-block; margin-right: 10px;">
+                <label style="position: relative; display: inline-block;">
+                    <button (click)="BulkDownload()" class="select-drop3">
+                        Bulk Download
+                    </button>
+                    <i
+                        style="position: absolute; top: 50%; right: 15px; transform: translateY(-50%); pointer-events: none;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" fill="none">
+                            <path
+                                d="M6.5 1C6.5 0.723858 6.27614 0.5 6 0.5C5.72386 0.5 5.5 0.723858 5.5 1V6.79289L4.35355 5.64645C4.15829 5.45118 3.84171 5.45118 3.64645 5.64645C3.45118 5.84171 3.45118 6.15829 3.64645 6.35355L5.64609 8.3532C5.6473 8.3544 5.64851 8.35561 5.64973 8.3568C5.6969 8.40313 5.75098 8.43822 5.80861 8.46206C5.86713 8.48633 5.93125 8.4998 5.9985 8.5L6 8.5L6.0015 8.5C6.13732 8.4996 6.26039 8.44505 6.35027 8.3568C6.35149 8.35561 6.3527 8.3544 6.35391 8.3532L8.35355 6.35355C8.54882 6.15829 8.54882 5.84171 8.35355 5.64645C8.15829 5.45118 7.84171 5.45118 7.64645 5.64645L6.5 6.79289V1Z"
+                                fill="#7E7E7E" />
+                            <path
+                                d="M1.5 8C1.77614 8 2 8.22386 2 8.5V10C2 10.2761 2.22386 10.5 2.5 10.5H9.5C9.77614 10.5 10 10.2761 10 10V8.5C10 8.22386 10.2239 8 10.5 8C10.7761 8 11 8.22386 11 8.5V10C11 10.8284 10.3284 11.5 9.5 11.5H2.5C1.67157 11.5 1 10.8284 1 10V8.5C1 8.22386 1.22386 8 1.5 8Z"
+                                fill="#7E7E7E" />
+                        </svg>
+                    </i>
+                </label>
+            </div>
+            <div style="display: inline-block; margin-right: 10px;">
+                <button (click)="ExportExcel()" class="plain-button" style="position: relative; padding-right: 30px;">
+                    Export
+                    <i
+                        style="position: absolute; top: 50%; right: 15px; transform: translateY(-50%); pointer-events: none;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" fill="none">
+                            <path
+                                d="M6.5 1C6.5 0.723858 6.27614 0.5 6 0.5C5.72386 0.5 5.5 0.723858 5.5 1V6.79289L4.35355 5.64645C4.15829 5.45118 3.84171 5.45118 3.64645 5.64645C3.45118 5.84171 3.45118 6.15829 3.64645 6.35355L5.64609 8.3532C5.6473 8.3544 5.64851 8.35561 5.64973 8.3568C5.6969 8.40313 5.75098 8.43822 5.80861 8.46206C5.86713 8.48633 5.93125 8.4998 5.9985 8.5L6 8.5L6.0015 8.5C6.13732 8.4996 6.26039 8.44505 6.35027 8.3568C6.35149 8.35561 6.3527 8.3544 6.35391 8.3532L8.35355 6.35355C8.54882 6.15829 8.54882 5.84171 8.35355 5.64645C8.15829 5.45118 7.84171 5.45118 7.64645 5.64645L6.5 6.79289V1Z"
+                                fill="#7E7E7E" />
+                            <path
+                                d="M1.5 8C1.77614 8 2 8.22386 2 8.5V10C2 10.2761 2.22386 10.5 2.5 10.5H9.5C9.77614 10.5 10 10.2761 10 10V8.5C10 8.22386 10.2239 8 10.5 8C10.7761 8 11 8.22386 11 8.5V10C11 10.8284 10.3284 11.5 9.5 11.5H2.5C1.67157 11.5 1 10.8284 1 10V8.5C1 8.22386 1.22386 8 1.5 8Z"
+                                fill="#7E7E7E" />
+                        </svg>
+                    </i>
                 </button>
             </div>
-            <div class="col-md-5 d-flex gap-2">
-                <button *ngIf="isAnyFilteredRowSelected()" (click)="IRNInitiate()"
-                    style="display: inline-block; width: 130px; height: 30px; padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; background: #302CB3; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.20); border-radius: 6px; justify-content: center; align-items: center; gap: 10px; display: inline-flex; border: none;">
-                    <div
-                        style="color: var(--background, #F5F5F5); font-size: 12px; font-family: Montserrat; font-weight: 600; line-height: 22.40px; letter-spacing: 0.24px; word-wrap: break-word">
-                        Initiate IRN</div>
-                </button>
+            <!-- <button (click)="ExportExcel()"
+                style="display: inline-block; width: 100px; height: 30px; padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; background: #302CB3; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.20); border-radius: 6px; justify-content: center; align-items: center; gap: 10px; display: inline-flex; border: none;">
+                <div
+                    style="color: var(--background, #F5F5F5); font-size: 12px; font-family: Nunito Sans; font-weight: 600; line-height: 22.40px; letter-spacing: 0.24px; word-wrap: break-word">
+                    Export</div>
+            </button> -->
+            <button *ngIf="canInitiateIRN()" (click)="confirmIRN()"
+                style="display: inline-block; left:10px; width: 120px; height: 30px; padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; background: #302CB3; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.20); border-radius: 6px; justify-content: center; align-items: center; gap: 10px; display: inline-flex; border: none;">
+                <div
+                    style="color: var(--background, #F5F5F5); font-size: 12px; font-family: Nunito Sans; font-weight: 600; line-height: 22.40px; letter-spacing: 0.24px; word-wrap: break-word">
+                    Initiate IRN</div>
+            </button>
+        </div>
+        <div class="legend-container">
+            <div class="legend-item" *ngFor="let it of legendItems">
+                <span class="legend-box" [style.backgroundColor]="it.color"></span>
+                {{ it.label }}
+            </div>
+        </div>
+        <div class="legend-irn-container">
+            <div class="legend-b2b left" *ngFor="let it of IrnTypeItems">
+                <span class="legend-boxb2b" [style.backgroundColor]="it.color"></span>
+                {{ it.label }}
+            </div>
+            <div class="right">
+                <div style="display: inline-block; margin-right: 5px;">
+                    <label style="position: relative; display: inline-block;">
+                        <button class="select-drop" (click)="Attributeclick()">
+                            Attributes
+                        </button>
+                        <i class="icon-right"
+                            style="position: absolute; top: 50%; right: 15px; transform: translateY(-50%); pointer-events: none;">
+                            <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M2 2.5C2.27614 2.5 2.5 2.72386 2.5 3C2.5 3.27614 2.27614 3.5 2 3.5H1.5C1.22386 3.5 1 3.27614 1 3C1 2.72386 1.22386 2.5 1.5 2.5H2Z"
+                                    fill="#7E7E7E" />
+                                <path
+                                    d="M4 2.5C3.72386 2.5 3.5 2.72386 3.5 3C3.5 3.27614 3.72386 3.5 4 3.5H10.5C10.7761 3.5 11 3.27614 11 3C11 2.72386 10.7761 2.5 10.5 2.5H4Z"
+                                    fill="#7E7E7E" />
+                                <path
+                                    d="M4 5.5C3.72386 5.5 3.5 5.72386 3.5 6C3.5 6.27614 3.72386 6.5 4 6.5H10.5C10.7761 6.5 11 6.27614 11 6C11 5.72386 10.7761 5.5 10.5 5.5H4Z"
+                                    fill="#7E7E7E" />
+                                <path
+                                    d="M3.5 9C3.5 8.72386 3.72386 8.5 4 8.5H10.5C10.7761 8.5 11 8.72386 11 9C11 9.27614 10.7761 9.5 10.5 9.5H4C3.72386 9.5 3.5 9.27614 3.5 9Z"
+                                    fill="#7E7E7E" />
+                                <path
+                                    d="M2.5 6C2.5 5.72386 2.27614 5.5 2 5.5H1.5C1.22386 5.5 1 5.72386 1 6C1 6.27614 1.22386 6.5 1.5 6.5H2C2.27614 6.5 2.5 6.27614 2.5 6Z"
+                                    fill="#7E7E7E" />
+                                <path
+                                    d="M2 8.5C2.27614 8.5 2.5 8.72386 2.5 9C2.5 9.27614 2.27614 9.5 2 9.5H1.5C1.22386 9.5 1 9.27614 1 9C1 8.72386 1.22386 8.5 1.5 8.5H2Z"
+                                    fill="#7E7E7E" />
+                            </svg>
+                        </i>
+                    </label>
+                </div>
+                <div style="display: inline-block; margin-right: 5px;">
+                    <label style="position: relative; display: inline-block;">
+                        <button class="select-drop" (click)="onImportClick(fileInput)">
+                            Import
+                        </button>
+                        <i
+                            style="position: absolute; top: 50%; right: 15px; transform: translateY(-50%); pointer-events: none;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12"
+                                fill="none">
+                                <path
+                                    d="M5.64645 0.646447C5.84171 0.451184 6.15829 0.451184 6.35355 0.646447L8.35355 2.64645C8.54882 2.84171 8.54882 3.15829 8.35355 3.35355C8.15829 3.54882 7.84171 3.54882 7.64645 3.35355L6.5 2.20711V8C6.5 8.27614 6.27614 8.5 6 8.5C5.72386 8.5 5.5 8.27614 5.5 8V2.20711L4.35355 3.35355C4.15829 3.54882 3.84171 3.54882 3.64645 3.35355C3.45118 3.15829 3.45118 2.84171 3.64645 2.64645L5.64645 0.646447Z"
+                                    fill="#7E7E7E" />
+                                <path
+                                    d="M1.5 8C1.77614 8 2 8.22386 2 8.5V10C2 10.2761 2.22386 10.5 2.5 10.5H9.5C9.77614 10.5 10 10.2761 10 10V8.5C10 8.22386 10.2239 8 10.5 8C10.7761 8 11 8.22386 11 8.5V10C11 10.8284 10.3284 11.5 9.5 11.5H2.5C1.67157 11.5 1 10.8284 1 10V8.5C1 8.22386 1.22386 8 1.5 8Z"
+                                    fill="#7E7E7E" />
+                            </svg>
+                        </i>
+                    </label>
+                    <input type="file" #fileInput style="display: none;" accept=".xlsx, .xls"
+                        (change)="onFileChange($event)" />
+                </div>
+                <div style="display: inline-block; margin-right: 10px;">
+                    <button (click)="onConsolidatedSummaryClick()" class="select-drop2"
+                        style="position: relative; padding-right: 30px;">
+                        Invoice Summary
+                        <i
+                            style="position: absolute; top: 50%; right: 15px; transform: translateY(-50%); pointer-events: none;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12"
+                                fill="none">
+                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                    d="M5.77652 0.552786C5.91728 0.482405 6.08296 0.482405 6.22373 0.552786L11.2237 3.05279C11.3931 3.13748 11.5001 3.31061 11.5001 3.5C11.5001 3.68939 11.3931 3.86252 11.2237 3.94721L6.22373 6.44721C6.08296 6.5176 5.91728 6.5176 5.77652 6.44721L0.776515 3.94721C0.607123 3.86252 0.500122 3.68939 0.500122 3.5C0.500122 3.31061 0.607123 3.13748 0.776515 3.05279L5.77652 0.552786ZM2.11816 3.5L6.00012 5.44098L9.88209 3.5L6.00012 1.55902L2.11816 3.5Z"
+                                    fill="#7E7E7E" />
+                                <path
+                                    d="M0.552896 8.27638C0.676391 8.02939 0.976727 7.92928 1.22372 8.05277L6.00011 10.441L10.7765 8.05277C11.0235 7.92928 11.3238 8.02939 11.4473 8.27638C11.5708 8.52337 11.4707 8.82371 11.2237 8.9472L6.22372 11.4472C6.08295 11.5176 5.91727 11.5176 5.7765 11.4472L0.776503 8.9472C0.529513 8.82371 0.429401 8.52337 0.552896 8.27638Z"
+                                    fill="#7E7E7E" />
+                                <path
+                                    d="M1.22372 5.55277C0.976727 5.42928 0.676391 5.52939 0.552896 5.77638C0.429401 6.02337 0.529513 6.32371 0.776503 6.4472L5.7765 8.9472C5.91727 9.01758 6.08295 9.01758 6.22372 8.9472L11.2237 6.4472C11.4707 6.32371 11.5708 6.02337 11.4473 5.77638C11.3238 5.52939 11.0235 5.42928 10.7765 5.55277L6.00011 7.94097L1.22372 5.55277Z"
+                                    fill="#7E7E7E" />
+                            </svg>
+
+                        </i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="table-wrapper">
+            <div class="table-scroll">
+                <table mat-table [dataSource]="dataSource" matSort class="custom-table mat-elevation-z8">
+
+                    <!-- Checkbox Column -->
+                    <ng-container matColumnDef="select">
+                        <mat-header-cell *matHeaderCellDef class="fixed-width-column">
+                            <mat-checkbox (change)="toggleAllRows()" [checked]="selection.hasValue() && isAllSelected()"
+                                [indeterminate]="isPartialSelected()">
+                            </mat-checkbox>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let element" class="fixed-width-column">
+                            <mat-checkbox (click)="$event.stopPropagation()" (change)="toggleRow(element)"
+                                [checked]="selection.isSelected(element)">
+                            </mat-checkbox>
+                        </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="pdfdownload">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header class="fixed-width-column"></mat-header-cell>
+                        <mat-cell *matCellDef="let element" class="fixed-width-column">
+                            <img src="assets/Icons/download_enabled.svg"
+                                (click)="DownloadInvoice(element.Invoice_Id, element.Invoice_Number)"
+                                matTooltip="Pdf Download" matTooltipPosition="above"
+                                style="cursor: pointer; width: 24px; height: 22px; max-width: 100px;" />
+                            <!-- <img *ngIf="!element.IRN_Number && !element.BatchFile" src="assets/Icons/download_disabled.svg"
+                                style="cursor: pointer; width: 24px; height: 22px;" />
+                            <img *ngIf="!element.IRN_Number && element.BatchFile" src="data:image/gif;base64,R0lGODlhGAASAPQAAP///wAAAMzMzICAgP//AP8AAP/MAP/MzP8zM////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAAAAAAALAAAAAAYABIAAAWRICCOZGmeaKqubOtCzPcCzPdFADs="
+                               mat-tooltip="Processing" width="24px;" height="22px;" /> -->
+                        </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="invoice_Id">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>invoice_Id</mat-header-cell>
+                        <mat-cell *matCellDef="let element">{{ element.Invoice_Id
+                            }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="invoice_Number">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header class="fixed-width-column4">Invoice
+                            Number</mat-header-cell>
+                        <mat-cell *matCellDef="let element" class="fixed-width-column4"><span [ngStyle]="{
+                                        'background-color': element.Invoice_Color,
+                                        'border-radius': '6px',
+                                        'border': '1px solid #222',
+                                        'color': 'white',
+                                        'height': '22px',
+                                        'width': '100px',
+                                        'display': 'inline-flex',
+                                        'align-items': 'center',
+                                        'justify-content': 'center',
+                                        'white-space': 'nowrap',
+                                        'overflow': 'hidden',
+                                        'text-overflow': 'ellipsis'
+                                    }" [title]="element.Invoice_Category">
+                                {{ element.Invoice_Number }}
+                            </span></mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="irnStatus">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header class="fixed-width-column2"> IRN Status
+                        </mat-header-cell>
+
+                        <mat-cell *matCellDef="let element" class="fixed-width-column2">
+
+                            <div style="display: flex; align-items: center;">
+
+                                <!-- Color Box -->
+                                <!-- 'legend-processing': element.IRN_Status === 'Processing',-->
+                                <span class="legend-box" [ngClass]="{
+                    'legend-pending': element.IRN_Status === 'Pending',
+                    'legend-requested': element.IRN_Status === 'Requested' || element.IRN_Status === 'Processing',
+                    'legend-generated': element.IRN_Status === 'Generated',
+                    'legend-rejected': element.IRN_Status === 'Rejected'                  
+                }" [title]="element.IRN_Status"></span>
+
+                                <!-- Status Text -->
+                                <span matTooltip="{{ element.IRN_Status }}"
+                                    style="white-space: nowrap; max-width: 140px; overflow: hidden; text-overflow: ellipsis;">
+
+                                </span>
+                            </div>
+                            <div class="hover-panel" *ngIf="showPanel">
+                                <table class="table-borderless" width="100%">
+                                <thead>
+                                <tr>
+                                  <th style="text-align: left; padding:5px; border-right: 1px solid white;">Error Code</th>
+                                  <th style="text-align: left; padding:5px;">Error Msg</th>
+                                </tr>
+                              </thead>
+                                    <tbody>
+                                        <tr *ngFor="let item of gridData">
+                                            <td style="text-align: left; padding:5px; border-right: 1px solid white;">{{item.Error_Code}}</td>
+                                            <td style="text-align: left; padding:5px;">{{item.Error_Message}}</td>
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <button 
+                                *ngIf="(element.IRN_Status === 'Rejected' || !element.IRN_Status) && element.HasError"
+                                class="alert-error-btn hover-target" (click)="downloadError(element)" (mouseenter)="onMouseEnter(element)" (mouseleave)="showPanel = false">
+                                ⚠
+                            </button>
+                        </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="Invoice_Date">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header class="fixed-width-column2">Invoice
+                            Date</mat-header-cell>
+                        <mat-cell *matCellDef="let element" class="fixed-width-column2">{{ element.Invoice_Date|
+                            date:'dd MMM yyyy'
+                            }}</mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="company_Id">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>Company_Id</mat-header-cell>
+                        <mat-cell *matCellDef="let element">{{ element.Company_Id
+                            }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="company_Code">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>Company Code</mat-header-cell>
+                        <mat-cell *matCellDef="let element">{{ element.Company_Code
+                            }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="cost_Center_Mapping_Id">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>Cost_Center_Mapping_Id</mat-header-cell>
+                        <mat-cell *matCellDef="let element">{{ element.Cost_Center_Mapping_Id
+                            }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="map_Name">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header class="fixed-width-column5">Map
+                            Name</mat-header-cell>
+                        <mat-cell *matCellDef="let element" class="fixed-width-column5">{{ element.Map_Name
+                            }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="pay_Period_Id">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>Pay_Period_Id</mat-header-cell>
+                        <mat-cell *matCellDef="let element">{{ element.Pay_Period_Id
+                            }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="pay_Period">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>Pay Period</mat-header-cell>
+                        <mat-cell *matCellDef="let element">{{ element.Pay_Period
+                            }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="HeadCount">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header
+                            class="fixed-width-column">HeadCount</mat-header-cell>
+                        <mat-cell *matCellDef="let element" class="fixed-width-column">{{ element.HeadCount
+                            }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="invoice_Type_Id">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>Invoice_Type_Id</mat-header-cell>
+                        <mat-cell *matCellDef="let element">{{ element.Invoice_Type_Id
+                            }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="invoice_Type">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header class="fixed-width-column2">Invoice
+                            Type</mat-header-cell>
+                        <mat-cell *matCellDef="let element" class="fixed-width-column2">{{ element.InvoiceType
+                            }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="stateId">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>StateId</mat-header-cell>
+                        <mat-cell *matCellDef="let element">{{ element.StateId
+                            }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="state_Name">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header class="fixed-width-column4">State
+                            Name</mat-header-cell>
+                        <mat-cell *matCellDef="let element" class="fixed-width-column4">{{ element.State_Name
+                            }}</mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="SubTotal">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header class="fixed-width-column2">Base Value
+                            (₹))</mat-header-cell>
+                        <mat-cell *matCellDef="let element" class="fixed-width-column2">{{ element.SubTotal
+                            }}</mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="CGST_Amount">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header class="fixed-width-column2">CGST
+                            (₹))</mat-header-cell>
+                        <mat-cell *matCellDef="let element" class="fixed-width-column2">{{ element.CGST_Amount
+                            }}</mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="SGST_Amount">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header class="fixed-width-column2">SGST
+                            (₹)</mat-header-cell>
+                        <mat-cell *matCellDef="let element" class="fixed-width-column2">{{ element.SGST_Amount
+                            }}</mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="UTGST_Amount">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header class="fixed-width-column2">UTGST
+                            (₹)</mat-header-cell>
+                        <mat-cell *matCellDef="let element" class="fixed-width-column2">{{ element.UTGST_Amount
+                            }}</mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="IGST_Amount">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header class="fixed-width-column2">IGST
+                            (₹)</mat-header-cell>
+                        <mat-cell *matCellDef="let element" class="fixed-width-column2">{{ element.IGST_Amount
+                            }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="net_Amount">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header class="fixed-width-column2">Invoice
+                            Value</mat-header-cell>
+                        <mat-cell *matCellDef="let element" class="fixed-width-column2">{{ element.Net_Amount
+                            }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="status">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>Status</mat-header-cell>
+                        <mat-cell *matCellDef="let element">{{ element.Status
+                            }}</mat-cell>
+                    </ng-container>
+                    <!-- Header and Row Declaration -->
+                    <mat-header-row *matHeaderRowDef="displayedColumns" sticky></mat-header-row>
+                    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                </table>
             </div>
 
+            <mat-paginator class="mat-footer-paginator" [pageSizeOptions]="[10, 25, 50, 100]" showFirstLastButtons
+                stickyEnd>
+            </mat-paginator>
         </div>
     </div>
+</div>
+<!-- <div class="overlaymerge" *ngIf="showpsd">
+
+  
+    <div class="popup-main">
+
+        <attribute class="centered-popup" [availables]="availableItems" valueField="value" textField="text"
+            [selects]="selectedItems" valueField="value" textField="text" (itemsMoved)="onItemsMoved($event)"
+            [Company_Code]="Company_Code" [pay_period]="pay_period" [AttributeType]="AttributeType"
+            (close)="showpsd = false"></attribute>
+    </div>
+</div> -->
+
+<div *ngIf="showPopup" class="overlay">
+    <app-alertpopup *ngIf="showPopup" [message]="popupMessage" [submessage]="popupSubMessage" class="centered-popup"
+        (close)="showPopup = false"></app-alertpopup>
 </div>
 
 <div *ngIf="isLoading" class="loading-overlay">
     <img src="assets/Loading.gif" alt="Loading...">
-</div>
-
-<div class="table-wrapper">
-    <div class="table-scroll">
-        <table mat-table [dataSource]="dataSource" matSort class="custom-table mat-elevation-z8">
-
-            <!-- Checkbox Column -->
-            <ng-container matColumnDef="select">
-                <mat-header-cell *matHeaderCellDef class="fixed-width-column">
-                    <mat-checkbox (change)="toggleAllRows()" [checked]="selection.hasValue() && isAllSelected()"
-                        [indeterminate]="isPartialSelected()">
-                    </mat-checkbox>
-                </mat-header-cell>
-                <mat-cell *matCellDef="let element" class="fixed-width-column">
-                    <mat-checkbox (click)="$event.stopPropagation()" (change)="toggleRow(element)"
-                        [checked]="selection.isSelected(element)">
-                    </mat-checkbox>
-                </mat-cell>
-            </ng-container>
-
-            <ng-container matColumnDef="invoice_Id">
-                <mat-header-cell *matHeaderCellDef mat-sort-header>invoice_Id</mat-header-cell>
-                <mat-cell *matCellDef="let element">{{ element.invoice_Id
-                    }}</mat-cell>
-            </ng-container>
-
-            <ng-container matColumnDef="invoice_Number">
-                <mat-header-cell *matHeaderCellDef mat-sort-header>Invoice Number</mat-header-cell>
-                <mat-cell *matCellDef="let element">{{ element.invoice_Number
-                    }}</mat-cell>
-            </ng-container>
-
-            <ng-container matColumnDef="Company_Id">
-                <mat-header-cell *matHeaderCellDef mat-sort-header>Company_Id</mat-header-cell>
-                <mat-cell *matCellDef="let element">{{ element.Company_Id
-                    }}</mat-cell>
-            </ng-container>
-
-            <ng-container matColumnDef="Company_Code">
-                <mat-header-cell *matHeaderCellDef mat-sort-header>Company Code</mat-header-cell>
-                <mat-cell *matCellDef="let element">{{ element.Company_Code
-                    }}</mat-cell>
-            </ng-container>
-
-            <ng-container matColumnDef="Cost_Center_Mapping_Id">
-                <mat-header-cell *matHeaderCellDef mat-sort-header>Cost_Center_Mapping_Id</mat-header-cell>
-                <mat-cell *matCellDef="let element">{{ element.Cost_Center_Mapping_Id
-                    }}</mat-cell>
-            </ng-container>
-
-            <ng-container matColumnDef="Map_Name">
-                <mat-header-cell *matHeaderCellDef mat-sort-header>Map Name</mat-header-cell>
-                <mat-cell *matCellDef="let element">{{ element.Map_Name
-                    }}</mat-cell>
-            </ng-container>
-
-            <ng-container matColumnDef="Pay_Period_Id">
-                <mat-header-cell *matHeaderCellDef mat-sort-header>Pay_Period_Id</mat-header-cell>
-                <mat-cell *matCellDef="let element">{{ element.Pay_Period_Id
-                    }}</mat-cell>
-            </ng-container>
-
-            <ng-container matColumnDef="Pay_Period">
-                <mat-header-cell *matHeaderCellDef mat-sort-header>Pay Period</mat-header-cell>
-                <mat-cell *matCellDef="let element">{{ element.Pay_Period
-                    }}</mat-cell>
-            </ng-container>
-
-            <ng-container matColumnDef="Invoice_Type_Id">
-                <mat-header-cell *matHeaderCellDef mat-sort-header>Invoice_Type_Id</mat-header-cell>
-                <mat-cell *matCellDef="let element">{{ element.Invoice_Type_Id
-                    }}</mat-cell>
-            </ng-container>
-
-            <ng-container matColumnDef="Invoice_Type">
-                <mat-header-cell *matHeaderCellDef mat-sort-header>Invoice Type</mat-header-cell>
-                <mat-cell *matCellDef="let element">{{ element.Invoice_Type
-                    }}</mat-cell>
-            </ng-container>
-
-            <ng-container matColumnDef="StateId">
-                <mat-header-cell *matHeaderCellDef mat-sort-header>StateId</mat-header-cell>
-                <mat-cell *matCellDef="let element">{{ element.StateId
-                    }}</mat-cell>
-            </ng-container>
-
-            <ng-container matColumnDef="State_Name">
-                <mat-header-cell *matHeaderCellDef mat-sort-header>State Name</mat-header-cell>
-                <mat-cell *matCellDef="let element">{{ element.State_Name
-                    }}</mat-cell>
-            </ng-container>
-
-            <ng-container matColumnDef="Net_Amount">
-                <mat-header-cell *matHeaderCellDef mat-sort-header>Net Amount</mat-header-cell>
-                <mat-cell *matCellDef="let element">{{ element.Net_Amount
-                    }}</mat-cell>
-            </ng-container>
-
-            <ng-container matColumnDef="Status">
-                <mat-header-cell *matHeaderCellDef mat-sort-header>Status</mat-header-cell>
-                <mat-cell *matCellDef="let element">{{ element.Status
-                    }}</mat-cell>
-            </ng-container>
-            <!-- Header and Row Declaration -->
-            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-        </table>
-    </div>
-
-    <mat-paginator class="mat-footer-paginator" [pageSizeOptions]="[5, 10, 25, 100]" showFirstLastButtons stickyEnd>
-    </mat-paginator>
-</div>
-<div *ngIf="showPopup" class="overlay">
-    <app-alertpopup *ngIf="showPopup" [message]="popupMessage" [submessage]="popupSubMessage" class="centered-popup"
-        (close)="showPopup = false"></app-alertpopup>
 </div>

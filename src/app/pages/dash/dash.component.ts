@@ -376,7 +376,7 @@ export class DashComponent implements OnInit {
 
     this.BindDashboardDetail(request);
     this.BindPendingLot();
-    this.BindInvoiceAllot();
+    //this.BindInvoiceAllot();
   }
 
   BindPendingLot(): void {

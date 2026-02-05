@@ -146,6 +146,8 @@ import { ReprocessComponent } from './pages/process/reprocess/reprocess.componen
 import { UpfrontmatrixComponent } from './pages/upfrontprocess/upfrontmatrix/upfrontmatrix.component';
 import { EmployeeComponents } from './pages/customers/employee/employee.component';
 import { TaxRemittanceGenerationComponent } from './pages/E-TDSProcess/tax-remittance-generation/tax-remittance-generation.component';
+import { BillingdashboardComponent } from './pages/Invoice/billingdashboard/billingdashboard.component';
+import { EInvoiceComponent } from './pages/Invoice/einvoice/einvoice.component';
 
 
 
@@ -362,13 +364,14 @@ export const routes: Routes = [
         path: 'invoicenavigation',
         component: InvoicenavigationComponent,
         children: [
+          {path:'billingdashboard',component:BillingdashboardComponent},
           { path: 'initiate', component: DraftInvoiceComponent },
           { path: 'provisionalinvoice', component: ProvisionalinvoiceComponent },
           { path: 'perfomainvoice', component: PerfomainvoiceComponent },
           { path: 'billabledays', component: BillableDaysComponent },
           { path: 'gstinvoice', component: GstinvoiceComponent },
-          { path: 'billingpayfrequency', component: BillingpayfrequencyComponent },
-          
+           { path: 'einvoice', component: EInvoiceComponent },
+          { path: 'billingpayfrequency', component: BillingpayfrequencyComponent },          
           { path: 'poinitiate', component: POInitiateComponent },
           //{path:'einvoicecanllation',component:invoice}
           { path: 'app-invoice-culture', component: InvoiceCultureComponent },

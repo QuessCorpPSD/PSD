@@ -153,5 +153,18 @@ export class InvoiceRepository implements IInvoiceRepository {
         );
     }
 
+     BillingDashboard(user_Id): Observable<APIResponse> {
+        
+        return this.http.get<APIResponse>(
+            this.environment.apiUrl + 'Invoice/BillingDashboardByUserId/'+user_Id
+        );
+    }
+     DraftInvoiceEmployeeByRequestId(reqNo): Observable<APIResponse>{
+       return this.http.get<APIResponse>(
+            this.environment.apiUrl + 'Invoice/DraftInvoiceEmployeeByRequestId/'+reqNo
+        );
+    }
+
+
 
 }
