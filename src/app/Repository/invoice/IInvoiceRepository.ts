@@ -3,13 +3,12 @@ import { APIResponse } from "../../Models/apiresponse";
 import { HttpResponse } from "@angular/common/http";
 
 export interface IInvoiceRepository {
-
     Search(val): Observable<APIResponse>;
     InvoiceInitiate(val): Observable<APIResponse>;
     ExportToExcel(val): Observable<APIResponse>;
     GetAllInvoiceDetails(companyId: number, payPeriodId: number, userId: string): Observable<APIResponse>;
     BillableSearch(val): Observable<APIResponse>;
-    UploadBillable (formData: FormData): Observable<APIResponse>;
+    UploadBillable(formData: FormData): Observable<APIResponse>;
     BillableDaysSearchExport(val): Observable<APIResponse>;
     BillableTemplateDownload(importtype): Observable<APIResponse>;
     Search(val): Observable<APIResponse>;
@@ -25,11 +24,13 @@ export interface IInvoiceRepository {
     getBillingType(): Observable<APIResponse>;
     getNetDeductionType(): Observable<APIResponse>;
     addGstInvoice(payload: any): Observable<string>;
-    POSearch(companyId: number, payPeriodId: number):Observable<APIResponse>;
-    POInvoiceInitiate(payload: any):Observable<APIResponse>;
+    POSearch(companyId: number, payPeriodId: number): Observable<APIResponse>;
+    POInvoiceInitiate(payload: any): Observable<APIResponse>;
     ExportPOInvoice(companyId: number, payPeriodId: number): Observable<any>;
     RequestPOInvoice(companyId: number, payPeriodId: number): Observable<any>;
-    POInvoiceUpload(payload: FormData):Observable<APIResponse>;    
-     GetAllAttributeAddAndUpdate(val): Observable<APIResponse>
-     GetAllAttribute(val): Observable<APIResponse>
+    POInvoiceUpload(payload: FormData): Observable<APIResponse>;
+    GetAllAttributeAddAndUpdate(val): Observable<APIResponse>
+    GetAllAttribute(val): Observable<APIResponse>
+    BulkDownloadInvoiceIRN(BulkInvoices: any): Observable<HttpResponse<Blob>>
+    DownloadInvoiceIRN(invoiceId: number): Observable<HttpResponse<Blob>>
 }

@@ -13,7 +13,7 @@ export interface IInvoiceRepository {
     UploadCancel(formData): Observable<string>;
     GetGSTInvoice(userId: number): Observable<APIResponse>;
     DownloadInvoice(invoiceId: number): Observable<HttpResponse<Blob>>;
-    BulkDownloadInvoice(BulkInvoices: any): Observable<HttpResponse<Blob>>;
+    BulkDownloadInvoice(BulkInvoices: any): Observable<HttpResponse<Blob>>;   
     getGSTInvoiceType(): Observable<APIResponse>;
     getCTCDeductionType(): Observable<APIResponse>;
     getBillingType(): Observable<APIResponse>;
@@ -38,4 +38,6 @@ export interface IInvoiceRepository {
     GetConsolidateInvoiceSummary(payload: any): Observable<APIResponse>
     getRemarksByReqNo(val): Observable<APIResponse>;
     GetGstRates(payload: any) :Observable<APIResponse>;
+    BulkDownloadInvoiceIRN(BulkInvoices: any): Observable<HttpResponse<Blob>>
+    DownloadInvoiceIRN(invoiceId: number): Observable<HttpResponse<Blob>>
 }
