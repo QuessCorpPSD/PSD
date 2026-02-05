@@ -42,13 +42,29 @@ export interface Cityclass {
   city_Name: string
 }
 
-export interface statenameclass {
-  state_Id: number
-  state_Name: string
-}
-
 export interface Paycodelist {
   paycode_Id: number
   paycode_Code: string
   description: string
+}
+
+export interface ChatMessage {
+  message: string;
+  type: string;
+  givenBy: string;
+  time: string;
+}
+
+export interface ChatWindow {
+  req_No: string;
+  messages: ChatMessage[];
+}
+export interface citynameclass {
+  city_Id: number
+  city_Name: string
+}
+
+export interface statenameclass {
+  state_Id: number
+  state_Name: string
 }

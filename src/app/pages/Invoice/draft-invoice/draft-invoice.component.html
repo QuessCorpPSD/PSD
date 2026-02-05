@@ -113,8 +113,17 @@
                         </ng-container>
                         <ng-container matColumnDef="Req_No">
                             <th mat-header-cell *matHeaderCellDef style="width: 100px;">Request No </th>
-                            <td mat-cell *matCellDef="let element" style="width: 100px;">{{ element.req_No }}</td>
+                        <td
+    mat-cell
+    *matCellDef="let element"
+    style="width: 100px; cursor: pointer; color: #1976d2;"
+    (mouseenter)="openChat(element)"
+    (mouseleave)="closeChat(element.req_No)"
+  >
+    {{ element.req_No }}
+  </td>   
                         </ng-container>
+                       
                         <ng-container matColumnDef="map_name">
                             <th mat-header-cell *matHeaderCellDef style="width: 200px;"> Map Name </th>
                             <td mat-cell *matCellDef="let element" style="width: 200px;">{{ element.map_name }}</td>
@@ -242,6 +251,7 @@
 
                                 {{ element.narration }}</td>
                         </ng-container>
+                        
                         <tr mat-header-row *matHeaderRowDef="displayColumns"></tr>
                         <tr mat-row *matRowDef="let row; columns: displayColumns;"></tr>
                     </table>
@@ -255,6 +265,43 @@
 <div *ngIf="isLoading" class="loading-overlay">
     <img src="assets/Loading.gif">
 </div>
+
+ <div *ngFor="let chat of openChats; let i = index">
+
+  <mat-card
+    class="chat-window"
+    [style.right.px]="20 + (i * 320)"   (mouseenter)="keepChatOpen(chat.req_No)"
+    (mouseleave)="closeChatDelayed(chat.req_No)">
+
+    <!-- HEADER -->
+    <div class="chat-header">
+      <span>Req No: {{ chat.req_No }}</span>
+      <mat-icon (click)="closeChat(chat.req_No)">close</mat-icon>
+    </div>
+
+    <!-- BODY -->
+    <div class="chat-body">
+
+      <div *ngFor="let msg of chat.messages" class="chat-bubble">
+        <div class="user">
+    {{ msg.givenBy }} • {{ msg.type }}
+  </div>
+
+  <div class="text">
+    {{ msg.message }}
+  </div>
+
+  <div class="time">
+    {{ msg.time }}
+  </div>
+      </div>
+
+    </div>
+
+  </mat-card>
+
+</div>
+
 <!-- <div *ngIf="isLoading" class="loader-overlay">
        <img src="../../../assets/Loading.gif">
     </div> -->

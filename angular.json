@@ -61,6 +61,7 @@
             },
             "development": {
               "optimization": false,
+              "ssr":false,
               "extractLicenses": true,
               "sourceMap": false,
               "namedChunks": false,
@@ -117,7 +118,7 @@
   "cli": {
     "analytics": "4cadd8be-1376-4d70-8547-d627daeaff94",
     "cache": {
-      "enabled": false
+      "enabled": true
     }
   }
 }
