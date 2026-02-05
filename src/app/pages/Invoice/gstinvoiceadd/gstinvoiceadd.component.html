@@ -28,7 +28,7 @@
                                 </div>
                                 <div class="col-md-3">
                                     <label class="form-label">Company Code<span class="text-danger">*</span></label>
-                                    <companyall (companyEmit)="handleCompanyEvent($event)"
+                                    <companyall (companyEmit)="handleCompanyEvent($event);onChange()"
                                         formControlName="companyCode">
                                     </companyall>
                                     <div class="text-danger small" *ngIf="addGstInvoice.get('companyCode')?.touched 
@@ -43,7 +43,7 @@
                                 <div class="col-md-3">
                                     <label class="form-label">Group Detail<span class="text-danger"></span></label>
                                     <groupname [selectedCompanyId]="selectedCompanyId"
-                                        (sitenameEmit)="groupnameEvent($event)" formControlName="GroupDetail">
+                                        (sitenameEmit)="groupnameEvent($event);onChange()" formControlName="GroupDetail">
                                     </groupname>
                                 </div>
                             </div>
@@ -117,8 +117,8 @@
                                 <div class="col-md-3" >
                                     <label class="form-label">State<span class="text-danger">*</span></label>
 
-                                    <statename [selectedCompanyId]="selectedCompanyId"
-                                        (statenameEmit)="statenameEvent($event)" formControlName="StateName" >
+                                    <statename [selectedCompanyId]="selectedCompanyId" 
+                                        (statenameEmit)="statenameEvent($event);onChange()" formControlName="StateName" >
                                     </statename>
                                     <div class="text-danger small" *ngIf="addGstInvoice.get('StateName')?.touched 
              && addGstInvoice.get('StateName')?.hasError('required')">
@@ -535,29 +535,92 @@
                         <div class="accordion-content">
                             <div class="row g-3 mb-2">
                                 <div class="col-md-3">
-                                    <label class="form-label">GST%<span class="text-danger">*</span></label>
+                                    <label class="form-label">CGST%<span class="text-danger">*</span></label>
                                     <div class="gst-wrapper">
-                                        <input type="number" formControlName="GST" class="gst-input" placeholder="0">
-
-                                        <span class="gst-suffix">%</span>
+                                     <span class="gst-suffix">%</span>
+                                        <input type="text" formControlName="CGSTper" class="gst-input" placeholder="0">           
                                         <div class="text-danger small" *ngIf="addGstInvoice.get('GST')?.touched 
              && addGstInvoice.get('GST')?.hasError('required')">
-                                            GST% is required
+                                            CGST% is required
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-md-3">
-                                    <label class="form-label">GST Amount</label>
+                                    <label class="form-label">CGST Amount</label>
                                     <div class="input-wrapper">
                                         <span class="prefix-box">
                                             <mat-icon class="small-icon">edit</mat-icon>
                                         </span>
-                                        <input type="number" class="form-control custom-input" placeholder="0"
-                                            formControlName="GSTAmount">
+                                        <input type="text" class="form-control custom-input" placeholder="0"
+                                            formControlName="CGSTAmount">
+                                    </div>
+                                    </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">SGST%<span class="text-danger">*</span></label>
+                                    <div class="gst-wrapper">
+                                     <span class="gst-suffix">%</span>
+                                        <input type="text" formControlName="SGSTper" class="gst-input" placeholder="0">           
+                                        <div class="text-danger small" *ngIf="addGstInvoice.get('GST')?.touched 
+             && addGstInvoice.get('GST')?.hasError('required')">
+                                            CGST% is required
+                                        </div>
                                     </div>
                                 </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">SGST Amount</label>
+                                    <div class="input-wrapper">
+                                        <span class="prefix-box">
+                                            <mat-icon class="small-icon">edit</mat-icon>
+                                        </span>
+                                        <input type="text" class="form-control custom-input" placeholder="0"
+                                            formControlName="SGSTAmount">
+                                    </div>
+                                    </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">UTGST%<span class="text-danger">*</span></label>
+                                    <div class="gst-wrapper">
+                                     <span class="gst-suffix">%</span>
+                                        <input type="text" formControlName="UTGSTper" class="gst-input" placeholder="0">           
+                                        <div class="text-danger small" *ngIf="addGstInvoice.get('GST')?.touched 
+             && addGstInvoice.get('GST')?.hasError('required')">
+                                            CGST% is required
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">UTGST Amount</label>
+                                    <div class="input-wrapper">
+                                        <span class="prefix-box">
+                                            <mat-icon class="small-icon">edit</mat-icon>
+                                        </span>
+                                        <input type="text" class="form-control custom-input" placeholder="0"
+                                            formControlName="UTGSTAmount">
+                                    </div>
+                                    </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">IGST%<span class="text-danger">*</span></label>
+                                    <div class="gst-wrapper">
+                                     <span class="gst-suffix">%</span>
+                                        <input type="text" formControlName="IGSTper" class="gst-input" placeholder="0">           
+                                        <div class="text-danger small" *ngIf="addGstInvoice.get('GST')?.touched 
+             && addGstInvoice.get('GST')?.hasError('required')">
+                                            IGST% is required
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">IGST Amount</label>
+                                    <div class="input-wrapper">
+                                        <span class="prefix-box">
+                                            <mat-icon class="small-icon">edit</mat-icon>
+                                        </span>
+                                        <input type="text" class="form-control custom-input" placeholder="0"
+                                            formControlName="IGSTAmount">
+                                    </div>
+                               </div>
+                                </div>
                             </div>
-                        </div>
+                       
                     </mat-expansion-panel>
                 </div>
             </mat-accordion>

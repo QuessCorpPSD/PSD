@@ -327,6 +327,11 @@ export class CommonService implements ICommonService {
         //console.log(url);
         return this.http.get<APIResponse>(url);
     } 
+     GetClientGstStateList(companyId: any): Observable<APIResponse> {
+        const url = `${this.environment.apiUrl}Common/GetClientGstStateList/${companyId}`;
+        console.log(url);
+        return this.http.get<APIResponse>(url);
+    } 
 
     GetPayCodes(): Observable<APIResponse> {
         const url = `${this.environment.apiUrl}Common/GetPayPeriod`;
@@ -349,9 +354,5 @@ export class CommonService implements ICommonService {
         //console.log(url);
         return this.http.get<APIResponse>(url);
     }
-    //  GetAllState( companyId:any):Observable<APIResponse> {
-    //     const url = `${this.environment.apiUrl}Common/GetAllState/${companyId}`;
-    //     //console.log(url);
-    //     return this.http.get<APIResponse>(url);
-    // }
+   
 }

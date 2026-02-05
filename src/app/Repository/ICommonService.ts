@@ -50,8 +50,8 @@ export interface ICommonService {
     GetMapNamebyCompany(companyId: any): Observable<APIResponse>;
     GetSitesByCompanyId(companyId: any): Observable<APIResponse>;
     GetAutoEntityLocation(companyId: any): Observable<APIResponse>;
-    GetAllState(companyId: any): Observable<APIResponse>;
     GetAllState(): Observable<APIResponse>;
+    GetClientGstStateList(companyId: any): Observable<APIResponse>; 
     GetPayCodes(): Observable<APIResponse>;
     GetManagerByUserId(user_Id): Observable<APIResponse>;
     SwapCategory(login): Observable<APIResponse>;
@@ -61,5 +61,5 @@ export interface ICommonService {
     GetInvoiceType(): Observable<APIResponse>;
     GetSitesByCompanyId(companyId: any): Observable<APIResponse>;
     GetMapNamebyCompany(companyId: any): Observable<APIResponse>;
-    // GetAllState( companyId:any):Observable<APIResponse>
+    GetAutoEntityLocation(companyId: any): Observable<APIResponse>;
 }

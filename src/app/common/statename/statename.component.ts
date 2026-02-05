@@ -41,7 +41,6 @@ export const COMM_TOKEN = new InjectionToken<ICommonService>('COMM_TOKEN');
   ]
 })
 export class StatenameComponent implements OnChanges {
-
   @Input() selectedCompanyId?: number;
   @Output() statenameEmit = new EventEmitter<statenameclass>();
 
@@ -60,8 +59,8 @@ export class StatenameComponent implements OnChanges {
     }
   }
 
-  bindStates(companyId: number) {
-    this._commonService.GetAllState(companyId).subscribe({
+  bindStates(selectedCompanyId: any) {
+    this._commonService.GetClientGstStateList(selectedCompanyId).subscribe({
       next: res => {
         this.stateName = res.Data ?? [];
         console.log(res.Data);
