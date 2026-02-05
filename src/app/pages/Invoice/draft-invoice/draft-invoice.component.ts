@@ -26,6 +26,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 import { GstinvoiceComponent } from "../gstinvoice/gstinvoice.component";
 import { InvoiceCancelComponent } from "../invoicecancel/invoicecancel.component";
+import { ChatMessage } from '../../../Models/Common';
+import { ChatWindow } from '../../../Models/Common';
 
 export const Invoice_TOKEN = new InjectionToken<IInvoiceRepository>('Invoice_TOKEN');
 @Component({
@@ -58,6 +60,9 @@ export class DraftInvoiceComponent implements OnInit {
   dialogRef!: MatDialogRef<any>;
   isLoading:boolean= false;
   Modelpopup:boolean=false;
+ openChats: ChatWindow[] = [];
+ hoverTimers: { [key: number]: any } = {};
+  currentUser = '';
   //@ViewChild(PayPeriod) PayPeriodComponent!: Payperiodclass;
   displayColumns=['action','serial_No', 'Req_No','map_name','net_CTC','netPay','lotNo','input_No','pO_Number','employee_Head_Count','service_Charge','serviceChargeAmount','service_Charge_Master','service_Charge_Type','bgvbl','astfee','discT1','discT2','idcard','email','regfee','trnfee','ggdbt','ppekit','vmsfee','edufee','ntpry','renmac','draded','othdd','mbapp','calcrg','calrt','narration']
   constructor(@Inject(Invoice_TOKEN) private _invoiceService: IInvoiceRepository,private _decrypt:EncryptionService,
@@ -280,4 +285,62 @@ export class DraftInvoiceComponent implements OnInit {
     onOptionSelected(event:InvoiceType){
      //this.invoiceType =event;
     }
+
+
+openChat(row: any): void {
+  const reqNo: string = row.req_No;
+
+  // 🔒 Prevent duplicate chat window
+  const existingChat = this.openChats.find(c => c.req_No === reqNo);
+  if (existingChat) {
+    this.keepChatOpen(reqNo);
+    return;
+  }
+
+  // 🪟 Create chat shell first
+  const chat = {
+    req_No: reqNo,
+    messages: [] as ChatMessage[]
+  };
+
+  this.openChats.push(chat);
+
+  const request = { Req_No: reqNo };
+
+  this._invoiceService.getRemarksByReqNo(request)
+    .subscribe((res: any) => {
+      console.log('API Response:', res);
+
+      const rows = res?.Data || res?.data || [];
+      console.log('Rows:', rows);
+
+      chat.messages = rows
+        .map((r: any) => ({
+          message: r.invoice_remarks,
+          givenBy: r.remarks_GivenBy,
+          type: r.invoiceType,
+          time: r.time // already formatted
+        }))
+        // 🕒 oldest → latest
+        .sort(
+          (a, b) =>
+            new Date(a.time).getTime() - new Date(b.time).getTime()
+        );
+    });
+}
+
+closeChat(reqNo: string): void {
+  this.openChats = this.openChats.filter(c => c.req_No !== reqNo);
+  clearTimeout(this.hoverTimers[reqNo]);
+}
+
+closeChatDelayed(reqNo: string): void {
+  this.hoverTimers[reqNo] = setTimeout(() => {
+    this.closeChat(reqNo);
+  }, 300);
+}
+
+keepChatOpen(reqNo: string): void {
+  clearTimeout(this.hoverTimers[reqNo]);
+}
 }

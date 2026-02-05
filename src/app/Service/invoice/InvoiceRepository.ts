@@ -192,6 +192,10 @@ export class InvoiceRepository implements IInvoiceRepository {
 
         return this.http.post<APIResponse>(url, formData);
     }
+getRemarksByReqNo(formData: FormData): Observable<APIResponse> {
+         const url = `${this.environment.apiUrl}InvoiceInitiation/getRemarksByReqNo`;
 
-
+        return this.http.post<APIResponse>(url, formData);
+    }
+        
 }

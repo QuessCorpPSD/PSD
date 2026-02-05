@@ -152,6 +152,15 @@ export class InvoiceRepository implements IInvoiceRepository {
             payload
         );
     }
+getRemarksByReqNo(formData: FormData): Observable<APIResponse> {
+         const url = `${this.environment.apiUrl}InvoiceInitiation/getRemarksByReqNo`;
 
-
+        return this.http.post<APIResponse>(url, formData);
+    }
+    GetGstRates(payload: any): Observable<APIResponse> {
+         const url = `${this.environment.apiUrl}GSTInvoice/GetGstRates`;
+console.log(url);
+        return this.http.post<APIResponse>(url, payload);
+    }
+ 
 }

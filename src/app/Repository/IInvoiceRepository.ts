@@ -22,5 +22,6 @@ export interface IInvoiceRepository {
     GetAllInvoiceAllotDetails(payload: any) :Observable<APIResponse>;
     GetAllInvoiceCancelDetails(val): Observable<APIResponse>;
     BulkApproveInvoice(val): Observable<APIResponse>;
-    
+    getRemarksByReqNo(val): Observable<APIResponse>;
+    GetGstRates(payload: any) :Observable<APIResponse>;
 }
