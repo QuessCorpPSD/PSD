@@ -187,17 +187,19 @@ export class InvoiceRepository implements IInvoiceRepository {
     }
 
     getBillingType(): Observable<APIResponse> {
-        return this.http.get<APIResponse>(this.environment.apiUrl + "GSTInvoice/GetGSTBillableType")
-    }
+    return this.http.post<APIResponse>(this.environment.apiUrl + "GSTInvoice/GetGSTBillableType", {});
+}
 
     getNetDeductionType(): Observable<APIResponse> {
         return this.http.get<APIResponse>(this.environment.apiUrl + "GSTInvoice/GetGSTNetDeductionType")
     }
 
-    addGstInvoice(payload: any): Observable<string> {
-        return this.http.post(this.environment.apiUrl + 'GSTInvoice/Create', payload, { responseType: 'text' })
+    addGstInvoice(payload: any): Observable<APIResponse> {
+          const url = `${this.environment.apiUrl}GSTInvoice/Create`;
+        return this.http.post<APIResponse>(url, payload);
     }
 
+        
      GetAllInvoiceCancelDetails(val): Observable<APIResponse> {
 
         const url = `${this.environment.apiUrl}GSTInvoice/GetAllInvoiceCancelDetails`;
@@ -233,6 +235,12 @@ getRemarksByReqNo(formData: FormData): Observable<APIResponse> {
 
         return this.http.post<APIResponse>(url, formData);
     }
+    GetParticulars(payload: any): Observable<APIResponse> {
+         const url = `${this.environment.apiUrl}GSTInvoice/GetParticulars`;
+
+        return this.http.post<APIResponse>(url, payload);
+    }
+    
     GetGstRates(payload: any): Observable<APIResponse> {
          const url = `${this.environment.apiUrl}GSTInvoice/GetGstRates`;
 console.log(url);
@@ -248,8 +256,22 @@ console.log(url);
        return this.http.get<APIResponse>(
             this.environment.apiUrl + 'Invoice/DraftInvoiceEmployeeByRequestId/'+reqNo
         );
+
+    }  
+    GetPayPeriod(payload: any): Observable<APIResponse> {
+         const url = `${this.environment.apiUrl}GSTInvoice/GetPayPeriod`;
+        return this.http.post<APIResponse>(url, payload);
+    } 
+       
+    GetInvoiceStatus(payload: any): Observable<APIResponse> {
+         const url = `${this.environment.apiUrl}GSTInvoice/GetInvoiceStatus`;
+        return this.http.post<APIResponse>(url, payload);
     }
 
+      GetInvoiceDetailsById(payload: any): Observable<APIResponse> {
+         const url = `${this.environment.apiUrl}GSTInvoice/Edit`;
+        return this.http.post<APIResponse>(url, payload);
+       }
 
  
 }
