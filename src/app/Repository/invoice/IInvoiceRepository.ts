@@ -31,6 +31,6 @@ export interface IInvoiceRepository {
     POInvoiceUpload(payload: FormData): Observable<APIResponse>;
     GetAllAttributeAddAndUpdate(val): Observable<APIResponse>
     GetAllAttribute(val): Observable<APIResponse>
-    BulkDownloadInvoiceIRN(BulkInvoices: any): Observable<HttpResponse<Blob>>
-    DownloadInvoiceIRN(invoiceId: number): Observable<HttpResponse<Blob>>
+    
+
 }

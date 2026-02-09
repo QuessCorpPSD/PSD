@@ -46,4 +46,6 @@ export interface IInvoiceRepository {
     RejectInvoice(formData: FormData): Observable<APIResponse>;
    
     //DownloadInvoiceIRN(invoiceId: number): Observable<HttpResponse<Blob>>
+    
+   
 }

@@ -72,9 +72,7 @@ export class InvoiceRepository implements IInvoiceRepository {
     }
 
     InitiateIRN(InitiateIRN: any): Observable<APIResponse> {
-        const url = `${this.environment.apiUrl}EInvoice/InitiateIRN`;
-        console.log(url);
-        console.table(InitiateIRN);
+        const url = `${this.environment.apiUrl}EInvoice/InitiateIRN`;      
         return this.http.post<APIResponse>(url, InitiateIRN);
     }
     GetIRNColors(): Observable<APIResponse> {
@@ -191,14 +189,7 @@ export class InvoiceRepository implements IInvoiceRepository {
         const url = `${this.environment.apiUrl}GSTInvoice/PostCancelReject`;
         return this.http.post(url, formData, { responseType: 'text' });
     }
-    DownloadInvoiceIRN(invoiceId: number): Observable<HttpResponse<Blob>> {
-        const url = `${this.environment.apiUrl}EInvoice/Download/${invoiceId}`;
-        return this.http.get(url, { responseType: 'blob', observe: 'response' });
-    }
-    BulkDownloadInvoiceIRN(BulkInvoices: any): Observable<HttpResponse<Blob>> {
-        const url = `${this.environment.apiUrl}EInvoice/BulkDownload`;
-        return this.http.post(url, BulkInvoices, { responseType: 'blob', observe: 'response' });
-    }
+ 
 
     GetGSTInvoice(userId: number): Observable<APIResponse> {
         const url = `${this.environment.apiUrl}GSTInvoice/GetGSTInvoice/${userId}`;
@@ -273,5 +264,7 @@ export class InvoiceRepository implements IInvoiceRepository {
 
         return this.http.post<APIResponse>(url, formData);
     }
+   
+
 
 }

@@ -137,10 +137,7 @@ export class InvoiceRepository implements IInvoiceRepository {
         //console.log(url);
         return this.http.get<APIResponse>(url);
     }
-    DownloadIRNInvoice(invoiceId: number): Observable<HttpResponse<Blob>> {
-        const url = `${this.environment.apiUrl}GSTInvoice/Download/${invoiceId}`;
-        return this.http.get(url, { responseType: 'blob', observe: 'response' });
-    }
+
      InitiateIRN(InitiateIRN: any): Observable<APIResponse> {
     const url = `${this.environment.apiUrl}EInvoice/InitiateIRN`;
     console.log(url);
@@ -171,12 +168,7 @@ export class InvoiceRepository implements IInvoiceRepository {
     console.log(url);
     return this.http.post<APIResponse>(url, payload);
   }
-    BulkIRNDownloadInvoice(BulkInvoices: any): Observable<HttpResponse<Blob>> {
-        const url = `${this.environment.apiUrl}GSTInvoice/BulkDownload`;
-        console.log(url);
-        console.table(BulkInvoices);
-        return this.http.post(url, BulkInvoices, { responseType: 'blob', observe: 'response' });
-    }
+   
 
     getGSTInvoiceType(): Observable<APIResponse> {
         return this.http.get<APIResponse>(this.environment.apiUrl + "GSTInvoice/GetGSTInvoiceType")
