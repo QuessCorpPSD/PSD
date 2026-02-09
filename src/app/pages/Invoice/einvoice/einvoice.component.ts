@@ -32,6 +32,8 @@ import { IInvoiceRepository } from '../../../Repository/IInvoiceRepository';
 import { EInvoiceGrid } from '../../../Models/EInvoiceGrid';
 import { InvoiceRepository } from '../../../Service/invoice/InvoiceRepository';
 import { AlertpopupComponent } from '../../../common/alertpopup/alertpopup.component';
+import { PayPeriodComponent } from "../../../common/payperiod/payperiod.component";
+import { CompanyallComponent } from '../../../common/CompanyAll/companyall.component';
 
 
 export const Invoice_TOKEN = new InjectionToken<IInvoiceRepository>('Invoice_TOKEN');
@@ -46,7 +48,7 @@ interface IrnColor {
   standalone: true,
   imports: [CommonModule, MatPaginator, MatTableModule, FormsModule,
     MatSort, MatSelectModule, MatInputModule, MatFormFieldModule, MatCheckbox, MatCardModule,
-    MatIconModule, MatTooltipModule, FormsModule, ReactiveFormsModule,AlertpopupComponent],
+    MatIconModule, MatTooltipModule, FormsModule, ReactiveFormsModule,CompanyallComponent,PayPeriodComponent, AlertpopupComponent, PayPeriodComponent],
   templateUrl: './einvoice.component.html',
   styleUrl: './einvoice.component.css',
   providers: [
@@ -87,6 +89,8 @@ export class EInvoiceComponent {
   gridData: any[] = [];
   cacheData: any;
   showPanel = false;
+  selectedCompanyId!:number;
+  payPeriodType:string="All";
    constructor( private _sessionStoreage: SessionStorageService,
     private decry: EncryptionService, private fb: FormBuilder, @Inject(Invoice_TOKEN) private invoiceService: IInvoiceRepository
   ) { }
@@ -104,7 +108,8 @@ export class EInvoiceComponent {
   handleCompanyEvent(company: any) {
     this.companyUI = company;
     this.Company_Code = company.company_Code;
-    this.selectedCC = this.companyUI.companyId;
+    this.selectedCompanyId = this.companyUI.companyId;
+    
     if (!this.companyUI) {
       alert("Select Company Code");
       return;
@@ -124,6 +129,35 @@ export class EInvoiceComponent {
     }
   }
 
+  search(){
+ 
+        this.selectedTemplate = '';
+    this.searchText = '';
+    this.selection.clear();
+    this.invoiceService.GetAllInvoiceDetailsByCompanyId(this.companyUI.companyId, this.payperiodUI.payfrequencyid).subscribe({
+      next: res => {
+        // Check data here
+        console.log(res);
+        const tableData = res.data.data.Table0;
+
+        if (!tableData || tableData.length === 0) {
+          alert("No data available to display.");
+          this.isLoading = false;
+          return;
+        }
+
+        this.dataSource = new MatTableDataSource<EInvoiceGrid>(tableData);
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+        this.onTemplateChange();
+        this.isLoading = false;
+      },
+      error: err => {
+        console.error('Error fetching data:', err.message);
+        this.isLoading = false;
+      }
+    });
+  }
   ngOnInit(): void {
     //this.payPeriodTypetoChild = "All"
     this.payPeriodTypefromParent = "All";
@@ -160,7 +194,7 @@ export class EInvoiceComponent {
     this.invoiceService.GetIRNColors().subscribe({
       next: (res: any) => {
         console.log(res);
-        this.IrnTypeItems = res.data.data; // ✅ correct level
+        this.IrnTypeItems = res.Data.data; // ✅ correct level
       },
       error: err => {
         console.error(err);
@@ -330,7 +364,7 @@ export class EInvoiceComponent {
       next: res => {
         // Check data here
         console.log(res);
-        const tableData = res.data.data.Table0;
+        const tableData = res.Data.data.Table0;
 
         if (!tableData || tableData.length === 0) {
           alert("No data available to display.");

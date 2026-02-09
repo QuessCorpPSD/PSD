@@ -38,6 +38,6 @@ export interface IInvoiceRepository {
     GetConsolidateInvoiceSummary(payload: any): Observable<APIResponse>
     getRemarksByReqNo(val): Observable<APIResponse>;
     GetGstRates(payload: any) :Observable<APIResponse>;
-    BulkDownloadInvoiceIRN(BulkInvoices: any): Observable<HttpResponse<Blob>>
-    DownloadInvoiceIRN(invoiceId: number): Observable<HttpResponse<Blob>>
+    
+   
 }
