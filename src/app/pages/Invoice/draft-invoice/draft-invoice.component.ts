@@ -139,6 +139,12 @@ export class DraftInvoiceComponent implements OnInit {
       this.isLoading=false;
     }
   RequestEmployeeDownload(element) {
+
+  if(element.req_No =="0" || element.req_No=="")
+  {
+    alert('Request No should not null');
+    return;
+  }
     this.isLoading=true;
     this._invoiceService.DraftInvoiceEmployeeByRequestId(element.req_No).subscribe({
       next: res => {

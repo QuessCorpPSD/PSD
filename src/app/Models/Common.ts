@@ -3,6 +3,7 @@ export interface Company {
   companyCode: string
   companyName: string
   displayName: string
+  companyId:number
 }
 export interface State {
   state_Id: number

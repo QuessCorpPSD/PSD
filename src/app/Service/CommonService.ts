@@ -354,5 +354,17 @@ export class CommonService implements ICommonService {
         //console.log(url);
         return this.http.get<APIResponse>(url);
     }
-   
+    GetPayperiodbyCompanyDeduction(companyId: any): Observable<APIResponse> {
+    const url = `${this.environment.apiUrl}Common/GetSalaryReleasePayperiod/${companyId}/Deduction`;
+    return this.http.get<APIResponse>(url);
+  }
+    GetPayperiodbyCompanyVanPayment(companyId: any): Observable<APIResponse> {
+    const url = `${this.environment.apiUrl}Common/GetSalaryReleasePayperiod/${companyId}/VanPayment`;
+    return this.http.get<APIResponse>(url);
+  }
+  //   GetPayperiodbyCompany(companyId: any): Observable<APIResponse> {
+  //   const url = `${this.environment.apiUrl}Common/GetAllPayperiod/${companyId}`;
+  //   console.log(url);
+  //   return this.http.get<APIResponse>(url);
+  // }
 }
