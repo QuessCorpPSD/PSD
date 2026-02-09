@@ -84,6 +84,38 @@
                         </i>
                     </label>
                 </div>
+
+<div style="display: inline-block; padding-top: 12px;">
+  <label style="position: relative; display: inline-block;">
+    <button
+      type="button"
+      class="select-drop reject-btn"
+      (click)="openRejectPage()"
+    >
+      Reject
+    </button>
+
+    <!-- Reject Icon -->
+    <i
+      style="
+        position: absolute;
+        top: 50%;
+        right: 15px;
+        transform: translateY(-50%);
+        pointer-events: none;
+      "
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12">
+        <path
+          d="M1.757 1.757a.5.5 0 0 1 .707 0L6 5.293l3.536-3.536a.5.5 0 1 1 .707.707L6.707 6l3.536 3.536a.5.5 0 0 1-.707.707L6 6.707l-3.536 3.536a.5.5 0 1 1-.707-.707L5.293 6 1.757 2.464a.5.5 0 0 1 0-.707z"
+          fill="#C62828"
+        />
+      </svg>
+    </i>
+  </label>
+</div>
+ 
+     
             </div>
             <div *ngIf="isLoading" class="loading-overlay">
                 <img src="assets/Loading.gif" alt="Loading...">
@@ -125,9 +157,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
-
-         
+            </div>       
            
             <div class="table-container" style="top:10px;">
                 <div class="table-scroll-window">

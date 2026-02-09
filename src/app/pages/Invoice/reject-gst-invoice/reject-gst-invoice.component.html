@@ -1,0 +1,93 @@
+<div class="reject-dialog-content">
+
+  <!-- Header -->
+  <div class="card shadow-sm">
+    <div class="card-header bg-primary text-white d-flex align-items-center">
+      <h5 class="mb-0">Reject GST Invoice</h5>
+      <span class="ms-auto" style="cursor:pointer" (click)="goBack()">✖</span>
+    </div>
+
+    <!-- Body -->
+    <div class="card-body">
+      <form [formGroup]="rejectForm" (ngSubmit)="onSubmit()">
+
+        <div class="row gx-3 align-items-end">
+
+          <!-- Upload File -->
+          <div class="col-md-4">
+            <label class="form-label fw-semibold">Upload File</label>
+            <input
+              type="file"
+              class="form-control"
+              (change)="onFileSelected($event)"
+            />
+            <small class="text-muted">.xls, .xlsx</small>
+            <div *ngIf="fileError" class="text-danger mt-1">
+              {{ fileError }}
+            </div>
+          </div>
+
+          <!-- Download Template -->
+          <div class="col-md-2 d-flex flex-column">
+            <label class="form-label invisible">Download</label>
+            <a
+              class="btn btn-outline-secondary w-100"
+              (click)="downloadTemplate()"
+              style="cursor:pointer"
+            >
+              ⬇ Download
+            </a>
+          </div>
+
+          <!-- Status -->
+          <div class="col-md-3">
+            <label class="form-label fw-semibold">
+              Status <span class="text-danger">*</span>
+            </label>
+            <select
+              class="form-select"
+              formControlName="status"
+            >
+              <option value="">-- Select --</option>
+              <option value="Rejected">Rejected</option>
+            </select>
+            <div
+              *ngIf="rejectForm.get('status')?.touched && rejectForm.get('status')?.invalid"
+              class="text-danger mt-1"
+            >
+              Status is required
+            </div>
+          </div>
+
+          <!-- Submit -->
+          <div class="col-md-3 d-flex flex-column">
+            <label class="form-label invisible">Submit</label>
+            <button
+              type="submit"
+              class="btn btn-primary w-100"
+              [disabled]="rejectForm.invalid || !selectedFile"
+            >
+              Submit
+            </button>
+          </div>
+
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+  <!-- Loader -->
+  <div *ngIf="isLoading" class="loader-overlay">
+    <img src="../../../assets/Loading.gif" />
+  </div>
+
+  <!-- Alert Popup -->
+  <div *ngIf="showPopup" class="overlay">
+    <app-alertpopup
+      [message]="popupMessage"
+      (close)="showPopup = false">
+    </app-alertpopup>
+  </div>
+
+</div>

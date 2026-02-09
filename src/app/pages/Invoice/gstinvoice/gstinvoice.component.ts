@@ -19,6 +19,7 @@ import { GstInvoiceGrid } from '../../../Models/GSTInvoiceGrid';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { GstinvoiceaddComponent } from '../gstinvoiceadd/gstinvoiceadd.component';
+import { RejectGstInvoiceComponent } from '../reject-gst-invoice/reject-gst-invoice.component';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIcon } from "@angular/material/icon";
 
@@ -114,7 +115,7 @@ export class GstinvoiceComponent {
   @ViewChild(MatSort) sort!: MatSort;
 
   constructor(@Inject(Invoice_TOKEN) private _invoiceService: IInvoiceRepository, private _decrypt: EncryptionService,
-    private _sessionStoreage: SessionStorageService, private dialog: MatDialog,) {
+    private _sessionStoreage: SessionStorageService, private dialog: MatDialog, ) {
   }
 
   selection = new SelectionModel<GstInvoiceGrid>(true, []);
@@ -381,6 +382,15 @@ export class GstinvoiceComponent {
       data: { example: 'Hello from parent!' }
     });
   }
+ openRejectPage(): void {
+ this.dialog.open(RejectGstInvoiceComponent, {
+      width: '95%',
+      height: '90vh',
+      disableClose: true,
+       hasBackdrop: true,
+      data: { example: 'Hello from parent!' }
+    });
+}
 
 }
 

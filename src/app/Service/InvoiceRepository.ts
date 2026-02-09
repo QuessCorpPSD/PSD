@@ -265,5 +265,9 @@ console.log(url);
         return this.http.post<APIResponse>(url, payload);
        }
 
- 
+      RejectInvoice(formData: FormData): Observable<APIResponse> {
+        const url = `${this.environment.apiUrl}GSTInvoice/Reject`;
+
+        return this.http.post<APIResponse>(url, formData);
+    }
 }
