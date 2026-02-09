@@ -43,6 +43,7 @@ export interface IInvoiceRepository {
     GetParticulars(payload: any): Observable<APIResponse>;
     GetInvoiceStatus(payload: any): Observable<APIResponse>;
     GetInvoiceDetailsById(payload: any): Observable<APIResponse>;
+    RejectInvoice(formData: FormData): Observable<APIResponse>;
    
     //DownloadInvoiceIRN(invoiceId: number): Observable<HttpResponse<Blob>>
 }
