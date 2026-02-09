@@ -57,4 +57,8 @@ export interface ICommonService {
     GetInvoiceType(): Observable<APIResponse>;
     GetSitesByCompanyId(companyId: any): Observable<APIResponse>;
     GetMapNamebyCompany(companyId: any): Observable<APIResponse>;
+    GetPayperiodbyCompanySalaryRelease(companyId: any): Observable<APIResponse>;
+    GetPayperiodbyCompanySalaryUpfront(companyId: any): Observable<APIResponse>;
+    GetPayperiodbyCompanyDeduction(companyId: any): Observable<APIResponse>;
+    GetPayperiodbyCompanyVanPayment(companyId: any): Observable<APIResponse>;
 }

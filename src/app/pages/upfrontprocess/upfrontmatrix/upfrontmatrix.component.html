@@ -11,7 +11,7 @@
                     <label class="form-label text-muted small">Role Type</label>
                     <select [(ngModel)]="roletype" class="form-control form-control-sm" style="height: 30px;">
                         <option value="">Select</option>
-                        <!-- <option *ngFor="let y of year" [value]="y.Financial_Year_Id">{{y.Financial_Year_Name}}</option> -->
+                        <option *ngFor="let role of role" [value]="role.ROLEVALUE">{{role.ROLETYPE}}</option>
 
                     </select>
                 </div>
@@ -31,14 +31,20 @@
             <div class="table-container" style="top:30px; background-color: black;" *ngIf="isUploadGridVisible">
                 <div class="table-scroll-window">
                     <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
-
-                        <ng-container matColumnDef="edit">
+                        <ng-container matColumnDef="delete">
                             <mat-header-cell *matHeaderCellDef mat-sort-header
                                 class="fixed-width-column"></mat-header-cell>
                             <mat-cell *matCellDef="let element" class="fixed-width-column">
-                                <mat-icon (click)="EditOpen()">edit</mat-icon>
+                                <mat-icon (click)="deleteRow(element)">delete</mat-icon>
                             </mat-cell>
                         </ng-container>
+                        <!-- <ng-container matColumnDef="edit">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header
+                                class="fixed-width-column"></mat-header-cell>
+                            <mat-cell *matCellDef="let element" class="fixed-width-column">
+                                <mat-icon (click)="EditOpen(element)">edit</mat-icon>
+                            </mat-cell>
+                        </ng-container> -->
 
                         <ng-container matColumnDef="Userid">
                             <mat-header-cell *matHeaderCellDef>User Id</mat-header-cell>
@@ -90,7 +96,7 @@
 
                 </div>
 
-                <mat-paginator [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons></mat-paginator>
+                <mat-paginator #paginator [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons></mat-paginator>
 
             </div>
         </div>
@@ -120,6 +126,8 @@
                         <label class="form-label text-muted small">Role Type <span class="text-danger">*</span></label>
                         <select class="form-control" formControlName="roleType">
                             <option value="">Select</option>
+                            <option *ngFor="let ar of addrole" [value]="ar.ROLEVALUE">{{ar.ROLETYPE}}</option>
+
                         </select>
                         <small class="text-danger"
                             *ngIf="upfrontmatrix.get('roleType')?.touched && upfrontmatrix.get('roleType')?.invalid">
@@ -130,8 +138,12 @@
                     <!-- User ID -->
                     <div class="col-md-4">
                         <label class="form-label text-muted small">User ID <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" placeholder="Please Enter User ID"
-                            formControlName="userId">
+                        <!-- <input type="text" class="form-control" placeholder="Please Enter User ID"
+                            formControlName="userId"> -->
+                        <select class="form-control" formControlName="userId">
+                            <option value="">Select</option>
+                            <option *ngFor="let ul of userlist" [value]="ul.UserId">{{ul.UserId}}</option>
+                        </select>
                         <small class="text-danger"
                             *ngIf="upfrontmatrix.get('userId')?.touched && upfrontmatrix.get('userId')?.invalid">
                             User ID is required
@@ -149,29 +161,6 @@
                         </small>
                     </div>
 
-                    <!-- Minimum Approve Limit -->
-                    <div class="col-md-4">
-                        <label class="form-label text-muted small">Minimum Approve Limit <span
-                                class="text-danger">*</span></label>
-                        <input type="number" class="form-control" placeholder="Please Enter Minimum Approve Limit"
-                            formControlName="minApproveLimit">
-                        <small class="text-danger"
-                            *ngIf="upfrontmatrix.get('minApproveLimit')?.touched && upfrontmatrix.get('minApproveLimit')?.invalid">
-                            Minimum Approve Limit is required
-                        </small>
-                    </div>
-
-                    <!-- Maximum Approve Limit -->
-                    <div class="col-md-4">
-                        <label class="form-label text-muted small">Maximum Approve Limit <span
-                                class="text-danger">*</span></label>
-                        <input type="number" class="form-control" placeholder="Please Enter Maximum Approve Limit"
-                            formControlName="maxApproveLimit">
-                        <small class="text-danger"
-                            *ngIf="upfrontmatrix.get('maxApproveLimit')?.touched && upfrontmatrix.get('maxApproveLimit')?.invalid">
-                            Maximum Approve Limit is required
-                        </small>
-                    </div>
 
                     <!-- Mail ID -->
                     <div class="col-md-4">
@@ -183,11 +172,110 @@
                             Valid Mail ID is required
                         </small>
                     </div>
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Sub User ID </label>
+                        <!-- <input type="text" class="form-control" placeholder="Please Enter User ID"
+                            formControlName="subuserId"> -->
+                        <select class="form-control" formControlName="subuserId">
+                            <option value="">Select</option>
+                            <option *ngFor="let sub of subuserlist" [value]="sub.UserId">{{sub.UserId}}</option>
+                        </select>
+                    </div>
 
-                    <!-- Zone -->
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Sub User Name </label>
+                        <input type="text" class="form-control" placeholder="Please Enter User Name"
+                            formControlName="subuserName">
+
+                    </div>
+
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Sub Mail ID</label>
+                        <input type="email" class="form-control" placeholder="Please Enter Mail ID"
+                            formControlName="submailId">
+
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Mode of Payment<span
+                                class="text-danger">*</span></label>
+                        <select class="form-control" formControlName="mod">
+                            <option value="">Select</option>
+                            <option value="1">Collection</option>
+                            <option value="2">Upfront</option>
+                        </select>
+                        <small class="text-danger"
+                            *ngIf="upfrontmatrix.get('mod')?.touched && upfrontmatrix.get('mod')?.invalid">
+                            Mode of Payment is required
+                        </small>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Designation<span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" placeholder="Please Enter Designation"
+                            formControlName="designation">
+                        <small class="text-danger"
+                            *ngIf="upfrontmatrix.get('designation')?.touched && upfrontmatrix.get('designation')?.invalid">
+                            Designation is required
+                        </small>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">
+                            Minimum Approve Limit <span class="text-danger">*</span>
+                        </label>
+
+                        <input type="text" class="form-control" placeholder="Please Enter Minimum Approve Limit"
+                            formControlName="minApproveLimit" (input)="allowOnlyNumbers($event)">
+
+                        <small class="text-danger" *ngIf="upfrontmatrix.get('minApproveLimit')?.touched 
+                 && upfrontmatrix.get('minApproveLimit')?.invalid">
+                            Minimum Approve Limit is required
+                        </small>
+                    </div>
+
+
+
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small d-block mb-1">
+                            Maximum Approve Limit <span class="text-danger">*</span>
+                        </label>
+
+                        <div class="d-flex">
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check form-check-sm"
+                                    formControlName="enableMaxApproveLimit">
+                                <!-- <label class="form-check-label" for="maxApproveCheck"></label> -->
+                            </div>
+
+
+
+                            <input type="text" class="form-control" placeholder="Please Enter Maximum Approve Limit"
+                                formControlName="maxApproveLimit" (input)="allowOnlyNumbersmax($event)">
+                        </div>
+
+                        <small class="text-danger" *ngIf="upfrontmatrix.get('maxApproveLimit')?.touched 
+                 && upfrontmatrix.get('maxApproveLimit')?.invalid
+                 && upfrontmatrix.get('maxApproveLimit')?.enabled">
+                            Maximum Approve Limit is required
+                        </small>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">IsActive</label>
+                        <select class="form-control" formControlName="isactive">
+                            <option value="">Select</option>
+                            <option [value]="1">Yes</option>
+                            <option [value]="0">No</option>
+                        </select>
+
+                    </div>
                     <div class="col-md-4">
                         <label class="form-label text-muted small">Zone <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" placeholder="Please Enter Zone" formControlName="zone">
+                        <!-- <input type="text" class="form-control" placeholder="Please Enter Zone" formControlName="zone"> -->
+                        <select class="form-control" formControlName="zone">
+                            <option value="">Select</option>
+                            <option *ngFor="let Zo of Zone" [value]="Zo.Zone_Tagging">{{Zo.Zone_Tagging}}</option>
+                        </select>
                         <small class="text-danger"
                             *ngIf="upfrontmatrix.get('zone')?.touched && upfrontmatrix.get('zone')?.invalid">
                             Zone is required
@@ -208,10 +296,13 @@
             </button>
 
             <button type="button" style="border: none; border-radius: 7px; width: 80px; height: 30px;
-                           cursor: pointer; background-color: blue; color: white;">
+                           cursor: pointer; background-color: blue; color: white;" (click)="saveUpfrontMatrix()">
                 {{ isEditMode ? 'Update' : 'Save' }} </button>
 
         </div>
 
     </mat-card>
+</div>
+<div *ngIf="isLoading" class="loading-overlay">
+    <img src="assets/Loading.gif" alt="Loading...">
 </div>

@@ -1,0 +1,479 @@
+<br />
+<div class="page-wrapper">
+    <div class="scrollable-content">
+
+        <div style="color: #302CB3; font-size: 22px; font-family: Nunito Sans; font-weight: 700; min-width: 960px">
+            Legal Entity
+        </div>
+
+        <div class="container py-4">
+            <div class="row g-3 align-items-end">
+
+                <!-- Legal Entity Code -->
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Legal Entity Code</label>
+                    <select class="form-select form-select-sm">
+                        <option>Select</option>
+                    </select>
+                </div>
+
+                <!-- Legal Entity Name -->
+                <div class="col-md-3 small-input">
+                    <label class="form-label text-muted small">Legal Entity Name</label>
+                    <input type="text" class="form-control form-control-sm" placeholder="Enter Legal Entity name">
+                </div>
+
+                <!-- Buttons: Only Search & Export visible initially -->
+                <div class="col-md-3 d-flex gap-2">
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-primary"
+                        matTooltip="Search" (click)="onSearchClick()">
+                        <mat-icon>search</mat-icon>
+                    </button>
+
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-secondary"
+                        matTooltip="Export to Excel">
+                        <mat-icon>download</mat-icon>
+                    </button>
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-success"
+                        matTooltip="Add" (click)="AddPOOpen()">
+                        <mat-icon>add</mat-icon>
+                    </button>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="table-wrapper1" *ngIf="showTable">
+            <div class="table-scroll">
+
+
+                <mat-table [dataSource]="uploadedDataSource" matSort
+                    class="custom-table mat-elevation-z8 auto-fit-table">
+
+
+                    <ng-container matColumnDef="Action">
+                        <mat-header-cell *matHeaderCellDef><strong>Action</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">
+                            <button class="btn btn-sm d-flex align-items-center justify-content-center"
+                                matTooltip="Delete">
+                                <mat-icon>delete</mat-icon>
+                            </button>
+                            <button class="btn btn-sm d-flex align-items-center justify-content-center"
+                                matTooltip="edit">
+                                <mat-icon>edit</mat-icon>
+                            </button>
+                        </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Legal Entity Code">
+                        <mat-header-cell *matHeaderCellDef><strong>Legal Entity Code</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['Legal Entity Code'] }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Legal Entity Name">
+                        <mat-header-cell *matHeaderCellDef><strong>Legal Entity Name</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['Legal Entity Name'] }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Branch/Division">
+                        <mat-header-cell *matHeaderCellDef><strong>Branch/Division</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['Branch/Division'] }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Flat/Door/Block No">
+                        <mat-header-cell *matHeaderCellDef><strong>Flat/Door/Block No</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['Flat/Door/Block No'] }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Name of the Building">
+                        <mat-header-cell *matHeaderCellDef><strong>Name of the Building</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['Name of the Building'] }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Street/Road Name">
+                        <mat-header-cell *matHeaderCellDef><strong>Street/Road Name</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['Street/Road Name'] }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="State">
+                        <mat-header-cell *matHeaderCellDef><strong>State</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['State'] }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="City">
+                        <mat-header-cell *matHeaderCellDef><strong>City</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['City'] }}</mat-cell>
+                    </ng-container>
+
+
+                    <mat-header-row *matHeaderRowDef="uploadDisplayedColumns"></mat-header-row>
+                    <mat-row *matRowDef="let row; columns: uploadDisplayedColumns;"></mat-row>
+
+                </mat-table>
+
+
+
+                <div *ngIf="uploadedData.length === 0" class="text-center p-4">
+                    <p class="text-muted">No data to display</p>
+                </div>
+            </div>
+            <mat-paginator [length]="uploadedData.length" [pageSize]="10" [pageSizeOptions]="[5, 10, 20]"
+                showFirstLastButtons>
+            </mat-paginator>
+        </div>
+    </div>
+</div>
+<div *ngIf="isAddclicked" class="popup-overlay" (keydown.escape)="closeclick()">
+    <mat-card class="popup-card">
+        <mat-card-header class="popup-header">
+            <mat-card-title>
+                {{ isEditMode ? 'Edit Legal Entity' : 'Add Legal Entity' }}
+            </mat-card-title>
+
+            <button class="close-btn" matTooltip="Close" (click)="closeclick()">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-card-header>
+
+        <mat-card-content>
+            <form [formGroup]="legalEntityForm" novalidate>
+
+                <div class="row g-3 mb-3">
+                    <div class="col-md-3">
+                        <div><strong>Dedutor Details</strong></div>
+                    </div>
+                </div>
+
+                <div class="row g-3 mb-3">
+                    <div class="col-md-3">
+                        <label class="form-label text-muted small">Legal Entity Code<span
+                                class="text-danger">*</span></label>
+                        <input type="text" class="form-control form-control-sm" formControlName="legalEntityCode">
+                        <small class="text-danger" *ngIf="legalEntityForm.get('legalEntityCode')?.touched &&
+         legalEntityForm.get('legalEntityCode')?.hasError('required')">
+                            Legal Entity Code is required
+                        </small>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label text-muted small">Legal Entity Name<span
+                                class="text-danger">*</span></label>
+                        <input type="text" class="form-control form-control-sm" formControlName="legalEntityName">
+
+                        <small class="text-danger" *ngIf="legalEntityForm.get('legalEntityName')?.touched &&
+         legalEntityForm.get('legalEntityName')?.hasError('required')">
+                            Legal Entity Name is required
+                        </small>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label text-muted small">Branch/Division</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="branchDivision">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label text-muted small">Flat/Door/Block No</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="deductorFlatNo">
+                    </div>
+                </div>
+                <div class="row g-3 mb-3">
+                    <div class="col-md-3">
+                        <label class="form-label text-muted small">Name of the Building</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="deductorBuilding">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label text-muted small">Street/Road</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="deductorStreet">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label text-muted small">State<span class="text-danger">*</span></label>
+                        <select class="form-select form-select-sm" formControlName="deductorState">
+                            <option>Select</option>
+                        </select>
+                        <small class="text-danger" *ngIf="legalEntityForm.get('deductorState')?.touched &&
+         legalEntityForm.get('deductorState')?.hasError('required')">
+                            State is required
+                        </small>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label text-muted small">City<span class="text-danger">*</span></label>
+                        <input type="text" class="form-control form-control-sm" formControlName="deductorCity">
+                        <small class="text-danger" *ngIf="legalEntityForm.get('deductorCity')?.touched &&
+         legalEntityForm.get('deductorCity')?.hasError('required')">
+                            City is required
+                        </small>
+                    </div>
+                </div>
+                <div class="row g-3 mb-3">
+                    <div class="col-md-3">
+                        <label class="form-label text-muted small">Pincode<span class="text-danger">*</span></label>
+                        <input type="text" class="form-control form-control-sm" formControlName="deductorPincode">
+
+                        <small class="text-danger" *ngIf="legalEntityForm.get('deductorPincode')?.touched &&
+         legalEntityForm.get('deductorPincode')?.hasError('required')">
+                            Pincode is required
+                        </small>
+
+                        <small class="text-danger" *ngIf="legalEntityForm.get('deductorPincode')?.touched &&
+         legalEntityForm.get('deductorPincode')?.hasError('pattern')">
+                            Pincode must be 6 digits
+                        </small>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label text-muted small">Telephone</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="deductorTelephone">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label text-muted small">STD Code</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="deductorStdCode">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label text-muted small">Fax</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="deductorFax">
+                    </div>
+                </div>
+                <div class="row g-3 mb-3">
+                    <div class="col-md-3">
+                        <label class="form-label text-muted small">E-Mail<span class="text-danger">*</span></label>
+                        <input type="text" class="form-control form-control-sm" formControlName="deductorEmail">
+
+                        <small class="text-danger" *ngIf="legalEntityForm.get('deductorEmail')?.touched &&
+         legalEntityForm.get('deductorEmail')?.hasError('required')">
+                            Email is required
+                        </small>
+
+                        <small class="text-danger" *ngIf="legalEntityForm.get('deductorEmail')?.touched &&
+         legalEntityForm.get('deductorEmail')?.hasError('email')">
+                            Enter a valid email address
+                        </small>
+                    </div>
+                    <div class="row g-2 mb-3">
+                        <div class="col-md-5" style="padding-left: 25px;">
+                            <div><strong>Responsible Person Details</strong></div>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-3">
+                            <label class="form-label text-muted small">Name<span class="text-danger">*</span></label>
+                            <input type="text" class="form-control form-control-sm" formControlName="rpName">
+                            <small class="text-danger" *ngIf="legalEntityForm.get('rpName')?.touched &&
+         legalEntityForm.get('rpName')?.hasError('required')">
+                                Name is required
+                            </small>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label text-muted small">Gender<span class="text-danger">*</span></label>
+                            <select class="form-select form-select-sm" formControlName="rpGender">
+                                <option value="">Select</option>
+                            </select>
+                            <small class="text-danger" *ngIf="legalEntityForm.get('rpGender')?.touched &&
+         legalEntityForm.get('rpGender')?.hasError('required')">
+                                Gender is required
+                            </small>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label text-muted small">Father's Name<span
+                                    class="text-danger">*</span></label>
+                            <input type="text" class="form-control form-control-sm" formControlName="rpFatherName">
+                            <small class="text-danger" *ngIf="legalEntityForm.get('rpFatherName')?.touched &&
+         legalEntityForm.get('rpFatherName')?.hasError('required')">
+                                Father's Name is required
+                            </small>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label text-muted small">Designation<span
+                                    class="text-danger">*</span></label>
+                            <input type="text" class="form-control form-control-sm" formControlName="rpDesignation">
+                            <small class="text-danger" *ngIf="legalEntityForm.get('rpDesignation')?.touched &&
+         legalEntityForm.get('rpDesignation')?.hasError('required')">
+                                Designation is required
+                            </small>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-3">
+                            <label class="form-label text-muted small">Flat/Door/Block No</label>
+                            <input type="text" class="form-control form-control-sm" formControlName="rpFlatNo">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label text-muted small">Name of the Building</label>
+                            <input type="text" class="form-control form-control-sm" formControlName="rpBuilding">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label text-muted small">Street/Road</label>
+                            <input type="text" class="form-control form-control-sm" formControlName="rpStreet">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label text-muted small">State<span class="text-danger">*</span></label>
+                            <select class="form-select form-select-sm" formControlName="rpState">
+                                <option value="">Select</option>
+                            </select>
+                            <small class="text-danger" *ngIf="legalEntityForm.get('rpState')?.touched &&
+         legalEntityForm.get('rpState')?.hasError('required')">
+                                State is required
+                            </small>
+                        </div>
+
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-3">
+                            <label class="form-label text-muted small">City<span class="text-danger">*</span></label>
+                            <input type="text" class="form-control form-control-sm" formControlName="rpCity">
+                            <small class="text-danger" *ngIf="legalEntityForm.get('rpCity')?.touched &&
+         legalEntityForm.get('rpCity')?.hasError('required')">
+                                City is required
+                            </small>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label text-muted small">Pincode<span class="text-danger">*</span></label>
+                            <input type="text" class="form-control form-control-sm" formControlName="rpState">
+                            <small class="text-danger" *ngIf="legalEntityForm.get('rpState')?.touched &&
+         legalEntityForm.get('rpState')?.hasError('required')">
+                                State is required
+                            </small>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label text-muted small">Telephone</label>
+                            <input type="text" class="form-control form-control-sm" formControlName="rpTelephone">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label text-muted small">STD Code</label>
+                            <input type="text" class="form-control form-control-sm" formControlName="rpStdCode">
+                        </div>
+
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-3">
+                            <label class="form-label text-muted small">Fax</label>
+                            <input type="text" class="form-control form-control-sm" formControlName="rpFax">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label text-muted small">Mobile Number<span
+                                    class="text-danger">*</span></label>
+                            <input type="text" class="form-control form-control-sm" formControlName="rpMobile">
+
+                            <small class="text-danger" *ngIf="legalEntityForm.get('rpMobile')?.touched &&
+         legalEntityForm.get('rpMobile')?.hasError('required')">
+                                Mobile number is required
+                            </small>
+
+                            <small class="text-danger" *ngIf="legalEntityForm.get('rpMobile')?.touched &&
+         legalEntityForm.get('rpMobile')?.hasError('pattern')">
+                                Enter valid 10-digit mobile number
+                            </small>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label text-muted small">E-Mail<span class="text-danger">*</span></label>
+                            <input type="text" class="form-control form-control-sm" formControlName="rpEmail">
+                            <small class="text-danger" *ngIf="legalEntityForm.get('rpEmail')?.touched &&
+         legalEntityForm.get('rpEmail')?.hasError('required')">
+                                Email is required
+                            </small>
+
+                            <small class="text-danger" *ngIf="legalEntityForm.get('rpEmail')?.touched &&
+         legalEntityForm.get('rpEmail')?.hasError('email')">
+                                Enter a valid email address
+                            </small>
+                        </div>
+                    </div>
+                    <div class="row g-1 mb-3">
+                        <div class="col-md-5" style="padding-left: 25px;">
+                            <div><strong>Statutory Details</strong></div>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-3">
+                            <label class="form-label text-muted small">TAN<span class="text-danger">*</span></label>
+                            <input type="text" class="form-control form-control-sm" formControlName="tan" maxlength="10"
+                                style="text-transform: uppercase;">
+                            <small class="text-danger" *ngIf="legalEntityForm.get('tan')?.touched &&
+        legalEntityForm.get('tan')?.hasError('required')">
+                                TAN is required
+                            </small>
+
+                            <small class="text-danger" *ngIf="legalEntityForm.get('tan')?.touched &&
+        legalEntityForm.get('tan')?.hasError('pattern')">
+                                Invalid TAN format (Example: ABCD12345E)
+                            </small>
+
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label text-muted small">PAN<span class="text-danger">*</span></label>
+                            <input type="text" class="form-control form-control-sm" formControlName="pan">
+
+                            <small class="text-danger" *ngIf="legalEntityForm.get('pan')?.touched &&
+         legalEntityForm.get('pan')?.hasError('required')">
+                                PAN is required
+                            </small>
+
+                            <small class="text-danger" *ngIf="legalEntityForm.get('pan')?.touched &&
+         legalEntityForm.get('pan')?.hasError('pattern')">
+                                Invalid PAN format (ABCDE1234F)
+                            </small>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label text-muted small">Status<span class="text-danger">*</span></label>
+                            <input type="text" class="form-control form-control-sm" formControlName="status">
+                            <small class="text-danger" *ngIf="legalEntityForm.get('status')?.touched &&
+         legalEntityForm.get('status')?.hasError('required')">
+                                Status is required
+                            </small>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label text-muted small">Is TDS Assessee<span
+                                    class="text-danger">*</span></label>
+                            <select class="form-select form-select-sm" formControlName="isTdsAssessee">
+                                <option>Select</option>
+                            </select>
+                            <small class="text-danger" *ngIf="legalEntityForm.get('isTdsAssessee')?.touched &&
+         legalEntityForm.get('isTdsAssessee')?.hasError('required')">
+                                Please select TDS Assessee
+                            </small>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-3">
+                            <label class="form-label text-muted small">Return Type<span
+                                    class="text-danger">*</span></label>
+                            <input type="text" class="form-control form-control-sm" formControlName="returnType">
+                            <small class="text-danger" *ngIf="legalEntityForm.get('returnType')?.touched &&
+         legalEntityForm.get('returnType')?.hasError('required')">
+                                Return Type is required
+                            </small>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label text-muted small">
+                                Responsible Person PAN<span class="text-danger">*</span></label>
+                            <input type="text" class="form-control form-control-sm" formControlName="rpPan">
+                            <small class="text-danger" *ngIf="legalEntityForm.get('rpPan')?.touched &&
+         legalEntityForm.get('rpPan')?.hasError('required')">
+                                Responsible Person PAN is required
+                            </small>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label text-muted small">Deductor Type<span
+                                    class="text-danger">*</span></label>
+                            <input type="text" class="form-control form-control-sm" formControlName="deductorType">
+                            <small class="text-danger" *ngIf="legalEntityForm.get('deductorType')?.touched &&
+         legalEntityForm.get('deductorType')?.hasError('required')">
+                                Deductor Type is required
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+        </mat-card-content>
+        <div class="d-flex justify-content-end mt-3" style="gap: 10px; padding-right: 8px;">
+
+            <button type="button" style="border: none; border-radius: 7px; width: 80px; height: 30px;
+                           cursor: pointer; background-color: #f0f0f0; color: black;" (click)="closeclick()">
+                Cancel
+            </button>
+
+            <button type="button" style="border: none; border-radius: 7px; width: 80px; height: 30px;
+                           cursor: pointer; background-color: blue; color: white;" (click)="save()">
+                {{ isEditMode ? 'Update' : 'Save' }} </button>
+
+        </div>
+
+    </mat-card>
+
+</div>

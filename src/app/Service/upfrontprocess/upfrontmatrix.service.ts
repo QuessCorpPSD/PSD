@@ -14,5 +14,20 @@ export class UpfrontmatrixService implements IUpfrontMatrix {
   Search(roletype: any): Observable<APIResponse> {
     return this.http.get<APIResponse>(`${this.env}UpfrontRequest/UpfrontViewLimit/${roletype}`)
   }
+  GetRole(): Observable<APIResponse> {
+    return this.http.get<APIResponse>(`${this.env}UpfrontRequest/RoleTypeLoad`)
+  }
+  GetUserlist(userid: any, suserid: any): Observable<APIResponse> {
+    return this.http.get<APIResponse>(`${this.env}UpfrontRequest/UserListLoad/${userid}/${suserid}`)
+  }
+  GetZone(): Observable<APIResponse> {
+    return this.http.get<APIResponse>(`${this.env}UpfrontRequest/ZoneListLoad`)
+  }
+  save(payload: any): Observable<APIResponse> {
+    return this.http.post<APIResponse>(
+      this.env + 'UpfrontRequest/UpfrontMatrixRequest',
+      payload
+    );
+  }
 
 }

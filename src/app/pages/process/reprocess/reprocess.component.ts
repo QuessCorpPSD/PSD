@@ -1,7 +1,6 @@
 import { CommonModule, DatePipe } from '@angular/common';
 import { Component, Inject, InjectionToken, OnInit } from '@angular/core';
 import { CompanyallComponent } from '../../../common/CompanyAll/companyall.component';
-import { PayPeriodComponent } from '../../../common/payperiod/payperiod.component';
 import { Payperiodclass } from '../../../Models/Common';
 import { MatIconModule } from '@angular/material/icon';
 import { FormsModule } from '@angular/forms';
