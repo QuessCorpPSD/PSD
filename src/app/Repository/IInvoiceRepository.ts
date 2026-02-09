@@ -18,7 +18,7 @@ export interface IInvoiceRepository {
     getCTCDeductionType(): Observable<APIResponse>;
     getBillingType(): Observable<APIResponse>;
     getNetDeductionType(): Observable<APIResponse>;
-    addGstInvoice(payload: any): Observable<string>;
+    addGstInvoice(payload: any): Observable<APIResponse>;
     GetAllInvoiceAllotDetails(payload: any) :Observable<APIResponse>;
     GetAllInvoiceCancelDetails(val): Observable<APIResponse>;
     BulkApproveInvoice(val): Observable<APIResponse>;
@@ -26,6 +26,7 @@ export interface IInvoiceRepository {
     DraftInvoiceEmployeeByRequestId(reqNo): Observable<APIResponse>;
     //GetAllInvoiceDetails(companyId: number, payPeriodId: number,userId): Observable<APIResponse>;
     GetAllAttributeAddAndUpdate(val): Observable<APIResponse>;
+    GetPayPeriod(payload: any): Observable<APIResponse>;
     GetAllAttribute(val): Observable<APIResponse>
     GetIRNColors(): Observable<APIResponse>
     GetAllInvoiceDetailsByCompanyId(companyId: number, payPeriodId: number): Observable<APIResponse> ;
@@ -38,6 +39,12 @@ export interface IInvoiceRepository {
     GetConsolidateInvoiceSummary(payload: any): Observable<APIResponse>
     getRemarksByReqNo(val): Observable<APIResponse>;
     GetGstRates(payload: any) :Observable<APIResponse>;
+    BulkIRNDownloadInvoice(BulkInvoices: any): Observable<HttpResponse<Blob>>
+    GetParticulars(payload: any): Observable<APIResponse>;
+    GetInvoiceStatus(payload: any): Observable<APIResponse>;
+    GetInvoiceDetailsById(payload: any): Observable<APIResponse>;
+   
+    //DownloadInvoiceIRN(invoiceId: number): Observable<HttpResponse<Blob>>
     
    
 }

@@ -83,7 +83,10 @@
 .custom-form .form-select {
     border-radius: .6rem;
 }
-
+.panel-header mat-panel-description {
+  color: brown;
+  font-weight: 600;
+}
 /* Make all form inputs and selects take full width of their column */
 /* .form-control,
 .form-select,
@@ -256,4 +259,26 @@ input[type="date"].form-control-sm {
     border-radius: 6px;
     border: 1px solid #ccc;
     font-weight: 600;
+}
+.readonly-checkbox {
+  pointer-events: none;
+}
+
+.readonly-box {
+  background: #f8f9fa;
+  border: 1px solid #ced4da;
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-size: 13px;
+  min-height: 34px;
+}
+label {
+  font-weight: 600;
+  font-size: 12px;
+}
+.section-title {
+  font-weight: 600;
+  margin-top: 20px;
+  border-bottom: 1px solid #dee2e6;
+  padding-bottom: 4px;
 }

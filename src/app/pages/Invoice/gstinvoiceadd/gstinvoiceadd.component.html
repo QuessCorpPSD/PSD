@@ -1,4 +1,4 @@
-<form [formGroup]="addGstInvoice" novalidate>
+<form [formGroup]="addGstInvoice" novalidate *ngIf="!showInvoiceDetails">
     <mat-card class="custom-card">
         <mat-card-header class="sticky-header">
 
@@ -67,17 +67,17 @@
                                     <label class="form-label">Location<span
                                             class="text-danger">*</span></label>
                                     <cityname [selectedCompanyId]="selectedCompanyId"
-                                        (citynameEmit)="citynameEvent($event)" formControlName="CityName" >
+                                        (citynameEmit)="citynameEvent($event)" formControlName="City" >
                                     </cityname>
-                                    <div class="text-danger small" *ngIf="addGstInvoice.get('CityName')?.touched 
-             && addGstInvoice.get('CityName')?.hasError('required')">
+                                    <div class="text-danger small" *ngIf="addGstInvoice.get('City')?.touched 
+             && addGstInvoice.get('City')?.hasError('required')">
                                         Location is required
                                     </div>
                                 </div>
 
                                 <div class="col-md-3">
                                     <label class="form-label">Financial Year<span class="text-danger">*</span></label>
-                                    <financial-year (financialEmit)="handleFinancialYear($event)"
+                                    <financial-year (financialEmit)="handleFinancialYear($event);GetPayPeriod();"
                                         formControlName="FinancialYear">
                                     </financial-year>
                                     <div class="text-danger small" *ngIf="addGstInvoice.get('FinancialYear')?.touched 
@@ -88,7 +88,7 @@
                                 <div class="col-md-3">
                                     <label class="form-label">Pay Period<span class="text-danger">*</span></label>
                                     <PayPeriod [selectedCompanyId]="selectedCompanyId" [payPeriodType]="payPeriodType"
-                                        (payperiodEmit)="handlePayperiodEvent($event)" formControlName="PayPeriod">
+                                        (payperiodEmit)="handlePayperiodEvent($event);UpdateParticulars();" formControlName="PayPeriod">
                                     </PayPeriod>
                                     <div class="text-danger small" *ngIf="addGstInvoice.get('PayPeriod')?.touched 
              && addGstInvoice.get('PayPeriod')?.hasError('required')">
@@ -145,6 +145,9 @@
                     <mat-expansion-panel class="panel-border" [expanded]="true">
                         <mat-expansion-panel-header class="panel-header">
                             <mat-panel-title>Taxable Amounts</mat-panel-title>
+                            <mat-panel-description>
+    Total: {{ totalTaxableAmount | number:'1.2-2' }}
+  </mat-panel-description>
                             <!-- <label
                                 style="color: brown;display: flex;justify-content: flex-start;align-items: flex-start;">Total</label> -->
                         </mat-expansion-panel-header>
@@ -156,7 +159,7 @@
                                     <div class="input-wrapper">
                                         <span class="prefix-box">₹</span>
                                         <input type="number" class="form-control custom-input" placeholder="0"
-                                            formControlName="Amount">
+                                            formControlName="Amount"   >
                                     </div>
                                     <div class="text-danger small" *ngIf="addGstInvoice.get('Amount')?.touched 
              && addGstInvoice.get('Amount')?.hasError('required')">
@@ -186,7 +189,7 @@
                                     <div class="input-wrapper">
                                         <span class="prefix-box">₹</span>
                                         <input type="number" class="form-control custom-input" placeholder="0"
-                                            formControlName="ServiceChargeAmount">
+                                            formControlName="ServiceChargeAmount" >
                                     </div>
                                 </div>
                             </div>
@@ -206,7 +209,7 @@
                                             <mat-icon class="small-icon">₹</mat-icon>
                                         </span>
                                         <input type="number" class="form-control custom-input"
-                                            formControlName="AbsorptionAmt">
+                                            formControlName="AbsorptionAmt" >
                                     </div>
                                 </div>
                                 <div class="col-md-3">
@@ -222,7 +225,7 @@
                                     <div class="input-wrapper">
                                         <span class="prefix-box">₹</span>
                                         <input type="number" class="form-control custom-input" placeholder="0"
-                                            formControlName="ServiceFeeAmount">
+                                            formControlName="SourcingChargeAmount" >
                                     </div>
                                 </div>
                             </div>
@@ -231,7 +234,7 @@
                                     <label class="form-label">InEdge Charges<span class="text-danger"></span></label>
                                     <div class="input-wrapper">
                                         <span class="prefix-box">₹</span>
-                                        <input type="number" class="form-control custom-input" placeholder="0">
+                                        <input type="number" class="form-control custom-input" placeholder="0" formControlName="TaxableAmount1" >
                                     </div>
                                 </div>
                                 <div class="col-md-3">
@@ -240,18 +243,31 @@
                                         <span class="prefix-box">
                                             <mat-icon class="small-icon">edit</mat-icon>
                                         </span>
-                                        <input type="number" class="form-control custom-input"
-                                            placeholder="Mobile Application Charges">
+                                        <input type="text" class="form-control custom-input"
+                                            placeholder="Mobile Application Charges" formControlName="TaxableAmount1_Note">
                                     </div>
                                 </div>
                                 <div class="col-md-3">
-                                    <label class="form-label">CTC Adjustment Amount(+/-)</label>
-                                    <div class="input-wrapper">
-                                        <span class="prefix-box">-</span>
-                                        <input type="number" class="form-control custom-input" placeholder="0"
-                                            formControlName="CTCAdjustmentAmount">
-                                    </div>
-                                </div>
+                            <label class="form-label">
+                                <input
+                                type="checkbox"
+                                class="form-check-input me-1"  formControlName="CTCAmtNorP"
+                                (change)="toggleCtcSign($event);"
+                                />
+                                CTC Adjustment Amount (+ / -)
+                            </label>
+
+                            <div class="input-wrapper">
+                                <span class="prefix-box">{{ ctcSign }}</span>
+                                <input
+                                type="number"
+                                class="form-control custom-input"
+                                placeholder="0"
+                                formControlName="CTCAdjustmentAmount"
+                                />
+                            </div>
+                            </div>
+
                                 <div class="col-md-3">
                                     <label class="form-label">CTC Deduction Type</label>
                                     <select class="form-select" formControlName="CTCDeductionType">
@@ -279,21 +295,21 @@
                                     <div class="input-wrapper">
                                         <span class="prefix-box">₹</span>
                                         <input type="number" class="form-control custom-input"
-                                            placeholder="Mobile Application Charges" formControlName="OnboardingCharge">
+                                            placeholder="Onboarding Charges" formControlName="OnboardingCharge" >
                                     </div>
                                 </div>
                                 <div class="col-md-3">
                                     <label class="form-label">Compliance Fee &#64;</label>
                                     <div class="input-wrapper">
                                         <span class="prefix-box">&#64;</span>
-                                        <input type="number" class="form-control custom-input" placeholder="0">
+                                        <input type="number" class="form-control custom-input" placeholder="0" formControlName="Compliance_Fee">
                                     </div>
                                 </div>
                                 <div class="col-md-3">
                                     <label class="form-label">Compliance Fee Amount</label>
                                     <div class="input-wrapper">
                                         <span class="prefix-box">₹</span>
-                                        <input type="number" class="form-control custom-input" placeholder="0">
+                                        <input type="number" class="form-control custom-input" placeholder="0" formControlName="Compliance_Fee_Amount" >
                                     </div>
                                 </div>
                             </div>
@@ -303,7 +319,7 @@
                                     <label class="form-label">Upfront Charges<span class="text-danger"></span></label>
                                     <div class="input-wrapper">
                                         <span class="prefix-box">₹</span>
-                                        <input type="number" class="form-control custom-input">
+                                        <input type="number" class="form-control custom-input" formControlName="TaxableAmount2" >
                                     </div>
                                 </div>
                                 <div class="col-md-3">
@@ -312,15 +328,15 @@
                                         <span class="prefix-box">
                                             <mat-icon class="small-icon">edit</mat-icon>
                                         </span>
-                                        <input type="number" class="form-control custom-input"
-                                            placeholder="Mobile Application Charges">
+                                        <input type="text" class="form-control custom-input"
+                                            placeholder="Upfront Charges" formControlName="TaxableAmount2_Note">
                                     </div>
                                 </div>
                                 <div class="col-md-3">
                                     <label class="form-label">Taxable Amount3</label>
                                     <div class="input-wrapper">
                                         <span class="prefix-box">₹</span>
-                                        <input type="number" class="form-control custom-input" placeholder="0.00">
+                                        <input type="number" class="form-control custom-input" placeholder="0.00"  formControlName="TaxableAmount3" >
                                     </div>
                                 </div>
                                 <div class="col-md-3">
@@ -329,7 +345,7 @@
                                         <span class="prefix-box">
                                             <mat-icon class="small-icon">edit</mat-icon>
                                         </span>
-                                        <input type="number" class="form-control custom-input">
+                                        <input type="text" class="form-control custom-input" formControlName="TaxableAmount3_Note">
                                     </div>
                                 </div>
                             </div>
@@ -341,7 +357,7 @@
                                     <div class="input-wrapper">
                                         <span class="prefix-box">₹</span>
                                         <input type="number" class="form-control custom-input"
-                                            formControlName="BGVBilling">
+                                            formControlName="BGVBilling" >
                                     </div>
                                 </div>
                                 <div class="col-md-3">
@@ -351,7 +367,7 @@
                                             <mat-icon class="small-icon">edit</mat-icon>
                                         </span>
                                         <input type="number" class="form-control custom-input" placeholder="0"
-                                            formControlName="AssessmentFee">
+                                            formControlName="AssessmentFee" >
                                     </div>
                                 </div>
                                 <div class="col-md-3">
@@ -359,7 +375,7 @@
                                     <div class="input-wrapper">
                                         <span class="prefix-box">₹</span>
                                         <input type="number" class="form-control custom-input" placeholder="0"
-                                            formControlName="Discount1">
+                                            formControlName="Discount1" >
                                     </div>
                                 </div>
                                 <div class="col-md-3">
@@ -369,7 +385,7 @@
                                             <mat-icon class="small-icon">edit</mat-icon>
                                         </span>
                                         <input type="number" class="form-control custom-input" placeholder="0"
-                                            formControlName="Discount2">
+                                            formControlName="Discount2" >
                                     </div>
                                 </div>
                             </div>
@@ -381,7 +397,7 @@
                                             <mat-icon class="small-icon">edit</mat-icon>
                                         </span>
                                         <input type="number" class="form-control custom-input" placeholder="0"
-                                            formControlName="IDCardBilling">
+                                            formControlName="IDCardBilling" >
                                     </div>
                                 </div>
                                 <div class="col-md-3">
@@ -391,7 +407,7 @@
                                             <mat-icon class="small-icon">edit</mat-icon>
                                         </span>
                                         <input type="number" class="form-control custom-input" placeholder="0"
-                                            formControlName="EmailId">
+                                            formControlName="Email" >
                                     </div>
                                 </div>
                                 <div class="col-md-3">
@@ -401,7 +417,7 @@
                                             <mat-icon class="small-icon">edit</mat-icon>
                                         </span>
                                         <input type="number" class="form-control custom-input" placeholder="0"
-                                            formControlName="RegistartionFee">
+                                            formControlName="RegistrationFee" >
                                     </div>
                                 </div>
                                 <div class="col-md-3">
@@ -411,7 +427,7 @@
                                             <mat-icon class="small-icon">edit</mat-icon>
                                         </span>
                                         <input type="number" class="form-control custom-input" placeholder="0"
-                                            formControlName="TrainerFee">
+                                            formControlName="TrainerFee" >
                                     </div>
                                 </div>
                             </div>
@@ -423,7 +439,7 @@
                                             <mat-icon class="small-icon">edit</mat-icon>
                                         </span>
                                         <input type="number" class="form-control custom-input" placeholder="0"
-                                            formControlName="GOVTGRANTS_DBT">
+                                            formControlName="GOVTGRANTS_DBT" >
                                     </div>
                                 </div>
                                 <div class="col-md-3">
@@ -433,7 +449,7 @@
                                             <mat-icon class="small-icon">edit</mat-icon>
                                         </span>
                                         <input type="number" class="form-control custom-input" placeholder="0"
-                                            formControlName="PREKIT">
+                                            formControlName="PREKIT" >
                                     </div>
                                 </div>
                                 <div class="col-md-3">
@@ -441,7 +457,7 @@
                                     <div class="input-wrapper">
                                         <span class="prefix-box">₹</span>
                                         <input type="number" class="form-control custom-input" placeholder="0"
-                                            formControlName="VMSFEE">
+                                            formControlName="VMSFEE" >
                                     </div>
                                 </div>
                                 <div class="col-md-3">
@@ -451,7 +467,7 @@
                                             <mat-icon class="small-icon">edit</mat-icon>
                                         </span>
                                         <input type="number" class="form-control custom-input" placeholder="0"
-                                            formControlName="EducationFee">
+                                            formControlName="EducationFee" >
                                     </div>
                                 </div>
                             </div>
@@ -463,7 +479,7 @@
                                             <mat-icon class="small-icon">edit</mat-icon>
                                         </span>
                                         <input type="number" class="form-control custom-input" placeholder="0"
-                                            formControlName="NoticePeriodRecovery">
+                                            formControlName="NoticePeriodRecovery" >
                                     </div>
                                 </div>
                                 <div class="col-md-3">
@@ -473,7 +489,7 @@
                                             <mat-icon class="small-icon">edit</mat-icon>
                                         </span>
                                         <input type="number" class="form-control custom-input" placeholder="0"
-                                            formControlName="LaptopRental">
+                                            formControlName="LaptopRental" >
                                     </div>
                                 </div>
                                 <div class="col-md-3">
@@ -483,7 +499,7 @@
                                             <mat-icon class="small-icon">edit</mat-icon>
                                         </span>
                                         <input type="number" class="form-control custom-input" placeholder="0"
-                                            formControlName="DRADeduction">
+                                            formControlName="DRADeduction" >
                                     </div>
                                 </div>
                                 <div class="col-md-3">
@@ -493,7 +509,7 @@
                                             <mat-icon class="small-icon">edit</mat-icon>
                                         </span>
                                         <input type="number" class="form-control custom-input" placeholder="0"
-                                            formControlName="OtherDeduction">
+                                            formControlName="OtherDeduction" >
                                     </div>
                                 </div>
                             </div>
@@ -505,7 +521,7 @@
                                             <mat-icon class="small-icon">edit</mat-icon>
                                         </span>
                                         <input type="number" class="form-control custom-input" placeholder="0"
-                                            formControlName="CallCharges">
+                                            formControlName="CallCharges" >
                                     </div>
                                 </div>
                                 <div class="col-md-3">
@@ -515,7 +531,7 @@
                                             <mat-icon class="small-icon">edit</mat-icon>
                                         </span>
                                         <input type="number" class="form-control custom-input" placeholder="0"
-                                            formControlName="CallRate">
+                                            formControlName="CallRate" >
                                     </div>
                                 </div>
                             </div>
@@ -530,6 +546,9 @@
                     <mat-expansion-panel class="panel-border" [expanded]="true">
                         <mat-expansion-panel-header class="panel-header">
                             <mat-panel-title>GST Details</mat-panel-title>
+                              <mat-panel-description>
+                        Total: {{ totalGstAmount | number:'1.2-2' }}
+                    </mat-panel-description>
                         </mat-expansion-panel-header>
 
                         <div class="accordion-content">
@@ -538,11 +557,7 @@
                                     <label class="form-label">CGST%<span class="text-danger">*</span></label>
                                     <div class="gst-wrapper">
                                      <span class="gst-suffix">%</span>
-                                        <input type="text" formControlName="CGSTper" class="gst-input" placeholder="0">           
-                                        <div class="text-danger small" *ngIf="addGstInvoice.get('GST')?.touched 
-             && addGstInvoice.get('GST')?.hasError('required')">
-                                            CGST% is required
-                                        </div>
+                                        <input type="number" formControlName="CGSTper" class="gst-input" placeholder="0">      
                                     </div>
                                 </div>
                                 <div class="col-md-3">
@@ -552,19 +567,14 @@
                                             <mat-icon class="small-icon">edit</mat-icon>
                                         </span>
                                         <input type="text" class="form-control custom-input" placeholder="0"
-                                            formControlName="CGSTAmount">
+                                            formControlName="CGSTAmount" readonly>
                                     </div>
                                     </div>
                                 <div class="col-md-3">
                                     <label class="form-label">SGST%<span class="text-danger">*</span></label>
                                     <div class="gst-wrapper">
                                      <span class="gst-suffix">%</span>
-                                        <input type="text" formControlName="SGSTper" class="gst-input" placeholder="0">           
-                                        <div class="text-danger small" *ngIf="addGstInvoice.get('GST')?.touched 
-             && addGstInvoice.get('GST')?.hasError('required')">
-                                            CGST% is required
-                                        </div>
-                                    </div>
+                                        <input type="number" formControlName="SGSTper" class="gst-input" placeholder="0">                </div>
                                 </div>
                                 <div class="col-md-3">
                                     <label class="form-label">SGST Amount</label>
@@ -573,18 +583,15 @@
                                             <mat-icon class="small-icon">edit</mat-icon>
                                         </span>
                                         <input type="text" class="form-control custom-input" placeholder="0"
-                                            formControlName="SGSTAmount">
+                                            formControlName="SGSTAmount" readonly>
                                     </div>
                                     </div>
                                 <div class="col-md-3">
                                     <label class="form-label">UTGST%<span class="text-danger">*</span></label>
                                     <div class="gst-wrapper">
                                      <span class="gst-suffix">%</span>
-                                        <input type="text" formControlName="UTGSTper" class="gst-input" placeholder="0">           
-                                        <div class="text-danger small" *ngIf="addGstInvoice.get('GST')?.touched 
-             && addGstInvoice.get('GST')?.hasError('required')">
-                                            CGST% is required
-                                        </div>
+                                        <input type="number" formControlName="UTGSTper" class="gst-input" placeholder="0">           
+                                       
                                     </div>
                                 </div>
                                 <div class="col-md-3">
@@ -594,18 +601,15 @@
                                             <mat-icon class="small-icon">edit</mat-icon>
                                         </span>
                                         <input type="text" class="form-control custom-input" placeholder="0"
-                                            formControlName="UTGSTAmount">
+                                            formControlName="UTGSTAmount" readonly>
                                     </div>
                                     </div>
                                 <div class="col-md-3">
                                     <label class="form-label">IGST%<span class="text-danger">*</span></label>
                                     <div class="gst-wrapper">
                                      <span class="gst-suffix">%</span>
-                                        <input type="text" formControlName="IGSTper" class="gst-input" placeholder="0">           
-                                        <div class="text-danger small" *ngIf="addGstInvoice.get('GST')?.touched 
-             && addGstInvoice.get('GST')?.hasError('required')">
-                                            IGST% is required
-                                        </div>
+                                        <input type="number" formControlName="IGSTper" class="gst-input" placeholder="0">           
+                                        
                                     </div>
                                 </div>
                                 <div class="col-md-3">
@@ -615,7 +619,7 @@
                                             <mat-icon class="small-icon">edit</mat-icon>
                                         </span>
                                         <input type="text" class="form-control custom-input" placeholder="0"
-                                            formControlName="IGSTAmount">
+                                            formControlName="IGSTAmount" readonly>
                                     </div>
                                </div>
                                 </div>
@@ -631,6 +635,9 @@
                     <mat-expansion-panel class="panel-border" [expanded]="true">
                         <mat-expansion-panel-header class="panel-header">
                             <mat-panel-title>Non Taxable Amounts</mat-panel-title>
+                             <mat-panel-description>
+                        Total: {{ totalNonTaxableAmount | number:'1.2-2' }}
+                    </mat-panel-description>
                         </mat-expansion-panel-header>
 
                         <div class="accordion-content">
@@ -642,7 +649,7 @@
                                     <div class="input-wrapper">
                                         <span class="prefix-box">₹</span>
                                         <input type="number" class="form-control custom-input" placeholder="0"
-                                            formControlName="MobilerecoveryAmount">
+                                            formControlName="MobilerecoveryAmount" readonly>
                                     </div>
                                 </div>
                                 <div class="col-md-3">
@@ -650,7 +657,7 @@
                                     <div class="input-wrapper">
                                         <span class="prefix-box">₹</span>
                                         <input type="number" class="form-control custom-input" placeholder="0"
-                                            formControlName="PersonalLoanAmount">
+                                            formControlName="PersonalLoanAmount"  readonly>
                                     </div>
                                 </div>
                                 <div class="col-md-3">
@@ -658,7 +665,7 @@
                                     <div class="input-wrapper">
                                         <span class="prefix-box">₹</span>
                                         <input type="number" class="form-control custom-input" placeholder="0"
-                                            FormControlName="OtherDeductionAmount">
+                                            FormControlName="OtherDeductionAmount"  readonly>
                                     </div>
                                 </div>
                             </div>
@@ -671,7 +678,7 @@
                                     <div class="input-wrapper">
                                         <span class="prefix-box">₹</span>
                                         <input type="number" class="form-control custom-input" placeholder="0"
-                                            formControlName="NonTaxableAmount1">
+                                            formControlName="NonTaxableAmount1"  readonly>
                                     </div>
                                 </div>
                                 <div class="col-md-3">
@@ -680,7 +687,7 @@
                                         <span class="prefix-box">
                                             <mat-icon class="small-icon">edit</mat-icon>
                                         </span>
-                                        <input type="number" class="form-control custom-input" placeholder="0">
+                                        <input type="text" class="form-control custom-input" placeholder="0"  readonly>
                                     </div>
                                 </div>
                                 <div class="col-md-3">
@@ -688,7 +695,7 @@
                                     <div class="input-wrapper">
                                         <span class="prefix-box">₹</span>
                                         <input type="number" class="form-control custom-input" placeholder="0"
-                                            formControlName="NonTaxableAmount2">
+                                            formControlName="NonTaxableAmount2"  readonly>
                                     </div>
                                 </div>
                                 <div class="col-md-3">
@@ -697,8 +704,8 @@
                                         <span class="prefix-box">
                                             <mat-icon class="small-icon">edit</mat-icon>
                                         </span>
-                                        <input type="number" class="form-control custom-input" placeholder="0"
-                                            formControlName="NonTaxableAmount2Note">
+                                        <input type="text" class="form-control custom-input" placeholder="0"
+                                            formControlName="NonTaxableAmount2Note"  readonly>
                                     </div>
                                 </div>
                             </div>
@@ -708,8 +715,8 @@
                                             class="text-danger"></span></label>
                                     <div class="input-wrapper">
                                         <span class="prefix-box">₹</span>
-                                        <input type="number" class="form-control custom-input" placeholder="0"
-                                            formControlName="NonTaxableAmount3">
+                                        <input type="text" class="form-control custom-input" placeholder="0"
+                                            formControlName="NonTaxableAmount3"  readonly>
                                     </div>
                                 </div>
                                 <div class="col-md-3">
@@ -719,7 +726,7 @@
                                             <mat-icon class="small-icon">edit</mat-icon>
                                         </span>
                                         <input type="number" class="form-control custom-input" placeholder="0"
-                                            formControlName="NonTaxableAmount3Note">
+                                            formControlName="NonTaxableAmount3Note"  readonly>
                                     </div>
                                 </div>
                             </div>
@@ -727,23 +734,25 @@
                                 details:</label>
                             <div class="row align-items-center mb-3">
                                 <div class="col-md-3">
-                                    <div class="form-check mb-1">
-                                        <input class="form-check-input" type="checkbox" id="netAdj">
-                                        <label class="form-label" for="netAdj">
-                                            Net Adjustment Amount (+ / -)
-                                        </label>
-                                    </div>
+                                    <label class="form-label">
+                                <input
+                                type="checkbox"
+                                 class="form-check-input me-1 readonly-checkbox" formControlName="NetAmtNorP"
+                                
+                                />
+                                Net Adjustment Amount (+ / -)
+                            </label>
                                     <div class="input-wrapper">
                                         <span class="prefix-box">-</span>
                                         <input type="number" class="form-control" placeholder="0"
-                                            formControlName="NetAdjustmentAmount">
+                                            formControlName="NetAdjustmentAmount" readonly>
                                     </div>
                                 </div>
 
                                 <!-- Net Deduction Type -->
                                 <div class="col-md-3">
                                     <label class="form-label">Net Deduction Type</label>
-                                    <select class="form-select form-select-sm">
+                                    <select class="form-select form-select-sm" disabled >
                                         <option>-Select-</option>
                                         <option *ngFor="let p of NetDeductionType " [value]="p.net_Deduction_Type_Id">
                                             {{p.net_Deduction_Type}} </option>
@@ -757,7 +766,7 @@
                                         <span class="prefix-box">
                                             <mat-icon class="small-icon">edit</mat-icon>
                                         </span>
-                                        <input type="text" class="form-control" formControlName="NetAdjNote">
+                                        <input type="text" class="form-control" formControlName="NetAdjNote" readonly>
                                     </div>
                                 </div>
 
@@ -766,7 +775,7 @@
                                     <label class="form-label">Net Amount</label>
                                     <div class="input-wrapper">
                                         <span class="prefix-box">₹</span>
-                                        <input type="text" class="form-control" value="0.00"
+                                        <input type="text" class="form-control"  [value]="getNetAmount() | number:'1.2-2'" readonly
                                             style="background: yellow; font-weight: 600;" formControlName="NetAmount">
                                     </div>
                                 </div>
@@ -879,7 +888,7 @@
                             <div class="row g-3 mb-2">
                                 <div class="col-md-3">
                                     <label class="form-label">Status<span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" formControlName="Status">
+                                    <input type="text" class="form-control" formControlName="Status" readonly>
                                     <div class="text-danger small" *ngIf="addGstInvoice.get('Status')?.touched 
              && addGstInvoice.get('Status')?.hasError('required')">
                                         Status is required
@@ -963,3 +972,210 @@
         </mat-card-footer>
     </mat-card>
 </form>
+
+<!-- GST INVOICE DETAILS VIEW -->
+<div *ngIf="showInvoiceDetails" class="p-3">
+
+  <!-- ✅ Success Message -->
+  <div *ngIf="successMessage" class="alert alert-success text-center fw-semibold mb-3">
+    ✔ Invoice {{ invoiceDetails?.Invoice_Number }} created successfully
+  </div>
+
+  <h5 class="mb-3">GST Invoice Details</h5>
+
+  <!-- ================= Invoice Information ================= -->
+  <div class="section-title">Invoice Information</div>
+  <div class="row g-3">
+    <div class="col-md-3">
+      <label>Invoice ID</label>
+      <div class="readonly-box">{{ invoiceDetails?.Invoice_Id }}</div>
+    </div>
+
+    <div class="col-md-3">
+      <label>Invoice Number</label>
+      <div class="readonly-box">{{ invoiceDetails?.Invoice_Number }}</div>
+    </div>
+
+    <div class="col-md-3">
+      <label>Invoice Type</label>
+      <div class="readonly-box">{{ invoiceDetails?.InvoiceType }}</div>
+    </div>
+
+    <div class="col-md-3">
+      <label>Invoice Date</label>
+      <div class="readonly-box">
+        {{ invoiceDetails?.Invoice_Date | date:'dd-MMM-yyyy' }}
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= Company & Location ================= -->
+  <div class="section-title">Company & Location</div>
+  <div class="row g-3">
+    <div class="col-md-3">
+      <label>Company Code</label>
+      <div class="readonly-box">{{ invoiceDetails?.Company_Code }}</div>
+    </div>
+
+    <div class="col-md-3">
+      <label>Cost Center</label>
+      <div class="readonly-box">{{ invoiceDetails?.Map_Name }}</div>
+    </div>
+
+    <div class="col-md-3">
+      <label>City</label>
+      <div class="readonly-box">{{ invoiceDetails?.City_Name }}</div>
+    </div>
+
+    <div class="col-md-3">
+      <label>State</label>
+      <div class="readonly-box">{{ invoiceDetails?.State_Name }}</div>
+    </div>
+
+    <div class="col-md-3">
+      <label>No. of Employees</label>
+      <div class="readonly-box">{{ invoiceDetails?.No_Of_Employees }}</div>
+    </div>
+    <div class="col-md-3">
+      <label>Pay Period</label>
+      <div class="readonly-box">{{ invoiceDetails?.Pay_Period }}</div>
+    </div>
+  </div>
+
+  <!-- ================= Amount Details ================= -->
+  <div class="section-title">Amount Details</div>
+  <div class="row g-3">
+
+    <div class="col-md-3">
+      <label>Base Amount</label>
+      <div class="readonly-box">{{ (invoiceDetails?.Amount ?? 0) | number:'1.2-2' }}</div>
+    </div>
+
+    <div class="col-md-3">
+      <label>Service Charge</label>
+      <div class="readonly-box">{{ (invoiceDetails?.Service_Charge_Amount ?? 0) | number:'1.2-2' }}</div>
+    </div>
+
+    <div class="col-md-3">
+      <label>Sourcing Fee</label>
+      <div class="readonly-box">{{ (invoiceDetails?.Sourcing_Fee_Amount ?? 0) | number:'1.2-2' }}</div>
+    </div>
+
+    <div class="col-md-3">
+      <label>Absorption Amount</label>
+      <div class="readonly-box">{{ (invoiceDetails?.Absorption_Amt ?? 0) | number:'1.2-2' }}</div>
+    </div>
+
+    <div class="col-md-3">
+      <label>Compliance Fee</label>
+      <div class="readonly-box">{{ (invoiceDetails?.Compliance_Fee_Amount ?? 0) | number:'1.2-2' }}</div>
+    </div>
+
+    <div class="col-md-3">
+      <label>CTC Adjusted Amount</label>
+      <div class="readonly-box">{{ (invoiceDetails?.CTC_Amt_Adjusted ?? 0) | number:'1.2-2' }}</div>
+    </div>
+
+    <div class="col-md-3">
+      <label>Net Adjusted Amount</label>
+      <div class="readonly-box">{{ (invoiceDetails?.Net_Amt_Adjusted ?? 0) | number:'1.2-2' }}</div>
+    </div>
+
+    <div class="col-md-3">
+      <label>Employee PF</label>
+      <div class="readonly-box">{{ (invoiceDetails?.Employee_PF ?? 0) | number:'1.2-2' }}</div>
+    </div>
+
+    <div class="col-md-3">
+      <label>Employer PF</label>
+      <div class="readonly-box">{{ (invoiceDetails?.Employer_PF ?? 0) | number:'1.2-2' }}</div>
+    </div>
+
+    <div class="col-md-3">
+      <label>Employee ESI</label>
+      <div class="readonly-box">{{ (invoiceDetails?.Employee_ESI ?? 0) | number:'1.2-2' }}</div>
+    </div>
+
+    <div class="col-md-3">
+      <label>Employer ESI</label>
+      <div class="readonly-box">{{ (invoiceDetails?.Employer_ESI ?? 0) | number:'1.2-2' }}</div>
+    </div>
+
+    <div class="col-md-3">
+      <label>Mobile Recovery</label>
+      <div class="readonly-box">{{ (invoiceDetails?.Mobile_Recovery_Amount ?? 0) | number:'1.2-2' }}</div>
+    </div>
+
+    <div class="col-md-3">
+      <label>Personal Loan</label>
+      <div class="readonly-box">{{ (invoiceDetails?.Personal_Loan_Amount ?? 0) | number:'1.2-2' }}</div>
+    </div>
+  </div>
+
+  <!-- ================= GST Details ================= -->
+  <div class="section-title">GST Details</div>
+  <div class="row g-3">
+    <div class="col-md-3">
+      <label>CGST (%)</label>
+      <div class="readonly-box">{{ invoiceDetails?.CGST_Percentage }}</div>
+    </div>
+
+    <div class="col-md-3">
+      <label>CGST Amount</label>
+      <div class="readonly-box">{{ invoiceDetails?.CGST_Amount }}</div>
+    </div>
+
+    <div class="col-md-3">
+      <label>SGST (%)</label>
+      <div class="readonly-box">{{ invoiceDetails?.SGST_Percentage }}</div>
+    </div>
+
+    <div class="col-md-3">
+      <label>SGST Amount</label>
+      <div class="readonly-box">{{ invoiceDetails?.SGST_Amount }}</div>
+    </div>
+
+    <div class="col-md-3">
+      <label>IGST (%)</label>
+      <div class="readonly-box">{{ invoiceDetails?.IGST_Percentage }}</div>
+    </div>
+
+    <div class="col-md-3">
+      <label>IGST Amount</label>
+      <div class="readonly-box">{{ invoiceDetails?.IGST_Amount }}</div>
+    </div>
+
+    <div class="col-md-3">
+      <label>Net Amount</label>
+      <div class="readonly-box fw-bold text-success">
+        {{ (invoiceDetails?.Net_Amount ?? 0) | number:'1.2-2' }}
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= Status ================= -->
+  <div class="section-title">Status</div>
+  <div class="row g-3">
+    <div class="col-md-3">
+      <label>Status</label>
+      <div class="readonly-box">{{ invoiceDetails?.Status }}</div>
+    </div>
+
+    <div class="col-md-3">
+      <label>IRN Status</label>
+      <div class="readonly-box">{{ invoiceDetails?.IRN_Status }}</div>
+    </div>
+
+    <div class="col-md-3">
+      <label>Created Mode</label>
+      <div class="readonly-box">{{ invoiceDetails?.Created_Mode }}</div>
+    </div>
+  </div>
+
+  <!-- ================= Actions ================= -->
+  <div class="mt-4 d-flex justify-content-end gap-2">
+    <button class="btn btn-secondary" (click)="closeForm()">Back To List</button>
+    <button class="btn btn-primary" (click)="createNewInvoice()">Create New Invoice</button>
+  </div>
+
+</div>
