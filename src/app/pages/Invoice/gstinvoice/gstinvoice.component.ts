@@ -22,6 +22,7 @@ import { GstinvoiceaddComponent } from '../gstinvoiceadd/gstinvoiceadd.component
 import { RejectGstInvoiceComponent } from '../reject-gst-invoice/reject-gst-invoice.component';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIcon } from "@angular/material/icon";
+import { DialogRef } from '@angular/cdk/dialog';
 
 export const Invoice_TOKEN = new InjectionToken<IInvoiceRepository>('Invoice_TOKEN');
 
@@ -390,6 +391,17 @@ export class GstinvoiceComponent {
        hasBackdrop: true,
       data: { example: 'Hello from parent!' }
     });
+}
+editInvoice(invoiceId: number) {
+  this.dialog.open(GstinvoiceaddComponent, {
+    width: '95%',
+    height: '90vh',
+    disableClose: true,
+    data: {
+      mode: 'edit',
+      invoiceId: invoiceId
+    }
+  });
 }
 
 }

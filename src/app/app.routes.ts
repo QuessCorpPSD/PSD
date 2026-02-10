@@ -148,6 +148,7 @@ import { EmployeeComponents } from './pages/customers/employee/employee.componen
 import { TaxRemittanceGenerationComponent } from './pages/E-TDSProcess/tax-remittance-generation/tax-remittance-generation.component';
 import { BillingdashboardComponent } from './pages/Invoice/billingdashboard/billingdashboard.component';
 import { EInvoiceComponent } from './pages/Invoice/einvoice/einvoice.component';
+import { InvoiceCancelComponent } from './pages/Invoice/invoicecancel/invoicecancel.component';
 
 
 
@@ -376,9 +377,10 @@ export const routes: Routes = [
           {path:'IRN',component:EInvoiceComponent},
           { path: 'app-invoice-culture', component: InvoiceCultureComponent },
           { path: 'ClientBillableReportDatewise', component: ClientbillablereportsdatewiseComponent },
-          { path: 'creditnote', component: CreditnoteComponent },
-          { path: 'creditnoteapprove', component: CreditnoteapproveComponent },
-          { path: 'creditnoteupdate', component: CreditnoteupdateComponent },
+          //{ path: 'creditnote', component: CreditnoteComponent },
+         // { path: 'creditnoteapprove', component: CreditnoteapproveComponent },
+         { path: 'invoicecancel', component: InvoiceCancelComponent },
+          //{ path: 'creditnoteupdate', component: CreditnoteupdateComponent },
           { path: 'companyinvoiceformat', component: CompanyinvoiceformatComponent },
           { path: 'OtherIncome', component: OtherincomeComponent },
 

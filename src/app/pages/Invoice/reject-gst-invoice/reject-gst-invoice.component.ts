@@ -113,17 +113,24 @@ expectedColumns: string[] = [
   formData.append('status', this.rejectForm.value.status);
 
   this.isLoading = true;
-  console.log(formData);
+  //console.log(formData);
+    this.showPopup = false; 
 
   this.gst.RejectInvoice(formData).subscribe({
-    next: (res: any) => {
+        next: (res) => {
+            this.isLoading = false; 
+          
+             this.popupMessage =
+             res?.Data?.data?.response ||  res?.Data?.message ||'Success';
+                this.showPopup = true;
+            return;          
+        },
+    error: (err) => {
       this.isLoading = false;
-      this.popupMessage = res?.Message || 'Rejected successfully';
-      this.showPopup = true;
-    },
-    error: () => {
-      this.isLoading = false;
-      this.popupMessage = 'Something went wrong';
+     this.popupMessage =
+        err?.error?.Message ||
+        err?.error?.data?.response ||
+        'Something went wrong';
       this.showPopup = true;
     }
   });
