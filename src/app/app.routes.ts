@@ -148,6 +148,8 @@ import { EmployeeComponents } from './pages/customers/employee/employee.componen
 import { TaxRemittanceGenerationComponent } from './pages/E-TDSProcess/tax-remittance-generation/tax-remittance-generation.component';
 import { BillingdashboardComponent } from './pages/Invoice/billingdashboard/billingdashboard.component';
 import { EInvoiceComponent } from './pages/Invoice/einvoice/einvoice.component';
+import { InputnavigationComponent } from './pages/inputaggregator/inputnavigation/inputnavigation.component';
+import { InputaggregatorwithclientComponent } from './pages/inputaggregator/inputaggregatorwithclient/inputaggregatorwithclient.component';
 import { InvoiceCancelComponent } from './pages/Invoice/invoicecancel/invoicecancel.component';
 
 
@@ -331,6 +333,12 @@ export const routes: Routes = [
 
 
         ]
+      },
+      {
+        path:'input',component:InputnavigationComponent,
+        children:[{
+          path:"inputaggregatorclient",component:InputaggregatorwithclientComponent
+        }]
       },
       {
         path: 'admin', component: AdminnavigationComponent,
