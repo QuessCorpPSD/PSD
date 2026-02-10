@@ -150,6 +150,7 @@ import { BillingdashboardComponent } from './pages/Invoice/billingdashboard/bill
 import { EInvoiceComponent } from './pages/Invoice/einvoice/einvoice.component';
 import { InputnavigationComponent } from './pages/inputaggregator/inputnavigation/inputnavigation.component';
 import { InputaggregatorwithclientComponent } from './pages/inputaggregator/inputaggregatorwithclient/inputaggregatorwithclient.component';
+import { InvoiceCancelComponent } from './pages/Invoice/invoicecancel/invoicecancel.component';
 
 
 
@@ -381,14 +382,14 @@ export const routes: Routes = [
            { path: 'einvoice', component: EInvoiceComponent },
           { path: 'billingpayfrequency', component: BillingpayfrequencyComponent },          
           { path: 'poinitiate', component: POInitiateComponent },
-          {path:'IRN',component:EInvoiceComponent},
+           {path:'IRN',component:EInvoiceComponent},
           { path: 'app-invoice-culture', component: InvoiceCultureComponent },
           { path: 'ClientBillableReportDatewise', component: ClientbillablereportsdatewiseComponent },
           { path: 'creditnote', component: CreditnoteComponent },
-          { path: 'creditnoteapprove', component: CreditnoteapproveComponent },
-          { path: 'creditnoteupdate', component: CreditnoteupdateComponent },
-          { path: 'companyinvoiceformat', component: CompanyinvoiceformatComponent },
-          { path: 'OtherIncome', component: OtherincomeComponent },
+          { path: 'creditnoteapprove', component: InvoiceCancelComponent },
+          // { path: 'creditnoteupdate', component: CreditnoteupdateComponent },
+          // { path: 'companyinvoiceformat', component: CompanyinvoiceformatComponent },
+           { path: 'OtherIncome', component: OtherincomeComponent },
 
         ]
       },

@@ -282,46 +282,61 @@ export class InputaggregatorwithclientComponent {
 
   downloadExcelBillablereport() {
     if (!this.selectCompanyId || !this.payperiodId) {
+      alert("Please Select Company and PayPeriod");
       return;
     }
 
     this.isLoading = true;
-
+    console.log(this.selectCompanyId, this.payperiodId);
     this.service
       .downloadBillableReport(this.selectCompanyId, this.payperiodId)
       .subscribe({
         next: (res: any) => {
+          console.log("res",res)
+          if (res.StatusCode === 200) {
+            const data = res?.Data?.data?.Table0;
+            const err = res;
+            if (!data || data.length === 0) {
+              alert('No records Found');
+              this.isLoading = false;
+              return;
+            }
 
-          const data = res?.Data?.data?.Table0;
+            const worksheet: XLSX.WorkSheet =
+              XLSX.utils.json_to_sheet(data);
 
-          if (!data || data.length === 0) {
-            alert('No records Found');
-            this.isLoading = false;
-            return;
+            const workbook: XLSX.WorkBook = {
+              Sheets: { 'Billable Report': worksheet },
+              SheetNames: ['Billable Report']
+            };
+
+            const excelBuffer = XLSX.write(workbook, {
+              bookType: 'xlsx',
+              type: 'array'
+            });
+
+            const blob = new Blob([excelBuffer], {
+              type:
+                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8'
+            });
+
+            saveAs(blob, 'Billable_Report.xlsx');
+          } else if (res.StatusCode === 404) {
+            alert('No Resource found');
+          } else if (res.Data.statusCode === 400) {
+            alert('Invalid request');
+          } else if (res.Data.statusCode === 500) {
+            alert('Server error, please try again later');
+          } else {
+            alert('Something went wrong');
           }
-
-          const worksheet: XLSX.WorkSheet =
-            XLSX.utils.json_to_sheet(data);
-
-          const workbook: XLSX.WorkBook = {
-            Sheets: { 'Billable Report': worksheet },
-            SheetNames: ['Billable Report']
-          };
-
-          const excelBuffer = XLSX.write(workbook, {
-            bookType: 'xlsx',
-            type: 'array'
-          });
-
-          const blob = new Blob([excelBuffer], {
-            type:
-              'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8'
-          });
-
-          saveAs(blob, 'Billable_Report.xlsx');
           this.isLoading = false;
+
         },
-        error: () => {
+        error: (err) => {
+          console.log("err", err);
+          alert('Server error, please try again later');
+
           this.isLoading = false;
         }
       });
@@ -364,10 +379,10 @@ export class InputaggregatorwithclientComponent {
   handleSearch(): void {
     if (!this.selectedCompanyId) {
       alert("Please Select Company");
-      console.log('seddede',this.selectedCompanyId)
+      console.log('seddede', this.selectedCompanyId)
       return;
     }
-      console.log('seddede',this.selectedCompanyId)
+    console.log('seddede', this.selectedCompanyId)
 
     this.isLoading = true;
 
