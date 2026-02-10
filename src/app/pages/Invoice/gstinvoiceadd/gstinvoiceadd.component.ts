@@ -8,7 +8,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatDialogRef ,MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { CompanyallComponent } from '../../../common/CompanyAll/companyall.component';
 import { format } from 'node:path';
 import { InvoiceRepository } from '../../../Service/InvoiceRepository';
@@ -26,7 +26,7 @@ import { debounceTime, filter } from 'rxjs/operators';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { FormBuilder } from '@angular/forms';
 import { AnyCaaRecord } from 'node:dns';
-
+import { Inject } from '@angular/core';
 @Component({
   selector: 'app-gstinvoiceadd',
   standalone: true,
@@ -93,8 +93,10 @@ showInvoiceDetails = false;
 invoiceDetails: any;
 createdInvoiceId: number | null = null;
 successMessage: string | null = null;
+ isEditMode = false;
+invoiceId!: number;
 
-  constructor(private dialogRef: MatDialogRef<GstinvoiceaddComponent>, private gst: InvoiceRepository, private _decrypt: EncryptionService, private _sessionStoreage: SessionStorageService,private fb: FormBuilder,) { }
+  constructor(private dialogRef: MatDialogRef<GstinvoiceaddComponent>, private gst: InvoiceRepository, private _decrypt: EncryptionService, private _sessionStoreage: SessionStorageService,private fb: FormBuilder,  @Inject(MAT_DIALOG_DATA) public data: any ) { }
 
   handleCompanyEvent(company: any) {
     this.selectedCompanyId = company.companyId;
@@ -162,6 +164,7 @@ citynameEvent(event) {
     this.payPeriodType = "All";
     const today = new Date();
     const formattedToday = today.toISOString().split('T')[0];
+     
     this.addGstInvoice = new FormGroup({
       InvoiceNumber: new FormControl(  { value: 'NEW', disabled: true }, Validators.required),
       companyCode: new FormControl('', Validators.required),
@@ -268,6 +271,13 @@ citynameEvent(event) {
       this.calculateGstAmounts();
       this.getNetAmount(); // or CalculateNetAmount()
     });
+    
+  if (this.data?.mode === 'edit' && this.data?.invoiceId) {
+    this.isEditMode = true;
+    this.invoiceId = this.data.invoiceId;
+    this.loadInvoiceForEdit(this.invoiceId);
+    
+    }
   }
 
   BindGstInvoiceType() {
@@ -328,12 +338,14 @@ const request = {
     const today = new Date().toISOString().split('T')[0] + "T00:00:00";
 
     const payload = {
-      Action: "Add",
+      //Action: "Add",
+      //Invoice_Id: null
+      Action: this.data?.mode === 'edit' ? 'Edit' : 'Add',
+      Invoice_Id: this.data?.invoiceId ?? null,
       Created_Mode: null,
 
       UserId: this.userdetail?.user_Id?.toString() ?? null,
-      Invoice_Id: null,
-
+      
       Invoice_Number: formValue?.InvoiceNumber?.toString() ?? null,
       Company_Id: this.selectedCompanyId?.toString() ?? null,
       Cost_Center_Mapping_Id: this.mapNameId?.toString() ?? null,
@@ -838,4 +850,39 @@ createNewInvoice() {
   this.showInvoiceDetails = false;
   this.invoiceDetails = null;
 }
+
+loadInvoiceForEdit(invoiceId: number) {
+
+  const payload = {
+    Action: "Get",
+    UserId: this.userdetail?.user_Id,
+    Invoice_Id: invoiceId,
+  };
+
+  this.gst.GetInvoiceDetailsById(payload).subscribe({
+    next: (res: any) => {
+      if (res?.StatusCode === 200 && res?.Data?.length > 0) {
+
+        const inv = res.Data[0];
+
+        this.addGstInvoice.patchValue({
+          InvoiceNumber: inv.Invoice_Number,
+          CompanyName: inv.Company_Name,
+          InvoiceDate: inv.Invoice_Date?.split('T')[0],
+          Amount: inv.Amount,
+          Particulars: inv.Particulars,
+          Status: inv.Status,
+          CGSTper: inv.CGST_Percentage,
+          SGSTper: inv.SGST_Percentage,
+          IGSTper: inv.IGST_Percentage,
+          UTGSTper: inv.UTGST_Percentage,
+          NetAmount: inv.Net_Amount
+        });
+
+        this.addGstInvoice.get('InvoiceNumber')?.disable();
+      }
+    }
+  });
+}
+
 }

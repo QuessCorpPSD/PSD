@@ -19,6 +19,7 @@ import { Payperiodclass } from '../../../Models/Common';
 import { InvoiceRepository } from '../../../Service/InvoiceRepository';
 import { EncryptionService } from '../../../Shared/encryption.service';
 import { SessionStorageService } from '../../../Shared/SessionStorageService';
+import { AlertpopupComponent } from '../../../common/alertpopup/alertpopup.component';
 @Component({
   selector: 'invoicecancel',
   standalone: true,
@@ -37,7 +38,8 @@ import { SessionStorageService } from '../../../Shared/SessionStorageService';
     MatDialogModule,
     CompanyallComponent,
     PayPeriodComponent,
-    MatSort
+    MatSort,
+    AlertpopupComponent
 
   ],
   templateUrl: './invoicecancel.component.html',
@@ -61,6 +63,8 @@ export class InvoiceCancelComponent implements OnInit, AfterViewInit {
   isLoading: boolean = false;
   remarks: string = '';
   userdetail: any;
+   showPopup: boolean = false;
+  popupMessage: string = "";
 
   displayedColumns: string[] = [  'select'
     , 'pdfdownload','invoice_Number', 'invoice_Date','map_Name','state_Name','invoiceType', 'cgsT_Amount','sgsT_Amount','igsT_Amount','net_Amount','creditNote_Status','creditNoteNumber','cancelledOn'];
@@ -193,12 +197,17 @@ invoiceApprove() {
 
   this._invoiceService.BulkApproveInvoice(payload).subscribe({
     next: (res: any) => {
-console.log(res);
-      // ✅ ALWAYS show backend message
-      alert(res?.message || 'Already Approved');
 
-      // ✅ Success or partial success
-      if (res?.statusCode === 200 || res?.status === 'PARTIAL') {
+      this.popupMessage =
+     res?.message || 'Invoices approved successfully';
+  this.showPopup = true;
+  console.log(res);
+ const isSuccess =
+        res?.status === 'SUCCESS' ||
+          res?.statusCode === 200;
+
+      if (isSuccess) {
+      
 
         // Clear selection
         this.selection.clear();

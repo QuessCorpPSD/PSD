@@ -385,11 +385,12 @@ export const routes: Routes = [
            {path:'IRN',component:EInvoiceComponent},
           { path: 'app-invoice-culture', component: InvoiceCultureComponent },
           { path: 'ClientBillableReportDatewise', component: ClientbillablereportsdatewiseComponent },
-          { path: 'creditnote', component: CreditnoteComponent },
-          { path: 'creditnoteapprove', component: InvoiceCancelComponent },
-          // { path: 'creditnoteupdate', component: CreditnoteupdateComponent },
-          // { path: 'companyinvoiceformat', component: CompanyinvoiceformatComponent },
-           { path: 'OtherIncome', component: OtherincomeComponent },
+          //{ path: 'creditnote', component: CreditnoteComponent },
+         // { path: 'creditnoteapprove', component: CreditnoteapproveComponent },
+         { path: 'invoicecancel', component: InvoiceCancelComponent },
+          //{ path: 'creditnoteupdate', component: CreditnoteupdateComponent },
+          { path: 'companyinvoiceformat', component: CompanyinvoiceformatComponent },
+          { path: 'OtherIncome', component: OtherincomeComponent },
 
         ]
       },
