@@ -9,6 +9,8 @@ import { SessionStorageService } from '../../../Shared/SessionStorageService';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 import { finalize } from 'rxjs';
+import FileSaver from 'file-saver';
+
 import { MatIcon, MatIconModule } from "@angular/material/icon";
 import { PayPeriodComponent } from "../../../common/payperiod/payperiod.component";
 import { Company, Payperiodclass } from '../../../Models/Common';
@@ -56,6 +58,7 @@ export class InputaggregatorwithclientComponent {
   payperiodId: any;
   payperiods: any;
   payPeriodType: any;
+  datatable: any;
   constructor(@Inject(Pay_TOKEN) private service: IInputaggregator,
     private decry: EncryptionService, private _sessionStoreage: SessionStorageService) {
 
@@ -292,7 +295,7 @@ export class InputaggregatorwithclientComponent {
       .downloadBillableReport(this.selectCompanyId, this.payperiodId)
       .subscribe({
         next: (res: any) => {
-          console.log("res",res)
+          console.log("res", res)
           if (res.StatusCode === 200) {
             const data = res?.Data?.data?.Table0;
             const err = res;
@@ -689,7 +692,19 @@ export class InputaggregatorwithclientComponent {
     return { parsed: null, msg: String(r) };
   }
 
+  downloadExcels(data: any[], templateId: string): void {
+    //console.log("export");
+    const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(data);
+    const workbook: XLSX.WorkBook = {
+      Sheets: { 'Sheet1': worksheet },
+      SheetNames: ['Sheet1']
+    };
 
+    const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    const blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
+    const fileName = `${templateId}.xlsx`;
+    FileSaver.saveAs(blob, fileName);
+  }
 
   showUploadPopup = false;
   selectedFile!: File;
@@ -775,9 +790,9 @@ export class InputaggregatorwithclientComponent {
 
           // Error parsing → download Excel
           if (res?.StatusCode === 200 && msg?.trim() === 'Failed to import.') {
-            const rawErr = res.Data.errors?.[0];
+            const rawErr = res?.Data?.errors[0];
             let errorArray: any[] = [];
-
+            console.log("rawErr", rawErr);
             try {
               if (typeof rawErr === 'string') {
                 const tryJson = JSON.parse(rawErr);
@@ -792,7 +807,7 @@ export class InputaggregatorwithclientComponent {
             }
 
             const exportData = errorArray.map((item: any) => ({
-              Error_Message: item?.Error_Message || ''
+              Error_Message: item?.message || item?.Error_Message || ''
             }));
 
             const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
@@ -817,6 +832,36 @@ export class InputaggregatorwithclientComponent {
           alert('Upload failed due to a network or server error.');
         }
       });
+
+    // this.service.Uploadclient(formData)
+    //   .pipe(finalize(() => (this.isLoading = false)))
+    //   .subscribe({
+    //     next: (res) => {
+    //       console.log(res);
+
+    //       if (res.Data.errors && res.Data.errors.length > 0) {
+    //         this.datatable = JSON.parse(res.Data.errors[0]);
+    //       } else {
+    //         this.datatable = [];
+    //       }
+
+    //       console.table(this.datatable);
+
+    //       if (this.datatable && Array.isArray(this.datatable) && this.datatable.length > 0) {
+    //         this.downloadExcels(this.datatable, "Input_Aggregator Validation");
+    //         this.isLoading = false;
+    //       } else {
+    //         alert("No validations returned");
+    //         this.isLoading = false;
+    //       }
+
+    //     },
+    //     error: err => {
+    //       console.error('❌ Upload failed', err);
+    //       alert(err);
+    //       this.isLoading = false;
+    //     }
+    //   });
   }
 
   tryParseResponseClient(r: any): { parsed: any; msg: string } {
