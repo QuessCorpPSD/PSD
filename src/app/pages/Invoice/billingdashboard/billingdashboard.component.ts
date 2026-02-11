@@ -19,6 +19,7 @@ import { CommonModule } from '@angular/common';
 export const DASH_TOKEN = new InjectionToken<IDashBoardServices>('DASH_TOKEN');
 export const AUTH_TOKEN = new InjectionToken<IAssignmentService>('AUTH_TOKEN');
 export const Invoice_TOKEN = new InjectionToken<IInvoiceRepository>('Invoice_TOKEN');
+import * as XLSX from 'xlsx';
 @Component({
   selector: 'app-billingdashboard',
   imports: [MatPaginatorModule,CommonModule,UserComponent,MatTableModule,MatCardModule,MatTooltipModule,MatCheckboxModule],
@@ -66,6 +67,24 @@ export class BillingdashboardComponent implements OnInit {
     this.userdetail = JSON.parse(this._decrypt.decrypt(userdetail!));
     this.BindInvoiceAllot();
   }
+    onExportInvoice() {
+      const request = {
+        "InvoiceType": 0,
+        "ActionType": "E",
+        "userId": this.userdetail.user_Id
+      }
+      console.log(request);
+      this._invoiceService.GetAllInvoiceAllotDetails(request).subscribe({
+        next: res => {
+          console.log(res.Data.data);
+          const ws = XLSX.utils.json_to_sheet(res.Data.data);
+          const wb = XLSX.utils.book_new();
+          XLSX.utils.book_append_sheet(wb, ws, "Table");
+          XLSX.writeFile(wb, "InvoiceAllotExport.xlsx");
+        },
+        error: err => { }
+      });
+    }
   BindInvoiceAllot() {
     console.log('BindInvoiceAllot');
     console.log(this.userdetail)
