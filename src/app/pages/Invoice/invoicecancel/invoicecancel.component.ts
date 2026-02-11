@@ -20,6 +20,7 @@ import { InvoiceRepository } from '../../../Service/InvoiceRepository';
 import { EncryptionService } from '../../../Shared/encryption.service';
 import { SessionStorageService } from '../../../Shared/SessionStorageService';
 import { AlertpopupComponent } from '../../../common/alertpopup/alertpopup.component';
+import { finalize } from 'rxjs';
 @Component({
   selector: 'invoicecancel',
   standalone: true,
@@ -49,7 +50,7 @@ export class InvoiceCancelComponent implements OnInit, AfterViewInit {
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
-  
+
   @ViewChild('editDialog') editDialog!: TemplateRef<any>;
 
   dataSource = new MatTableDataSource<Invoicecancelgrid>([]);
@@ -63,13 +64,13 @@ export class InvoiceCancelComponent implements OnInit, AfterViewInit {
   isLoading: boolean = false;
   remarks: string = '';
   userdetail: any;
-   showPopup: boolean = false;
+  showPopup: boolean = false;
   popupMessage: string = "";
 
-  displayedColumns: string[] = [  'select'
-    , 'pdfdownload','invoice_Number', 'invoice_Date','map_Name','state_Name','invoiceType', 'cgsT_Amount','sgsT_Amount','igsT_Amount','net_Amount','creditNote_Status','creditNoteNumber','cancelledOn'];
-filterDisplayedColumns: string[] = [...this.displayedColumns];
-columnFilters: { [key: string]: string } = {};
+  displayedColumns: string[] = ['select'
+    , 'pdfdownload', 'docDownload', 'invoice_Number', 'invoice_Date', 'map_Name', 'state_Name', 'invoiceType', 'cgsT_Amount', 'sgsT_Amount', 'igsT_Amount', 'net_Amount', 'creditNote_Status', 'creditNoteNumber', 'cancelledOn'];
+  filterDisplayedColumns: string[] = [...this.displayedColumns];
+  columnFilters: { [key: string]: string } = {};
   selection = new SelectionModel<Invoicecancelgrid>(true, []);
 
   constructor(
@@ -77,37 +78,37 @@ columnFilters: { [key: string]: string } = {};
     private _decrypt: EncryptionService,
     private _sessionStoreage: SessionStorageService,
     private dialog: MatDialog
-  ) {}
-isAnyFilteredRowSelected(): boolean {
+  ) { }
+  isAnyFilteredRowSelected(): boolean {
     return this.selection.selected.some(sel =>
       this.dataSource.filteredData.some(row => row.invoice_Id === sel.invoice_Id
       )
     );
   }
   ngOnInit(): void {
-  const userdetail = this._sessionStoreage.getItem('UserProfile');
-  this.userdetail = JSON.parse(this._decrypt.decrypt(userdetail!));
+    const userdetail = this._sessionStoreage.getItem('UserProfile');
+    this.userdetail = JSON.parse(this._decrypt.decrypt(userdetail!));
 
-  this.dataSource.filterPredicate = (data: any, filter: string) => {
-    const filters = JSON.parse(filter);
+    this.dataSource.filterPredicate = (data: any, filter: string) => {
+      const filters = JSON.parse(filter);
 
-    return Object.keys(filters).every(column => {
-      if (!filters[column]) return true;
+      return Object.keys(filters).every(column => {
+        if (!filters[column]) return true;
 
-      const value = data[column];
-      if (!value) return false;
+        const value = data[column];
+        if (!value) return false;
 
-      return value
-        .toString()
-        .toLowerCase()
-        .includes(filters[column]);
-    });
-  };
-}
+        return value
+          .toString()
+          .toLowerCase()
+          .includes(filters[column]);
+      });
+    };
+  }
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
-      this.dataSource.sort = this.sort;
+    this.dataSource.sort = this.sort;
   }
 
   handleCompanyEvent(company: any) {
@@ -118,22 +119,22 @@ isAnyFilteredRowSelected(): boolean {
     this.payPeriod = payperiod;
   }
 
-applyFilter(event: Event, column: string) {
-  const value = (event.target as HTMLInputElement).value
-    .trim()
-    .toLowerCase();
+  applyFilter(event: Event, column: string) {
+    const value = (event.target as HTMLInputElement).value
+      .trim()
+      .toLowerCase();
 
-  this.columnFilters[column] = value;
-  this.dataSource.filter = JSON.stringify(this.columnFilters);
-}
-applyDateFilter(event: Event, column: string) {
-  const value = (event.target as HTMLInputElement).value
-    .trim()
-    .toLowerCase();
+    this.columnFilters[column] = value;
+    this.dataSource.filter = JSON.stringify(this.columnFilters);
+  }
+  applyDateFilter(event: Event, column: string) {
+    const value = (event.target as HTMLInputElement).value
+      .trim()
+      .toLowerCase();
 
-  this.columnFilters[column] = value;
-  this.dataSource.filter = JSON.stringify(this.columnFilters);
-}
+    this.columnFilters[column] = value;
+    this.dataSource.filter = JSON.stringify(this.columnFilters);
+  }
   isAllSelected() {
     const numSelected = this.selection.selected.length;
     const numRows = this.dataSource.data.length;
@@ -171,102 +172,102 @@ applyDateFilter(event: Event, column: string) {
   }
 
 
-invoiceApprove() {
-  this.isLoading = true;
+  invoiceApprove() {
+    this.isLoading = true;
 
-  const filteredSelected = this.selection.selected.filter((item: any) =>
-    this.dataSource.filteredData.includes(item)
-  );
+    const filteredSelected = this.selection.selected.filter((item: any) =>
+      this.dataSource.filteredData.includes(item)
+    );
 
-  const selectedInvoiceIds = filteredSelected.map(item => item.invoice_Id);
+    const selectedInvoiceIds = filteredSelected.map(item => item.invoice_Id);
 
-  // ❌ No selection
-  if (!selectedInvoiceIds.length) {
-    alert('Please select at least one invoice ❌');
-    this.isLoading = false;
-    return;
-  }
+    // ❌ No selection
+    if (!selectedInvoiceIds.length) {
+      alert('Please select at least one invoice ❌');
+      this.isLoading = false;
+      return;
+    }
 
-  // ⚠️ Confirmation
-  if (!confirm(`You have selected ${selectedInvoiceIds.length} invoice(s). Do you want to approve them?`)) {
-    this.isLoading = false;
-    return;
-  }
+    // ⚠️ Confirmation
+    if (!confirm(`You have selected ${selectedInvoiceIds.length} invoice(s). Do you want to approve them?`)) {
+      this.isLoading = false;
+      return;
+    }
 
-  const payload = { invoice_Id: selectedInvoiceIds };
+    const payload = { invoice_Id: selectedInvoiceIds };
 
-  this._invoiceService.BulkApproveInvoice(payload).subscribe({
-    next: (res: any) => {
+    this._invoiceService.BulkApproveInvoice(payload).subscribe({
+      next: (res: any) => {
 
-      this.popupMessage =
-     res?.message || 'Invoices approved successfully';
-  this.showPopup = true;
-  console.log(res);
- const isSuccess =
-        res?.status === 'SUCCESS' ||
+        this.popupMessage =
+          res?.message || 'Invoices approved successfully';
+        this.showPopup = true;
+        console.log(res);
+        const isSuccess =
+          res?.status === 'SUCCESS' ||
           res?.statusCode === 200;
 
-      if (isSuccess) {
-      
+        if (isSuccess) {
 
-        // Clear selection
-        this.selection.clear();
 
-        // Reset paginator
-        if (this.paginator) {
-          this.paginator.firstPage();
+          // Clear selection
+          this.selection.clear();
+
+          // Reset paginator
+          if (this.paginator) {
+            this.paginator.firstPage();
+          }
+
+          // Refresh grid
+          this.InvoiceSearch();
         }
 
-        // Refresh grid
-        this.InvoiceSearch();
+        this.isLoading = false;
+      },
+      error: (err) => {
+        alert(err?.error?.message || 'Something went wrong ❌');
+        this.isLoading = false;
       }
-
-      this.isLoading = false;
-    },
-    error: (err) => {
-      alert(err?.error?.message || 'Something went wrong ❌');
-      this.isLoading = false;
-    }
-  });
-}
-
-InvoiceSearch() {
-  if (!this.selectedCompanyId || !this.payPeriod) {
-    alert('Select Company and Pay Period');
-    return;
+    });
   }
 
-  this.isLoading = true;
-
-  const request = {
-    Company_Id: this.selectedCompanyId,
-    PayPeriod_Id: this.payPeriod.payfrequencyid
-  };
-
-  this._invoiceService.GetAllInvoiceCancelDetails(request).subscribe({
-    next: (res: any) => {
-      const apiData = Array.isArray(res?.Data?.data) ? res.Data.data : [];
-
-      this.dataSource.data = apiData.map((item: any) => ({
-        ...item,
-        invoice_Number:
-          item.invoice_Number ||
-          item.invoiceNumber ||
-          item.InvoiceNumber
-      }));
-
-      // ✅ Always reassign paginator after data load
-      if (this.paginator) {
-        this.dataSource.paginator = this.paginator;
-      }
-
-      this.isLoading = false;
-    },
-    error: () => {
-      this.isLoading = false;
+  InvoiceSearch() {
+    if (!this.selectedCompanyId || !this.payPeriod) {
+      alert('Select Company and Pay Period');
+      return;
     }
-  });
-}
+
+    this.isLoading = true;
+
+    const request = {
+      Company_Id: this.selectedCompanyId,
+      PayPeriod_Id: this.payPeriod.payfrequencyid
+    };
+
+    this._invoiceService.GetAllInvoiceCancelDetails(request).subscribe({
+      next: (res: any) => {
+        const apiData = Array.isArray(res?.Data?.data) ? res.Data.data : [];
+
+        this.dataSource.data = apiData.map((item: any) => ({
+          ...item,
+          invoice_Number:
+            item.invoice_Number ||
+            item.invoiceNumber ||
+            item.InvoiceNumber
+        }));
+
+        // ✅ Always reassign paginator after data load
+        if (this.paginator) {
+          this.dataSource.paginator = this.paginator;
+        }
+
+        this.isLoading = false;
+      },
+      error: () => {
+        this.isLoading = false;
+      }
+    });
+  }
 
   Invoiceintiate() {
     if (!this.selection.selected.length) {
@@ -352,6 +353,42 @@ InvoiceSearch() {
       window.URL.revokeObjectURL(url);
       this.isLoading = false;
     });
+  }
+
+  Downloadfile(invoice_Id: number) {
+    if (!invoice_Id) return;
+
+    this.isLoading = true;
+
+    this._invoiceService.GetUploadedFile(invoice_Id)
+      .pipe(
+        finalize(() => this.isLoading = false)
+      )
+      .subscribe({
+        next: res => {
+          //console.log(res);
+          if (res.StatusCode === 200) {
+            const data = res.Data;
+            var base64 = data.file;
+            this.downloadExcelFromBase64(base64, data.fileName);
+          } else {
+            alert("File Path not found!");
+          }
+        },
+        error: error => {
+          console.error('Error:', error);
+        }
+      });
+  }
+
+  downloadExcelFromBase64(base64: string, filename: string) {
+    // this.isLoading=false;
+    const source = `data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,${base64}`;
+    const downloadLink = document.createElement('a');
+    downloadLink.href = source;
+    downloadLink.download = filename;
+    downloadLink.click();
+    this.isLoading = false;
   }
 
 }

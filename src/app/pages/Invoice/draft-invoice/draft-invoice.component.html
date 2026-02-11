@@ -1,5 +1,28 @@
 <div class="container-fluid">
     <div style="display:flex; float:right; margin-right: 25px; gap:10px; margin-top:15px;">
+        <div style="display: inline-block; margin-right: 10px;">
+            <label style="position: relative; display: inline-block;">
+                <select [(ngModel)]="selectedTemplate" (change)="onTemplateChange()" class="select-drop">
+                    <option value="" disabled selected hidden>Filter</option>
+                    <option *ngFor="let item of TemplateOptions" [value]="item.value">{{ item.Text }}</option>
+                </select>
+                <i
+                    style="position: absolute; top: 50%; right: 15px; transform: translateY(-50%); pointer-events: none;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
+                        <path
+                            d="M1.5 2.5C1.22386 2.5 1 2.72386 1 3C1 3.27614 1.22386 3.5 1.5 3.5H10.5C10.7761 3.5 11 3.27614 11 3C11 2.72386 10.7761 2.5 10.5 2.5H1.5Z"
+                            fill="#7E7E7E" />
+                        <path
+                            d="M3.5 5.5C3.22386 5.5 3 5.72386 3 6C3 6.27614 3.22386 6.5 3.5 6.5H8.5C8.77614 6.5 9 6.27614 9 6C9 5.72386 8.77614 5.5 8.5 5.5H3.5Z"
+                            fill="#7E7E7E" />
+                        <path
+                            d="M5.5 8.5C5.22386 8.5 5 8.72386 5 9C5 9.27614 5.22386 9.5 5.5 9.5H6.5C6.77614 9.5 7 9.27614 7 9C7 8.72386 6.77614 8.5 6.5 8.5H5.5Z"
+                            fill="#7E7E7E" />
+                    </svg>
+
+                </i>
+            </label>
+        </div>
         <button style="display: inline-block;" (click)="Invoiceintiate()" [disabled]="isdisabled"
             class="btn btn-primary btn-sm d-flex align-items-center">Initiate</button>
 
@@ -23,49 +46,46 @@
                 </th>
                 <td mat-cell *matCellDef="let element">
 
-                                <mat-checkbox (click)="$event.stopPropagation()"
-                                    (change)="$event ? selection.toggle(element) : null"
-                                    [checked]="selection.isSelected(element)">
-                                </mat-checkbox>
-                            </td>
-                        </ng-container>
-                         <ng-container matColumnDef="download">
-                            <th mat-header-cell *matHeaderCellDef style="width: 100px;"></th>
-                            <td mat-cell *matCellDef="let element" style="width: 100px;">
-                                 <img src="assets/download_enabled.svg"
-                                    (click)="RequestEmployeeDownload(element)"
-                                    matTooltip="Pdf Download" matTooltipPosition="above"
-                                    style="cursor: pointer; width: 24px; height: 22px; max-width: 100px;" />
-                            </td>
-                        </ng-container>
-                        <ng-container matColumnDef="serial_No">
-                            <th mat-header-cell *matHeaderCellDef style="width: 100px;">Sl No </th>
-                            <td mat-cell *matCellDef="let element" style="width: 100px;">{{ element.serial_No }}</td>
-                        </ng-container>
-                        <ng-container matColumnDef="Req_No">
-                            <th mat-header-cell *matHeaderCellDef style="width: 100px;">Request No </th>
-                        <td
-    mat-cell
-    *matCellDef="let element"
-    style="width: 100px; cursor: pointer; color: #1976d2;"
-    (mouseenter)="openChat(element)"
-    (mouseleave)="closeChat(element.req_No)"
-  >
-    {{ element.req_No }}
-  </td>   
-                        </ng-container>
-                       <ng-container matColumnDef="company_Code">
-                            <th mat-header-cell *matHeaderCellDef style="width: 200px;"> Company Code </th>
-                            <td mat-cell *matCellDef="let element" style="width: 200px;">{{ element.company_Code }}</td>
-                        </ng-container>
-                        <ng-container matColumnDef="map_name">
-                            <th mat-header-cell *matHeaderCellDef style="width: 200px;"> Map Name </th>
-                            <td mat-cell *matCellDef="let element" style="width: 200px;">{{ element.map_name }}</td>
-                        </ng-container>
-                        <ng-container matColumnDef="lotNo">
-                            <th mat-header-cell *matHeaderCellDef style="width: 200px;"> Lot No. </th>
-                            <td mat-cell *matCellDef="let element" style="width: 200px;">{{ element.lotNo }}</td>
-                        </ng-container>
+                    <mat-checkbox (click)="$event.stopPropagation()"
+                        (change)="$event ? selection.toggle(element) : null" [checked]="selection.isSelected(element)">
+                    </mat-checkbox>
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="download">
+                <th mat-header-cell *matHeaderCellDef style="width: 100px;"></th>
+                <td mat-cell *matCellDef="let element" style="width: 100px;">
+                    <img src="assets/download_enabled.svg" (click)="RequestEmployeeDownload(element)"
+                        matTooltip="Pdf Download" matTooltipPosition="above"
+                        style="cursor: pointer; width: 24px; height: 22px; max-width: 100px;" />
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="serial_No">
+                <th mat-header-cell *matHeaderCellDef style="width: 100px;">Sl No </th>
+                <td mat-cell *matCellDef="let element" style="width: 100px;">{{ element.serial_No }}</td>
+            </ng-container>
+            <ng-container matColumnDef="invoiceType">
+                <th mat-header-cell *matHeaderCellDef style="width: 100px;">Invoice Type</th>
+                <td mat-cell *matCellDef="let element" style="width: 100px;">{{ element.invoiceType }}</td>
+            </ng-container>
+            <ng-container matColumnDef="Req_No">
+                <th mat-header-cell *matHeaderCellDef style="width: 100px;">Request No </th>
+                <td mat-cell *matCellDef="let element" style="width: 100px; cursor: pointer; color: #1976d2;"
+                    (mouseenter)="openChat(element)" (mouseleave)="closeChat(element.req_No)">
+                    {{ element.req_No }}
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="company_Code">
+                <th mat-header-cell *matHeaderCellDef style="width: 200px;"> Company Code </th>
+                <td mat-cell *matCellDef="let element" style="width: 200px;">{{ element.company_Code }}</td>
+            </ng-container>
+            <ng-container matColumnDef="map_name">
+                <th mat-header-cell *matHeaderCellDef style="width: 180px;"> Map Name </th>
+                <td mat-cell *matCellDef="let element" style="width: 180px;">{{ element.map_name }}</td>
+            </ng-container>
+            <ng-container matColumnDef="lotNo">
+                <th mat-header-cell *matHeaderCellDef style="width: 200px;"> Lot No. </th>
+                <td mat-cell *matCellDef="let element" style="width: 200px;">{{ element.lotNo }}</td>
+            </ng-container>
 
             <ng-container matColumnDef="net_CTC">
                 <th mat-header-cell *matHeaderCellDef> Net CTC </th>
@@ -191,7 +211,7 @@
                     {{ element.data_From }}</td>
             </ng-container>
 
-            
+
 
             <tr mat-header-row *matHeaderRowDef="displayColumns"></tr>
             <tr mat-row *matRowDef="let row; columns: displayColumns;"></tr>
@@ -213,7 +233,7 @@
 
         <!-- HEADER -->
         <div class="chat-header">
-            <span>Req No: {{ chat.req_No }}</span>
+            <span>Invoie Remarks for Req No: {{ chat.req_No }}</span>
             <mat-icon (click)="closeChat(chat.req_No)">close</mat-icon>
         </div>
 
@@ -239,6 +259,7 @@
     </mat-card>
 
 </div>
+
 
 <!-- <div *ngIf="isLoading" class="loader-overlay">
        <img src="../../../assets/Loading.gif">

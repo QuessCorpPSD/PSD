@@ -24,53 +24,53 @@ export class InvoiceRepository implements IInvoiceRepository {
             .set('Accept', 'application/json')
         return this.http.post<APIResponse>(url, JSON.stringify(val), { headers });
     }
- GetAllAttributeAddAndUpdate(val): Observable<APIResponse> {
+    GetAllAttributeAddAndUpdate(val): Observable<APIResponse> {
 
-    const url = `${this.environment.apiUrl}Attributes/AttributeAddUpdate`;
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Accept': 'application/json'
-    });
-    const config = new HttpHeaders().set('Content-Type', 'application/json')
-      .set('Accept', 'application/json')
-    return this.http.post<APIResponse>(url, JSON.stringify(val), { headers });
-  }
-  GetAllAttribute(val): Observable<APIResponse> {
+        const url = `${this.environment.apiUrl}Attributes/AttributeAddUpdate`;
+        const headers = new HttpHeaders({
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        });
+        const config = new HttpHeaders().set('Content-Type', 'application/json')
+            .set('Accept', 'application/json')
+        return this.http.post<APIResponse>(url, JSON.stringify(val), { headers });
+    }
+    GetAllAttribute(val): Observable<APIResponse> {
 
-    const url = `${this.environment.apiUrl}Attributes/GetAllAttribute`;
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Accept': 'application/json'
-    });
-    const config = new HttpHeaders().set('Content-Type', 'application/json')
-      .set('Accept', 'application/json')
-    return this.http.post<APIResponse>(url, JSON.stringify(val), { headers });
-  }
+        const url = `${this.environment.apiUrl}Attributes/GetAllAttribute`;
+        const headers = new HttpHeaders({
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        });
+        const config = new HttpHeaders().set('Content-Type', 'application/json')
+            .set('Accept', 'application/json')
+        return this.http.post<APIResponse>(url, JSON.stringify(val), { headers });
+    }
     GetIRNColors(): Observable<APIResponse> {
-    const url = `${this.environment.apiUrl}EInvoice/GetAllInvoiceTypeColors`;
-    //console.log(url);
-    return this.http.get<APIResponse>(url);
-  }
+        const url = `${this.environment.apiUrl}EInvoice/GetAllInvoiceTypeColors`;
+        //console.log(url);
+        return this.http.get<APIResponse>(url);
+    }
     GetAllInvoiceDetailsByCompanyId(companyId: number, payPeriodId: number): Observable<APIResponse> {
-    const url = `${this.environment.apiUrl}EInvoice/GetAllInvoiceDetails/${companyId}/${payPeriodId}`;
-    //console.log(url);
-    return this.http.get<APIResponse>(url);
-  }
+        const url = `${this.environment.apiUrl}EInvoice/GetAllInvoiceDetails/${companyId}/${payPeriodId}`;
+        //console.log(url);
+        return this.http.get<APIResponse>(url);
+    }
     GetExportData(companyId: number, payPeriodId: number): Observable<APIResponse> {
-    const url = `${this.environment.apiUrl}EInvoice/EInvoiceExport/${companyId}/${payPeriodId}`;
-    //console.log(url);
-    return this.http.get<APIResponse>(url);
-  }
-  DownloadInvoice(invoiceId: number): Observable<HttpResponse<Blob>> {
-    const url = `${this.environment.apiUrl}EInvoice/Download/${invoiceId}`;
-    return this.http.get(url, { responseType: 'blob', observe: 'response' });
-  }
-  BulkDownloadInvoice(BulkInvoices: any): Observable<HttpResponse<Blob>> {
-    const url = `${this.environment.apiUrl}EInvoice/BulkDownload`;
-    console.log(url);
-    console.table(BulkInvoices);
-    return this.http.post(url, BulkInvoices, { responseType: 'blob', observe: 'response' });
-  }
+        const url = `${this.environment.apiUrl}EInvoice/EInvoiceExport/${companyId}/${payPeriodId}`;
+        //console.log(url);
+        return this.http.get<APIResponse>(url);
+    }
+    DownloadInvoice(invoiceId: number): Observable<HttpResponse<Blob>> {
+        const url = `${this.environment.apiUrl}EInvoice/Download/${invoiceId}`;
+        return this.http.get(url, { responseType: 'blob', observe: 'response' });
+    }
+    BulkDownloadInvoice(BulkInvoices: any): Observable<HttpResponse<Blob>> {
+        const url = `${this.environment.apiUrl}EInvoice/BulkDownload`;
+        console.log(url);
+        console.table(BulkInvoices);
+        return this.http.post(url, BulkInvoices, { responseType: 'blob', observe: 'response' });
+    }
     InitialSearch(val): Observable<APIResponse> {
 
         const url = `${this.environment.apiUrl}InvoiceInitiation/InitiationSearch`;
@@ -138,37 +138,37 @@ export class InvoiceRepository implements IInvoiceRepository {
         return this.http.get<APIResponse>(url);
     }
 
-     InitiateIRN(InitiateIRN: any): Observable<APIResponse> {
-    const url = `${this.environment.apiUrl}EInvoice/InitiateIRN`;
-    console.log(url);
-    console.table(InitiateIRN);
-    return this.http.post<APIResponse>(url, InitiateIRN);
-  }
+    InitiateIRN(InitiateIRN: any): Observable<APIResponse> {
+        const url = `${this.environment.apiUrl}EInvoice/InitiateIRN`;
+        console.log(url);
+        console.table(InitiateIRN);
+        return this.http.post<APIResponse>(url, InitiateIRN);
+    }
     GetEInvoiceError(invoiceId): Observable<APIResponse> {
-    return this.http.get<APIResponse>(this.environment.apiUrl + 'EInvoice/EInvoiceError/' + invoiceId)
-  }
+        return this.http.get<APIResponse>(this.environment.apiUrl + 'EInvoice/EInvoiceError/' + invoiceId)
+    }
 
-  GetEInvoiceErrorHover(invoiceId): Observable<APIResponse> {
-    return this.http.get<APIResponse>(this.environment.apiUrl + 'EInvoice/EInvoiceErrorHover/' + invoiceId)
-  }
+    GetEInvoiceErrorHover(invoiceId): Observable<APIResponse> {
+        return this.http.get<APIResponse>(this.environment.apiUrl + 'EInvoice/EInvoiceErrorHover/' + invoiceId)
+    }
     UploadAttributesGST(formData: FormData): Observable<APIResponse> {
-    return this.http.post<APIResponse>(
-      this.environment.apiUrl + 'EInvoice/UploadAttributes',
-      formData
-    );
-  }
+        return this.http.post<APIResponse>(
+            this.environment.apiUrl + 'EInvoice/UploadAttributes',
+            formData
+        );
+    }
     GetConsolidatedPayRegister(payload: any): Observable<APIResponse> {
-    const url = `${this.environment.apiUrl}EInvoice/PayRegisterDownload`;
-    console.log(url);
-    return this.http.post<APIResponse>(url, payload);
-  }
+        const url = `${this.environment.apiUrl}EInvoice/PayRegisterDownload`;
+        console.log(url);
+        return this.http.post<APIResponse>(url, payload);
+    }
 
-  GetConsolidateInvoiceSummary(payload: any): Observable<APIResponse> {
-    const url = `${this.environment.apiUrl}EInvoice/GetConsolidateInvoiceSummary`;
-    console.log(url);
-    return this.http.post<APIResponse>(url, payload);
-  }
-   
+    GetConsolidateInvoiceSummary(payload: any): Observable<APIResponse> {
+        const url = `${this.environment.apiUrl}EInvoice/GetConsolidateInvoiceSummary`;
+        console.log(url);
+        return this.http.post<APIResponse>(url, payload);
+    }
+
 
     getGSTInvoiceType(): Observable<APIResponse> {
         return this.http.get<APIResponse>(this.environment.apiUrl + "GSTInvoice/GetGSTInvoiceType")
@@ -179,20 +179,20 @@ export class InvoiceRepository implements IInvoiceRepository {
     }
 
     getBillingType(): Observable<APIResponse> {
-    return this.http.post<APIResponse>(this.environment.apiUrl + "GSTInvoice/GetGSTBillableType", {});
-}
+        return this.http.post<APIResponse>(this.environment.apiUrl + "GSTInvoice/GetGSTBillableType", {});
+    }
 
     getNetDeductionType(): Observable<APIResponse> {
         return this.http.get<APIResponse>(this.environment.apiUrl + "GSTInvoice/GetGSTNetDeductionType")
     }
 
     addGstInvoice(payload: any): Observable<APIResponse> {
-          const url = `${this.environment.apiUrl}GSTInvoice/Create`;
+        const url = `${this.environment.apiUrl}GSTInvoice/Create`;
         return this.http.post<APIResponse>(url, payload);
     }
 
-        
-     GetAllInvoiceCancelDetails(val): Observable<APIResponse> {
+
+    GetAllInvoiceCancelDetails(val): Observable<APIResponse> {
 
         const url = `${this.environment.apiUrl}GSTInvoice/GetAllInvoiceCancelDetails`;
         const headers = new HttpHeaders({
@@ -201,10 +201,10 @@ export class InvoiceRepository implements IInvoiceRepository {
         });
         const config = new HttpHeaders().set('Content-Type', 'application/json')
             .set('Accept', 'application/json')
-     return this.http.post<APIResponse>(url, val, { headers });
+        return this.http.post<APIResponse>(url, val, { headers });
     }
 
-     BulkApproveInvoice(val): Observable<APIResponse> {
+    BulkApproveInvoice(val): Observable<APIResponse> {
 
         const url = `${this.environment.apiUrl}GSTInvoice/BulkApproveInvoice`;
         const headers = new HttpHeaders({
@@ -213,7 +213,7 @@ export class InvoiceRepository implements IInvoiceRepository {
         });
         const config = new HttpHeaders().set('Content-Type', 'application/json')
             .set('Accept', 'application/json')
-     return this.http.post<APIResponse>(url, val, { headers });
+        return this.http.post<APIResponse>(url, val, { headers });
     }
 
     GetAllInvoiceAllotDetails(payload: any): Observable<APIResponse> {
@@ -222,53 +222,58 @@ export class InvoiceRepository implements IInvoiceRepository {
             payload
         );
     }
-getRemarksByReqNo(formData: FormData): Observable<APIResponse> {
-         const url = `${this.environment.apiUrl}InvoiceInitiation/getRemarksByReqNo`;
+    getRemarksByReqNo(formData: FormData): Observable<APIResponse> {
+        const url = `${this.environment.apiUrl}InvoiceInitiation/getRemarksByReqNo`;
 
         return this.http.post<APIResponse>(url, formData);
     }
     GetParticulars(payload: any): Observable<APIResponse> {
-         const url = `${this.environment.apiUrl}GSTInvoice/GetParticulars`;
+        const url = `${this.environment.apiUrl}GSTInvoice/GetParticulars`;
 
         return this.http.post<APIResponse>(url, payload);
     }
-    
+
     GetGstRates(payload: any): Observable<APIResponse> {
-         const url = `${this.environment.apiUrl}GSTInvoice/GetGstRates`;
-console.log(url);
+        const url = `${this.environment.apiUrl}GSTInvoice/GetGstRates`;
+        console.log(url);
         return this.http.post<APIResponse>(url, payload);
     }
-     BillingDashboard(user_Id): Observable<APIResponse> {
-        
+    BillingDashboard(user_Id): Observable<APIResponse> {
+
         return this.http.get<APIResponse>(
-            this.environment.apiUrl + 'Invoice/BillingDashboardByUserId/'+user_Id
+            this.environment.apiUrl + 'Invoice/BillingDashboardByUserId/' + user_Id
         );
     }
-     DraftInvoiceEmployeeByRequestId(reqNo): Observable<APIResponse>{
-       return this.http.get<APIResponse>(
-            this.environment.apiUrl + 'Invoice/DraftInvoiceEmployeeByRequestId/'+reqNo
+    DraftInvoiceEmployeeByRequestId(reqNo): Observable<APIResponse> {
+        return this.http.get<APIResponse>(
+            this.environment.apiUrl + 'Invoice/DraftInvoiceEmployeeByRequestId/' + reqNo
         );
 
-    }  
+    }
     GetPayPeriod(payload: any): Observable<APIResponse> {
-         const url = `${this.environment.apiUrl}GSTInvoice/GetPayPeriod`;
-        return this.http.post<APIResponse>(url, payload);
-    } 
-       
-    GetInvoiceStatus(payload: any): Observable<APIResponse> {
-         const url = `${this.environment.apiUrl}GSTInvoice/GetInvoiceStatus`;
+        const url = `${this.environment.apiUrl}GSTInvoice/GetPayPeriod`;
         return this.http.post<APIResponse>(url, payload);
     }
 
-      GetInvoiceDetailsById(payload: any): Observable<APIResponse> {
-         const url = `${this.environment.apiUrl}GSTInvoice/Edit`;
+    GetInvoiceStatus(payload: any): Observable<APIResponse> {
+        const url = `${this.environment.apiUrl}GSTInvoice/GetInvoiceStatus`;
         return this.http.post<APIResponse>(url, payload);
-       }
+    }
 
-      RejectInvoice(formData: FormData): Observable<APIResponse> {
+    GetInvoiceDetailsById(payload: any): Observable<APIResponse> {
+        const url = `${this.environment.apiUrl}GSTInvoice/Edit`;
+        return this.http.post<APIResponse>(url, payload);
+    }
+
+    RejectInvoice(formData: FormData): Observable<APIResponse> {
         const url = `${this.environment.apiUrl}GSTInvoice/Reject`;
 
         return this.http.post<APIResponse>(url, formData);
+    }
+    GetUploadedFile(invoice_Id: number):Observable<APIResponse> {
+        const url = `${this.environment.apiUrl}GSTInvoice/GetUploadedFile/${invoice_Id}`;
+        console.log(invoice_Id);
+        return this.http.get<APIResponse>(url);
     }
 
 }
