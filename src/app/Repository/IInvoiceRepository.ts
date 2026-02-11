@@ -9,7 +9,7 @@ export interface IInvoiceRepository {
     ExportToExcel(val): Observable<APIResponse>;
     InitialSearch(val): Observable<APIResponse>;
     InitialSearchAllot(val): Observable<APIResponse>;
-    InitiationSearchExport(val): Observable<APIResponse>;
+    InitiationSearchExport(request: any): Observable<APIResponse>;
     UploadCancel(formData): Observable<string>;
     GetGSTInvoice(userId: number): Observable<APIResponse>;
     DownloadInvoice(invoiceId: number): Observable<HttpResponse<Blob>>;

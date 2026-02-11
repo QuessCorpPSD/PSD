@@ -94,7 +94,7 @@ export class InvoiceRepository implements IInvoiceRepository {
             .set('Accept', 'application/json')
         return this.http.post<APIResponse>(url, JSON.stringify(val), { headers });
     }
-    InitiationSearchExport(val): Observable<APIResponse> {
+    InitiationSearchExport(IntiationExportRequest: any): Observable<APIResponse> {
 
         const url = `${this.environment.apiUrl}InvoiceInitiation/InitiationSearchExport`;
         const headers = new HttpHeaders({
@@ -103,7 +103,7 @@ export class InvoiceRepository implements IInvoiceRepository {
         });
         const config = new HttpHeaders().set('Content-Type', 'application/json')
             .set('Accept', 'application/json')
-        return this.http.post<APIResponse>(url, JSON.stringify(val), { headers });
+        return this.http.post<APIResponse>(url, JSON.stringify(IntiationExportRequest), { headers });
     }
     InvoiceInitiate(val): Observable<APIResponse> {
 
