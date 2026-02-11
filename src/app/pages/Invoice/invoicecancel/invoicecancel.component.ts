@@ -231,6 +231,65 @@ export class InvoiceCancelComponent implements OnInit, AfterViewInit {
     });
   }
 
+  invoiceReject() {
+    this.isLoading = true;
+
+    const filteredSelected = this.selection.selected.filter((item: any) =>
+      this.dataSource.filteredData.includes(item)
+    );
+
+    const selectedInvoiceIds = filteredSelected.map(item => item.invoice_Id);
+
+    // ❌ No selection
+    if (!selectedInvoiceIds.length) {
+      alert('Please select at least one invoice ❌');
+      this.isLoading = false;
+      return;
+    }
+
+    // ⚠️ Confirmation
+    if (!confirm(`You have selected ${selectedInvoiceIds.length} invoice(s). Do you want to Reject them?`)) {
+      this.isLoading = false;
+      return;
+    }
+
+    const payload = { invoice_Id: selectedInvoiceIds };
+
+    this._invoiceService.BulkApproveInvoice(payload).subscribe({
+      next: (res: any) => {
+
+        this.popupMessage =
+          res?.message || 'Invoices approved successfully';
+        this.showPopup = true;
+        console.log(res);
+        const isSuccess =
+          res?.status === 'SUCCESS' ||
+          res?.statusCode === 200;
+
+        if (isSuccess) {
+
+
+          // Clear selection
+          this.selection.clear();
+
+          // Reset paginator
+          if (this.paginator) {
+            this.paginator.firstPage();
+          }
+
+          // Refresh grid
+          this.InvoiceSearch();
+        }
+
+        this.isLoading = false;
+      },
+      error: (err) => {
+        alert(err?.error?.message || 'Something went wrong ❌');
+        this.isLoading = false;
+      }
+    });
+  }
+
   InvoiceSearch() {
     if (!this.selectedCompanyId || !this.payPeriod) {
       alert('Select Company and Pay Period');

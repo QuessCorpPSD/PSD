@@ -15,6 +15,8 @@
     <div class="col-auto d-flex gap-2">
       <button class="btn btn-primary" (click)="InvoiceSearch()">Search</button>
       <button class="btn btn-primary" (click)="invoiceApprove()">Approve</button>
+      <!-- <button class="btn btn-primary" (click)="invoiceReject()">Reject</button> -->
+
     </div>
   </div>
 
@@ -39,17 +41,17 @@
 
         <!-- PDF DOWNLOAD -->
         <ng-container matColumnDef="pdfdownload">
-          <th mat-header-cell *matHeaderCellDef style="width: 100px;"></th>
-          <td mat-cell *matCellDef="let element" style="width: 100px;">
+          <th mat-header-cell *matHeaderCellDef style="width: 100px; align-items:center;">Invoice Pdf</th>
+          <td mat-cell *matCellDef="let element" style="width: 100px;  align-items:center;">
             <img src="assets/download_enabled.svg" (click)="DownloadInvoice(element.invoice_Id, element.invoice_Number)" matTooltip="Pdf Download"
               matTooltipPosition="above" style="cursor: pointer; width: 24px; height: 22px; max-width: 100px;" />
           </td>
         </ng-container>
 
         <ng-container matColumnDef="docDownload">
-          <th mat-header-cell *matHeaderCellDef style="width: 100px;"></th>
-          <td mat-cell *matCellDef="let element" style="width: 100px;">
-            <img src="assets/download_enabled.svg" (click)="Downloadfile(element.invoice_Id)" matTooltip="Doc Download"
+          <th mat-header-cell *matHeaderCellDef style="width: 100px;  align-items:center;">Cancel Doc</th>
+          <td mat-cell *matCellDef="let element" style="width: 100px; align-items:center;">
+            <img src="assets/icons/download_enabled_green.svg" (click)="Downloadfile(element.invoice_Id)" matTooltip="Doc Download"
               matTooltipPosition="above" style="cursor: pointer; width: 24px; height: 22px; max-width: 100px;" />
           </td>
         </ng-container>
