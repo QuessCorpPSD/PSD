@@ -63,8 +63,14 @@ export class DraftInvoiceComponent implements OnInit {
   openChats: ChatWindow[] = [];
   hoverTimers: { [key: number]: any } = {};
   currentUser = '';
+  selectedTemplate: string = '';
+  template: string = "";
+    TemplateOptions = [
+    { value: 'Proforma', Text: 'Proforma' },
+    { value: 'Provisional', Text: 'Provisional' }
+  ];
   //@ViewChild(PayPeriod) PayPeriodComponent!: Payperiodclass;
-  displayColumns = ['action', 'download', 'serial_No', 'Req_No','company_Code', 'map_name', 'net_CTC', 'netPay', 'lotNo', 'input_No', 'pO_Number', 'employee_Head_Count', 'service_Charge', 'serviceChargeAmount', 'service_Charge_Master', 'service_Charge_Type', 'bgvbl', 'astfee', 'discT1', 'discT2', 'idcard', 'email', 'regfee', 'trnfee', 'ggdbt', 'ppekit', 'vmsfee', 'edufee', 'ntpry', 'renmac', 'draded', 'othdd', 'mbapp', 'calcrg', 'calrt', 'narration']
+  displayColumns = ['action', 'download', 'serial_No', 'invoiceType', 'Req_No', 'company_Code', 'map_name', 'net_CTC', 'netPay', 'lotNo', 'input_No', 'pO_Number', 'employee_Head_Count', 'service_Charge', 'serviceChargeAmount', 'service_Charge_Master', 'service_Charge_Type', 'bgvbl', 'astfee', 'discT1', 'discT2', 'idcard', 'email', 'regfee', 'trnfee', 'ggdbt', 'ppekit', 'vmsfee', 'edufee', 'ntpry', 'renmac', 'draded', 'othdd', 'mbapp', 'calcrg', 'calrt', 'narration']
   constructor(@Inject(Invoice_TOKEN) private _invoiceService: IInvoiceRepository, private _decrypt: EncryptionService,
     private _sessionStoreage: SessionStorageService, private dialog: MatDialog) {
   }
@@ -82,6 +88,47 @@ export class DraftInvoiceComponent implements OnInit {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
+
+  onTemplateChange(searchText: string = ''): void {
+
+    this.template = this.selectedTemplate;
+
+    const filterValue = `${this.template}|${searchText}`;
+
+    this.dataSource.filterPredicate = (data: any, filter: string): boolean => {
+
+      const [template, searchText = ''] = filter.split('|');
+      const searchValues = searchText
+        .toLowerCase()
+        .split(',')
+        .map(v => v.trim())
+        .filter(Boolean);
+      let templateMatch = true;
+
+      switch (template) {
+        case 'Proforma':
+          templateMatch = data.invoiceType == 'Proforma';
+          break;
+
+        case 'Provisional':
+          templateMatch = data.invoiceType == 'Provisional';
+          break;
+      }
+
+      const textMatch =
+        searchValues.length === 0 ||
+        searchValues.some(search =>
+          Object.values(data).some(val =>
+            String(val).toLowerCase().includes(search)
+          )
+        );
+
+      return templateMatch && textMatch;
+    };
+
+    this.dataSource.filter = filterValue;
+  }
+
   Invoiceintiate(): void {
     // if(this.selectedCompanyId==undefined)
     // {
@@ -173,12 +220,12 @@ export class DraftInvoiceComponent implements OnInit {
       alert("Multiple selection not allowed.");
       return;
     }
-    console.log('Selection',this.selection.selected);
+    console.log('Selection', this.selection.selected);
     this.isLoading = true;
     const request = {
       "Company_Id": this.selection.selected[0].company_Id,
       "PayPeriod_Id": this.selection.selected[0].pay_Period_Id,
-      "LotNo":this.selection.selected[0].lotNo ,
+      "LotNo": this.selection.selected[0].lotNo,
       "ReqNo": this.selection.selected[0].req_No,
       "Data_From": this.selection.selected[0].data_From
     }
@@ -191,7 +238,7 @@ export class DraftInvoiceComponent implements OnInit {
       },
       error: err => {
         console.log(err);
-        this.isLoading= false;
+        this.isLoading = false;
       }
     })
   }
@@ -284,7 +331,7 @@ export class DraftInvoiceComponent implements OnInit {
     }
     this._invoiceService.InitialSearchAllot(request).subscribe({
       next: res => {
-          console.log(res.Data);
+        console.log(res.Data);
         this.dataSource = new MatTableDataSource<any>(Array.isArray(res.Data) ? res.Data : []);
         console.log(this.dataSource);
         this.dataSource.paginator = this.PeningLot_paginator;
