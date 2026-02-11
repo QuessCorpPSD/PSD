@@ -1,0 +1,217 @@
+<div class="page-wrapper">
+    <div class="scrollable-content">
+        <mat-card-title class="main-header">
+            Upfront Matrix
+        </mat-card-title>
+        <div class="justify-content-between align-items-center mb-3 pl-4 pt-2">
+            <div class="row g-3 align-items-end">
+
+
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">Role Type</label>
+                    <select [(ngModel)]="roletype" class="form-control form-control-sm" style="height: 30px;">
+                        <option value="">Select</option>
+                        <!-- <option *ngFor="let y of year" [value]="y.Financial_Year_Id">{{y.Financial_Year_Name}}</option> -->
+
+                    </select>
+                </div>
+
+
+                <div class="col-md-3 d-flex gap-2">
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-primary"
+                        matTooltip="Search" (click)="onsearch()">
+                        <mat-icon>search</mat-icon>
+                    </button>
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-success"
+                        matTooltip="Add" (click)="AddPOOpen()">
+                        <mat-icon>add</mat-icon>
+                    </button>
+                </div>
+            </div>
+            <div class="table-container" style="top:30px; background-color: black;" *ngIf="isUploadGridVisible">
+                <div class="table-scroll-window">
+                    <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+
+                        <ng-container matColumnDef="edit">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header
+                                class="fixed-width-column"></mat-header-cell>
+                            <mat-cell *matCellDef="let element" class="fixed-width-column">
+                                <mat-icon (click)="EditOpen()">edit</mat-icon>
+                            </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Userid">
+                            <mat-header-cell *matHeaderCellDef>User Id</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Userid }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Username">
+                            <mat-header-cell *matHeaderCellDef>User Name</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.UserNmae }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Min_approve_limit">
+                            <mat-header-cell *matHeaderCellDef>Minimum Approve Limit</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.ApproveLimitFrom }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Max_approve_limit">
+                            <mat-header-cell *matHeaderCellDef>Maximum Approve Limit</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.MaxApproveLimit }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Zone">
+                            <mat-header-cell *matHeaderCellDef>Zone</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Zone }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="roletype">
+                            <mat-header-cell *matHeaderCellDef>Role Type</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.RoleType1 }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Isactive">
+                            <mat-header-cell *matHeaderCellDef>IsActive</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.IsActive }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Mail_id">
+                            <mat-header-cell *matHeaderCellDef>Mail Id</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.MailID }}</mat-cell>
+                        </ng-container>
+
+
+
+                        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+
+                    </table>
+
+
+                </div>
+
+                <mat-paginator [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons></mat-paginator>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<br><br><br><br><br><br>
+
+
+<div *ngIf="isAddclicked" class="popup-overlay" (keydown.escape)="closeclick()">
+    <mat-card class="popup-card">
+        <mat-card-header class="popup-header">
+            <mat-card-title>
+                {{ isEditMode ? 'Edit Upfront Matrix' : 'Add Upfront Matrix' }}
+            </mat-card-title>
+
+            <button class="close-btn" matTooltip="Close" (click)="closeclick()">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-card-header>
+        <mat-card-content class="scroll-content">
+
+            <form [formGroup]="upfrontmatrix">
+                <div class="row g-3 align-items-end">
+                    <!-- Role Type -->
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Role Type <span class="text-danger">*</span></label>
+                        <select class="form-control" formControlName="roleType">
+                            <option value="">Select</option>
+                        </select>
+                        <small class="text-danger"
+                            *ngIf="upfrontmatrix.get('roleType')?.touched && upfrontmatrix.get('roleType')?.invalid">
+                            Role Type is required
+                        </small>
+                    </div>
+
+                    <!-- User ID -->
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">User ID <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" placeholder="Please Enter User ID"
+                            formControlName="userId">
+                        <small class="text-danger"
+                            *ngIf="upfrontmatrix.get('userId')?.touched && upfrontmatrix.get('userId')?.invalid">
+                            User ID is required
+                        </small>
+                    </div>
+
+                    <!-- User Name -->
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">User Name <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" placeholder="Please Enter User Name"
+                            formControlName="userName">
+                        <small class="text-danger"
+                            *ngIf="upfrontmatrix.get('userName')?.touched && upfrontmatrix.get('userName')?.invalid">
+                            User Name is required
+                        </small>
+                    </div>
+
+                    <!-- Minimum Approve Limit -->
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Minimum Approve Limit <span
+                                class="text-danger">*</span></label>
+                        <input type="number" class="form-control" placeholder="Please Enter Minimum Approve Limit"
+                            formControlName="minApproveLimit">
+                        <small class="text-danger"
+                            *ngIf="upfrontmatrix.get('minApproveLimit')?.touched && upfrontmatrix.get('minApproveLimit')?.invalid">
+                            Minimum Approve Limit is required
+                        </small>
+                    </div>
+
+                    <!-- Maximum Approve Limit -->
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Maximum Approve Limit <span
+                                class="text-danger">*</span></label>
+                        <input type="number" class="form-control" placeholder="Please Enter Maximum Approve Limit"
+                            formControlName="maxApproveLimit">
+                        <small class="text-danger"
+                            *ngIf="upfrontmatrix.get('maxApproveLimit')?.touched && upfrontmatrix.get('maxApproveLimit')?.invalid">
+                            Maximum Approve Limit is required
+                        </small>
+                    </div>
+
+                    <!-- Mail ID -->
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Mail ID <span class="text-danger">*</span></label>
+                        <input type="email" class="form-control" placeholder="Please Enter Mail ID"
+                            formControlName="mailId">
+                        <small class="text-danger"
+                            *ngIf="upfrontmatrix.get('mailId')?.touched && upfrontmatrix.get('mailId')?.invalid">
+                            Valid Mail ID is required
+                        </small>
+                    </div>
+
+                    <!-- Zone -->
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Zone <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" placeholder="Please Enter Zone" formControlName="zone">
+                        <small class="text-danger"
+                            *ngIf="upfrontmatrix.get('zone')?.touched && upfrontmatrix.get('zone')?.invalid">
+                            Zone is required
+                        </small>
+                    </div>
+
+                </div>
+
+            </form>
+        </mat-card-content>
+
+
+        <div class="d-flex justify-content-end mt-3" style="gap: 10px; padding-right: 8px;">
+
+            <button type="button" style="border: none; border-radius: 7px; width: 80px; height: 30px;
+                           cursor: pointer; background-color: #f0f0f0; color: black;" (click)="closeclick()">
+                Cancel
+            </button>
+
+            <button type="button" style="border: none; border-radius: 7px; width: 80px; height: 30px;
+                           cursor: pointer; background-color: blue; color: white;">
+                {{ isEditMode ? 'Update' : 'Save' }} </button>
+
+        </div>
+
+    </mat-card>
+</div>

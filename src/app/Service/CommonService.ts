@@ -379,29 +379,28 @@ export class CommonService implements ICommonService {
     }).set('Content-Type', 'application/json')
       .set('Accept', 'application/json');
 
-    const config = { headers };
-    return this.http.get<APIResponse>(this.environment.apiUrl + "Admin/GetEmployeeByUserId/" + userId, config);
-  }
-  GetAllState(): Observable<APIResponse> {
-    const url = `${this.environment.apiUrl}Common/GetAllState`;
-    //console.log(url);
-    return this.http.get<APIResponse>(url);
-  }
-  GetPayCodes(): Observable<APIResponse> {
-    //console.log(this.environment.apiUrl + "Common/GetAllInputType");
-    return this.http.get<APIResponse>(this.environment.apiUrl + "Common/GetPaycodes")
-  }
-  //     const config = { headers };
-  //     return this.http.get<APIResponse>(this.environment.apiUrl + "Admin/GetEmployeeByUserId/" + userId, config);
-  // }
-  GetMapNamebyCompany(companyId: any): Observable<APIResponse> {
-    const url = `${this.environment.apiUrl}Common/GetMapNamebyCompany/${companyId}`;
-    //console.log(url);
-    return this.http.get<APIResponse>(url);
-  }
-  GetSitesByCompanyId(companyId: any): Observable<APIResponse> {
-    const url = `${this.environment.apiUrl}Common/GetSitesByCompanyId/${companyId}`;
-    //console.log(url);
-    return this.http.get<APIResponse>(url);
-  }
+        const config = { headers };
+        return this.http.get<APIResponse>(this.environment.apiUrl + "Admin/GetEmployeeByUserId/" + userId, config);
+    }
+    GetMapNamebyCompany(companyId: any): Observable<APIResponse> {
+        const url = `${this.environment.apiUrl}Common/GetMapNamebyCompany/${companyId}`;
+        //console.log(url);
+        return this.http.get<APIResponse>(url);
+    }
+    GetSitesByCompanyId(companyId: any): Observable<APIResponse> {
+        const url = `${this.environment.apiUrl}Common/GetSitesByCompanyId/${companyId}`;
+        //console.log(url);
+        return this.http.get<APIResponse>(url);
+    }
+    GetAllState(): Observable<APIResponse> {
+        const url = `${this.environment.apiUrl}Common/GetAllState`;
+        //console.log(url);
+        return this.http.get<APIResponse>(url);
+    } 
+
+    GetPayCodes(): Observable<APIResponse> {
+        const url = `${this.environment.apiUrl}Common/GetPayPeriod`;
+        //console.log(url);
+        return this.http.get<APIResponse>(url);
+    } 
 }

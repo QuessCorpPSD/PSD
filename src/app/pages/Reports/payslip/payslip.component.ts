@@ -14,7 +14,6 @@ import { PayPeriodComponent } from '../../../common/payperiod/payperiod.componen
 import { PayslipService } from '../../../Service/Reports/payslip.service';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 
-
 type RawRow = Record<string, any>;
 
 interface ViewRow {

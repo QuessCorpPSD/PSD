@@ -30,7 +30,7 @@
     flex-direction: column;
     gap: 8px;
     padding: 0px 24px 0 35px;
-    width: 85%;
+    width: 75%;
     min-width: 700px;
 }
 
@@ -79,12 +79,33 @@
     table-layout: auto !important;
 }
 
+::ng-deep .mat-mdc-table {
+    display: table !important;
+    table-layout: auto !important;
+    width: max-content !important;
+    min-width: 100% !important;
+}
+
+::ng-deep .mat-mdc-header-row,
+::ng-deep .mat-mdc-row {
+    display: table-row !important;
+    height: 50px !important;
+}
+
+::ng-deep .mat-mdc-header-cell,
+::ng-deep .mat-mdc-cell {
+    display: table-cell !important;
+    width: auto !important;
+    white-space: nowrap;
+}
+
+
 /* ===== Header Cells ===== */
 ::ng-deep .mat-mdc-header-cell {
     background-color: #ffffff !important;
     color: #000000 !important;
     font-size: 13px;
-    font-family: "Nunito Sans", sans-serif;
+    font-family: "Montserrat", sans-serif;
     font-weight: 400 !important;
     border-right: 1px solid #ddd;
     display: flex;
@@ -92,15 +113,13 @@
     align-items: center;
     text-align: center;
     height: 32px !important;
-    min-width: 140px;
-    /* ensures consistent width for scrolling */
     white-space: nowrap;
     vertical-align: middle;
 }
 
 /* ===== Body Cells ===== */
 ::ng-deep .mat-mdc-cell {
-    font-family: "Nunito Sans", sans-serif;
+    font-family: "Montserrat", sans-serif;
     font-size: 12px;
     font-weight: 400 !important;
     color: #222;
@@ -112,8 +131,8 @@
     text-align: center;
     padding: 0 10px;
     height: 30px;
-    min-width: 140px;
     white-space: nowrap;
+    vertical-align: middle;
 }
 
 
@@ -162,7 +181,6 @@
     ::ng-deep .mat-mdc-cell {
         font-size: 11px;
         padding: 4px 6px;
-        min-width: 100px;
     }
 
     .custom-table {
@@ -217,18 +235,6 @@
     z-index: 2100;
 }
 
-/* .SNo {
-    width: 80px !important;
-    min-width: 80px !important;
-    max-width: 80px !important;
-}
-
-.Action {
-    width: 80px !important;
-    min-width: 80px !important;
-    max-width: 80px !important;
-} */
-
 .btn-search {
     background-color: #0d6efd;
     color: #fff;
@@ -254,30 +260,10 @@
     color: #fff;
 }
 
-::ng-deep .mat-mdc-table {
-    display: table !important;
-    table-layout: auto !important;
-    width: max-content !important;
-    min-width: 100% !important;
-}
-
-::ng-deep .mat-mdc-header-row,
-::ng-deep .mat-mdc-row {
-    display: table-row !important;
-    height: 50px !important;
-}
-
-::ng-deep .mat-mdc-header-cell,
-::ng-deep .mat-mdc-cell {
-    display: table-cell !important;
-    width: auto !important;
-    white-space: nowrap;
-}
-
 .header {
     display: flex;
-    align-items: center;
-    justify-content: center;
+    /* align-items: center;
+    justify-content: center; */
     gap: 3px;
-    width: 100%;
+    padding-top: 2px !important;
 }

@@ -33,6 +33,7 @@ export class EmployeeInformationComponent {
   fundlevy: any;
   religion: any;
   userdetail: any;
+  workpass: any;
 
   constructor(
     private dialogRef: MatDialogRef<EmployeeInformationComponent>,
@@ -45,11 +46,26 @@ export class EmployeeInformationComponent {
 
     this.rowData = data.rowData;
   }
-  formatDate(date: string): string {
-    const [day, month, year] = date.split('-');
-    return `${year}-${month}-${day}`; // Converts DD-MM-YYYY to YYYY-MM-DD
-  }
 
+  formatDate(date?: string): string {
+    if (!date) {
+      return '';
+    }
+
+    // If ISO format like 1753-01-01T00:00:00
+    if (date.includes('T')) {
+      return date.split('T')[0];
+    }
+
+    // If DD-MM-YYYY
+    const parts = date.split('-');
+    if (parts.length !== 3) {
+      return '';
+    }
+
+    const [day, month, year] = parts;
+    return `${year}-${month}-${day}`;
+  }
 
   ngOnInit(): void {
     const json = this._sessionStoreage.getItem('UserProfile');
@@ -57,52 +73,80 @@ export class EmployeeInformationComponent {
       this.userdetail = JSON.parse(this.decry.decrypt(json));
     }
 
+    // this.infoForm = this.fb.group({
+    //   passportNo: [this.rowData.Passport_Number ?? '', Validators.required],
+
+    //   passportExpiry: [
+    //     this.formatDate(this.rowData.Passport_Expiry_Date),
+    //     Validators.required
+    //   ],
+
+    //   placeOfIssue: [this.rowData.Place_Of_Issue ?? '', Validators.required],
+    //   gunLicenseNo: [this.rowData.Gun_License_No ?? '', Validators.required],
+    //   drivingLicenseNo: [this.rowData.Driving_License_Number ?? '', Validators.required],
+    //   nricFinNo: [this.rowData.NRIC_FIN_NUMBER ?? '', Validators.required],
+    //   fundLevy: [this.rowData.FUND_LEVY ?? '', Validators.required],
+    //   sprStatus: [this.rowData.spr_status_id ?? '', Validators.required],
+
+    //   sprApprovedDate: [
+    //     this.formatDate(this.rowData.SPR_APPROVE_DATE),
+    //     Validators.required
+    //   ],
+
+    //   visaNumber: [this.rowData.VISA_NUMBER ?? '', Validators.required],
+    //   insuranceNumber: [this.rowData.INSURANCE_NUMBER ?? '', Validators.required],
+
+    //   visaStartDate: [
+    //     this.formatDate(this.rowData.VISA_DURATION_START_DATE),
+    //     Validators.required
+    //   ],
+
+    //   visaEndDate: [
+    //     this.formatDate(this.rowData.VISA_DURATION_END_DATE),
+    //     Validators.required
+    //   ],
+
+    //   workPassId: [this.rowData.WORK_PASS_ID ?? '', Validators.required],
+    //   religion: [this.rowData.Religion ?? '']
+    // });
     this.infoForm = this.fb.group({
-      passportNo: [this.rowData.Passport_Number ?? '', Validators.required],
-
+      passportNo: [this.rowData?.passportNo ?? '', Validators.required],
       passportExpiry: [
-        this.formatDate(this.rowData.Passport_Expiry_Date),
+        this.formatDate(this.rowData?.passportExpiry),
         Validators.required
       ],
+      placeOfIssue: [this.rowData?.placeOfIssue ?? '', Validators.required],
 
-      placeOfIssue: [this.rowData.Place_Of_Issue ?? '', Validators.required],
-      gunLicenseNo: [this.rowData.Gun_License_No ?? '', Validators.required],
-      drivingLicenseNo: [this.rowData.Driving_License_Number ?? '', Validators.required],
-      nricFinNo: [this.rowData.Total_CTC ?? '', Validators.required],
-      fundLevy: [this.rowData.FUND_LEVY ?? '', Validators.required],
-      sprStatus: [this.rowData.spr_status_id ?? '', Validators.required],
+      panno: [this.rowData?.panno ?? ''],
+      gunLicenseNo: [this.rowData?.gunLicenseNo ?? ''],
+      drivingLicenseNo: [this.rowData?.drivingLicenseNo ?? ''],
 
-      sprApprovedDate: [
-        this.formatDate(this.rowData.SPR_APPROVE_DATE),
-        Validators.required
-      ],
+      ESIno: [this.rowData?.ESIno ?? ''],
+      pfno: [this.rowData?.pfno ?? ''],
+      Uanno: [this.rowData?.Uanno ?? ''],
+      pfnobackup: [this.rowData?.pfnobackup ?? ''],
+      aadharno: [this.rowData?.aadharno ?? ''],
 
-      visaNumber: [this.rowData.VISA_NUMBER ?? '', Validators.required],
-      insuranceNumber: [this.rowData.INSURANCE_NUMBER ?? '', Validators.required],
+      insuranceNumber: [this.rowData?.insuranceNumber ?? ''],
+      Prannumber: [this.rowData?.Prannumber ?? ''],
 
-      visaStartDate: [
-        this.formatDate(this.rowData.VISA_DURATION_START_DATE),
-        Validators.required
-      ],
-
-      visaEndDate: [
-        this.formatDate(this.rowData.VISA_DURATION_END_DATE),
-        Validators.required
-      ],
-
-      workPassId: [this.rowData.WORK_PASS_ID ?? '', Validators.required],
-      religion: [this.rowData.Religion ?? '']
+      UANtype: [this.rowData?.UANtype ?? '']
     });
+
 
     this.BindSprstatus();
     this.BindReligion();
+    this.Bindworkpass();
   }
-
-
 
   BindSprstatus() {
     this.service.Getsprstatus().subscribe({
       next: res => { this.sprstatus = res.Data.data }
+    });
+  }
+  Bindworkpass() {
+    this.service.Getworkpass().subscribe({
+      next: res => { this.workpass = res.Data.data.Table0 }
     });
   }
   BindReligion() {

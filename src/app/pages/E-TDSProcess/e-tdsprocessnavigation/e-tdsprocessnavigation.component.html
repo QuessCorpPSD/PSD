@@ -1,0 +1,23 @@
+<div class="headerSOP">
+</div>
+<div class="contentCategory">
+    <div style="width: 100%;">
+        <div class="Categorylist">
+            <ul class="horizontal-list">
+
+                <li><a [routerLink]="['/Master/etdsprocess/legalentitymapping']" class="nav-link"
+                        routerLinkActive="selectedInput" [routerLinkActiveOptions]="{ exact: true }">Legal Entity
+                        Mapping</a>
+                </li>
+
+                <li><a [routerLink]="['/Master/etdsprocess/taxremittancegeneration']" class="nav-link"
+                        routerLinkActive="selectedInput" [routerLinkActiveOptions]="{ exact: true }">Tax Remittance
+                        Generation
+                    </a>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+</div>
+<router-outlet></router-outlet>

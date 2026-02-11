@@ -8,11 +8,11 @@ import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { CompanyallComponent } from "../../../common/CompanyAll/companyall.component";
 import { MatDialog } from '@angular/material/dialog';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { LtacalculationService } from '../../../Service/Taxandsavings/ltacalculation.service';
-import { ILtaCalculation } from '../../../Repository/Taxandsavings/Ilta.service';
 import * as XLSX from 'xlsx';
 import { EncryptionService } from '../../../Shared/encryption.service';
 import { SessionStorageService } from '../../../Shared/SessionStorageService';
+import { ILtaCalculation } from '../../../Repository/TaxAndSavings/Ilta.service';
+import { LtacalculationService } from '../../../Service/TaxAndSavings/ltacalculation.service';
 export const Pay_Token = new InjectionToken<ILtaCalculation>('Pay_Token');
 export interface ILTA {
   slNo: number;
@@ -206,78 +206,210 @@ export class LtacalculationComponent {
   }
 
 
+  // onSearch() {
+  //   this.showTable = true;
+  //   this.isLoading = true;
+  //   const companyId = this.CompanyId || 0
+  //   const EmployeeId = this.EmpCode || 0
+
+  //   this.service.search(companyId, EmployeeId).subscribe({
+
+  //     next: (res) => {
+  //       this.ltaSearch = res.Data.data.Table0;
+  //       if (this.ltaSearch && this.ltaSearch.length > 0) {
+  //         this.dataSource = new MatTableDataSource(this.ltaSearch);
+  //         this.dataSource.paginator = this.paginator;
+  //         this.displayedColumns = [
+  //           "delete", "edit", "sno", "companyCode", "employeeCode", "employeeName", "financialYear", "ltaBlockPeriod"
+  //           , "declarationType", "travelFromDate", "travelToDate", "travelLocation", "claimDate", "claimAmount", "actualAmount", "eligibleAmount", "exemptionAmount", "remarks", "carryForward"
+  //         ];
+  //       } else {
+  //         this.dataSource.data = [];
+  //         alert('No data found for the selected criteria');
+  //       }
+  //       this.isLoading = false;
+  //     },
+  //     error: (err) => {
+  //       console.error('Error loading data', err);
+  //       alert('Failed to load data');
+  //       this.isLoading = false;
+  //     },
+  //   });
+  //   this.isLoading = false;
+  // }
+
   onSearch() {
-    this.showTable = true;
     this.isLoading = true;
-    const companyId = this.CompanyId || 0
-    const EmployeeId = this.EmpCode || 0
+    if (!this.CompanyId) {
+      alert('Please Select Company');
+      this.isLoading = false;
+      this.showTable = false;
+      return;
+    }
 
-    this.service.search(companyId, EmployeeId).subscribe({
 
+    this.showTable = true;
+
+    const companyId = this.CompanyId;
+    const employeeId = this.EmpCode || 0;
+
+    this.service.search(companyId, employeeId).subscribe({
       next: (res) => {
-        this.ltaSearch = res.Data.data.Table0;
-        if (this.ltaSearch && this.ltaSearch.length > 0) {
-          this.dataSource = new MatTableDataSource(this.ltaSearch);
-          this.dataSource.paginator = this.paginator;
-          this.displayedColumns = [
-            "delete", "edit", "sno", "companyCode", "employeeCode", "employeeName", "financialYear", "ltaBlockPeriod"
-            , "declarationType", "travelFromDate", "travelToDate", "travelLocation", "claimDate", "claimAmount", "actualAmount", "eligibleAmount", "exemptionAmount", "remarks", "carryForward"
-          ];
-        } else {
+
+
+        if (res?.Data?.statusCode === '400') {
+          alert(res.Data.message);
           this.dataSource.data = [];
-          alert('No data found for the selected criteria');
+          this.isLoading = false;
+          return;
         }
+
+        this.ltaSearch = res?.Data?.data?.Table0 ?? [];
+
+        if (this.ltaSearch.length === 0) {
+          alert('No data found for the selected criteria');
+          this.dataSource.data = [];
+          this.isLoading = false;
+          return;
+        }
+
+        this.dataSource = new MatTableDataSource(this.ltaSearch);
+        this.dataSource.paginator = this.paginator;
+
+        this.displayedColumns = [
+          "delete",
+          "edit",
+          "sno",
+          "companyCode",
+          "employeeCode",
+          "employeeName",
+          "financialYear",
+          "ltaBlockPeriod",
+          "declarationType",
+          "travelFromDate",
+          "travelToDate",
+          "travelLocation",
+          "claimDate",
+          "claimAmount",
+          "actualAmount",
+          "eligibleAmount",
+          "exemptionAmount",
+          "remarks",
+          "carryForward"
+        ];
+
         this.isLoading = false;
       },
       error: (err) => {
         console.error('Error loading data', err);
         alert('Failed to load data');
         this.isLoading = false;
-      },
+      }
     });
-    this.isLoading = false;
   }
+
+
+
+
+  // exportToExcel(): void {
+  //   this.isLoading = true;
+  //   const companyId = this.CompanyId || 0
+  //   const EmployeeId = this.EmpCode || 0
+
+  //   this.service.exportToExcel(companyId, EmployeeId).subscribe({
+  //     next: (res) => {
+  //       try {
+  //         const jsonData = res?.Data?.data?.Table0;
+
+  //         //  Check if Data is not an array or empty
+  //         if (!Array.isArray(jsonData) || jsonData.length === 0) {
+  //           alert('No data available for the companycode and employeecode.');
+  //           this.isLoading = false;
+  //           return;
+  //         }
+
+  //         // Create Excel file
+  //         const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(jsonData);
+  //         const wb: XLSX.WorkBook = XLSX.utils.book_new();
+
+  //         XLSX.utils.book_append_sheet(wb, ws, 'Ltacalculation');
+
+  //         const timestamp = new Date().toISOString().split('T')[0];
+  //         const fileName = `Ltacalculation${timestamp}.xlsx`;
+
+  //         XLSX.writeFile(wb, fileName);
+  //         this.isLoading = false;
+  //       } catch (err) {
+  //         console.error('Error exporting to Excel:', err);
+  //         alert('An error occurred while exporting data.');
+  //       }
+  //     },
+  //     error: (err) => {
+  //       console.error('Error loading data for export', err);
+  //       alert('Failed to load data from server.');
+  //       this.isLoading = false;
+  //     },
+  //   });
+  // }
 
   exportToExcel(): void {
     this.isLoading = true;
-    const companyId = this.CompanyId || 0
-    const EmployeeId = this.EmpCode || 0
 
-    this.service.exportToExcel(companyId, EmployeeId).subscribe({
+    // Company is mandatory
+    if (!this.CompanyId) {
+      alert('Please Select Company');
+      this.isLoading = false;
+      return;
+    }
+
+    const companyId = this.CompanyId;
+    const employeeId = this.EmpCode || 0; 
+
+    this.service.exportToExcel(companyId, employeeId).subscribe({
       next: (res) => {
+
+      
+        if (res?.Data?.statusCode === '400') {
+          alert(res.Data.message || 'No records found');
+          this.isLoading = false;
+          return;
+        }
+
+        const jsonData = res?.Data?.data?.Table0 ?? [];
+
+    
+        if (!Array.isArray(jsonData) || jsonData.length === 0) {
+          alert('No data available for the selected criteria.');
+          this.isLoading = false;
+          return;
+        }
+
         try {
-          const jsonData = res?.Data?.data?.Table0;
-
-          //  Check if Data is not an array or empty
-          if (!Array.isArray(jsonData) || jsonData.length === 0) {
-            alert('No data available for the companycode and employeecode.');
-            this.isLoading = false;
-            return;
-          }
-
-          // Create Excel file
+      
           const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(jsonData);
           const wb: XLSX.WorkBook = XLSX.utils.book_new();
 
           XLSX.utils.book_append_sheet(wb, ws, 'Ltacalculation');
 
           const timestamp = new Date().toISOString().split('T')[0];
-          const fileName = `Ltacalculation${timestamp}.xlsx`;
+          const fileName = `Ltacalculation_${timestamp}.xlsx`;
 
           XLSX.writeFile(wb, fileName);
-          this.isLoading = false;
         } catch (err) {
           console.error('Error exporting to Excel:', err);
           alert('An error occurred while exporting data.');
+        } finally {
+          this.isLoading = false;
         }
       },
       error: (err) => {
         console.error('Error loading data for export', err);
         alert('Failed to load data from server.');
         this.isLoading = false;
-      },
+      }
     });
   }
+
 
   ImportClick(fileInput: HTMLInputElement): void {
     fileInput.click();

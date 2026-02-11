@@ -55,10 +55,12 @@ export class PayregisterunprocessedComponent {
     this.isLoading = true;
     if (!this.companyId) {
       this.companyId = 0;
+
     }
 
     if (!this.selectedPP) {
       this.selectedPP = 0;
+
     }
 
     this.payregisterService.GetExporttoExcel(

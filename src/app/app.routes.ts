@@ -98,13 +98,34 @@ import { ITcalenderComponent } from './pages/customers/itcalender/itcalender.com
 import { PayfrequencyComponent } from './pages/customers/payfrequency/payfrequency.component';
 import { ServiceChargeComponent } from './pages/customers/ServiceChargeMaster/service-charge/service-charge.component';
 
-import { EmployeeComponents } from './pages/customers/employee/employee.component';
 import { AdminnavigationComponent } from './pages/admin/adminnavigation/adminnavigation.component';
 import { CompanypermissionComponent } from './pages/admin/companypermission/companypermission.component';
 import { PasswordunlockComponent } from './pages/admin/passwordunlock/passwordunlock.component';
 import { PayperiodunlockComponent } from './pages/admin/payperiodunlock/payperiodunlock.component';
+import { BillableDaysComponent } from './pages/Invoice/billable-days/billable-days.component';
+import { BillingpayfrequencyComponent } from './pages/Invoice/billingpayfrequency/billingpayfrequency.component';
+import { ClientbillablereportsdatewiseComponent } from './pages/Invoice/clientbillablereportsdatewise/clientbillablereportsdatewise.component';
+import { CompanyinvoiceformatComponent } from './pages/Invoice/companyinvoiceformat/companyinvoiceformat.component';
+import { CreditnoteComponent } from './pages/Invoice/creditnote/creditnote.component';
+import { CreditnoteapproveComponent } from './pages/Invoice/creditnoteapprove/creditnoteapprove.component';
+import { CreditnoteupdateComponent } from './pages/Invoice/creditnoteupdate/creditnoteupdate.component';
+import { GstinvoiceComponent } from './pages/Invoice/gstinvoice/gstinvoice.component';
+import { InvoiceCultureComponent } from './pages/Invoice/invoice-culture/invoice-culture.component';
+import { InvoicenavigationComponent } from './pages/Invoice/invoicenavigation/invoicenavigation.component';
+import { PerfomainvoiceComponent } from './pages/Invoice/perfomainvoice/perfomainvoice.component';
+import { POInitiateComponent } from './pages/Invoice/poinitiate/poinitiate.component';
+import { ProvisionalinvoiceComponent } from './pages/Invoice/provisionalinvoice/provisionalinvoice.component';
+
 //import { ReimbrusementnavigationComponent } from './pages/reimbruements/reimbrusementnavigation/reimbrusementnavigation.component';
 import { ReimbrusementComponent } from './pages/Reimbursement/reimbrusement/reimbrusement.component';
+
+import { ETDSProcessnavigationComponent } from './pages/E-TDSProcess/e-tdsprocessnavigation/e-tdsprocessnavigation.component';
+import { LegalEntityMappingComponent } from './pages/E-TDSProcess/legal-entity-mapping/legal-entity-mapping.component';
+
+import { CompanyprovidedbenefitsComponent } from './pages/Taxandsavings/companyprovidedbenefits/companyprovidedbenefits.component';
+import { GratuityComponent } from './pages/Taxandsavings/gratuity/gratuity.component';
+import { IncreamentComponent } from './pages/Promotion/increament/increament.component';
+import { PromotionNavigationComponent } from './pages/Promotion/promotion-navigation/promotion-navigation.component';
 import { AllowReProcessComponent } from './pages/process/allow-re-process/allow-re-process.component';
 import { ArrearAttendanceComponent } from './pages/process/arrear-attendance/arrear-attendance.component';
 import { AttendanceComponent } from './pages/process/attendance/attendance.component';
@@ -122,6 +143,10 @@ import { PaytransactionComponent } from './pages/process/paytransaction/paytrans
 import { ProcessComponent } from './pages/process/process.component';
 import { ReimbrusmentcalenderComponent } from './pages/process/reimbrusmentcalender/reimbrusmentcalender.component';
 import { ReprocessComponent } from './pages/process/reprocess/reprocess.component';
+import { UpfrontmatrixComponent } from './pages/upfrontprocess/upfrontmatrix/upfrontmatrix.component';
+import { EmployeeComponents } from './pages/customers/employee/employee.component';
+import { TaxRemittanceGenerationComponent } from './pages/E-TDSProcess/tax-remittance-generation/tax-remittance-generation.component';
+
 
 
 
@@ -210,6 +235,14 @@ export const routes: Routes = [
           { path: 'Report', component: ReportComponent }
         ]
       },
+      {
+        path: 'PromationNavigation', component: PromotionNavigationComponent,
+        children: [
+          { path: 'Increament', component: IncreamentComponent },
+
+
+        ]
+      },
 
       {
         path: 'Separation',
@@ -256,17 +289,21 @@ export const routes: Routes = [
         path: 'tools', component: ToolsnavigationComponent,
         children: [
           { path: "dynamiupload", component: DynamicuploadComponent },
+          { path: "upfrontmatrix", component: UpfrontmatrixComponent }
         ]
       },
       {
         path: 'taxnavigation', component: NavigationComponent,
         children: [
           { path: 'cea', component: ChildreneducationallowanceComponent },
+          { path: 'cpb', component: CompanyprovidedbenefitsComponent },
+          { path: 'gratuity', component: GratuityComponent },
           { path: "ltacalculation", component: LtacalculationComponent },
           { path: "previousemploymenttaxdetails", component: PreviousemploymenttaxdetailsComponent },
           { path: "taxanddeclarationactual", component: TaxdeclationandactualComponent },
           { path: 'IncomeLoss', component: IncomeLossOnHousePropertyComponent },
           { path: 'HRAcalculation', component: HRAcalculationComponent },
+
 
 
         ]
@@ -275,8 +312,18 @@ export const routes: Routes = [
         path: 'reimbursementnavigation', component: ReimbursenavigationComponent,
         children: [
           { path: "loanandadvance", component: LoanandadvanceComponent },
-          { path: 'LoanPreClosure', component: ReimbursementLoanPreClosureComponent },
+          { path: 'loanpreclosure', component: ReimbursementLoanPreClosureComponent },
           { path: 'reimbursement', component: ReimbrusementComponent }
+
+
+        ]
+      },
+      {
+        path: 'etdsprocess', component: ETDSProcessnavigationComponent,
+        children: [
+          { path: "legalentitymapping", component: LegalEntityMappingComponent },
+          { path: "taxremittancegeneration", component: TaxRemittanceGenerationComponent }
+
 
 
         ]
@@ -307,6 +354,28 @@ export const routes: Routes = [
           { path: "employee", component: EmployeeComponents },
           { path: "cancelledinvoicerepository", component: CancelledinvoicerepositoryComponent },
           { path: "Company", component: CompanyComponent },
+
+        ]
+      },
+      {
+        path: 'invoicenavigation',
+        component: InvoicenavigationComponent,
+        children: [
+          { path: 'initiate', component: InitiateComponent },
+          { path: 'provisionalinvoice', component: ProvisionalinvoiceComponent },
+          { path: 'perfomainvoice', component: PerfomainvoiceComponent },
+          { path: 'billabledays', component: BillableDaysComponent },
+          { path: 'gstinvoice', component: GstinvoiceComponent },
+          { path: 'billingpayfrequency', component: BillingpayfrequencyComponent },
+          { path: 'gstinvoice', component: GstinvoiceComponent },
+          { path: 'poinitiate', component: POInitiateComponent },
+          { path: 'app-invoice-culture', component: InvoiceCultureComponent },
+          { path: 'ClientBillableReportDatewise', component: ClientbillablereportsdatewiseComponent },
+          { path: 'creditnote', component: CreditnoteComponent },
+          { path: 'creditnoteapprove', component: CreditnoteapproveComponent },
+          { path: 'creditnoteupdate', component: CreditnoteupdateComponent },
+          { path: 'companyinvoiceformat', component: CompanyinvoiceformatComponent },
+          { path: 'OtherIncome', component: OtherincomeComponent },
 
         ]
       },

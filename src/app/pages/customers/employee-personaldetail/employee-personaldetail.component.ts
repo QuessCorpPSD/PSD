@@ -55,15 +55,16 @@ export class EmployeePersonaldetailComponent {
     }
 
     this.personalForm = this.fb.group({
-      birthPlace: [this.rowData.Birth_Place ?? '', Validators.required],
-      nominee: [this.rowData.Nominee ?? '', Validators.required],
-      relationship: [this.rowData.Relationship ?? '', Validators.required],
-      racecode: [this.rowData.RACE_CODE ?? '', Validators.required],
-      Nationalcode: [this.rowData.NATIONAL_CODE ?? '', Validators.required],
-      RFUNDCode1: [this.rowData.RFUND_CODE1 ?? '', Validators.required],
-      RFUNDCode2: [this.rowData.RFUND_CODE2 ?? ''],
-      COB: [this.rowData.COUNTRY_OF_BIRTH ?? '']
+      birthPlace: ['', Validators.required],
+      Homestate: [''],
+      nominee: [''],
+      relationship: ['', Validators.required],
+      religion: [''],
+      Nationality: [''],
+      recuritersname: ['', Validators.required],
+      exservice: ['']   // Y / N
     });
+
 
     this.BindRFUNDCODE();
     this.BindRFUNDCODE1();

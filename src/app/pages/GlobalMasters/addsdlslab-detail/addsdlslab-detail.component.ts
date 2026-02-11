@@ -26,7 +26,6 @@ import { SessionStorageService } from '../../../Shared/SessionStorageService';
     MatCardModule,
     MatDialogModule,
     ReactiveFormsModule,
-    AlertpopupComponent
   ],
   templateUrl: './addsdlslab-detail.component.html',
   styleUrls: ['./addsdlslab-detail.component.css']

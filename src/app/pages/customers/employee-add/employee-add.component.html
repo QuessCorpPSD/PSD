@@ -31,7 +31,7 @@
                     </small>
                 </div>
                 <div class="col-md-3">
-                    <label class="form-label text-muted small">SPR Status<span style="color:red">*</span></label>
+                    <label class="form-label text-muted small">Cap/Non-Cap<span style="color:red">*</span></label>
                     <select class="form-select form-select-sm" formControlName="sprstatus">
                         <option value="" disabled>Select</option>
                         <option *ngFor="let spr of sprstatus " [value]="spr.spr_status_id">
@@ -79,8 +79,21 @@
                     <input class="form-control form-control-sm" formControlName="LanguageKnown">
                 </div>
 
+
             </div>
             <div class="row g-3 mb-3">
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Identification</label>
+                    <input class="form-control form-control-sm" formControlName="Identification">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Height</label>
+                    <input class="form-control form-control-sm" formControlName="height">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Weight</label>
+                    <input class="form-control form-control-sm" formControlName="weight">
+                </div>
                 <div class="col-md-3">
                     <label class="form-label text-muted small">Gender<span style="color:red">*</span></label>
                     <div class="d-flex gap-3">
@@ -104,6 +117,8 @@
                         Gender is required
                     </small>
                 </div>
+            </div>
+            <div class="row g-3 mb-3">
 
                 <div class="col-md-3">
                     <label class="form-label text-muted small">Material Status<span style="color:red">*</span></label>
@@ -148,8 +163,7 @@
                         Disability is required
                     </small>
                 </div>
-            </div>
-            <div class="row g-3 mb-3">
+
                 <div class="col-md-3">
                     <label class="form-label text-muted small">Map Name<span style="color:red">*</span></label>
                     <select class="form-select form-select-sm" formControlName="Mapname">
@@ -164,7 +178,8 @@
                         Mapname is required
                     </small>
                 </div>
-
+            </div>
+            <div class="row g-3 mb-3">
 
                 <div class="col-md-3">
                     <label class="form-label text-muted small">Date of Joining<span style="color:red">*</span></label>
@@ -201,9 +216,7 @@
                         Cost Center is required
                     </small>
                 </div>
-            </div>
 
-            <div class="row g-3 mb-3">
                 <div class="col-md-3">
                     <label class="form-label text-muted small">Join PayPeriod<span style="color:red">*</span></label>
                     <input class="form-control form-control-sm" formControlName="joinpayperiod" readonly>
@@ -213,18 +226,21 @@
                         Join PayPeriod is required
                     </small>
                 </div>
+            </div>
+
+            <div class="row g-3 mb-3">
 
 
-
-                <div class="col-md-3" style="display: none;">
+                <div class="col-md-3">
                     <label class="form-label text-muted small">PT State<span style="color:red">*</span></label>
                     <select class="form-select form-select-sm" formControlName="PTState">
                         <option value="" disabled>Select</option>
                     </select>
-                    <!-- <small *ngIf="employeeForm.get('PTState')?.touched && employeeForm.get('PTState')?.hasError('required')"
+                    <small
+                        *ngIf="employeeForm.get('PTState')?.touched && employeeForm.get('PTState')?.hasError('required')"
                         style="color: red;">
                         PTState is required
-                    </small> -->
+                    </small>
 
                 </div>
 
@@ -250,17 +266,19 @@
                         Effective Date is required
                     </small>
                 </div>
-                <div class="col-md-3" style="display: none;">
+                <div class="col-md-3">
                     <label class="form-label text-muted small">LWF State<span style="color:red">*</span></label>
                     <select class="form-select form-select-sm" formControlName="LWFState">
                         <option value="" disabled>Select</option>
                     </select>
-                    <!-- <small
+                    <small
                         *ngIf="employeeForm.get('LWFState')?.touched && employeeForm.get('LWFState')?.hasError('required')"
                         style="color: red;">
                         LWFState is required
-                    </small> -->
+                    </small>
                 </div>
+            </div>
+            <div class="row g-3 mb-3">
                 <div class="col-md-3">
                     <label class="form-label text-muted small">Business Units Location<span
                             style="color:red">*</span></label>
@@ -275,8 +293,7 @@
                         Business Unit Location is required
                     </small>
                 </div>
-            </div>
-            <div class="row g-3 mb-3">
+
                 <div class="col-md-3">
                     <label class="form-label text-muted small">Department<span style="color:red">*</span></label>
                     <select class="form-select form-select-sm" formControlName="department">
@@ -303,17 +320,19 @@
                     </small>
                 </div>
 
-                <div class="col-md-3" style="display: none;">
-                    <label class="form-label text-muted small">User Group</label>
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">User Group<span style="color:red">*</span></label>
                     <select class="form-select form-select-sm" formControlName="usergroup">
                         <option value="" disabled>Select</option>
                     </select>
-                    <!-- <small
+                    <small
                         *ngIf="employeeForm.get('usergroup')?.touched && employeeForm.get('usergroup')?.hasError('required')"
                         style="color: red;">
                         usergroup is required
-                    </small> -->
+                    </small>
                 </div>
+            </div>
+            <div class="row g-3 mb-3">
                 <div class="col-md-3">
                     <label class="form-label text-muted small">Designation<span style="color:red">*</span></label>
                     <select class="form-select form-select-sm" formControlName="designation">
@@ -328,7 +347,7 @@
                     </small>
                 </div>
 
-                <div class="col-md-3" style="display: none;">
+                <div class="col-md-3">
                     <label class="form-label text-muted small">Ikya Location</label>
                     <input class="form-control form-control-sm" formControlName="ikyalocation">
                 </div>
@@ -337,12 +356,13 @@
                     <label class="form-label text-muted small">Date of Resignation</label>
                     <input class="form-control form-control-sm" type="date" formControlName="DateOfResignation">
                 </div>
-            </div>
-            <div class="row g-3 mb-3">
+
                 <div class="col-md-3">
                     <label class="form-label text-muted small">DMS Id</label>
                     <input class="form-control form-control-sm" formControlName="DMSId">
                 </div>
+            </div>
+            <div class="row g-3 mb-3">
                 <div class="col-md-3">
                     <label class="form-label text-muted small">Billing Designation<span
                             style="color:red">*</span></label>
@@ -367,9 +387,8 @@
                     <label class="form-label text-muted small">ETDS Sequence</label>
                     <input class="form-control form-control-sm" formControlName="ETDSSequence">
                 </div>
-            </div>
-            <div class="row g-3 mb-3">
-                <div class="col-md-3" style="display: none;">
+
+                <div class="col-md-3">
                     <label class="form-label text-muted small">PT<span style="color:red">*</span></label>
                     <div class="d-flex gap-3">
                         <div class="form-check">
@@ -383,11 +402,13 @@
                             <label class="form-check-label" for="no">No</label>
                         </div>
                     </div>
-                    <!-- <small *ngIf="employeeForm.get('PT')?.touched && employeeForm.get('PT')?.hasError('required')"
+                    <small *ngIf="employeeForm.get('PT')?.touched && employeeForm.get('PT')?.hasError('required')"
                         style="color: red;">
                         PT is required
-                    </small> -->
+                    </small>
                 </div>
+            </div>
+            <div class="row g-3 mb-3">
 
                 <div class="col-md-3">
                     <label class="form-label text-muted small">Resign Pay Period</label>
@@ -397,7 +418,7 @@
                 </div>
                 <div class="col-md-3">
                     <label class="form-label text-muted small">Contract Expiry Date</label>
-                    <input class="form-control form-control-sm" formControlName="Contractexpirydate">
+                    <input class="form-control form-control-sm" type="date" formControlName="Contractexpirydate">
                 </div>
 
                 <div class="col-md-3">
@@ -437,7 +458,7 @@
 
                     </select>
                 </div>
-                <div class="col-md-3" style="display: none;">
+                <div class="col-md-3">
                     <label class="form-label text-muted small">Metro City<span style="color:red">*</span></label>
                     <div class="d-flex gap-3">
                         <div class="form-check">
@@ -450,11 +471,11 @@
                                 formControlName="Metrocity">
                             <label class="form-check-label" for="no">No</label>
                         </div>
-                        <!-- <small
+                        <small
                             *ngIf="employeeForm.get('Metrocity')?.touched && employeeForm.get('Metrocity')?.hasError('required')"
                             style="color: red;">
                             Metrocity is required
-                        </small> -->
+                        </small>
                     </div>
                 </div>
                 <div class="col-md-3">
@@ -475,10 +496,11 @@
 
                 <div class="col-md-3">
                     <label class="form-label text-muted small">Reason of Leaving</label>
-                    <input class="form-control form-control-sm" formControlName="ROL">
+                    <input class="form-control form-control-sm" type="text" formControlName="ROL">
 
                 </div>
-
+            </div>
+            <div class="row g-3 mb-3">
                 <div class="col-md-3">
                     <label class="form-label text-muted small">Hiring Status<span style="color:red">*</span></label>
                     <select class="form-select form-select-sm" formControlName="Hiringstatus">
@@ -492,8 +514,7 @@
                         Hiringstatus is required
                     </small>
                 </div>
-            </div>
-            <div class="row g-3 mb-3">
+
 
                 <div class="col-md-3">
                     <label class="form-label text-muted small">PF<span style="color:red">*</span></label>
@@ -525,8 +546,9 @@
                     <label class="form-label text-muted small">Deputee Id</label>
                     <input class="form-control form-control-sm" formControlName="Deputeeid">
                 </div>
-
-                <div class="col-md-3" style="display: none;">
+            </div>
+            <div class="row g-3 mb-3">
+                <div class="col-md-3">
                     <label class="form-label text-muted small">ESI<span style="color:red">*</span></label>
                     <div class="d-flex gap-3">
                         <div class="form-check">
@@ -539,11 +561,10 @@
                                 formControlName="ESI">
                             <label class="form-check-label" for="no">No</label>
                         </div>
-                        <!-- <small
-                            *ngIf="employeeForm.get('ESI')?.touched && employeeForm.get('ESI')?.hasError('required')"
+                        <small *ngIf="employeeForm.get('ESI')?.touched && employeeForm.get('ESI')?.hasError('required')"
                             style="color: red;">
                             ESI is required
-                        </small> -->
+                        </small>
                     </div>
                 </div>
 
@@ -552,8 +573,7 @@
                     <input class="form-control form-control-sm" formControlName="Reportheademail">
 
                 </div>
-            </div>
-            <div class="row g-3 mb-3">
+
                 <div class="col-md-3">
                     <label class="form-label text-muted small">ReJoinee Date</label>
                     <input class="form-control form-control-sm" type="date" formControlName="Rejoineedate">
@@ -579,6 +599,8 @@
                     </div>
                 </div>
 
+            </div>
+            <div class="row g-3 mb-3">
                 <div class="col-md-3">
                     <label class="form-label text-muted small">Business Head</label>
                     <input class="form-control form-control-sm" formControlName="Businesshead">
@@ -590,8 +612,7 @@
                     <label class="form-label text-muted small">ReJoin Month</label>
                     <input class="form-control form-control-sm" formControlName="Rejoinmonth" readonly>
                 </div>
-            </div>
-            <div class="row g-3 mb-3">
+
                 <div class="col-md-3">
                     <label class="form-label text-muted small">Stop Payment<span style="color:red">*</span></label>
                     <div class="d-flex gap-3">
@@ -616,7 +637,8 @@
                     <label class="form-label text-muted small">Axpert ID</label>
                     <input class="form-control form-control-sm" formControlName="axpertid">
                 </div>
-
+            </div>
+            <div class="row g-3 mb-3">
                 <div class="col-md-3">
                     <label class="form-label text-muted small">Blood Group</label>
                     <select class="form-select form-select-sm" formControlName="bloodgroup">
@@ -635,33 +657,7 @@
                         </option>
                     </select>
                 </div>
-            </div>
-            <div class="row g-3 mb-3">
-
                 <div class="col-md-3">
-                    <label class="form-label text-muted small">Abscond Reporting Date</label>
-                    <input class="form-control form-control-sm" type="date" formControlName="Abscondreportingdate">
-                </div>
-                <div class="col-md-3">
-                    <label class="form-label text-muted small">Date of Death</label>
-                    <input class="form-control form-control-sm" type="date" formControlName="DOD">
-                </div>
-                <div class="col-md-3">
-                    <label class="form-label text-muted small">Invoice Legal Entity<span
-                            style="color:red">*</span></label>
-                    <select class="form-select form-select-sm" formControlName="invoicelegalentity">
-                        <option value="" disabled>Select</option>
-                        <option *ngFor="let legalentity of invoicelegalentity" [value]="legalentity.legalEntityId">{{
-                            legalentity.legalEntityName }}</option>
-                    </select>
-                    <small
-                        *ngIf="employeeForm.get('invoicelegalentity')?.touched && employeeForm.get('invoicelegalentity')?.hasError('required')"
-                        style="color: red;">
-                        Invoice Legal Entity is required
-                    </small>
-                </div>
-
-                <div class="col-md-3" style="display: none;">
                     <label class="form-label text-muted small">Tax Regime<span style="color:red">*</span></label>
                     <div class="d-flex gap-3">
                         <div class="form-check">
@@ -675,40 +671,67 @@
                                 formControlName="TaxRegime">
                             <label class="form-check-label" for="old">old</label>
                         </div>
-                        <!-- <small
+                        <small
                             *ngIf="employeeForm.get('TaxRegime')?.touched && employeeForm.get('TaxRegime')?.hasError('required')"
                             style="color: red;">
                             TaxRegime is required
-                        </small> -->
+                        </small>
                     </div>
 
                 </div>
 
-                <div class="col-md-3" style="display: none;">
+
+                <div class="col-md-3">
                     <label class="form-label text-muted small">Vertical</label>
                     <select class="form-select form-select-sm" formControlName="Vertical">
                         <option value="" disabled>Select</option>
                     </select>
                 </div>
-                <div class="col-md-3" style="display: none;">
+                <div class="col-md-3">
                     <label class="form-label text-muted small">Product</label>
                     <select class="form-select form-select-sm" formControlName="Product">
                         <option value="" disabled>Select</option>
                     </select>
                 </div>
-                <div class="col-md-3" style="display: none;">
+                <div class="col-md-3">
                     <label class="form-label text-muted small">Channel</label>
                     <select class="form-select form-select-sm" formControlName="Channel">
                         <option value="" disabled>Select</option>
                     </select>
                 </div>
 
-                <div class="col-md-3" style="display: none;">
+                <div class="col-md-3">
                     <label class="form-label text-muted small">Sub Vertical</label>
                     <select class="form-select form-select-sm" formControlName="subvertical">
                         <option value="" disabled>Select</option>
                     </select>
                 </div>
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Abscond Reporting Date</label>
+                    <input class="form-control form-control-sm" type="date" formControlName="Abscondreportingdate">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Date of Death</label>
+                    <input class="form-control form-control-sm" type="date" formControlName="DOD">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Billing Map Name</label>
+                    <input class="form-control form-control-sm" type="date" formControlName="billingmapname">
+                </div>
+                <!-- <div class="col-md-3">
+                    <label class="form-label text-muted small">Invoice Legal Entity<span
+                            style="color:red">*</span></label>
+                    <select class="form-select form-select-sm" formControlName="invoicelegalentity">
+                        <option value="" disabled>Select</option>
+                        <option *ngFor="let legalentity of invoicelegalentity" [value]="legalentity.legalEntityId">{{
+                            legalentity.legalEntityName }}</option>
+                    </select>
+                    <small
+                        *ngIf="employeeForm.get('invoicelegalentity')?.touched && employeeForm.get('invoicelegalentity')?.hasError('required')"
+                        style="color: red;">
+                        Invoice Legal Entity is required
+                    </small>
+                </div> -->
             </div>
         </mat-card-content>
 
@@ -763,7 +786,7 @@
                     </button>
 
                     <button type="submit"
-                        style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: blue; color: white; "
+                        style="border: none; display: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: blue; color: white; "
                         (click)="onsave()">
                         Save
                     </button>

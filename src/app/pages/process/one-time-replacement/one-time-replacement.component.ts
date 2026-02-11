@@ -47,6 +47,7 @@ export class OneTimeReplacementComponent {
   showPopup: boolean = false;
   popupMessage: string = '';
   popupSubMessage: string = '';
+  Employee_Id:string='';
 
   EmployeeList: any[] = [];
   employeeCode: string = "";
@@ -64,13 +65,13 @@ export class OneTimeReplacementComponent {
   ) { }
 
   uploadDisplayedColumns: string[] = [
-    'Action',
+   // 'Action',
     'SNo',
     'Company_Code',
     'Employee_Code',
     'Employee_Name',
     'Pay_Category_Code',
-    'Pay_Sequence_Number',
+    //'Pay_Sequence_Number',
     'Pay_Period',
     'Paycode_Code',
     'Amount',
@@ -78,6 +79,9 @@ export class OneTimeReplacementComponent {
     // 'Type',
     // 'Arrear_Pay_Sequence_Number',
     // 'Arrear_Pay_Period'
+    'Type',
+    //'Arrear_Pay_Sequence_Number',
+    'Arrear_Pay_Period'
   ];
 
   uploadedDataSource = new MatTableDataSource<any>(this.uploadedData);
@@ -122,7 +126,7 @@ export class OneTimeReplacementComponent {
     const payload = {
       Company_id: this.selectedCompanyId.toString(),
       Pay_Frequency_Id: this.payPeriodId.toString(),
-      Employee_Code: this.employeeCode || ""
+      Employee_Code: this.Employee_Id || ""
     };
     console.log('Payload for OneTimeSearch:', payload);
 
@@ -170,7 +174,7 @@ export class OneTimeReplacementComponent {
     const payload = {
       Company_id: this.selectedCompanyId.toString(),
       Pay_Frequency_Id: this.payPeriodId.toString(),
-      Employee_Code: this.employeeCode || ""
+      Employee_Code: this.Employee_Id || ""
     };
 
     this.leave.downloadExcel(payload).subscribe({
