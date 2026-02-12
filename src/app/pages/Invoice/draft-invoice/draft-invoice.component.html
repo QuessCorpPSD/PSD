@@ -23,11 +23,29 @@
                 </i>
             </label>
         </div>
-        <button style="display: inline-block;" (click)="Invoiceintiate()" [disabled]="isdisabled"
+        <button (click)="Invoiceintiate()" [disabled]="isdisabled"
+            style="width: 100px; height: 40px; color: white;padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; background: #302CB3; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.20); border-radius: 6px; justify-content: center; align-items: center; gap: 10px; display: inline-flex; border: none;">
+            <div
+                style="color: var(--background, #F5F5F5); font-size: 12px; font-family: Nunito Sans; font-weight: 600; line-height: 22.40px; letter-spacing: 0.24px; word-wrap: break-word">
+                Initiate</div>
+        </button>
+        <button (click)="InitiationSearchExport()" [disabled]="isdisabled"
+            style="width: 150px; height: 40px; color: white;padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; background: #302CB3; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.20); border-radius: 6px; justify-content: center; align-items: center; gap: 10px; display: inline-flex; border: none;">
+            <div
+                style="color: var(--background, #F5F5F5); font-size: 12px; font-family: Nunito Sans; font-weight: 600; line-height: 22.40px; letter-spacing: 0.24px; word-wrap: break-word">
+                PayRegister Download</div>
+        </button>
+        <button (click)="ExportGridData()"
+            style="width: 100px; height: 40px; color: white;padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; background: #302CB3; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.20); border-radius: 6px; justify-content: center; align-items: center; gap: 10px; display: inline-flex; border: none;">
+            <div
+                style="color: var(--background, #F5F5F5); font-size: 12px; font-family: Nunito Sans; font-weight: 600; line-height: 22.40px; letter-spacing: 0.24px; word-wrap: break-word">
+                Export</div>
+        </button>
+        <!-- <button style="display: inline-block;" (click)="Invoiceintiate()" [disabled]="isdisabled"
             class="btn btn-primary btn-sm d-flex align-items-center">Initiate</button>
 
         <button style="display: inline-block;" (click)="InitiationSearchExport()"
-            class="btn btn-primary btn-sm d-flex align-items-center">Export</button>
+            class="btn btn-primary btn-sm d-flex align-items-center">Export</button> -->
     </div>
 
 </div>
@@ -65,12 +83,12 @@
             </ng-container>
             <ng-container matColumnDef="invoiceType">
                 <th mat-header-cell *matHeaderCellDef style="width: 100px;">Invoice Type</th>
-                <td mat-cell *matCellDef="let element" style="width: 100px;">{{ element.invoiceType }}</td>
+                <td mat-cell *matCellDef="let element" style="width: 100px;">{{ element.invoiceType === 'Proforma' ? 'Draft' :  element.invoiceType }}</td>
             </ng-container>
             <ng-container matColumnDef="Req_No">
                 <th mat-header-cell *matHeaderCellDef style="width: 100px;">Request No </th>
                 <td mat-cell *matCellDef="let element" style="width: 100px; cursor: pointer; color: #1976d2;"
-                    (mouseenter)="openChat(element)" (mouseleave)="closeChat(element.req_No)">
+                    (mouseenter)="element.req_No && openChat(element)" (mouseleave)="element.req_No && closeChat(element.req_No)">
                     {{ element.req_No }}
                 </td>
             </ng-container>

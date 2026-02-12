@@ -6,7 +6,8 @@
                 <div class="rightside gst-filters">
                     <companyall (companyEmit)="handleCompanyEvent($event)"></companyall>
                     <PayPeriod [selectedCompanyId]="selectedCompanyId" [payPeriodType]="payPeriodType"
-                        (payperiodEmit)="handlePayperiodEvent($event)"></PayPeriod> <button (click)="searchClick()"
+                        (payperiodEmit)="handlePayperiodEvent($event)"></PayPeriod>
+                    <button (click)="searchClick()"
                         style="width: 80px; height: 30px; color: white;padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; background: #302CB3; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.20); border-radius: 6px; justify-content: center; align-items: center; gap: 10px; display: inline-flex; border: none;">
                         <div
                             style="color: var(--background, #F5F5F5); font-size: 12px; font-family: Nunito Sans; font-weight: 600; line-height: 22.40px; letter-spacing: 0.24px; word-wrap: break-word">
@@ -446,7 +447,7 @@
     </div>
 
 </div>
-<!-- <div class="overlaymerge" *ngIf="showpsd">
+<div class="overlaymerge" *ngIf="showpsd">
 
   
     <div class="popup-main">
@@ -456,7 +457,7 @@
             [Company_Code]="Company_Code" [pay_period]="pay_period" [AttributeType]="AttributeType"
             (close)="showpsd = false"></attribute>
     </div>
-</div> -->
+</div>
 
 <div *ngIf="showPopup" class="overlay">
     <app-alertpopup *ngIf="showPopup" [message]="popupMessage" [submessage]="popupSubMessage" class="centered-popup"

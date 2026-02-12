@@ -13,10 +13,28 @@
       </PayPeriod>
     </div>
     <div class="col-auto d-flex gap-2">
-      <button class="btn btn-primary" (click)="InvoiceSearch()">Search</button>
+      <button (click)="InvoiceSearch()"
+        style="width: 80px; height: 30px; color: white;padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; background: #302CB3; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.20); border-radius: 6px; justify-content: center; align-items: center; gap: 10px; display: inline-flex; border: none;">
+        <div
+          style="color: var(--background, #F5F5F5); font-size: 12px; font-family: Nunito Sans; font-weight: 600; line-height: 22.40px; letter-spacing: 0.24px; word-wrap: break-word">
+          Search</div>
+      </button>
+      <button (click)="invoiceApprove()"
+        style="width: 120px; height: 30px; color: white;padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; background: #302CB3; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.20); border-radius: 6px; justify-content: center; align-items: center; gap: 10px; display: inline-flex; border: none;">
+        <div
+          style="color: var(--background, #F5F5F5); font-size: 12px; font-family: Nunito Sans; font-weight: 600; line-height: 22.40px; letter-spacing: 0.24px; word-wrap: break-word">
+          Approve</div>
+      </button>
+      <button (click)="invoiceReject()"
+        style="width: 100px; height: 30px; color: white;padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; background: #302CB3; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.20); border-radius: 6px; justify-content: center; align-items: center; gap: 10px; display: inline-flex; border: none;">
+        <div
+          style="color: var(--background, #F5F5F5); font-size: 12px; font-family: Nunito Sans; font-weight: 600; line-height: 22.40px; letter-spacing: 0.24px; word-wrap: break-word">
+          Reject</div>
+      </button>
+      <!-- <button class="btn btn-primary" (click)="InvoiceSearch()">Search</button>
       <button class="btn btn-primary" (click)="invoiceApprove()">Approve</button>
-      <!-- <button class="btn btn-primary" (click)="invoiceReject()">Reject</button> -->
-
+      <button class="btn btn-primary" (click)="invoiceReject()">Reject</button> -->
+      <input placeholder="Remarks" type="text" [(ngModel)]="remarkText" />
     </div>
   </div>
 
@@ -43,16 +61,17 @@
         <ng-container matColumnDef="pdfdownload">
           <th mat-header-cell *matHeaderCellDef style="width: 100px; align-items:center;">Invoice Pdf</th>
           <td mat-cell *matCellDef="let element" style="width: 100px;  align-items:center;">
-            <img src="assets/download_enabled.svg" (click)="DownloadInvoice(element.invoice_Id, element.invoice_Number)" matTooltip="Pdf Download"
-              matTooltipPosition="above" style="cursor: pointer; width: 24px; height: 22px; max-width: 100px;" />
+            <img src="assets/download_enabled.svg" (click)="DownloadInvoice(element.invoice_Id, element.invoice_Number)"
+              matTooltip="Pdf Download" matTooltipPosition="above"
+              style="cursor: pointer; width: 24px; height: 22px; max-width: 100px;" />
           </td>
         </ng-container>
 
         <ng-container matColumnDef="docDownload">
           <th mat-header-cell *matHeaderCellDef style="width: 100px;  align-items:center;">Cancel Doc</th>
           <td mat-cell *matCellDef="let element" style="width: 100px; align-items:center;">
-            <img src="assets/icons/download_enabled_green.svg" (click)="Downloadfile(element.invoice_Id)" matTooltip="Doc Download"
-              matTooltipPosition="above" style="cursor: pointer; width: 24px; height: 22px; max-width: 100px;" />
+            <img [src]="element.filePath ? 'assets/icons/download_enabled_green.svg' : 'assets/icons/download_disabled.svg'"
+              [style.cursor]="element.filePath ? 'pointer' : 'not-allowed'" style="width: 24px; height: 22px;" />
           </td>
         </ng-container>
 
@@ -172,6 +191,11 @@
           <mat-cell *matCellDef="let element">{{ element.cancelledOn | date:'dd MMM yyyy' }}</mat-cell>
         </ng-container>
 
+        <ng-container matColumnDef="filePath">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>FilePath</mat-header-cell>
+          <mat-cell *matCellDef="let element">{{ element.filePath }}</mat-cell>
+        </ng-container>
+
         <!-- ROWS -->
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
         <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
@@ -187,7 +211,7 @@
     <img src="assets/Loading.gif" alt="Loading..." />
   </div>
   <div *ngIf="showPopup" class="overlay">
-    <app-alertpopup [message]="popupMessage" (close)="showPopup = false">
-    </app-alertpopup>
+    <app-alertpopup *ngIf="showPopup" [message]="popupMessage" [submessage]="popupSubMessage" class="centered-popup"
+      (close)="showPopup = false"></app-alertpopup>
   </div>
 </div>
