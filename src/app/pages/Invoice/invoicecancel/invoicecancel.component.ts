@@ -66,6 +66,9 @@ export class InvoiceCancelComponent implements OnInit, AfterViewInit {
   userdetail: any;
   showPopup: boolean = false;
   popupMessage: string = "";
+  popupSubMessage: string = "";
+  showRemarksPopup = false;
+  remarkText?: string;
 
   displayedColumns: string[] = ['select'
     , 'pdfdownload', 'docDownload', 'invoice_Number', 'invoice_Date', 'map_Name', 'state_Name', 'invoiceType', 'cgsT_Amount', 'sgsT_Amount', 'igsT_Amount', 'net_Amount', 'creditNote_Status', 'creditNoteNumber', 'cancelledOn'];
@@ -171,6 +174,11 @@ export class InvoiceCancelComponent implements OnInit, AfterViewInit {
     this.dialogRef = this.dialog.open(this.editDialog, { width: '400px' });
   }
 
+  CloseCancelPopup(): void {
+    this.showRemarksPopup = false;
+    this.remarkText = '';
+  }
+
 
   invoiceApprove() {
     this.isLoading = true;
@@ -181,48 +189,47 @@ export class InvoiceCancelComponent implements OnInit, AfterViewInit {
 
     const selectedInvoiceIds = filteredSelected.map(item => item.invoice_Id);
 
-    // ❌ No selection
     if (!selectedInvoiceIds.length) {
       alert('Please select at least one invoice ❌');
       this.isLoading = false;
       return;
     }
 
-    // ⚠️ Confirmation
     if (!confirm(`You have selected ${selectedInvoiceIds.length} invoice(s). Do you want to approve them?`)) {
       this.isLoading = false;
       return;
     }
 
-    const payload = { invoice_Id: selectedInvoiceIds };
+    const payload = {
+      invoice_Id: selectedInvoiceIds,
+      remarks: this.remarkText
+    };
 
     this._invoiceService.BulkApproveInvoice(payload).subscribe({
       next: (res: any) => {
+        if (res.Data[0].Status === "SUCCESS") {
+          this.popupMessage = 'Cancel Request Approved successfully';
+          this.showPopup = true;
+          const isSuccess =
+            res?.status === 'SUCCESS' ||
+            res?.statusCode === 200;
 
-        this.popupMessage =
-          res?.message || 'Invoices approved successfully';
-        this.showPopup = true;
-        console.log(res);
-        const isSuccess =
-          res?.status === 'SUCCESS' ||
-          res?.statusCode === 200;
-
-        if (isSuccess) {
-
-
-          // Clear selection
-          this.selection.clear();
-
-          // Reset paginator
-          if (this.paginator) {
-            this.paginator.firstPage();
+          if (isSuccess) {
+            this.selection.clear();
+            if (this.paginator) {
+              this.paginator.firstPage();
+            }
+            this.InvoiceSearch();
           }
 
-          // Refresh grid
-          this.InvoiceSearch();
+          this.isLoading = false;
         }
-
-        this.isLoading = false;
+        else {
+          this.popupMessage = 'Cancel Request Failed';
+          this.popupSubMessage ='Note:' + res.Data[0].Error_Message;
+          this.showPopup = true;
+          this.isLoading = false;
+        }
       },
       error: (err) => {
         alert(err?.error?.message || 'Something went wrong ❌');
@@ -240,48 +247,53 @@ export class InvoiceCancelComponent implements OnInit, AfterViewInit {
 
     const selectedInvoiceIds = filteredSelected.map(item => item.invoice_Id);
 
-    // ❌ No selection
     if (!selectedInvoiceIds.length) {
-      alert('Please select at least one invoice ❌');
+      alert('Please select at least one invoice');
+      this.isLoading = false;
+      return;
+    }
+    console.log(this.remarkText);
+    if (!this.remarkText || this.remarkText == "") {
+      alert("Remarks Mandatory for Reject");
       this.isLoading = false;
       return;
     }
 
-    // ⚠️ Confirmation
     if (!confirm(`You have selected ${selectedInvoiceIds.length} invoice(s). Do you want to Reject them?`)) {
       this.isLoading = false;
       return;
     }
 
-    const payload = { invoice_Id: selectedInvoiceIds };
-
-    this._invoiceService.BulkApproveInvoice(payload).subscribe({
+    const payload = {
+      invoice_Id: selectedInvoiceIds,
+      remarks: this.remarkText
+    };
+    console.log('Reject Payload', payload);
+    this._invoiceService.BulkRejectCancelRequest(payload).subscribe({
       next: (res: any) => {
+        if (res.Data[0].Status === "SUCCESS") {
+          this.popupMessage = 'Cancel Request Rejected successfully';
+          this.showPopup = true;
+          const isSuccess =
+            res?.status === 'SUCCESS' ||
+            res?.statusCode === 200;
 
-        this.popupMessage =
-          res?.message || 'Invoices approved successfully';
-        this.showPopup = true;
-        console.log(res);
-        const isSuccess =
-          res?.status === 'SUCCESS' ||
-          res?.statusCode === 200;
-
-        if (isSuccess) {
-
-
-          // Clear selection
-          this.selection.clear();
-
-          // Reset paginator
-          if (this.paginator) {
-            this.paginator.firstPage();
+          if (isSuccess) {
+            this.selection.clear();
+            if (this.paginator) {
+              this.paginator.firstPage();
+            }
+            this.InvoiceSearch();
           }
 
-          // Refresh grid
-          this.InvoiceSearch();
+          this.isLoading = false;
         }
-
-        this.isLoading = false;
+        else {
+          this.popupMessage = 'Cancel Request Rejection Failed';
+          this.popupSubMessage ='Note:' + res.Data[0].Error_Message;
+          this.showPopup = true;
+          this.isLoading = false;
+        }
       },
       error: (err) => {
         alert(err?.error?.message || 'Something went wrong ❌');
@@ -306,7 +318,7 @@ export class InvoiceCancelComponent implements OnInit, AfterViewInit {
     this._invoiceService.GetAllInvoiceCancelDetails(request).subscribe({
       next: (res: any) => {
         const apiData = Array.isArray(res?.Data?.data) ? res.Data.data : [];
-
+        console.log(apiData);
         this.dataSource.data = apiData.map((item: any) => ({
           ...item,
           invoice_Number:

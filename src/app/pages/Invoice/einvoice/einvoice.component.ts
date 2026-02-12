@@ -34,6 +34,7 @@ import { InvoiceRepository } from '../../../Service/invoice/InvoiceRepository';
 import { AlertpopupComponent } from '../../../common/alertpopup/alertpopup.component';
 import { PayPeriodComponent } from "../../../common/payperiod/payperiod.component";
 import { CompanyallComponent } from '../../../common/CompanyAll/companyall.component';
+import { AttributeComponent } from "../attribute/attribute.component";
 
 
 export const Invoice_TOKEN = new InjectionToken<IInvoiceRepository>('Invoice_TOKEN');
@@ -48,13 +49,15 @@ interface IrnColor {
   standalone: true,
   imports: [CommonModule, MatPaginator, MatTableModule, FormsModule,
     MatSort, MatSelectModule, MatInputModule, MatFormFieldModule, MatCheckbox, MatCardModule,
-    MatIconModule, MatTooltipModule, FormsModule, ReactiveFormsModule,CompanyallComponent,PayPeriodComponent, AlertpopupComponent, PayPeriodComponent],
+    MatIconModule, MatTooltipModule, FormsModule, ReactiveFormsModule, CompanyallComponent, PayPeriodComponent, AlertpopupComponent, PayPeriodComponent, AttributeComponent],
   templateUrl: './einvoice.component.html',
   styleUrl: './einvoice.component.css',
   providers: [
-    
-    { provide: Invoice_TOKEN, 
-      useClass: InvoiceRepository }]
+
+    {
+      provide: Invoice_TOKEN,
+      useClass: InvoiceRepository
+    }]
 })
 export class EInvoiceComponent {
 
@@ -89,9 +92,9 @@ export class EInvoiceComponent {
   gridData: any[] = [];
   cacheData: any;
   showPanel = false;
-  selectedCompanyId!:number;
-  payPeriodType:string="All";
-   constructor( private _sessionStoreage: SessionStorageService,
+  selectedCompanyId!: number;
+  payPeriodType: string = "All";
+  constructor(private _sessionStoreage: SessionStorageService,
     private decry: EncryptionService, private fb: FormBuilder, @Inject(Invoice_TOKEN) private invoiceService: IInvoiceRepository
   ) { }
   TemplateOptions = [
@@ -109,11 +112,23 @@ export class EInvoiceComponent {
     this.companyUI = company;
     this.Company_Code = company.company_Code;
     this.selectedCompanyId = this.companyUI.companyId;
-    
     if (!this.companyUI) {
       alert("Select Company Code");
       return;
     }
+    const request = {
+      "id": 0,
+      "AttributeName": "A",
+      "ActionType": "G",
+      "IsActive": false,
+      "CreatedBy": 3,
+      "DateTime": new Date()
+    }
+    this.invoiceService.GetAllAttribute(request).subscribe({
+      next: res => {
+        this.availableItems = res.Data;
+      }, error: err => { console.log(err) }
+    })
   }
   handlePayperiodEvent(payperiod: Payperiodclass) {
 
@@ -129,9 +144,9 @@ export class EInvoiceComponent {
     }
   }
 
-  search(){
- 
-        this.selectedTemplate = '';
+  search() {
+
+    this.selectedTemplate = '';
     this.searchText = '';
     this.selection.clear();
     this.invoiceService.GetAllInvoiceDetailsByCompanyId(this.companyUI.companyId, this.payperiodUI.payfrequencyid).subscribe({
@@ -174,7 +189,9 @@ export class EInvoiceComponent {
       }
       this.invoiceService.GetAllAttribute(request).subscribe({
         next: res => {
-          this.availableItems = res.data;
+          //console.log('Result',res.Data);
+          this.availableItems = res.Data;
+          //console.log('availableItems',this.availableItems);
 
         }, error: err => { console.log(err) }
       })
@@ -218,7 +235,7 @@ export class EInvoiceComponent {
     , 'Invoice_Date', 'state_Name', 'SubTotal', 'CGST_Amount', 'SGST_Amount', 'UTGST_Amount', 'IGST_Amount', 'net_Amount'
   ];
 
- 
+
 
 
   selection = new SelectionModel<EInvoiceGrid>(true, []);
@@ -540,7 +557,7 @@ export class EInvoiceComponent {
       invoiceIds: selectedInvoiceIds,
       CompanyId: this.companyUI.companyId,
       PayPeriodId: this.payperiodUI.payfrequencyid,
-      userId: this.userdetail.userId
+      userId: this.userdetail.user_Id
     };
     //console.log(InitiateIRN);
     if (InitiateIRN) {
@@ -717,11 +734,10 @@ export class EInvoiceComponent {
     }
     this.invoiceService.GetAllAttribute(request).subscribe({
       next: res => {
-        this.availableItems = res.data;
-
+        this.availableItems = res.Data;
       }, error: err => { console.log(err) }
     })
-    this.isattributes = true;
+    //this.isattributes = true;
     this.showpsd = true;
 
   }
@@ -778,31 +794,17 @@ export class EInvoiceComponent {
     this.excelFile = target.files[0];
     console.log(target.files.length);
 
-    // const reader: FileReader = new FileReader();
-    // reader.onload = (e: any) => {
-    //   const bstr: string = e.target.result;
-    //   const wb: XLSX.WorkBook = XLSX.read(bstr, { type: 'binary' });
-
-    //   const wsname: string = wb.SheetNames[0];
-    //   const ws: XLSX.WorkSheet = wb.Sheets[wsname];
-
-    //   const data: any[][] = XLSX.utils.sheet_to_json(ws, { header: 1 });
-    //   if (!data.length) {
-    //     alert("Uploaded file is empty.");
-    //     return;
-    //   }
-
     const formData = new FormData();
     if (this.excelFile) {
       formData.append('file', this.excelFile);
       formData.append('CompanyId', this.companyUI.companyId);
       formData.append('payperiodId', this.payperiodUI.payfrequencyid);
-      formData.append('CreatedBy', this.userdetail.userId);
+      formData.append('CreatedBy', this.userdetail.user_Id);
 
-      console.log(formData);
       this.invoiceService.UploadAttributesGST(formData).subscribe({
         next: res => {
           this.UploadedResponse = res;
+          console.log(this.UploadedResponse);
           if (this.UploadedResponse.statuscode === 200 && this.UploadedResponse.data.response.includes('Row(s) Uploaded Successfully.')) {
             this.isLoading = false;
             this.showPopup = true;

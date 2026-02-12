@@ -260,6 +260,25 @@
 /* ===========================
    LOADING OVERLAY
 =========================== */
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+}
+
+.centered-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+}
+
 .loading-overlay {
   position: absolute;
   top: 0;
@@ -281,4 +300,15 @@ table th:first-child {
 
 table td:first-child input[type="checkbox"] {
   margin: 0; /* remove any default margin */
+}
+
+input {
+  width: 100%;
+  padding: 6px 8px;
+  border-radius: 4px;
+  border: 1px solid #A0A0A0;
+  font-size: 12px;
+  font-family: "Montserrat";
+  color: #222;
+  appearance: outline;
 }

@@ -28,6 +28,8 @@ import { GstinvoiceComponent } from "../gstinvoice/gstinvoice.component";
 import { InvoiceCancelComponent } from "../invoicecancel/invoicecancel.component";
 import { ChatMessage } from '../../../Models/Common';
 import { ChatWindow } from '../../../Models/Common';
+import * as XLSX from 'xlsx';
+import * as FileSaver from 'file-saver';
 
 export const Invoice_TOKEN = new InjectionToken<IInvoiceRepository>('Invoice_TOKEN');
 @Component({
@@ -65,8 +67,8 @@ export class DraftInvoiceComponent implements OnInit {
   currentUser = '';
   selectedTemplate: string = '';
   template: string = "";
-    TemplateOptions = [
-    { value: 'Proforma', Text: 'Proforma' },
+  TemplateOptions = [
+    { value: 'Proforma', Text: 'Draft' },
     { value: 'Provisional', Text: 'Provisional' }
   ];
   //@ViewChild(PayPeriod) PayPeriodComponent!: Payperiodclass;
@@ -331,9 +333,8 @@ export class DraftInvoiceComponent implements OnInit {
     }
     this._invoiceService.InitialSearchAllot(request).subscribe({
       next: res => {
-        console.log(res.Data);
         this.dataSource = new MatTableDataSource<any>(Array.isArray(res.Data) ? res.Data : []);
-        console.log(this.dataSource);
+        console.log('Grid Data', this.dataSource);
         this.dataSource.paginator = this.PeningLot_paginator;
         this.issearch = false;
         this.isLoading = false;
@@ -342,6 +343,92 @@ export class DraftInvoiceComponent implements OnInit {
       error: err => { this.issearch = false; }
     });
   }
+
+  ExportGridData() {
+    if (!this.dataSource.filteredData) {
+      this.InvoiceSearch();
+    }
+    else if (this.dataSource.filteredData) {
+      const selectedData = this.dataSource.filteredData.map(item => ({
+        serial_No: item.serial_No,
+        req_No: item.req_No,
+        lotNo: item.lotNo,
+        input_No: item.input_No,
+        map_name: item.map_name,
+        company_Code: item.company_Code,
+        pay_Period: item.pay_Period,
+        employee_Head_Count: item.employee_Head_Count,
+        service_Charge: item.service_Charge,
+        service_Charge_Master: item.service_Charge_Master,
+        service_Charge_Type: item.service_Charge_Type,
+        net_CTC: item.net_CTC,
+        invoiceCul_Ref_No: item.invoiceCul_Ref_No,
+        pO_Number: item.pO_Number,
+        serviceChargeAmount: item.serviceChargeAmount,
+        inctc: item.inctc,
+        inscg: item.inscg,
+        netPay: item.netPay,
+        bgvbl: item.bgvbl,
+        astfee: item.astfee,
+        discT1: item.discT1,
+        discT2: item.discT2,
+        idcard: item.idcard,
+        email: item.email,
+        regfee: item.regfee,
+        trnfee: item.trnfee,
+        ggdbt: item.ggdbt,
+        ppekit: item.ppekit,
+        vmsfee: item.vmsfee,
+        calcrg: item.calcrg,
+        calrt: item.calrt,
+        edufee: item.edufee,
+        ntpry: item.ntpry,
+        draded: item.draded,
+        renmac: item.renmac,
+        othdd: item.othdd,
+        stctc: item.stctc,
+        bfiN35: item.bfiN35,
+        mbapp: item.mbapp,
+        invoice_Type: item.invoice_Type,
+        invoice_Category: item.invoice_Category,
+        state_name: item.state_name,
+        isInitiation: item.isInitiation,
+        isActive: item.isActive,
+        created_On: item.created_On,
+        created_By: item.created_By,
+        modify_On: item.modify_On,
+        modify_By: item.modify_By,
+        cancelled_On: item.cancelled_On,
+        cancelled_By: item.cancelled_By,
+        approved_On: item.approved_On,
+        approved_By: item.approved_By,
+        rejected_On: item.rejected_On,
+        rejected_By: item.rejected_By,
+        initiation_Remarks: item.initiation_Remarks,
+        gL_Code: item.gL_Code,
+        cost_Center_Name: item.cost_Center_Name,
+        client_SPOC_Name: item.client_SPOC_Name,
+        work_Order_Number: item.work_Order_Number,
+        data_From: item.data_From,
+        invoiceType: item.invoiceType
+      }));
+      this.downloadExcel(selectedData, 'DraftInvoice_Export');
+    }
+  }
+
+  downloadExcel(data: any[], FileName: string): void {
+    //console.log("export");
+    const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(data);
+    const workbook: XLSX.WorkBook = {
+      Sheets: { 'Sheet1': worksheet },
+      SheetNames: ['Sheet1']
+    };
+    const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    const blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
+    const fileName = `${FileName}.xlsx`;
+    FileSaver.saveAs(blob, fileName);
+  }
+
   ngOnChanges() {
     if (!this.payPeriodType) {
 

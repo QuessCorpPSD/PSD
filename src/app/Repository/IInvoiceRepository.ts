@@ -44,7 +44,8 @@ export interface IInvoiceRepository {
     GetInvoiceStatus(payload: any): Observable<APIResponse>;
     GetInvoiceDetailsById(payload: any): Observable<APIResponse>;
     RejectInvoice(formData: FormData): Observable<APIResponse>;
-    GetUploadedFile(invoice_Id: number):Observable<APIResponse>
+    GetUploadedFile(invoice_Id: number):Observable<APIResponse>;
+    BulkRejectCancelRequest(payload: any):Observable<APIResponse>;
    
     //DownloadInvoiceIRN(invoiceId: number): Observable<HttpResponse<Blob>>
     

@@ -32,7 +32,7 @@ export class InvoiceRepository implements IInvoiceRepository {
     }
     GetAllAttribute(val): Observable<APIResponse> {
 
-        const url = `${this.environment.apiUrl}Attributes/GetAllAttribute`;
+        const url = `${this.environment.apiUrl}GSTInvoice/GetAllAttribute`;
         const headers = new HttpHeaders({
             'Content-Type': 'application/json',
             'Accept': 'application/json'
@@ -51,7 +51,7 @@ export class InvoiceRepository implements IInvoiceRepository {
     }
     UploadAttributesGST(formData: FormData): Observable<APIResponse> {
         return this.http.post<APIResponse>(
-            this.environment.apiUrl + 'EInvoice/UploadAttributes',
+            this.environment.apiUrl + 'GSTInvoice/UploadAttributes',
             formData
         );
     }

@@ -37,7 +37,7 @@ export class InvoiceRepository implements IInvoiceRepository {
     }
     GetAllAttribute(val): Observable<APIResponse> {
 
-        const url = `${this.environment.apiUrl}Attributes/GetAllAttribute`;
+        const url = `${this.environment.apiUrl}GSTInvoice/GetAllAttribute`;
         const headers = new HttpHeaders({
             'Content-Type': 'application/json',
             'Accept': 'application/json'
@@ -47,17 +47,17 @@ export class InvoiceRepository implements IInvoiceRepository {
         return this.http.post<APIResponse>(url, JSON.stringify(val), { headers });
     }
     GetIRNColors(): Observable<APIResponse> {
-        const url = `${this.environment.apiUrl}EInvoice/GetAllInvoiceTypeColors`;
+        const url = `${this.environment.apiUrl}GSTInvoice/GetAllInvoiceTypeColors`;
         //console.log(url);
         return this.http.get<APIResponse>(url);
     }
     GetAllInvoiceDetailsByCompanyId(companyId: number, payPeriodId: number): Observable<APIResponse> {
-        const url = `${this.environment.apiUrl}EInvoice/GetAllInvoiceDetails/${companyId}/${payPeriodId}`;
+        const url = `${this.environment.apiUrl}GSTInvoice/GetAllInvoiceDetails/${companyId}/${payPeriodId}`;
         //console.log(url);
         return this.http.get<APIResponse>(url);
     }
     GetExportData(companyId: number, payPeriodId: number): Observable<APIResponse> {
-        const url = `${this.environment.apiUrl}EInvoice/EInvoiceExport/${companyId}/${payPeriodId}`;
+        const url = `${this.environment.apiUrl}GSTInvoice/EInvoiceExport/${companyId}/${payPeriodId}`;
         //console.log(url);
         return this.http.get<APIResponse>(url);
     }
@@ -139,32 +139,32 @@ export class InvoiceRepository implements IInvoiceRepository {
     }
 
     InitiateIRN(InitiateIRN: any): Observable<APIResponse> {
-        const url = `${this.environment.apiUrl}EInvoice/InitiateIRN`;
+        const url = `${this.environment.apiUrl}GSTInvoice/InitiateIRN`;
         console.log(url);
         console.table(InitiateIRN);
         return this.http.post<APIResponse>(url, InitiateIRN);
     }
     GetEInvoiceError(invoiceId): Observable<APIResponse> {
-        return this.http.get<APIResponse>(this.environment.apiUrl + 'EInvoice/EInvoiceError/' + invoiceId)
+        return this.http.get<APIResponse>(this.environment.apiUrl + 'GSTInvoice/EInvoiceError/' + invoiceId)
     }
 
     GetEInvoiceErrorHover(invoiceId): Observable<APIResponse> {
-        return this.http.get<APIResponse>(this.environment.apiUrl + 'EInvoice/EInvoiceErrorHover/' + invoiceId)
+        return this.http.get<APIResponse>(this.environment.apiUrl + 'GSTInvoice/EInvoiceErrorHover/' + invoiceId)
     }
     UploadAttributesGST(formData: FormData): Observable<APIResponse> {
         return this.http.post<APIResponse>(
-            this.environment.apiUrl + 'EInvoice/UploadAttributes',
+            this.environment.apiUrl + 'GSTInvoice/UploadAttributes',
             formData
         );
     }
     GetConsolidatedPayRegister(payload: any): Observable<APIResponse> {
-        const url = `${this.environment.apiUrl}EInvoice/PayRegisterDownload`;
+        const url = `${this.environment.apiUrl}GSTInvoice/PayRegisterDownload`;
         console.log(url);
         return this.http.post<APIResponse>(url, payload);
     }
 
     GetConsolidateInvoiceSummary(payload: any): Observable<APIResponse> {
-        const url = `${this.environment.apiUrl}EInvoice/GetConsolidateInvoiceSummary`;
+        const url = `${this.environment.apiUrl}GSTInvoice/GetConsolidateInvoiceSummary`;
         console.log(url);
         return this.http.post<APIResponse>(url, payload);
     }
@@ -214,6 +214,11 @@ export class InvoiceRepository implements IInvoiceRepository {
         const config = new HttpHeaders().set('Content-Type', 'application/json')
             .set('Accept', 'application/json')
         return this.http.post<APIResponse>(url, val, { headers });
+    }
+
+    BulkRejectCancelRequest(payload: any) : Observable<APIResponse> {
+        const url = `${this.environment.apiUrl}GSTInvoice/BulkRejectCancelRequest`;
+        return this.http.post<APIResponse>(url, payload);
     }
 
     GetAllInvoiceAllotDetails(payload: any): Observable<APIResponse> {

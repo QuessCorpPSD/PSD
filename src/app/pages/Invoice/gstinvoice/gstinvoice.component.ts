@@ -293,12 +293,11 @@ export class GstinvoiceComponent {
   getTableColumns(): string[] {
     return this.excelPreviewData?.length ? Object.keys(this.excelPreviewData[0]) : [];
   }
-  DownloadInvoice(invoiceId: number, invoice_Number: string) {
+   DownloadInvoice(invoiceId: number, invoice_Number: string) {
     this.isLoading = true;
-    console.log(invoiceId);
     this._invoiceService.DownloadInvoice(invoiceId).subscribe(response => {
       const contentDisposition = response.headers.get('Content-Disposition');
-      let fileName = invoice_Number + '.pdf';
+      let fileName = 'Invoices.zip';
 
       // Extract file name from header
       if (contentDisposition) {
