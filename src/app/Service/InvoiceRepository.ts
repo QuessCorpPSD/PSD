@@ -62,11 +62,11 @@ export class InvoiceRepository implements IInvoiceRepository {
         return this.http.get<APIResponse>(url);
     }
     DownloadInvoice(invoiceId: number): Observable<HttpResponse<Blob>> {
-        const url = `${this.environment.apiUrl}EInvoice/Download/${invoiceId}`;
+        const url = `${this.environment.apiUrl}GSTInvoice/Download/${invoiceId}`;
         return this.http.get(url, { responseType: 'blob', observe: 'response' });
     }
     BulkDownloadInvoice(BulkInvoices: any): Observable<HttpResponse<Blob>> {
-        const url = `${this.environment.apiUrl}EInvoice/BulkDownload`;
+        const url = `${this.environment.apiUrl}GSTInvoice/BulkDownload`;
         console.log(url);
         console.table(BulkInvoices);
         return this.http.post(url, BulkInvoices, { responseType: 'blob', observe: 'response' });
