@@ -47,7 +47,7 @@ export class InvoiceRepository implements IInvoiceRepository {
         return this.http.get<APIResponse>(url);
     }
     GetEInvoiceError(invoiceId): Observable<APIResponse> {
-        return this.http.get<APIResponse>(this.environment.apiUrl + 'EInvoice/EInvoiceError/' + invoiceId)
+        return this.http.get<APIResponse>(this.environment.apiUrl + 'GSTInvoice/EInvoiceError/' + invoiceId)
     }
     UploadAttributesGST(formData: FormData): Observable<APIResponse> {
         return this.http.post<APIResponse>(
@@ -56,19 +56,19 @@ export class InvoiceRepository implements IInvoiceRepository {
         );
     }
     GetConsolidatedPayRegister(payload: any): Observable<APIResponse> {
-        const url = `${this.environment.apiUrl}EInvoice/PayRegisterDownload`;
+        const url = `${this.environment.apiUrl}GSTInvoice/PayRegisterDownload`;
         console.log(url);
         return this.http.post<APIResponse>(url, payload);
     }
 
     GetConsolidateInvoiceSummary(payload: any): Observable<APIResponse> {
-        const url = `${this.environment.apiUrl}EInvoice/GetConsolidateInvoiceSummary`;
+        const url = `${this.environment.apiUrl}GSTInvoice/GetConsolidateInvoiceSummary`;
         console.log(url);
         return this.http.post<APIResponse>(url, payload);
     }
 
     GetEInvoiceErrorHover(invoiceId): Observable<APIResponse> {
-        return this.http.get<APIResponse>(this.environment.apiUrl + 'EInvoice/EInvoiceErrorHover/' + invoiceId)
+        return this.http.get<APIResponse>(this.environment.apiUrl + 'GSTInvoice/EInvoiceErrorHover/' + invoiceId)
     }
 
     InitiateIRN(InitiateIRN: any): Observable<APIResponse> {

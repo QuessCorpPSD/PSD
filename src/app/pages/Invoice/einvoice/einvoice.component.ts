@@ -651,7 +651,7 @@ export class EInvoiceComponent {
   downloadError(error) {
     this.invoiceService.GetEInvoiceError(error.Invoice_Id).subscribe({
       next: res => {
-        let files = res.data;
+        let files = res.Data;
         if (files.file != "No") {
           this.downloadExcelFromBase64(files.file, error.Invoice_Number);
         }
@@ -696,8 +696,8 @@ export class EInvoiceComponent {
 
     this.invoiceService.GetEInvoiceErrorHover(error.Invoice_Id).subscribe({
       next: res => {
-        console.log(res.data);
-        const data = res.data.data.Table0.map((item: any) => ({
+        console.log(res.Data);
+        const data = res.Data.data.Table0.map((item: any) => ({
           Error_Code: item.Error_Code,
           Error_Message: item.Error_Message,
         }));
@@ -805,15 +805,15 @@ export class EInvoiceComponent {
         next: res => {
           this.UploadedResponse = res;
           console.log(this.UploadedResponse);
-          if (this.UploadedResponse.statuscode === 200 && this.UploadedResponse.data.response.includes('Row(s) Uploaded Successfully.')) {
+          if (this.UploadedResponse.StatusCode === 200 && this.UploadedResponse.Data.response.includes('Row(s) Uploaded Successfully.')) {
             this.isLoading = false;
             this.showPopup = true;
-            this.popupMessage = this.UploadedResponse.data.response;
+            this.popupMessage = this.UploadedResponse.Data.response;
             this.searchClick();
           }
-          else if (this.UploadedResponse.statuscode === 200 && this.UploadedResponse.data.response === 'Failed to import.') {
+          else if (this.UploadedResponse.StatusCode === 200 && this.UploadedResponse.Data.response === 'Failed to import.') {
 
-            const errorArray = JSON.parse(this.UploadedResponse.data.errors[0]);
+            const errorArray = JSON.parse(this.UploadedResponse.Data.errors[0]);
             const exportData = errorArray.map((item: any) => ({
               Error_Message: item.Error_Message || item.Error_Message || ''
                 || item.Message || item.MESSAGE || item.message
@@ -826,15 +826,15 @@ export class EInvoiceComponent {
             };
 
             // Export the file
-            XLSX.writeFile(workbook, 'ErrorMessages_Invoice_Split.xlsx');
+            XLSX.writeFile(workbook, 'Attribute_Validations.xlsx');
             this.isLoading = false;
             this.showPopup = true;
             this.popupMessage = 'Import Failed.';
 
           }
           else {
-            if (this.UploadedResponse.data.response != '') {
-              alert(this.UploadedResponse.data.response);
+            if (this.UploadedResponse.Data.response != '') {
+              alert(this.UploadedResponse.Data.response);
               this.isLoading = false;
             }
             else {
@@ -922,8 +922,9 @@ export class EInvoiceComponent {
         next: res => {
           //console.log(res);
           if (res.StatusCode === 200) {
-            const data = res.data;
-            this.downloadExcelFromBase64(data.file, data.fileName);
+            console.log(res.Data);
+            const data = res.Data;
+            this.downloadExcelFromBase64(data.File, data.FileName);
           } else {
             alert("Something went wrong while generating the report.");
           }
