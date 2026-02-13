@@ -59,8 +59,9 @@ import { Inject } from '@angular/core';
   styleUrl: './gstinvoiceadd.component.css'
 })
 export class GstinvoiceaddComponent {
-
   selectedCompanyId!: number;
+  companyList: any[] = [];
+   selectedCompany: any;
   @ViewChild(MatAccordion) accordion!: MatAccordion;
   accordionLoaded = false;
   addGstInvoice!: FormGroup;
@@ -264,6 +265,8 @@ citynameEvent(event) {
       Compliance_Fee:new FormControl(""),
       Compliance_Fee_Amount:new FormControl(""),
       NetAmtNorP:new FormControl(""),
+      EAPCT:new FormControl(""),
+      HOSAC:new FormControl(""),
     });
      this.addGstInvoice.valueChanges
     .pipe(debounceTime(300)) // prevents too many calls
@@ -472,6 +475,8 @@ const request = {
       GGDBT: formValue?.GOVTGRANTS_DBT?.toString() ?? null,
       PPEKIT: formValue?.PREKIT?.toString() ?? null,
       VMSFEE: formValue?.VMSFEEF?.toString() ?? null,
+      EAPCT: formValue?.PREKIT?.toString() ?? null,
+      HOSAC: formValue?.VMSFEEF?.toString() ?? null,
 
       CALCRG: formValue?.CallCharges?.toString() ?? null,
       CALRT: formValue?.CallRate?.toString() ?? null
@@ -610,6 +615,8 @@ toBlank(value: any): string {
       const amtVMSFEE = Number(this.addGstInvoice.get('VMSFEE')?.value) || 0;
       const amtEDUFEE =  Number(this.addGstInvoice.get('EducationFee')?.value) || 0;       
       const amtRENMAC = Number(this.addGstInvoice.get('LaptopRental')?.value) || 0; 
+      const amtEAPCT =  Number(this.addGstInvoice.get('EAPCT')?.value) || 0;       
+      const amtHOSAC = Number(this.addGstInvoice.get('HOSAC')?.value) || 0; 
 
       const amtDRADED= (Number(this.addGstInvoice.get('DRADeduction')?.value) || 0)*-1;
       const amtOTHDD =  (Number(this.addGstInvoice.get('OtherDeduction')?.value) || 0)*-1;
@@ -626,7 +633,7 @@ toBlank(value: any): string {
     const   amtNonTaxableAmount3 =Number(this.addGstInvoice.get('NonTaxableAmount3')?.value) || 0;
 
     const amtTotalDeduction = amtMobileRecovery + amtPersonalLoan + amtOtherDeduction + amtNonTaxableAmount1 + amtNonTaxableAmount2 + amtNonTaxableAmount3;
-       const amtTotalTaxable = finalCtcAmount + amtServiceCharge + amtSourcingFee + amtAbsorption + amtOnboardingCharge + amtTaxableAmount1 + amtTaxableAmount2 + amtTaxableAmount3 +amtBGVBL + amtASTFEE +  amtIDCARD + amtEMAIL + amtREGFEE + amtTRNFEE + amtGGDBT + amtPPEKIT + amtVMSFEE + amtEDUFEE  + amtRENMAC+( amtDRADED +  amtOTHDD+amtDISCT1 + amtDISCT2 + amtNTPRY) ;
+       const amtTotalTaxable = finalCtcAmount + amtServiceCharge + amtSourcingFee + amtAbsorption + amtOnboardingCharge + amtTaxableAmount1 + amtTaxableAmount2 + amtTaxableAmount3 +amtBGVBL + amtASTFEE +  amtIDCARD + amtEMAIL + amtREGFEE + amtTRNFEE + amtGGDBT + amtPPEKIT + amtVMSFEE + amtEDUFEE  + amtRENMAC+amtEAPCT+amtHOSAC+( amtDRADED +  amtOTHDD+amtDISCT1 + amtDISCT2 + amtNTPRY) ;
         this.calculateGstAmounts();
        const totalGstAmount=this.getTotalcGst();
       const Compliance_Fee = Number(this.addGstInvoice.get('Compliance_Fee')?.value) || 0
@@ -689,6 +696,8 @@ const isCtcAdjustmentPositve =   this.addGstInvoice.get('CTCAmtNorP')?.value;
       const amtVMSFEE = Number(this.addGstInvoice.get('VMSFEE')?.value) || 0;
       const amtEDUFEE =  Number(this.addGstInvoice.get('EducationFee')?.value) || 0;       
       const amtRENMAC = Number(this.addGstInvoice.get('LaptopRental')?.value) || 0; 
+       const amtEAPCT=  Number(this.addGstInvoice.get('EAPCT')?.value) || 0;       
+      const amtHOSAC= Number(this.addGstInvoice.get('HOSAC')?.value) || 0;
 
       const amtDRADED= (Number(this.addGstInvoice.get('DRADeduction')?.value) || 0)*-1;
       const amtOTHDD =  (Number(this.addGstInvoice.get('OtherDeduction')?.value) || 0)*-1;
@@ -705,7 +714,7 @@ const isCtcAdjustmentPositve =   this.addGstInvoice.get('CTCAmtNorP')?.value;
     const   amtNonTaxableAmount3 =Number(this.addGstInvoice.get('NonTaxableAmount3')?.value) || 0;
 
     const amtTotalDeduction = amtMobileRecovery + amtPersonalLoan + amtOtherDeduction + amtNonTaxableAmount1 + amtNonTaxableAmount2 + amtNonTaxableAmount3;
-       const amtTotalTaxable = finalCtcAmount + amtServiceCharge + amtSourcingFee + amtAbsorption + amtOnboardingCharge + amtTaxableAmount1 + amtTaxableAmount2 + amtTaxableAmount3 +amtBGVBL + amtASTFEE +  amtIDCARD + amtEMAIL + amtREGFEE + amtTRNFEE + amtGGDBT + amtPPEKIT + amtVMSFEE + amtEDUFEE  + amtRENMAC+( amtDRADED +  amtOTHDD+amtDISCT1 + amtDISCT2 + amtNTPRY) ;
+       const amtTotalTaxable = finalCtcAmount + amtServiceCharge + amtSourcingFee + amtAbsorption + amtOnboardingCharge + amtTaxableAmount1 + amtTaxableAmount2 + amtTaxableAmount3 +amtBGVBL + amtASTFEE +  amtIDCARD + amtEMAIL + amtREGFEE + amtTRNFEE + amtGGDBT + amtPPEKIT + amtVMSFEE + amtEDUFEE  + amtRENMAC+amtEAPCT+amtHOSAC+( amtDRADED +  amtOTHDD+amtDISCT1 + amtDISCT2 + amtNTPRY) ;
         this.calculateGstAmounts();
        const totalGstAmount=this.getTotalcGst();
       const Compliance_Fee = Number(this.addGstInvoice.get('Compliance_Fee')?.value) || 0
@@ -852,37 +861,150 @@ createNewInvoice() {
 }
 
 loadInvoiceForEdit(invoiceId: number) {
-
   const payload = {
-    Action: "Get",
-    UserId: this.userdetail?.user_Id,
-    Invoice_Id: invoiceId,
-  };
-
+      Action: "Get",
+      UserId: this.userdetail?.user_Id?.toString() ?? null,
+      Invoice_Id: this.toBlank(invoiceId)
+  }
+ 
   this.gst.GetInvoiceDetailsById(payload).subscribe({
     next: (res: any) => {
       if (res?.StatusCode === 200 && res?.Data?.length > 0) {
 
         const inv = res.Data[0];
-
+        this.selectedCompanyId = inv.Company_Id;
+        this.companyId = inv.Company_Id;
+         console.log(inv);
+this.selectedCompanyId = inv.Company_Id;
+this.companyId = inv.Company_Id;
         this.addGstInvoice.patchValue({
+          companyCode: inv.Company_Id,
           InvoiceNumber: inv.Invoice_Number,
-          CompanyName: inv.Company_Name,
-          InvoiceDate: inv.Invoice_Date?.split('T')[0],
+          GroupDetail:inv.Group_Detail_Id,
+          CostCenterMapping:inv.Cost_Center_Mapping_Id,
+          City:inv.City_Id,
+          InvoiceType:inv.Invoice_Type_Id,
           Amount: inv.Amount,
           Particulars: inv.Particulars,
           Status: inv.Status,
+          ServiceCharge:inv.Service_Charge,
+          ServiceChargeAmount:inv.ServiceChargeAmount,
+          AbsorptionFee:inv.Absorption_Fee,
+          AbsorptionAmt:inv.Absorption_Amt,
+          SourcingFee:inv.Sourcing_Fee,
+          SourcingChargeAmount:inv.Sourcing_Fee_Amount,
+          InEdgeCharges:inv.TaxableAmount1,
+          InEdgeChargesNote:inv.TaxableAmount1_Note,
+          CTCAdjustmentAmount:inv.CTC_Amt_Adjusted,
+          CTCDeductionType:inv.Ctc_Deduction_Type_Id,
+          CTCAdjustmentNote:inv.CTC_Adj_Note,
+          OnboardingCharge:inv.Onboarding_Charge,
+          ComplianceFee:inv.Compliance_Fee,
+          ComplianceFeeAmount:inv.Compliance_Fee_Amount,
+          UpfrontCharges:inv.TaxableAmount2,
+          UpfrontChargesNote:inv.TaxableAmount2_Note,
+          BGVBilling:inv.BGVBL,
+           AssessmentFee: inv.ASTFEE,
+      Discount1: inv.DISCT1,
+      Discount2: inv.DISCT2,
+      IDCardBilling:inv.IDCARD,
+      Email: inv.EMAIL,
+      RegistrationFee: inv.REGFEE,
+      TrainerFee: inv.TRNFEE,
+      GOVTGRANTS_DBT:inv.GGDBT,
+      PREKIT:inv.PPEKIT,
+      VMSFEE: inv.VMSFEE,
+      EducationFee: inv.EDUFEE,
+      EAPCT: inv.EAPCT,
+      HOSAC: inv.HOSAC,
+      NoticePeriodRecovery:inv.NTPRY,
+      LaptopRental:inv.UFMNS,
+      DRADeduction: inv.DRADED,
+      OtherDeduction: inv.OTHDD,
+      CallCharges: inv.CALCRG,
+      CallRate: inv.CALRT,
+      MobilerecoveryAmount:inv.Mobile_Recovery_Amount,
+      PersonalLoanAmount: inv.Personal_Loan_Amount,
+      OtherDeductionAmount: inv.Other_Deduction_Amount,
+      TaxableAmount3: inv.TaxableAmount3,
+      TaxableAmount3_Note:inv.TaxableAmount3_Note,
+      NonTaxableAmount1:inv.NonTaxableAmount1,
+      NonTaxableAmount1Note: inv.NonTaxableAmount1_Note,
+      NonTaxableAmount2: inv.NonTaxableAmount2,
+      NonTaxableAmount2Note:inv.NonTaxableAmount2_Note,
+      NonTaxableAmount3:inv.NonTaxableAmount3,
+      NonTaxableAmount3Note:inv.NonTaxableAmount3_Note,
+      NetAdjustmentAmount:inv.Net_Amt_Adjusted,
+      NetDeductionType:inv.Net_Deduction_Type_Id,
+      NetAdjNote: inv.Net_Adj_Note,
+      NetAmount: inv.Net_Amount,
+      EmployeeESI: inv.Employee_ESI,
+      EmployerESI:inv.Employer_ESI,
+      EmployeePF: inv.Employee_PF,
+      EmployerPF: inv.Employer_PF,
+      EmployeeName: inv.Employee_Name,
+      Markup: inv.Markup,
+      GriMsp: inv.Gri_Msp,
+      DONumber: inv.DO_Number,
+      WONumber: inv.WO_Number,
+      WODate: inv.WO_Date,
+      InvoiceNotes: inv.InvoiceNotes,
+      Remarks: inv.Remarks,
+      DiscrepancyReason:inv.Discrepancy_Reason,
+      DiscrepancyBy: inv.Discrepancy_By,
+      CreatedMode: inv.Created_Mode,
+      BillableType: inv.Billable_Type_Id,
+      CGSTAmount:inv.CGST_Amount,
+      SGSTAmount:inv.SGST_Amount,
+      UTGSTAmount:inv.UTGST_Amount,
+      IGSTAmount:inv.IGST_Amount,
+      CTCAmtNorP:inv.CTC_Amt_NorP,
+      Compliance_Fee:inv.Compliance_Fee,
+      Compliance_Fee_Amount:inv.Compliance_Fee_Amount,
+      NetAmtNorP:inv.Net_Amt_NorP,
           CGSTper: inv.CGST_Percentage,
           SGSTper: inv.SGST_Percentage,
           IGSTper: inv.IGST_Percentage,
-          UTGSTper: inv.UTGST_Percentage,
-          NetAmount: inv.Net_Amount
+          UTGSTper: inv.UTGST_Percentage
         });
-
+ 
+this.addGstInvoice.get('InvoiceDate')?.setValue(
+  inv.Invoice_Date ? new Date(inv.Invoice_Date) : null
+);
+this.handleCompanyEvent(inv.Company_Id);
         this.addGstInvoice.get('InvoiceNumber')?.disable();
+          this.addGstInvoice.get('companyCode')?.disable();
+        if (this.isEditMode) {
+  [
+    'GroupDetail',
+    'City',
+    'StateName',
+    'PayPeriod',
+    'FinancialYear',
+    'CostCenterMapping',
+    'Amount',
+    'InvoiceType',
+    'ServiceChargeAmount',
+    'InvoiceDate',
+    'NofEmployees',
+    'AbsorptionAmt',
+    'Particulars',
+    'SourcingChargeAmount',
+    'TaxableAmount1',
+    'CTCAdjustmentAmount'
+  ].forEach(c =>
+    this.addGstInvoice.get(c)?.disable()
+  );
+}
       }
     }
   });
+}
+ngOnChanges() {
+  if (this.selectedCompanyId && this.companyList?.length) {
+    this.selectedCompany =
+      this.companyList.find(c => c.company_Id === this.selectedCompanyId);
+  }
 }
 
 }

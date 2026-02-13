@@ -23,13 +23,15 @@ import { RejectGstInvoiceComponent } from '../reject-gst-invoice/reject-gst-invo
 import { MatDialog } from '@angular/material/dialog';
 import { MatIcon } from "@angular/material/icon";
 import { DialogRef } from '@angular/cdk/dialog';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatIconModule } from '@angular/material/icon';
 
 export const Invoice_TOKEN = new InjectionToken<IInvoiceRepository>('Invoice_TOKEN');
 
 @Component({
   selector: 'gstinvoice',
   standalone: true,
-  imports: [CommonModule, MatTableModule, MatCheckboxModule, MatPaginatorModule, MatSort, MatSelectModule, MatInputModule, MatFormFieldModule, ReactiveFormsModule, FormsModule, MatDatepickerModule, MatNativeDateModule],
+  imports: [CommonModule, MatTableModule,MatTooltipModule,MatIconModule , MatCheckboxModule, MatPaginatorModule, MatSort, MatSelectModule, MatInputModule, MatFormFieldModule, ReactiveFormsModule, FormsModule, MatDatepickerModule, MatNativeDateModule],
   templateUrl: './gstinvoice.component.html',
   styleUrl: './gstinvoice.component.css',
   providers: [{
@@ -62,6 +64,7 @@ export class GstinvoiceComponent {
 
   displayedColumns: string[] = [
     'select'
+    ,'edit' 
     , 'pdfdownload'
     , 'invoice_Number'
     ,'irN_Status'
@@ -85,6 +88,7 @@ export class GstinvoiceComponent {
 
   filterDisplayedColumns: string[] = [
     'filterselect'
+    ,'filteredit'
     , 'filterpdfdownload'
     , 'filterinvoice_Number'
     , 'filterirn_Status'
@@ -291,11 +295,7 @@ export class GstinvoiceComponent {
   }
    DownloadInvoice(invoiceId: number, invoice_Number: string) {
     this.isLoading = true;
-    const BulkInvoices = {
-      invoiceIds: [invoiceId]
-    }
-    console.log(BulkInvoices);
-    this._invoiceService.BulkDownloadInvoice(BulkInvoices).subscribe(response => {
+    this._invoiceService.DownloadInvoice(invoiceId).subscribe(response => {
       const contentDisposition = response.headers.get('Content-Disposition');
       let fileName = 'Invoices.zip';
 
@@ -407,7 +407,9 @@ editInvoice(invoiceId: number) {
     }
   });
 }
-
+isEditDisabled(element: any): boolean {
+  return element.irN_Status?.toLowerCase() !== 'pending';
+}
 }
 
 

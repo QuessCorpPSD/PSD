@@ -492,6 +492,26 @@
                                             formControlName="LaptopRental" >
                                     </div>
                                 </div>
+                                  <div class="col-md-3">
+                                    <label class="form-label">EAP COST</label>
+                                    <div class="input-wrapper">
+                                        <span class="prefix-box">
+                                            <mat-icon class="small-icon">edit</mat-icon>
+                                        </span>
+                                        <input type="number" class="form-control custom-input" placeholder="0"
+                                            formControlName="EAPCT" >
+                                    </div>
+                                </div>
+                                  <div class="col-md-3">
+                                    <label class="form-label">HOSTEL OR ACCOMONDATION</label>
+                                    <div class="input-wrapper">
+                                        <span class="prefix-box">
+                                            <mat-icon class="small-icon">edit</mat-icon>
+                                        </span>
+                                        <input type="number" class="form-control custom-input" placeholder="0"
+                                            formControlName="HOSAC" >
+                                    </div>
+                                </div>
                                 <div class="col-md-3">
                                     <label class="form-label">DRA Deduction</label>
                                     <div class="input-wrapper">
@@ -1151,6 +1171,7 @@
         {{ (invoiceDetails?.Net_Amount ?? 0) | number:'1.2-2' }}
       </div>
     </div>
+    
   </div>
 
   <!-- ================= Status ================= -->

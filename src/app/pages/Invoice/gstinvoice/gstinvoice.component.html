@@ -168,6 +168,11 @@
                             <mat-header-cell *matHeaderCellDef class="fixed-width-column" >
                             </mat-header-cell>
                         </ng-container>
+                          <ng-container matColumnDef="filteredit">
+                            <mat-header-cell *matHeaderCellDef class="fixed-width-column" >
+                            </mat-header-cell>
+                        </ng-container>
+        
                         <ng-container matColumnDef="filterpdfdownload">
                             <mat-header-cell *matHeaderCellDef class="fixed-width-column" >
                             </mat-header-cell>
@@ -289,17 +294,24 @@
                                 style="cursor: pointer; width: 24px; height: 22px;" />
                             <img *ngIf="!element.IRN_Number && element.BatchFile" src="data:image/gif;base64,R0lGODlhGAASAPQAAP///wAAAMzMzICAgP//AP8AAP/MAP/MzP8zM////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAAAAAAALAAAAAAYABIAAAWRICCOZGmeaKqubOtCzPcCzPdFADs="
                                mat-tooltip="Processing" width="24px;" height="22px;" /> -->
-
-             <button
-      class="btn btn-sm btn-outline-primary"
-      matTooltip="Edit Invoice"
-      matTooltipPosition="above"
-      (click)="editInvoice(element.invoice_Id)">
-      <i class="bi bi-pencil-square"></i>
-    </button>
                             </mat-cell>
                         </ng-container>
+<ng-container matColumnDef="edit">
+  <mat-header-cell *matHeaderCellDef class="fixed-width-column">
+    Edit
+  </mat-header-cell>
 
+  <mat-cell *matCellDef="let element" class="fixed-width-column">
+    <mat-icon
+      color="primary"
+      style="cursor: pointer"
+      [matTooltip]="isEditDisabled(element) ? 'Edit not allowed' : 'Edit Invoice'"
+      [class.disabled-icon]="isEditDisabled(element)"
+      (click)="!isEditDisabled(element) && editInvoice(element.invoice_Id)">
+      edit
+    </mat-icon>
+  </mat-cell>
+</ng-container>
                         <ng-container matColumnDef="invoice_Id">
                             <mat-header-cell *matHeaderCellDef mat-sort-header>invoice_Id</mat-header-cell>
                             <mat-cell *matCellDef="let element"><span class="offer-style">{{ element.invoice_Id
