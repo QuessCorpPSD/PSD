@@ -116,6 +116,12 @@ export class InvoiceRepository implements IInvoiceRepository {
             .set('Accept', 'application/json')
         return this.http.post<APIResponse>(url, JSON.stringify(val), { headers });
     }
+
+    ProvisionalInvoiceInitiate(requestPayload: any): Observable<APIResponse> {
+        //console.log('Sending PO save payload:', payload);
+        return this.http.post<APIResponse>(
+            this.environment.apiUrl + 'InvoiceInitiation/ProvisionalInvoiceInitiate', requestPayload);
+    }
     ExportToExcel(val): Observable<APIResponse> {
         const url = `${this.environment.apiUrl}InvoiceInitiation/ExportToExcel`;
         const headers = new HttpHeaders({
@@ -216,7 +222,7 @@ export class InvoiceRepository implements IInvoiceRepository {
         return this.http.post<APIResponse>(url, val, { headers });
     }
 
-    BulkRejectCancelRequest(payload: any) : Observable<APIResponse> {
+    BulkRejectCancelRequest(payload: any): Observable<APIResponse> {
         const url = `${this.environment.apiUrl}GSTInvoice/BulkRejectCancelRequest`;
         return this.http.post<APIResponse>(url, payload);
     }
@@ -249,9 +255,9 @@ export class InvoiceRepository implements IInvoiceRepository {
             this.environment.apiUrl + 'Invoice/BillingDashboardByUserId/' + user_Id
         );
     }
-    DraftInvoiceEmployeeByRequestId(reqNo): Observable<APIResponse> {
+    DraftInvoiceEmployeeByRequestId(reqNo: number, invoiceType: string): Observable<APIResponse> {
         return this.http.get<APIResponse>(
-            this.environment.apiUrl + 'Invoice/DraftInvoiceEmployeeByRequestId/' + reqNo
+            this.environment.apiUrl + `Invoice/DraftInvoiceEmployeeByRequestId/${reqNo}/${invoiceType}`
         );
 
     }
@@ -275,7 +281,7 @@ export class InvoiceRepository implements IInvoiceRepository {
 
         return this.http.post<APIResponse>(url, formData);
     }
-    GetUploadedFile(invoice_Id: number):Observable<APIResponse> {
+    GetUploadedFile(invoice_Id: number): Observable<APIResponse> {
         const url = `${this.environment.apiUrl}GSTInvoice/GetUploadedFile/${invoice_Id}`;
         console.log(invoice_Id);
         return this.http.get<APIResponse>(url);

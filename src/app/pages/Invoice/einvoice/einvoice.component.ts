@@ -557,14 +557,14 @@ export class EInvoiceComponent {
       invoiceIds: selectedInvoiceIds,
       CompanyId: this.companyUI.companyId,
       PayPeriodId: this.payperiodUI.payfrequencyid,
-      userId: this.userdetail.user_Id
+      userId: String(this.userdetail.user_Id)
     };
     //console.log(InitiateIRN);
     if (InitiateIRN) {
       this.invoiceService.InitiateIRN(InitiateIRN).subscribe({
         next: res => {
           console.log(res);
-          const parsedData = JSON.parse(res.data.data);
+          const parsedData = JSON.parse(res.Data.data);
           const errorMessage = parsedData[0]?.Error_Message;
           if (errorMessage) {
             //console.log(errorMessage);

@@ -30,6 +30,7 @@ import { ChatMessage } from '../../../Models/Common';
 import { ChatWindow } from '../../../Models/Common';
 import * as XLSX from 'xlsx';
 import * as FileSaver from 'file-saver';
+import { finalize, lastValueFrom } from 'rxjs';
 
 export const Invoice_TOKEN = new InjectionToken<IInvoiceRepository>('Invoice_TOKEN');
 @Component({
@@ -72,7 +73,7 @@ export class DraftInvoiceComponent implements OnInit {
     { value: 'Provisional', Text: 'Provisional' }
   ];
   //@ViewChild(PayPeriod) PayPeriodComponent!: Payperiodclass;
-  displayColumns = ['action', 'download', 'serial_No', 'invoiceType', 'Req_No', 'company_Code', 'map_name', 'net_CTC', 'netPay', 'lotNo', 'input_No', 'pO_Number', 'employee_Head_Count', 'service_Charge', 'serviceChargeAmount', 'service_Charge_Master', 'service_Charge_Type', 'bgvbl', 'astfee', 'discT1', 'discT2', 'idcard', 'email', 'regfee', 'trnfee', 'ggdbt', 'ppekit', 'vmsfee', 'edufee', 'ntpry', 'renmac', 'draded', 'othdd', 'mbapp', 'calcrg', 'calrt', 'narration']
+  displayColumns = ['action', 'download', 'serial_No', 'invoiceType', 'Req_No', 'invoice_remarks', 'company_Code', 'map_name', 'net_CTC', 'netPay', 'lotNo', 'input_No', 'pO_Number', 'employee_Head_Count', 'service_Charge', 'serviceChargeAmount', 'service_Charge_Master', 'service_Charge_Type', 'bgvbl', 'astfee', 'discT1', 'discT2', 'idcard', 'email', 'regfee', 'trnfee', 'ggdbt', 'ppekit', 'vmsfee', 'edufee', 'ntpry', 'renmac', 'draded', 'othdd', 'mbapp', 'calcrg', 'calrt', 'narration']
   constructor(@Inject(Invoice_TOKEN) private _invoiceService: IInvoiceRepository, private _decrypt: EncryptionService,
     private _sessionStoreage: SessionStorageService, private dialog: MatDialog) {
   }
@@ -132,52 +133,125 @@ export class DraftInvoiceComponent implements OnInit {
   }
 
   Invoiceintiate(): void {
-    // if(this.selectedCompanyId==undefined)
-    // {
-    //   alert("Select Company ");
-    //   return;
-    // }
 
-    // if(this.payPeriod==undefined)
-    // {
-    //   alert("Select PayPeriod ");
-    //   return;
-    // }
-    // //this.invoiceType=1
-    // if(this.invoiceType==undefined)
-    // {
-    //   alert("Select Invoice Type ");
-    //   return;
-    // }
     if (this.selection.selected.length == 0) {
       alert("Please Select atleast one row");
       return;
     }
+
+    const uniqueInvoiceTypes = new Set(
+      this.selection.selected.map(row => row.invoiceType)
+    );
+    console.log('uniqueInvoiceTypes', uniqueInvoiceTypes);
+    if (uniqueInvoiceTypes.size > 1) {
+      alert('Both Draft and Provisional Invoices are selected. Please select only Draft or Provisional Invoices.');
+      this.selection.clear();
+      return;
+    }
     this.isdisabled = true;
     this.isLoading = true;
-    const request = {
-      "invoiceInitiations": this.selection.selected,
-      "TaxTypeId": this.invoiceType,
-      "CreatedBy": this.userdetail.user_Id,
-    }
-    this._invoiceService.InvoiceInitiate(request).subscribe({
-      next: res => {
-        alert(res.Data.error_Message);
-        this.isdisabled = false;
-        this.InvoiceSearch();
-        this.selection.clear();
-        this.selection = new SelectionModel<any>(true, []);
-        this.isLoading = false;
-        this.dialogRef.close();
-        this.remarks = '';
-      },
-      error: err => {
-        console.log(err);
-        this.isdisabled = false;
-        this.isLoading = false;
+    if (this.selection.selected[0].invoiceType === 'Proforma') {
+      const request = {
+        "invoiceInitiations": this.selection.selected,
+        "TaxTypeId": this.invoiceType,
+        "CreatedBy": this.userdetail.user_Id,
       }
-    })
+      this._invoiceService.InvoiceInitiate(request).subscribe({
+        next: res => {
+          alert(res.Data.error_Message);
+          this.isdisabled = false;
+          this.InvoiceSearch();
+          this.selection.clear();
+          this.selection = new SelectionModel<any>(true, []);
+          this.isLoading = false;
+          this.dialogRef.close();
+          this.remarks = '';
+        },
+        error: err => {
+          console.log(err);
+          this.isdisabled = false;
+          this.isLoading = false;
+        }
+      })
+    }
+    else if (this.selection.selected[0].invoiceType === 'Provisional') {
+      this.InvoiceInitiateClick();
+    }
+
   }
+
+  async InvoiceInitiateClick() {
+    //this.isLoading = true;
+    console.log('Provisional');
+    const selectedRows = this.selection.selected;
+
+    if (selectedRows.length === 0) {
+      alert("Please select at least one row");
+      this.isLoading = false;
+      return;
+    }
+
+    const allResponses: any[] = [];
+
+    try {
+      for (const row of selectedRows) {
+
+        const requestPayload = {
+          CompanyId: String(row.company_Id),
+          CompanyCode: String(row.company_Code),
+          PayPeriodId: String(row.pay_Period_Id),
+          PayPeriod: String(row.pay_Period),
+          LotNo: String(row.lotNo),
+          Input_No: String(row.input_No),
+          Map_Name_Id: String(row.map_Name_Id),
+          Map_Name: String(row.map_name),
+          CreatedBy: String(this.userdetail.user_Id)
+        };
+
+        console.log("Sending API for row:", requestPayload);
+
+        const res: any = await lastValueFrom(
+          this._invoiceService.ProvisionalInvoiceInitiate(requestPayload)
+        );
+
+        console.log("Received response for row:", res);
+
+        allResponses.push({
+          Map_Name: requestPayload.Map_Name,
+          LotNo: requestPayload.LotNo,
+          Response: res.Data.response
+        });
+      }
+
+      console.log(allResponses);
+      this.downloadExcelValidate(allResponses, "ProvisionalInvoiceInitiateLog");
+      this.isLoading = false;
+      // this.showPopup = true;
+      // this.popupMessage = "All selected invoices processed!";
+      //this.searchClick();
+
+    } catch (err) {
+      console.error("❌ Error processing rows:", err);
+      alert("Error while processing.");
+      this.isLoading = false;
+    }
+
+  }
+
+  downloadExcelValidate(data: any[], templateId: string): void {
+    //console.log("export");
+    const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(data);
+    const workbook: XLSX.WorkBook = {
+      Sheets: { 'Sheet1': worksheet },
+      SheetNames: ['Sheet1']
+    };
+    const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    const blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
+    const fileName = `${templateId}.xlsx`;
+    FileSaver.saveAs(blob, fileName);
+  }
+
+  
   downloadExcelFromBase64(base64: string, filename: string) {
     // this.isLoading=false;
     const source = `data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,${base64}`;
@@ -190,11 +264,11 @@ export class DraftInvoiceComponent implements OnInit {
   RequestEmployeeDownload(element) {
 
     if (element.req_No == "0" || element.req_No == "") {
-      alert('Request No should not null');
+      alert('Request No should not be Empty');
       return;
     }
     this.isLoading = true;
-    this._invoiceService.DraftInvoiceEmployeeByRequestId(element.req_No).subscribe({
+    this._invoiceService.DraftInvoiceEmployeeByRequestId(element.req_No, element.invoiceType).subscribe({
       next: res => {
         const files = res.Data;
         if (files.file != "No") {
@@ -229,7 +303,9 @@ export class DraftInvoiceComponent implements OnInit {
       "PayPeriod_Id": this.selection.selected[0].pay_Period_Id,
       "LotNo": this.selection.selected[0].lotNo,
       "ReqNo": this.selection.selected[0].req_No,
-      "Data_From": this.selection.selected[0].data_From
+      "Data_From": this.selection.selected[0].data_From,
+      "Invoice_Type": this.selection.selected[0].invoiceType
+
     }
     this._invoiceService.InitiationSearchExport(request).subscribe({
       next: res => {
@@ -350,67 +426,45 @@ export class DraftInvoiceComponent implements OnInit {
     }
     else if (this.dataSource.filteredData) {
       const selectedData = this.dataSource.filteredData.map(item => ({
-        serial_No: item.serial_No,
-        req_No: item.req_No,
-        lotNo: item.lotNo,
-        input_No: item.input_No,
-        map_name: item.map_name,
-        company_Code: item.company_Code,
-        pay_Period: item.pay_Period,
-        employee_Head_Count: item.employee_Head_Count,
-        service_Charge: item.service_Charge,
-        service_Charge_Master: item.service_Charge_Master,
-        service_Charge_Type: item.service_Charge_Type,
-        net_CTC: item.net_CTC,
-        invoiceCul_Ref_No: item.invoiceCul_Ref_No,
-        pO_Number: item.pO_Number,
-        serviceChargeAmount: item.serviceChargeAmount,
-        inctc: item.inctc,
-        inscg: item.inscg,
-        netPay: item.netPay,
-        bgvbl: item.bgvbl,
-        astfee: item.astfee,
-        discT1: item.discT1,
-        discT2: item.discT2,
-        idcard: item.idcard,
-        email: item.email,
-        regfee: item.regfee,
-        trnfee: item.trnfee,
-        ggdbt: item.ggdbt,
-        ppekit: item.ppekit,
-        vmsfee: item.vmsfee,
-        calcrg: item.calcrg,
-        calrt: item.calrt,
-        edufee: item.edufee,
-        ntpry: item.ntpry,
-        draded: item.draded,
-        renmac: item.renmac,
-        othdd: item.othdd,
-        stctc: item.stctc,
-        bfiN35: item.bfiN35,
-        mbapp: item.mbapp,
-        invoice_Type: item.invoice_Type,
-        invoice_Category: item.invoice_Category,
-        state_name: item.state_name,
-        isInitiation: item.isInitiation,
-        isActive: item.isActive,
-        created_On: item.created_On,
-        created_By: item.created_By,
-        modify_On: item.modify_On,
-        modify_By: item.modify_By,
-        cancelled_On: item.cancelled_On,
-        cancelled_By: item.cancelled_By,
-        approved_On: item.approved_On,
-        approved_By: item.approved_By,
-        rejected_On: item.rejected_On,
-        rejected_By: item.rejected_By,
-        initiation_Remarks: item.initiation_Remarks,
-        gL_Code: item.gL_Code,
-        cost_Center_Name: item.cost_Center_Name,
-        client_SPOC_Name: item.client_SPOC_Name,
-        work_Order_Number: item.work_Order_Number,
-        data_From: item.data_From,
-        invoiceType: item.invoiceType
+        Serial_No: item.serial_No,
+        Request_No: item.req_No,
+        InvoiceType: item.invoiceType === 'Proforma' ? 'Draft' : item.invoiceType,
+        Company_Code: item.company_Code,
+        Pay_Period: item.pay_Period,
+        Map_Name: item.map_name,
+        LotNo: item.lotNo,
+        Input_No: item.input_No,
+        Employee_Head_Count: item.employee_Head_Count,
+        PO_Number: item.pO_Number,
+        Net_CTC: item.net_CTC,
+        NetPay: item.netPay,
+        Service_Charge: item.service_Charge,
+        Service_Charge_Master: item.service_Charge_Master,
+        Service_Charge_Type: item.service_Charge_Type,
+        ServiceChargeAmount: item.serviceChargeAmount,
+        BGV_Billing: item.bgvbl,
+        Assignment_Fee: item.astfee,
+        Registration_Fee: item.regfee,
+        Training_Fee: item.trnfee,
+        Govt_Grants_Debit: item.ggdbt,
+        PPE_Kit: item.ppekit,
+        VMS_Fee: item.vmsfee,
+        Education_Fee: item.edufee,
+        Notice_Pay_Recovery: item.ntpry,
+        Discount1: item.discT1,
+        Discount2: item.discT2,
+        ID_Card_Billing: item.idcard,
+        Call_Charge: item.calcrg,
+        Call_Rate: item.calrt,
+        DRA_Deduction: item.draded,
+        Other_Deduction: item.othdd,
+        Mobile_Application_Charge: item.mbapp,
+        Invoice_Category: item.invoice_Category,
+        State_Name: item.state_name,
+        Initiation_Remarks: item.initiation_Remarks,
+        GL_Code: item.gL_Code,
+        Work_Order_Number: item.work_Order_Number,
+        Data_From: item.data_From
       }));
       this.downloadExcel(selectedData, 'DraftInvoice_Export');
     }

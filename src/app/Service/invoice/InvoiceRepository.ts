@@ -72,11 +72,11 @@ export class InvoiceRepository implements IInvoiceRepository {
     }
 
     InitiateIRN(InitiateIRN: any): Observable<APIResponse> {
-        const url = `${this.environment.apiUrl}EInvoice/InitiateIRN`;      
+        const url = `${this.environment.apiUrl}GSTInvoice/InitiateIRN`;      
         return this.http.post<APIResponse>(url, InitiateIRN);
     }
     GetIRNColors(): Observable<APIResponse> {
-        const url = `${this.environment.apiUrl}EInvoice/GetAllInvoiceTypeColors`;
+        const url = `${this.environment.apiUrl}GSTInvoice/GetAllInvoiceTypeColors`;
         //console.log(url);
         return this.http.get<APIResponse>(url);
     }

@@ -23,7 +23,7 @@ export interface IInvoiceRepository {
     GetAllInvoiceCancelDetails(val): Observable<APIResponse>;
     BulkApproveInvoice(val): Observable<APIResponse>;
     BillingDashboard(user_Id): Observable<APIResponse>;
-    DraftInvoiceEmployeeByRequestId(reqNo): Observable<APIResponse>;
+    DraftInvoiceEmployeeByRequestId(reqNo: number, invoiceType: string): Observable<APIResponse>;
     //GetAllInvoiceDetails(companyId: number, payPeriodId: number,userId): Observable<APIResponse>;
     GetAllAttributeAddAndUpdate(val): Observable<APIResponse>;
     GetPayPeriod(payload: any): Observable<APIResponse>;
@@ -46,7 +46,7 @@ export interface IInvoiceRepository {
     RejectInvoice(formData: FormData): Observable<APIResponse>;
     GetUploadedFile(invoice_Id: number):Observable<APIResponse>;
     BulkRejectCancelRequest(payload: any):Observable<APIResponse>;
-   
+   ProvisionalInvoiceInitiate(requestPayload: any): Observable<APIResponse> ;
     //DownloadInvoiceIRN(invoiceId: number): Observable<HttpResponse<Blob>>
     
    

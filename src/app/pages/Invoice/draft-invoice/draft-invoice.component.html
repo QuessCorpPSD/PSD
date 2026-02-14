@@ -24,19 +24,19 @@
             </label>
         </div>
         <button (click)="Invoiceintiate()" [disabled]="isdisabled"
-            style="width: 100px; height: 40px; color: white;padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; background: #302CB3; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.20); border-radius: 6px; justify-content: center; align-items: center; gap: 10px; display: inline-flex; border: none;">
+            style="width: 100px; height: 35px; color: white;padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; background: #302CB3; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.20); border-radius: 6px; justify-content: center; align-items: center; gap: 10px; display: inline-flex; border: none;">
             <div
                 style="color: var(--background, #F5F5F5); font-size: 12px; font-family: Nunito Sans; font-weight: 600; line-height: 22.40px; letter-spacing: 0.24px; word-wrap: break-word">
                 Initiate</div>
         </button>
         <button (click)="InitiationSearchExport()" [disabled]="isdisabled"
-            style="width: 150px; height: 40px; color: white;padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; background: #302CB3; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.20); border-radius: 6px; justify-content: center; align-items: center; gap: 10px; display: inline-flex; border: none;">
+            style="width: 150px; height: 35px; color: white;padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; background: #302CB3; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.20); border-radius: 6px; justify-content: center; align-items: center; gap: 10px; display: inline-flex; border: none;">
             <div
                 style="color: var(--background, #F5F5F5); font-size: 12px; font-family: Nunito Sans; font-weight: 600; line-height: 22.40px; letter-spacing: 0.24px; word-wrap: break-word">
-                PayRegister Download</div>
+                Pay Register</div>
         </button>
         <button (click)="ExportGridData()"
-            style="width: 100px; height: 40px; color: white;padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; background: #302CB3; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.20); border-radius: 6px; justify-content: center; align-items: center; gap: 10px; display: inline-flex; border: none;">
+            style="width: 100px; height: 35px; color: white;padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; background: #302CB3; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.20); border-radius: 6px; justify-content: center; align-items: center; gap: 10px; display: inline-flex; border: none;">
             <div
                 style="color: var(--background, #F5F5F5); font-size: 12px; font-family: Nunito Sans; font-weight: 600; line-height: 22.40px; letter-spacing: 0.24px; word-wrap: break-word">
                 Export</div>
@@ -83,22 +83,50 @@
             </ng-container>
             <ng-container matColumnDef="invoiceType">
                 <th mat-header-cell *matHeaderCellDef style="width: 100px;">Invoice Type</th>
-                <td mat-cell *matCellDef="let element" style="width: 100px;">{{ element.invoiceType === 'Proforma' ? 'Draft' :  element.invoiceType }}</td>
+                <td mat-cell *matCellDef="let element" style="width: 100px;">{{ element.invoiceType === 'Proforma' ?
+                    'Draft' : element.invoiceType }}</td>
             </ng-container>
-            <ng-container matColumnDef="Req_No">
+            <!-- <ng-container matColumnDef="Req_No">
                 <th mat-header-cell *matHeaderCellDef style="width: 100px;">Request No </th>
                 <td mat-cell *matCellDef="let element" style="width: 100px; cursor: pointer; color: #1976d2;"
-                    (mouseenter)="element.req_No && openChat(element)" (mouseleave)="element.req_No && closeChat(element.req_No)">
+                    (mouseenter)="element.req_No && openChat(element)"
+                    (mouseleave)="element.req_No && closeChat(element.req_No)">
                     {{ element.req_No }}
                 </td>
+            </ng-container> -->
+            <ng-container matColumnDef="Req_No">
+                <th mat-header-cell *matHeaderCellDef style="width: 100px;">Request No</th>
+                <td mat-cell *matCellDef="let element" style="width: 100px;">{{ element.req_No }}</td>
+            </ng-container>
+            <ng-container matColumnDef="invoice_remarks">
+                <th mat-header-cell *matHeaderCellDef style="width: 100px;">Invoice Remarks</th>
+                <td mat-cell *matCellDef="let element" style="width: 100px;">{{ element.invoice_remarks }}</td>
             </ng-container>
             <ng-container matColumnDef="company_Code">
                 <th mat-header-cell *matHeaderCellDef style="width: 200px;"> Company Code </th>
                 <td mat-cell *matCellDef="let element" style="width: 200px;">{{ element.company_Code }}</td>
             </ng-container>
+            <ng-container matColumnDef="company_Id">
+                <th mat-header-cell *matHeaderCellDef style="width: 200px;"> Company_Id </th>
+                <td mat-cell *matCellDef="let element" style="width: 200px;">{{ element.company_Id }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="pay_Period_Id">
+                <th mat-header-cell *matHeaderCellDef style="width: 200px;"> pay_Period_Id </th>
+                <td mat-cell *matCellDef="let element" style="width: 200px;">{{ element.pay_Period_Id }}</td>
+            </ng-container>
+            <ng-container matColumnDef="pay_Period">
+                <th mat-header-cell *matHeaderCellDef style="width: 200px;"> pay_Period </th>
+                <td mat-cell *matCellDef="let element" style="width: 200px;">{{ element.pay_Period }}</td>
+            </ng-container>
+
             <ng-container matColumnDef="map_name">
                 <th mat-header-cell *matHeaderCellDef style="width: 180px;"> Map Name </th>
                 <td mat-cell *matCellDef="let element" style="width: 180px;">{{ element.map_name }}</td>
+            </ng-container>
+            <ng-container matColumnDef="map_Name_Id">
+                <th mat-header-cell *matHeaderCellDef style="width: 180px;"> map_Name_Id </th>
+                <td mat-cell *matCellDef="let element" style="width: 180px;">{{ element.map_Name_Id }}</td>
             </ng-container>
             <ng-container matColumnDef="lotNo">
                 <th mat-header-cell *matHeaderCellDef style="width: 200px;"> Lot No. </th>
