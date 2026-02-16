@@ -261,7 +261,7 @@ export class DraftInvoiceComponent implements OnInit {
     downloadLink.click();
     this.isLoading = false;
   }
-  RequestEmployeeDownload(element) {
+  InitiationSearchExport(element) {
 
     if (element.req_No == "0" || element.req_No == "") {
       alert('Request No should not be Empty');
@@ -285,41 +285,41 @@ export class DraftInvoiceComponent implements OnInit {
     })
   }
 
-  InitiationSearchExport(): void {
+  // InitiationSearchExport(): void {
 
-    if (this.selection.selected.length == 0) {
-      alert("Please Select atleast one row");
-      return;
-    }
+  //   if (this.selection.selected.length == 0) {
+  //     alert("Please Select atleast one row");
+  //     return;
+  //   }
 
-    if (this.selection.selected.length > 1) {
-      alert("Multiple selection not allowed.");
-      return;
-    }
-    console.log('Selection', this.selection.selected);
-    this.isLoading = true;
-    const request = {
-      "Company_Id": this.selection.selected[0].company_Id,
-      "PayPeriod_Id": this.selection.selected[0].pay_Period_Id,
-      "LotNo": this.selection.selected[0].lotNo,
-      "ReqNo": this.selection.selected[0].req_No,
-      "Data_From": this.selection.selected[0].data_From,
-      "Invoice_Type": this.selection.selected[0].invoiceType
+  //   if (this.selection.selected.length > 1) {
+  //     alert("Multiple selection not allowed.");
+  //     return;
+  //   }
+  //   console.log('Selection', this.selection.selected);
+  //   this.isLoading = true;
+  //   const request = {
+  //     "Company_Id": this.selection.selected[0].company_Id,
+  //     "PayPeriod_Id": this.selection.selected[0].pay_Period_Id,
+  //     "LotNo": this.selection.selected[0].lotNo,
+  //     "ReqNo": this.selection.selected[0].req_No,
+  //     "Data_From": this.selection.selected[0].data_From,
+  //     "Invoice_Type": this.selection.selected[0].invoiceType
 
-    }
-    this._invoiceService.InitiationSearchExport(request).subscribe({
-      next: res => {
-        if (res.Data.file != "No") {
-          this.downloadExcelFromBase64(res.Data.file, res.Data.fileName)
-        }
+  //   }
+  //   this._invoiceService.InitiationSearchExport(request).subscribe({
+  //     next: res => {
+  //       if (res.Data.file != "No") {
+  //         this.downloadExcelFromBase64(res.Data.file, res.Data.fileName)
+  //       }
 
-      },
-      error: err => {
-        console.log(err);
-        this.isLoading = false;
-      }
-    })
-  }
+  //     },
+  //     error: err => {
+  //       console.log(err);
+  //       this.isLoading = false;
+  //     }
+  //   })
+  // }
   toggleRow(event) {
 
   }
