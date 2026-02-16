@@ -78,10 +78,10 @@
                         </i>
                     </label>
                 </div>
-                <!-- <div style="display: inline-block; margin-right: 10px;">
-                    <button (click)="ExportExcel()" class="plain-button"
+                <div style="display: inline-block; margin-right: 10px;">
+                    <button (click)="PayRegisterDownload()" class="plain-button"
                         style="position: relative; padding-right: 30px;">
-                        Export
+                        Payregister
                         <i
                             style="position: absolute; top: 50%; right: 15px; transform: translateY(-50%); pointer-events: none;">
                             <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12"
@@ -95,19 +95,15 @@
                             </svg>
                         </i>
                     </button>
-                </div> -->
-                <!-- <button (click)="ExportExcel()"
-                style="display: inline-block; width: 100px; height: 30px; padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; background: #302CB3; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.20); border-radius: 6px; justify-content: center; align-items: center; gap: 10px; display: inline-flex; border: none;">
-                <div
-                    style="color: var(--background, #F5F5F5); font-size: 12px; font-family: Nunito Sans; font-weight: 600; line-height: 22.40px; letter-spacing: 0.24px; word-wrap: break-word">
-                    Export</div>
-            </button> -->
-                <button *ngIf="canInitiateIRN()" (click)="confirmIRN()"
-                    style="display: inline-block; left:10px; width: 120px; height: 30px; padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; background: #302CB3; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.20); border-radius: 6px; justify-content: center; align-items: center; gap: 10px; display: inline-flex; border: none;">
-                    <div
-                        style="color: var(--background, #F5F5F5); font-size: 12px; font-family: Nunito Sans; font-weight: 600; line-height: 22.40px; letter-spacing: 0.24px; word-wrap: break-word">
-                        Initiate IRN</div>
-                </button>
+
+
+                    <button *ngIf="canInitiateIRN()" (click)="confirmIRN()"
+                        style="display: inline-block; left:10px; width: 120px; height: 30px; padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; background: #302CB3; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.20); border-radius: 6px; justify-content: center; align-items: center; gap: 10px; display: inline-flex; border: none;">
+                        <div
+                            style="color: var(--background, #F5F5F5); font-size: 12px; font-family: Nunito Sans; font-weight: 600; line-height: 22.40px; letter-spacing: 0.24px; word-wrap: break-word">
+                            Initiate IRN</div>
+                    </button>
+                </div>
             </div>
         </div>
         <div class="gst-legend">
@@ -117,7 +113,6 @@
                     {{ it.label }}
                 </div>
             </div>
-
         </div>
         <div class="gst-legend-row">
             <div class="legend-irn-container">
@@ -318,7 +313,8 @@
                     <ng-container matColumnDef="Invoice_Date">
                         <mat-header-cell *matHeaderCellDef mat-sort-header class="fixed-width-column2">Invoice
                             Date</mat-header-cell>
-                        <mat-cell *matCellDef="let element" class="fixed-width-column2">{{ element.Invoice_Date}}</mat-cell>
+                        <mat-cell *matCellDef="let element" class="fixed-width-column2">{{
+                            element.Invoice_Date}}</mat-cell>
                     </ng-container>
                     <ng-container matColumnDef="company_Id">
                         <mat-header-cell *matHeaderCellDef mat-sort-header>Company_Id</mat-header-cell>
@@ -447,7 +443,7 @@
 </div>
 <div class="overlaymerge" *ngIf="showpsd">
 
-  
+
     <div class="popup-main">
 
         <attribute class="centered-popup" [availables]="availableItems" valueField="value" textField="text"

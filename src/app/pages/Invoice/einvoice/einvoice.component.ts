@@ -936,5 +936,48 @@ export class EInvoiceComponent {
       });
   }
 
+  PayRegisterDownload(): void {
+    if (!this.companyUI) {
+      alert("Please select Company Code");
+      return;
+    }
+
+    if (!this.payperiodUI) {
+      alert("Please select PayPeriod");
+      return;
+    }
+
+    this.isLoading = true;
+
+    const payload = {
+      Company_Id: this.companyUI.companyId,
+      Company_Code: this.companyUI.companyCode,
+      Company_Name: this.companyUI.companyName,
+      Pay_Period_Id: this.payperiodUI.payfrequencyid,
+      Pay_Period: this.payperiodUI.payPeriod
+    }
+
+    this.invoiceService.PayRegisterDownload(payload)
+      .pipe(
+        finalize(() => this.isLoading = false) // ✅ only one place to stop loading
+      )
+      .subscribe({
+        next: res => {
+          //console.log(res);
+          if (res.StatusCode === 200) {
+            console.log(res.Data);
+            const data = res.Data;
+            this.downloadExcelFromBase64(data.File, data.FileName);
+          } else {
+            alert("Something went wrong while generating the report.");
+          }
+        },
+        error: error => {
+          console.error('Error:', error);
+          alert("Server error occurred.");
+        }
+      });
+  }
+
 
 }
