@@ -151,6 +151,7 @@ export class DraftInvoiceComponent implements OnInit {
     this.isdisabled = true;
     this.isLoading = true;
     if (this.selection.selected[0].invoiceType === 'Proforma') {
+      console.log('Selection', this.selection.selected);
       const request = {
         "invoiceInitiations": this.selection.selected,
         "TaxTypeId": this.invoiceType,
@@ -222,7 +223,7 @@ export class DraftInvoiceComponent implements OnInit {
           Response: res.Data.response
         });
       }
-
+      this.isdisabled = false;
       console.log(allResponses);
       this.downloadExcelValidate(allResponses, "ProvisionalInvoiceInitiateLog");
       this.isLoading = false;
@@ -261,65 +262,56 @@ export class DraftInvoiceComponent implements OnInit {
     downloadLink.click();
     this.isLoading = false;
   }
-  InitiationSearchExport(element) {
+  // InitiationSearchExport(element) {
 
-    if (element.req_No == "0" || element.req_No == "") {
-      alert('Request No should not be Empty');
-      return;
-    }
-    this.isLoading = true;
-    this._invoiceService.DraftInvoiceEmployeeByRequestId(element.req_No, element.invoiceType).subscribe({
-      next: res => {
-        const files = res.Data;
-        if (files.file != "No") {
-          this.downloadExcelFromBase64(files.file, element.req_No);
-        }
-        else {
-          this.isLoading = false;
-        }
-      },
-      error: err => {
-        this.isLoading = false;
-        console.log(err)
-      }
-    })
-  }
-
-  // InitiationSearchExport(): void {
-
-  //   if (this.selection.selected.length == 0) {
-  //     alert("Please Select atleast one row");
+  //   if (element.req_No == "0" || element.req_No == "") {
+  //     alert('Request No should not be Empty');
   //     return;
   //   }
-
-  //   if (this.selection.selected.length > 1) {
-  //     alert("Multiple selection not allowed.");
-  //     return;
-  //   }
-  //   console.log('Selection', this.selection.selected);
   //   this.isLoading = true;
-  //   const request = {
-  //     "Company_Id": this.selection.selected[0].company_Id,
-  //     "PayPeriod_Id": this.selection.selected[0].pay_Period_Id,
-  //     "LotNo": this.selection.selected[0].lotNo,
-  //     "ReqNo": this.selection.selected[0].req_No,
-  //     "Data_From": this.selection.selected[0].data_From,
-  //     "Invoice_Type": this.selection.selected[0].invoiceType
-
-  //   }
-  //   this._invoiceService.InitiationSearchExport(request).subscribe({
+  //   this._invoiceService.DraftInvoiceEmployeeByRequestId(element.req_No, element.invoiceType).subscribe({
   //     next: res => {
-  //       if (res.Data.file != "No") {
-  //         this.downloadExcelFromBase64(res.Data.file, res.Data.fileName)
+  //       const files = res.Data;
+  //       if (files.file != "No") {
+  //         this.downloadExcelFromBase64(files.file, element.req_No);
   //       }
-
+  //       else {
+  //         this.isLoading = false;
+  //       }
   //     },
   //     error: err => {
-  //       console.log(err);
   //       this.isLoading = false;
+  //       console.log(err)
   //     }
   //   })
   // }
+
+  InitiationSearchExport(element:any): void {
+
+    console.log('Selection', element);
+    this.isLoading = true;
+    const request = {
+      "Company_Id": element.company_Id,
+      "PayPeriod_Id": element.pay_Period_Id,
+      "LotNo": element.lotNo,
+      "ReqNo": element.req_No,
+      "Data_From": element.data_From,
+      "Invoice_Type": element.invoiceType
+
+    }
+    this._invoiceService.InitiationSearchExport(request).subscribe({
+      next: res => {
+        if (res.Data.file != "No") {
+          this.downloadExcelFromBase64(res.Data.file, res.Data.fileName)
+        }
+
+      },
+      error: err => {
+        console.log(err);
+        this.isLoading = false;
+      }
+    })
+  }
   toggleRow(event) {
 
   }
