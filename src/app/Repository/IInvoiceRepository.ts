@@ -37,7 +37,7 @@ export interface IInvoiceRepository {
     UploadAttributesGST(formData: FormData): Observable<APIResponse>;
     GetConsolidatedPayRegister(payload: any): Observable<APIResponse>
     GetConsolidateInvoiceSummary(payload: any): Observable<APIResponse>
-    PayRegisterDownload(payload: any): Observable<APIResponse>;
+    //PayRegisterDownload(payload: any): Observable<APIResponse>;
     getRemarksByReqNo(val): Observable<APIResponse>;
     GetGstRates(payload: any) :Observable<APIResponse>;
    // //BulkIRNDownloadInvoice(BulkInvoices: any): Observable<HttpResponse<Blob>>

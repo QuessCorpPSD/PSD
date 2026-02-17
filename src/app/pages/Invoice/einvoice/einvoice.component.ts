@@ -924,7 +924,7 @@ export class EInvoiceComponent {
           if (res.StatusCode === 200) {
             console.log(res.Data);
             const data = res.Data;
-            this.downloadExcelFromBase64(data.File, data.FileName);
+            this.downloadExcelFromBase64(data.file, data.fileName);
           } else {
             alert("Something went wrong while generating the report.");
           }
@@ -957,7 +957,7 @@ export class EInvoiceComponent {
       Pay_Period: this.payperiodUI.payPeriod
     }
 
-    this.invoiceService.PayRegisterDownload(payload)
+    this.invoiceService.GetConsolidatedPayRegister(payload)
       .pipe(
         finalize(() => this.isLoading = false) // ✅ only one place to stop loading
       )
@@ -967,7 +967,7 @@ export class EInvoiceComponent {
           if (res.StatusCode === 200) {
             console.log(res.Data);
             const data = res.Data;
-            this.downloadExcelFromBase64(data.File, data.FileName);
+            this.downloadExcelFromBase64(data.file, data.fileName);
           } else {
             alert("Something went wrong while generating the report.");
           }

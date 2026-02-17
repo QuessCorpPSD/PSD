@@ -175,11 +175,11 @@ export class InvoiceRepository implements IInvoiceRepository {
         return this.http.post<APIResponse>(url, payload);
     }
 
-    PayRegisterDownload(payload: any): Observable<APIResponse> {
-        const url = `${this.environment.apiUrl}GSTInvoice/PayRegisterDownload`;
-        console.log(url);
-        return this.http.post<APIResponse>(url, payload);
-    }
+    // PayRegisterDownload(payload: any): Observable<APIResponse> {
+    //     const url = `${this.environment.apiUrl}GSTInvoice/PayRegisterDownload`;
+    //     console.log(url);
+    //     return this.http.post<APIResponse>(url, payload);
+    // }
 
 
     getGSTInvoiceType(): Observable<APIResponse> {
