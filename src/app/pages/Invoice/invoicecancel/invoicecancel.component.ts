@@ -207,37 +207,38 @@ export class InvoiceCancelComponent implements OnInit, AfterViewInit {
 
     this._invoiceService.BulkApproveInvoice(payload).subscribe({
       next: (res: any) => {
-        if (res.Data[0].Status === "SUCCESS") {
-          this.popupMessage = 'Cancel Request Approved successfully';
-          this.showPopup = true;
-          const isSuccess =
-            res?.status === 'SUCCESS' ||
-            res?.statusCode === 200;
+        console.log(res);
+         this.isLoading = false;
+        if (res?.statusCode === 200 && res?.data?.status === 'SUCCESS') {
+      this.popupMessage = res.data.message; // ✅ correct
+      this.showPopup = true;
 
-          if (isSuccess) {
-            this.selection.clear();
-            if (this.paginator) {
-              this.paginator.firstPage();
-            }
-            this.InvoiceSearch();
-          }
+      this.selection.clear();
 
-          this.isLoading = false;
-        }
-        else {
-          this.popupMessage = 'Cancel Request Failed';
-          this.popupSubMessage ='Note:' + res.Data[0].Error_Message;
-          this.showPopup = true;
-          this.isLoading = false;
-        }
-      },
-      error: (err) => {
-        alert(err?.error?.message || 'Something went wrong ❌');
-        this.isLoading = false;
+      if (this.paginator) {
+        this.paginator.firstPage();
       }
-    });
-  }
 
+      this.InvoiceSearch();
+    } else {
+      this.popupMessage =  res?.data?.message ||'Invoice Approved Successfully';
+      this.showPopup = true;
+       this.selection.clear();
+
+      if (this.paginator) {
+        this.paginator.firstPage();
+      }
+
+      this.InvoiceSearch();
+    }
+  },
+
+  error: (err) => {
+    this.isLoading = false;
+    alert(err?.error?.message || 'Something went wrong ❌');
+  }
+});
+  }
   invoiceReject() {
     this.isLoading = true;
 
