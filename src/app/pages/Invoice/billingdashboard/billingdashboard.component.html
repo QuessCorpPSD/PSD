@@ -1,11 +1,11 @@
 <div class="container py-2">
   <div class="download-btn-container">
-      <button class="download-btn" (click)="onExportInvoice()">⬇️ Export</button>
+      <button  class="download-btn btn-primary" (click)="onExportInvoice()">⬇️ Export</button>
     </div>
 
 <div id="myGrid" class="ag-theme-quartz" style="width: 100%;  overflow-x: auto; ">
       <div class="card-body rounded-4">
-        <div class="example-container mat-elevation-z8">
+        <!-- <div class="example-container mat-elevation-z8">
           <table mat-table [dataSource]="InvoiceAlloted" class="mat-elevation-z8">
             <ng-container matColumnDef="select">
               <mat-header-cell *matHeaderCellDef>
@@ -20,14 +20,7 @@
               </mat-cell>
             </ng-container>
 
-            <!-- <ng-container matColumnDef="edit">
-              <mat-header-cell *matHeaderCellDef mat-sort-header></mat-header-cell>
-              <mat-cell *matCellDef="let element">
-                <img src="assets\icons\edit.svg" alt="edit"
-                  style="cursor: pointer; width: 24px; height: 22px;"
-                  (click)="EditClick(element.req_No)" />
-              </mat-cell>
-            </ng-container> -->
+           
 
             <ng-container matColumnDef="edit" >
               <th mat-header-cell *matHeaderCellDef>Edit</th>
@@ -37,9 +30,6 @@
                   (click)="EditClick(element.req_No, element.assignedTo)"/>
                 </td>
             </ng-container>
-
-
-           
 
             <ng-container matColumnDef="Req_No" >
               <th mat-header-cell *matHeaderCellDef> Req ID </th>
@@ -97,7 +87,16 @@
           </table>
           <mat-paginator class="mat-footer-paginator" #InvoiceAlotPaginator [pageSizeOptions]="[5,10, 25, 100]"
             showFirstLastButtons></mat-paginator>
-        </div>
+        </div> -->
+
+        <ag-grid-angular class="ag-theme-quartz" [pagination]="true" [paginationPageSize]="100"
+                [rowData]="BillingDasData" [columnDefs]="columnDefs" [defaultColDef]="defaultColDef"
+                [domLayout]="'autoHeight'" [gridOptions]="gridOptions" [pagination]="true"
+                [paginationPageSize]="pageSize" [paginationPageSizeSelector]="pageSizeOptions"
+                (paginationChanged)="onPaginationChanged($event)" (gridReady)="onGridReady($event)">
+        </ag-grid-angular>
+
+
       </div>
     </div>
 	<div *ngIf="iseditClicked" class="popup-overlay">

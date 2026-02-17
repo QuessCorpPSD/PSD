@@ -12,7 +12,7 @@ import { SelectionModel } from '@angular/cdk/collections';
 import * as XLSX from 'xlsx';
 import * as FileSaver from 'file-saver';
 import { IInvoiceRepository } from '../../../Repository/IInvoiceRepository';
-import { InvoiceRepository } from '../../../Service/InvoiceRepository'; 
+import { InvoiceRepository } from '../../../Service/InvoiceRepository';
 import { EncryptionService } from '../../../Shared/encryption.service';
 import { SessionStorageService } from '../../../Shared/SessionStorageService';
 import { GstInvoiceGrid } from '../../../Models/GSTInvoiceGrid';
@@ -25,13 +25,27 @@ import { MatIcon } from "@angular/material/icon";
 import { DialogRef } from '@angular/cdk/dialog';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+
+
+import { AgGridAngular } from "ag-grid-angular";
+import type { ColDef, GridApi, GridOptions, GridReadyEvent, PaginationChangedEvent, RowClickedEvent } from "ag-grid-community";
+import {
+  AllCommunityModule,
+  ModuleRegistry,
+  provideGlobalGridOptions,
+  themeAlpine,
+  themeBalham,
+  themeMaterial,
+  themeQuartz,
+} from "ag-grid-community";
 
 export const Invoice_TOKEN = new InjectionToken<IInvoiceRepository>('Invoice_TOKEN');
 
 @Component({
   selector: 'gstinvoice',
   standalone: true,
-  imports: [CommonModule, MatTableModule,MatTooltipModule,MatIconModule , MatCheckboxModule, MatPaginatorModule, MatSort, MatSelectModule, MatInputModule, MatFormFieldModule, ReactiveFormsModule, FormsModule, MatDatepickerModule, MatNativeDateModule],
+  imports: [CommonModule,MatButtonModule,AgGridAngular, MatTableModule, MatTooltipModule, MatIconModule, MatCheckboxModule, MatPaginatorModule, MatSelectModule, MatInputModule, MatFormFieldModule, ReactiveFormsModule, FormsModule, MatDatepickerModule, MatNativeDateModule],
   templateUrl: './gstinvoice.component.html',
   styleUrl: './gstinvoice.component.css',
   providers: [{
@@ -41,6 +55,155 @@ export const Invoice_TOKEN = new InjectionToken<IInvoiceRepository>('Invoice_TOK
 })
 
 export class GstinvoiceComponent {
+
+
+  // AG grid
+
+  public gridOptions: GridOptions = {
+    theme: 'legacy',
+    suppressHorizontalScroll: false,
+    domLayout: 'normal',
+    rowHeight: 35,
+
+    rowSelection: 'multiple',
+    suppressRowClickSelection: true,
+    animateRows: true,
+    pagination: true,
+    rowMultiSelectWithClick: true,
+    enableBrowserTooltips: false
+  };
+
+  defaultColDef: ColDef = {
+    sortable: true,
+    resizable: true,
+    minWidth: 150,
+    filter: 'agTextColumnFilter',
+    floatingFilter: true,
+    tooltipValueGetter: (params: any) =>
+      params.value != null ? params.value.toString() : '',
+
+    tooltipComponentParams: {
+      tooltipClass: 'ag-tooltip'
+    }
+  };
+
+  GSTinvoiceData: any;
+  //columnDefs: any;
+
+  pageSize = 5; // default
+  pageSizeOptions = [5, 10, 20, 30, 50, 100];
+  currentPage = 1;
+  totalPages = 1;
+
+  columnDefs: ColDef[] = [
+
+    // ✅ checkbox (very small)
+    {
+      headerCheckboxSelection: true,
+      checkboxSelection: true,
+      width: 45,
+      maxWidth: 45,
+      minWidth: 45,
+      pinned: 'left',
+      sortable: false,
+      filter: false,
+      suppressSizeToFit: true
+    },
+
+    // ✅ edit (small)
+    {
+      headerName: 'Edit',
+      width: 60,
+      maxWidth: 60,
+      minWidth: 60,
+      pinned: 'left',
+      sortable: false,
+      filter: false,
+      suppressSizeToFit: true,
+      cellRenderer: (params: any) => {
+        const disabled = this.isEditDisabled(params.data);
+        return `<span style="
+                cursor:${disabled ? 'not-allowed' : 'pointer'};
+                opacity:${disabled ? 0.5 : 1};
+                color:#1976d2;
+                font-size:15px;
+              ">✏️</span>`;
+      },
+      onCellClicked: (params: any) => {
+        if (!this.isEditDisabled(params.data)) {
+          this.editInvoice(params.data.invoice_Id);
+        }
+      }
+    },
+
+    // ✅ pdf (small)
+    {
+      headerName: '',
+      width: 60,
+      maxWidth: 60,
+      minWidth: 60,
+      pinned: 'left',
+      sortable: false,
+      filter: false,
+      suppressSizeToFit: true,
+      cellRenderer: () => {
+        return `<img src="assets/download_enabled.svg"
+                   style="cursor:pointer;width:24px;height:24px;" />`;
+      },
+      onCellClicked: (params: any) => {
+        this.DownloadInvoice(
+          params.data.invoice_Id,
+          params.data.invoice_Number
+        );
+      }
+    },
+    {
+      field: 'invoice_Number',
+      headerName: 'Invoice Number',
+      pinned: 'left',
+      minWidth: 160,
+      suppressSizeToFit: false
+    },
+
+    // ✅ remaining scrollable columns
+    { field: 'irN_Status', headerName: 'IRN Status', minWidth: 150 },
+
+    {
+      field: 'invoice_Date',
+      headerName: 'Invoice Date',
+      filter: 'agDateColumnFilter',
+      minWidth: 150,
+      valueFormatter: (p: any) =>
+        p.value ? new Date(p.value).toLocaleDateString('en-GB') : ''
+    },
+
+    { field: 'company_Code', headerName: 'Company Code', minWidth: 150 },
+    { field: 'pay_Period', headerName: 'Pay Period', minWidth: 150 },
+    { field: 'map_Name', headerName: 'Map Name', minWidth: 160 },
+    { field: 'group_Name', headerName: 'Group Name', minWidth: 160 },
+    { field: 'invoiceType', headerName: 'Invoice Type', minWidth: 150 },
+
+    {
+      field: 'net_Amount',
+      headerName: 'Net Amount',
+      filter: 'agNumberColumnFilter',
+      minWidth: 150
+    },
+
+    { field: 'status', headerName: 'Status', minWidth: 130 },
+    { field: 'Irn_Number', headerName: 'IRN Number', minWidth: 180 },
+    { field: 'sap_Invoice_Number', headerName: 'SAP Invoice No', minWidth: 180 },
+    { field: 'sap_Account_Number', headerName: 'SAP Account No', minWidth: 180 },
+    { field: 'crn_Number', headerName: 'CRN Number', minWidth: 160 },
+    { field: 'crn_IRN_Status', headerName: 'CRN IRN Status', minWidth: 170 },
+    { field: 'crn_IRN_Number', headerName: 'CRN IRN Number', minWidth: 170 },
+    { field: 'sap_Cancel_Document', headerName: 'SAP Cancel DOC No', minWidth: 200 },
+    { field: 'sap_Credit_Note_Document', headerName: 'SAP Credit Note No', minWidth: 210 }
+  ];
+
+  private gridApi!: GridApi;
+
+  //AG grid
 
   companyUI: any;
   payperiodUI: any;
@@ -64,10 +227,10 @@ export class GstinvoiceComponent {
 
   displayedColumns: string[] = [
     'select'
-    ,'edit' 
+    , 'edit'
     , 'pdfdownload'
     , 'invoice_Number'
-    ,'irN_Status'
+    , 'irN_Status'
     , 'invoice_Date'
     , 'company_Code'
     , 'pay_Period'
@@ -80,19 +243,19 @@ export class GstinvoiceComponent {
     , 'sap_Invoice_Number'
     , 'sap_Account_Number'
     , 'crn_Number'
-    ,'crn_IRN_Status'
-    ,'crn_IRN_Number'
+    , 'crn_IRN_Status'
+    , 'crn_IRN_Number'
     , 'sap_Cancel_Document'
     , 'sap_Credit_Note_Document'
   ];
 
   filterDisplayedColumns: string[] = [
     'filterselect'
-    ,'filteredit'
+    , 'filteredit'
     , 'filterpdfdownload'
     , 'filterinvoice_Number'
     , 'filterirn_Status'
-   
+
     , 'filterinvoice_Date'
     , 'filtercompany_Code'
     , 'filterpay_Period'
@@ -101,15 +264,16 @@ export class GstinvoiceComponent {
     , 'filterinvoiceType'
     , 'filternet_Amount'
     , 'filterstatus'
-    ,'filterIrn_Number'
+    , 'filterIrn_Number'
     , 'filtersap_Invoice_Number'
     , 'filtersap_Account_Number'
     , 'filtercrn_Number'
-    ,'filtercrn_IRN_Status'
-    ,'filtercrn_IRN_Number'
+    , 'filtercrn_IRN_Status'
+    , 'filtercrn_IRN_Number'
     , 'filtersap_Cancel_Document'
     , 'filtersap_Credit_Note_Document'
   ]
+
   TemplateOptions = [
     { value: 'reject', Text: 'Reject' },
     { value: 'cancel', Text: 'Cancel' },
@@ -120,7 +284,7 @@ export class GstinvoiceComponent {
   @ViewChild(MatSort) sort!: MatSort;
 
   constructor(@Inject(Invoice_TOKEN) private _invoiceService: IInvoiceRepository, private _decrypt: EncryptionService,
-    private _sessionStoreage: SessionStorageService, private dialog: MatDialog, ) {
+    private _sessionStoreage: SessionStorageService, private dialog: MatDialog,) {
   }
 
   selection = new SelectionModel<GstInvoiceGrid>(true, []);
@@ -143,6 +307,7 @@ export class GstinvoiceComponent {
     const numRows = this.dataSource.data.length;
     return numSelected > 0 && numSelected < numRows;
   }
+
   toggleAllRows() {
     if (this.isAllSelected()) {
       this.selection.clear();
@@ -154,6 +319,7 @@ export class GstinvoiceComponent {
   toggleRow(row: GstInvoiceGrid) {
     this.selection.toggle(row);
   }
+
   templateDataMap: { [key: string]: any[] } = {
     reject: [
       { 'Invoice Number': '', 'Discrepancy By': '', 'Discrepancy': '' },
@@ -168,6 +334,25 @@ export class GstinvoiceComponent {
     this.userdetail = JSON.parse(this._decrypt.decrypt(userdetail!));
     this.BindDashBoard(this.userdetail.user_Id);
   }
+
+  //AG grid
+  onGridReady(params: GridReadyEvent) {
+    this.gridApi = params.api;
+    this.updatePaginationInfo();
+  }
+
+  onPaginationChanged(event: PaginationChangedEvent) {
+    this.updatePaginationInfo();
+  }
+
+  updatePaginationInfo() {
+    if (!this.gridApi) return;
+    this.currentPage = this.gridApi.paginationGetCurrentPage() + 1;
+    this.totalPages = this.gridApi.paginationGetTotalPages();
+  }
+
+  //AG Grid
+
   applyFilter(event: Event, column: string) {
     const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
 
@@ -177,14 +362,16 @@ export class GstinvoiceComponent {
 
     this.dataSource.filter = filterValue;
   }
+
   BindDashBoard(userId: number) {
     this._invoiceService.GetGSTInvoice(userId).subscribe({
       next: res => {
         console.log(res);
-        this.dataSource = new MatTableDataSource<any>(res.Data);
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
-        this.isLoading = false;
+        // this.dataSource = new MatTableDataSource<any>(res.Data);
+        this.GSTinvoiceData = res.Data;
+        // this.dataSource.paginator = this.paginator;
+        // this.dataSource.sort = this.sort;
+        // this.isLoading = false;
       },
       error: err => {
         console.error('Error fetching data:', err.message);
@@ -207,7 +394,7 @@ export class GstinvoiceComponent {
   }
 
   TemplateClick(): void {
-      const dataToExport = [
+    const dataToExport = [
       { 'Invoice_Number': '', 'Remarks': '', 'NewInvoiceNumber': '' },
     ]
     this.downloadExcel(dataToExport, "Template_" + this.selectedTemplate);
@@ -260,27 +447,27 @@ export class GstinvoiceComponent {
 
     const formData = new FormData();
     if (this.excelFile) {
-        formData.append('file', this.excelFile);
-        formData.append('userId', this.userdetail.user_Id);
+      formData.append('file', this.excelFile);
+      formData.append('userId', this.userdetail.user_Id);
 
-        this._invoiceService.UploadCancel(formData).subscribe({
-          next: (res: string) => {
-            const error_msg = res ;
-            console.table(error_msg);
-            if (error_msg) {
-              alert(error_msg);
-              this.BindDashBoard(this.userdetail.user_Id);
-              this.isLoading = false;
-            } else {
-              alert("No validations returned");
-              this.isLoading = false;
-            }
-          },
-          error: err => {
-            console.error('❌ Upload failed', err);
+      this._invoiceService.UploadCancel(formData).subscribe({
+        next: (res: string) => {
+          const error_msg = res;
+          console.table(error_msg);
+          if (error_msg) {
+            alert(error_msg);
+            this.BindDashBoard(this.userdetail.user_Id);
+            this.isLoading = false;
+          } else {
+            alert("No validations returned");
             this.isLoading = false;
           }
-        });
+        },
+        error: err => {
+          console.error('❌ Upload failed', err);
+          this.isLoading = false;
+        }
+      });
     }
     else {
       console.error('No Data');
@@ -293,7 +480,7 @@ export class GstinvoiceComponent {
   getTableColumns(): string[] {
     return this.excelPreviewData?.length ? Object.keys(this.excelPreviewData[0]) : [];
   }
-   DownloadInvoice(invoiceId: number, invoice_Number: string) {
+  DownloadInvoice(invoiceId: number, invoice_Number: string) {
     this.isLoading = true;
     this._invoiceService.DownloadInvoice(invoiceId).subscribe(response => {
       const contentDisposition = response.headers.get('Content-Disposition');
@@ -387,29 +574,29 @@ export class GstinvoiceComponent {
       data: { example: 'Hello from parent!' }
     });
   }
- openRejectPage(): void {
- this.dialog.open(RejectGstInvoiceComponent, {
+  openRejectPage(): void {
+    this.dialog.open(RejectGstInvoiceComponent, {
       width: '95%',
       height: '90vh',
       disableClose: true,
-       hasBackdrop: true,
+      hasBackdrop: true,
       data: { example: 'Hello from parent!' }
     });
-}
-editInvoice(invoiceId: number) {
-  this.dialog.open(GstinvoiceaddComponent, {
-    width: '95%',
-    height: '90vh',
-    disableClose: true,
-    data: {
-      mode: 'edit',
-      invoiceId: invoiceId
-    }
-  });
-}
-isEditDisabled(element: any): boolean {
-  return element.irN_Status?.toLowerCase() !== 'pending';
-}
+  }
+  editInvoice(invoiceId: number) {
+    this.dialog.open(GstinvoiceaddComponent, {
+      width: '95%',
+      height: '90vh',
+      disableClose: true,
+      data: {
+        mode: 'edit',
+        invoiceId: invoiceId
+      }
+    });
+  }
+  isEditDisabled(element: any): boolean {
+    return element.irN_Status?.toLowerCase() !== 'pending';
+  }
 }
 
 

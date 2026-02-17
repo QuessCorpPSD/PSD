@@ -348,7 +348,6 @@ export const routes: Routes = [
           { path: "payperiodunlock", component: PayperiodunlockComponent, },
 
         ]
-
       },
       {
         path: 'customer', component: CustomernavigationComponent,
