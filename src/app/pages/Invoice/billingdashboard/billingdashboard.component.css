@@ -29,7 +29,7 @@
 }
 
 .download-btn {
-  background: #109bdc;
+  background: #302CB3;
   color: #fff;
   /* dark text */
   border: 1px solid #ccc;
@@ -45,7 +45,7 @@
 }
 
 .download-btn:hover {
-  background-color: #f5f5f5;
+  background-color: #302CB3;
   /* subtle hover effect */
   border-color: #999;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);

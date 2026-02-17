@@ -24,6 +24,20 @@ import { EncryptionService } from '../../../Shared/encryption.service';
 import { finalize } from 'rxjs';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
+
+import { AgGridAngular } from "ag-grid-angular";
+
+import type { ColDef, GridApi, GridOptions, GridReadyEvent, PaginationChangedEvent, RowClickedEvent } from "ag-grid-community";
+import {
+  AllCommunityModule,
+  ModuleRegistry,
+  provideGlobalGridOptions,
+  themeAlpine,
+  themeBalham,
+  themeMaterial,
+  themeQuartz,
+} from "ag-grid-community";
+
 interface ChildDetail {
   InvoiceCulture_id: number;
   Company_Id: number;
@@ -36,6 +50,7 @@ interface ChildDetail {
   selector: 'app-invoice-culture',
   standalone: true,
   imports: [
+    AgGridAngular,
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
@@ -53,6 +68,121 @@ interface ChildDetail {
   styleUrls: ['./invoice-culture.component.css']
 })
 export class InvoiceCultureComponent implements AfterViewInit {
+
+  // AG grid
+
+  public gridOptions: GridOptions = {
+    theme: 'legacy',
+    suppressHorizontalScroll: false,
+    domLayout: 'normal',
+    rowHeight: 46,
+    headerHeight: 48,
+
+    rowSelection: 'multiple',
+    suppressRowClickSelection: true,
+    animateRows: true,
+    pagination: true,
+    rowMultiSelectWithClick: true,
+    enableBrowserTooltips: false
+  };
+
+  defaultColDef: ColDef = {
+    sortable: true,
+    resizable: true,
+    minWidth: 150,
+    filter: 'agTextColumnFilter',
+    floatingFilter: true,
+    tooltipValueGetter: (params: any) =>
+      params.value != null ? params.value.toString() : '',
+
+    tooltipComponentParams: {
+      tooltipClass: 'ag-tooltip'
+    }
+  };
+
+  InvoiceCultureData: any[] = [];
+  //columnDefs: any;
+
+  pageSize = 5; // default
+  pageSizeOptions = [5, 10, 20, 30, 50, 100];
+  currentPage = 1;
+  totalPages = 1;
+
+  columnDefs: ColDef[] = [
+
+    // ✅ DELETE (PINNED)
+    {
+      colId: 'delete',
+      headerName: '',
+      width: 50,
+      minWidth: 50,
+      maxWidth: 50,
+      pinned: 'left',
+      sortable: false,
+      filter: false,
+      suppressSizeToFit: true,
+      lockPinned: true,
+
+      tooltipValueGetter: () => 'Delete',
+
+      cellRenderer: () =>
+        `<img src="assets/delete.svg"
+             style="cursor:pointer;width:18px;height:18px;" />`,
+
+      onCellClicked: (params: any) => {
+        this.deleteClick(
+          params.data.invoiceCulture_id,
+          params.data.invoiceType
+        );
+      }
+    },
+
+    // ✅ company_Code
+    {
+      field: 'company_Code',
+      headerName: 'Company Code',
+      width: 230,
+      filter: 'agTextColumnFilter'
+    },
+
+    // ✅ company_Name
+    {
+      field: 'company_Name',
+      headerName: 'Company Name',
+      width: 230,
+      filter: 'agTextColumnFilter'
+    },
+
+    // ✅ invoiceCul_Ref_No
+    {
+      field: 'invoiceCul_Ref_No',
+      headerName: 'InvoiceCul Ref No',
+      width: 200,
+      filter: 'agTextColumnFilter'
+    },
+
+    // ✅ invoiceType
+    {
+      field: 'invoiceType',
+      headerName: 'Invoice Type',
+      width: 200,
+      filter: 'agTextColumnFilter'
+    },
+
+    // ✅ map_Name
+    {
+      field: 'map_Name',
+      headerName: 'Map Name',
+      width: 200,
+      filter: 'agTextColumnFilter'
+    }
+  ];
+
+
+
+  private gridApi!: GridApi;
+
+  //AG grid
 
   comapnyId: number = 0;
   selectedCompanyCode: string = '';
@@ -106,6 +236,27 @@ export class InvoiceCultureComponent implements AfterViewInit {
     };
   }
 
+
+
+  //AG grid
+  onGridReady(params: GridReadyEvent) {
+    this.gridApi = params.api;
+    this.updatePaginationInfo();
+  }
+
+  onPaginationChanged(event: PaginationChangedEvent) {
+    this.updatePaginationInfo();
+  }
+
+  updatePaginationInfo() {
+    if (!this.gridApi) return;
+    this.currentPage = this.gridApi.paginationGetCurrentPage() + 1;
+    this.totalPages = this.gridApi.paginationGetTotalPages();
+  }
+
+  //AG Grid
+
+
   applyFilters() {
     const filterValue = this.searchText?.trim().toLowerCase();
     this.dataSource.filter = filterValue;
@@ -141,6 +292,7 @@ export class InvoiceCultureComponent implements AfterViewInit {
         this.isLoading = false;
 
         if (res.StatusCode === 200 && Array.isArray(res.Data) && res.Data.length > 0) {
+          this.InvoiceCultureData = res.Data;
           this.dataSource.data = res.Data;
           this.isTableVisible = true;
 

@@ -21,10 +21,25 @@ import { EncryptionService } from '../../../Shared/encryption.service';
 import { SessionStorageService } from '../../../Shared/SessionStorageService';
 import { AlertpopupComponent } from '../../../common/alertpopup/alertpopup.component';
 import { finalize } from 'rxjs';
+
+import { AgGridAngular } from "ag-grid-angular";
+
+import type { ColDef, GridApi, GridOptions, GridReadyEvent, PaginationChangedEvent, RowClickedEvent } from "ag-grid-community";
+import {
+  AllCommunityModule,
+  ModuleRegistry,
+  provideGlobalGridOptions,
+  themeAlpine,
+  themeBalham,
+  themeMaterial,
+  themeQuartz,
+} from "ag-grid-community";
+
 @Component({
   selector: 'invoicecancel',
   standalone: true,
   imports: [
+    AgGridAngular,
     CommonModule,
     MatTableModule,
     MatPaginatorModule,
@@ -39,7 +54,6 @@ import { finalize } from 'rxjs';
     MatDialogModule,
     CompanyallComponent,
     PayPeriodComponent,
-    MatSort,
     AlertpopupComponent
 
   ],
@@ -47,6 +61,187 @@ import { finalize } from 'rxjs';
   styleUrls: ['./invoicecancel.component.css']
 })
 export class InvoiceCancelComponent implements OnInit, AfterViewInit {
+
+
+  // AG grid
+
+  public gridOptions: GridOptions = {
+    theme: 'legacy',
+    suppressHorizontalScroll: false,
+    domLayout: 'normal',
+    rowHeight: 46,
+    headerHeight: 48,
+
+    rowSelection: 'multiple',
+    suppressRowClickSelection: true,
+    animateRows: true,
+    pagination: true,
+    rowMultiSelectWithClick: true,
+    enableBrowserTooltips: false
+  };
+
+  defaultColDef: ColDef = {
+    sortable: true,
+    resizable: true,
+    minWidth: 150,
+    filter: 'agTextColumnFilter',
+    floatingFilter: true,
+    tooltipValueGetter: (params: any) =>
+      params.value != null ? params.value.toString() : '',
+
+    tooltipComponentParams: {
+      tooltipClass: 'ag-tooltip'
+    }
+  };
+
+  InvoiceCancelData: any[] = [];
+  //columnDefs: any;
+
+  pageSize = 5; // default
+  pageSizeOptions = [5, 10, 20, 30, 50, 100];
+  currentPage = 1;
+  totalPages = 1;
+
+  columnDefs: ColDef[] = [
+
+    // ✅ SELECT
+    {
+      colId: 'select',
+      headerCheckboxSelection: true,
+      headerCheckboxSelectionFilteredOnly: true,
+      checkboxSelection: () => true,
+      width: 40,
+      minWidth: 40,
+      maxWidth: 40,
+      pinned: 'left',
+      sortable: false,
+      filter: false
+    },
+
+    // ✅ PDF DOWNLOAD
+    {
+      colId: 'pdfdownload',
+      headerName: 'Invoice Pdf',
+      width: 45,
+      pinned: 'left',
+      sortable: false,
+      filter: false,
+      suppressSizeToFit: true,
+      tooltipValueGetter: () => 'Pdf Download',
+
+      cellRenderer: () =>
+        `<img src="assets/download_enabled.svg"
+             style="cursor:pointer;width:18px;height:18px;" />`,
+
+      onCellClicked: (params: any) => {
+        this.DownloadInvoice(
+          params.data.invoice_Id,
+          params.data.invoice_Number
+        );
+      }
+    },
+
+    // ✅ CANCEL DOC
+    {
+      colId: 'docDownload',
+      headerName: 'Cancel Doc',
+      width: 45,
+      pinned: 'left',
+      sortable: false,
+      filter: false,
+
+      cellRenderer: (params: any) => {
+        const hasFile = !!params.data?.filePath;
+
+        const icon = hasFile
+          ? 'assets/icons/download_enabled_green.svg'
+          : 'assets/icons/download_disabled.svg';
+
+        const cursor = hasFile ? 'pointer' : 'not-allowed';
+
+        return `<img src="${icon}"
+                   style="cursor:${cursor};width:18px;height:18px;" />`;
+      }
+    },
+
+    // ================= DATA =================
+
+    {
+      field: 'invoice_Number',
+      headerName: 'Invoice Number',
+      width: 150,
+      filter: 'agTextColumnFilter',
+      pinned: 'left',
+    },
+
+    {
+      field: 'invoice_Date',
+      headerName: 'Invoice Date',
+      width: 150,
+      filter: 'agDateColumnFilter',
+      pinned: 'left',
+      valueFormatter: (p: any) =>
+        p.value ? new Date(p.value).toLocaleDateString('en-GB') : ''
+    },
+
+    {
+      field: 'map_Name',
+      headerName: 'Map Name',
+      width: 130,
+      filter: 'agTextColumnFilter'
+    },
+
+    {
+      field: 'state_Name',
+      headerName: 'State Name',
+      width: 130,
+      filter: 'agTextColumnFilter'
+    },
+
+    {
+      field: 'invoiceType',
+      headerName: 'Invoice Type',
+      width: 130
+    },
+
+    { field: 'cgsT_Amount', headerName: 'CGST (₹)', width: 110 },
+    { field: 'sgsT_Amount', headerName: 'SGST (₹)', width: 110 },
+    { field: 'igsT_Amount', headerName: 'IGST (₹)', width: 110 },
+
+    {
+      field: 'net_Amount',
+      headerName: 'Net Amount',
+      width: 130,
+      filter: 'agNumberColumnFilter'
+    },
+
+    {
+      field: 'creditNote_Status',
+      headerName: 'Credit Note Status',
+      width: 170,
+      filter: 'agTextColumnFilter'
+    },
+
+    {
+      field: 'creditNoteNumber',
+      headerName: 'Credit Note',
+      width: 150,
+      filter: 'agTextColumnFilter'
+    },
+
+    {
+      field: 'cancelledOn',
+      headerName: 'Cancelled Date',
+      width: 150,
+      valueFormatter: (p: any) =>
+        p.value ? new Date(p.value).toLocaleDateString('en-GB') : ''
+    }
+  ];
+
+
+  private gridApi!: GridApi;
+
+  //AG grid
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -113,6 +308,26 @@ export class InvoiceCancelComponent implements OnInit, AfterViewInit {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
+
+
+  //AG grid
+  onGridReady(params: GridReadyEvent) {
+    this.gridApi = params.api;
+    this.updatePaginationInfo();
+  }
+
+  onPaginationChanged(event: PaginationChangedEvent) {
+    this.updatePaginationInfo();
+  }
+
+  updatePaginationInfo() {
+    if (!this.gridApi) return;
+    this.currentPage = this.gridApi.paginationGetCurrentPage() + 1;
+    this.totalPages = this.gridApi.paginationGetTotalPages();
+  }
+
+  //AG Grid
+
 
   handleCompanyEvent(company: any) {
     this.selectedCompanyId = company.companyId;
@@ -226,7 +441,7 @@ export class InvoiceCancelComponent implements OnInit, AfterViewInit {
         }
         else {
           this.popupMessage = 'Cancel Request Failed';
-          this.popupSubMessage ='Note:' + res.Data[0].Error_Message;
+          this.popupSubMessage = 'Note:' + res.Data[0].Error_Message;
           this.showPopup = true;
           this.isLoading = false;
         }
@@ -290,7 +505,7 @@ export class InvoiceCancelComponent implements OnInit, AfterViewInit {
         }
         else {
           this.popupMessage = 'Cancel Request Rejection Failed';
-          this.popupSubMessage ='Note:' + res.Data[0].Error_Message;
+          this.popupSubMessage = 'Note:' + res.Data[0].Error_Message;
           this.showPopup = true;
           this.isLoading = false;
         }
@@ -320,6 +535,14 @@ export class InvoiceCancelComponent implements OnInit, AfterViewInit {
         const apiData = Array.isArray(res?.Data?.data) ? res.Data.data : [];
         console.log(apiData);
         this.dataSource.data = apiData.map((item: any) => ({
+          ...item,
+          invoice_Number:
+            item.invoice_Number ||
+            item.invoiceNumber ||
+            item.InvoiceNumber
+        }));
+
+        this.InvoiceCancelData = apiData.map((item: any) => ({
           ...item,
           invoice_Number:
             item.invoice_Number ||

@@ -37,6 +37,19 @@ import { CompanyallComponent } from '../../../common/CompanyAll/companyall.compo
 import { AttributeComponent } from "../attribute/attribute.component";
 
 
+import { AgGridAngular } from "ag-grid-angular";
+
+import type { ColDef, GridApi, GridOptions, GridReadyEvent, PaginationChangedEvent, RowClickedEvent } from "ag-grid-community";
+import {
+  AllCommunityModule,
+  ModuleRegistry,
+  provideGlobalGridOptions,
+  themeAlpine,
+  themeBalham,
+  themeMaterial,
+  themeQuartz,
+} from "ag-grid-community";
+
 export const Invoice_TOKEN = new InjectionToken<IInvoiceRepository>('Invoice_TOKEN');
 
 interface IrnColor {
@@ -47,8 +60,8 @@ interface IrnColor {
 @Component({
   selector: 'einvoice',
   standalone: true,
-  imports: [CommonModule, MatPaginator, MatTableModule, FormsModule,
-    MatSort, MatSelectModule, MatInputModule, MatFormFieldModule, MatCheckbox, MatCardModule,
+  imports: [CommonModule, AgGridAngular, MatTableModule, FormsModule,
+     MatSelectModule, MatInputModule, MatFormFieldModule, MatCardModule,
     MatIconModule, MatTooltipModule, FormsModule, ReactiveFormsModule, CompanyallComponent, PayPeriodComponent, AlertpopupComponent, PayPeriodComponent, AttributeComponent],
   templateUrl: './einvoice.component.html',
   styleUrl: './einvoice.component.css',
@@ -60,6 +73,151 @@ interface IrnColor {
     }]
 })
 export class EInvoiceComponent {
+
+
+  // AG grid
+
+  public gridOptions: GridOptions = {
+    theme: 'legacy',
+    suppressHorizontalScroll: false,
+    domLayout: 'normal',
+    rowHeight: 46,
+    headerHeight: 48,
+
+    rowSelection: 'multiple',
+    suppressRowClickSelection: true,
+    animateRows: true,
+    pagination: true,
+    rowMultiSelectWithClick: true,
+    enableBrowserTooltips: false
+  };
+
+  defaultColDef: ColDef = {
+    sortable: true,
+    resizable: true,
+    minWidth: 150,
+    filter: 'agTextColumnFilter',
+    floatingFilter: true,
+    tooltipValueGetter: (params: any) =>
+      params.value != null ? params.value.toString() : '',
+
+    tooltipComponentParams: {
+      tooltipClass: 'ag-tooltip'
+    }
+  };
+
+  einvoiceData: any[] = [];
+  //columnDefs: any;
+
+  pageSize = 5; // default
+  pageSizeOptions = [5, 10, 20, 30, 50, 100];
+  currentPage = 1;
+  totalPages = 1;
+
+  columnDefs: ColDef[] = [
+
+    // ✅ select
+    {
+      colId: 'select',
+      headerCheckboxSelection: true,
+      headerCheckboxSelectionFilteredOnly: true,
+      checkboxSelection: () => true,
+      width: 40,
+      minWidth: 40,
+      maxWidth: 40,
+      pinned: 'left',
+      sortable: false,
+      filter: false
+    },
+
+    // ✅ pdf download
+    {
+      colId: 'pdfdownload',
+      headerName: '',
+      width: 45,
+      minWidth: 45,
+      maxWidth: 45,
+      pinned: 'left',
+      sortable: false,
+      filter: false,
+      tooltipValueGetter: () => 'Pdf Download',
+
+      cellRenderer: () =>
+        `<img src="assets/download_enabled.svg"
+             style="cursor:pointer;width:18px;height:18px;" />`,
+
+      onCellClicked: (params: any) => {
+        this.DownloadInvoice(
+          params.data.Invoice_Id,
+          params.data.Invoice_Number
+        );
+      }
+    },
+
+    // ✅ status
+    {
+      field: 'IRN_Status',
+      colId: 'irnStatus',
+      headerName: 'Status',
+      width: 140,
+      minWidth: 100,
+      pinned: 'left',
+    },
+
+    // ✅ invoice number
+    {
+      field: 'Invoice_Number',
+      colId: 'invoice_Number',
+      headerName: 'Invoice Number',
+      width: 160,
+      minWidth: 120,
+      pinned: 'left',
+    },
+    // ✅ invoice date
+    {
+      field: 'Invoice_Date',
+      headerName: 'Invoice Date',
+      width: 150,
+      pinned: 'left',
+    },
+    // ✅ map name
+    {
+      field: 'Map_Name',
+      colId: 'map_Name',
+      headerName: 'Map Name',
+      width: 130,
+      minWidth: 120,
+    },
+
+
+
+    // ✅ state
+    {
+      field: 'State_Name',
+      headerName: 'State Name',
+      width: 130
+    },
+
+    // ✅ amounts
+    { field: 'SubTotal', headerName: 'Base Value (₹)', width: 120 },
+    { field: 'CGST_Amount', headerName: 'CGST (₹)', width: 110 },
+    { field: 'SGST_Amount', headerName: 'SGST (₹)', width: 110 },
+    { field: 'UTGST_Amount', headerName: 'UTGST (₹)', width: 110 },
+    { field: 'IGST_Amount', headerName: 'IGST (₹)', width: 110 },
+
+    // ✅ net amount
+    {
+      field: 'Net_Amount',
+      colId: 'net_Amount',
+      headerName: 'Invoice Value',
+      width: 130
+    }
+  ];
+
+
+  private gridApi!: GridApi;
+
+  //AG grid
 
   companyUI: any;
   payperiodUI: any;
@@ -240,6 +398,25 @@ export class EInvoiceComponent {
 
   selection = new SelectionModel<EInvoiceGrid>(true, []);
 
+
+  //AG grid
+  onGridReady(params: GridReadyEvent) {
+    this.gridApi = params.api;
+    this.updatePaginationInfo();
+  }
+
+  onPaginationChanged(event: PaginationChangedEvent) {
+    this.updatePaginationInfo();
+  }
+
+  updatePaginationInfo() {
+    if (!this.gridApi) return;
+    this.currentPage = this.gridApi.paginationGetCurrentPage() + 1;
+    this.totalPages = this.gridApi.paginationGetTotalPages();
+  }
+
+  //AG Grid
+
   isAnyFilteredRowSelected(): boolean {
     return this.selection.selected.some(sel =>
       this.dataSource.filteredData.some(row => row.Invoice_Id === sel.Invoice_Id
@@ -388,6 +565,8 @@ export class EInvoiceComponent {
           this.isLoading = false;
           return;
         }
+
+        this.einvoiceData = tableData;
 
         this.dataSource = new MatTableDataSource<EInvoiceGrid>(tableData);
         this.dataSource.paginator = this.paginator;

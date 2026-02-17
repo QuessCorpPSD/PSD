@@ -205,12 +205,12 @@
         </div>
     </div>
     <div class="row align-items-end py-2">
-        <div class="table-wrapper">
+        <!-- <div class="table-wrapper">
             <div class="table-scroll">
-                <!-- <div class="card-body rounded-2"> -->
+                <!-- <div class="card-body rounded-2"> 
                 <table mat-table [dataSource]="dataSource" matSort class="custom-table mat-elevation-z8">
 
-                    <!-- Checkbox Column -->
+                    <!-- Checkbox Column 
                     <ng-container matColumnDef="select">
                         <mat-header-cell *matHeaderCellDef class="fixed-width-column">
                             <mat-checkbox (change)="toggleAllRows()" [checked]="selection.hasValue() && isAllSelected()"
@@ -233,7 +233,7 @@
                             <!-- <img *ngIf="!element.IRN_Number && !element.BatchFile" src="assets/Icons/download_disabled.svg"
                                     style="cursor: pointer; width: 24px; height: 22px;" />
                                 <img *ngIf="!element.IRN_Number && element.BatchFile" src="data:image/gif;base64,R0lGODlhGAASAPQAAP///wAAAMzMzICAgP//AP8AAP/MAP/MzP8zM////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAAAAAAALAAAAAAYABIAAAWRICCOZGmeaKqubOtCzPcCzPdFADs="
-                                   mat-tooltip="Processing" width="24px;" height="22px;" /> -->
+                                   mat-tooltip="Processing" width="24px;" height="22px;" /> 
                         </mat-cell>
                     </ng-container>
 
@@ -272,8 +272,8 @@
 
                             <div style="display: flex; align-items: center;">
 
-                                <!-- Color Box -->
-                                <!-- 'legend-processing': element.IRN_Status === 'Processing',-->
+                                <!-- Color Box 
+                                <!-- 'legend-processing': element.IRN_Status === 'Processing',
                                 <span class="legend-box" [ngClass]="{
                         'legend-pending': element.IRN_Status === 'Pending',
                         'legend-requested': element.IRN_Status === 'Requested' || element.IRN_Status === 'Processing',
@@ -281,7 +281,7 @@
                         'legend-rejected': element.IRN_Status === 'Rejected'                  
                     }" [title]="element.IRN_Status"></span>
 
-                                <!-- Status Text -->
+                                <!-- Status Text 
                                 <span matTooltip="{{ element.IRN_Status }}"
                                     style="white-space: nowrap; max-width: 140px; overflow: hidden; text-overflow: ellipsis;">
 
@@ -318,7 +318,8 @@
                     <ng-container matColumnDef="Invoice_Date">
                         <mat-header-cell *matHeaderCellDef mat-sort-header class="fixed-width-column2">Invoice
                             Date</mat-header-cell>
-                        <mat-cell *matCellDef="let element" class="fixed-width-column2">{{ element.Invoice_Date}}</mat-cell>
+                        <mat-cell *matCellDef="let element" class="fixed-width-column2">{{
+                            element.Invoice_Date}}</mat-cell>
                     </ng-container>
                     <ng-container matColumnDef="company_Id">
                         <mat-header-cell *matHeaderCellDef mat-sort-header>Company_Id</mat-header-cell>
@@ -432,22 +433,29 @@
                         <mat-cell *matCellDef="let element">{{ element.Status
                             }}</mat-cell>
                     </ng-container>
-                    <!-- Header and Row Declaration -->
+                    <!-- Header and Row Declaration -
                     <mat-header-row *matHeaderRowDef="displayedColumns" sticky></mat-header-row>
                     <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
                 </table>
             </div>
-            <!-- </div> -->
+            <!-- </div> --
 
             <mat-paginator [pageSizeOptions]="[10, 25, 50, 100]" showFirstLastButtons style="border: 1px solid #ddd;">
             </mat-paginator>
-        </div>
+        </div> -->
+
+        <ag-grid-angular class="ag-theme-quartz" [pagination]="true" [paginationPageSize]="100"
+            [rowData]="einvoiceData" [columnDefs]="columnDefs" [defaultColDef]="defaultColDef"
+            [domLayout]="'autoHeight'" [gridOptions]="gridOptions" [pagination]="true" [paginationPageSize]="pageSize"
+            [paginationPageSizeSelector]="pageSizeOptions" (paginationChanged)="onPaginationChanged($event)"
+            (gridReady)="onGridReady($event)">
+        </ag-grid-angular>
     </div>
 
 </div>
 <div class="overlaymerge" *ngIf="showpsd">
 
-  
+
     <div class="popup-main">
 
         <attribute class="centered-popup" [availables]="availableItems" valueField="value" textField="text"

@@ -17,14 +17,167 @@ import * as XLSX from 'xlsx';
 import FileSaver from 'file-saver';
 import { AlertpopupComponent } from '../../../common/alertpopup/alertpopup.component';
 
+
+import { AgGridAngular } from "ag-grid-angular";
+
+import type { ColDef, GridApi, GridOptions, GridReadyEvent, PaginationChangedEvent, RowClickedEvent } from "ag-grid-community";
+import {
+  AllCommunityModule,
+  ModuleRegistry,
+  provideGlobalGridOptions,
+  themeAlpine,
+  themeBalham,
+  themeMaterial,
+  themeQuartz,
+} from "ag-grid-community";
+
 @Component({
   selector: 'app-otherincome',
   standalone: true,
-  imports: [MatPaginator, MatTableModule, MatIconModule, CompanyallComponent, CommonModule, FormsModule, MatTooltipModule, PayPeriodComponent, AlertpopupComponent],
+  imports: [ AgGridAngular, MatTableModule, MatIconModule, CompanyallComponent, CommonModule, FormsModule, MatTooltipModule, PayPeriodComponent, AlertpopupComponent],
   templateUrl: './otherincome.component.html',
   styleUrl: './otherincome.component.css'
 })
 export class OtherincomeComponent {
+
+  // AG grid
+
+  public gridOptions: GridOptions = {
+    theme: 'legacy',
+    suppressHorizontalScroll: false,
+    domLayout: 'normal',
+    rowHeight: 46,
+    headerHeight: 48,
+
+    rowSelection: 'multiple',
+    suppressRowClickSelection: true,
+    animateRows: true,
+    pagination: true,
+    rowMultiSelectWithClick: true,
+    enableBrowserTooltips: false
+  };
+
+  defaultColDef: ColDef = {
+    sortable: true,
+    resizable: true,
+    minWidth: 150,
+    filter: 'agTextColumnFilter',
+    floatingFilter: true,
+    tooltipValueGetter: (params: any) =>
+      params.value != null ? params.value.toString() : '',
+
+    tooltipComponentParams: {
+      tooltipClass: 'ag-tooltip'
+    }
+  };
+
+  OtherIncomeData: any[] = [];
+  //columnDefs: any;
+
+  pageSize = 5; // default
+  pageSizeOptions = [5, 10, 20, 30, 50, 100];
+  currentPage = 1;
+  totalPages = 1;
+
+  columnDefs: ColDef[] = [
+
+    // ✅ Action (Delete)
+    {
+      colId: 'Action',
+      headerName: 'Action',
+      width: 90,
+      minWidth: 80,
+      maxWidth: 100,
+      pinned: 'left',
+      sortable: false,
+      filter: false,
+      suppressSizeToFit: true,
+      lockPinned: true,
+      tooltipValueGetter: () => 'Delete',
+
+      cellRenderer: () =>
+        `<button class="ag-btn-delete">
+         <span class="material-icons">delete</span>
+       </button>`,
+
+      onCellClicked: (params: any) => {
+        this.deleteClick(params.data);
+      }
+    },
+
+    // ✅ SNo (auto index)
+    {
+      headerName: 'SNo',
+      width: 80,
+      minWidth: 70,
+      maxWidth: 90,
+      pinned: 'left',
+      valueGetter: (params) => (params.node?.rowIndex ?? 0) + 1,
+      sortable: false,
+      filter: false
+    },
+
+    // ✅ Company Code
+    {
+      field: 'Company_Code',
+      headerName: 'Company Code',
+      width: 150,
+      filter: 'agTextColumnFilter'
+    },
+
+    // ✅ Employee Code
+    {
+      field: 'Employee_Code',
+      headerName: 'Employee Code',
+      width: 150,
+      filter: 'agTextColumnFilter'
+    },
+
+    // ✅ Employee Name
+    {
+      field: 'Employee_Name',
+      headerName: 'Employee Name',
+      width: 180,
+      filter: 'agTextColumnFilter'
+    },
+
+    // ✅ Band Name
+    {
+      field: 'Band_name',
+      headerName: 'Band Name',
+      width: 140,
+      filter: 'agTextColumnFilter'
+    },
+
+    // ✅ Gender
+    {
+      field: 'Gender',
+      headerName: 'Gender',
+      width: 110,
+      filter: 'agTextColumnFilter'
+    },
+
+    // ✅ Incentive Pay Period
+    {
+      field: 'Increment_Pay_Period',
+      headerName: 'Incentive Pay Period',
+      width: 190,
+      filter: 'agTextColumnFilter'
+    },
+
+    // ✅ Pay Period
+    {
+      field: 'Pay_Period',
+      headerName: 'Pay Period',
+      width: 140,
+      filter: 'agTextColumnFilter'
+    }
+  ];
+
+  private gridApi!: GridApi;
+
+  //AG grid
+
   selectedCompanyId: any;
   selectedCompanyCode: any;
   dataSource = new MatTableDataSource<any>();
@@ -47,8 +200,8 @@ export class OtherincomeComponent {
   filteredRows: any[] = [];
   paginatedData: any[] = [];
 
-  pageSize = 10;
-  currentPage = 0;
+  // pageSize = 10;
+  // currentPage = 0;
   isUploadGridVisible = false;
 
   constructor(private dialog: MatDialog, private decry: EncryptionService, private service: OtherincomeService,
@@ -132,6 +285,7 @@ export class OtherincomeComponent {
           this.isLoading = false;
         }
 
+        this.OtherIncomeData = this.itadjusts; 
         this.dataSource = new MatTableDataSource(this.itadjusts);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
@@ -161,6 +315,24 @@ export class OtherincomeComponent {
     this.payPeriodType = "All";
 
   }
+
+  //AG grid
+  onGridReady(params: GridReadyEvent) {
+    this.gridApi = params.api;
+    this.updatePaginationInfo();
+  }
+
+  onPaginationChanged(event: PaginationChangedEvent) {
+    this.updatePaginationInfo();
+  }
+
+  updatePaginationInfo() {
+    if (!this.gridApi) return;
+    this.currentPage = this.gridApi.paginationGetCurrentPage() + 1;
+    this.totalPages = this.gridApi.paginationGetTotalPages();
+  }
+
+  //AG Grid
 
 
   ImportClick(fileInput: HTMLInputElement): void {

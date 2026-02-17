@@ -32,10 +32,25 @@ import * as XLSX from 'xlsx';
 import * as FileSaver from 'file-saver';
 import { finalize, lastValueFrom } from 'rxjs';
 
+
+import { AgGridAngular } from "ag-grid-angular";
+
+import type { ColDef, GridApi, GridOptions, GridReadyEvent, PaginationChangedEvent, RowClickedEvent } from "ag-grid-community";
+import {
+  AllCommunityModule,
+  ModuleRegistry,
+  provideGlobalGridOptions,
+  themeAlpine,
+  themeBalham,
+  themeMaterial,
+  themeQuartz,
+} from "ag-grid-community";
+
+
 export const Invoice_TOKEN = new InjectionToken<IInvoiceRepository>('Invoice_TOKEN');
 @Component({
   selector: 'app-draft-invoice',
-  imports: [CommonModule, MatFormFieldModule,
+  imports: [CommonModule, MatFormFieldModule, AgGridAngular,
     MatInputModule, MatRadioModule, MatTabsModule, MatPaginatorModule, FormsModule, MatFormFieldModule, MatCardModule, MatCheckboxModule, MatIconModule, MatTableModule],
   templateUrl: './draft-invoice.component.html',
   styleUrl: './draft-invoice.component.css',
@@ -74,6 +89,146 @@ export class DraftInvoiceComponent implements OnInit {
   ];
   //@ViewChild(PayPeriod) PayPeriodComponent!: Payperiodclass;
   displayColumns = ['action', 'download', 'serial_No', 'invoiceType', 'Req_No', 'invoice_remarks', 'company_Code', 'map_name', 'net_CTC', 'netPay', 'lotNo', 'input_No', 'pO_Number', 'employee_Head_Count', 'service_Charge', 'serviceChargeAmount', 'service_Charge_Master', 'service_Charge_Type', 'bgvbl', 'astfee', 'discT1', 'discT2', 'idcard', 'email', 'regfee', 'trnfee', 'ggdbt', 'ppekit', 'vmsfee', 'edufee', 'ntpry', 'renmac', 'draded', 'othdd', 'mbapp', 'calcrg', 'calrt', 'narration']
+
+  // AG grid
+
+  public gridOptions: GridOptions = {
+    theme: 'legacy',
+    suppressHorizontalScroll: false,
+    domLayout: 'normal',
+    rowHeight: 46,
+    headerHeight: 48,
+
+    rowSelection: 'multiple',
+    suppressRowClickSelection: true,
+    animateRows: true,
+    pagination: true,
+    rowMultiSelectWithClick: true,
+    enableBrowserTooltips: false
+  };
+
+  defaultColDef: ColDef = {
+    sortable: true,
+    resizable: true,
+    minWidth: 150,
+    filter: 'agTextColumnFilter',
+    floatingFilter: true,
+    tooltipValueGetter: (params: any) =>
+      params.value != null ? params.value.toString() : '',
+
+    tooltipComponentParams: {
+      tooltipClass: 'ag-tooltip'
+    }
+  };
+
+  DraftInvoiceData: any;
+  //columnDefs: any;
+
+  pageSize = 5; // default
+  pageSizeOptions = [5, 10, 20, 30, 50, 100];
+  currentPage = 1;
+  totalPages = 1;
+
+  columnDefs: ColDef[] = [
+
+    // ✅ CHECKBOX
+    {
+      colId: 'action',
+      headerCheckboxSelection: true,
+      headerCheckboxSelectionFilteredOnly: true,
+      checkboxSelection: () => true,
+      width: 45,
+      minWidth: 45,
+      maxWidth: 45,
+      pinned: 'left',
+      sortable: false,
+      filter: false
+    },
+
+    // ✅ DOWNLOAD
+    {
+      colId: 'download',
+      headerName: '',
+      width: 55,
+      minWidth: 55,
+      maxWidth: 55,
+      pinned: 'left',
+      sortable: false,
+      filter: false,
+      suppressSizeToFit: true,
+
+      tooltipValueGetter: () => 'Pdf Download',
+
+      cellRenderer: () => {
+        return `<img src="assets/download_enabled.svg"
+                     style="cursor:pointer;width:20px;height:20px;" />`;
+      },
+
+      onCellClicked: (params: any) => {
+        this.RequestEmployeeDownload(params.data);
+      }
+    },
+
+    // ======================
+    // DATA COLUMNS
+    // ======================
+
+    { field: 'serial_No', headerName: 'Sl No', width: 90,pinned: 'left', },
+
+    {
+      field: 'invoiceType',
+      headerName: 'Invoice Type',
+      width: 130,
+      pinned: 'left',
+      valueFormatter: (p: any) =>
+        p.value === 'Proforma' ? 'Draft' : p.value
+    },
+
+    { field: 'req_No', headerName: 'Request No', width: 120,pinned: 'left', },
+    { field: 'invoice_remarks', headerName: 'Invoice Remarks', width: 150 },
+    { field: 'company_Code', headerName: 'Company Code', width: 150 },
+    { field: 'company_Id', headerName: 'Company Id', width: 130 },
+    { field: 'pay_Period_Id', headerName: 'Pay Period Id', width: 140 },
+    { field: 'pay_Period', headerName: 'Pay Period', width: 140 },
+    { field: 'map_name', headerName: 'Map Name', width: 140 },
+    { field: 'map_Name_Id', headerName: 'Map Name Id', width: 140 },
+    { field: 'lotNo', headerName: 'Lot No.', width: 120 },
+    { field: 'net_CTC', headerName: 'Net CTC', width: 120 },
+    { field: 'netPay', headerName: 'Net Pay', width: 120 },
+    { field: 'input_No', headerName: 'Input No.', width: 120 },
+    { field: 'pO_Number', headerName: 'PO Number', width: 130 },
+    { field: 'employee_Head_Count', headerName: 'Head Count', width: 130 },
+    { field: 'service_Charge', headerName: 'Service Charge', width: 140 },
+    { field: 'serviceChargeAmount', headerName: 'Service Charge Amount', width: 170 },
+    { field: 'service_Charge_Master', headerName: 'Service Charge Master', width: 170 },
+    { field: 'service_Charge_Type', headerName: 'Service Charge Type', width: 170 },
+    { field: 'bgvbl', headerName: 'BGV Billing', width: 130 },
+    { field: 'astfee', headerName: 'Assignment Fee', width: 150 },
+    { field: 'discT1', headerName: 'Discount1', width: 120 },
+    { field: 'discT2', headerName: 'Discount2', width: 120 },
+    { field: 'idcard', headerName: 'ID Card Billing', width: 150 },
+    { field: 'email', headerName: 'Email Id', width: 180 },
+    { field: 'regfee', headerName: 'Registration Fee', width: 150 },
+    { field: 'trnfee', headerName: 'Trainer Fee', width: 140 },
+    { field: 'ggdbt', headerName: 'Govt Grants DBT', width: 160 },
+    { field: 'ppekit', headerName: 'PPE Kit', width: 120 },
+    { field: 'vmsfee', headerName: 'VMS Fee', width: 120 },
+    { field: 'edufee', headerName: 'Education Fee', width: 150 },
+    { field: 'ntpry', headerName: 'Notice Period Recovery', width: 200 },
+    { field: 'renmac', headerName: 'Laptop Rental', width: 150 },
+    { field: 'draded', headerName: 'DRA Deduction', width: 150 },
+    { field: 'othdd', headerName: 'Other Deduction', width: 150 },
+    { field: 'mbapp', headerName: 'Mobile Application Charge', width: 210 },
+    { field: 'calcrg', headerName: 'Call Charge', width: 130 },
+    { field: 'calrt', headerName: 'Call Rate', width: 120 },
+    { field: 'narration', headerName: 'Narration', width: 180 },
+    { field: 'data_From', headerName: 'Data From', width: 140 }
+  ];
+
+  private gridApi!: GridApi;
+
+  //AG grid
+
   constructor(@Inject(Invoice_TOKEN) private _invoiceService: IInvoiceRepository, private _decrypt: EncryptionService,
     private _sessionStoreage: SessionStorageService, private dialog: MatDialog) {
   }
@@ -131,6 +286,25 @@ export class DraftInvoiceComponent implements OnInit {
 
     this.dataSource.filter = filterValue;
   }
+
+  
+   //AG grid
+  onGridReady(params: GridReadyEvent) {
+    this.gridApi = params.api;
+    this.updatePaginationInfo();
+  }
+
+  onPaginationChanged(event: PaginationChangedEvent) {
+    this.updatePaginationInfo();
+  }
+
+  updatePaginationInfo() {
+    if (!this.gridApi) return;
+    this.currentPage = this.gridApi.paginationGetCurrentPage() + 1;
+    this.totalPages = this.gridApi.paginationGetTotalPages();
+  }
+
+  //AG Grid
 
   Invoiceintiate(): void {
 
@@ -251,7 +425,7 @@ export class DraftInvoiceComponent implements OnInit {
     FileSaver.saveAs(blob, fileName);
   }
 
-  
+
   downloadExcelFromBase64(base64: string, filename: string) {
     // this.isLoading=false;
     const source = `data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,${base64}`;
@@ -409,6 +583,7 @@ export class DraftInvoiceComponent implements OnInit {
     }
     this._invoiceService.InitialSearchAllot(request).subscribe({
       next: res => {
+        this.DraftInvoiceData = Array.isArray(res.Data) ? res.Data : [];
         this.dataSource = new MatTableDataSource<any>(Array.isArray(res.Data) ? res.Data : []);
         console.log('Grid Data', this.dataSource);
         this.dataSource.paginator = this.PeningLot_paginator;
