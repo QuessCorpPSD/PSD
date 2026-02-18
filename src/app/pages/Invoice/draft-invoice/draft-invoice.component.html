@@ -245,6 +245,14 @@
                 <th mat-header-cell *matHeaderCellDef> Call Rate</th>
                 <td mat-cell *matCellDef="let element">{{ element.calrt }}</td>
             </ng-container>
+             <ng-container matColumnDef="eapct">
+                <th mat-header-cell *matHeaderCellDef> EAPCOST </th>
+                <td mat-cell *matCellDef="let element">{{ element.eapct }}</td>
+            </ng-container>
+            <ng-container matColumnDef="hosac">
+                <th mat-header-cell *matHeaderCellDef> HOSTEL OR ACCOMONDATION</th>
+                <td mat-cell *matCellDef="let element">{{ element.hosac }}</td>
+            </ng-container>
             <ng-container matColumnDef="narration">
                 <th mat-header-cell *matHeaderCellDef style="width: 250px;">Narration </th>
                 <td mat-cell *matCellDef="let element" style="width: 250px;">

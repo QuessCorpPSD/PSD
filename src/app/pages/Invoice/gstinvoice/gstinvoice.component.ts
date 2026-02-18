@@ -404,6 +404,7 @@ export class GstinvoiceComponent {
       hasBackdrop: true,
       data: { example: 'Hello from parent!' }
     });
+   
   }
   editInvoice(invoiceId: number) {
     this.dialog.open(GstinvoiceaddComponent, {

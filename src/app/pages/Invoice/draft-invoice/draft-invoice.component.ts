@@ -73,7 +73,7 @@ export class DraftInvoiceComponent implements OnInit {
     { value: 'Provisional', Text: 'Provisional' }
   ];
   //@ViewChild(PayPeriod) PayPeriodComponent!: Payperiodclass;
-  displayColumns = ['action', 'download', 'serial_No', 'invoiceType', 'Req_No', 'invoice_remarks', 'company_Code', 'map_name', 'net_CTC', 'netPay', 'lotNo', 'input_No', 'pO_Number', 'employee_Head_Count', 'service_Charge', 'serviceChargeAmount', 'service_Charge_Master', 'service_Charge_Type', 'bgvbl', 'astfee', 'discT1', 'discT2', 'idcard', 'email', 'regfee', 'trnfee', 'ggdbt', 'ppekit', 'vmsfee', 'edufee', 'ntpry', 'renmac', 'draded', 'othdd', 'mbapp', 'calcrg', 'calrt', 'narration']
+  displayColumns = ['action', 'download', 'serial_No', 'invoiceType', 'Req_No', 'invoice_remarks', 'company_Code', 'map_name', 'net_CTC', 'netPay', 'lotNo', 'input_No', 'pO_Number', 'employee_Head_Count', 'service_Charge', 'serviceChargeAmount', 'service_Charge_Master', 'service_Charge_Type', 'bgvbl', 'astfee', 'discT1', 'discT2', 'idcard', 'email', 'regfee', 'trnfee', 'ggdbt', 'ppekit', 'vmsfee', 'edufee', 'ntpry', 'renmac', 'draded', 'othdd', 'mbapp', 'calcrg', 'calrt', 'narration', 'eapct', 'hosac']
   constructor(@Inject(Invoice_TOKEN) private _invoiceService: IInvoiceRepository, private _decrypt: EncryptionService,
     private _sessionStoreage: SessionStorageService, private dialog: MatDialog) {
   }
@@ -252,7 +252,7 @@ export class DraftInvoiceComponent implements OnInit {
     FileSaver.saveAs(blob, fileName);
   }
 
-  
+
   downloadExcelFromBase64(base64: string, filename: string) {
     // this.isLoading=false;
     const source = `data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,${base64}`;
@@ -286,7 +286,7 @@ export class DraftInvoiceComponent implements OnInit {
   //   })
   // }
 
-  InitiationSearchExport(element:any): void {
+  InitiationSearchExport(element: any): void {
 
     console.log('Selection', element);
     this.isLoading = true;
@@ -406,60 +406,31 @@ export class DraftInvoiceComponent implements OnInit {
         this.dataSource.paginator = this.PeningLot_paginator;
         this.issearch = false;
         this.isLoading = false;
-
       },
       error: err => { this.issearch = false; }
     });
   }
 
   ExportGridData() {
-    if (!this.dataSource.filteredData) {
-      this.InvoiceSearch();
+    this.isLoading = true;
+    const request = {
+      "InvoiceType": 0,
+      "ActionType": "E",
+      "userId": this.userdetail.user_Id
     }
-    else if (this.dataSource.filteredData) {
-      const selectedData = this.dataSource.filteredData.map(item => ({
-        Serial_No: item.serial_No,
-        Request_No: item.req_No,
-        InvoiceType: item.invoiceType === 'Proforma' ? 'Draft' : item.invoiceType,
-        Company_Code: item.company_Code,
-        Pay_Period: item.pay_Period,
-        Map_Name: item.map_name,
-        LotNo: item.lotNo,
-        Input_No: item.input_No,
-        Employee_Head_Count: item.employee_Head_Count,
-        PO_Number: item.pO_Number,
-        Net_CTC: item.net_CTC,
-        NetPay: item.netPay,
-        Service_Charge: item.service_Charge,
-        Service_Charge_Master: item.service_Charge_Master,
-        Service_Charge_Type: item.service_Charge_Type,
-        ServiceChargeAmount: item.serviceChargeAmount,
-        BGV_Billing: item.bgvbl,
-        Assignment_Fee: item.astfee,
-        Registration_Fee: item.regfee,
-        Training_Fee: item.trnfee,
-        Govt_Grants_Debit: item.ggdbt,
-        PPE_Kit: item.ppekit,
-        VMS_Fee: item.vmsfee,
-        Education_Fee: item.edufee,
-        Notice_Pay_Recovery: item.ntpry,
-        Discount1: item.discT1,
-        Discount2: item.discT2,
-        ID_Card_Billing: item.idcard,
-        Call_Charge: item.calcrg,
-        Call_Rate: item.calrt,
-        DRA_Deduction: item.draded,
-        Other_Deduction: item.othdd,
-        Mobile_Application_Charge: item.mbapp,
-        Invoice_Category: item.invoice_Category,
-        State_Name: item.state_name,
-        Initiation_Remarks: item.initiation_Remarks,
-        GL_Code: item.gL_Code,
-        Work_Order_Number: item.work_Order_Number,
-        Data_From: item.data_From
-      }));
-      this.downloadExcel(selectedData, 'DraftInvoice_Export');
-    }
+    this._invoiceService.DraftExporttoExcel(request).subscribe({
+      next: res => {
+        if (res.Data.file != "No") {
+          this.downloadExcelFromBase64(res.Data.file, res.Data.fileName)
+        }
+
+      },
+      error: err => {
+        console.log(err);
+        this.isLoading = false;
+      }
+    });
+
   }
 
   downloadExcel(data: any[], FileName: string): void {

@@ -94,6 +94,18 @@ export class InvoiceRepository implements IInvoiceRepository {
             .set('Accept', 'application/json')
         return this.http.post<APIResponse>(url, JSON.stringify(val), { headers });
     }
+
+    DraftExporttoExcel(val): Observable<APIResponse> {
+
+        const url = `${this.environment.apiUrl}InvoiceInitiation/DraftExporttoExcel`;
+        const headers = new HttpHeaders({
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        });
+        const config = new HttpHeaders().set('Content-Type', 'application/json')
+            .set('Accept', 'application/json')
+        return this.http.post<APIResponse>(url, JSON.stringify(val), { headers });
+    }
     InitiationSearchExport(IntiationExportRequest: any): Observable<APIResponse> {
 
         const url = `${this.environment.apiUrl}InvoiceInitiation/InitiationSearchExport`;
