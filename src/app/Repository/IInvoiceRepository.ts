@@ -20,7 +20,7 @@ export interface IInvoiceRepository {
     getNetDeductionType(): Observable<APIResponse>;
     addGstInvoice(payload: any): Observable<APIResponse>;
     GetAllInvoiceAllotDetails(payload: any) :Observable<APIResponse>;
-    GetAllInvoiceCancelDetails(val): Observable<APIResponse>;
+    GetAllInvoiceCancelDetails(): Observable<APIResponse>;
     BulkApproveInvoice(val): Observable<APIResponse>;
     BillingDashboard(user_Id): Observable<APIResponse>;
     DraftInvoiceEmployeeByRequestId(reqNo: number, invoiceType: string): Observable<APIResponse>;

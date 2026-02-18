@@ -380,22 +380,29 @@ export class GstinvoiceComponent {
   };
 
   AddGstInvoice() {
-    this.dialog.open(GstinvoiceaddComponent, {
+    const dialogRef =this.dialog.open(GstinvoiceaddComponent, {
       width: '95%',
       height: '90vh',
       disableClose: true,
       data: { example: 'Hello from parent!' }
     });
+    dialogRef.afterClosed().subscribe(() => {
+    this.BindDashBoard(this.userdetail.user_Id);
+  });
   }
  openRejectPage(): void {
- this.dialog.open(RejectGstInvoiceComponent, {
+  const dialogRef = this.dialog.open(RejectGstInvoiceComponent, {
       width: '95%',
       height: '90vh',
       disableClose: true,
        hasBackdrop: true,
       data: { example: 'Hello from parent!' }
     });
+    dialogRef.afterClosed().subscribe(() => {
+    this.BindDashBoard(this.userdetail.user_Id);
+  });
 }
+
 editInvoice(invoiceId: number) {
   this.dialog.open(GstinvoiceaddComponent, {
     width: '95%',
