@@ -13,14 +13,18 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatSort } from '@angular/material/sort';
 import { MatDialog, MatDialogRef, MatDialogModule } from '@angular/material/dialog';
 import { Invoicecancelgrid } from '../../../Models/Invoicecancelgrid';
-import { CompanyallComponent } from '../../../common/CompanyAll/companyall.component';
-import { PayPeriodComponent } from '../../../common/payperiod/payperiod.component';
 import { Payperiodclass } from '../../../Models/Common';
 import { InvoiceRepository } from '../../../Service/InvoiceRepository';
 import { EncryptionService } from '../../../Shared/encryption.service';
 import { SessionStorageService } from '../../../Shared/SessionStorageService';
 import { AlertpopupComponent } from '../../../common/alertpopup/alertpopup.component';
 import { finalize } from 'rxjs';
+import { MatTooltipModule } from '@angular/material/tooltip';
+
+interface IrnColor {
+  label: string,
+  color: string
+}
 @Component({
   selector: 'invoicecancel',
   standalone: true,
@@ -37,17 +41,19 @@ import { finalize } from 'rxjs';
     MatCardModule,
     MatRadioModule,
     MatDialogModule,
-    CompanyallComponent,
-    PayPeriodComponent,
     MatSort,
-    AlertpopupComponent
+    AlertpopupComponent,
+    MatTooltipModule
 
   ],
   templateUrl: './invoicecancel.component.html',
   styleUrls: ['./invoicecancel.component.css']
 })
-export class InvoiceCancelComponent implements OnInit, AfterViewInit {
 
+
+
+export class InvoiceCancelComponent implements OnInit, AfterViewInit {
+  IrnTypeItems: IrnColor[] = [];
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
@@ -68,13 +74,24 @@ export class InvoiceCancelComponent implements OnInit, AfterViewInit {
   popupMessage: string = "";
   popupSubMessage: string = "";
   showRemarksPopup = false;
+    searchText: string = '';
   remarkText?: string;
+    showPanel = false;
+     currentSelectItems: any[] = [];
+       gridData: any[] = [];
+         selectedTemplate: string = ''; 
+           template: string = "";
 
   displayedColumns: string[] = ['select'
-    , 'pdfdownload', 'docDownload', 'invoice_Number', 'invoice_Date', 'map_Name', 'state_Name', 'invoiceType', 'cgsT_Amount', 'sgsT_Amount', 'igsT_Amount', 'net_Amount', 'creditNote_Status', 'creditNoteNumber', 'cancelledOn'];
-  filterDisplayedColumns: string[] = [...this.displayedColumns];
+    , 'pdfdownload', 'docDownload', 'invoice_Number', 'invoice_Date', 'company_Code','pay_Period','map_Name', 'cgsT_Amount', 'sgsT_Amount', 'igsT_Amount', 'net_Amount', 'creditNote_Status', 'creditNoteNumber', 'cancelledOn','crn_IRN_Status','crn_IRN_Number'];
+    filterDisplayedColumns: string[] = [...this.displayedColumns];
   columnFilters: { [key: string]: string } = {};
   selection = new SelectionModel<Invoicecancelgrid>(true, []);
+ TemplateOptions = [
+    { value: 'requested', Text: 'Requested' },
+    { value: 'approved', Text: 'Approved' },
+    { value: 'rejected', Text: 'Rejected' }
+  ];
 
   constructor(
     private _invoiceService: InvoiceRepository,
@@ -89,24 +106,26 @@ export class InvoiceCancelComponent implements OnInit, AfterViewInit {
     );
   }
   ngOnInit(): void {
+
     const userdetail = this._sessionStoreage.getItem('UserProfile');
     this.userdetail = JSON.parse(this._decrypt.decrypt(userdetail!));
+    this.InvoiceSearch();
+     this.BindIRNColors();
+    this.dataSource.filterPredicate = (data: any, filter: string): boolean => {
+    const searchTerms = JSON.parse(filter);
 
-    this.dataSource.filterPredicate = (data: any, filter: string) => {
-      const filters = JSON.parse(filter);
+    return Object.keys(searchTerms).every(column => {
+      const filterValue = searchTerms[column];
+      const dataValue = data[column];
 
-      return Object.keys(filters).every(column => {
-        if (!filters[column]) return true;
+      if (!filterValue) return true;
 
-        const value = data[column];
-        if (!value) return false;
-
-        return value
-          .toString()
-          .toLowerCase()
-          .includes(filters[column]);
-      });
-    };
+      return dataValue
+        ?.toString()
+        .toLowerCase()
+        .includes(filterValue);
+    });
+  };
   }
 
   ngAfterViewInit() {
@@ -120,23 +139,6 @@ export class InvoiceCancelComponent implements OnInit, AfterViewInit {
 
   handlePayperiodEvent(payperiod: Payperiodclass) {
     this.payPeriod = payperiod;
-  }
-
-  applyFilter(event: Event, column: string) {
-    const value = (event.target as HTMLInputElement).value
-      .trim()
-      .toLowerCase();
-
-    this.columnFilters[column] = value;
-    this.dataSource.filter = JSON.stringify(this.columnFilters);
-  }
-  applyDateFilter(event: Event, column: string) {
-    const value = (event.target as HTMLInputElement).value
-      .trim()
-      .toLowerCase();
-
-    this.columnFilters[column] = value;
-    this.dataSource.filter = JSON.stringify(this.columnFilters);
   }
   isAllSelected() {
     const numSelected = this.selection.selected.length;
@@ -207,37 +209,38 @@ export class InvoiceCancelComponent implements OnInit, AfterViewInit {
 
     this._invoiceService.BulkApproveInvoice(payload).subscribe({
       next: (res: any) => {
-        if (res.Data[0].Status === "SUCCESS") {
-          this.popupMessage = 'Cancel Request Approved successfully';
-          this.showPopup = true;
-          const isSuccess =
-            res?.status === 'SUCCESS' ||
-            res?.statusCode === 200;
+        console.log(res);
+         this.isLoading = false;
+        if (res?.statusCode === 200 && res?.data?.status === 'SUCCESS') {
+      this.popupMessage = res?.Data[0]?.data?.message; // ✅ correct
+      this.showPopup = true;
 
-          if (isSuccess) {
-            this.selection.clear();
-            if (this.paginator) {
-              this.paginator.firstPage();
-            }
-            this.InvoiceSearch();
-          }
+      this.selection.clear();
 
-          this.isLoading = false;
-        }
-        else {
-          this.popupMessage = 'Cancel Request Failed';
-          this.popupSubMessage ='Note:' + res.Data[0].Error_Message;
-          this.showPopup = true;
-          this.isLoading = false;
-        }
-      },
-      error: (err) => {
-        alert(err?.error?.message || 'Something went wrong ❌');
-        this.isLoading = false;
+      if (this.paginator) {
+        this.paginator.firstPage();
       }
-    });
-  }
 
+      this.InvoiceSearch();
+    } else {
+      this.popupMessage =  res?.Data[0]?.data?.message||'Invoice Approved Successfully';
+      this.showPopup = true;
+       this.selection.clear();
+
+      if (this.paginator) {
+        this.paginator.firstPage();
+      }
+
+      this.InvoiceSearch();
+    }
+  },
+
+  error: (err) => {
+    this.isLoading = false;
+    alert(err?.error?.message || 'Something went wrong ❌');
+  }
+});
+  }
   invoiceReject() {
     this.isLoading = true;
 
@@ -303,19 +306,19 @@ export class InvoiceCancelComponent implements OnInit, AfterViewInit {
   }
 
   InvoiceSearch() {
-    if (!this.selectedCompanyId || !this.payPeriod) {
+    /*if (!this.selectedCompanyId || !this.payPeriod) {
       alert('Select Company and Pay Period');
       return;
-    }
+    }*/
 
     this.isLoading = true;
 
-    const request = {
+    /*const request = {
       Company_Id: this.selectedCompanyId,
       PayPeriod_Id: this.payPeriod.payfrequencyid
-    };
+    };*/
 
-    this._invoiceService.GetAllInvoiceCancelDetails(request).subscribe({
+    this._invoiceService.GetAllInvoiceCancelDetails().subscribe({
       next: (res: any) => {
         const apiData = Array.isArray(res?.Data?.data) ? res.Data.data : [];
         console.log(apiData);
@@ -461,5 +464,146 @@ export class InvoiceCancelComponent implements OnInit, AfterViewInit {
     downloadLink.click();
     this.isLoading = false;
   }
+  BindIRNColors() {
+    this._invoiceService.GetIRNColors().subscribe({
+      next: (res: any) => {
+        console.log(res);
+        this.IrnTypeItems = res.Data.data; // ✅ correct level
+      },
+      error: err => {
+        console.error(err);
+      }
+    });
+  }
+
+  onMouseEnter(error: any): void {
+    console.log('Triggered');
+    if (!error?.Invoice_Id) return;
+
+    if (Array.isArray(this.gridData) && this.gridData.length > 0) {
+      this.showPanel = true;
+      return;
+    }
+
+    this._invoiceService.GetEInvoiceErrorHover(error.Invoice_Id).subscribe({
+      next: res => {
+        console.log(res.Data);
+        const data = res.Data.data.Table0.map((item: any) => ({
+          Error_Code: item.Error_Code,
+          Error_Message: item.Error_Message,
+        }));
+        this.gridData = data;
+        this.showPanel = true;
+      }
+    });
+  }
+
+
+  onItemsMoved(event): void {
+    this.currentSelectItems = event.selected;
+  }
+
+
+    legendItems = [
+    { label: 'Pending', color: '#9E9E9E' },
+    { label: 'Requested', color: '#2196F3' },
+    //{ label: 'Processing', color: '#FF9800' },
+    { label: 'Generated', color: '#4CAF50' },
+    { label: 'Rejected', color: '#F44336' }
+
+  ];
+ 
+  getIRNStatusColor(row: any): string {
+
+    if (row.crn_IRN_Status == null) {
+      return '#f6c23e'; // Invoice Pending
+    }
+    if (row.crn_IRN_Status == "Requested") {
+      return '#36b9cc'; // Invoice Requested
+    }
+    if (row.crn_IRN_Status = "Generated") {
+      return '#1cc88a'; // Invoice Generated
+    }
+    if (row.crn_IRN_Status = "Processing") {
+      return '#4e73df'; // Invoice Generated
+    }
+    if (row.IRN_Status === 'Rejected') {
+      return '#e74a3b'; // Invoice Generated
+    }
+    return '#f6c23e';
+  }
+ downloadError(error) {
+    this._invoiceService.GetEInvoiceError(error.Invoice_Id).subscribe({
+      next: res => {
+        let files = res.Data;
+        if (files.file != "No") {
+          this.downloadExcelFromBase64(files.file, error.Invoice_Number);
+        }
+      },
+      error: err => { }
+    })
+  }
+ onTemplateChange(searchText: string = ''): void {
+
+    this.template = this.selectedTemplate;
+
+    const filterValue = `${this.template}|${searchText}`;
+
+    this.dataSource.filterPredicate = (data: any, filter: string): boolean => {
+
+      const [template, searchText = ''] = filter.split('|');
+      const searchValues = searchText
+        .toLowerCase()
+        .split(',')
+        .map(v => v.trim())
+        .filter(Boolean);
+
+
+      let templateMatch = true;
+
+      switch (template) {
+        case 'requested':
+          templateMatch = data.creditNote_Status == 'Requested';
+          break;
+
+        case 'approved':
+          templateMatch = data.creditNote_Status=='Approved';
+          break;
+
+        case 'rejected':
+          templateMatch = data.creditNote_Status=='Rejected';
+          break;
+      }
+
+      const textMatch =
+        searchValues.length === 0 ||
+        searchValues.some(search =>
+          Object.values(data).some(val =>
+            String(val).toLowerCase().includes(search)
+          )
+        );
+
+      return templateMatch && textMatch;
+    };
+
+    this.dataSource.filter = filterValue;
+  }
+  applyFilter(event: Event, column: string) {
+    const value = (event.target as HTMLInputElement).value
+      .trim()
+      .toLowerCase();
+
+    this.columnFilters[column] = value;
+    this.dataSource.filter = JSON.stringify(this.columnFilters);
+  }
+  applyDateFilter(event: Event, column: string) {
+    const value = (event.target as HTMLInputElement).value
+      .trim()
+      .toLowerCase();
+
+    this.columnFilters[column] = value;
+    this.dataSource.filter = JSON.stringify(this.columnFilters);
+  }
+
 
 }

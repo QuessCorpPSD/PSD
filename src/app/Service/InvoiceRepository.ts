@@ -214,18 +214,9 @@ export class InvoiceRepository implements IInvoiceRepository {
         const url = `${this.environment.apiUrl}GSTInvoice/Create`;
         return this.http.post<APIResponse>(url, payload);
     }
-
-
-    GetAllInvoiceCancelDetails(val): Observable<APIResponse> {
-
-        const url = `${this.environment.apiUrl}GSTInvoice/GetAllInvoiceCancelDetails`;
-        const headers = new HttpHeaders({
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-        });
-        const config = new HttpHeaders().set('Content-Type', 'application/json')
-            .set('Accept', 'application/json')
-        return this.http.post<APIResponse>(url, val, { headers });
+    
+ GetAllInvoiceCancelDetails(): Observable<APIResponse> {
+        return this.http.post<APIResponse>(this.environment.apiUrl + "GSTInvoice/GetAllInvoiceCancelDetails", {});
     }
 
     BulkApproveInvoice(val): Observable<APIResponse> {
