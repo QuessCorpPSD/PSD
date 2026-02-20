@@ -116,7 +116,7 @@
                         </mat-cell>
                     </ng-container>
                     <ng-container matColumnDef="pdfdownload">
-                        <mat-header-cell *matHeaderCellDef mat-sort-header class="fixed-width-column"></mat-header-cell>
+                        <mat-header-cell *matHeaderCellDef mat-sort-header class="fixed-width-column">Pdf</mat-header-cell>
                         <mat-cell *matCellDef="let element" class="fixed-width-column">
                             <img src="assets/download_enabled.svg"
                                 (click)="DownloadInvoice(element.invoice_Id, element.invoice_Number)"

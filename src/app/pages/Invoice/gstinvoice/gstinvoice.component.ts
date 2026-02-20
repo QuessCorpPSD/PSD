@@ -12,7 +12,7 @@ import { SelectionModel } from '@angular/cdk/collections';
 import * as XLSX from 'xlsx';
 import * as FileSaver from 'file-saver';
 import { IInvoiceRepository } from '../../../Repository/IInvoiceRepository';
-import { InvoiceRepository } from '../../../Service/InvoiceRepository';
+import { InvoiceRepository } from '../../../Service/InvoiceRepository'; 
 import { EncryptionService } from '../../../Shared/encryption.service';
 import { SessionStorageService } from '../../../Shared/SessionStorageService';
 import { GstInvoiceGrid } from '../../../Models/GSTInvoiceGrid';
@@ -31,7 +31,7 @@ export const Invoice_TOKEN = new InjectionToken<IInvoiceRepository>('Invoice_TOK
 @Component({
   selector: 'gstinvoice',
   standalone: true,
-  imports: [CommonModule, MatTableModule, MatTooltipModule, MatIconModule, MatCheckboxModule, MatPaginatorModule, MatSort, MatSelectModule, MatInputModule, MatFormFieldModule, ReactiveFormsModule, FormsModule, MatDatepickerModule, MatNativeDateModule],
+  imports: [CommonModule, MatTableModule,MatTooltipModule,MatIconModule , MatCheckboxModule, MatPaginatorModule, MatSort, MatSelectModule, MatInputModule, MatFormFieldModule, ReactiveFormsModule, FormsModule, MatDatepickerModule, MatNativeDateModule],
   templateUrl: './gstinvoice.component.html',
   styleUrl: './gstinvoice.component.css',
   providers: [{
@@ -64,10 +64,10 @@ export class GstinvoiceComponent {
 
   displayedColumns: string[] = [
     'select'
-    , 'edit'
+    ,'edit' 
     , 'pdfdownload'
     , 'invoice_Number'
-    , 'irN_Status'
+    ,'irN_Status'
     , 'invoice_Date'
     , 'company_Code'
     , 'pay_Period'
@@ -80,19 +80,19 @@ export class GstinvoiceComponent {
     , 'sap_Invoice_Number'
     , 'sap_Account_Number'
     , 'crn_Number'
-    , 'crn_IRN_Status'
-    , 'crn_IRN_Number'
+    ,'crn_IRN_Status'
+    ,'crn_IRN_Number'
     , 'sap_Cancel_Document'
     , 'sap_Credit_Note_Document'
   ];
 
   filterDisplayedColumns: string[] = [
     'filterselect'
-    , 'filteredit'
+    ,'filteredit'
     , 'filterpdfdownload'
     , 'filterinvoice_Number'
     , 'filterirn_Status'
-
+   
     , 'filterinvoice_Date'
     , 'filtercompany_Code'
     , 'filterpay_Period'
@@ -101,12 +101,12 @@ export class GstinvoiceComponent {
     , 'filterinvoiceType'
     , 'filternet_Amount'
     , 'filterstatus'
-    , 'filterIrn_Number'
+    ,'filterIrn_Number'
     , 'filtersap_Invoice_Number'
     , 'filtersap_Account_Number'
     , 'filtercrn_Number'
-    , 'filtercrn_IRN_Status'
-    , 'filtercrn_IRN_Number'
+    ,'filtercrn_IRN_Status'
+    ,'filtercrn_IRN_Number'
     , 'filtersap_Cancel_Document'
     , 'filtersap_Credit_Note_Document'
   ]
@@ -120,7 +120,7 @@ export class GstinvoiceComponent {
   @ViewChild(MatSort) sort!: MatSort;
 
   constructor(@Inject(Invoice_TOKEN) private _invoiceService: IInvoiceRepository, private _decrypt: EncryptionService,
-    private _sessionStoreage: SessionStorageService, private dialog: MatDialog,) {
+    private _sessionStoreage: SessionStorageService, private dialog: MatDialog, ) {
   }
 
   selection = new SelectionModel<GstInvoiceGrid>(true, []);
@@ -207,7 +207,7 @@ export class GstinvoiceComponent {
   }
 
   TemplateClick(): void {
-    const dataToExport = [
+      const dataToExport = [
       { 'Invoice_Number': '', 'Remarks': '', 'NewInvoiceNumber': '' },
     ]
     this.downloadExcel(dataToExport, "Template_" + this.selectedTemplate);
@@ -260,27 +260,27 @@ export class GstinvoiceComponent {
 
     const formData = new FormData();
     if (this.excelFile) {
-      formData.append('file', this.excelFile);
-      formData.append('userId', this.userdetail.user_Id);
+        formData.append('file', this.excelFile);
+        formData.append('userId', this.userdetail.user_Id);
 
-      this._invoiceService.UploadCancel(formData).subscribe({
-        next: (res: string) => {
-          const error_msg = res;
-          console.table(error_msg);
-          if (error_msg) {
-            alert(error_msg);
-            this.BindDashBoard(this.userdetail.user_Id);
-            this.isLoading = false;
-          } else {
-            alert("No validations returned");
+        this._invoiceService.UploadCancel(formData).subscribe({
+          next: (res: string) => {
+            const error_msg = res ;
+            console.table(error_msg);
+            if (error_msg) {
+              alert(error_msg);
+              this.BindDashBoard(this.userdetail.user_Id);
+              this.isLoading = false;
+            } else {
+              alert("No validations returned");
+              this.isLoading = false;
+            }
+          },
+          error: err => {
+            console.error('❌ Upload failed', err);
             this.isLoading = false;
           }
-        },
-        error: err => {
-          console.error('❌ Upload failed', err);
-          this.isLoading = false;
-        }
-      });
+        });
     }
     else {
       console.error('No Data');
@@ -293,20 +293,11 @@ export class GstinvoiceComponent {
   getTableColumns(): string[] {
     return this.excelPreviewData?.length ? Object.keys(this.excelPreviewData[0]) : [];
   }
-  DownloadInvoice(invoiceId: number, invoice_Number: string) {
+   DownloadInvoice(invoiceId: number, invoice_Number: string) {
     this.isLoading = true;
-    // const filteredSelected = this.selection.selected.filter((item: any) =>
-    //   this.dataSource.filteredData.includes(item)
-    // );
-    //const selectedInvoiceIds = invoiceId;
-
-    const BulkInvoices = {
-      invoiceIds: [invoiceId]
-    }
-    console.log(BulkInvoices);
-    this._invoiceService.BulkDownloadInvoice(BulkInvoices).subscribe(response => {
+    this._invoiceService.DownloadInvoice(invoiceId).subscribe(response => {
       const contentDisposition = response.headers.get('Content-Disposition');
-      let fileName = 'invoices.zip';
+      let fileName = 'Invoices.zip';
 
       // Extract file name from header
       if (contentDisposition) {
@@ -399,12 +390,12 @@ export class GstinvoiceComponent {
     this.BindDashBoard(this.userdetail.user_Id);
   });
   }
-  openRejectPage(): void {
-     const dialogRef = this.dialog.open(RejectGstInvoiceComponent, {
+ openRejectPage(): void {
+  const dialogRef = this.dialog.open(RejectGstInvoiceComponent, {
       width: '95%',
       height: '90vh',
       disableClose: true,
-      hasBackdrop: true,
+       hasBackdrop: true,
       data: { example: 'Hello from parent!' }
     });
     dialogRef.afterClosed().subscribe(() => {
@@ -426,23 +417,6 @@ editInvoice(invoiceId: number) {
 isEditDisabled(element: any): boolean {
   return element.irN_Status?.toLowerCase() !== 'pending';
 }
-    });
-   
-  }
-  editInvoice(invoiceId: number) {
-    this.dialog.open(GstinvoiceaddComponent, {
-      width: '95%',
-      height: '90vh',
-      disableClose: true,
-      data: {
-        mode: 'edit',
-        invoiceId: invoiceId
-      }
-    });
-  }
-  isEditDisabled(element: any): boolean {
-    return element.irN_Status?.toLowerCase() !== 'pending';
-  }
 }
 
 
