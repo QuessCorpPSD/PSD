@@ -83,7 +83,7 @@ export class InvoiceCancelComponent implements OnInit, AfterViewInit {
            template: string = "";
 
   displayedColumns: string[] = ['select'
-    , 'pdfdownload', 'docDownload', 'invoice_Number', 'invoice_Date', 'company_Code','pay_Period','map_Name', 'cgsT_Amount', 'sgsT_Amount', 'igsT_Amount', 'net_Amount', 'creditNote_Status', 'creditNoteNumber', 'cancelledOn','crn_IRN_Status','crn_IRN_Number'];
+    , 'pdfdownload', 'docDownload', 'invoice_Number', 'invoice_Date', 'company_Code','pay_Period','map_Name','amount', 'cgsT_Amount', 'sgsT_Amount', 'igsT_Amount', 'net_Amount', 'creditNote_Status', 'creditNoteNumber', 'cancelledOn','crn_IRN_Status','crn_IRN_Number','remarks'];
     filterDisplayedColumns: string[] = [...this.displayedColumns];
   columnFilters: { [key: string]: string } = {};
   selection = new SelectionModel<Invoicecancelgrid>(true, []);
