@@ -374,11 +374,14 @@ export class InvoiceCancelComponent implements OnInit, AfterViewInit {
     });
   }
 
-  DownloadInvoice(invoiceId: number, invoice_Number: string) {
+  DownloadInvoice(invoiceId: number, invoice_Number: string,creditNoteNumber:string) {
     this.isLoading = true;
     this._invoiceService.DownloadInvoice(invoiceId).subscribe(response => {
       const contentDisposition = response.headers.get('Content-Disposition');
-      let fileName = invoice_Number + '.pdf';
+      const fileNameBase = creditNoteNumber && creditNoteNumber.trim() !== ''
+        ? creditNoteNumber
+        : invoice_Number;
+      let fileName =  `${fileNameBase}.pdf`;
       if (contentDisposition) {
         const match = contentDisposition.match(/filename="?(.*?)"?$/);
         if (match && match.length > 1) fileName = match[1];
