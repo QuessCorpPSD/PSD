@@ -23,7 +23,8 @@ export interface IInvoiceRepository {
     GetAllInvoiceAllotDetails(payload: any) :Observable<APIResponse>;
     GetAllInvoiceCancelDetails(val): Observable<APIResponse>;
     BulkApproveInvoice(val): Observable<APIResponse>;
-    BillingDashboard(user_Id): Observable<APIResponse>;
+    BillingDashboard(user_Id, flag): Observable<APIResponse>;
+    BillingDashboardExport(user_Id, flag): Observable<APIResponse>;
     DraftInvoiceEmployeeByRequestId(reqNo: number, invoiceType: string): Observable<APIResponse>;
     //GetAllInvoiceDetails(companyId: number, payPeriodId: number,userId): Observable<APIResponse>;
     GetAllAttributeAddAndUpdate(val): Observable<APIResponse>;
