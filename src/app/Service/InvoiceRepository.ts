@@ -258,10 +258,17 @@ export class InvoiceRepository implements IInvoiceRepository {
         console.log(url);
         return this.http.post<APIResponse>(url, payload);
     }
-    BillingDashboard(user_Id): Observable<APIResponse> {
+    BillingDashboard(user_Id, flag): Observable<APIResponse> {
 
         return this.http.get<APIResponse>(
-            this.environment.apiUrl + 'Invoice/BillingDashboardByUserId/' + user_Id
+            this.environment.apiUrl + 'Invoice/BillingDashboardByUserId/' + user_Id + '/' + flag
+        );
+    }
+
+    BillingDashboardExport(user_Id, flag): Observable<APIResponse> {
+
+        return this.http.get<APIResponse>(
+            this.environment.apiUrl + 'Invoice/BillingDashboardExport/' + user_Id + '/' + flag
         );
     }
     DraftInvoiceEmployeeByRequestId(reqNo: number, invoiceType: string): Observable<APIResponse> {

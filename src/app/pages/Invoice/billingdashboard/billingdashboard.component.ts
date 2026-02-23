@@ -20,25 +20,26 @@ export const DASH_TOKEN = new InjectionToken<IDashBoardServices>('DASH_TOKEN');
 export const AUTH_TOKEN = new InjectionToken<IAssignmentService>('AUTH_TOKEN');
 export const Invoice_TOKEN = new InjectionToken<IInvoiceRepository>('Invoice_TOKEN');
 import * as XLSX from 'xlsx';
+import { finalize } from 'rxjs';
 @Component({
   selector: 'app-billingdashboard',
-  imports: [MatPaginatorModule,CommonModule,UserComponent,MatTableModule,MatCardModule,MatTooltipModule,MatCheckboxModule],
+  imports: [MatPaginatorModule, CommonModule, UserComponent, MatTableModule, MatCardModule, MatTooltipModule, MatCheckboxModule],
   templateUrl: './billingdashboard.component.html',
   styleUrl: './billingdashboard.component.css',
-  providers:[
+  providers: [
     {
-        provide: DASH_TOKEN,
-        useClass: DashBoardServices,
-      },
-    
-      {
-        provide: Invoice_TOKEN,
-        useClass: InvoiceRepository,
-      }
+      provide: DASH_TOKEN,
+      useClass: DashBoardServices,
+    },
+
+    {
+      provide: Invoice_TOKEN,
+      useClass: InvoiceRepository,
+    }
   ]
 })
 export class BillingdashboardComponent implements OnInit {
- userList: any;
+  userList: any;
   AllotedTo?: number;
   InvoiceAlloted: any;
   iseditClicked = false;
@@ -46,6 +47,7 @@ export class BillingdashboardComponent implements OnInit {
   reqNo: string = '';
   user: any;
   selection = new SelectionModel<any>(true, []);
+  isLoading = false;
   @ViewChild('InvoiceAlotPaginator') InvoiceAlot_paginator!: MatPaginator;
   constructor(@Inject(DASH_TOKEN) private dashService: IDashBoardServices, @Inject(Invoice_TOKEN) private _invoiceService: IInvoiceRepository,
     private _decrypt: EncryptionService,
@@ -67,31 +69,50 @@ export class BillingdashboardComponent implements OnInit {
     this.userdetail = JSON.parse(this._decrypt.decrypt(userdetail!));
     this.BindInvoiceAllot();
   }
-    onExportInvoice() {
-      const request = {
-        "InvoiceType": 0,
-        "ActionType": "E",
-        "userId": this.userdetail.user_Id
-      }
-      console.log(request);
-      this._invoiceService.GetAllInvoiceAllotDetails(request).subscribe({
+  onExportInvoice() {
+    this.isLoading=true;
+    const loggedInUser = [263, 3].includes(this.userdetail.user_Id)  ? 0  : this.userdetail.user_Id;
+    const flag = "Export";
+    console.log(loggedInUser)
+    this._invoiceService.BillingDashboardExport(loggedInUser, flag)
+      .pipe(
+        finalize(() => this.isLoading = false)
+      )
+      .subscribe({
         next: res => {
-          console.log(res.Data.data);
-          const ws = XLSX.utils.json_to_sheet(res.Data.data);
-          const wb = XLSX.utils.book_new();
-          XLSX.utils.book_append_sheet(wb, ws, "Table");
-          XLSX.writeFile(wb, "InvoiceAllotExport.xlsx");
+          console.log(res);
+          if (res.StatusCode === 200) {
+            const data = res.Data;
+            var base64 = data.file;
+            this.downloadExcelFromBase64(base64, data.fileName);
+          } else {
+            console.error('Unexpected status code', res.StatusCode);
+          }
         },
-        error: err => { }
+        error: error => {
+          console.error('Error:', error);
+          this.isLoading = false;
+        }
       });
-    }
+  }
+
+    downloadExcelFromBase64(base64: string, filename: string) {
+    const source = `data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,${base64}`;
+    const downloadLink = document.createElement('a');
+    downloadLink.href = source;
+    downloadLink.download = filename;
+    downloadLink.click();
+    this.isLoading = false;
+  }
+
+  
   BindInvoiceAllot() {
     console.log('BindInvoiceAllot');
     console.log(this.userdetail)
-   
- const loggedInUser =  this.userdetail.user_Id === 263 ? 0 : this.userdetail.user_Id;
- console.log(loggedInUser)
-    this._invoiceService.BillingDashboard(loggedInUser).subscribe({
+
+    const loggedInUser = [263, 3].includes(this.userdetail.user_Id)  ? 0  : this.userdetail.user_Id;
+    console.log(loggedInUser)
+    this._invoiceService.BillingDashboard(loggedInUser, 'Search').subscribe({
       next: res => {
         console.log(res.Data);
         this.InvoiceAlloted = new MatTableDataSource<any>(Array.isArray(res.Data) ? res.Data : []);
