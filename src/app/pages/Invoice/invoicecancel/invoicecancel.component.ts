@@ -83,7 +83,7 @@ export class InvoiceCancelComponent implements OnInit, AfterViewInit {
            template: string = "";
 
   displayedColumns: string[] = ['select'
-    , 'pdfdownload', 'docDownload', 'invoice_Number', 'invoice_Date', 'company_Code','pay_Period','map_Name', 'cgsT_Amount', 'sgsT_Amount', 'igsT_Amount', 'net_Amount', 'creditNote_Status', 'creditNoteNumber', 'cancelledOn','crn_IRN_Status','crn_IRN_Number'];
+    , 'pdfdownload', 'docDownload', 'invoice_Number', 'invoice_Date', 'company_Code','pay_Period','map_Name','amount', 'cgsT_Amount', 'sgsT_Amount', 'igsT_Amount', 'net_Amount', 'creditNote_Status', 'creditNoteNumber', 'cancelledOn','crn_IRN_Status','crn_IRN_Number','remarks'];
     filterDisplayedColumns: string[] = [...this.displayedColumns];
   columnFilters: { [key: string]: string } = {};
   selection = new SelectionModel<Invoicecancelgrid>(true, []);
@@ -374,11 +374,14 @@ export class InvoiceCancelComponent implements OnInit, AfterViewInit {
     });
   }
 
-  DownloadInvoice(invoiceId: number, invoice_Number: string) {
+  DownloadInvoice(invoiceId: number, invoice_Number: string,creditNoteNumber:string) {
     this.isLoading = true;
     this._invoiceService.DownloadInvoice(invoiceId).subscribe(response => {
       const contentDisposition = response.headers.get('Content-Disposition');
-      let fileName = invoice_Number + '.pdf';
+      const fileNameBase = creditNoteNumber && creditNoteNumber.trim() !== ''
+        ? creditNoteNumber
+        : invoice_Number;
+      let fileName =  `${fileNameBase}.pdf`;
       if (contentDisposition) {
         const match = contentDisposition.match(/filename="?(.*?)"?$/);
         if (match && match.length > 1) fileName = match[1];
