@@ -168,15 +168,27 @@ export class GstinvoiceComponent {
     this.userdetail = JSON.parse(this._decrypt.decrypt(userdetail!));
     this.BindDashBoard(this.userdetail.user_Id);
   }
-  applyFilter(event: Event, column: string) {
-    const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
+ applyFilter(event: Event, column: string) {
+  const inputValue = (event.target as HTMLInputElement).value || '';
 
-    this.dataSource.filterPredicate = (data: any, filter: string) => {
-      return data[column]?.toString().toLowerCase().includes(filter);
-    };
+  // Split comma-separated invoice numbers
+  const searchValues = inputValue
+    .split(',')
+    .map(v => v.trim().toLowerCase())
+    .filter(v => v);
 
-    this.dataSource.filter = filterValue;
-  }
+  this.dataSource.filterPredicate = (data: any, filter: string) => {
+    if (!searchValues.length) return true;
+
+    const cellValue = data[column]?.toString().toLowerCase() || '';
+
+    // Match ANY invoice number
+    return searchValues.some(val => cellValue.includes(val));
+  };
+
+  // Trigger filtering
+  this.dataSource.filter = searchValues.join(',');
+}
   BindDashBoard(userId: number) {
     this._invoiceService.GetGSTInvoice(userId).subscribe({
       next: res => {
@@ -357,27 +369,38 @@ export class GstinvoiceComponent {
     });
   }
 
-  applyDateFilter(event: any, column: string) {
-    const filterValue = event.target.value.trim().toLowerCase();
+applyDateFilter(event: any, column: string) {
+  const inputValue = event.target.value || '';
 
-    this.dataSource.filterPredicate = (data: any, filter: string) => {
-      if (!filter) return true;
+  // Split comma-separated date values
+  const searchDates = inputValue
+    .split(',')
+    .map(v => v.trim().toLowerCase())
+    .filter(v => v);
 
-      const rowDate = new Date(data[column]);
-      if (isNaN(rowDate.getTime())) return false;
+  this.dataSource.filterPredicate = (data: any, filter: string) => {
+    if (!searchDates.length) return true;
 
-      // Convert row date → dd MMM yyyy
-      const formattedRowDate = rowDate.toLocaleDateString('en-GB', {
+    const rowDate = new Date(data[column]);
+    if (isNaN(rowDate.getTime())) return false;
+
+    // Convert row date → dd MMM yyyy
+    const formattedRowDate = rowDate
+      .toLocaleDateString('en-GB', {
         day: '2-digit',
         month: 'short',
         year: 'numeric'
-      }).replace(',', '').toLowerCase();
+      })
+      .replace(',', '')
+      .toLowerCase();
 
-      return formattedRowDate.includes(filter);
-    };
-
-    this.dataSource.filter = filterValue;
+    // Match ANY date from comma-separated input
+    return searchDates.some(date => formattedRowDate.includes(date));
   };
+
+  // Trigger filter refresh
+  this.dataSource.filter = searchDates.join(',');
+}
 
   AddGstInvoice() {
     const dialogRef =this.dialog.open(GstinvoiceaddComponent, {

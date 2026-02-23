@@ -185,6 +185,9 @@
                         </ng-container>
                         <ng-container matColumnDef="filterirn_Status">
                             <mat-header-cell *matHeaderCellDef>
+                                 <input style="width:100%;" class="form-control form-control-sm" placeholder="Search"
+                                    (keyup)="applyFilter($event, 'irN_Status')">
+                    
                             </mat-header-cell>
                         </ng-container>
                         <ng-container matColumnDef="filtersap_Invoice_Number">
@@ -254,8 +257,6 @@
                         </ng-container>
                         <ng-container matColumnDef="filtercrn_Number">
                             <mat-header-cell *matHeaderCellDef>
-                                <input style="width:100%;" class="form-control form-control-sm" placeholder="Search"
-                                    (keyup)="applyFilter($event, 'crn_Number')">
                             </mat-header-cell>
                         </ng-container>
                          <ng-container matColumnDef="filtercrn_IRN_Status">

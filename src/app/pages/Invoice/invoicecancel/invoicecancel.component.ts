@@ -591,22 +591,66 @@ export class InvoiceCancelComponent implements OnInit, AfterViewInit {
 
     this.dataSource.filter = filterValue;
   }
-  applyFilter(event: Event, column: string) {
+ /* applyFilter(event: Event, column: string) {
     const value = (event.target as HTMLInputElement).value
       .trim()
       .toLowerCase();
 
     this.columnFilters[column] = value;
     this.dataSource.filter = JSON.stringify(this.columnFilters);
-  }
-  applyDateFilter(event: Event, column: string) {
-    const value = (event.target as HTMLInputElement).value
-      .trim()
+  }*/
+ applyFilter(event: Event, column: string) {
+  const inputValue = (event.target as HTMLInputElement).value || '';
+
+  // Split comma-separated invoice numbers
+  const searchValues = inputValue
+    .split(',')
+    .map(v => v.trim().toLowerCase())
+    .filter(v => v);
+
+  this.dataSource.filterPredicate = (data: any, filter: string) => {
+    if (!searchValues.length) return true;
+
+    const cellValue = data[column]?.toString().toLowerCase() || '';
+
+    // Match ANY invoice number
+    return searchValues.some(val => cellValue.includes(val));
+  };
+
+  // Trigger filtering
+  this.dataSource.filter = searchValues.join(',');
+}
+ applyDateFilter(event: any, column: string) {
+  const inputValue = event.target.value || '';
+
+  // Split comma-separated date values
+  const searchDates = inputValue
+    .split(',')
+    .map(v => v.trim().toLowerCase())
+    .filter(v => v);
+
+  this.dataSource.filterPredicate = (data: any, filter: string) => {
+    if (!searchDates.length) return true;
+
+    const rowDate = new Date(data[column]);
+    if (isNaN(rowDate.getTime())) return false;
+
+    // Convert row date → dd MMM yyyy
+    const formattedRowDate = rowDate
+      .toLocaleDateString('en-GB', {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric'
+      })
+      .replace(',', '')
       .toLowerCase();
 
-    this.columnFilters[column] = value;
-    this.dataSource.filter = JSON.stringify(this.columnFilters);
-  }
+    // Match ANY date from comma-separated input
+    return searchDates.some(date => formattedRowDate.includes(date));
+  };
 
+  // Trigger filter refresh
+  this.dataSource.filter = searchDates.join(',');
+}
 
 }
