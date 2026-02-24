@@ -383,7 +383,7 @@ export const routes: Routes = [
           { path: 'billingpayfrequency', component: BillingpayfrequencyComponent },          
           { path: 'poinitiate', component: POInitiateComponent },
            {path:'IRN',component:EInvoiceComponent},
-          { path: 'app-invoice-culture', component: InvoiceCultureComponent },
+          { path: 'app-invoice-culture', component: OtherincomeComponent },
           { path: 'ClientBillableReportDatewise', component: ClientbillablereportsdatewiseComponent },
           //{ path: 'creditnote', component: CreditnoteComponent },
          // { path: 'creditnoteapprove', component: CreditnoteapproveComponent },
