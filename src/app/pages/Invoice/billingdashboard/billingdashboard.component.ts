@@ -19,11 +19,12 @@ import { CommonModule } from '@angular/common';
 export const DASH_TOKEN = new InjectionToken<IDashBoardServices>('DASH_TOKEN');
 export const AUTH_TOKEN = new InjectionToken<IAssignmentService>('AUTH_TOKEN');
 export const Invoice_TOKEN = new InjectionToken<IInvoiceRepository>('Invoice_TOKEN');
+import { FormsModule } from '@angular/forms';
 import * as XLSX from 'xlsx';
 import { finalize } from 'rxjs';
 @Component({
   selector: 'app-billingdashboard',
-  imports: [MatPaginatorModule, CommonModule, UserComponent, MatTableModule, MatCardModule, MatTooltipModule, MatCheckboxModule],
+  imports: [MatPaginatorModule, CommonModule, UserComponent, MatTableModule, MatCardModule, MatTooltipModule, MatCheckboxModule,FormsModule],
   templateUrl: './billingdashboard.component.html',
   styleUrl: './billingdashboard.component.css',
   providers: [
@@ -48,11 +49,14 @@ export class BillingdashboardComponent implements OnInit {
   user: any;
   selection = new SelectionModel<any>(true, []);
   isLoading = false;
+  searchText: string = '';
+  selectedTemplate: string = '';
+  template: string = "";
   @ViewChild('InvoiceAlotPaginator') InvoiceAlot_paginator!: MatPaginator;
   constructor(@Inject(DASH_TOKEN) private dashService: IDashBoardServices, @Inject(Invoice_TOKEN) private _invoiceService: IInvoiceRepository,
     private _decrypt: EncryptionService,
     private _sessionStoreage: SessionStorageService) { }
-  displayedInvoiceColumns: string[] = ['edit'
+  displayedInvoiceColumns: string[] = ['edit','status'
     , 'Req_No'
     , 'RequestDatetime'
     , 'Company_Code'
@@ -64,14 +68,66 @@ export class BillingdashboardComponent implements OnInit {
     , 'AllocationDatetime'
     , 'Invoice_Created_Date'
   ]
+  TemplateOptions = [
+    { value: 'Not Allotted', Text: 'Not Allotted' },
+    { value: 'Pending', Text: 'Pending' },
+    { value: 'Completed', Text: 'Completed' }
+  ];
   ngOnInit(): void {
     const userdetail = this._sessionStoreage.getItem('UserProfile');
     this.userdetail = JSON.parse(this._decrypt.decrypt(userdetail!));
     this.BindInvoiceAllot();
   }
+  
+  onTemplateChange(searchText: string = ''): void {
+
+    this.template = this.selectedTemplate;
+
+    const filterValue = `${this.template}|${searchText}`;
+
+    this.InvoiceAlloted.filterPredicate = (data: any, filter: string): boolean => {
+
+      const [template, searchText = ''] = filter.split('|');
+      const searchValues = searchText
+        .toLowerCase()
+        .split(',')
+        .map(v => v.trim())
+        .filter(Boolean);
+
+
+      let templateMatch = true;
+      console.log('Selected', template);
+      switch (template) {
+        case 'Not Allotted':
+          templateMatch = data.status == 'Not Allotted';
+          break;
+
+        case 'Pending':
+          templateMatch = data.status == 'Pending';
+          break;
+
+        case 'Completed':
+          templateMatch = data.status == 'Completed';
+          break;
+      }
+
+      const textMatch =
+        searchValues.length === 0 ||
+        searchValues.some(search =>
+          Object.values(data).some(val =>
+            String(val).toLowerCase().includes(search)
+          )
+        );
+
+      return templateMatch && textMatch;
+    };
+
+    this.InvoiceAlloted.filter = filterValue;
+  }
+
   onExportInvoice() {
-    this.isLoading=true;
-    const loggedInUser = [263, 3].includes(this.userdetail.user_Id)  ? 0  : this.userdetail.user_Id;
+    this.isLoading = true;
+    const loggedInUser = [263, 3].includes(this.userdetail.user_Id) ? 0 : this.userdetail.user_Id;
     const flag = "Export";
     
     this._invoiceService.BillingDashboardExport(loggedInUser, flag)
@@ -80,7 +136,7 @@ export class BillingdashboardComponent implements OnInit {
       )
       .subscribe({
         next: res => {
-          console.log(res);
+          //console.log(res);
           if (res.StatusCode === 200) {
             const data = res.Data;
             var base64 = data.file;
@@ -96,7 +152,12 @@ export class BillingdashboardComponent implements OnInit {
       });
   }
 
-    downloadExcelFromBase64(base64: string, filename: string) {
+  applyFilter(searchText: string = '') {
+
+    this.onTemplateChange(searchText);
+  }
+
+  downloadExcelFromBase64(base64: string, filename: string) {
     const source = `data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,${base64}`;
     const downloadLink = document.createElement('a');
     downloadLink.href = source;
