@@ -73,7 +73,7 @@ export class BillingdashboardComponent implements OnInit {
     this.isLoading=true;
     const loggedInUser = [263, 3].includes(this.userdetail.user_Id)  ? 0  : this.userdetail.user_Id;
     const flag = "Export";
-    console.log(loggedInUser)
+    
     this._invoiceService.BillingDashboardExport(loggedInUser, flag)
       .pipe(
         finalize(() => this.isLoading = false)
@@ -106,15 +106,14 @@ export class BillingdashboardComponent implements OnInit {
   }
 
   
-  BindInvoiceAllot() {
-    console.log('BindInvoiceAllot');
-    console.log(this.userdetail)
+  BindInvoiceAllot() {   
+    
 
     const loggedInUser = [263, 3].includes(this.userdetail.user_Id)  ? 0  : this.userdetail.user_Id;
-    console.log(loggedInUser)
+    
     this._invoiceService.BillingDashboard(loggedInUser, 'Search').subscribe({
       next: res => {
-        console.log(res.Data);
+        
         this.InvoiceAlloted = new MatTableDataSource<any>(Array.isArray(res.Data) ? res.Data : []);
         this.InvoiceAlloted.paginator = this.InvoiceAlot_paginator;
       },
@@ -123,7 +122,7 @@ export class BillingdashboardComponent implements OnInit {
   }
   handleuserEvent(user: any) {
     this.user = user;
-    console.log(this.user);
+    
   }
   isAllSelected() {
     const numSelected = this.selection.selected.length;
@@ -168,7 +167,7 @@ export class BillingdashboardComponent implements OnInit {
       next: res => {
         const error = res.Data;
         const message = error?.[0]?.[""];
-        console.log(message);
+        
 
         if (message === 'Updated successfully') {
           alert('Updated successfully');

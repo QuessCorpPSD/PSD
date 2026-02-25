@@ -91,6 +91,7 @@ displayedPeningColumns: string[] =  ['companyShortName','lot_Number',
     showOverduePanel = false;
     showInprogressPanel = false;
     showNotAssignmentPanel = false;
+    showProcessAssignmentPanel=false;
     gridData:any;
     rowData:any;
      modules = [AllCommunityModule];
@@ -249,13 +250,14 @@ constructor(@Inject(DASH_TOKEN) private dashService: IDashBoardServices,
     }
   };
 
-onMouseEnter(assignmentType: 'T' | 'C' | 'O' | 'I' | 'N'):void{
+onMouseEnter(assignmentType: 'T' | 'C' | 'O' | 'I' | 'N'|'P'):void{
   this.BindDashBoard();
   this.showPanel = false;
   this.showCompletedPanel = false;
   this.showOverduePanel = false;
   this.showInprogressPanel = false;
   this.showNotAssignmentPanel = false;
+  this.showProcessAssignmentPanel = false;
   switch (assignmentType) {
     case 'T':
       this.showPanel = true;
@@ -271,6 +273,9 @@ onMouseEnter(assignmentType: 'T' | 'C' | 'O' | 'I' | 'N'):void{
       break;
     case 'N':
       this.showNotAssignmentPanel = true;
+      break;
+       case 'P':
+      this.showProcessAssignmentPanel = true;
       break;
   }
   this.dashService.getCategoryLotDetail(assignmentType).subscribe({
@@ -476,7 +481,7 @@ BindDashboardDetail(val){
   BindDashBoard()
   {
     this.dashService.getadmindashboard().subscribe({
-      next:res=>{this.carddashboard=res.Data;},
+      next:res=>{this.carddashboard=res.Data;console.log(res.Data)},
       error:err=>{console.log(err.message)}
     })
   }

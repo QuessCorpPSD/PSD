@@ -204,7 +204,8 @@ export class InvoiceCancelComponent implements OnInit, AfterViewInit {
 
     const payload = {
       invoice_Id: selectedInvoiceIds,
-      remarks: this.remarkText
+      remarks: this.remarkText,
+      userId: this.userdetail.user_Id
     };
 
     this._invoiceService.BulkApproveInvoice(payload).subscribe({
@@ -255,7 +256,7 @@ export class InvoiceCancelComponent implements OnInit, AfterViewInit {
       this.isLoading = false;
       return;
     }
-    console.log(this.remarkText);
+    
     if (!this.remarkText || this.remarkText == "") {
       alert("Remarks Mandatory for Reject");
       this.isLoading = false;
@@ -269,9 +270,10 @@ export class InvoiceCancelComponent implements OnInit, AfterViewInit {
 
     const payload = {
       invoice_Id: selectedInvoiceIds,
-      remarks: this.remarkText
+      remarks: this.remarkText,
+      userId: this.userdetail.user_Id
     };
-    console.log('Reject Payload', payload);
+    
     this._invoiceService.BulkRejectCancelRequest(payload).subscribe({
       next: (res: any) => {
         if (res.Data[0].Status === "SUCCESS") {
