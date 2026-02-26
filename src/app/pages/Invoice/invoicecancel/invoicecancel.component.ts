@@ -205,9 +205,8 @@ export class InvoiceCancelComponent implements OnInit, AfterViewInit {
     const payload = {
       invoice_Id: selectedInvoiceIds,
       remarks: this.remarkText,
-      userId: this.userdetail.user_Id
+      userId: String(this.userdetail.user_Id)
     };
-
     this._invoiceService.BulkApproveInvoice(payload).subscribe({
       next: (res: any) => {
         console.log(res);
@@ -271,7 +270,7 @@ export class InvoiceCancelComponent implements OnInit, AfterViewInit {
     const payload = {
       invoice_Id: selectedInvoiceIds,
       remarks: this.remarkText,
-      userId: this.userdetail.user_Id
+      userId: String(this.userdetail.user_Id)
     };
     
     this._invoiceService.BulkRejectCancelRequest(payload).subscribe({
