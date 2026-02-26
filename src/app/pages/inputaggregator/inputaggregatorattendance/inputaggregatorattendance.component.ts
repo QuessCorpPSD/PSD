@@ -1,18 +1,18 @@
 import { CommonModule } from '@angular/common';
-import { Component, HostListener, Inject, InjectionToken } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { CompanyallComponent } from "../../../common/CompanyAll/companyall.component";
-import { InputaggregatorService } from '../../../Service/inputaggregator/inputaggregator.service';
-import { IInputaggregator } from '../../../Repository/Inputaggregator/Iinputaggregator';
+import { Component, Inject, InjectionToken, TrackByFunction } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatIconModule } from '@angular/material/icon';
+import { CompanyallComponent } from '../../../common/CompanyAll/companyall.component';
+import { PayPeriodComponent } from '../../../common/payperiod/payperiod.component';
+import { Company, Payperiodclass } from '../../../Models/Common';
 import { EncryptionService } from '../../../Shared/encryption.service';
 import { SessionStorageService } from '../../../Shared/SessionStorageService';
+import { finalize } from 'rxjs';
+import { IInputaggregator } from '../../../Repository/Inputaggregator/Iinputaggregator';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
-import { finalize } from 'rxjs';
-import { MatIcon, MatIconModule } from "@angular/material/icon";
-import { PayPeriodComponent } from "../../../common/payperiod/payperiod.component";
-import { Company, Payperiodclass } from '../../../Models/Common';
-export const Pay_TOKEN = new InjectionToken<IInputaggregator>('Pay_TOKEN');
+import { InputaggregatorService } from '../../../Service/inputaggregator/inputaggregator.service';
+// export const Pay_TOKEN = new InjectionToken<IInputaggregator>('Pay_TOKEN');
 
 interface ClientAttribute {
   Client_Attribute_Id: number;
@@ -31,20 +31,19 @@ interface QuessAttribute {
   Quess_Template_Field_Name: string;
   IsActive: boolean;
 }
-
 @Component({
-  selector: 'app-inputaggregatorwithclient',
-  imports: [CommonModule, FormsModule, CompanyallComponent, MatIconModule, PayPeriodComponent],
-  templateUrl: './inputaggregatorwithclient.component.html',
-  styleUrl: './inputaggregatorwithclient.component.css',
-  providers: [
-    {
-      provide: Pay_TOKEN,
-      useClass: InputaggregatorService,
-    }
-  ]
+  selector: 'app-inputaggregatorattendance',
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, CompanyallComponent, MatIconModule, PayPeriodComponent],
+  templateUrl: './inputaggregatorattendance.component.html',
+  styleUrl: './inputaggregatorattendance.component.css'
+  // providers: [
+  //   {
+  //     provide: Pay_TOKEN,
+  //     useClass: InputaggregatorService,
+  //   }
+  // ]
 })
-export class InputaggregatorwithclientComponent {
+export class InputaggregatorattendanceComponent {
   mapname: any;
   userdetail: any;
   sitename: any;
@@ -56,17 +55,11 @@ export class InputaggregatorwithclientComponent {
   payperiodId: any;
   payperiods: any;
   payPeriodType: any;
-  selectedInputType: string = 'Billing';
-  billingAttributes: any[] = [];
-  attendanceAttributes: any[] = [];
-
-  filteredBillingAttributes: any[] = [];
-  filteredAttendanceAttributes: any[] = [];
-  inputTypes: string[] = ['Attendance', 'Billing'];
-  quessAttendanceAttributes: QuessAttribute[] = [];
   Attendancesearch: any[] = [];
-
-  constructor(@Inject(Pay_TOKEN) private service: IInputaggregator,
+  payPeriodmain!: Payperiodclass;
+  payperiodIdmain: any;
+  payperiodsmain: any;
+  constructor(private service: InputaggregatorService,
     private decry: EncryptionService, private _sessionStoreage: SessionStorageService) {
 
   }
@@ -90,20 +83,22 @@ export class InputaggregatorwithclientComponent {
   selectedCompanyCode: any;
   showInfoPopup = false;
   showreportPopup = false;
+
   isDropdownOpen = false;
 
   toggleDropdown(event: Event) {
-    event.stopPropagation();
+    event.stopPropagation(); // VERY IMPORTANT
     this.isDropdownOpen = !this.isDropdownOpen;
   }
 
-  selectOption(type: string, fileInput5: any) {
+  selectOption(type: string, fileInput2: HTMLInputElement) {
     this.isDropdownOpen = false;
 
     console.log(type + ' selected');
-
-    fileInput5.click(); // open file picker
+    this.ImportClickclient(fileInput2);
+    // fileInput.click(); // open file picker
   }
+
 
   handleCompanysEvent(company: Company | null) {
     if (!company) {
@@ -123,40 +118,9 @@ export class InputaggregatorwithclientComponent {
     this.payperiods = payperiod.payPeriod;
 
   }
-  // toggleInfoPopup() {
-  //   this.showInfoPopup = !this.showInfoPopup;
-  // }
-
   toggleInfoPopup() {
-
-    if (!this.selectedInputType) {
-      alert('Please select Input Type');
-      return;
-    }
-
-    this.searchQuery = '';
-    console.log("input", this.selectedInputType);
-    if (this.selectedInputType === 'Billing') {
-
-      this.service.getQuessMasterAttributes().subscribe(res => {
-        this.quessMasterAttributes =
-          res?.Data?.data?.Table0 as QuessAttribute[] || [];
-
-        this.showInfoPopup = true;
-      });
-
-    } else if (this.selectedInputType === 'Attendance') {
-
-      this.service.getQuessAttendanceAttributes().subscribe(res => {
-        this.quessMasterAttributes =
-          res?.Data?.data?.Table0 as QuessAttribute[] || [];
-        console.log("data", this.quessMasterAttributes);
-        this.showInfoPopup = true;
-      });
-
-    }
+    this.showInfoPopup = !this.showInfoPopup;
   }
-
 
   closeInfoPopup() {
     this.showInfoPopup = false;
@@ -175,8 +139,7 @@ export class InputaggregatorwithclientComponent {
     } else {
       console.warn('UserProfile not found in session storage');
     }
-    // this.loadQuessAttributes();
-    // this.loadQuessAttendanceAttributes();
+    this.loadQuessAttributes();
     this.payPeriodType = "All";
   }
   handleCompanyEvent(company: Company | null) {
@@ -190,6 +153,13 @@ export class InputaggregatorwithclientComponent {
     this.selectedCompanyCode = company.companyCode ?? null;
     this.BindMapname();
     this.BindSitename();
+  }
+
+  handlePayperiodEventmain(payperiod: Payperiodclass) {
+    this.payPeriodmain = payperiod;
+    this.payperiodIdmain = payperiod.payfrequencyid;
+    this.payperiodsmain = payperiod.payPeriod;
+
   }
   BindMapname() {
     const companyid = this.selectedCompanyId;
@@ -212,18 +182,10 @@ export class InputaggregatorwithclientComponent {
     });
   };
   loadQuessAttributes() {
-    this.service.getQuessMasterAttributes().subscribe(res => {
+    this.service.getQuessAttendanceAttributes().subscribe(res => {
       this.quessMasterAttributes =
         res?.Data?.data?.Table0 as QuessAttribute[] || [];
-      console.log("data1", this.quessMasterAttributes)
-    });
-  }
 
-  loadQuessAttendanceAttributes() {
-    this.service.getQuessAttendanceAttributes().subscribe(res => {
-      this.quessAttendanceAttributes =
-        res?.Data?.data?.Table0 as QuessAttribute[] || [];
-      console.log("data2", this.quessAttendanceAttributes)
     });
   }
   trackByIndex(index: number, item: any) {
@@ -260,7 +222,6 @@ export class InputaggregatorwithclientComponent {
   }
 
 
-
   downloadTemplate(type: 'mapping' | 'client') {
     this.isTemplateDropdownOpen = false;
 
@@ -290,7 +251,7 @@ export class InputaggregatorwithclientComponent {
       }));
 
       worksheet = XLSX.utils.json_to_sheet(data, { header: headers });
-      fileName = 'Attributes_Mapping_Template.xlsx';
+      fileName = 'Attributes_attendance_Mapping_Template.xlsx';
 
     } else {
       console.log('Download Client Attributes Template');
@@ -303,7 +264,7 @@ export class InputaggregatorwithclientComponent {
       ];
 
       worksheet = XLSX.utils.aoa_to_sheet([headers]);
-      fileName = 'Client_Attributes_Template.xlsx';
+      fileName = 'Client_Attributes_attendance_Template.xlsx';
     }
 
     workbook = XLSX.utils.book_new();
@@ -321,7 +282,7 @@ export class InputaggregatorwithclientComponent {
     this.isLoading = true;
     console.log(this.selectCompanyId, this.payperiodId);
     this.service
-      .downloadBillableReport(this.selectCompanyId, this.payperiodId)
+      .downloadBillableReportattendance(this.selectCompanyId, this.payperiodId)
       .subscribe({
         next: (res: any) => {
           console.log("res", res)
@@ -338,8 +299,8 @@ export class InputaggregatorwithclientComponent {
               XLSX.utils.json_to_sheet(data);
 
             const workbook: XLSX.WorkBook = {
-              Sheets: { 'Billable Report': worksheet },
-              SheetNames: ['Billable Report']
+              Sheets: { 'Attendance Report': worksheet },
+              SheetNames: ['Attendance Report']
             };
 
             const excelBuffer = XLSX.write(workbook, {
@@ -352,7 +313,7 @@ export class InputaggregatorwithclientComponent {
                 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8'
             });
 
-            saveAs(blob, 'Billable_Report.xlsx');
+            saveAs(blob, 'Attendance_Report.xlsx');
           } else if (res.StatusCode === 404) {
             alert('No Resource found');
           } else if (res.Data.statusCode === 400) {
@@ -375,7 +336,6 @@ export class InputaggregatorwithclientComponent {
   }
 
 
-
   downloadExcel() {
     if (!this.filteredAttributes || this.filteredAttributes.length === 0) {
       return;
@@ -390,7 +350,7 @@ export class InputaggregatorwithclientComponent {
     const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(excelData);
     const workbook: XLSX.WorkBook = {
       Sheets: { Attributes: worksheet },
-      SheetNames: ['Attributes']
+      SheetNames: ['Attributes_Attendance']
     };
 
     const excelBuffer = XLSX.write(workbook, {
@@ -403,482 +363,11 @@ export class InputaggregatorwithclientComponent {
         'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8'
     });
     this.isLoading = false;
-    saveAs(blob, `Quess_Attributes.xlsx`);
+    saveAs(blob, `Quess_Attributes_Attendance.xlsx`);
 
   }
 
 
-
-  handleSearch(): void {
-    // if (!this.selectedInputType) {
-    //   alert("Please Select Input Type");
-    //   return;
-    // }
-    if (!this.selectedCompanyId) {
-      alert("Please Select Company");
-      return;
-    }
-
-    this.isLoading = true;
-
-    this.service.search(this.selectedCompanyId)
-      .pipe(
-        finalize(() => {
-          this.isLoading = false;
-        })
-      )
-      .subscribe({
-        next: (res) => {
-          const tableData = res?.Data?.data?.Table0;
-
-          if (!tableData || tableData.length === 0) {
-            alert("No records found");
-            this.loadClientAttributesFallback();
-            return;
-          }
-
-          this.bindClientAttributes(tableData);
-        },
-        error: () => {
-          this.loadClientAttributesFallback();
-        }
-      });
-  }
-
-
-
-
-
-  loadClientAttributesFallback(): void {
-    this.service.getClientAttributes(this.selectedCompanyId).subscribe(res => {
-      const tableData = res?.Data?.data?.Table0 || [];
-      this.bindClientAttributes(tableData);
-    });
-  }
-  bindClientAttributes(data: any[]): void {
-    this.attributeMappings = data.map(item => ({
-      clientAttribute: item.Template_Field_Name,
-      quessAttribute: item.Quess_Template_Field_Name || '',
-      Template_Field_Name: item.Template_Field_Name,
-      SelectedQuessAttributeId: item.Quess_Template_Field_Id || ''
-    }));
-  }
-
-  toggleAttributeDropdown(index: number): void {
-    if (this.openAttributeDropdown === index) {
-      this.openAttributeDropdown = null;
-    } else {
-      this.openAttributeDropdown = index;
-    }
-  }
-
-  updateAttribute(index: number, value: string) {
-    this.attributeMappings[index].quessAttribute = value;
-    this.openAttributeDropdown = null;
-  }
-  ImportClickcli(fileInput1: HTMLInputElement): void {
-    fileInput1.click();
-  }
-  onFileChangecli(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    const file = input?.files?.[0];
-
-    if (!file) {
-      console.error('Please upload only one Excel file.');
-      return;
-    }
-
-    const formData = new FormData();
-    formData.append('file', file);
-    formData.append('CreatedBy', this.userdetail.user_Id);
-
-    this.isLoading = true;
-
-    this.service.Uploadcli(formData)
-      .pipe(finalize(() => {
-        this.isLoading = false;
-      }))
-      .subscribe({
-        next: (res) => {
-          console.log('📥 API Response:', res);
-
-          if (!res || !res.Data) {
-            alert('Upload request processed. Server did not return any data.');
-            return;
-          }
-
-          const response = res.Data.response;
-
-          if (response && response.includes("Row(s) Uploaded Successfully.")) {
-            alert(res.Data.response);
-            return;
-          }
-
-          const { parsed, msg } = this.tryParseResponse(response);
-
-          const successMsg = 'Data uploaded successfully.';
-          const successMatch =
-            (Array.isArray(parsed) && parsed[0]?.Message?.trim() === successMsg) ||
-            (parsed && typeof parsed === 'object' && parsed?.Message?.trim() === successMsg);
-
-          if (res?.StatusCode === 200 && successMatch) {
-            alert('Data uploaded successfully.');
-            return;
-          }
-
-          if (res?.StatusCode === 200 && msg?.trim() === 'Failed to import.') {
-            const rawErr = res.Data.errors?.[0];
-            let errorArray: any[] = [];
-
-            try {
-              if (typeof rawErr === 'string') {
-                const tryJson = JSON.parse(rawErr);
-                errorArray = Array.isArray(tryJson) ? tryJson : [tryJson];
-              } else if (Array.isArray(rawErr)) {
-                errorArray = rawErr;
-              } else if (rawErr) {
-                errorArray = [rawErr];
-              }
-            } catch {
-              errorArray = rawErr ? [{ Error_Message: String(rawErr) }] : [];
-            }
-
-            // ✅ Use Error_Message instead of Validation
-            const exportData = errorArray.map((item: any) => ({
-              Error_Message: item?.Error_Message || ''
-            }));
-
-            const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
-            const workbook: XLSX.WorkBook = {
-              Sheets: { ErrorMessages: worksheet },
-              SheetNames: ['ErrorMessages']
-            };
-
-            XLSX.writeFile(
-              workbook,
-              `ClientAttributes_ErrorMessages.xlsx`
-            );
-            return;
-          }
-
-          const fallback =
-            msg ||
-            (Array.isArray(parsed) ? JSON.stringify(parsed) :
-              (parsed?.Error_Message ?? ''));
-
-          alert(fallback || 'Error while processing response.');
-        },
-
-        error: (err) => {
-          console.error('❌ Upload failed', err);
-          alert('Upload failed due to a network or server error.');
-        }
-      });
-  }
-
-
-
-  tryParseResponse(r: any): { parsed: any; msg: string } {
-    if (r == null) return { parsed: null, msg: '' };
-
-    if (Array.isArray(r)) return { parsed: r, msg: '' };
-    if (typeof r === 'object') return { parsed: r, msg: '' };
-
-    // string
-    if (typeof r === 'string') {
-      try {
-        const p = JSON.parse(r);
-        return { parsed: p, msg: '' };
-      } catch {
-        return { parsed: null, msg: r };
-      }
-    }
-
-    return { parsed: null, msg: String(r) };
-  }
-  ImportClickatt(fileInput2: HTMLInputElement): void {
-    fileInput2.click();
-  }
-  onFileChangeatt(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    const file = input?.files?.[0];
-
-    if (!file) {
-      console.error('Please upload only one Excel file.');
-      return;
-    }
-
-
-
-    const formData = new FormData();
-    formData.append('file', file);
-    formData.append('CreatedBy', this.userdetail.user_Id);
-
-    // 🔄 START LOADING
-    this.isLoading = true;
-
-    this.service.Upload(formData)
-      .pipe(
-        finalize(() => {
-          this.isLoading = false;
-        })
-      )
-      .subscribe({
-        next: (res) => {
-          console.log('📥 API Response:', res);
-
-          if (!res || !res.Data) {
-            alert('Upload request processed. Server did not return any data.');
-            return;
-          }
-
-          const response = res.Data.response;
-
-          if (response && response.includes("Row(s) Uploaded Successfully.")) {
-            alert(res.Data.response);
-            return;
-          }
-
-          const { parsed, msg } = this.tryParseResponseatt(response);
-
-          const successMsg = 'Data uploaded successfully.';
-          const successMatch =
-            (Array.isArray(parsed) && parsed[0]?.Message?.trim() === successMsg) ||
-            (parsed && typeof parsed === 'object' && parsed?.Message?.trim() === successMsg);
-
-          if (res?.StatusCode === 200 && successMatch) {
-            alert(' Data uploaded successfully.');
-            return;
-          }
-
-          if (res?.StatusCode === 200 && msg?.trim() === 'Failed to import.') {
-            const rawErr = res.Data.errors?.[0];
-            let errorArray: any[] = [];
-
-            try {
-              if (typeof rawErr === 'string') {
-                const tryJson = JSON.parse(rawErr);
-                errorArray = Array.isArray(tryJson) ? tryJson : [tryJson];
-              } else if (Array.isArray(rawErr)) {
-                errorArray = rawErr;
-              } else if (rawErr) {
-                errorArray = [rawErr];
-              }
-            } catch {
-              errorArray = rawErr ? [{ Error_Message: String(rawErr) }] : [];
-            }
-
-            // ✅ Use Error_Message instead of Validation
-            const exportData = errorArray.map((item: any) => ({
-              Error_Message: item?.Error_Message || ''
-            }));
-
-            const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
-            const workbook: XLSX.WorkBook = {
-              Sheets: { ErrorMessages: worksheet },
-              SheetNames: ['ErrorMessages']
-            };
-
-            XLSX.writeFile(
-              workbook,
-              `AttributesMapping_ErrorMessages.xlsx`
-            );
-            return;
-          }
-
-          const fallback =
-            msg ||
-            (Array.isArray(parsed) ? JSON.stringify(parsed) :
-              (parsed?.Error_Message ?? ''));
-
-          alert(fallback || 'Error while processing response.');
-        },
-
-        error: (err) => {
-          console.error('❌ Upload failed', err);
-          alert('Upload failed due to a network or server error.');
-        }
-      });
-  }
-
-
-
-
-  tryParseResponseatt(r: any): { parsed: any; msg: string } {
-    if (r == null) return { parsed: null, msg: '' };
-
-    if (Array.isArray(r)) return { parsed: r, msg: '' };
-    if (typeof r === 'object') return { parsed: r, msg: '' };
-
-    // string
-    if (typeof r === 'string') {
-      try {
-        const p = JSON.parse(r);
-        return { parsed: p, msg: '' };
-      } catch {
-        return { parsed: null, msg: r };
-      }
-    }
-
-    return { parsed: null, msg: String(r) };
-  }
-
-
-
-  showUploadPopup = false;
-  selectedFile!: File;
-  previewData: any[] = [];
-  previewColumns: string[] = [];
-
-  ImportClickclient(fileInput: HTMLInputElement): void {
-
-    if (!this.selectedCompanyId) {
-      alert("Please Select Company");
-      return;
-    }
-
-    fileInput.value = '';
-    fileInput.click();
-  }
-
-  onFileChange(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    const file = input?.files?.[0];
-    if (!file) return;
-
-    this.selectedFile = file;
-
-    const reader = new FileReader();
-    reader.onload = (e: any) => {
-      const workbook = XLSX.read(e.target.result, { type: 'array' });
-      const sheetName = workbook.SheetNames[0];
-      const worksheet = workbook.Sheets[sheetName];
-
-      const jsonData: any[] = XLSX.utils.sheet_to_json(worksheet, { defval: '' });
-
-      this.previewData = jsonData;
-      this.previewColumns = jsonData.length ? Object.keys(jsonData[0]) : [];
-      this.showUploadPopup = true; // show popup with table
-    };
-
-    reader.readAsArrayBuffer(file);
-  }
-
-  submitUpload() {
-    if (!this.selectedFile) {
-      alert("Please Select File");
-      return;
-    };
-    const formData = new FormData();
-    formData.append('file', this.selectedFile);
-    formData.append('CreatedBy', this.userdetail.user_Id);
-    formData.append('CompanyId', this.selectedCompanyId);
-
-    this.isLoading = true;
-
-    this.service.Uploadclient(formData)
-      .pipe(finalize(() => (this.isLoading = false)))
-      .subscribe({
-        next: (res: any) => {
-          if (!res || !res.Data) {
-            alert('Upload request processed. Server did not return any data.');
-            return;
-          }
-
-          const response = res.Data.response;
-
-          // Success message
-          if (response && response.includes("Row(s) Uploaded Successfully.")) {
-            alert(res.Data.response);
-            this.closeUploadPopup();
-            return;
-          }
-
-          const { parsed, msg } = this.tryParseResponseClient(response);
-
-          const successMsg = 'Data uploaded successfully.';
-          const successMatch =
-            (Array.isArray(parsed) && parsed[0]?.Message?.trim() === successMsg) ||
-            (parsed && typeof parsed === 'object' && parsed?.Message?.trim() === successMsg);
-
-          if (res?.StatusCode === 200 && successMatch) {
-            alert('Data uploaded successfully.');
-            this.closeUploadPopup();
-            return;
-          }
-
-          // Error parsing → download Excel
-          if (res?.StatusCode === 200 && msg?.trim() === 'Failed to import.') {
-            const rawErr = res.Data.errors?.[0];
-            let errorArray: any[] = [];
-
-            try {
-              if (typeof rawErr === 'string') {
-                const tryJson = JSON.parse(rawErr);
-                errorArray = Array.isArray(tryJson) ? tryJson : [tryJson];
-              } else if (Array.isArray(rawErr)) {
-                errorArray = rawErr;
-              } else if (rawErr) {
-                errorArray = [rawErr];
-              }
-            } catch {
-              errorArray = rawErr ? [{ Error_Message: String(rawErr) }] : [];
-            }
-
-            const exportData = errorArray.map((item: any) => ({
-              Error_Message: item?.Error_Message || ''
-            }));
-
-            const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
-            const workbook: XLSX.WorkBook = {
-              Sheets: { ErrorMessages: worksheet },
-              SheetNames: ['ErrorMessages']
-            };
-
-            XLSX.writeFile(workbook, `AttributesMapping_ErrorMessages.xlsx`);
-            this.closeUploadPopup();
-            return;
-          }
-
-          // fallback
-          const fallback =
-            msg ||
-            (Array.isArray(parsed) ? JSON.stringify(parsed) : parsed?.Error_Message ?? '');
-          alert(fallback || 'Error while processing response.');
-        },
-        error: (err) => {
-          console.error('❌ Upload failed', err);
-          alert('Upload failed due to a network or server error.');
-        }
-      });
-  }
-
-  tryParseResponseClient(r: any): { parsed: any; msg: string } {
-    if (r == null) return { parsed: null, msg: '' };
-    if (Array.isArray(r)) return { parsed: r, msg: '' };
-    if (typeof r === 'object') return { parsed: r, msg: '' };
-
-    if (typeof r === 'string') {
-      try {
-        const p = JSON.parse(r);
-        return { parsed: p, msg: '' };
-      } catch {
-        return { parsed: null, msg: r };
-      }
-    }
-
-    return { parsed: null, msg: String(r) };
-  }
-
-
-  closeUploadPopup() {
-    this.showUploadPopup = false;
-    this.previewData = [];
-    this.previewColumns = [];
-  }
-
-
-  // This is For Input Aggregator 
   handleSearchattendance(): void {
     if (!this.selectedCompanyId) {
       alert("Please Select Company");
@@ -916,72 +405,39 @@ export class InputaggregatorwithclientComponent {
     }));
 
   }
-  downloadExcelBillablereportAttendance() {
-    if (!this.selectCompanyId || !this.payperiodId) {
-      alert("Please Select Company and PayPeriod");
-      return;
+
+
+  loadClientAttributesFallback(): void {
+    this.service.getClientAttributes(this.selectedCompanyId).subscribe(res => {
+      const tableData = res?.Data?.data?.Table0 || [];
+      this.bindClientAttributes(tableData);
+    });
+  }
+  bindClientAttributes(data: any[]): void {
+    this.attributeMappings = data.map(item => ({
+      clientAttribute: item.Template_Field_Name,
+      quessAttribute: item.Quess_Template_Field_Name || '',
+      Template_Field_Name: item.Template_Field_Name,
+      SelectedQuessAttributeId: item.Quess_Template_Field_Id || ''
+    }));
+  }
+
+  toggleAttributeDropdown(index: number): void {
+    if (this.openAttributeDropdown === index) {
+      this.openAttributeDropdown = null;
+    } else {
+      this.openAttributeDropdown = index;
     }
-
-    this.isLoading = true;
-    console.log(this.selectCompanyId, this.payperiodId);
-    this.service
-      .downloadBillableReportattendance(this.selectCompanyId, this.payperiodId)
-      .subscribe({
-        next: (res: any) => {
-          console.log("res", res)
-          if (res.StatusCode === 200) {
-            const data = res?.Data?.data?.Table0;
-            const err = res;
-            if (!data || data.length === 0) {
-              alert('No records Found');
-              this.isLoading = false;
-              return;
-            }
-
-            const worksheet: XLSX.WorkSheet =
-              XLSX.utils.json_to_sheet(data);
-
-            const workbook: XLSX.WorkBook = {
-              Sheets: { 'Billable Report': worksheet },
-              SheetNames: ['Billable Report']
-            };
-
-            const excelBuffer = XLSX.write(workbook, {
-              bookType: 'xlsx',
-              type: 'array'
-            });
-
-            const blob = new Blob([excelBuffer], {
-              type:
-                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8'
-            });
-
-            saveAs(blob, 'Billable_Report.xlsx');
-          } else if (res.StatusCode === 404) {
-            alert('No Resource found');
-          } else if (res.Data.statusCode === 400) {
-            alert('Invalid request');
-          } else if (res.Data.statusCode === 500) {
-            alert('Server error, please try again later');
-          } else {
-            alert('Something went wrong');
-          }
-          this.isLoading = false;
-
-        },
-        error: (err) => {
-          console.log("err", err);
-          alert('Server error, please try again later');
-
-          this.isLoading = false;
-        }
-      });
   }
 
-  ImportClickcliattendance(fileInput3: HTMLInputElement): void {
-    fileInput3.click();
+  updateAttribute(index: number, value: string) {
+    this.attributeMappings[index].quessAttribute = value;
+    this.openAttributeDropdown = null;
   }
-  onFileChangecliattendance(event: Event): void {
+  ImportClickcli(fileInput1: HTMLInputElement): void {
+    fileInput1.click();
+  }
+  onFileChangecli(event: Event): void {
     const input = event.target as HTMLInputElement;
     const file = input?.files?.[0];
 
@@ -1058,7 +514,7 @@ export class InputaggregatorwithclientComponent {
 
             XLSX.writeFile(
               workbook,
-              `ClientAttributes_ErrorMessages.xlsx`
+              `ClientAttributesAttendance_ErrorMessages.xlsx`
             );
             return;
           }
@@ -1080,7 +536,7 @@ export class InputaggregatorwithclientComponent {
 
 
 
-  tryParseResponseattendance(r: any): { parsed: any; msg: string } {
+  tryParseResponse(r: any): { parsed: any; msg: string } {
     if (r == null) return { parsed: null, msg: '' };
 
     if (Array.isArray(r)) return { parsed: r, msg: '' };
@@ -1098,10 +554,10 @@ export class InputaggregatorwithclientComponent {
 
     return { parsed: null, msg: String(r) };
   }
-  ImportClickattattendance(fileInput4: HTMLInputElement): void {
-    fileInput4.click();
+  ImportClickatt(fileInput: HTMLInputElement): void {
+    fileInput.click();
   }
-  onFileChangeattattendance(event: Event): void {
+  onFileChangeatt(event: Event): void {
     const input = event.target as HTMLInputElement;
     const file = input?.files?.[0];
 
@@ -1118,7 +574,8 @@ export class InputaggregatorwithclientComponent {
 
     // 🔄 START LOADING
     this.isLoading = true;
-
+    console.log('service test');
+    alert('attribute api calling')
     this.service.Uploadattendanceattributes(formData)
       .pipe(
         finalize(() => {
@@ -1141,7 +598,7 @@ export class InputaggregatorwithclientComponent {
             return;
           }
 
-          const { parsed, msg } = this.tryParseResponseattattendance(response);
+          const { parsed, msg } = this.tryParseResponseatt(response);
 
           const successMsg = 'Data uploaded successfully.';
           const successMatch =
@@ -1183,7 +640,7 @@ export class InputaggregatorwithclientComponent {
 
             XLSX.writeFile(
               workbook,
-              `AttributesMapping_ErrorMessages.xlsx`
+              `AttributesAttendanceMapping_ErrorMessages.xlsx`
             );
             return;
           }
@@ -1206,7 +663,7 @@ export class InputaggregatorwithclientComponent {
 
 
 
-  tryParseResponseattattendance(r: any): { parsed: any; msg: string } {
+  tryParseResponseatt(r: any): { parsed: any; msg: string } {
     if (r == null) return { parsed: null, msg: '' };
 
     if (Array.isArray(r)) return { parsed: r, msg: '' };
@@ -1227,28 +684,32 @@ export class InputaggregatorwithclientComponent {
 
 
 
-  // showUploadPopupattendance = false;
-  selectedFileattendance!: File;
-  previewDataattendance: any[] = [];
-  previewColumnsattendance: string[] = [];
+  showUploadPopup = false;
+  selectedFile!: File;
+  previewData: any[] = [];
+  previewColumns: string[] = [];
 
-  ImportClickclientattendance(fileInput5: HTMLInputElement): void {
+  ImportClickclient(fileInput2: HTMLInputElement): void {
 
     if (!this.selectedCompanyId) {
       alert("Please Select Company");
       return;
     }
+    if (!this.payperiodIdmain) {
+      alert("Please Select Pay Period");
+      return;
+    }
 
-    fileInput5.value = '';
-    fileInput5.click();
+    fileInput2.value = '';
+    fileInput2.click();
   }
 
-  onFileChangeattendance(event: Event): void {
+  onFileChange(event: Event): void {
     const input = event.target as HTMLInputElement;
     const file = input?.files?.[0];
     if (!file) return;
 
-    this.selectedFileattendance = file;
+    this.selectedFile = file;
 
     const reader = new FileReader();
     reader.onload = (e: any) => {
@@ -1258,24 +719,24 @@ export class InputaggregatorwithclientComponent {
 
       const jsonData: any[] = XLSX.utils.sheet_to_json(worksheet, { defval: '' });
 
-      this.previewDataattendance = jsonData;
-      this.previewColumnsattendance = jsonData.length ? Object.keys(jsonData[0]) : [];
+      this.previewData = jsonData;
+      this.previewColumns = jsonData.length ? Object.keys(jsonData[0]) : [];
       this.showUploadPopup = true; // show popup with table
     };
 
     reader.readAsArrayBuffer(file);
   }
 
-  submitUploadattendance() {
-    if (!this.selectedFileattendance) {
+  submitUpload() {
+    if (!this.selectedFile) {
       alert("Please Select File");
       return;
     };
     const formData = new FormData();
-    formData.append('file', this.selectedFileattendance);
+    formData.append('file', this.selectedFile);
     formData.append('CreatedBy', this.userdetail.user_Id);
     formData.append('CompanyId', this.selectedCompanyId);
-
+    formData.append('PayPeriodId', this.payperiodIdmain);
     this.isLoading = true;
 
     this.service.Uploadclientattendance(formData)
@@ -1296,7 +757,7 @@ export class InputaggregatorwithclientComponent {
             return;
           }
 
-          const { parsed, msg } = this.tryParseResponseClientattendance(response);
+          const { parsed, msg } = this.tryParseResponseClient(response);
 
           const successMsg = 'Data uploaded successfully.';
           const successMatch =
@@ -1337,7 +798,7 @@ export class InputaggregatorwithclientComponent {
               SheetNames: ['ErrorMessages']
             };
 
-            XLSX.writeFile(workbook, `AttributesMapping_ErrorMessages.xlsx`);
+            XLSX.writeFile(workbook, `AttributesAttendanceMapping_ErrorMessages.xlsx`);
             this.closeUploadPopup();
             return;
           }
@@ -1353,9 +814,10 @@ export class InputaggregatorwithclientComponent {
           alert('Upload failed due to a network or server error.');
         }
       });
+    this.closeUploadPopup();
   }
 
-  tryParseResponseClientattendance(r: any): { parsed: any; msg: string } {
+  tryParseResponseClient(r: any): { parsed: any; msg: string } {
     if (r == null) return { parsed: null, msg: '' };
     if (Array.isArray(r)) return { parsed: r, msg: '' };
     if (typeof r === 'object') return { parsed: r, msg: '' };
@@ -1370,6 +832,13 @@ export class InputaggregatorwithclientComponent {
     }
 
     return { parsed: null, msg: String(r) };
+  }
+
+
+  closeUploadPopup() {
+    this.showUploadPopup = false;
+    this.previewData = [];
+    this.previewColumns = [];
   }
 
 

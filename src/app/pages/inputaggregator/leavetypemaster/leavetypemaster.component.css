@@ -34,37 +34,75 @@
 .popup-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.4);
-    z-index: 999;
+    background: rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(2px);
+    z-index: 9998;
 }
 
-.info-popup {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    width: 360px;
-    max-height: 70vh;
-    transform: translate(-50%, -50%);
-    background: #fff;
-    border-radius: 8px;
-    z-index: 1000;
-    display: flex;
-    flex-direction: column;
-}
-
+/* Popup Box */
 .report-popup {
     position: fixed;
     top: 50%;
     left: 50%;
-    width: 500px;
-    height: 30vh !important;
     transform: translate(-50%, -50%);
-    background: #fff;
-    border-radius: 8px;
-    z-index: 1000;
+    width: 600px;
+    max-width: 95%;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.2);
+    z-index: 9999;
+    animation: popupFade 0.2s ease-out;
+}
+
+/* Header */
+.popup-header {
     display: flex;
-    flex-direction: column;
-    padding-left: 10px;
+    justify-content: space-between;
+    align-items: center;
+    /* padding: 20px 24px; */
+}
+
+.panelreport-title {
+    font-size: 22px;
+    font-weight: 600;
+    color: #2f3bbd;
+    margin: 0;
+}
+
+/* Body */
+/* .report-list {
+    padding: 20px 24px 10px 24px;
+} */
+
+/* Footer Button Area */
+.popup-footer {
+    padding: 16px 24px 22px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+}
+
+/* Cancel Button */
+.btn-secondary {
+    background: #6c757d;
+    color: #f5f5f5;
+    font-size: 12px;
+    font-weight: 600;
+    font-family: "Nunito Sans", sans-serif;
+    letter-spacing: 0.24px;
+    border-radius: 6px;
+    box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.2);
+    padding: 0 24px;
+    height: 30px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    margin-bottom: 15px;
+
+}
+
+.btn-secondary:hover {
+    background: #5a6268;
 }
 
 .close-btn {
@@ -114,12 +152,11 @@
 
 }
 
+
 .action-dropdown-wrapper {
     position: relative;
-    display: inline-block;
 }
 
-/* Hide dropdown by default */
 .template-dropdown {
     position: absolute;
     top: 40px;
@@ -130,25 +167,15 @@
     min-width: 240px;
     box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
     z-index: 9999;
-
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(-5px);
-    transition: all 0.2s ease;
-}
-
-/* 🔥 Show when hovering wrapper */
-.action-dropdown-wrapper:hover .template-dropdown {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
+    /* 🔥 critical */
 }
 
 .template-dropdown .dropdown-item {
-    padding: 10px 50px;
+    width: 100%;
+    padding: 10px 12px;
     background: transparent;
     border: none;
-    text-align: right;
+    text-align: left;
     cursor: pointer;
 }
 
@@ -282,6 +309,29 @@
 .search-button:hover {
     background-color: #2520a0;
 }
+
+.add-button {
+    background-color: #31e859;
+    color: #f5f5f5;
+    font-size: 12px;
+    font-weight: 600;
+    font-family: "Nunito Sans", sans-serif;
+    letter-spacing: 0.24px;
+    border-radius: 6px;
+    box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.2);
+    padding: 0 24px;
+    height: 30px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    margin-bottom: 15px;
+
+}
+
+.add-button:hover {
+    background-color: #31e859;
+}
+
 
 /* Content Grid */
 .content-grid {
@@ -436,7 +486,8 @@
     border-radius: 8px;
     box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
     overflow: hidden;
-    min-width: 100% !important;
+    /* min-width: 50% !important; */
+    width: 50%;
 
 }
 
@@ -501,12 +552,13 @@
 
 .table-wrapper {
     overflow-x: auto;
-    max-height: 500px !important;
+    max-height: 400px !important;
     overflow-y: auto;
 }
 
 .attributes-table {
-    width: 100%;
+    
+    width: 100% !important;
     border-collapse: collapse;
     max-height: 500px;
     overflow-y: auto;
@@ -543,6 +595,16 @@
     font-weight: 500;
     font-family: "Nunito Sans", sans-serif;
 }
+
+.edit {
+    padding: 10px 15px;
+    /* color: #1f2937; */
+    /* font-size: 12px;
+    font-weight: 500;
+    font-family: "Nunito Sans", sans-serif; */
+    height: 5px;
+}
+
 
 .quess-attribute-cell {
     padding: 16px 24px;
