@@ -127,7 +127,7 @@
     background: #ffffff;
     border: 1px solid #e5e7eb;
     border-radius: 6px;
-    min-width: 240px;
+    min-width: 100px;
     box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
     z-index: 9999;
 
@@ -141,11 +141,11 @@
 .action-dropdown-wrapper:hover .template-dropdown {
     opacity: 1;
     visibility: visible;
-    transform: translateY(0);
+    transform: translateY(20);
 }
 
 .template-dropdown .dropdown-item {
-    padding: 10px 50px;
+    padding: 10px 5px;
     background: transparent;
     border: none;
     text-align: left;
