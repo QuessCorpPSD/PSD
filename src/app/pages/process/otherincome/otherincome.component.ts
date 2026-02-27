@@ -63,6 +63,27 @@ export class OtherincomeComponent {
     minWidth: 150,
     filter: 'agTextColumnFilter',
     floatingFilter: true,
+    filterParams: {
+      textMatcher: ({ value, filterText }) => {
+        if (!filterText) return true;
+
+        // convert cell value safely to string
+        const cellValue = value != null
+          ? value.toString().toLowerCase()
+          : '';
+
+        // split by comma
+        const searchTerms = filterText
+          .split(',')
+          .map(term => term.trim().toLowerCase())
+          .filter(term => term); // remove empty
+
+        // OR condition (match any)
+        return searchTerms.some(term =>
+          cellValue.includes(term)
+        );
+      }
+    },
     tooltipValueGetter: (params: any) =>
       params.value != null ? params.value.toString() : '',
 

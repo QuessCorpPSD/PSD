@@ -113,11 +113,26 @@ export class DraftInvoiceComponent implements OnInit {
     minWidth: 150,
     filter: 'agTextColumnFilter',
     floatingFilter: true,
-    tooltipValueGetter: (params: any) =>
-      params.value != null ? params.value.toString() : '',
+    filterParams: {
+      textMatcher: ({ value, filterText }) => {
+        if (!filterText) return true;
 
-    tooltipComponentParams: {
-      tooltipClass: 'ag-tooltip'
+        // convert cell value safely to string
+        const cellValue = value != null
+          ? value.toString().toLowerCase()
+          : '';
+
+        // split by comma
+        const searchTerms = filterText
+          .split(',')
+          .map(term => term.trim().toLowerCase())
+          .filter(term => term); // remove empty
+
+        // OR condition (match any)
+        return searchTerms.some(term =>
+          cellValue.includes(term)
+        );
+      }
     }
   };
 
@@ -173,7 +188,7 @@ export class DraftInvoiceComponent implements OnInit {
     // DATA COLUMNS
     // ======================
 
-    { field: 'serial_No', headerName: 'Sl No', width: 90,pinned: 'left', },
+    { field: 'serial_No', headerName: 'Sl No', width: 90, pinned: 'left', },
 
     {
       field: 'invoiceType',
@@ -184,7 +199,7 @@ export class DraftInvoiceComponent implements OnInit {
         p.value === 'Proforma' ? 'Draft' : p.value
     },
 
-    { field: 'req_No', headerName: 'Request No', width: 120,pinned: 'left', },
+    { field: 'req_No', headerName: 'Request No', width: 120, pinned: 'left', },
     { field: 'invoice_remarks', headerName: 'Invoice Remarks', width: 150 },
     { field: 'company_Code', headerName: 'Company Code', width: 150 },
     { field: 'company_Id', headerName: 'Company Id', width: 130 },
@@ -287,8 +302,8 @@ export class DraftInvoiceComponent implements OnInit {
     this.dataSource.filter = filterValue;
   }
 
-  
-   //AG grid
+
+  //AG grid
   onGridReady(params: GridReadyEvent) {
     this.gridApi = params.api;
     this.updatePaginationInfo();
