@@ -107,12 +107,12 @@ export class LeavetypemasterComponent {
     if (!confirm("Are you sure you want to delete this row?")) {
       return;
     }
-
+    this.isLoading = true;
     const payload = {
       createdBy: this.userdetail.user_Id,
       mode: "delete",
       parentDetail: {
-        LEAVE_TYPE_ID: item.leaveId,  
+        LEAVE_TYPE_ID: item.leaveId,
         LEAVE_TYPE_NAME: item.leaveName,
         ISACTIVE: item.isActive ? true : false
       }
@@ -123,7 +123,7 @@ export class LeavetypemasterComponent {
     this.service.LeavemasterSave(payload).subscribe({
       next: (res: any) => {
         if (res?.Data?.statusCode === 200) {
-
+          this.isLoading = false;
           const message =
             res?.Data?.data?.Table0?.[0]?.Error_Message ||
             'Deleted Successfully';
@@ -132,11 +132,13 @@ export class LeavetypemasterComponent {
 
           this.handleSearch(); // refresh table
         } else {
+          this.isLoading = false;
           alert("Delete Failed due to internal server error");
         }
       },
       error: (err) => {
         console.error(err);
+        this.isLoading = false;
         alert('Error while Deleting');
       }
     });
@@ -147,6 +149,8 @@ export class LeavetypemasterComponent {
       alert('Leave Type is required');
       return;
     }
+
+    this.isLoading = true;
     const payload = {
       createdBy: this.userdetail.user_Id,
       mode: "Add",
@@ -161,15 +165,18 @@ export class LeavetypemasterComponent {
     this.service.LeavemasterSave(payload).subscribe({
       next: (res: any) => {
         if (res.Data.statusCode === 200) {
+          this.isLoading = false;
           alert(res?.Data?.data?.Table0?.[0].Error_Message || 'Updated Successfully');
           this.closeAddPopup();
           this.handleSearch();
         } else {
+          this.isLoading = false;
           alert("Save Failed due to internal server error");
         }
       },
       error: (err) => {
         console.error(err);
+        this.isLoading = false;
         alert('Error while saving');
       }
     });

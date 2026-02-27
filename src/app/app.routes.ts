@@ -151,6 +151,9 @@ import { EInvoiceComponent } from './pages/Invoice/einvoice/einvoice.component';
 import { InputnavigationComponent } from './pages/inputaggregator/inputnavigation/inputnavigation.component';
 import { InputaggregatorwithclientComponent } from './pages/inputaggregator/inputaggregatorwithclient/inputaggregatorwithclient.component';
 import { InvoiceCancelComponent } from './pages/Invoice/invoicecancel/invoicecancel.component';
+import { InputaggregatorattendanceComponent } from './pages/inputaggregator/inputaggregatorattendance/inputaggregatorattendance.component';
+import { LeavetypemasterComponent } from './pages/inputaggregator/leavetypemaster/leavetypemaster.component';
+import { LeavetypemastermappingComponent } from './pages/inputaggregator/leavetypemastermapping/leavetypemastermapping.component';
 
 
 
@@ -336,9 +339,13 @@ export const routes: Routes = [
       },
       {
         path:'input',component:InputnavigationComponent,
-        children:[{
-          path:"inputaggregatorclient",component:InputaggregatorwithclientComponent
-        }]
+        children:[
+            { path: "inputaggregatorclient", component: InputaggregatorwithclientComponent },
+          { path: "inputaggregatorattendance", component: InputaggregatorattendanceComponent },
+          { path: "leavemaster", component: LeavetypemasterComponent },
+          { path: "leavemastermapping", component: LeavetypemastermappingComponent }
+        //  path:"inputaggregatorclient",component:InputaggregatorwithclientComponent
+        ]
       },
       {
         path: 'admin', component: AdminnavigationComponent,

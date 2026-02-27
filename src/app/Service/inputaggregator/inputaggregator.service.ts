@@ -61,4 +61,43 @@ export class InputaggregatorService implements IInputaggregator {
       );
   }
 
+
+  // This is for Input Aggregator Attendance
+
+  getQuessAttendanceAttributes(): Observable<APIResponse> {
+    return this.http.get<APIResponse>(
+      this.env.apiUrl + 'InputAggregatorAttendance/QuessAttendanceAttributeMaster'
+    );
+  }
+  Uploadattendancecli(formData: FormData): Observable<APIResponse> {
+    return this
+      .http.post<APIResponse>(
+        this.env.apiUrl + 'InputAggregatorAttendance/ClientAttributesUpload',
+        formData
+      );
+  }
+  Uploadattendanceattributes(formData: FormData): Observable<APIResponse> {
+    return this
+      .http.post<APIResponse>(
+        this.env.apiUrl + 'InputAggregatorAttendance/AttributesMappingUpload',
+        formData
+      );
+  }
+  downloadBillableReportattendance(companyId: number, payPeriodId: number) {
+    return this.http.get(
+      `${this.env.apiUrl}InputAggregatorAttendance/billableReport/${companyId}/${payPeriodId}`
+    );
+  }
+  Uploadclientattendance(formData: FormData): Observable<APIResponse> {
+    return this
+      .http.post<APIResponse>(
+        this.env.apiUrl + 'InputAggregatorAttendance/Upload',
+        formData
+      );
+  }
+
+  searchattendance(companyId: number): Observable<APIResponse> {
+    return this.http.get<APIResponse>(
+      this.env.apiUrl + `InputAggregatorAttendance/Search/${companyId}`);
+  }
 }

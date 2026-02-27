@@ -182,7 +182,7 @@ export class LeavetypemastermappingComponent {
     if (!confirm("Are you sure you want to delete this row?")) {
       return;
     }
-
+    this.isLoading = true;
     const payload = {
       createdBy: this.userdetail.user_Id,
       mode: "delete",
@@ -202,7 +202,7 @@ export class LeavetypemastermappingComponent {
     this.service.LeavemastermappingSave(payload).subscribe({
       next: (res: any) => {
         if (res?.Data?.statusCode === 200) {
-
+          this.isLoading = false;
           const message =
             res?.Data?.data?.Table0?.[0]?.Error_Message ||
             'Deleted Successfully';
@@ -211,11 +211,13 @@ export class LeavetypemastermappingComponent {
 
           this.handleSearch();
         } else {
+          this.isLoading = false;
           alert("Delete Failed due to internal server error");
         }
       },
       error: (err) => {
         console.error(err);
+        this.isLoading = false;
         alert('Error while Deleting');
       }
     });
@@ -232,7 +234,7 @@ export class LeavetypemastermappingComponent {
       alert("Please fill all required fields");
       return;
     }
-
+    this.isLoading = true;
     const payload = {
       createdBy: this.userdetail.user_Id,
       mode: "Add",
@@ -251,16 +253,19 @@ export class LeavetypemastermappingComponent {
     this.service.LeavemastermappingSave(payload).subscribe({
       next: (res: any) => {
         if (res.Data.statusCode === 200) {
+          this.isLoading = false;
           console.log('save', res)
           alert(res?.Data?.data?.Table0?.[0]?.Error_Message || res.Data.message || 'Saved Successfully');
           this.closeAddPopup();
           this.handleSearch();
         } else {
+          this.isLoading = false;
           alert("Save Failed due to internal server error");
         }
       },
       error: (err) => {
         console.error(err);
+        this.isLoading = false;
         alert('Error while saving');
       }
     });
