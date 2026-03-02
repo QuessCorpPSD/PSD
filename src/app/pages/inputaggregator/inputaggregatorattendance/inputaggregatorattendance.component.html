@@ -269,12 +269,12 @@
                                 Template
                             </button>
 
-                            <div class="template-dropdown" *ngIf="isTemplateDropdownOpen">
-                                <button class="dropdown-item" (click)="downloadTemplate('mapping')">
+                            <div class="template-dropdowns" *ngIf="isTemplateDropdownOpen">
+                                <button class="dropdowns-item" (click)="downloadTemplate('mapping')">
                                     Attributes Mapping Template
                                 </button>
 
-                                <button class="dropdown-item" (click)="downloadTemplate('client')">
+                                <button class="dropdowns-item" (click)="downloadTemplate('client')">
                                     Client Attributes Template
                                 </button>
                             </div>
