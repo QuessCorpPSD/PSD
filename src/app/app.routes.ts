@@ -136,7 +136,7 @@ import { ITAdjustmentComponent } from './pages/process/itadjustment/itadjustment
 import { LockpayperiodComponent } from './pages/process/lockpayperiod/lockpayperiod.component';
 import { LOPAdjustmentsComponent } from './pages/process/lopadjustments/lopadjustments.component';
 import { OneTimeReplacementComponent } from './pages/process/one-time-replacement/one-time-replacement.component';
-import { OtherincomeComponent } from './pages/process/otherincome/otherincome.component';
+
 import { PayProcessComponent } from './pages/process/pay-process/pay-process.component';
 import { PayregisteruploadComponent } from './pages/process/payregisterupload/payregisterupload.component';
 import { PaytransactionComponent } from './pages/process/paytransaction/paytransaction.component';
@@ -154,6 +154,8 @@ import { InvoiceCancelComponent } from './pages/Invoice/invoicecancel/invoicecan
 import { InputaggregatorattendanceComponent } from './pages/inputaggregator/inputaggregatorattendance/inputaggregatorattendance.component';
 import { LeavetypemasterComponent } from './pages/inputaggregator/leavetypemaster/leavetypemaster.component';
 import { LeavetypemastermappingComponent } from './pages/inputaggregator/leavetypemastermapping/leavetypemastermapping.component';
+import { InvoiceCultureAddpoComponent } from './pages/Invoice/invoice-culture-addpo/invoice-culture-addpo.component';
+import { OtherincomeComponent } from './pages/Invoice/otherincome/otherincome.component';
 
 
 
@@ -390,7 +392,7 @@ export const routes: Routes = [
           { path: 'billingpayfrequency', component: BillingpayfrequencyComponent },          
           { path: 'poinitiate', component: POInitiateComponent },
            {path:'IRN',component:EInvoiceComponent},
-          { path: 'app-invoice-culture', component: OtherincomeComponent },
+          { path: 'app-invoice-culture', component: InvoiceCultureAddpoComponent },
           { path: 'ClientBillableReportDatewise', component: ClientbillablereportsdatewiseComponent },
           //{ path: 'creditnote', component: CreditnoteComponent },
          // { path: 'creditnoteapprove', component: CreditnoteapproveComponent },
