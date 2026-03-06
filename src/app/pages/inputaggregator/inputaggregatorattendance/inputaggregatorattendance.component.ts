@@ -575,7 +575,7 @@ export class InputaggregatorattendanceComponent {
     // 🔄 START LOADING
     this.isLoading = true;
     console.log('service test');
-    alert('attribute api calling')
+    
     this.service.Uploadattendanceattributes(formData)
       .pipe(
         finalize(() => {

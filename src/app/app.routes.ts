@@ -9,7 +9,7 @@ import { AssignmentComponent } from './pages/assignment/assignment.component';
 import { SeverityComponent } from './pages/severity/severity.component';
 import { AllotedLotComponent } from './pages/alloted-lot/alloted-lot.component';
 
-import { SopnewComponent } from './pages/sopnew/sopnew.component';
+
 import { UserMappingComponent } from './pages/admin/user-mapping/user-mapping.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { ChangepasswordComponent } from './pages/changepassword/changepassword.component';
@@ -185,8 +185,7 @@ export const routes: Routes = [
       { path: 'Assignment', component: AssignmentComponent },
       { path: 'Severity', component: SeverityComponent },
       { path: 'AllottedLot', component: AllotedLotComponent },
-      { path: 'Break', component: BreakdetailComponent },
-      { path: 'SOP', component: SopnewComponent },
+      { path: 'Break', component: BreakdetailComponent },      
       { path: 'user', component: UserListComponent },
       { path: 'dashboard', component: DashboardComponent },
       { path: 'app-revok', component: RevokComponent },

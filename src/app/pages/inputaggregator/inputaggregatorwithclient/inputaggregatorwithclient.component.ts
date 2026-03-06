@@ -175,7 +175,7 @@ export class InputaggregatorwithclientComponent {
     } else {
       console.warn('UserProfile not found in session storage');
     }
-    // this.loadQuessAttributes();
+     this.loadQuessAttributes();
     // this.loadQuessAttendanceAttributes();
     this.payPeriodType = "All";
   }
