@@ -12,4 +12,12 @@ export interface IInputaggregator {
     downloadBillableReport(companyId: number, payPeriodId: number);
     Uploadclient(formData: FormData): Observable<APIResponse>;
 
+    // this is for Input aggregator attendance
+    
+    getQuessAttendanceAttributes(): Observable<APIResponse>;
+    Uploadclientattendance(formData: FormData): Observable<APIResponse>;
+    downloadBillableReportattendance(companyId: number, payPeriodId: number);
+    Uploadattendanceattributes(formData: FormData): Observable<APIResponse>;
+    Uploadattendancecli(formData: FormData): Observable<APIResponse>;
+    searchattendance(companyId: number): Observable<APIResponse>;
 }

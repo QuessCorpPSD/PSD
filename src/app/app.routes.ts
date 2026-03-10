@@ -149,6 +149,20 @@ import { TaxRemittanceGenerationComponent } from './pages/E-TDSProcess/tax-remit
 import { LegalEntityComponent } from './pages/E-TDSProcess/legal-entity/legal-entity.component';
 import { InputnavigationComponent } from './pages/inputaggregator/inputnavigation/inputnavigation.component';
 import { InputaggregatorwithclientComponent } from './pages/inputaggregator/inputaggregatorwithclient/inputaggregatorwithclient.component';
+import { InputaggregatorattendanceComponent } from './pages/inputaggregator/inputaggregatorattendance/inputaggregatorattendance.component';
+import { LeavetypemasterComponent } from './pages/inputaggregator/leavetypemaster/leavetypemaster.component';
+import { BankAccountComponent } from './pages/SalaryReleaseNew/bank-account/bank-account.component';
+import { BatchcreationprocessComponent } from './pages/SalaryReleaseNew/batchcreationprocess/batchcreationprocess.component';
+import { DownloadbatchComponent } from './pages/SalaryReleaseNew/downloadbatch/downloadbatch.component';
+import { HoldRequestComponent } from './pages/SalaryReleaseNew/hold-request/hold-request.component';
+import { NetpaySummaryComponent } from './pages/SalaryReleaseNew/netpay-summary/netpay-summary.component';
+import { SalaryReleaseMenuComponent } from './pages/SalaryReleaseNew/salary-release-menu/salary-release-menu.component';
+import { UpfrontApprovalComponent } from './pages/SalaryReleaseNew/upfront-approval/upfront-approval.component';
+import { YearlyPayoutComponent } from './pages/SalaryReleaseNew/yearly-payout/yearly-payout.component';
+import { SalaryReleaseProcessComponent } from './pages/SalaryReleaseNew/salary-release-process/salary-release-process.component';
+import { SalaryReleaseApproveComponent } from './pages/SalaryReleaseNew/salary-release-approve/salary-release-approve.component';
+import { LeavetypemastermappingComponent } from './pages/inputaggregator/leavetypemastermapping/leavetypemastermapping.component';
+import { SalaryReleaseStatusComponent } from './pages/SalaryReleaseNew/salary-release-status/salary-release-status.component';
 
 
 
@@ -323,6 +337,22 @@ export const routes: Routes = [
         ]
       },
       {
+        path: 'salaryreleasemenu',
+        component: SalaryReleaseMenuComponent,
+        children: [
+          { path: 'BankAccount', component: BankAccountComponent },
+          { path: 'Holdrequest', component: HoldRequestComponent },
+          { path: 'Netpaysummary', component: NetpaySummaryComponent },
+          { path: 'Upfrontapproval', component: UpfrontApprovalComponent },
+          { path: 'Yearlypayout', component: YearlyPayoutComponent },
+          { path: 'downloadbatch', component: DownloadbatchComponent },
+          { path: 'batchcreation', component: BatchcreationprocessComponent },
+          { path: 'SalaryReleaseProcess', component: SalaryReleaseProcessComponent },
+          { path: 'SalaryReleaseApproval', component: SalaryReleaseApproveComponent },
+          { path: 'SalaryReleaseStatus', component: SalaryReleaseStatusComponent },
+        ]
+      },
+      {
         path: 'etdsprocess', component: ETDSProcessnavigationComponent,
         children: [
           { path: "legalentitymapping", component: LegalEntityMappingComponent },
@@ -335,7 +365,9 @@ export const routes: Routes = [
         children: [
           // { path: "inputaggregator", component: InputaggregatorComponent },
           { path: "inputaggregatorclient", component: InputaggregatorwithclientComponent },
-
+          { path: "inputaggregatorattendance", component: InputaggregatorattendanceComponent },
+          { path: "leavemaster", component: LeavetypemasterComponent },
+          { path: "leavemastermapping", component: LeavetypemastermappingComponent }
 
         ]
       },

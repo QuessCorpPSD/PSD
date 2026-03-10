@@ -43,7 +43,7 @@ export interface ICommonService {
     GetAllUsers(): Observable<APIResponse>;
     GetManagerByUserId(user_Id): Observable<APIResponse>;
     SwapCategory(login): Observable<APIResponse>;
-    GetCompanyCodes(userId: number): Observable<APIResponse>
+    // GetCompanyCodes(userId: number): Observable<APIResponse>
     GetPayperiodbyCompany(companyId: any): Observable<APIResponse>
     GetCurrentPayperiod(companyId: any): Observable<APIResponse>
     GetInvoiceType(): Observable<APIResponse>;
@@ -61,4 +61,6 @@ export interface ICommonService {
     GetPayperiodbyCompanySalaryUpfront(companyId: any): Observable<APIResponse>;
     GetPayperiodbyCompanyDeduction(companyId: any): Observable<APIResponse>;
     GetPayperiodbyCompanyVanPayment(companyId: any): Observable<APIResponse>;
+    GetInputType(): Observable<APIResponse>;
+    GetCityByCompanyCode(companyId: any, Group_Id: any): Observable<APIResponse>
 }

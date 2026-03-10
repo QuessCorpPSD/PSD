@@ -1,0 +1,8 @@
+.right-align {
+    display: inline-flex;     
+    align-items: center;
+    justify-content: flex-end;
+    gap: 12px;
+    width: fit-content;      
+    max-width: 100%;
+}

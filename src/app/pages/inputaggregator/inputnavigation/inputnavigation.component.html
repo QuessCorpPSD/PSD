@@ -3,12 +3,21 @@
         <div class="Categorylist">
             <ul class="horizontal-list">
 
-                
+
                 <li><a [routerLink]="['/Master/input/inputaggregatorclient']" class="nav-link"
                         routerLinkActive="selectedInput" [routerLinkActiveOptions]="{ exact: true }">Input
                         Aggregator</a>
                 </li>
-
+                <li><a [routerLink]="['/Master/input/inputaggregatorattendance']" class="nav-link"
+                        routerLinkActive="selectedInput" [routerLinkActiveOptions]="{ exact: true }">Input
+                        Aggregator Attendance</a>
+                </li>
+                <li><a [routerLink]="['/Master/input/leavemaster']" class="nav-link" routerLinkActive="selectedInput"
+                        [routerLinkActiveOptions]="{ exact: true }">Leave Master</a>
+                </li>
+                <li><a [routerLink]="['/Master/input/leavemastermapping']" class="nav-link" routerLinkActive="selectedInput"
+                        [routerLinkActiveOptions]="{ exact: true }">Leave Master Mapping</a>
+                </li>
             </ul>
         </div>
     </div>

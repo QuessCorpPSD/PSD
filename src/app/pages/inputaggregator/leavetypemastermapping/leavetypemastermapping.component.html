@@ -1,0 +1,230 @@
+<!-- Main Container -->
+<div class="app-container">
+
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="search-form-container">
+            <form class="search-form">
+                <div class="form-group">
+                    <label class="form-label">Company Code</label>
+                    <companyall (companyEmit)="handleCompanyEventMain($event)">
+                    </companyall>
+                </div>
+                <div class="d-flex gap-2">
+                    <button type="button" class="search-button" (click)="handleSearch()">
+                        Search
+                    </button>
+                    <button type="button" class="add-button" (click)="openAddPopup()">
+                        Add
+                    </button>
+                </div>
+            </form>
+        </div>
+        <div class="popup-overlay" *ngIf="showAddPopup" (click)="closeAddPopup()">
+        </div>
+
+        <div class="report-popup" *ngIf="showAddPopup">
+
+            <div class="popup-header">
+                <h2 class="panelreport-title">
+                    {{ isEditMode ? 'Edit Leave Type Mapping' : 'Add Leave Type Mapping' }}</h2>
+                <button class="close-btn" (click)="closeAddPopup()">
+                    <mat-icon>close</mat-icon>
+                </button>
+            </div>
+
+            <div class="report-list">
+                <div class="row g-2">
+
+                    <!-- Company Code -->
+                    <div class="col-md-6">
+                        <label class="form-label text-muted small">
+                            Company Code <span style="color:red">*</span>
+                        </label>
+                        <!-- Edit Mode -->
+                        <input *ngIf="isEditMode" type="text" [(ngModel)]="company" class="form-control" readonly />
+
+                        <!-- Add Mode -->
+                        <companyall *ngIf="!isEditMode" (companyEmit)="handleCompanyEvent($event)">
+                        </companyall>
+                    </div>
+
+                    <!-- Attendance Type -->
+                    <div class="col-md-6">
+                        <label class="form-label text-muted small">
+                            Attendance Type <span style="color:red">*</span>
+                        </label>
+                        <select class="form-control form-control-sm" [(ngModel)]="attendanceType">
+                            <option value="">Select</option>
+                            <option [value]="1">Consolidated</option>
+                            <option [value]="2">Time Sheet</option>
+                        </select>
+                    </div>
+
+                    <!-- Leave Type -->
+                    <div class="col-md-6">
+                        <label class="form-label text-muted small">
+                            Leave Type <span style="color:red">*</span>
+                        </label>
+                        <select class="form-control form-control-sm" [(ngModel)]="selectedLeaveId">
+                            <option value="">Select</option>
+                            <option *ngFor="let leave of LEAVETYPES" [value]="leave.LEAVE_TYPE_ID">
+                                {{ leave.LEAVE_TYPE_NAME }}
+                            </option>
+                        </select>
+                    </div>
+
+                    <!-- Leave Treat Type -->
+                    <div class="col-md-6">
+                        <label class="form-label text-muted small">
+                            Leave Treat Type <span style="color:red">*</span>
+                        </label>
+                        <select class="form-control form-control-sm" [(ngModel)]="selectedTreatTypeId">
+                            <option value="">Select</option>
+                            <option *ngFor="let treat of QuessLEAVETYPES" [value]="treat.LEAVE_ID">
+                                {{ treat.LEAVE_NAME }}
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label text-muted small">
+                            Is Active <span style="color:red">*</span>
+                        </label>
+                        <select class="form-control" [(ngModel)]="isActive">
+                            <option [ngValue]="1">Yes</option>
+                            <option [ngValue]="0">No</option>
+                        </select>
+                    </div>
+
+                    <!-- Footer -->
+                    <div class="popup-footer">
+                        <button type="button" class="btn-secondary" (click)="closeAddPopup()">
+                            Cancel
+                        </button>
+
+                        <button type="button" class="search-button" (click)="saveLeavequessType()">
+                            {{ isEditMode ? 'Update' : 'Save' }}
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="right-panel">
+
+            <div style="display: flex; justify-content: flex-end; margin-bottom: 10px;">
+                <div style="
+            display: flex;
+            align-items: center;
+            border-radius: 10px;
+            border: 1px solid #7E7E7E;
+            width: 170px;
+            height: 40px;
+            background-color: white;
+            padding: 2px 20px;
+        ">
+                    <i style="margin-right: 6px; display: flex;">
+                        <!-- SVG -->
+                    </i>
+
+                    <input type="text" [(ngModel)]="searchText" (keyup)="applyFilter()" placeholder="Search" style="
+    border: none;
+    outline: none;
+    flex: 1;
+    font-size: 12px;
+    background-color: transparent;
+    padding:5px;
+  " />
+                </div>
+            </div>
+            <!-- Table -->
+            <div class="table-wrapper">
+                <table class="attributes-table">
+                    <thead>
+                        <tr>
+                            <th>Delete</th>
+                            <th>Company Code</th>
+                            <th>Attendance Type</th>
+                            <th>Leave Type</th>
+                            <th>Leave Treat Type</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <ng-container *ngIf="leaveTypes.length > 0; else emptyState">
+                            <tr *ngFor="let mapping of leaveTypes; let i = index; trackBy: trackByIndex">
+                                <td>
+                                    <button class="btn btn-sm" (click)="deleterow(mapping)">
+                                        <mat-icon>delete</mat-icon>
+                                    </button>
+                                </td>
+                                <td class="client-attribute-cell">
+                                    {{ mapping.companycode }}
+                                </td>
+                                <td class="client-attribute-cell">
+                                    {{ mapping.attendancetype }}
+                                </td>
+                                <td class="client-attribute-cell">
+                                    {{ mapping.leaveType }}
+                                </td>
+                                <td class="client-attribute-cell">
+                                    {{ mapping.leavetreattype }}
+                                </td>
+
+
+                                <!-- <td class="quess-attribute-cell">
+                                    <select class="form-control form-control-sm"
+                                        [(ngModel)]="mapping.SelectedQuessAttributeId">
+
+                                        <option value="">Select</option>
+
+                                        <option *ngFor="let quessatt of quessMasterAttributes"
+                                                [value]="quessatt.Quess_Template_Field_Id">
+                                                {{ quessatt.Quess_Template_Field_Name }}
+                                            </option>
+                                    </select>
+
+                                </td> -->
+
+
+                            </tr>
+
+                        </ng-container>
+
+                        <ng-template #emptyState>
+                            <tr>
+                                <td colspan="5" class="empty-state">
+                                    <div class="empty-state-content">
+                                        <svg class="empty-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                        </svg>
+                                        <p class="empty-text">No Data Found</p>
+                                    </div>
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Footer Info -->
+            <div class="table-footer" *ngIf="leaveTypes.length > 0">
+                <p class="footer-text">
+                    {{ leaveTypes.length }} leave type {{ leaveTypes.length !== 1 ? 's' : '' }}
+                    Mapping Found
+                </p>
+            </div>
+        </div>
+
+
+    </main>
+</div>
+
+<div *ngIf="isLoading" class="loading-overlay">
+    <img src="assets/Loading.gif" alt="Loading...">
+</div>

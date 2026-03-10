@@ -1,0 +1,156 @@
+<!-- Main Container -->
+<div class="app-container">
+
+
+    <!-- Main Content -->
+    <main class="main-content">
+
+        <div class="d-flex gap-2">
+            <!-- <button type="button" class="search-button" (click)="handleSearch()">
+                Search
+            </button> -->
+            <button type="button" class="add-button" (click)="openAddPopup()">
+                Add
+            </button>
+        </div>
+
+        <div class="popup-overlay" *ngIf="showAddPopup" (click)="closeAddPopup()">
+        </div>
+
+        <div class="report-popup" *ngIf="showAddPopup">
+
+            <div class="popup-header">
+                <h2 class="panelreport-title">
+                    Add Leave Type</h2>
+                <button class="close-btn" (click)="closeAddPopup()">
+                    <mat-icon>close</mat-icon>
+                </button>
+            </div>
+
+            <div class="report-list">
+                <div class="row g-2">
+
+                    <div class="col-md-6">
+                        <label class="form-label text-muted small">
+                            Leave Type <span style="color:red">*</span>
+                        </label>
+                        <input type="text" class="form-control" [(ngModel)]="leaveType" />
+                    </div>
+
+                    <!-- Is Active -->
+                    <div class="col-md-6">
+                        <label class="form-label text-muted small">
+                            Is Active
+                        </label>
+                        <select class="form-control" [(ngModel)]="isActive">
+                            <option [ngValue]="1">Yes</option>
+                            <option [ngValue]="0">No</option>
+                        </select>
+                    </div>
+
+                    <div class="popup-footer">
+                        <button type="button" class="btn-secondary" (click)="closeAddPopup()">
+                            Cancel
+                        </button>
+
+                        <button type="button" class="search-button" (click)="saveLeaveType()">
+                            <!-- {{ isEditMode ? 'Delete' : 'Save' }} -->
+                            Save
+                        </button>
+
+                    </div>
+
+
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="right-panel">
+
+
+            <!-- 🔹 Search aligned right -->
+            <div style="display: flex; justify-content: flex-end; margin-bottom: 10px;">
+                <div style="
+            display: flex;
+            align-items: center;
+            border-radius: 10px;
+            border: 1px solid #7E7E7E;
+            width: 170px;
+            height: 40px;
+            background-color: white;
+            padding: 2px 20px;
+        ">
+                    <i style="margin-right: 6px; display: flex;">
+                        <!-- SVG -->
+                    </i>
+
+                    <input type="text" [(ngModel)]="searchText" (keyup)="applyFilter()" placeholder="Search" style="
+    border: none;
+    outline: none;
+    flex: 1;
+    font-size: 12px;
+    background-color: transparent;
+    padding:5px;
+  " />
+                </div>
+            </div>
+            <!-- Table -->
+            <div class="table-wrapper">
+                <table class="attributes-table">
+                    <thead>
+                        <tr>
+                            <th>Delete</th>
+                            <th>Leave Type</th>
+                            <th>Isactive</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <ng-container *ngIf="leaveTypes.length > 0; else emptyState">
+                            <tr *ngFor="let item of leaveTypes">
+
+                                <td class="edit">
+                                    <button class="btn btn-sm" (click)="deleterow(item)">
+                                        <mat-icon>delete</mat-icon>
+                                    </button>
+                                </td>
+
+                                <td class="client-attribute-cell">
+                                    {{ item.leaveName }}
+                                </td>
+
+                                <td class="client-attribute-cell">
+                                    {{ item.isActive ? 'Yes' : 'No' }}
+                                </td>
+
+                            </tr>
+                        </ng-container>
+
+                        <ng-template #emptyState>
+                            <tr>
+                                <td colspan="3" class="empty-state">
+                                    No Leave Types Found
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Footer Info -->
+            <div class="table-footer" *ngIf="leaveTypes.length > 0">
+                <p class="footer-text">
+                    {{ leaveTypes.length }} Leave Type {{ leaveTypes.length !== 1 ? 's' : '' }}
+
+                </p>
+            </div>
+        </div>
+
+
+    </main>
+</div>
+
+<div *ngIf="isLoading" class="loading-overlay">
+    <img src="assets/Loading.gif" alt="Loading...">
+</div>

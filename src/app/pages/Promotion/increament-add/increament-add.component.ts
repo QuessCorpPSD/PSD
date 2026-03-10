@@ -32,9 +32,8 @@ export const Increment_TOKEN = new InjectionToken<Iincrement>('Increment_TOKEN')
     MatPaginator,
     MatCardModule,
     MatPaginator,
-    FormsModule,
-    CompanyallComponent,
-    PayPeriodComponent
+    FormsModule
+    
   ],
   templateUrl: './increament-add.component.html',
   styleUrl: './increament-add.component.css',

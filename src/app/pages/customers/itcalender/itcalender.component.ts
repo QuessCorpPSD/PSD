@@ -101,7 +101,7 @@ export class ITcalenderComponent {
   }
 
   onsearch() {
-    this.isLoading = true;   // <-- Start loader
+    this.isLoading = true;  
 
     this.itcalenderService.Search(this.selectedCompanyId, this.selectedfinacialyearId).subscribe({
       next: (res: any) => {

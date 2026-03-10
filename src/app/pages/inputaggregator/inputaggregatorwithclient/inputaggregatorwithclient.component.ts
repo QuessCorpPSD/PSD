@@ -56,6 +56,16 @@ export class InputaggregatorwithclientComponent {
   payperiodId: any;
   payperiods: any;
   payPeriodType: any;
+  selectedInputType: string = 'Billing';
+  billingAttributes: any[] = [];
+  attendanceAttributes: any[] = [];
+
+  filteredBillingAttributes: any[] = [];
+  filteredAttendanceAttributes: any[] = [];
+  inputTypes: string[] = ['Attendance', 'Billing'];
+  quessAttendanceAttributes: QuessAttribute[] = [];
+  Attendancesearch: any[] = [];
+
   constructor(@Inject(Pay_TOKEN) private service: IInputaggregator,
     private decry: EncryptionService, private _sessionStoreage: SessionStorageService) {
 
@@ -74,12 +84,27 @@ export class InputaggregatorwithclientComponent {
   selectedItem: string | null = null;
   quessMasterAttributes: QuessAttribute[] = [];
 
-  selectedItems: { [key: number]: string } = {}; // Track selection per row
+  selectedItems: { [key: number]: string } = {};
 
   selectedCompanyId: any;
   selectedCompanyCode: any;
   showInfoPopup = false;
   showreportPopup = false;
+  isDropdownOpen = false;
+
+  toggleDropdown(event: Event) {
+    event.stopPropagation();
+    this.isDropdownOpen = !this.isDropdownOpen;
+  }
+
+  selectOption(type: string, fileInput5: any) {
+    this.isDropdownOpen = false;
+
+    console.log(type + ' selected');
+
+    fileInput5.click(); // open file picker
+  }
+
   handleCompanysEvent(company: Company | null) {
     if (!company) {
       this.selectCompanyId = null;
@@ -98,9 +123,40 @@ export class InputaggregatorwithclientComponent {
     this.payperiods = payperiod.payPeriod;
 
   }
+  // toggleInfoPopup() {
+  //   this.showInfoPopup = !this.showInfoPopup;
+  // }
+
   toggleInfoPopup() {
-    this.showInfoPopup = !this.showInfoPopup;
+
+    if (!this.selectedInputType) {
+      alert('Please select Input Type');
+      return;
+    }
+
+    this.searchQuery = '';
+    console.log("input", this.selectedInputType);
+    if (this.selectedInputType === 'Billing') {
+
+      this.service.getQuessMasterAttributes().subscribe(res => {
+        this.quessMasterAttributes =
+          res?.Data?.data?.Table0 as QuessAttribute[] || [];
+
+        this.showInfoPopup = true;
+      });
+
+    } else if (this.selectedInputType === 'Attendance') {
+
+      this.service.getQuessAttendanceAttributes().subscribe(res => {
+        this.quessMasterAttributes =
+          res?.Data?.data?.Table0 as QuessAttribute[] || [];
+        console.log("data", this.quessMasterAttributes);
+        this.showInfoPopup = true;
+      });
+
+    }
   }
+
 
   closeInfoPopup() {
     this.showInfoPopup = false;
@@ -120,13 +176,14 @@ export class InputaggregatorwithclientComponent {
       console.warn('UserProfile not found in session storage');
     }
     this.loadQuessAttributes();
+    // this.loadQuessAttendanceAttributes();
     this.payPeriodType = "All";
   }
   handleCompanyEvent(company: Company | null) {
     if (!company) {
-      alert("please Select Company")
-      this.selectCompanyId = null;
-      this.selectCompanyCode = null;
+      // alert("please Select Company")
+      this.selectedCompanyId = null;
+      this.selectedCompanyCode = null;
       return;
     }
     this.selectedCompanyId = company.companyId ?? null;
@@ -157,8 +214,16 @@ export class InputaggregatorwithclientComponent {
   loadQuessAttributes() {
     this.service.getQuessMasterAttributes().subscribe(res => {
       this.quessMasterAttributes =
-        res?.Data?.data?.Table0 as QuessAttribute[] || [];
+        res?.Data?.data?.Table0 as QuessAttribute[];
+      console.log("data1", this.quessMasterAttributes)
+    });
+  }
 
+  loadQuessAttendanceAttributes() {
+    this.service.getQuessAttendanceAttributes().subscribe(res => {
+      this.quessAttendanceAttributes =
+        res?.Data?.data?.Table0 as QuessAttribute[];
+      console.log("data2", this.quessAttendanceAttributes)
     });
   }
   trackByIndex(index: number, item: any) {
@@ -196,39 +261,6 @@ export class InputaggregatorwithclientComponent {
 
 
 
-  // downloadTemplate(type: 'mapping' | 'client') {
-  //   this.isTemplateDropdownOpen = false;
-
-  //   let worksheet: XLSX.WorkSheet;
-  //   let workbook: XLSX.WorkBook;
-  //   let fileName: string;
-
-  //   if (type === 'mapping') {
-  //     console.log('Download Attributes Mapping Template');
-
-  //     const mappingHeaders = [
-  //       ['COMPANY_CODE', 'CLIENT_ATTRIBUTE_NAME', 'QUESS_ATTRIBUTE_NAME', 'EFFECTIVE_DATE', 'ISACTIVE', 'MODE']
-  //     ];
-
-  //     worksheet = XLSX.utils.aoa_to_sheet(mappingHeaders);
-  //     fileName = 'Attributes_Mapping_Template.xlsx';
-
-  //   } else {
-  //     console.log('Download Client Attributes Template');
-
-  //     const clientHeaders = [
-  //       ['COMPANY_CODE', 'CLIENT_ATTRIBUTE_NAME', 'ISACTIVE', 'MODE']
-  //     ];
-
-  //     worksheet = XLSX.utils.aoa_to_sheet(clientHeaders);
-  //     fileName = 'Client_Attributes_Template.xlsx';
-  //   }
-
-  //   workbook = XLSX.utils.book_new();
-  //   XLSX.utils.book_append_sheet(workbook, worksheet, 'Template');
-
-  //   XLSX.writeFile(workbook, fileName);
-  // }
   downloadTemplate(type: 'mapping' | 'client') {
     this.isTemplateDropdownOpen = false;
 
@@ -282,50 +314,66 @@ export class InputaggregatorwithclientComponent {
 
   downloadExcelBillablereport() {
     if (!this.selectCompanyId || !this.payperiodId) {
+      alert("Please Select Company and PayPeriod");
       return;
     }
 
     this.isLoading = true;
-
+    console.log(this.selectCompanyId, this.payperiodId);
     this.service
       .downloadBillableReport(this.selectCompanyId, this.payperiodId)
       .subscribe({
         next: (res: any) => {
+          console.log("res", res)
+          if (res.StatusCode === 200) {
+            const data = res?.Data?.data?.Table0;
+            const err = res;
+            if (!data || data.length === 0) {
+              alert('No records Found');
+              this.isLoading = false;
+              return;
+            }
 
-          const data = res?.Data?.data?.Table0;
+            const worksheet: XLSX.WorkSheet =
+              XLSX.utils.json_to_sheet(data);
 
-          if (!data || data.length === 0) {
-            alert('No records Found');
-            this.isLoading = false;
-            return;
+            const workbook: XLSX.WorkBook = {
+              Sheets: { 'Billable Report': worksheet },
+              SheetNames: ['Billable Report']
+            };
+
+            const excelBuffer = XLSX.write(workbook, {
+              bookType: 'xlsx',
+              type: 'array'
+            });
+
+            const blob = new Blob([excelBuffer], {
+              type:
+                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8'
+            });
+
+            saveAs(blob, 'Billable_Report.xlsx');
+          } else if (res.StatusCode === 404) {
+            alert('No Resource found');
+          } else if (res.Data.statusCode === 400) {
+            alert('Invalid request');
+          } else if (res.Data.statusCode === 500) {
+            alert('Server error, please try again later');
+          } else {
+            alert('Something went wrong');
           }
-
-          const worksheet: XLSX.WorkSheet =
-            XLSX.utils.json_to_sheet(data);
-
-          const workbook: XLSX.WorkBook = {
-            Sheets: { 'Billable Report': worksheet },
-            SheetNames: ['Billable Report']
-          };
-
-          const excelBuffer = XLSX.write(workbook, {
-            bookType: 'xlsx',
-            type: 'array'
-          });
-
-          const blob = new Blob([excelBuffer], {
-            type:
-              'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8'
-          });
-
-          saveAs(blob, 'Billable_Report.xlsx');
           this.isLoading = false;
+
         },
-        error: () => {
+        error: (err) => {
+          console.log("err", err);
+          alert('Server error, please try again later');
+
           this.isLoading = false;
         }
       });
   }
+
 
 
   downloadExcel() {
@@ -362,9 +410,12 @@ export class InputaggregatorwithclientComponent {
 
 
   handleSearch(): void {
+    // if (!this.selectedInputType) {
+    //   alert("Please Select Input Type");
+    //   return;
+    // }
     if (!this.selectedCompanyId) {
       alert("Please Select Company");
-      console.log('',this.selectedCompanyId)
       return;
     }
 
@@ -409,7 +460,7 @@ export class InputaggregatorwithclientComponent {
       clientAttribute: item.Template_Field_Name,
       quessAttribute: item.Quess_Template_Field_Name || '',
       Template_Field_Name: item.Template_Field_Name,
-      SelectedQuessAttributeId: item.Quess_Template_Field_Id || ''
+      SelectedQuessAttributeId: item.Quess_Template_Field_Id ?? null
     }));
   }
 
@@ -545,8 +596,8 @@ export class InputaggregatorwithclientComponent {
 
     return { parsed: null, msg: String(r) };
   }
-  ImportClickatt(fileInput: HTMLInputElement): void {
-    fileInput.click();
+  ImportClickatt(fileInput2: HTMLInputElement): void {
+    fileInput2.click();
   }
   onFileChangeatt(event: Event): void {
     const input = event.target as HTMLInputElement;
@@ -565,8 +616,7 @@ export class InputaggregatorwithclientComponent {
 
     // 🔄 START LOADING
     this.isLoading = true;
-    console.log('service test');
-    alert('attribute api calling')
+
     this.service.Upload(formData)
       .pipe(
         finalize(() => {
@@ -825,6 +875,501 @@ export class InputaggregatorwithclientComponent {
     this.showUploadPopup = false;
     this.previewData = [];
     this.previewColumns = [];
+  }
+
+
+  // This is For Input Aggregator 
+  handleSearchattendance(): void {
+    if (!this.selectedCompanyId) {
+      alert("Please Select Company");
+      return;
+    }
+    // this.isshowtable = true;
+    this.isLoading = true;
+
+    this.service.searchattendance(this.selectedCompanyId)
+      .pipe(finalize(() => this.isLoading = false))
+      .subscribe({
+        next: (res) => {
+
+          const tableData = res?.Data?.data?.Table0;
+          console.log(tableData);
+          if (!tableData || tableData.length === 0) {
+            alert("No records found");
+            this.Attendancesearch = [];
+            return;
+          }
+
+          this.bindAttendance(tableData);
+        },
+        error: (err) => {
+          console.error(err);
+          this.Attendancesearch = [];
+        }
+      });
+  }
+  bindAttendance(data: any[]): void {
+
+    this.Attendancesearch = data.map(item => ({
+      clientattributes: item.ClientAttributes,
+      quessatributes: item.QuessMasterAttributes,
+    }));
+
+  }
+  downloadExcelBillablereportAttendance() {
+    if (!this.selectCompanyId || !this.payperiodId) {
+      alert("Please Select Company and PayPeriod");
+      return;
+    }
+
+    this.isLoading = true;
+    console.log(this.selectCompanyId, this.payperiodId);
+    this.service
+      .downloadBillableReportattendance(this.selectCompanyId, this.payperiodId)
+      .subscribe({
+        next: (res: any) => {
+          console.log("res", res)
+          if (res.StatusCode === 200) {
+            const data = res?.Data?.data?.Table0;
+            const err = res;
+            if (!data || data.length === 0) {
+              alert('No records Found');
+              this.isLoading = false;
+              return;
+            }
+
+            const worksheet: XLSX.WorkSheet =
+              XLSX.utils.json_to_sheet(data);
+
+            const workbook: XLSX.WorkBook = {
+              Sheets: { 'Billable Report': worksheet },
+              SheetNames: ['Billable Report']
+            };
+
+            const excelBuffer = XLSX.write(workbook, {
+              bookType: 'xlsx',
+              type: 'array'
+            });
+
+            const blob = new Blob([excelBuffer], {
+              type:
+                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8'
+            });
+
+            saveAs(blob, 'Billable_Report.xlsx');
+          } else if (res.StatusCode === 404) {
+            alert('No Resource found');
+          } else if (res.Data.statusCode === 400) {
+            alert('Invalid request');
+          } else if (res.Data.statusCode === 500) {
+            alert('Server error, please try again later');
+          } else {
+            alert('Something went wrong');
+          }
+          this.isLoading = false;
+
+        },
+        error: (err) => {
+          console.log("err", err);
+          alert('Server error, please try again later');
+
+          this.isLoading = false;
+        }
+      });
+  }
+
+  ImportClickcliattendance(fileInput3: HTMLInputElement): void {
+    fileInput3.click();
+  }
+  onFileChangecliattendance(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input?.files?.[0];
+
+    if (!file) {
+      console.error('Please upload only one Excel file.');
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('CreatedBy', this.userdetail.user_Id);
+
+    this.isLoading = true;
+
+    this.service.Uploadattendancecli(formData)
+      .pipe(finalize(() => {
+        this.isLoading = false;
+      }))
+      .subscribe({
+        next: (res) => {
+          console.log('📥 API Response:', res);
+
+          if (!res || !res.Data) {
+            alert('Upload request processed. Server did not return any data.');
+            return;
+          }
+
+          const response = res.Data.response;
+
+          if (response && response.includes("Row(s) Uploaded Successfully.")) {
+            alert(res.Data.response);
+            return;
+          }
+
+          const { parsed, msg } = this.tryParseResponse(response);
+
+          const successMsg = 'Data uploaded successfully.';
+          const successMatch =
+            (Array.isArray(parsed) && parsed[0]?.Message?.trim() === successMsg) ||
+            (parsed && typeof parsed === 'object' && parsed?.Message?.trim() === successMsg);
+
+          if (res?.StatusCode === 200 && successMatch) {
+            alert('Data uploaded successfully.');
+            return;
+          }
+
+          if (res?.StatusCode === 200 && msg?.trim() === 'Failed to import.') {
+            const rawErr = res.Data.errors?.[0];
+            let errorArray: any[] = [];
+
+            try {
+              if (typeof rawErr === 'string') {
+                const tryJson = JSON.parse(rawErr);
+                errorArray = Array.isArray(tryJson) ? tryJson : [tryJson];
+              } else if (Array.isArray(rawErr)) {
+                errorArray = rawErr;
+              } else if (rawErr) {
+                errorArray = [rawErr];
+              }
+            } catch {
+              errorArray = rawErr ? [{ Error_Message: String(rawErr) }] : [];
+            }
+
+            // ✅ Use Error_Message instead of Validation
+            const exportData = errorArray.map((item: any) => ({
+              Error_Message: item?.Error_Message || ''
+            }));
+
+            const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
+            const workbook: XLSX.WorkBook = {
+              Sheets: { ErrorMessages: worksheet },
+              SheetNames: ['ErrorMessages']
+            };
+
+            XLSX.writeFile(
+              workbook,
+              `ClientAttributes_ErrorMessages.xlsx`
+            );
+            return;
+          }
+
+          const fallback =
+            msg ||
+            (Array.isArray(parsed) ? JSON.stringify(parsed) :
+              (parsed?.Error_Message ?? ''));
+
+          alert(fallback || 'Error while processing response.');
+        },
+
+        error: (err) => {
+          console.error('❌ Upload failed', err);
+          alert('Upload failed due to a network or server error.');
+        }
+      });
+  }
+
+
+
+  tryParseResponseattendance(r: any): { parsed: any; msg: string } {
+    if (r == null) return { parsed: null, msg: '' };
+
+    if (Array.isArray(r)) return { parsed: r, msg: '' };
+    if (typeof r === 'object') return { parsed: r, msg: '' };
+
+    // string
+    if (typeof r === 'string') {
+      try {
+        const p = JSON.parse(r);
+        return { parsed: p, msg: '' };
+      } catch {
+        return { parsed: null, msg: r };
+      }
+    }
+
+    return { parsed: null, msg: String(r) };
+  }
+  ImportClickattattendance(fileInput4: HTMLInputElement): void {
+    fileInput4.click();
+  }
+  onFileChangeattattendance(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input?.files?.[0];
+
+    if (!file) {
+      console.error('Please upload only one Excel file.');
+      return;
+    }
+
+
+
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('CreatedBy', this.userdetail.user_Id);
+
+    // 🔄 START LOADING
+    this.isLoading = true;
+
+    this.service.Uploadattendanceattributes(formData)
+      .pipe(
+        finalize(() => {
+          this.isLoading = false;
+        })
+      )
+      .subscribe({
+        next: (res) => {
+          console.log('📥 API Response:', res);
+
+          if (!res || !res.Data) {
+            alert('Upload request processed. Server did not return any data.');
+            return;
+          }
+
+          const response = res.Data.response;
+
+          if (response && response.includes("Row(s) Uploaded Successfully.")) {
+            alert(res.Data.response);
+            return;
+          }
+
+          const { parsed, msg } = this.tryParseResponseattattendance(response);
+
+          const successMsg = 'Data uploaded successfully.';
+          const successMatch =
+            (Array.isArray(parsed) && parsed[0]?.Message?.trim() === successMsg) ||
+            (parsed && typeof parsed === 'object' && parsed?.Message?.trim() === successMsg);
+
+          if (res?.StatusCode === 200 && successMatch) {
+            alert(' Data uploaded successfully.');
+            return;
+          }
+
+          if (res?.StatusCode === 200 && msg?.trim() === 'Failed to import.') {
+            const rawErr = res.Data.errors?.[0];
+            let errorArray: any[] = [];
+
+            try {
+              if (typeof rawErr === 'string') {
+                const tryJson = JSON.parse(rawErr);
+                errorArray = Array.isArray(tryJson) ? tryJson : [tryJson];
+              } else if (Array.isArray(rawErr)) {
+                errorArray = rawErr;
+              } else if (rawErr) {
+                errorArray = [rawErr];
+              }
+            } catch {
+              errorArray = rawErr ? [{ Error_Message: String(rawErr) }] : [];
+            }
+
+            // ✅ Use Error_Message instead of Validation
+            const exportData = errorArray.map((item: any) => ({
+              Error_Message: item?.Error_Message || ''
+            }));
+
+            const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
+            const workbook: XLSX.WorkBook = {
+              Sheets: { ErrorMessages: worksheet },
+              SheetNames: ['ErrorMessages']
+            };
+
+            XLSX.writeFile(
+              workbook,
+              `AttributesMapping_ErrorMessages.xlsx`
+            );
+            return;
+          }
+
+          const fallback =
+            msg ||
+            (Array.isArray(parsed) ? JSON.stringify(parsed) :
+              (parsed?.Error_Message ?? ''));
+
+          alert(fallback || 'Error while processing response.');
+        },
+
+        error: (err) => {
+          console.error('❌ Upload failed', err);
+          alert('Upload failed due to a network or server error.');
+        }
+      });
+  }
+
+
+
+
+  tryParseResponseattattendance(r: any): { parsed: any; msg: string } {
+    if (r == null) return { parsed: null, msg: '' };
+
+    if (Array.isArray(r)) return { parsed: r, msg: '' };
+    if (typeof r === 'object') return { parsed: r, msg: '' };
+
+    // string
+    if (typeof r === 'string') {
+      try {
+        const p = JSON.parse(r);
+        return { parsed: p, msg: '' };
+      } catch {
+        return { parsed: null, msg: r };
+      }
+    }
+
+    return { parsed: null, msg: String(r) };
+  }
+
+
+
+  // showUploadPopupattendance = false;
+  selectedFileattendance!: File;
+  previewDataattendance: any[] = [];
+  previewColumnsattendance: string[] = [];
+
+  ImportClickclientattendance(fileInput5: HTMLInputElement): void {
+
+    if (!this.selectedCompanyId) {
+      alert("Please Select Company");
+      return;
+    }
+
+    fileInput5.value = '';
+    fileInput5.click();
+  }
+
+  onFileChangeattendance(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input?.files?.[0];
+    if (!file) return;
+
+    this.selectedFileattendance = file;
+
+    const reader = new FileReader();
+    reader.onload = (e: any) => {
+      const workbook = XLSX.read(e.target.result, { type: 'array' });
+      const sheetName = workbook.SheetNames[0];
+      const worksheet = workbook.Sheets[sheetName];
+
+      const jsonData: any[] = XLSX.utils.sheet_to_json(worksheet, { defval: '' });
+
+      this.previewDataattendance = jsonData;
+      this.previewColumnsattendance = jsonData.length ? Object.keys(jsonData[0]) : [];
+      this.showUploadPopup = true; // show popup with table
+    };
+
+    reader.readAsArrayBuffer(file);
+  }
+
+  submitUploadattendance() {
+    if (!this.selectedFileattendance) {
+      alert("Please Select File");
+      return;
+    };
+    const formData = new FormData();
+    formData.append('file', this.selectedFileattendance);
+    formData.append('CreatedBy', this.userdetail.user_Id);
+    formData.append('CompanyId', this.selectedCompanyId);
+
+    this.isLoading = true;
+
+    this.service.Uploadclientattendance(formData)
+      .pipe(finalize(() => (this.isLoading = false)))
+      .subscribe({
+        next: (res: any) => {
+          if (!res || !res.Data) {
+            alert('Upload request processed. Server did not return any data.');
+            return;
+          }
+
+          const response = res.Data.response;
+
+          // Success message
+          if (response && response.includes("Row(s) Uploaded Successfully.")) {
+            alert(res.Data.response);
+            this.closeUploadPopup();
+            return;
+          }
+
+          const { parsed, msg } = this.tryParseResponseClientattendance(response);
+
+          const successMsg = 'Data uploaded successfully.';
+          const successMatch =
+            (Array.isArray(parsed) && parsed[0]?.Message?.trim() === successMsg) ||
+            (parsed && typeof parsed === 'object' && parsed?.Message?.trim() === successMsg);
+
+          if (res?.StatusCode === 200 && successMatch) {
+            alert('Data uploaded successfully.');
+            this.closeUploadPopup();
+            return;
+          }
+
+          // Error parsing → download Excel
+          if (res?.StatusCode === 200 && msg?.trim() === 'Failed to import.') {
+            const rawErr = res.Data.errors?.[0];
+            let errorArray: any[] = [];
+
+            try {
+              if (typeof rawErr === 'string') {
+                const tryJson = JSON.parse(rawErr);
+                errorArray = Array.isArray(tryJson) ? tryJson : [tryJson];
+              } else if (Array.isArray(rawErr)) {
+                errorArray = rawErr;
+              } else if (rawErr) {
+                errorArray = [rawErr];
+              }
+            } catch {
+              errorArray = rawErr ? [{ Error_Message: String(rawErr) }] : [];
+            }
+
+            const exportData = errorArray.map((item: any) => ({
+              Error_Message: item?.Error_Message || ''
+            }));
+
+            const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
+            const workbook: XLSX.WorkBook = {
+              Sheets: { ErrorMessages: worksheet },
+              SheetNames: ['ErrorMessages']
+            };
+
+            XLSX.writeFile(workbook, `AttributesMapping_ErrorMessages.xlsx`);
+            this.closeUploadPopup();
+            return;
+          }
+
+          // fallback
+          const fallback =
+            msg ||
+            (Array.isArray(parsed) ? JSON.stringify(parsed) : parsed?.Error_Message ?? '');
+          alert(fallback || 'Error while processing response.');
+        },
+        error: (err) => {
+          console.error('❌ Upload failed', err);
+          alert('Upload failed due to a network or server error.');
+        }
+      });
+  }
+
+  tryParseResponseClientattendance(r: any): { parsed: any; msg: string } {
+    if (r == null) return { parsed: null, msg: '' };
+    if (Array.isArray(r)) return { parsed: r, msg: '' };
+    if (typeof r === 'object') return { parsed: r, msg: '' };
+
+    if (typeof r === 'string') {
+      try {
+        const p = JSON.parse(r);
+        return { parsed: p, msg: '' };
+      } catch {
+        return { parsed: null, msg: r };
+      }
+    }
+
+    return { parsed: null, msg: String(r) };
   }
 
 

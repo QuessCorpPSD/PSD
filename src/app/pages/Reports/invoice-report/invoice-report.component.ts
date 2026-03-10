@@ -31,8 +31,8 @@ import { AlertpopupComponent } from '../../../common/alertpopup/alertpopup.compo
     MatTableModule,
     MatPaginatorModule,
     MatCardModule,
-    CompanyallComponent,
-    AlertpopupComponent
+    CompanyallComponent
+    
   ],
   templateUrl: './invoice-report.component.html',
   styleUrls: ['./invoice-report.component.css']
