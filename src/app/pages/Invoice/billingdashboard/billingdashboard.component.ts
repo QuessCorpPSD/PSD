@@ -21,7 +21,7 @@ export const AUTH_TOKEN = new InjectionToken<IAssignmentService>('AUTH_TOKEN');
 export const Invoice_TOKEN = new InjectionToken<IInvoiceRepository>('Invoice_TOKEN');
 import { FormsModule } from '@angular/forms';
 import * as XLSX from 'xlsx';
-import { finalize } from 'rxjs';
+import { finalize, interval } from 'rxjs';
 import { SignalrService } from '../../../Shared/SignalrService';
 @Component({
   selector: 'app-billingdashboard',
@@ -78,7 +78,10 @@ export class BillingdashboardComponent implements OnInit {
     const userdetail = this._sessionStoreage.getItem('UserProfile');
     this.userdetail = JSON.parse(this._decrypt.decrypt(userdetail!));
     this.BindInvoiceAllot();
-
+    interval(60000).subscribe(() => {
+      alert("Hi")
+    this.BindInvoiceAllot();
+  });
     //  this.signalr.startConnection();
 
     // this.signalr.onGridUpdate(() => {
