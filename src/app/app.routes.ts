@@ -146,6 +146,7 @@ import { ReprocessComponent } from './pages/process/reprocess/reprocess.componen
 import { UpfrontmatrixComponent } from './pages/upfrontprocess/upfrontmatrix/upfrontmatrix.component';
 import { EmployeeComponents } from './pages/customers/employee/employee.component';
 import { TaxRemittanceGenerationComponent } from './pages/E-TDSProcess/tax-remittance-generation/tax-remittance-generation.component';
+import { TaxremittancedetailComponent } from './pages/E-TDSProcess/taxremittancedetail/taxremittancedetail.component';
 import { BillingdashboardComponent } from './pages/Invoice/billingdashboard/billingdashboard.component';
 import { EInvoiceComponent } from './pages/Invoice/einvoice/einvoice.component';
 import { InputnavigationComponent } from './pages/inputaggregator/inputnavigation/inputnavigation.component';
@@ -332,7 +333,8 @@ export const routes: Routes = [
         path: 'etdsprocess', component: ETDSProcessnavigationComponent,
         children: [
           { path: "legalentitymapping", component: LegalEntityMappingComponent },
-          { path: "taxremittancegeneration", component: TaxRemittanceGenerationComponent }
+          { path: "taxremittancegeneration", component: TaxRemittanceGenerationComponent },
+          { path: "taxremittancedetail", component: TaxremittancedetailComponent }
 
 
 
