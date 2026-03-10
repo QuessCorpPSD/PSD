@@ -1,0 +1,343 @@
+<div class="page-wrapper">
+    <div class="scrollable-content">
+        <mat-card-title class="main-header">
+            Tax Remittance Detail
+        </mat-card-title>
+        <div class="container py-2">
+            <div class="row g-3 align-items-end">
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Challan Number</label>
+                    <input type="text" class="form-control" [ngModel]="challanNumber" />
+                </div>
+
+                <div class="col-md-2 d-flex gap-2">
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-search"
+                        matTooltip="Search" (click)="onSearch()">
+                        <mat-icon>search</mat-icon>
+                    </button>
+                    <button class="btn btn-secondary btn-sm d-flex align-items-center justify-content-center"
+                        matTooltip="export to excel">
+                        <mat-icon>download</mat-icon>
+                    </button>
+
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-upload"
+                        matTooltip="Import">
+                        <mat-icon>cloud_upload</mat-icon>
+                    </button>
+
+                    <!-- <button class="btn btn-sm d-flex align-items-center justify-content-center btn-download"
+                        matTooltip="Template">
+                        <mat-icon>cloud_download</mat-icon>
+                    </button> -->
+
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-add" matTooltip="Add"
+                        (click)="AddTaxOpen()">
+                        <mat-icon>add</mat-icon>
+                    </button>
+                    <!--  <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Template"
+        (click)="DownloadTemplate()">
+        <mat-icon>cloud_download</mat-icon>
+      </button> -->
+                    <!-- <input type="file" #fileInput style="display: none;" (click)="fileInput.value=''"
+                        (change)="onFileChange($event)" accept=".xlsx, .xls" /> -->
+                </div>
+
+            </div>
+            <div class="table-container" style="top:30px;" *ngIf="showTable">
+                <div class="table-scroll-window">
+                    <table mat-table [dataSource]="uploadedDataSource" matSort class="mat-elevation-z8">
+                        <ng-container matColumnDef="delete">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header
+                                class="fixed-width-column"></mat-header-cell>
+                            <mat-cell *matCellDef="let element" class="fixed-width-column">
+                                <img src="assets/delete.svg" style="cursor: pointer; width: 24px; height: 22px;" />
+                            </mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="edit">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header
+                                class="fixed-width-column"></mat-header-cell>
+                            <mat-cell *matCellDef="let element" class="fixed-width-column">
+                                <img src="assets/Icons/edit.svg" style="cursor: pointer; width: 24px; height: 22px;" />
+                            </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="legalEntityCode">
+                            <mat-header-cell *matHeaderCellDef>Legal Entity Code</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.SNo }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="remittanceDate">
+                            <mat-header-cell *matHeaderCellDef>Remittance Date</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Company_Code }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="branch">
+                            <mat-header-cell *matHeaderCellDef>Branch</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Employee_Code }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="bank">
+                            <mat-header-cell *matHeaderCellDef>Bank</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Employee_Code }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="BrsCode">
+                            <mat-header-cell *matHeaderCellDef>BRS Code</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Reimbursement_Date }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="financialYear">
+                            <mat-header-cell *matHeaderCellDef>Financial Year</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Financial_Year_Name }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="chequeNumber">
+                            <mat-header-cell *matHeaderCellDef>Cheque Number </mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Pay_Period }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="challanNUmber">
+                            <mat-header-cell *matHeaderCellDef>Challan Number</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Reimbursement_Code }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="monthNumber">
+                            <mat-header-cell *matHeaderCellDef>Month Number</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Claim_Amount }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="year">
+                            <mat-header-cell *matHeaderCellDef>Year</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Claim_Amount }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="serialNumber">
+                            <mat-header-cell *matHeaderCellDef>Serial Number</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Claim_Amount }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="employeeType">
+                            <mat-header-cell *matHeaderCellDef>Employee Type</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Claim_Amount }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="amount">
+                            <mat-header-cell *matHeaderCellDef>Amount</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Claim_Amount }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="referenceNUmber">
+                            <mat-header-cell *matHeaderCellDef>Reference Number</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Claim_Amount }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="file_name">
+                            <mat-header-cell *matHeaderCellDef>File_Name</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Claim_Amount }}</mat-cell>
+                        </ng-container>
+
+                        <mat-header-row *matHeaderRowDef="uploadDisplayedColumns"></mat-header-row>
+
+                        <!-- Data Rows -->
+                        <mat-row *matRowDef="let row; columns: uploadDisplayedColumns"></mat-row>
+
+                    </table>
+                </div>
+                <div *ngIf="uploadedDataSource.data.length===0" class="text-center p-4">
+                    <p class="text-muted">No data to display</p>
+                </div>
+                <mat-paginator [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons
+                    style="border-top: 1px solid #ddd;"></mat-paginator>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="isAddclicked" class="popup-overlay" (keydown.escape)="closeclick()">
+    <mat-card class="popup-card">
+        <mat-card-header class="popup-header">
+            <mat-card-title class="d-flex justify-content-center align-items-center">
+                {{ isEditMode ? 'Edit Tax Remittance' : 'Add Tax Remittance' }}
+            </mat-card-title>
+
+            <button class="close-btn" matTooltip="Close" (click)="closeclick()">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-card-header>
+        <mat-card-content class="scroll-content">
+            <form [formGroup]="addTaxRemittanceDetail" novalidate>
+                <!-- Row 1 -->
+                <div class="row g-3 mb-3">
+                    <div class="col-md-4">
+                        <label class="form-label">Legal Entity<span class="text-danger">*</span></label>
+                        <select class="form-select" formControlName="LegalEntity">
+                            <option value="">-- Select --</option>
+                            <!-- <option *ngFor="let e of empCode" [value]="e.Employee_Id">
+                                {{ e.Employee_code }}
+                            </option> -->
+                        </select>
+                        <div class="text-danger small" *ngIf="addTaxRemittanceDetail.get('LegalEntity')?.touched 
+             && addTaxRemittanceDetail.get('LegalEntity')?.hasError('required')">
+                            LegalEntity is required
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Remittance Date<span class="text-danger">*</span></label>
+                        <input type="date" class="form-control" formControlName="RemittanceDate" />
+                        <div class="text-danger small" *ngIf="addTaxRemittanceDetail.get('RemittanceDate')?.touched 
+             && addTaxRemittanceDetail.get('RemittanceDate')?.hasError('required')">
+                            RemittanceDate is required
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Bank Branch<span class="text-danger">*</span></label>
+                        <select class="form-select" formControlName="BankBranch">
+                            <option value="">-- Select --</option>
+                            <!-- <option *ngFor="let e of empCode" [value]="e.Employee_Id">
+                                {{ e.Employee_code }}
+                            </option> -->
+                        </select>
+                        <div class="text-danger small" *ngIf="addTaxRemittanceDetail.get('BankBranch')?.touched 
+             && addTaxRemittanceDetail.get('BankBranch')?.hasError('required')">
+                            BankBranch is required
+                        </div>
+                    </div>
+                </div>
+                <!-- Row 2 -->
+                <div class="row g-3 mb-3">
+                    <div class="col-md-4">
+                        <label class="form-label">Bank</label>
+                        <input type="text" class="form-control" formControlName="bank" />
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">BSR Code</label>
+                        <input type="text" class="form-control" formControlName="BrsCode" />
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Financial Year<span class="text-danger">*</span></label>
+                        <select class="form-select" formControlName="FinancialYear">
+                            <option value="">-- Select --</option>
+                            <!-- <option *ngFor="let p of payPeriod" [value]="p.Pay_Frequency_Detail_Id">
+                                {{p.Pay_Period}}
+                            </option> -->
+                        </select>
+                        <div class="text-danger small" *ngIf="addTaxRemittanceDetail.get('FinancialYear')?.touched 
+             && addTaxRemittanceDetail.get('FinancialYear')?.hasError('required')">
+                            FinancialYear is required
+                        </div>
+                    </div>
+                </div>
+                <div class="row g-3 mb-3">
+                    <div class="col-md-4">
+                        <label class="form-label">UTR Number</label>
+                        <input type="text" class="form-control" formControlName="UTRNumber" />
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Challan Number<span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" formControlName="ChallanNumber" />
+                        <div class="text-danger small" *ngIf="addTaxRemittanceDetail.get('ChallanNumber')?.touched 
+             && addTaxRemittanceDetail.get('ChallanNumber')?.hasError('required')">
+                            ChallanNumber is required
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Month Number<span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" formControlName="MonthNumber" />
+                        <div class="text-danger small" *ngIf="addTaxRemittanceDetail.get('MonthNumber')?.touched 
+             && addTaxRemittanceDetail.get('MonthNumber')?.hasError('required')">
+                            MonthNumber is required
+                        </div>
+                    </div>
+                </div>
+                <div class="row g-3 mb-3">
+                    <div class="col-md-4">
+                        <label class="form-label">Year<span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" formControlName="Year" />
+                        <div class="text-danger small" *ngIf="addTaxRemittanceDetail.get('Year')?.touched 
+             && addTaxRemittanceDetail.get('Year')?.hasError('required')">
+                            Year is required
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Serial Number<span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" formControlName="SerialNumber" />
+                        <div class="text-danger small" *ngIf="addTaxRemittanceDetail.get('SerialNumber')?.touched 
+             && addTaxRemittanceDetail.get('SerialNumber')?.hasError('required')">
+                            SerialNumber is required
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Employee Type<span class="text-danger">*</span></label>
+                        <select class="form-select" formControlName="EmployeeType">
+                            <option value="">-- Select --</option>
+                            <!-- <option *ngFor="let p of payPeriod" [value]="p.Pay_Frequency_Detail_Id">
+                                {{p.Pay_Period}}
+                            </option> -->
+                        </select>
+                        <div class="text-danger small" *ngIf="addTaxRemittanceDetail.get('EmployeeType')?.touched 
+             && addTaxRemittanceDetail.get('EmployeeType')?.hasError('required')">
+                            EmployeeType is required
+                        </div>
+                    </div>
+                </div>
+                <div class="row g-3 mb-3">
+                    <div class="col-md-4">
+                        <label class="form-label">Reference Number<span class="text-danger">*</span></label>
+                        <select class="form-select" formControlName="ReferenceNumber">
+                            <option value="">-- Select --</option>
+                            <!-- <option *ngFor="let p of payPeriod" [value]="p.Pay_Frequency_Detail_Id">
+                                {{p.Pay_Period}}
+                            </option> -->
+                        </select>
+                        <div class="text-danger small" *ngIf="addTaxRemittanceDetail.get('ReferenceNumber')?.touched 
+             && addTaxRemittanceDetail.get('ReferenceNumber')?.hasError('required')">
+                            ReferenceNumber is required
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Amount</label>
+                        <input type="text" class="form-control" formControlName="Amount" />
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">
+                            Upload Remittance </label>
+                        <input type="file" class="form-control" (change)="onFileSelected($event)"
+                            accept=".pdf,.jpg,.jpeg,.png" formControlName="UploadRemittance" />
+                    </div>
+
+                </div>
+                <div class="row g-3 mb-3">
+                    <div class="col-md-4">
+                        <label class="form-label">Reference Token Number</label>
+                        <input type="text" class="form-control" formControlName="ReferenceTokenNumber" />
+                    </div>
+                </div>
+
+            </form>
+
+            <!-- <mat-card-footer class="footer"> -->
+            <div class="d-flex justify-content-end mt-3" style="gap: 10px; padding-right: 8px;">
+                <!-- <div> -->
+
+                <button type="Cancel"
+                    style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: #f0f0f0; color: black;"
+                    (click)="closeclick()">
+                    Cancel
+                </button>
+
+                <button type="submit"
+                    style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: blue; color: white;"
+                    (click)="Save()">
+                    Save
+                </button>
+                <!-- </div> -->
+            </div>
+            <!-- </mat-card-footer> -->
+        </mat-card-content>
+
+    </mat-card>
+</div>
+<!-- <div *ngIf="isLoading" class="loading-overlay">
+    <img src="assets/Loading.gif" alt="Loading...">
+</div> -->
