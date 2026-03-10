@@ -85,7 +85,7 @@
           <ng-container matColumnDef="edit">
             <th mat-header-cell *matHeaderCellDef>Edit</th>
             <td mat-cell *matCellDef="let element">
-              <img src="assets/icons/edit.svg" alt="edit" style="width: 24px; height: 22px;"
+              <img src="assets/icons/edit.svg" *ngIf="element.isedit"  alt="edit" style="width: 24px; height: 22px;"
                 [style.cursor]="element.status === 'Completed' ? 'not-allowed' : 'pointer'"
                 [style.opacity]="element.status === 'Completed' ? '0.5' : '1'"
                 [style.pointer-events]="element.status === 'Completed' ? 'none' : 'auto'"

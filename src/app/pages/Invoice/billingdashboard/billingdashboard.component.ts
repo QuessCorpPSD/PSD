@@ -77,11 +77,13 @@ export class BillingdashboardComponent implements OnInit {
   ngOnInit(): void {
     const userdetail = this._sessionStoreage.getItem('UserProfile');
     this.userdetail = JSON.parse(this._decrypt.decrypt(userdetail!));
-     this.signalr.startConnection();
+    this.BindInvoiceAllot();
 
-    this.signalr.onGridUpdate(() => {
-      this.BindInvoiceAllot();
-    });
+    //  this.signalr.startConnection();
+
+    // this.signalr.onGridUpdate(() => {
+     
+    // });
    
   }
   
@@ -176,11 +178,11 @@ export class BillingdashboardComponent implements OnInit {
   BindInvoiceAllot() {   
     
 
-    const loggedInUser = [263, 3].includes(this.userdetail.user_Id)  ? 0  : this.userdetail.user_Id;
+    const loggedInUser =this.userdetail.user_Id //[263, 3].includes(this.userdetail.user_Id)  ? 0  : this.userdetail.user_Id;
     
     this._invoiceService.BillingDashboard(loggedInUser, 'Search').subscribe({
       next: res => {
-        
+       
         this.InvoiceAlloted = new MatTableDataSource<any>(Array.isArray(res.Data) ? res.Data : []);
         this.InvoiceAlloted.paginator = this.InvoiceAlot_paginator;
       },
