@@ -438,6 +438,7 @@ input {
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
+  gap: 50px;
 }
 
 
@@ -584,7 +585,7 @@ input {
   -webkit-appearance: none;
   border-radius: 10px;
   border: 1px solid #e9e9e9;
-  width: 120px;
+  width: 150px;
   height: 40px;
   padding: 4px 40px 4px 4px;
   background-color: white;
@@ -616,8 +617,8 @@ input {
 }
 
 .right {
-  margin-left: auto;
-  margin-right: 80px;
+  float:right;
+  /* margin-right: 40px; */
 }
 
 .hover-target {
