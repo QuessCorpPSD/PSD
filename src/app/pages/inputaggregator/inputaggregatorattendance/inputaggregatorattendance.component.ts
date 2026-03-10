@@ -349,7 +349,7 @@ export class InputaggregatorattendanceComponent {
 
     const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(excelData);
     const workbook: XLSX.WorkBook = {
-      Sheets: { Attributes: worksheet },
+      Sheets: { 'Attributes_Attendance': worksheet },
       SheetNames: ['Attributes_Attendance']
     };
 
@@ -363,7 +363,7 @@ export class InputaggregatorattendanceComponent {
         'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8'
     });
     this.isLoading = false;
-    saveAs(blob, `Quess_Attributes_Attendance.xlsx`);
+    saveAs(blob, 'Quess_Attributes_Attendance.xlsx');
 
   }
 
@@ -457,8 +457,7 @@ export class InputaggregatorattendanceComponent {
         this.isLoading = false;
       }))
       .subscribe({
-        next: (res) => {
-          console.log('📥 API Response:', res);
+        next: (res) => {          
 
           if (!res || !res.Data) {
             alert('Upload request processed. Server did not return any data.');
@@ -719,7 +718,7 @@ export class InputaggregatorattendanceComponent {
 
       const jsonData: any[] = XLSX.utils.sheet_to_json(worksheet, { defval: '' });
 
-      this.previewData = jsonData;
+      this.previewData = jsonData.slice(0,100);
       this.previewColumns = jsonData.length ? Object.keys(jsonData[0]) : [];
       this.showUploadPopup = true; // show popup with table
     };

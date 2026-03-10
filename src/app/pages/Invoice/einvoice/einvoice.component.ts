@@ -93,6 +93,7 @@ export class EInvoiceComponent {
   cacheData: any;
   showPanel = false;
   selectedCompanyId!: number;
+  PayregisterTemplate:string=''
   payPeriodType: string = "All";
   constructor(private _sessionStoreage: SessionStorageService,
     private decry: EncryptionService, private fb: FormBuilder, @Inject(Invoice_TOKEN) private invoiceService: IInvoiceRepository
@@ -103,11 +104,18 @@ export class EInvoiceComponent {
     { value: 'irngenerated', Text: 'IRN Generated' }
   ];
 
+   PayRegisterOptions = [
+    { value: 'R', Text: 'Regular' },
+    { value: 'OI', Text: 'OI' }
+  ];
+
   attributes = [
     { name: 'Narration', selected: false },
     { name: 'PO_Number', selected: false }
   ];
+onPayRegisterChange(){
 
+}
   handleCompanyEvent(company: any) {
     this.companyUI = company;
     this.Company_Code = company.company_Code;
@@ -954,7 +962,8 @@ export class EInvoiceComponent {
       Company_Code: this.companyUI.companyCode,
       Company_Name: this.companyUI.companyName,
       Pay_Period_Id: this.payperiodUI.payfrequencyid,
-      Pay_Period: this.payperiodUI.payPeriod
+      Pay_Period: this.payperiodUI.payPeriod,
+      Data_From:this.PayregisterTemplate
     }
 
     this.invoiceService.GetConsolidatedPayRegister(payload)

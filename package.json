@@ -15,6 +15,7 @@
     "@angular/material": "^19.2.15",
     "@angular/platform-server": "^19.2.15",
     "@canvasjs/angular-charts": "^1.2.0",
+    "@microsoft/signalr": "^10.0.0",
     "@popperjs/core": "^2.11.8",
     "@swimlane/ngx-charts": "^22.0.0",
     "@types/d3-shape": "^3.1.7",

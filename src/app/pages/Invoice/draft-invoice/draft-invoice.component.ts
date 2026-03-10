@@ -31,6 +31,7 @@ import { ChatWindow } from '../../../Models/Common';
 import * as XLSX from 'xlsx';
 import * as FileSaver from 'file-saver';
 import { finalize, lastValueFrom } from 'rxjs';
+import { SignalrService } from '../../../Shared/SignalrService';
 
 export const Invoice_TOKEN = new InjectionToken<IInvoiceRepository>('Invoice_TOKEN');
 @Component({
@@ -75,7 +76,8 @@ export class DraftInvoiceComponent implements OnInit {
   //@ViewChild(PayPeriod) PayPeriodComponent!: Payperiodclass;
   displayColumns = ['action', 'download', 'serial_No', 'invoiceType', 'Req_No', 'invoice_remarks', 'company_Code', 'map_name', 'net_CTC', 'netPay', 'lotNo', 'input_No', 'pO_Number', 'employee_Head_Count', 'service_Charge', 'serviceChargeAmount', 'service_Charge_Master', 'service_Charge_Type', 'bgvbl', 'astfee', 'discT1', 'discT2', 'idcard', 'email', 'regfee', 'trnfee', 'ggdbt', 'ppekit', 'vmsfee', 'edufee', 'ntpry', 'renmac', 'draded', 'othdd', 'mbapp', 'calcrg', 'calrt', 'narration', 'eapct', 'hosac']
   constructor(@Inject(Invoice_TOKEN) private _invoiceService: IInvoiceRepository, private _decrypt: EncryptionService,
-    private _sessionStoreage: SessionStorageService, private dialog: MatDialog) {
+    private _sessionStoreage: SessionStorageService, private dialog: MatDialog
+  ,private signalr:SignalrService) {
   }
 
 
@@ -142,7 +144,7 @@ export class DraftInvoiceComponent implements OnInit {
     const uniqueInvoiceTypes = new Set(
       this.selection.selected.map(row => row.invoiceType)
     );
-    console.log('uniqueInvoiceTypes', uniqueInvoiceTypes);
+    
     if (uniqueInvoiceTypes.size > 1) {
       alert('Both Draft and Provisional Invoices are selected. Please select only Draft or Provisional Invoices.');
       this.selection.clear();
@@ -288,7 +290,7 @@ export class DraftInvoiceComponent implements OnInit {
 
   InitiationSearchExport(element: any): void {
 
-    console.log('Selection', element);
+    
     this.isLoading = true;
     const request = {
       "Company_Id": element.company_Id,
@@ -296,7 +298,9 @@ export class DraftInvoiceComponent implements OnInit {
       "LotNo": element.lotNo,
       "ReqNo": element.req_No,
       "Data_From": element.data_From,
-      "Invoice_Type": element.invoiceType
+      "Invoice_Type": element.invoiceType,
+      "Company_Code":element.company_Code,
+      "Pay_Period":element.pay_Period
 
     }
     this._invoiceService.InitiationSearchExport(request).subscribe({
@@ -354,7 +358,10 @@ export class DraftInvoiceComponent implements OnInit {
       "userId": this.userdetail.user_Id
     }
     this.dataSource = new MatTableDataSource<any>([]);
-    this.InvoiceSearch();
+    //this.loadGrid();
+
+    this.InvoiceSearch();  // auto refresh grid
+    
     // this._invoiceService.InitialSearch(request).subscribe({
     //   next: res => {
 

@@ -22,6 +22,7 @@ export const Invoice_TOKEN = new InjectionToken<IInvoiceRepository>('Invoice_TOK
 import { FormsModule } from '@angular/forms';
 import * as XLSX from 'xlsx';
 import { finalize } from 'rxjs';
+import { SignalrService } from '../../../Shared/SignalrService';
 @Component({
   selector: 'app-billingdashboard',
   imports: [MatPaginatorModule, CommonModule, UserComponent, MatTableModule, MatCardModule, MatTooltipModule, MatCheckboxModule,FormsModule],
@@ -55,7 +56,7 @@ export class BillingdashboardComponent implements OnInit {
   @ViewChild('InvoiceAlotPaginator') InvoiceAlot_paginator!: MatPaginator;
   constructor(@Inject(DASH_TOKEN) private dashService: IDashBoardServices, @Inject(Invoice_TOKEN) private _invoiceService: IInvoiceRepository,
     private _decrypt: EncryptionService,
-    private _sessionStoreage: SessionStorageService) { }
+    private _sessionStoreage: SessionStorageService,private signalr:SignalrService) { }
   displayedInvoiceColumns: string[] = ['edit','status'
     , 'Req_No'
     , 'RequestDatetime'
@@ -76,7 +77,12 @@ export class BillingdashboardComponent implements OnInit {
   ngOnInit(): void {
     const userdetail = this._sessionStoreage.getItem('UserProfile');
     this.userdetail = JSON.parse(this._decrypt.decrypt(userdetail!));
-    this.BindInvoiceAllot();
+     this.signalr.startConnection();
+
+    this.signalr.onGridUpdate(() => {
+      this.BindInvoiceAllot();
+    });
+   
   }
   
   onTemplateChange(searchText: string = ''): void {

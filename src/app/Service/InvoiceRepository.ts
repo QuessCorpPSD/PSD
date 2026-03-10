@@ -176,14 +176,12 @@ export class InvoiceRepository implements IInvoiceRepository {
         );
     }
     GetConsolidatedPayRegister(payload: any): Observable<APIResponse> {
-        const url = `${this.environment.apiUrl}GSTInvoice/PayRegisterDownload`;
-        console.log(url);
+        const url = `${this.environment.apiUrl}GSTInvoice/PayRegisterDownload`;      
         return this.http.post<APIResponse>(url, payload);
     }
 
     GetConsolidateInvoiceSummary(payload: any): Observable<APIResponse> {
-        const url = `${this.environment.apiUrl}GSTInvoice/GetConsolidateInvoiceSummary`;
-        console.log(url);
+        const url = `${this.environment.apiUrl}GSTInvoice/GetConsolidateInvoiceSummary`;       
         return this.http.post<APIResponse>(url, payload);
     }
 
