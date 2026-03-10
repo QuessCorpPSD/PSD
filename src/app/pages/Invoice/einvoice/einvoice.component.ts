@@ -106,7 +106,10 @@ export class EInvoiceComponent {
 
    PayRegisterOptions = [
     { value: 'R', Text: 'Regular' },
-    { value: 'OI', Text: 'OI' }
+    { value: 'OI', Text: 'OI' },
+    { value: 'Split', Text: 'Split' },
+    { value: 'Clear', Text: 'Clear'}
+
   ];
 
   attributes = [
@@ -945,6 +948,10 @@ onPayRegisterChange(){
   }
 
   PayRegisterDownload(): void {
+    if (this.PayregisterTemplate==='Clear'){
+      this.PayregisterTemplate='';
+      return;
+    }
     if (!this.companyUI) {
       alert("Please select Company Code");
       return;

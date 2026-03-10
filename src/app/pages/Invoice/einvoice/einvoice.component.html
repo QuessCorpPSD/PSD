@@ -95,21 +95,24 @@
                             </svg>
                         </i>
                     </button> -->
- <div style="display: inline-block; margin-right: 10px;">
-            <label style="position: relative; display: inline-block;">
-                <select [(ngModel)]="PayregisterTemplate" (change)="PayRegisterDownload()" class="select-drop">
-                    <option value="" disabled hidden>Pay Register</option>
-                    <option *ngFor="let item of PayRegisterOptions" [value]="item.value">{{ item.Text }}</option>
-                </select>
-                <i
-                    style="position: absolute; top: 50%; right: 15px; transform: translateY(-50%); pointer-events: none;">
-                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                            stroke-linejoin="round" />
-                    </svg>
-                </i>
-            </label>
-        </div>
+                    <div style="display: inline-block; margin-right: 10px;">
+                        <label style="position: relative; display: inline-block;">
+                            <select [(ngModel)]="PayregisterTemplate" (change)="PayRegisterDownload()"
+                                class="select-drop">
+                                <option value="" disabled hidden>Pay Register</option>
+                                <option *ngFor="let item of PayRegisterOptions" [value]="item.value">{{ item.Text }}
+                                </option>
+                            </select>
+                            <i
+                                style="position: absolute; top: 50%; right: 15px; transform: translateY(-50%); pointer-events: none;">
+                                <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5"
+                                        stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                            </i>
+                        </label>
+                    </div>
 
                     <button *ngIf="canInitiateIRN()" (click)="confirmIRN()"
                         style="display: inline-block; left:10px; width: 120px; height: 30px; padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; background: #302CB3; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.20); border-radius: 6px; justify-content: center; align-items: center; gap: 10px; display: inline-flex; border: none;">
