@@ -79,7 +79,7 @@ export class BillingdashboardComponent implements OnInit {
     this.userdetail = JSON.parse(this._decrypt.decrypt(userdetail!));
     this.BindInvoiceAllot();
     interval(60000).subscribe(() => {
-      alert("Hi")
+      //lert("Hi")
     this.BindInvoiceAllot();
   });
     //  this.signalr.startConnection();
