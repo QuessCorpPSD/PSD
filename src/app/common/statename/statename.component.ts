@@ -51,7 +51,7 @@ export class StatenameComponent implements OnChanges {
 
   constructor(
     @Inject(COMM_TOKEN) private _commonService: ICommonService
-  ) {}
+  ) { }
 
   ngOnChanges(): void {
     if (this.selectedCompanyId) {

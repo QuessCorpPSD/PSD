@@ -1,13 +1,10 @@
 import { Component, Inject, InjectionToken, ViewChild } from '@angular/core';
 import { MatPaginator, MatPaginatorModule } from "@angular/material/paginator";
 import { MatTableDataSource, MatTableModule } from "@angular/material/table";
-import { ClientaddressNewComponent } from '../clientaddress-new/clientaddress-new.component';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from "@angular/material/icon";
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { ClientaddressImportComponent } from '../clientaddress-import/clientaddress-import.component';
-import { ClientaddressEditComponent } from '../clientaddress-edit/clientaddress-edit.component';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { AlertpopupComponent } from "../../../common/alertpopup/alertpopup.component";
 import { ClientaddressService } from '../../../Service/customersserv/clientaddress.service';
@@ -18,13 +15,18 @@ import * as XLSX from 'xlsx';
 import FileSaver from 'file-saver';
 import { MatCardModule } from "@angular/material/card";
 import { IClientaddress } from '../../../Repository/customer/IClientaddress';
-import { APIResponse } from '../../../Models/apiresponse';
+import { CompanyallComponent } from '../../../common/CompanyAll/companyall.component';
+import { MapnameComponent } from "../../../common/Mapname/mapname/mapname.component";
+import { StatenameComponent } from '../../../common/statename/statename.component';
+import { StateComponent } from '../../../common/state/state.component';
+import { CitynameComponent } from '../../../common/cityname/cityname.component';
+import { CitybystateComponent } from '../../../common/citybystate/citybystate.component';
 export const Pay_TOKEN = new InjectionToken<IClientaddress>('Pay_TOKEN');
 
 @Component({
-  selector: 'app-clientaddress',
+  selector: 'clientaddress',
   standalone: true,
-  imports: [MatPaginatorModule, MatTableModule, MatIconModule, CommonModule, FormsModule, ReactiveFormsModule, MatTooltipModule, AlertpopupComponent, MatCardModule],
+  imports: [MatPaginatorModule, MatTableModule, MatIconModule, CommonModule, FormsModule, ReactiveFormsModule, MatTooltipModule, MatCardModule, CompanyallComponent, MapnameComponent, StateComponent, CitybystateComponent],
   templateUrl: './clientaddress.component.html',
   styleUrl: './clientaddress.component.css',
   providers: [
@@ -37,8 +39,25 @@ export const Pay_TOKEN = new InjectionToken<IClientaddress>('Pay_TOKEN');
 export class ClientaddressComponent {
   Clientaddress: any;
   userdetail: any;
+  clientaddress!: FormGroup;
+  selectedCC: any;
+  companyUI: any;
+  mapnameUI: any;
+  stateNameUI: any;
+  stateNameUI1: any;
+  stateNameUI2: any;
+  cityNameUI1: any;
+  cityNameUI2: any;
+  selectedMN: string = '';
+  selectedState?: number;
+  selectedState1?: number;
+  selectedState2?: number;
+  showErrors = false;
+  isEditMode: boolean = false;
+  rowData: any;
+
   constructor(private dialog: MatDialog, @Inject(Pay_TOKEN) private service: IClientaddress, private decry: EncryptionService,
-    private _sessionStoreage: SessionStorageService) { }
+    private _sessionStoreage: SessionStorageService, private fb: FormBuilder,) { }
   message: string = '';
   popupMessage: string = '';
   popupSubMessage: string = '';
@@ -47,16 +66,145 @@ export class ClientaddressComponent {
   showValidate = false;
   isLoading: boolean = false;
   uploadDisplayedColumns: string[] = [
-    'Client_Address_Id', 'Companycode', 'MapName', 'SAPCustomercode', 'Billing_Client_Name', 'billingaddress', 'Shippingaddresssameasbilling', 'Shippingclientname', 'Shippingaddress', 'Effectivedate', 'gstnumber', 'gstapplicable'];
-
+    'Action',
+    'Client_Address_Id',
+    'Companycode',
+    'State',
+    'MapName',
+    'SACCode',
+    'Billing_Client_Name',
+    'billingaddress',
+    'billingstate',
+    'Shippingaddresssameasbilling',
+    'Shippingclientname',
+    'Shippingaddress',
+    'Shippingstate',
+    'Effectivedate',
+    'SezApplicable',
+    'SezExpiryDate',
+    'LutNumber',
+    'LutDate',
+    'LutExpiryDate',
+    'VendorCode',
+    'gstnumber',
+    'BillingLocation',
+    'ShippingLocation',
+    'BillingPincode',
+    'ShippingPincode',
+    'SapBillTo',
+    'SapShipTo',
+    'AddressCode'
+  ];
   dataSource = new MatTableDataSource<any>();
   tableHeaders: string[] = [];
   dynamicColumns: string[] = [];
   @ViewChild(MatSort) sort!: MatSort;
-
-
   @ViewChild(MatPaginator) paginator!: MatPaginator;
+  showClientPopup = false;
+  sameAsBilling = false;
 
+
+  AddPOOpen() {
+    this.isEditMode = false;
+    this.clientaddress.reset();
+    this.showClientPopup = true;
+  }
+
+  editOpen(row: any) {
+    this.isEditMode = true;
+    this.rowData = row;
+    this.showClientPopup = true;
+    //console.log('RowData', this.rowData);
+    this.clientaddress.patchValue({
+      company: row.company_Code,
+      Costcentermapping: row.map_Name,
+      state: row.state_Name,
+      subCustomerCode: row.saC_Code,
+      billingClientName: row.billingClientName,
+      billingAddress: row.billingAddress,
+      billingState: row.billingStateName,
+      billingLocation: row.city_Name,
+      billingPinCode: row.billingPinCode,
+      shippingsameasbilling: row.isShippingAddressSameAsBilling,
+      shippingClientName: row.shippingClientName,
+      shippingAddress: row.shippingAddress,
+      shippingState: row.shippingStateName,
+      shippingLocation: row.shippingCity_Name,
+      shippingPinCode: row.shippingPinCode,
+      sapBillTo: row.sapBillTo,
+      sapShipTo: row.sapShipTo,
+      effectiveDate: row.effectiveDate,
+      vendorcode: row.vendorCode,
+      sezApplicable: row.seZ_Applicable,
+      sezExpiryDate: row.seZ_ExpiryDate,
+      lutNumber: row.luT_Number,
+      lutDate: row.luT_Date,
+      lutExpiryDate: row.luT_ExpiryDate,
+    });
+  }
+
+  closeClientPopup() {
+    this.showClientPopup = false;
+  }
+
+  handleCompanyEvent(company: any) {
+    console.log('company', company);
+    this.selectedCC = company.companyId;
+    this.companyUI = company;
+    this.clientaddress.patchValue({
+      company: company
+    });
+  }
+
+  handleMapNameEvent(mapname: any) {
+    console.log('Map', mapname);
+    this.mapnameUI = mapname;
+    this.selectedMN = mapname.mapName;
+    this.clientaddress.patchValue({
+      Costcentermapping: mapname
+    });
+  }
+
+  handleStateNameEvent(statename: any) {
+    console.log(statename);
+    this.stateNameUI = statename;
+    this.selectedState = statename.state_Id;
+    this.clientaddress.patchValue({
+      state: statename
+    });
+
+  }
+
+  handleStateNameEvent1(statename1: any) {
+    this.stateNameUI1 = statename1;
+    this.selectedState1 = statename1.state_Id;
+    this.clientaddress.patchValue({
+      billingState: statename1
+    });
+  }
+
+  handleStateNameEvent2(statename2: any) {
+    this.stateNameUI2 = statename2;
+    this.selectedState2 = statename2.state_Id;
+    this.clientaddress.patchValue({
+      shippingState: statename2
+    });
+  }
+
+  citybystateEvent1(cityname: any) {
+    console.log('City', cityname);
+    this.cityNameUI1 = cityname;
+    this.clientaddress.patchValue({
+      billingLocation: cityname
+    });
+  }
+
+  citybystateEvent2(cityname: any) {
+    this.cityNameUI2 = cityname;
+    this.clientaddress.patchValue({
+      shippingLocation: cityname
+    });
+  }
 
   ngOnInit(): void {
     const json = this._sessionStoreage.getItem('UserProfile');
@@ -64,7 +212,64 @@ export class ClientaddressComponent {
       this.userdetail = JSON.parse(this.decry.decrypt(json));
     }
 
+    this.clientaddress = this.fb.group({
+
+      company: ['', Validators.required],
+      Costcentermapping: ['', Validators.required],
+      subCustomerCode: ['', Validators.required],
+      state: ['', Validators.required],
+      billingClientName: ['', Validators.required],
+      billingAddress: ['', Validators.required],
+      billingState: ['', Validators.required],
+      billingLocation: ['', Validators.required],
+      billingPinCode: ['', Validators.required],
+      sapBillTo: [''],
+      shippingClientName: ['', Validators.required],
+      shippingAddress: ['', Validators.required],
+      shippingState: ['', Validators.required],
+      shippingLocation: ['', Validators.required],
+      shippingPinCode: ['', Validators.required],
+      sapShipTo: [''],
+      shippingsameasbilling: [false],
+      effectiveDate: [''],
+      sezApplicable: [false],
+      sezExpiryDate: [''],
+      lutNumber: [''],
+      lutDate: [''],
+      lutExpiryDate: [''],
+      vendorcode: ['']
+
+    });
+
+
+
+
     this.onsearch();
+
+
+
+  }
+
+  sameAsBillingChange(event: any) {
+
+    this.sameAsBilling = event.target.checked;
+
+    console.log('BillingLocation', this.clientaddress.value.billingLocation);
+
+    if (this.sameAsBilling) {
+
+      this.clientaddress.patchValue({
+
+        shippingClientName: this.clientaddress.value.billingClientName,
+        shippingAddress: this.clientaddress.value.billingAddress,
+        shippingState: this.clientaddress.value.billingState,
+        shippingLocation: this.clientaddress.value.billingLocation,
+        shippingPinCode: this.clientaddress.value.billingPinCode,
+        sapShipTo: this.clientaddress.value.sapBillTo
+      });
+
+    }
+
   }
 
   showAlertPopup(message: string, subMessage: string = '') {
@@ -86,43 +291,30 @@ export class ClientaddressComponent {
     this.showValidate = false;
   }
 
-  AddPOOpen() {
-    const dialogRef = this.dialog.open(ClientaddressNewComponent, {
-      width: '60%',
-      height: '85vh',
-      disableClose: true,
-      data: { example: 'Hello from parent!' }
-    });
-    dialogRef.afterClosed().subscribe(result => {
-      if (result === 'refresh') {
-        this.onsearch();
-      }
-    });
-  }
+  // AddPOOpen() {
+  //   const dialogRef = this.dialog.open(ClientaddressNewComponent, {
+  //     width: '60%',
+  //     height: '85vh',
+  //     disableClose: true,
+  //     data: { example: 'Hello from parent!' }
+  //   });
+  //   dialogRef.afterClosed().subscribe(result => {
+  //     if (result === 'refresh') {
+  //       this.onsearch();
+  //     }
+  //   });
+  // }
 
-  ImportOpen() {
-    const dialogRef = this.dialog.open(ClientaddressImportComponent, {
-      width: '60%',
-      height: '78vh',
-      disableClose: true,
-      data: { example: 'Hello from parent!' }
-    });
+  // ImportOpen() {
+  //   const dialogRef = this.dialog.open(ClientaddressImportComponent, {
+  //     width: '60%',
+  //     height: '78vh',
+  //     disableClose: true,
+  //     data: { example: 'Hello from parent!' }
+  //   });
 
-  }
+  // }
 
-  editOpen(row: any) {
-    const dialogRef = this.dialog.open(ClientaddressEditComponent, {
-      width: '60%',
-      height: '85vh',
-      disableClose: true,
-      data: { rowData: row }
-    });
-    dialogRef.afterClosed().subscribe(result => {
-      if (result === 'refresh') {
-        this.onsearch();
-      }
-    });
-  }
 
   deleteClientAddress(row: any): void {
     const userId = this.userdetail.user_Id;
@@ -169,8 +361,34 @@ export class ClientaddressComponent {
           this.dataSource.paginator = this.paginator;
           this.dataSource.sort = this.sort;
           this.uploadDisplayedColumns = [
-            'Action', 'Client_Address_Id', 'Companycode', 'MapName', 'SAPCustomercode', 'Billing_Client_Name', 'billingaddress', 'Shippingaddresssameasbilling', 'Shippingclientname', 'Shippingaddress', 'Effectivedate', 'gstnumber', 'gstapplicable'];
-
+            'Action',
+            'Client_Address_Id',
+            'Companycode',
+            'State',
+            'MapName',
+            'SACCode',
+            'Billing_Client_Name',
+            'billingaddress',
+            'billingstate',
+            'Shippingaddresssameasbilling',
+            'Shippingclientname',
+            'Shippingaddress',
+            'Shippingstate',
+            'Effectivedate',
+            'SezApplicable',
+            'SezExpiryDate',
+            'LutNumber',
+            'LutDate',
+            'LutExpiryDate',
+            'VendorCode',
+            'gstnumber',
+            'BillingLocation',
+            'ShippingLocation',
+            'BillingPincode',
+            'ShippingPincode',
+            'SapBillTo',
+            'SapShipTo',
+            'AddressCode'];
         } else {
           this.isLoading = false;
           this.dataSource.data = [];
@@ -357,6 +575,145 @@ export class ClientaddressComponent {
       error: (err) => {
         this.isLoading = false;
         alert("Upload Failed")
+      }
+    });
+  }
+
+  saveClientAddress() {
+    if (this.isEditMode) {
+      this.onSubmitedit();
+    } else {
+      this.ValidatedSubmit();
+    }
+  }
+
+  onSubmitedit(): Promise<void> {
+    // this.submitted = true;
+
+    return new Promise((resolve, reject) => {
+
+      if (this.clientaddress.invalid) {
+        this.clientaddress.markAllAsTouched();
+        reject("Form validation failed");
+        return;
+      }
+
+      const raw = this.clientaddress.getRawValue();
+
+      const payload = {
+
+        Action: "Edit",
+        UserId: this.userdetail.user_Id,
+        ClientAddressId: this.rowData.clientAddressId,
+
+        CompanyId: this.rowData.companyId,
+        CostCenterMappingId: this.rowData.costCenterMappingId,
+
+        BillingClientName: raw.billingClientName,
+        BillingAddress: raw.billingAddress,
+
+        IsShippingAddressSameAsBilling: raw.shippingsameasbilling,
+
+        ShippingClientName: raw.shippingClientName,
+        ShippingAddress: raw.shippingAddress,
+
+        EffectiveDate: raw.effectiveDate || "",
+        GstApplicable: raw.gstApplicable || false,
+
+        SAC_Code: raw.subCustomerCode,
+        GstNumber: raw.gstNumber,
+
+        CreatedBy: this.userdetail.user_Id
+      };
+      this.service.clientaddressaddsave(payload).subscribe({
+        next: (res: string) => {
+          const cleanMessage = res.replace(/<br\s*\/?>/gi, '\n');
+          if (cleanMessage.includes('Success')) {
+            alert('Client Address updated Successfully');
+            resolve();
+            this.onsearch();
+          } else {
+            alert(cleanMessage)
+            reject('API returned failure');
+          }
+        },
+        error: (err) => {
+          console.error('API Error:', err);
+          reject(err);
+        }
+      });
+    });
+  }
+  ValidatedSubmit() {
+    console.log('Client Address', this.clientaddress);
+    this.showErrors = true;
+
+    if (this.clientaddress.invalid) {
+      return;
+    }
+    //this.isLoading = true;
+
+    const raw = this.clientaddress.getRawValue();
+
+    const payload = {
+      Action: "Add",
+      UserId: this.userdetail.user_Id ,
+      ClientAddressId: null,
+      CompanyId: raw.company?.companyId || 0,
+      StateId: raw.state?.state_Id || 0,
+      CostCenterMappingId: raw.Costcentermapping?.mapNameId || 0,
+      BillingClientName: raw.billingClientName || "",
+      BillingAddress: raw.billingAddress || "",
+      BillingStateId: raw.billingState.state_Id || 0,
+      IsShippingAddressSameAsBilling: raw.IsShippingAddressSameAsBilling,
+      ShippingClientName: this.sameAsBilling
+        ? this.clientaddress.get('billingClientName')?.value
+        : raw.shippingClientName || "",
+      ShippingAddress: this.sameAsBilling
+        ? this.clientaddress.get('billingAddress')?.value
+        : raw.shippingAddress || "",
+      ShippingStateId: raw.shippingState.state_Id || 0,
+      EffectiveDate: raw.effectiveDate || "",
+      SEZ_Applicable: raw.sezApplicable || false,
+      // SEZ_Document: raw.
+      SEZ_ExpiryDate: raw.sezExpiryDate || "",
+      LUT_Number: raw.lutNumber || "",
+      LUT_Date: raw.lutDate || "",
+      LUT_ExpiryDate: raw.lutExpiryDate || "",
+      VendorCode: raw.vendorcode || "",
+      SAC_Code: raw.subCustomerCode || "",
+      GstNumber: raw.gstNumber || "",
+      Company_Code: raw.company?.companyCode || "",
+      State_Name: raw.state?.state_Name || "",
+      Map_Name: raw.Costcentermapping?.mapName || "",
+      BillingStateName: raw.billingState?.state_Name || "",
+      ShippingStateName: raw.shippingState?.state_Name || "",
+      BillingLocationId: raw.billingLocation?.city_Id || 0,
+      BillingPinCode: raw.billingPinCode || "",
+      ShippingLocationId: raw.shippingLocation?.city_Id || 0,
+      ShippingPinCode: raw.shippingPinCode || "",
+      City_Name: raw.billingLocation?.city_Name || "",
+      ShippingCity_Name: raw.shippingLocation?.city_Name || "",
+      SapBillTo: raw.sapBillTo || "",
+      SapShipTo: raw.sapShipTo || "",
+      AddressCode: "",
+      ClientGstNumber: "",
+      CreatedBy: this.userdetail.user_Id
+    };
+
+    this.service.clientaddressaddsave(payload).subscribe({
+      next: (res: string) => {
+        const cleanMessage = res.replace(/<br\s*\/?>/gi, '\n');
+        if (cleanMessage.includes('Success')) {
+          alert('Client Address Created Successfully');
+          this.closeClientPopup();
+        } else {
+          alert(cleanMessage);
+          this.closeClientPopup();
+        }
+      },
+      error: (err) => {
+        console.error('API Error:', err);
       }
     });
   }
