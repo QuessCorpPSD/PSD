@@ -119,6 +119,23 @@ export class EInvoiceComponent {
 onPayRegisterChange(){
 
 }
+DownloadNetPaySummary(){
+
+  this.invoiceService.DownloadNetPaySummary(this.selectedCompanyId, this.pay_period ).subscribe({
+    next:res=> {
+      const files=res.Data
+      if(files.file!="N")
+      {
+        const currentDate = new Date();
+        this.downloadExcelFromBase64(files.file,`Net Pay Summary_${currentDate}.xlsx`)
+      }
+      else{
+        alert("File is not available")
+      }
+    },
+    error:err=>{}
+  })
+}
   handleCompanyEvent(company: any) {
     this.companyUI = company;
     this.Company_Code = company.company_Code;
@@ -435,19 +452,29 @@ onPayRegisterChange(){
   }
 
 
-  confirmIRN(): void {
+ confirmIRN(): void {
     const filteredSelected = this.selection.selected.filter((item: any) =>
       this.dataSource.filteredData.includes(item)
     );
-
+ 
     const hasB2COrB2BEXMT = filteredSelected.some(item =>
       item.Invoice_Category === 'B2C' || item.Invoice_Category === 'B2BEXMT'
     );
-
+ 
+    const hasPROInvoice = filteredSelected.some(item =>
+      item.Invoice_Number?.includes('PRO')
+    );
+ 
     if (hasB2COrB2BEXMT) {
       alert('Cannot Initiate IRN for B2C or B2BEXMPT Catgory');
       return;
     }
+ 
+    else if (hasPROInvoice){
+      alert('Cannot Initiate IRN for Provisional Invoices');
+      return;
+    }
+ 
     else {
       const confirmed = confirm("Are you sure you want to Generate IRN for the Selected Invoice(s)");
       if (confirmed) {
@@ -455,6 +482,7 @@ onPayRegisterChange(){
       }
     }
   }
+ 
 
   // DownloadInvoice(invoiceId: number, invoice_Number: string) {
   //   this.isLoading = true;
@@ -574,9 +602,8 @@ onPayRegisterChange(){
     if (InitiateIRN) {
       this.invoiceService.InitiateIRN(InitiateIRN).subscribe({
         next: res => {
-          console.log(res);
-          const parsedData = JSON.parse(res.Data.data);
-          const errorMessage = parsedData[0]?.Error_Message;
+         console.log(res);          
+            const errorMessage = res.data.error_Message;;
           if (errorMessage) {
             //console.log(errorMessage);
             alert(errorMessage);

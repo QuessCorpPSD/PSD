@@ -46,6 +46,11 @@ export class InvoiceRepository implements IInvoiceRepository {
             .set('Accept', 'application/json')
         return this.http.post<APIResponse>(url, JSON.stringify(val), { headers });
     }
+    DownloadNetPaySummary (companyId,payperiodId): Observable<APIResponse> {
+        const url = `${this.environment.apiUrl}EInvoice/GetNetPaySummary/`+companyId+'/'+payperiodId;
+        //console.log(url);
+        return this.http.get<APIResponse>(url);
+    }
     GetIRNColors(): Observable<APIResponse> {
         const url = `${this.environment.apiUrl}GSTInvoice/GetAllInvoiceTypeColors`;
         //console.log(url);

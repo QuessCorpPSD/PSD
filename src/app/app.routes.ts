@@ -157,6 +157,7 @@ import { LeavetypemasterComponent } from './pages/inputaggregator/leavetypemaste
 import { LeavetypemastermappingComponent } from './pages/inputaggregator/leavetypemastermapping/leavetypemastermapping.component';
 import { InvoiceCultureAddpoComponent } from './pages/Invoice/invoice-culture-addpo/invoice-culture-addpo.component';
 import { OtherincomeComponent } from './pages/Invoice/otherincome/otherincome.component';
+import { SEZRepositoryComponent } from './pages/Invoice/sezrepository/sezrepository.component';
 
 
 
@@ -401,6 +402,7 @@ export const routes: Routes = [
           //{ path: 'creditnoteupdate', component: CreditnoteupdateComponent },
           { path: 'companyinvoiceformat', component: CompanyinvoiceformatComponent },
           { path: 'OtherIncome', component: OtherincomeComponent },
+          { path: 'sezapproval', component: SEZRepositoryComponent },
 
         ]
       },
