@@ -56,6 +56,11 @@
                         <mat-cell *matCellDef="let row">{{row.clientAddressId}}</mat-cell>
                     </ng-container>
 
+                    <ng-container matColumnDef="companyId">
+                        <mat-header-cell *matHeaderCellDef><strong>companyId</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{row.companyId}}</mat-cell>
+                    </ng-container>
+
                     <!-- Company Code -->
                     <ng-container matColumnDef="Companycode">
                         <mat-header-cell *matHeaderCellDef><strong>Company Code</strong></mat-header-cell>
@@ -182,6 +187,16 @@
                     <ng-container matColumnDef="ShippingLocation">
                         <mat-header-cell *matHeaderCellDef><strong>Shipping Location</strong></mat-header-cell>
                         <mat-cell *matCellDef="let row">{{row.shippingCity_Name}}</mat-cell>
+                    </ng-container>
+                    
+                    <ng-container matColumnDef="BillingLocationId">
+                        <mat-header-cell *matHeaderCellDef><strong>BillingLocationId</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{row.billingLocationId}}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="ShippingLocationId">
+                        <mat-header-cell *matHeaderCellDef><strong>ShippingLocationId</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{row.shippingLocationId}}</mat-cell>
                     </ng-container>
 
                     <!-- Billing Pin -->
@@ -379,7 +394,7 @@
                             <small class="text-danger d-block mt-1"
                                 *ngIf="showErrors && clientaddress.get('billingPinCode')?.invalid">
                                 Billing Pincode is required
-                            </small>                           
+                            </small>
 
                             <label class="form-label text-muted small mt-3">SAP Bill To</label>
                             <input class="form-control form-control-sm" formControlName="sapBillTo">
@@ -504,6 +519,4 @@
         </mat-card>
 
     </form>
-
-
 </div>

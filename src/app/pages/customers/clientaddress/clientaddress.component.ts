@@ -40,6 +40,7 @@ export class ClientaddressComponent {
   Clientaddress: any;
   userdetail: any;
   clientaddress!: FormGroup;
+  clientaddressEdit!: FormGroup;
   selectedCC: any;
   companyUI: any;
   mapnameUI: any;
@@ -114,22 +115,63 @@ export class ClientaddressComponent {
     this.isEditMode = true;
     this.rowData = row;
     this.showClientPopup = true;
-    //console.log('RowData', this.rowData);
-    this.clientaddress.patchValue({
-      company: row.company_Code,
-      Costcentermapping: row.map_Name,
+    console.log('RowData', this.rowData);
+
+    // const company = {
+    //   companyId : row.companyId,
+    //   company_Code:  row.company_Code
+    // }
+    // const mapname = {
+    //   map_Name: row.map_Name,
+    //   mapNameId: row.costCenterMappingId
+    // }
+    // const state = {
+    //   state_Name: row.state_Name,
+    //   stateId: row.stateId
+    // }
+
+    // const billingState = {
+    //   state_Name: row.billingStateName,
+    //   stateId: row.billingStateId
+    // }
+
+    // const shippingState = {
+    //   state_Name: row.shippingStateName,
+    //   stateId: row.shippingStateId
+    // }
+
+    // const billingLocation = {
+    //   city_Id: row.billingLocationId,
+    //   city_Name: row.city_Name
+    // }
+
+    // const shippingLocation = {
+    //   city_Id: row.shippingLocationId,
+    //   city_Name: row.shippingCity_Name
+    // }
+
+    this.clientaddressEdit.patchValue({
+      companyId: row.companyId,
+      companyCode: row.company_Code,
+      Costcentermapping:row.map_Name,
+      CostcentermappingID:row.costCenterMappingId,
       state: row.state_Name,
+      stateId: row.stateId,
       subCustomerCode: row.saC_Code,
       billingClientName: row.billingClientName,
       billingAddress: row.billingAddress,
       billingState: row.billingStateName,
+      billingStateId: row.billingStateId,
       billingLocation: row.city_Name,
+      billingLocationId: row.billingLocationId,
       billingPinCode: row.billingPinCode,
       shippingsameasbilling: row.isShippingAddressSameAsBilling,
       shippingClientName: row.shippingClientName,
       shippingAddress: row.shippingAddress,
       shippingState: row.shippingStateName,
+      shippingStateId: row.shippingStateId,
       shippingLocation: row.shippingCity_Name,
+      shippingLocationId: row.shippingLocationId,
       shippingPinCode: row.shippingPinCode,
       sapBillTo: row.sapBillTo,
       sapShipTo: row.sapShipTo,
@@ -141,6 +183,7 @@ export class ClientaddressComponent {
       lutDate: row.luT_Date,
       lutExpiryDate: row.luT_ExpiryDate,
     });
+    console.log('Clientaddress',this.clientaddress)
   }
 
   closeClientPopup() {
@@ -148,7 +191,7 @@ export class ClientaddressComponent {
   }
 
   handleCompanyEvent(company: any) {
-    console.log('company', company);
+    //console.log('company', company);
     this.selectedCC = company.companyId;
     this.companyUI = company;
     this.clientaddress.patchValue({
@@ -210,6 +253,7 @@ export class ClientaddressComponent {
     const json = this._sessionStoreage.getItem('UserProfile');
     if (json) {
       this.userdetail = JSON.parse(this.decry.decrypt(json));
+      this.onsearch();
     }
 
     this.clientaddress = this.fb.group({
@@ -241,13 +285,40 @@ export class ClientaddressComponent {
 
     });
 
+    this.clientaddressEdit = this.fb.group({
 
+      companyId: [''],
+      companyCode: [''],
+      Costcentermapping: [''],
+      CostcentermappingID: [''],
+      subCustomerCode: [''],
+      state: [''],
+      billingClientName: [''],
+      billingAddress: [''],
+      billingState: [''],
+      billingStateId: [''],
+      billingLocation: [''],
+      billingLocationId: [''],
+      billingPinCode: [''],
+      sapBillTo: [''],
+      shippingClientName: [''],
+      shippingAddress: [''],
+      shippingState: [''],
+      shippingStateId: [''],
+      shippingLocation: [''],
+      shippingLocationId: [''],
+      shippingPinCode: [''],
+      sapShipTo: [''],
+      shippingsameasbilling: [false],
+      effectiveDate: [''],
+      sezApplicable: [false],
+      sezExpiryDate: [''],
+      lutNumber: [''],
+      lutDate: [''],
+      lutExpiryDate: [''],
+      vendorcode: ['']
 
-
-    this.onsearch();
-
-
-
+    });
   }
 
   sameAsBillingChange(event: any) {
@@ -350,6 +421,7 @@ export class ClientaddressComponent {
       next: (res) => {
         this.isLoading = false;
         this.Clientaddress = res?.Data;
+        //console.log(this.Clientaddress);
 
         if (!this.Clientaddress) {
           this.isLoading = false;
@@ -459,17 +531,34 @@ export class ClientaddressComponent {
   downloadTemplate() {
     const templateData = [
       {
-        CompanyCode: "",
-        MapName: "",
-        BillingClientName: "",
-        BillingAddress: "",
-        IsShippingAddressSameAsBilling: "",
-        ShippingClientName: "",
-        ShippingAddress: "",
-        EffectiveDate: "",
-        VATApplicable: "",
+        Company_Code: "",
+        StateName: "",
+        Map_Name: "",
+        Billing_Client_Name: "",
+        Billing_Address: "",
+        Billing_State: "",
+        Is_Shipping_Address_Same_As_Billing: "",
+        Shipping_Client_Name: "",
+        Shipping_Address: "",
+        Shipping_State: "",
+        Effective_Date: "",
+        SEZ_Applicable: "",
+        SEZ_ExpiryDate: "",
         SAC_Code: "",
-        GstNumber: ""
+        GST_Number: "",
+        LUT_Number: "",
+        LUT_Date: "",
+        LUT_ExpiryDate: "",
+        Vendor_Code: "",
+        Billing_City_Name: "",
+        Billing_Pin_Code: "",
+        Shipping_City_Name: "",
+        Shipping_Pin_Code: "",
+        GST_Excemption: "",
+        SapBillTo: "",
+        SapShipTo: "",
+        AddressCode: "",
+        ClientGstNumber: "",
       }
     ];
 
@@ -592,38 +681,54 @@ export class ClientaddressComponent {
 
     return new Promise((resolve, reject) => {
 
-      if (this.clientaddress.invalid) {
-        this.clientaddress.markAllAsTouched();
+      if (this.clientaddressEdit.invalid) {
+        this.clientaddressEdit.markAllAsTouched();
         reject("Form validation failed");
         return;
       }
 
-      const raw = this.clientaddress.getRawValue();
+      const raw = this.clientaddressEdit.getRawValue();
 
       const payload = {
-
-        Action: "Edit",
-        UserId: this.userdetail.user_Id,
-        ClientAddressId: this.rowData.clientAddressId,
-
-        CompanyId: this.rowData.companyId,
-        CostCenterMappingId: this.rowData.costCenterMappingId,
-
-        BillingClientName: raw.billingClientName,
-        BillingAddress: raw.billingAddress,
-
-        IsShippingAddressSameAsBilling: raw.shippingsameasbilling,
-
-        ShippingClientName: raw.shippingClientName,
-        ShippingAddress: raw.shippingAddress,
-
-        EffectiveDate: raw.effectiveDate || "",
-        GstApplicable: raw.gstApplicable || false,
-
-        SAC_Code: raw.subCustomerCode,
-        GstNumber: raw.gstNumber,
-
-        CreatedBy: this.userdetail.user_Id
+      Action: "Edit",
+      UserId: this.userdetail.user_Id,
+      ClientAddressId: this.rowData.clientAddressId,
+      CompanyId: raw.companyId || 0,
+      StateId: raw.state?.state_Id || 0,
+      CostCenterMappingId: raw.CostcentermappingID || 0,
+      BillingClientName: raw.billingClientName || "",
+      BillingAddress: raw.billingAddress || "",
+      BillingStateId: raw.billingStateId || 0,
+      IsShippingAddressSameAsBilling: raw.shippingsameasbilling,
+      ShippingClientName: raw.shippingClientName || "",
+      ShippingAddress: raw.shippingAddress || "",
+      ShippingStateId: raw.shippingStateId || 0,
+      EffectiveDate: raw.effectiveDate || "",
+      SEZ_Applicable: raw.sezApplicable || false,
+      // SEZ_Document: raw.
+      SEZ_ExpiryDate: raw.sezExpiryDate || "",
+      LUT_Number: raw.lutNumber || "",
+      LUT_Date: raw.lutDate || "",
+      LUT_ExpiryDate: raw.lutExpiryDate || "",
+      VendorCode: raw.vendorcode || "",
+      SAC_Code: raw.subCustomerCode || "",
+      GstNumber: raw.gstNumber || "",
+      Company_Code: raw.companyCode || "",
+      State_Name: raw.state || "",
+      Map_Name: raw.Costcentermapping || "",
+      BillingStateName: raw.billingState || "",
+      ShippingStateName: raw.shippingState || "",
+      BillingLocationId: raw.billingLocationId || 0,
+      BillingPinCode: raw.billingPinCode || "",
+      ShippingLocationId: raw.shippingLocationId || 0,
+      ShippingPinCode: raw.shippingPinCode || "",
+      City_Name: raw.billingLocation || "",
+      ShippingCity_Name: raw.shippingLocation || "",
+      SapBillTo: raw.sapBillTo || "",
+      SapShipTo: raw.sapShipTo || "",
+      AddressCode: "",
+      ClientGstNumber: "",
+      CreatedBy: this.userdetail.user_Id
       };
       this.service.clientaddressaddsave(payload).subscribe({
         next: (res: string) => {
@@ -654,18 +759,18 @@ export class ClientaddressComponent {
     //this.isLoading = true;
 
     const raw = this.clientaddress.getRawValue();
-
+    console.log(raw);
     const payload = {
       Action: "Add",
-      UserId: this.userdetail.user_Id ,
-      ClientAddressId: null,
+      UserId: this.userdetail.user_Id,
+      ClientAddressId: 0,
       CompanyId: raw.company?.companyId || 0,
       StateId: raw.state?.state_Id || 0,
       CostCenterMappingId: raw.Costcentermapping?.mapNameId || 0,
       BillingClientName: raw.billingClientName || "",
       BillingAddress: raw.billingAddress || "",
       BillingStateId: raw.billingState.state_Id || 0,
-      IsShippingAddressSameAsBilling: raw.IsShippingAddressSameAsBilling,
+      IsShippingAddressSameAsBilling: raw.shippingsameasbilling,
       ShippingClientName: this.sameAsBilling
         ? this.clientaddress.get('billingClientName')?.value
         : raw.shippingClientName || "",

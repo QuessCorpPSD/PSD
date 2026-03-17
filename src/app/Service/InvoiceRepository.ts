@@ -51,8 +51,14 @@ export class InvoiceRepository implements IInvoiceRepository {
         //console.log(url);
         return this.http.get<APIResponse>(url);
     }
+    // GetAllInvoiceDetailsByCompanyId(companyId: number, payPeriodId: number): Observable<APIResponse> {
+    //     const url = `${this.environment.apiUrl}GSTInvoice/GetAllInvoiceDetails/${companyId}/${payPeriodId}`;
+    //     //console.log(url);
+    //     return this.http.get<APIResponse>(url);
+    // }
+
     GetAllInvoiceDetailsByCompanyId(companyId: number, payPeriodId: number): Observable<APIResponse> {
-        const url = `${this.environment.apiUrl}GSTInvoice/GetAllInvoiceDetails/${companyId}/${payPeriodId}`;
+        const url = `${this.environment.apiUrl}EInvoice/GetAllInvoiceDetails/${companyId}/${payPeriodId}`;
         //console.log(url);
         return this.http.get<APIResponse>(url);
     }
@@ -176,12 +182,12 @@ export class InvoiceRepository implements IInvoiceRepository {
         );
     }
     GetConsolidatedPayRegister(payload: any): Observable<APIResponse> {
-        const url = `${this.environment.apiUrl}GSTInvoice/PayRegisterDownload`;      
+        const url = `${this.environment.apiUrl}GSTInvoice/PayRegisterDownload`;
         return this.http.post<APIResponse>(url, payload);
     }
 
     GetConsolidateInvoiceSummary(payload: any): Observable<APIResponse> {
-        const url = `${this.environment.apiUrl}GSTInvoice/GetConsolidateInvoiceSummary`;       
+        const url = `${this.environment.apiUrl}GSTInvoice/GetConsolidateInvoiceSummary`;
         return this.http.post<APIResponse>(url, payload);
     }
 
@@ -212,8 +218,8 @@ export class InvoiceRepository implements IInvoiceRepository {
         const url = `${this.environment.apiUrl}GSTInvoice/Create`;
         return this.http.post<APIResponse>(url, payload);
     }
-    
- GetAllInvoiceCancelDetails(): Observable<APIResponse> {
+
+    GetAllInvoiceCancelDetails(): Observable<APIResponse> {
         return this.http.post<APIResponse>(this.environment.apiUrl + "GSTInvoice/GetAllInvoiceCancelDetails", {});
     }
 
