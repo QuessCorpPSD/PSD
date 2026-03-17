@@ -1,8 +1,8 @@
 <div class="page-wrapper">
 
     <div class="scrollable-content">
-        <mat-card-title style="color: #302CB3; font-size: 22px; font-family: Montserrat; font-weight: 700;">Cilent
-            Address List</mat-card-title>
+        <mat-card-title style="color: #302CB3; font-size: 22px; font-family: Montserrat; font-weight: 700;">Vendor Cilent
+            Address</mat-card-title>
 
         <div class="container py-2">
             <div class="row g-3 align-items-end">
@@ -52,7 +52,7 @@
 
                     <!-- Client Address Id -->
                     <ng-container matColumnDef="Client_Address_Id">
-                        <mat-header-cell *matHeaderCellDef><strong>Client Address Id</strong></mat-header-cell>
+                        <mat-header-cell *matHeaderCellDef><strong>Vendor Client Address Id</strong></mat-header-cell>
                         <mat-cell *matCellDef="let row">{{row.clientAddressId}}</mat-cell>
                     </ng-container>
 
@@ -248,7 +248,7 @@
             <!-- HEADER -->
             <mat-card-header class="popup-header">
                 <mat-card-title>
-                    {{ isEditMode ? 'Edit Client Address' : 'Add Client Address' }}
+                    {{ isEditMode ? 'Edit Vendor Client Address' : 'Add Vendor Client Address' }}
                 </mat-card-title>
                 <span class="spacer"></span>
 

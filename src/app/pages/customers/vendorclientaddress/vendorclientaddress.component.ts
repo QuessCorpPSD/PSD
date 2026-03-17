@@ -1,31 +1,28 @@
 import { Component, Inject, InjectionToken, ViewChild } from '@angular/core';
-import { MatPaginator, MatPaginatorModule } from "@angular/material/paginator";
-import { MatTableDataSource, MatTableModule } from "@angular/material/table";
-import { MatDialog } from '@angular/material/dialog';
-import { MatIconModule } from "@angular/material/icon";
-import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MatTooltipModule } from '@angular/material/tooltip';
-import { AlertpopupComponent } from "../../../common/alertpopup/alertpopup.component";
-import { ClientaddressService } from '../../../Service/customersserv/clientaddress.service';
-import { EncryptionService } from '../../../Shared/encryption.service';
-import { SessionStorageService } from '../../../Shared/SessionStorageService';
-import { MatSort } from '@angular/material/sort';
 import * as XLSX from 'xlsx';
 import FileSaver from 'file-saver';
-import { MatCardModule } from "@angular/material/card";
+import { FormGroup, FormBuilder, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { IClientaddress } from '../../../Repository/customer/IClientaddress';
-import { APIResponse } from '../../../Models/apiresponse';
-import { CompanyComponent } from '../../../common/company/company.component';
+import { EncryptionService } from '../../../Shared/encryption.service';
+import { SessionStorageService } from '../../../Shared/SessionStorageService';
+import { CommonModule } from '@angular/common';
+import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { CompanyallComponent } from '../../../common/CompanyAll/companyall.component';
-export const Pay_TOKEN = new InjectionToken<IClientaddress>('Pay_TOKEN');
+import { ClientaddressService } from '../../../Service/customersserv/clientaddress.service';
+const Pay_TOKEN = new InjectionToken<IClientaddress>('Pay_TOKEN');
+
 
 @Component({
-  selector: 'app-clientaddress',
-  standalone: true,
-  imports: [MatPaginatorModule, MatTableModule, MatIconModule, CommonModule, FormsModule, ReactiveFormsModule, MatTooltipModule, MatCardModule, CompanyallComponent],
-  templateUrl: './clientaddress.component.html',
-  styleUrl: './clientaddress.component.css',
+  selector: 'app-vendorclientaddress',
+  imports: [MatPaginator, MatTableModule, MatIconModule, CommonModule, FormsModule, ReactiveFormsModule, MatTooltipModule, MatCardModule, CompanyallComponent],
+  templateUrl: './vendorclientaddress.component.html',
+  styleUrl: './vendorclientaddress.component.css',
   providers: [
     {
       provide: Pay_TOKEN,
@@ -33,7 +30,7 @@ export const Pay_TOKEN = new InjectionToken<IClientaddress>('Pay_TOKEN');
     }
   ]
 })
-export class ClientaddressComponent {
+export class VendorclientaddressComponent {
   Clientaddress: any;
   userdetail: any;
   clientaddress!: FormGroup;
@@ -649,3 +646,4 @@ export class ClientaddressComponent {
     });
   }
 }
+

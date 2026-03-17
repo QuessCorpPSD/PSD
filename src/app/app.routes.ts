@@ -156,6 +156,7 @@ import { LeavetypemasterComponent } from './pages/inputaggregator/leavetypemaste
 import { LeavetypemastermappingComponent } from './pages/inputaggregator/leavetypemastermapping/leavetypemastermapping.component';
 import { InvoiceCultureAddpoComponent } from './pages/Invoice/invoice-culture-addpo/invoice-culture-addpo.component';
 import { OtherincomeComponent } from './pages/Invoice/otherincome/otherincome.component';
+import { VendorclientaddressComponent } from './pages/customers/vendorclientaddress/vendorclientaddress.component';
 
 
 
@@ -185,7 +186,7 @@ export const routes: Routes = [
       { path: 'Assignment', component: AssignmentComponent },
       { path: 'Severity', component: SeverityComponent },
       { path: 'AllottedLot', component: AllotedLotComponent },
-      { path: 'Break', component: BreakdetailComponent },      
+      { path: 'Break', component: BreakdetailComponent },
       { path: 'user', component: UserListComponent },
       { path: 'dashboard', component: DashboardComponent },
       { path: 'app-revok', component: RevokComponent },
@@ -339,13 +340,13 @@ export const routes: Routes = [
         ]
       },
       {
-        path:'input',component:InputnavigationComponent,
-        children:[
-            { path: "inputaggregatorclient", component: InputaggregatorwithclientComponent },
+        path: 'input', component: InputnavigationComponent,
+        children: [
+          { path: "inputaggregatorclient", component: InputaggregatorwithclientComponent },
           { path: "inputaggregatorattendance", component: InputaggregatorattendanceComponent },
           { path: "leavemaster", component: LeavetypemasterComponent },
           { path: "leavemastermapping", component: LeavetypemastermappingComponent }
-        //  path:"inputaggregatorclient",component:InputaggregatorwithclientComponent
+          //  path:"inputaggregatorclient",component:InputaggregatorwithclientComponent
         ]
       },
       {
@@ -374,6 +375,7 @@ export const routes: Routes = [
           { path: "employee", component: EmployeeComponents },
           { path: "cancelledinvoicerepository", component: CancelledinvoicerepositoryComponent },
           { path: "Company", component: CompanyComponent },
+          { path: "vendorclientaddress", component: VendorclientaddressComponent },
 
         ]
       },
@@ -381,21 +383,21 @@ export const routes: Routes = [
         path: 'invoicenavigation',
         component: InvoicenavigationComponent,
         children: [
-          {path:'billingdashboard',component:BillingdashboardComponent},
+          { path: 'billingdashboard', component: BillingdashboardComponent },
           { path: 'initiate', component: DraftInvoiceComponent },
           { path: 'provisionalinvoice', component: ProvisionalinvoiceComponent },
           { path: 'perfomainvoice', component: PerfomainvoiceComponent },
           { path: 'billabledays', component: BillableDaysComponent },
           { path: 'gstinvoice', component: GstinvoiceComponent },
-           { path: 'einvoice', component: EInvoiceComponent },
-          { path: 'billingpayfrequency', component: BillingpayfrequencyComponent },          
+          { path: 'einvoice', component: EInvoiceComponent },
+          { path: 'billingpayfrequency', component: BillingpayfrequencyComponent },
           { path: 'poinitiate', component: POInitiateComponent },
-           {path:'IRN',component:EInvoiceComponent},
-          { path: 'app-invoice-culture', component: InvoiceCultureAddpoComponent },
+          { path: 'IRN', component: EInvoiceComponent },
+          { path: 'app-invoice-culture', component: InvoiceCultureComponent },
           { path: 'ClientBillableReportDatewise', component: ClientbillablereportsdatewiseComponent },
           //{ path: 'creditnote', component: CreditnoteComponent },
-         // { path: 'creditnoteapprove', component: CreditnoteapproveComponent },
-         { path: 'invoicecancel', component: InvoiceCancelComponent },
+          // { path: 'creditnoteapprove', component: CreditnoteapproveComponent },
+          { path: 'invoicecancel', component: InvoiceCancelComponent },
           //{ path: 'creditnoteupdate', component: CreditnoteupdateComponent },
           { path: 'companyinvoiceformat', component: CompanyinvoiceformatComponent },
           { path: 'OtherIncome', component: OtherincomeComponent },

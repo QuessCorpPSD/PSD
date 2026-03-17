@@ -1,6 +1,6 @@
 export const environment = {
     production:false,
-   apiUrl:"https://localhost:7087/api/",
+   apiUrl:"http://localhost:7087/api/",
     
   signalRURL:"https://localhost:7087/"
     //apiUrl:"https://qpayerp-api.quesscorp.com/api/"
