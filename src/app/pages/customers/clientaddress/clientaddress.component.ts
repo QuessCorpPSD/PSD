@@ -117,60 +117,40 @@ export class ClientaddressComponent {
     this.showClientPopup = true;
     console.log('RowData', this.rowData);
 
-    // const company = {
-    //   companyId : row.companyId,
-    //   company_Code:  row.company_Code
-    // }
-    // const mapname = {
-    //   map_Name: row.map_Name,
-    //   mapNameId: row.costCenterMappingId
-    // }
-    // const state = {
-    //   state_Name: row.state_Name,
-    //   stateId: row.stateId
-    // }
 
-    // const billingState = {
-    //   state_Name: row.billingStateName,
-    //   stateId: row.billingStateId
-    // }
-
-    // const shippingState = {
-    //   state_Name: row.shippingStateName,
-    //   stateId: row.shippingStateId
-    // }
-
-    // const billingLocation = {
-    //   city_Id: row.billingLocationId,
-    //   city_Name: row.city_Name
-    // }
-
-    // const shippingLocation = {
-    //   city_Id: row.shippingLocationId,
-    //   city_Name: row.shippingCity_Name
-    // }
-
-    this.clientaddressEdit.patchValue({
+    this.clientaddress.patchValue({
       companyId: row.companyId,
-      companyCode: row.company_Code,
-      Costcentermapping:row.map_Name,
-      CostcentermappingID:row.costCenterMappingId,
+      company: row.company_Code,
+      Costcentermapping: row.map_Name,
+      CostcentermappingID: row.costCenterMappingId,
       state: row.state_Name,
       stateId: row.stateId,
       subCustomerCode: row.saC_Code,
       billingClientName: row.billingClientName,
       billingAddress: row.billingAddress,
-      billingState: row.billingStateName,
+      billingState: {
+        state_Id: row.billingStateId,
+        state_Name: row.billingStateName
+      },
       billingStateId: row.billingStateId,
-      billingLocation: row.city_Name,
+      billingLocation: {
+        city_Id: row.billingLocationId,
+        city_Name: row.city_Name
+      },
       billingLocationId: row.billingLocationId,
       billingPinCode: row.billingPinCode,
       shippingsameasbilling: row.isShippingAddressSameAsBilling,
       shippingClientName: row.shippingClientName,
       shippingAddress: row.shippingAddress,
-      shippingState: row.shippingStateName,
+      shippingState: {
+        state_Id: row.shippingStateId,
+        state_Name: row.shippingStateName
+      },
       shippingStateId: row.shippingStateId,
-      shippingLocation: row.shippingCity_Name,
+      shippingLocation: {
+        city_Id: row.shippingLocationId,
+        city_Name: row.shippingCity_Name
+      },
       shippingLocationId: row.shippingLocationId,
       shippingPinCode: row.shippingPinCode,
       sapBillTo: row.sapBillTo,
@@ -182,8 +162,10 @@ export class ClientaddressComponent {
       lutNumber: row.luT_Number,
       lutDate: row.luT_Date,
       lutExpiryDate: row.luT_ExpiryDate,
+
     });
-    console.log('Clientaddress',this.clientaddress)
+
+    console.log('Clientaddress', this.clientaddress)
   }
 
   closeClientPopup() {
@@ -226,6 +208,9 @@ export class ClientaddressComponent {
     });
   }
 
+  get billingStateControl() {
+    return this.clientaddress.get('billingState');
+  }
   handleStateNameEvent2(statename2: any) {
     this.stateNameUI2 = statename2;
     this.selectedState2 = statename2.state_Id;
@@ -233,13 +218,16 @@ export class ClientaddressComponent {
       shippingState: statename2
     });
   }
-
+  cityNameUI3: any;
   citybystateEvent1(cityname: any) {
     console.log('City', cityname);
     this.cityNameUI1 = cityname;
+    this.cityNameUI3 = cityname.city_Id;
     this.clientaddress.patchValue({
       billingLocation: cityname
     });
+    console.log('BillingLocation', this.clientaddress.value.billingLocation);
+    console.log('CityNameUI3', this.cityNameUI3);
   }
 
   citybystateEvent2(cityname: any) {
@@ -285,40 +273,40 @@ export class ClientaddressComponent {
 
     });
 
-    this.clientaddressEdit = this.fb.group({
+    // this.clientaddressEdit = this.fb.group({
 
-      companyId: [''],
-      companyCode: [''],
-      Costcentermapping: [''],
-      CostcentermappingID: [''],
-      subCustomerCode: [''],
-      state: [''],
-      billingClientName: [''],
-      billingAddress: [''],
-      billingState: [''],
-      billingStateId: [''],
-      billingLocation: [''],
-      billingLocationId: [''],
-      billingPinCode: [''],
-      sapBillTo: [''],
-      shippingClientName: [''],
-      shippingAddress: [''],
-      shippingState: [''],
-      shippingStateId: [''],
-      shippingLocation: [''],
-      shippingLocationId: [''],
-      shippingPinCode: [''],
-      sapShipTo: [''],
-      shippingsameasbilling: [false],
-      effectiveDate: [''],
-      sezApplicable: [false],
-      sezExpiryDate: [''],
-      lutNumber: [''],
-      lutDate: [''],
-      lutExpiryDate: [''],
-      vendorcode: ['']
+    //   companyId: [''],
+    //   companyCode: [''],
+    //   Costcentermapping: [''],
+    //   CostcentermappingID: [''],
+    //   subCustomerCode: [''],
+    //   state: [''],
+    //   billingClientName: [''],
+    //   billingAddress: [''],
+    //   billingState: [''],
+    //   billingStateId: [''],
+    //   billingLocation: [''],
+    //   billingLocationId: [''],
+    //   billingPinCode: [''],
+    //   sapBillTo: [''],
+    //   shippingClientName: [''],
+    //   shippingAddress: [''],
+    //   shippingState: [''],
+    //   shippingStateId: [''],
+    //   shippingLocation: [''],
+    //   shippingLocationId: [''],
+    //   shippingPinCode: [''],
+    //   sapShipTo: [''],
+    //   shippingsameasbilling: [false],
+    //   effectiveDate: [''],
+    //   sezApplicable: [false],
+    //   sezExpiryDate: [''],
+    //   lutNumber: [''],
+    //   lutDate: [''],
+    //   lutExpiryDate: [''],
+    //   vendorcode: ['']
 
-    });
+    // });
   }
 
   sameAsBillingChange(event: any) {
@@ -419,16 +407,14 @@ export class ClientaddressComponent {
 
     this.service.Search(userId).subscribe({
       next: (res) => {
-        this.isLoading = false;
         this.Clientaddress = res?.Data;
-        //console.log(this.Clientaddress);
+        console.log('search', this.Clientaddress);
 
         if (!this.Clientaddress) {
-          this.isLoading = false;
           alert(res.Data.message)
+          this.isLoading = false;
         }
         if (this.Clientaddress && this.Clientaddress.length > 0) {
-          this.isLoading = false;
           this.dataSource = new MatTableDataSource(this.Clientaddress);
           this.dataSource.paginator = this.paginator;
           this.dataSource.sort = this.sort;
@@ -461,8 +447,12 @@ export class ClientaddressComponent {
             'SapBillTo',
             'SapShipTo',
             'AddressCode'];
+
+          this.isLoading = false;
+
         } else {
           this.isLoading = false;
+          alert('No Records Found');
           this.dataSource.data = [];
         }
       },
@@ -471,7 +461,6 @@ export class ClientaddressComponent {
         console.error('Error loading Companypaycode release data', err);
       },
     });
-    this.isLoading = false;
   }
 
 
@@ -677,68 +666,71 @@ export class ClientaddressComponent {
   }
 
   onSubmitedit(): Promise<void> {
-    // this.submitted = true;
-
     return new Promise((resolve, reject) => {
 
-      if (this.clientaddressEdit.invalid) {
-        this.clientaddressEdit.markAllAsTouched();
+      if (this.clientaddress.invalid) {
+        this.clientaddress.markAllAsTouched();
         reject("Form validation failed");
         return;
       }
 
-      const raw = this.clientaddressEdit.getRawValue();
+      const raw = this.clientaddress.getRawValue();
 
       const payload = {
-      Action: "Edit",
-      UserId: this.userdetail.user_Id,
-      ClientAddressId: this.rowData.clientAddressId,
-      CompanyId: raw.companyId || 0,
-      StateId: raw.state?.state_Id || 0,
-      CostCenterMappingId: raw.CostcentermappingID || 0,
-      BillingClientName: raw.billingClientName || "",
-      BillingAddress: raw.billingAddress || "",
-      BillingStateId: raw.billingStateId || 0,
-      IsShippingAddressSameAsBilling: raw.shippingsameasbilling,
-      ShippingClientName: raw.shippingClientName || "",
-      ShippingAddress: raw.shippingAddress || "",
-      ShippingStateId: raw.shippingStateId || 0,
-      EffectiveDate: raw.effectiveDate || "",
-      SEZ_Applicable: raw.sezApplicable || false,
-      // SEZ_Document: raw.
-      SEZ_ExpiryDate: raw.sezExpiryDate || "",
-      LUT_Number: raw.lutNumber || "",
-      LUT_Date: raw.lutDate || "",
-      LUT_ExpiryDate: raw.lutExpiryDate || "",
-      VendorCode: raw.vendorcode || "",
-      SAC_Code: raw.subCustomerCode || "",
-      GstNumber: raw.gstNumber || "",
-      Company_Code: raw.companyCode || "",
-      State_Name: raw.state || "",
-      Map_Name: raw.Costcentermapping || "",
-      BillingStateName: raw.billingState || "",
-      ShippingStateName: raw.shippingState || "",
-      BillingLocationId: raw.billingLocationId || 0,
-      BillingPinCode: raw.billingPinCode || "",
-      ShippingLocationId: raw.shippingLocationId || 0,
-      ShippingPinCode: raw.shippingPinCode || "",
-      City_Name: raw.billingLocation || "",
-      ShippingCity_Name: raw.shippingLocation || "",
-      SapBillTo: raw.sapBillTo || "",
-      SapShipTo: raw.sapShipTo || "",
-      AddressCode: "",
-      ClientGstNumber: "",
-      CreatedBy: this.userdetail.user_Id
+        Action: "Edit",
+        UserId: this.userdetail.user_Id,
+        ClientAddressId: this.rowData.clientAddressId,
+
+        CompanyId: this.rowData.companyId,
+        CostCenterMappingId: this.rowData.costCenterMappingId,
+        StateId: this.rowData.stateId,
+        Company_Code: this.rowData.company_Code,
+        State_Name: this.rowData.state_Name,
+        Map_Name: this.rowData.map_Name,
+        BillingClientName: raw.billingClientName || "",
+        BillingAddress: raw.billingAddress || "",
+        BillingStateId: raw.billingState?.state_Id || 0,
+        BillingStateName: raw.billingState?.state_Name || "",
+        BillingLocationId: raw.billingLocation?.city_Id || this.rowData.billingLocationId || 0,
+        City_Name: raw.billingLocation?.city_Name || "",
+        BillingPinCode: raw.billingPinCode || "",
+        IsShippingAddressSameAsBilling: raw.shippingsameasbilling,
+        ShippingClientName: raw.shippingClientName || "",
+        ShippingAddress: raw.shippingAddress || "",
+        ShippingStateId: raw.shippingState?.state_Id || 0,
+        ShippingStateName: raw.shippingState?.state_Name || "",
+        ShippingLocationId: raw.shippingLocation?.city_Id || this.rowData.shippingLocationId || 0,
+        ShippingCity_Name: raw.shippingLocation?.city_Name || "",
+        ShippingPinCode: raw.shippingPinCode || "",
+        EffectiveDate: raw.effectiveDate || "",
+        SEZ_Applicable: raw.sezApplicable || false,
+        SEZ_ExpiryDate: raw.sezExpiryDate || "",
+        LUT_Number: raw.lutNumber || "",
+        LUT_Date: raw.lutDate || "",
+        LUT_ExpiryDate: raw.lutExpiryDate || "",
+        VendorCode: raw.vendorcode || "",
+        SAC_Code: raw.subCustomerCode || "",
+        GstNumber: raw.gstNumber || "",
+        SapBillTo: raw.sapBillTo || "",
+        SapShipTo: raw.sapShipTo || "",
+        AddressCode: "",
+        ClientGstNumber: "",
+        CreatedBy: this.userdetail.user_Id
       };
+      console.log('Edit Payload', payload);
+      console.log('Client Address Form Value', JSON.stringify(payload));
+
       this.service.clientaddressaddsave(payload).subscribe({
         next: (res: string) => {
           const cleanMessage = res.replace(/<br\s*\/?>/gi, '\n');
+
           if (cleanMessage.includes('Success')) {
             alert('Client Address updated Successfully');
-            resolve();
+            this.closeClientPopup();
             this.onsearch();
+            resolve();
           } else {
-            alert(cleanMessage)
+            alert(cleanMessage);
             reject('API returned failure');
           }
         },
@@ -812,6 +804,7 @@ export class ClientaddressComponent {
         if (cleanMessage.includes('Success')) {
           alert('Client Address Created Successfully');
           this.closeClientPopup();
+          this.onsearch();
         } else {
           alert(cleanMessage);
           this.closeClientPopup();
