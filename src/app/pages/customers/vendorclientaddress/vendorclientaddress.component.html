@@ -1,0 +1,555 @@
+<div class="page-wrapper">
+
+    <div class="scrollable-content">
+        <mat-card-title style="color: #302CB3; font-size: 22px; font-family: Montserrat; font-weight: 700;">Vendor Cilent
+            Address List</mat-card-title>
+
+        <div class="container py-2">
+            <div class="row g-3 align-items-end">
+
+                <div class="col-md-3 d-flex gap-2">
+                    <button class="btn btn-sm btn-add" matTooltip="Create" (click)="AddPOOpen()">
+                        <mat-icon>add</mat-icon>
+                    </button>
+
+                    <button class="btn btn-secondary btn-sm d-flex align-items-center justify-content-center"
+                        matTooltip="Export" (click)="exportToExcel()">
+                        <mat-icon>download</mat-icon>
+                    </button>
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-download"
+                        matTooltip="Template" (click)="downloadTemplate()">
+                        <mat-icon>cloud_download</mat-icon>
+                    </button>
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-upload"
+                        matTooltip="Import" (click)="ImportClick(fileInput)">
+                        <mat-icon>cloud_upload</mat-icon>
+                    </button>
+                    <input type="file" #fileInput style="display: none;" (click)="fileInput.value=''"
+                        (change)="onFileChange($event)" accept=".xlsx, .xls" />
+                </div>
+            </div>
+        </div>
+        <div class="table-wrapper1">
+            <div class="table-scroll">
+
+                <mat-table [dataSource]="dataSource" matSort class="custom-table mat-elevation-z8 auto-fit-table">
+
+                    <!-- Action -->
+                    <ng-container matColumnDef="Action">
+                        <mat-header-cell *matHeaderCellDef><strong>Action</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">
+                            <div class="action-wrapper">
+                                <button class="btn btn-sm" matTooltip="Edit" (click)="editOpen(row)">
+                                    <mat-icon>edit</mat-icon>
+                                </button>
+
+                                <!-- <button class="btn btn-sm" matTooltip="Delete" (click)="deleteClientAddress(row)">
+                                    <mat-icon>delete</mat-icon>
+                                </button> -->   
+                            </div>
+                        </mat-cell>
+                    </ng-container>
+
+                    <!-- Client Address Id -->
+                    <ng-container matColumnDef="VendorClientAddressId">
+                        <mat-header-cell *matHeaderCellDef><strong>VendorClientAddressId</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{row.vendorClientAddressId}}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="companyId">
+                        <mat-header-cell *matHeaderCellDef><strong>companyId</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{row.companyId}}</mat-cell>
+                    </ng-container>
+
+                    <!-- Company Code -->
+                    <ng-container matColumnDef="Companycode">
+                        <mat-header-cell *matHeaderCellDef><strong>Company Code</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{row. company_Code}}</mat-cell>
+                    </ng-container>
+
+                    <!-- State -->
+                    <ng-container matColumnDef="State">
+                        <mat-header-cell *matHeaderCellDef><strong>State</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{row.state_Name}}</mat-cell>
+                    </ng-container>
+
+                    <!-- Map Name -->
+                    <ng-container matColumnDef="MapName">
+                        <mat-header-cell *matHeaderCellDef><strong>Map Name</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{row.map_Name}}</mat-cell>
+                    </ng-container>
+
+                    <!-- SAC Code -->
+                    <ng-container matColumnDef="SACCode">
+                        <mat-header-cell *matHeaderCellDef><strong>SAC Code</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{row.saC_Code}}</mat-cell>
+                    </ng-container>
+
+                    <!-- Billing Client Name -->
+                    <ng-container matColumnDef="Billing_Client_Name">
+                        <mat-header-cell *matHeaderCellDef><strong>Billing Client Name</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{row.billingClientName}}</mat-cell>
+                    </ng-container>
+
+                    <!-- Billing Address -->
+                    <ng-container matColumnDef="billingaddress">
+                        <mat-header-cell *matHeaderCellDef><strong>Billing Address</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{row.billingAddress}}</mat-cell>
+                    </ng-container>
+
+                    <!-- Billing State -->
+                    <ng-container matColumnDef="billingstate">
+                        <mat-header-cell *matHeaderCellDef><strong>Billing State</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{row.billingStateName}}</mat-cell>
+                    </ng-container>
+
+                    <!-- Shipping Same -->
+                    <ng-container matColumnDef="Shippingaddresssameasbilling">
+                        <mat-header-cell *matHeaderCellDef><strong>Shipping Same as Billing</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">
+                            {{row.isShippingAddressSameAsBilling ? 'Yes' : 'No'}}
+                        </mat-cell>
+                    </ng-container>
+
+                    <!-- Shipping Client -->
+                    <ng-container matColumnDef="Shippingclientname">
+                        <mat-header-cell *matHeaderCellDef><strong>Shipping Client Name</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{row.shippingClientName}}</mat-cell>
+                    </ng-container>
+
+                    <!-- Shipping Address -->
+                    <ng-container matColumnDef="Shippingaddress">
+                        <mat-header-cell *matHeaderCellDef><strong>Shipping Address</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{row.shippingAddress}}</mat-cell>
+                    </ng-container>
+
+                    <!-- Shipping State -->
+                    <ng-container matColumnDef="Shippingstate">
+                        <mat-header-cell *matHeaderCellDef><strong>Shipping State</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{row.shippingStateName}}</mat-cell>
+                    </ng-container>
+
+                    <!-- Effective Date -->
+                    <ng-container matColumnDef="Effectivedate">
+                        <mat-header-cell *matHeaderCellDef><strong>Effective Date</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{row.effectiveDate}}</mat-cell>
+                    </ng-container>
+
+                    <!-- SEZ Applicable -->
+                    <ng-container matColumnDef="SezApplicable">
+                        <mat-header-cell *matHeaderCellDef><strong>SEZ Applicable</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{row.sezApplicable ? 'Yes':'No'}}</mat-cell>
+                    </ng-container>
+
+                    <!-- SEZ Expiry -->
+                    <ng-container matColumnDef="SezExpiryDate">
+                        <mat-header-cell *matHeaderCellDef><strong>SEZ Expiry Date</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{row.seZ_ExpiryDate}}</mat-cell>
+                    </ng-container>
+
+                    <!-- LUT Number -->
+                    <ng-container matColumnDef="LutNumber">
+                        <mat-header-cell *matHeaderCellDef><strong>LUT Number</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{row.luT_Number}}</mat-cell>
+                    </ng-container>
+
+                    <!-- LUT Date -->
+                    <ng-container matColumnDef="LutDate">
+                        <mat-header-cell *matHeaderCellDef><strong>LUT Date</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{row.luT_Date}}</mat-cell>
+                    </ng-container>
+
+                    <!-- LUT Expiry -->
+                    <ng-container matColumnDef="LutExpiryDate">
+                        <mat-header-cell *matHeaderCellDef><strong>LUT Expiry Date</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{row.luT_ExpiryDate}}</mat-cell>
+                    </ng-container>
+
+                    <!-- Vendor Code -->
+                    <ng-container matColumnDef="VendorCode">
+                        <mat-header-cell *matHeaderCellDef><strong>Vendor Code</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{row.vendorCode}}</mat-cell>
+                    </ng-container>
+
+                    <!-- GST Number -->
+                    <ng-container matColumnDef="gstnumber">
+                        <mat-header-cell *matHeaderCellDef><strong>GST Number</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{row.gstNumber}}</mat-cell>
+                    </ng-container>
+
+                    <!-- Billing Location -->
+                    <ng-container matColumnDef="BillingLocation">
+                        <mat-header-cell *matHeaderCellDef><strong>Billing Location</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{row.city_Name}}</mat-cell>
+                    </ng-container>
+
+                    <!-- Shipping Location -->
+                    <ng-container matColumnDef="ShippingLocation">
+                        <mat-header-cell *matHeaderCellDef><strong>Shipping Location</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{row.shippingCity_Name}}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="BillingLocationId">
+                        <mat-header-cell *matHeaderCellDef><strong>BillingLocationId</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{row.billingLocationId}}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="ShippingLocationId">
+                        <mat-header-cell *matHeaderCellDef><strong>ShippingLocationId</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{row.shippingLocationId}}</mat-cell>
+                    </ng-container>
+
+                    <!-- Billing Pin -->
+                    <ng-container matColumnDef="BillingPincode">
+                        <mat-header-cell *matHeaderCellDef><strong>Billing PinCode</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{row.billingPinCode}}</mat-cell>
+                    </ng-container>
+
+                    <!-- Shipping Pin -->
+                    <ng-container matColumnDef="ShippingPincode">
+                        <mat-header-cell *matHeaderCellDef><strong>Shipping PinCode</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{row.shippingPinCode}}</mat-cell>
+                    </ng-container>
+
+                    <!-- SAP Bill To -->
+                    <ng-container matColumnDef="SapBillTo">
+                        <mat-header-cell *matHeaderCellDef><strong>SAP Bill To</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{row.sapBillTo}}</mat-cell>
+                    </ng-container>
+
+                    <!-- SAP Ship To -->
+                    <ng-container matColumnDef="SapShipTo">
+                        <mat-header-cell *matHeaderCellDef><strong>SAP Ship To</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{row.sapShipTo}}</mat-cell>
+                    </ng-container>
+
+                    <!-- Address Code -->
+                    <ng-container matColumnDef="AddressCode">
+                        <mat-header-cell *matHeaderCellDef><strong>Address Code</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{row.addressCode}}</mat-cell>
+                    </ng-container>
+
+                    <mat-header-row *matHeaderRowDef="uploadDisplayedColumns"></mat-header-row>
+                    <mat-row *matRowDef="let row; columns: uploadDisplayedColumns"></mat-row>
+
+                </mat-table>
+            </div>
+
+            <!-- No Data -->
+            <div *ngIf="dataSource.data.length === 0" class="text-center p-4">
+                <p class="text-muted">No data to display</p>
+            </div>
+
+            <!-- Paginator -->
+            <mat-paginator [length]="dataSource.data.length" [pageSize]="5" [pageSizeOptions]="[5,10,20]"
+                showFirstLastButtons>
+            </mat-paginator>
+
+        </div>
+
+    </div>
+</div>
+<div *ngIf="isLoading" class="loading-overlay">
+    <img src="assets/Loading.gif" alt="Loading...">
+</div>
+
+<!-- CLIENT ADDRESS POPUP -->
+
+<div *ngIf="showClientPopup" class="popup-overlay">
+    <form [formGroup]="clientaddress" novalidate>
+
+        <mat-card class="popup-card">
+
+            <!-- HEADER -->
+            <mat-card-header class="popup-header">
+                <mat-card-title>
+                    {{ isEditMode ? 'Edit Client Address' : 'Add Client Address' }}
+                </mat-card-title>
+                <span class="spacer"></span>
+
+                <button style="background: transparent; border:none" mat-icon-button (click)="closeClientPopup()">
+                    <mat-icon>close</mat-icon>
+                </button>
+            </mat-card-header>
+
+            <mat-card-content>
+
+                <!-- ROW 1 -->
+                <div class="row g-3 mb-3">
+
+                    <div class="col-md-6">
+                        <label class="form-label text-muted small">Company <span class="text-danger">*</span></label>
+
+                        <!-- ADD MODE -->
+                        <companyall *ngIf="!isEditMode" formControlName="company"
+                            (companyEmit)="handleCompanyEvent($event)">
+                        </companyall>
+                        <small class="text-danger d-block mt-1"
+                            *ngIf="showErrors && clientaddress.get('company')?.invalid">
+                            Company is required
+                        </small>
+
+                        <!-- EDIT MODE -->
+                        <input *ngIf="isEditMode" class="form-control form-control-sm" formControlName="company"
+                            readonly>
+
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label text-muted small">Cost Center Mapping<span
+                                class="text-danger">*</span></label>
+                        <mapname *ngIf="!isEditMode" formControlName="Costcentermapping"
+                            [selectedCompanyId]="selectedCC" (mapnameEmit)="handleMapNameEvent($event)"></mapname>
+                        <small class="text-danger d-block mt-1"
+                            *ngIf="showErrors && clientaddress.get('Costcentermapping')?.invalid">
+                            Map Name is required
+                        </small>
+                        <input *ngIf="isEditMode" class="form-control form-control-sm"
+                            formControlName="Costcentermapping" readonly>
+                    </div>
+                </div>
+
+
+                <!-- ROW 2 -->
+
+                <div class="row g-3 mb-3">
+
+                    <div class="col-md-6">
+                        <label class="form-label text-muted small">SAC Code <span class="text-danger">*</span></label>
+                        <input class="form-control form-control-sm" formControlName="subCustomerCode">
+                        <small class="text-danger d-block mt-1"
+                            *ngIf="showErrors && clientaddress.get('subCustomerCode')?.invalid">
+                            SAC Code is required
+                        </small>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label text-muted small">State</label>
+                        <state *ngIf="!isEditMode" formControlName="state" (stateEmit)="handleStateNameEvent($event)">
+                        </state>
+                        <small class="text-danger d-block mt-1"
+                            *ngIf="showErrors && clientaddress.get('state')?.invalid">
+                            state is required
+                        </small>
+                        <input *ngIf="isEditMode" class="form-control form-control-sm" formControlName="state" readonly>
+                    </div>
+
+                </div>
+
+
+                <!-- SAME AS BILLING -->
+
+                <div class="row mb-3 align-items-center">
+                    <div class="col-12" style="padding-left: 52%;">
+                        <input type="checkbox" formControlName="shippingsameasbilling"
+                            (change)="sameAsBillingChange($event)">
+                        <label class="form-label text-muted small ms-2">Shipping Address same as Billing</label>
+                    </div>
+                </div>
+
+
+
+                <div class="row mb-3 address-row">
+
+                    <div class="col-md-12">
+                        <div class="address-box">
+
+                            <label class="form-label text-muted small">Billing Client Name <span
+                                    class="text-danger">*</span></label>
+                            <input class="form-control form-control-sm" formControlName="billingClientName">
+                            <small class="text-danger d-block mt-1"
+                                *ngIf="showErrors && clientaddress.get('billingClientName')?.invalid">
+                                Billing Client Name is required
+                            </small>
+
+                            <label class="form-label text-muted small mt-3">Billing Address <span
+                                    class="text-danger">*</span></label>
+                            <textarea class="form-control form-control-sm" rows="4"
+                                formControlName="billingAddress"></textarea>
+                            <small class="text-danger d-block mt-1"
+                                *ngIf="showErrors && clientaddress.get('billingAddress')?.invalid">
+                                Billing Address is required
+                            </small>
+
+                            <label class="form-label text-muted small mt-3">Billing State <span
+                                    class="text-danger">*</span></label>
+                            <state formControlName="billingState" (stateEmit)="handleStateNameEvent1($event)">
+                            </state>
+                            <small class="text-danger d-block mt-1"
+                                *ngIf="showErrors && clientaddress.get('billingState')?.invalid">
+                                Billing State is required
+                            </small>
+                            <!-- <input *ngIf="isEditMode" class="form-control form-control-sm"
+                                formControlName="billingState" readonly> -->
+
+
+                            <label class="form-label text-muted small mt-3">Billing Location <span
+                                    class="text-danger">*</span></label>
+                            <citybystate formControlName="billingLocation"
+                                [selectedStateId]="billingStateControl?.value?.state_Id"
+                                (citybyStateEmit)="citybystateEvent1($event)">
+                            </citybystate>
+                            <small class="text-danger d-block mt-1"
+                                *ngIf="showErrors && clientaddress.get('billingLocation')?.invalid">
+                                Billing Location is required
+                            </small>
+                            <!-- <input *ngIf="isEditMode" class="form-control form-control-sm"
+                                formControlName="billingLocation" readonly> -->
+
+
+                            <label class="form-label text-muted small mt-3">Billing Pin Code <span
+                                    class="text-danger">*</span></label>
+                            <input class="form-control form-control-sm" formControlName="billingPinCode">
+                            <small class="text-danger d-block mt-1"
+                                *ngIf="showErrors && clientaddress.get('billingPinCode')?.invalid">
+                                Billing Pincode is required
+                            </small>
+
+                            <label class="form-label text-muted small mt-3">SAP Bill To</label>
+                            <input class="form-control form-control-sm" formControlName="sapBillTo">
+                        </div>
+                    </div>
+
+
+                    <!-- SHIPPING -->
+                    <div class="col-md-12">
+                        <div class="address-box">
+
+                            <label class="form-label text-muted small">Shipping Client Name <span
+                                    class="text-danger">*</span></label>
+                            <input class="form-control form-control-sm" formControlName="shippingClientName"
+                                [readonly]="sameAsBilling">
+                            <small class="text-danger d-block mt-1"
+                                *ngIf="showErrors && clientaddress.get('shippingClientName')?.invalid">
+                                Shipping Client Name is required
+                            </small>
+                            <label class="form-label text-muted small mt-3">Shipping Address <span
+                                    class="text-danger">*</span></label>
+                            <textarea class="form-control form-control-sm" rows="4" formControlName="shippingAddress"
+                                [readonly]="sameAsBilling"></textarea>
+                            <small class="text-danger d-block mt-1"
+                                *ngIf="showErrors && clientaddress.get('shippingAddress')?.invalid">
+                                Shipping Address is required
+                            </small>
+                            <label class="form-label text-muted small mt-3">Shipping State <span
+                                    class="text-danger">*</span></label>
+                            <state formControlName="shippingState" (stateEmit)="handleStateNameEvent2($event)"
+                                [readonly]="sameAsBilling">
+                            </state>
+                            <small class="text-danger d-block mt-1"
+                                *ngIf="showErrors && clientaddress.get('shippingState')?.invalid">
+                                Shipping State is required
+                            </small>
+                            <!-- <input *ngIf="isEditMode" class="form-control form-control-sm"
+                                formControlName="shippingState" readonly> -->
+
+                            <label class="form-label text-muted small mt-3">Shipping Location <span
+                                    class="text-danger">*</span></label>
+                            <citybystate formControlName="shippingLocation"
+                                [selectedStateId]="clientaddress.get('shippingState')?.value?.state_Id"
+                                (citybyStateEmit)="citybystateEvent2($event)" [readonly]="sameAsBilling">
+                            </citybystate>
+                            <small class="text-danger d-block mt-1"
+                                *ngIf="showErrors && clientaddress.get('shippingLocation')?.invalid">
+                                Shipping Location is required
+                            </small>
+                            <!-- <input *ngIf="isEditMode" class="form-control form-control-sm"
+                                formControlName="shippingLocation" readonly> -->
+
+                            <label class="form-label text-muted small mt-3">Shipping Pin Code <span
+                                    class="text-danger">*</span></label>
+                            <input class="form-control form-control-sm" formControlName="shippingPinCode"
+                                [readonly]="sameAsBilling">
+                            <small class="text-danger d-block mt-1"
+                                *ngIf="showErrors && clientaddress.get('shippingPinCode')?.invalid">
+                                Shipping Pin Code is required
+                            </small>
+                            <label class="form-label text-muted small mt-3">SAP Ship To</label>
+                            <input class="form-control form-control-sm" formControlName="sapShipTo"
+                                [readonly]="sameAsBilling">
+                            <small class="text-danger d-block mt-1"
+                                *ngIf="showErrors && clientaddress.get('sapShipTo')?.invalid">
+                                SAP Ship To is required
+                            </small>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- EFFECTIVE DATE -->
+
+                <div class="row g-3 mb-3">
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Effective Date</label>
+                        <input type="date" class="form-control form-control-sm" formControlName="effectiveDate">
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Vendor Code</label>
+                        <input class="form-control form-control-sm" formControlName="vendorcode">
+                    </div>
+
+                    <div class="col-md-4 align-self-end">
+                        <input type="checkbox" formControlName="sezApplicable">
+                        <label class="form-label text-muted small ms-2">SEZ Applicable</label>
+                    </div>
+
+                </div>
+                <div class="row g-3 mb-3">
+                </div>
+                <!-- SEZ SECTION -->
+
+                <div *ngIf="clientaddress.get('sezApplicable')?.value" class="sez-box">
+
+                    <div class="row g-3">
+
+                        <div class="col-md-6">
+                            <label class="form-label text-muted small">SEZ Document</label>
+                            <input type="file" class="form-control form-control-sm">
+                        </div>
+
+                        <div class="col-md-3">
+                            <label class="form-label text-muted small">SEZ Expiry Date</label>
+                            <input type="date" class="form-control form-control-sm" formControlName="sezExpiryDate">
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label text-muted small">LUT Number</label>
+                            <input class="form-control form-control-sm" formControlName="lutNumber">
+                        </div>
+
+                        <div class="col-md-3">
+                            <label class="form-label text-muted small">LUT Date</label>
+                            <input type="date" class="form-control form-control-sm" formControlName="lutDate">
+                        </div>
+
+                        <div class="col-md-3">
+                            <label class="form-label text-muted small">LUT Expiry Date</label>
+                            <input type="date" class="form-control form-control-sm" formControlName="lutExpiryDate">
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+            </mat-card-content>
+
+
+            <!-- FOOTER -->
+
+            <mat-card-footer class="popup-footer">
+
+                <button class="btn-cancel" type="button" (click)="closeClientPopup()">Cancel</button>
+
+                <button class="btn-save" type="button" (click)="saveClientAddress()">
+                    {{ isEditMode ? 'Update' : 'Save' }}
+                </button>
+
+
+            </mat-card-footer>
+
+        </mat-card>
+
+    </form>
+</div>

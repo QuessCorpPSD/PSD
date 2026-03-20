@@ -157,6 +157,7 @@ import { LeavetypemasterComponent } from './pages/inputaggregator/leavetypemaste
 import { LeavetypemastermappingComponent } from './pages/inputaggregator/leavetypemastermapping/leavetypemastermapping.component';
 import { InvoiceCultureAddpoComponent } from './pages/Invoice/invoice-culture-addpo/invoice-culture-addpo.component';
 import { OtherincomeComponent } from './pages/Invoice/otherincome/otherincome.component';
+import { VendorclientaddressComponent } from './pages/customers/vendorclientaddress/vendorclientaddress.component';
 
 
 
@@ -370,6 +371,7 @@ export const routes: Routes = [
           { path: "payfrequency", component: PayfrequencyComponent },
           { path: "corporatebank", component: CorporatebankComponent },
           { path: "clientaddress", component: ClientaddressComponent },
+          { path: "vendorclientaddress", component: VendorclientaddressComponent },
           { path: "itcalender", component: ITcalenderComponent },
           { path: "companypaycodemapping", component: CompanypaycodemappingComponent },
           { path: "ServiceCharge", component: ServiceChargeComponent },

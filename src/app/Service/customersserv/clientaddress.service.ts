@@ -55,5 +55,37 @@ export class ClientaddressService implements IClientaddress {
     );
   }
 
+  VendorSearch(payload: any): Observable<APIResponse> {
+    const params = new HttpParams({ fromObject: payload });
+
+    return this.http.get<APIResponse>(
+      this.env.apiUrl + 'VendorClientAddress/GetAllVendorClientAddressDetails/' + payload
+    );
+  }
+
+  VendorExporttoExcel(userid: any): Observable<APIResponse> {
+    return this.http.get<APIResponse>(
+      this.env.apiUrl + 'VendorClientAddress/VendorClientAddressExport/' + userid
+    );
+  }
+
+  Vendorclientaddressaddsave(payload: any): Observable<string> {
+    return this.http.post(
+      this.env.apiUrl + 'VendorClientAddress/PostAddVendorClientAddress',
+      payload,
+      { responseType: 'text' }
+    );
+  }
+
+  PostVendorClientAddressUpload(payload: any): Observable<APIResponse> {
+    return this.http.post<APIResponse>(this.env.apiUrl + 'VendorClientAddress/PostVendorClientAddressUpload', payload)
+  }
+  PostVendorClientAddressDelete(clientaddressid: any, userid: any): Observable<string> {
+    return this.http.get<string>(
+      this.env.apiUrl + 'VendorClientAddress/PostDeleteVendorClientAddress/' + clientaddressid + '/' + userid,
+      { responseType: 'text' as 'json' }
+    );
+  }
+
 
 }
