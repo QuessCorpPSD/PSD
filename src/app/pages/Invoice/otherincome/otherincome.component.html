@@ -152,9 +152,13 @@
                         </div>
                     </div>
                     <div class="col-md-4">
+                        <label class="form-label">Invoice Ref No</label>
+                        <input type="text" class="form-control" formControlName="InvoiceRefNo" />
+                    </div>
+                    <!-- <div class="col-md-4">
                         <label class="form-label">Company Name<span class="text-danger"></span></label>
                         <input type="text" class="form-control" formControlName="CompanyName" />
-                    </div>
+                    </div> -->
                     <div class="col-md-4">
                         <label class="form-label">Service Charge<span class="text-danger">*</span></label>
                         <select class="form-select" formControlName="ServiceCharge">
@@ -171,10 +175,7 @@
                 </div>
                 <!-- Row 2 -->
                 <div class="row g-3 mb-3">
-                    <div class="col-md-4">
-                        <label class="form-label">Invoice Ref No</label>
-                        <input type="text" class="form-control" formControlName="InvoiceRefNo" />
-                    </div>
+
                     <div class="col-md-4">
                         <label class="form-label">Map Name<span class="text-danger">*</span></label>
                         <mapname [selectedCompanyId]="selectedCC" (mapnameEmit)="handleMapNameEvent($event)"></mapname>
@@ -193,9 +194,8 @@
                         <label class="form-label">Location<span class="text-danger"></span></label>
                         <input type="text" class="form-control" formControlName="Location" />
                     </div>
-                </div>
-                <div class="row g-3 mb-3">
                     <div class="col-md-4">
+
                         <label class="form-label">Invoice Type<span class="text-danger">*</span></label>
                         <select class="form-select" formControlName="InvoiceType">
                             <option value="">-- Select --</option>
@@ -206,6 +206,9 @@
                             Invoice Type is required
                         </div>
                     </div>
+                </div>
+                <div class="row g-3 mb-3">
+
                     <div class="col-md-4">
                         <label class="form-label">Invoice Category<span class="text-danger">*</span></label>
                         <select class="form-select" formControlName="InvoiceCategory">
@@ -235,40 +238,80 @@
                     </div>
                 </div>
                 <div class="row g-3 mb-3">
-                    <div class="col-md-4">
+                    <div class="col-md-12">
                         <label class="form-label">Type Of Invoice<span class="text-danger"></span></label>
-                        <div class="type-scroll" *ngIf="CompanyId > 0">
-                            <div class="checkbox-grid">
-                                <mat-checkbox *ngFor="let t of typeInvoiceList"
-                                    [formControlName]="t.Paycode_Id.toString()" class="cb"
-                                    (change)="onCheckboxChange()">
-                                    {{ t.Paycode_Code }}
-                                </mat-checkbox>
+                    </div>
+                    <div class="col-md-2"></div>
+                    <div class="col-md-8">
+                        <div class="type-scroll" *ngIf="selectedCC > 0">
+                            <div class="row">
+
+                                <!-- AVAILABLE PAYCODES -->
+                                <div class="col-md-6">
+                                    <!-- <label>Default Paycodes</label> -->
+
+                                    <input type="text" class="form-control form-control-sm mb-2"
+                                        placeholder="Search default paycodes" [formControl]="availableSearchInput">
+
+                                    <div cdkDropList id="availableList" #availables="cdkDropList"
+                                        [cdkDropListData]="filteredAvailableItems" [cdkDropListConnectedTo]="[selects]"
+                                        (cdkDropListDropped)="drop($event)" class="drag-drop-list">
+
+                                        <div class="drag-drop-box" *ngFor="let item of filteredAvailableItems" cdkDrag>
+                                            {{ item.Paycode_Code }}
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <!-- SELECTED PAYCODES -->
+                                <div class="col-md-6">
+                                    <!-- <label>Mapped Paycodes</label> -->
+
+                                    <input type="text" class="form-control form-control-sm mb-2"
+                                        placeholder="Search mapped paycodes" [formControl]="selectedSearchInput">
+
+                                    <div cdkDropList id="selectedList" #selects="cdkDropList"
+                                        [cdkDropListData]="selectedDragItems" [cdkDropListConnectedTo]="[availables]"
+                                        (cdkDropListDropped)="drop($event)" class="drag-drop-list">
+
+                                        <div class="drag-drop-box-selected" *ngFor="let item of filteredSelectedItems"
+                                            cdkDrag>
+                                            {{ item.Paycode_Code }}
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
+                    <div class="col-md-2"></div>
                 </div>
             </form>
 
             <!-- <mat-card-footer class="footer"> -->
-            <div class="d-flex justify-content-end mt-3" style="gap: 10px; padding-right: 8px;">
-                <!-- <div> -->
 
-                <button type="Cancel"
-                    style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: #f0f0f0; color: black;"
-                    (click)="closeclick()">
-                    Cancel
-                </button>
-
-                <button type="submit"
-                    style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: blue; color: white;"
-                    (click)="SaveData()">
-                    Save
-                </button>
-                <!-- </div> -->
-            </div>
             <!-- </mat-card-footer> -->
         </mat-card-content>
+        <mat-card-actions class="d-flex justify-content-end mt-3" style="gap: 10px; padding-right: 8px;">\
+            <div class="d-flex justify-content-end mt-3">
+                <div class="btn-1"
+                    style="display: flex; justify-content: flex-end; gap: 10px; width: 100%; padding-right: 7px;">
+
+                    <button type="button" (click)="closeclick()"
+                        style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: #f0f0f0; color: black;">
+                        Cancel
+                    </button>
+
+                    <button type="button" (click)="SaveData()"
+                        style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: blue; color: white;">
+                        Save
+                    </button>
+
+                </div>
+            </div>
+            <!-- <button type="Cancel" (click)="closeclick()">Cancel</button>
+            <button type="submit" (click)="SaveData()">Save</button> -->
+        </mat-card-actions>
     </mat-card>
 </div>
 <div *ngIf="isLoading" class="loading-overlay">

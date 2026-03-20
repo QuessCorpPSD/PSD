@@ -13,6 +13,9 @@
 
 }
 
+
+
+
 .scrollable-content {
     flex: 1 1 auto;
     overflow-x: auto;
@@ -263,7 +266,7 @@
     max-width: 85%;
     height: 85vh;
     max-height: 85vh;
-    overflow-y: auto;
+    /* overflow-y: auto; */
 }
 
 select {
@@ -334,7 +337,7 @@ input {
 }
 
 .form-label {
-    font-size: 12px;
+    font-size: 15px;
     color: #6c757d;
 }
 
@@ -490,4 +493,99 @@ input {
     display: flex;
     align-items: center;
     justify-content: space-between;
+}
+
+
+
+.drag-drop-list {
+    border: solid 1px;
+    height: 220px;
+    overflow-y: auto;
+    display: block;
+    margin-top: 10px;
+    background: #f4f6f8;
+    color: #fff;
+    border-radius: 10px;
+}
+
+.drag-drop-box,
+.drag-drop-box-selected {
+
+    padding: 10px 12px;
+    margin: 6px;
+    background: #ffffff;
+    border-radius: 8px;
+    border: 1px solid #d4d7ff;
+    cursor: grab;
+    color: #2a2a2a;
+
+    font-size: 10px;
+    font-weight: 500;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+}
+
+.cdk-drag-preview {
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+}
+
+.cdk-drag-placeholder {
+    opacity: 0;
+}
+
+.drag-drop-container {
+    width: 90%;
+    margin: auto;
+    vertical-align: top;
+}
+
+
+/* Fix card layout */
+.popup-card {
+    height: 85vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* HEADER FIXED */
+.popup-header {
+    position: sticky;
+    top: 0;
+    background: white;
+    z-index: 10;
+    border-bottom: 1px solid #ddd;
+}
+
+/* BODY SCROLL ONLY */
+mat-card-content {
+    flex: 1;
+    overflow-y: auto;
+}
+
+/* FOOTER FIXED */
+mat-card-actions {
+    position: sticky;
+    bottom: 0;
+    background: white;
+    z-index: 10;
+    border-top: 1px solid #ddd;
+}
+
+/* Cancel button hover */
+mat-card-actions button:first-child:hover {
+    background-color: #d6d6d6 !important;
+    /* slightly darker grey */
+}
+
+/* Save button hover */
+mat-card-actions button:last-child:hover {
+    background-color: #d6d6d6 !important;
+}
+
+mat-card-actions button {
+    transition: 0.3s;
 }

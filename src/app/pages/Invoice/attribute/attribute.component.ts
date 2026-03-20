@@ -124,8 +124,8 @@ export class AttributeComponent implements OnInit, OnChanges {
 
       console.log('2', this.filteredAvailableItems);
     });
-
   }
+
   ngOnChanges(changes: SimpleChanges): void {
 
   }
@@ -145,6 +145,7 @@ export class AttributeComponent implements OnInit, OnChanges {
       to: 'selected',
     });
   }
+  
   AttributeAdd() {
     this.IsAdd = true;
   }
