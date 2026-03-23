@@ -11,17 +11,18 @@ import { PaycodeComponent } from "../../../common/paycode/paycode.component";
 import { EncryptionService } from '../../../Shared/encryption.service';
 import { SessionStorageService } from '../../../Shared/SessionStorageService';
 import * as XLSX from 'xlsx';
-import { FormualService } from '../../../Repository/GlobalMasters/formula.service';
+import { FormualService } from '../../../Service/GlobalMasters/formula.service';
 import { IFormulaRepository } from '../../../Repository/GlobalMasters/IFormulaRepository';
 import { MatCardModule } from "@angular/material/card";
 import { AlertpopupComponent } from "../../../common/alertpopup/alertpopup.component";
+import { FormsModule } from '@angular/forms';
 
 export const Formula_TOKEN = new InjectionToken<IFormulaRepository>('Formula_TOKEN');
 
 @Component({
   selector: 'app-formula',
   standalone: true,
-  imports: [CommonModule, MatIconModule, MatTooltipModule, MatTableModule, MatPaginator, PaycodeComponent, MatCardModule, AlertpopupComponent],
+  imports: [CommonModule, FormsModule, MatIconModule, MatTooltipModule, MatTableModule, MatPaginator, MatCardModule, AlertpopupComponent],
   templateUrl: './formula.component.html',
   styleUrl: './formula.component.css',
   providers: [{
@@ -41,7 +42,7 @@ export class FormulaComponent {
   showPopup: boolean = false;
   popupMessage: string = '';
   popupSubMessage: string = '';
-
+  formulaname: any;
 
   uploadDisplayedColumns: string[] = [
     'Action',
@@ -87,6 +88,18 @@ export class FormulaComponent {
       "paycode_Code": "",
       "description": ""
     }
+    this.Search();
+    // this.uploadedDataSource.filterPredicate = (data: any, filter: string) => {
+    //   const formulaname = filter.toLowerCase();
+    //   console.log(data.Formula_Name);
+    //   return (
+    //     data.Formula_Name?.toLowerCase().includes(formulaname) ||
+    //     data.Company_Code?.toLowerCase().includes(formulaname)
+    //     // data.Month_Name?.toLowerCase().includes(searchText) ||
+    //     // data.From_Value?.toString().includes(searchText) ||
+    //     // data.To_Value?.toString().includes(searchText)
+    //   );
+    // };
 
   }
 
@@ -94,24 +107,25 @@ export class FormulaComponent {
     this.paycodeUI = paycode;
   }
 
-
-  onSearchClick() {
-    this.showTable = true;
+  Search() {
     this.isLoading = true;
-    this.BindDashBoard(this.paycodeUI.paycode_Id);
-  }
-
-  BindDashBoard(paycode_Id: number) {
+    const paycode_Id = 0;
     this.formula.GetFormulaSearch(paycode_Id).subscribe({
       next: res => {
+        this.uploadedData = res.Data.data.Table0;
         if (!res.Data || res.Data.length === 0) {
           alert("No data available to display.");
           this.isLoading = false;
           return;
         }
-        this.uploadedDataSource = new MatTableDataSource<any>(res.Data.data.Table0);
+        this.showTable = true;
+        this.uploadedDataSource = new MatTableDataSource(this.uploadedData);
         this.uploadedDataSource.paginator = this.paginator;
         this.uploadedDataSource.sort = this.sort;
+        // if (this.uploadedDataSource.paginator) {
+        //   this.uploadedDataSource.paginator.firstPage();
+        //   this.isLoading = false;
+        // }
         this.isLoading = false;
       },
       error: err => {
@@ -119,6 +133,11 @@ export class FormulaComponent {
         this.isLoading = false;
       }
     });
+  }
+
+  applyFilter() {
+    const filterValue = this.formulaname?.trim().toLowerCase();
+    this.uploadedDataSource.filter = filterValue;
   }
   exportToExcel() {
     this.isLoading = true;
@@ -156,7 +175,7 @@ export class FormulaComponent {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result === 'updated') {
-        this.onSearchClick();
+        this.Search();
       }
     });
   }
@@ -198,7 +217,7 @@ export class FormulaComponent {
         this.isLoading = false;
         if (res?.StatusCode === 200) {
           this.showAlertPopup(res?.Data?.message || "Formula Deleted successfully");
-          this.onSearchClick();
+          this.Search();
         } else {
           alert("Delete failed");
           this.isLoading = false;

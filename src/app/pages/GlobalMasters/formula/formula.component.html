@@ -8,12 +8,12 @@
         <div class="container py-2">
             <div class="row g-3 align-items-end">
                 <div class="col-md-3 small-input">
-                    <label class="form-label text-muted small">Formula Name</label>
-                    <paycode (paycodeEmit)="handlePaycodeEvent($event)" style="width: 300px;"></paycode>
+                    <input class="form-control form-control-sm" [(ngModel)]="formulaname" (input)="applyFilter()"
+                        placeholder="search" />
                 </div>
                 <div class="col-md-3 d-flex gap-2">
                     <button class="btn btn-sm d-flex align-items-center justify-content-center btn-search"
-                        matTooltip="Search" (click)="onSearchClick()">
+                        matTooltip="Search" (click)="Search()">
                         <mat-icon>search</mat-icon>
                     </button>
 
@@ -97,7 +97,7 @@
             </div>
 
             <mat-paginator [length]="uploadedDataSource.data.length" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]"
-                showFirstLastButtons>
+                showFirstLastButtons aria-label="select page">
             </mat-paginator>
 
         </div>

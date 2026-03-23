@@ -141,7 +141,7 @@
       color: #000000 !important;
       font-family: "Montserrat", sans-serif;
       font-size: 13px;
-      font-weight: 700 !important;
+      font-weight: 400 !important;
       border-right: 1px solid #ddd;
       height: 32px !important;
       /* padding: 0 12px; */
@@ -156,7 +156,7 @@
   ::ng-deep .mat-mdc-cell {
       font-family: "Montserrat", sans-serif;
       font-size: 12px;
-      font-weight: 600;
+      font-weight: 400;
       color: #222;
       border-bottom: 1px dashed #e8e8e8 !important;
       border-right: 1px solid #ddd;
