@@ -4,7 +4,7 @@
 
         <mat-card-header class="sticky-header">
             <mat-card-title style="color:#302CB3; font-size:22px; font-weight:700;">
-                Add Formula
+                Add Multi Commercial Formula
             </mat-card-title>
 
             <span class="spacer"></span>
@@ -30,18 +30,21 @@
 
                 <!-- Pay Category -->
                 <label class="form-label text-muted small">Pay Category:</label>
+                <input class="form-control form-control-sm" style="width:250px;" formControlName="PayCategory">
+
+                <label class="form-label text-muted small">Payroll Type:</label>
                 <div>
-                    <select class="form-select form-select-sm" style="width:250px;" formControlName="PayCategory"
-                    (change)="ChangepayCategory($event)">
-                        <option value="">Select Pay Category</option>
-                        <option *ngFor="let pf of payCategory" [value]="pf.Band_Id">
-                            {{ pf.Band_Name }}
+                    <select class="form-select form-select-sm" style="width:250px;" formControlName="PayrollType"
+                    (change)="ChangepayrollType($event)">
+                        <option value="">Select Payroll Type</option>
+                        <option *ngFor="let pf of payrollType" [value]="pf.PayrollTypeId">
+                            {{ pf.PayrollType }}
                         </option>
                     </select>
 
-                    <div *ngIf="addformula.get('PayCategory')?.touched && addformula.get('PayCategory')?.invalid"
+                    <div *ngIf="addformula.get('PayrollType')?.touched && addformula.get('PayrollType')?.invalid"
                         class="text-danger small mt-1">
-                        Pay Category is required
+                        Payroll Type is required
                     </div>
                 </div>
 
@@ -93,7 +96,7 @@
     <mat-card class="custom-card">
 
         <mat-card-header class="sticky-header">
-            <mat-card-title style="color:#302CB3;">Edit Formula</mat-card-title>
+            <mat-card-title style="color:#302CB3;">Edit Multi Commercial Formula</mat-card-title>
             <span class="spacer"></span>
             <button mat-icon-button (click)="onClose()">
                 <mat-icon>close</mat-icon>

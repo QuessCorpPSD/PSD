@@ -158,6 +158,7 @@ import { LeavetypemastermappingComponent } from './pages/inputaggregator/leavety
 import { InvoiceCultureAddpoComponent } from './pages/Invoice/invoice-culture-addpo/invoice-culture-addpo.component';
 import { OtherincomeComponent } from './pages/Invoice/otherincome/otherincome.component';
 import { VendorclientaddressComponent } from './pages/customers/vendorclientaddress/vendorclientaddress.component';
+import { MulticommercialComponent } from './pages/GlobalMasters/multicommercial/multicommercial.component';
 
 
 
@@ -286,6 +287,7 @@ export const routes: Routes = [
           { path: 'city', component: CityComponent },
           { path: 'states', component: StatesComponent },
           { path: 'Formula', component: FormulaComponent },
+          { path: 'multicommercial', component: MulticommercialComponent },
           { path: 'ESIslab', component: ESIslabComponent },
           { path: 'Formula', component: FormulaComponent },
           { path: "professionaltax", component: ProfessionaltaxComponent },

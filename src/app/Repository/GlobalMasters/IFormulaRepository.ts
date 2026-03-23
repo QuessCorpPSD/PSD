@@ -6,4 +6,6 @@ export interface IFormulaRepository {
     payCategory(selectedCompanyId: number): Observable<APIResponse>;
     payCode(): Observable<APIResponse>;
     CreateFormula(payload: any): Observable<APIResponse>
+    PayrollType(): Observable<APIResponse>;
+    CreateMCFormula(payload: any): Observable<APIResponse>;
 }

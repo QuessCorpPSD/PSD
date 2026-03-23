@@ -6,7 +6,6 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { AddFormulasComponent } from '../add-formulas/add-formulas.component';
 import { PaycodeComponent } from "../../../common/paycode/paycode.component";
 import { EncryptionService } from '../../../Shared/encryption.service';
 import { SessionStorageService } from '../../../Shared/SessionStorageService';
@@ -16,23 +15,24 @@ import { IFormulaRepository } from '../../../Repository/GlobalMasters/IFormulaRe
 import { MatCardModule } from "@angular/material/card";
 import { AlertpopupComponent } from "../../../common/alertpopup/alertpopup.component";
 import { FormsModule } from '@angular/forms';
+import { AddMulticommercialComponent } from '../add-multicommercial/add-multicommercial.component';
 
 export const Formula_TOKEN = new InjectionToken<IFormulaRepository>('Formula_TOKEN');
 
+
 @Component({
-  selector: 'app-formula',
-  standalone: true,
+  selector: 'multicommercial',
   imports: [CommonModule, FormsModule, MatIconModule, MatTooltipModule, MatTableModule, MatPaginator, MatCardModule, AlertpopupComponent],
-  templateUrl: './formula.component.html',
-  styleUrl: './formula.component.css',
-  providers: [{
-    provide: Formula_TOKEN,
-    useClass: FormualService,
-  }
-  ]
+  templateUrl: './multicommercial.component.html',
+  styleUrl: './multicommercial.component.css',
+    providers: [{
+      provide: Formula_TOKEN,
+      useClass: FormualService,
+    }
+    ]
 })
-export class FormulaComponent {
-  uploadedData: any[] = [];
+export class MulticommercialComponent {
+uploadedData: any[] = [];
   showTable: boolean = false;
 
   paycodeUI: any;
@@ -89,18 +89,6 @@ export class FormulaComponent {
       "description": ""
     }
     this.Search();
-    // this.uploadedDataSource.filterPredicate = (data: any, filter: string) => {
-    //   const formulaname = filter.toLowerCase();
-    //   console.log(data.Formula_Name);
-    //   return (
-    //     data.Formula_Name?.toLowerCase().includes(formulaname) ||
-    //     data.Company_Code?.toLowerCase().includes(formulaname)
-    //     // data.Month_Name?.toLowerCase().includes(searchText) ||
-    //     // data.From_Value?.toString().includes(searchText) ||
-    //     // data.To_Value?.toString().includes(searchText)
-    //   );
-    // };
-
   }
 
   handlePaycodeEvent(paycode: any) {
@@ -157,18 +145,18 @@ export class FormulaComponent {
   }
 
   AddPOOpen() {
-    this.dialog.open(AddFormulasComponent, {
+    this.dialog.open(AddMulticommercialComponent, {
       width: '40%',
-      height: '75vh',
+      height: '54vh',
       disableClose: true,
       data: { mode: 'add' }
     });
   }
 
   openEdit(row: any) {
-    const dialogRef = this.dialog.open(AddFormulasComponent, {
+    const dialogRef = this.dialog.open(AddMulticommercialComponent, {
       width: '40%',
-      height: '75vh',
+      height: '54vh',
       disableClose: true,
       data: { mode: 'edit', row: row }
     });
@@ -230,8 +218,4 @@ export class FormulaComponent {
     });
 
   }
-
-
 }
-
-
