@@ -158,6 +158,7 @@ import { LeavetypemastermappingComponent } from './pages/inputaggregator/leavety
 import { InvoiceCultureAddpoComponent } from './pages/Invoice/invoice-culture-addpo/invoice-culture-addpo.component';
 import { OtherincomeComponent } from './pages/Invoice/otherincome/otherincome.component';
 import { SEZRepositoryComponent } from './pages/Invoice/sezrepository/sezrepository.component';
+import { SezwoprepositorynewComponent } from './pages/Invoice/sezwoprepositorynew/sezwoprepositorynew.component';
 
 
 
@@ -403,7 +404,7 @@ export const routes: Routes = [
           { path: 'companyinvoiceformat', component: CompanyinvoiceformatComponent },
           { path: 'OtherIncome', component: OtherincomeComponent },
           { path: 'sezapproval', component: SEZRepositoryComponent },
-
+          { path: 'app-sezwoprepositorynew', component: SezwoprepositorynewComponent },
         ]
       },
 
