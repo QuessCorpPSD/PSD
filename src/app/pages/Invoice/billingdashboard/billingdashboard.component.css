@@ -56,6 +56,42 @@
   z-index: 9999;
 }
 
+.filter-buttonsdate {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  /* border: 0.8px solid #d8ddeb; */
+  border-radius: 30px;
+  background: white;
+  font-size: 12px;
+  color: #3b4252;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.auto-table {
+  width: auto;          /* allow table to size based on content */
+  table-layout: auto;   /* important for auto-fit */
+}
+
+.mat-header-cell,
+.mat-cell {
+  white-space: nowrap;  /* prevent wrapping */
+  padding: 8px 16px;
+}
+
+.filter-buttondate:hover {
+  background: #f9f9fb;
+}
+
+.filter-buttondate svg {
+  flex-shrink: 0;
+}
+
+.date-range {
+  font-size: 12px;
+}
 
 .select-drop {
   font-family: "Nunito Sans";

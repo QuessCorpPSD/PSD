@@ -731,7 +731,7 @@ QCVerify(){
     "userId":user.user_Id,
     "allotments":catg,
     "RaiseQuery":RaiseQuery,
-    "revised":this.lotAssignment.revised,
+    "revised":this.lotAssignment.revisedtime,
     "CheckinFile":base64
 }
 

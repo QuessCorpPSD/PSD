@@ -56,6 +56,7 @@ constructor( private _sessionStoreage:SessionStorageService,
    roleIdGroups: Record<Role, number[]> = {
   [Role.Admin]: [ 1,2,12, 4,11,14, 17, 20,38, 52, 263],
   [Role.SOP]: [0],
+  [Role.GS]:[1],
   [Role.Manager]: [] // fallback
 };
    getUserRole(roleId: number): Role {
@@ -81,5 +82,6 @@ constructor( private _sessionStoreage:SessionStorageService,
 enum Role {
   Admin = 'admin',
   SOP = 'SOP',
-  Manager = 'manager'
+  Manager = 'manager',
+  GS = 'GS'
 }

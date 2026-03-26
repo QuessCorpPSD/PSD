@@ -261,18 +261,28 @@ export class InvoiceRepository implements IInvoiceRepository {
         console.log(url);
         return this.http.post<APIResponse>(url, payload);
     }
-    BillingDashboard(user_Id, flag): Observable<APIResponse> {
+    // BillingDashboard(user_Id, flag): Observable<APIResponse> {
 
-        return this.http.get<APIResponse>(
-            this.environment.apiUrl + 'Invoice/BillingDashboardByUserId/' + user_Id + '/' + flag
-        );
+    //     return this.http.get<APIResponse>(
+    //         this.environment.apiUrl + 'Invoice/BillingDashboardByUserId/' + user_Id + '/' + flag
+    //     );
+    // }
+
+     BillingDashboard(request): Observable<APIResponse> {
+
+        const url = `${this.environment.apiUrl}Invoice/BillingDashboardByUserId`;
+        return this.http.post<APIResponse>(url, request);
+        // return this.http.get<APIResponse>(
+        //     this.environment.apiUrl + 'Invoice/BillingDashboardByUserId/' + user_Id + '/' + flag
+        // );
     }
 
-    BillingDashboardExport(user_Id, flag): Observable<APIResponse> {
-
-        return this.http.get<APIResponse>(
-            this.environment.apiUrl + 'Invoice/BillingDashboardExport/' + user_Id + '/' + flag
-        );
+    BillingDashboardExport(request): Observable<APIResponse> {
+ const url = `${this.environment.apiUrl}Invoice/BillingDashboardExport`;
+        return this.http.post<APIResponse>(url, request);
+        // return this.http.get<APIResponse>(
+        //     this.environment.apiUrl + 'Invoice/BillingDashboardExport/' + user_Id + '/' + flag
+        // );
     }
     DraftInvoiceEmployeeByRequestId(reqNo: number, invoiceType: string): Observable<APIResponse> {
         return this.http.get<APIResponse>(

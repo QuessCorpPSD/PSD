@@ -50,11 +50,19 @@ private _sessionStoreage:SessionStorageService){
   AutoAllotment(){
       const userdetail = this._sessionStoreage.getItem('UserProfile');
     var user = JSON.parse(this._decrypt.decrypt(userdetail!));
-    this._authService.AutoAllotmentByUser(user.user_Id).subscribe({
-      next:res=>{console.log(res); this.GetCompanyData();},
-      error:err=>{}
-    })
+    // this._authService.AutoAllotmentByUser(user.user_Id).subscribe({
+    //   next:res=>{ this.GetCompanyData();},
+    //   error:err=>{}
+    // })
+    
+  var user = JSON.parse(this._decrypt.decrypt(userdetail!));
+    this._authService.GetAssignmentLot(user.user_Id,'A').subscribe(
+      {
+        next: data => { this.data = data.Data;console.log(this.data)  },
+        error: error => console.error('Error:', error)
+      });
   }
+  
 
   GetCompanyData() {
     const userdetail = this._sessionStoreage.getItem('UserProfile');
@@ -72,7 +80,7 @@ const userdetail= this._sessionStoreage.getItem('UserProfile');
   var user = JSON.parse(this._decrypt.decrypt(userdetail!));
     this._authService.GetAssignmentLot(user.user_Id,filterType).subscribe(
       {
-        next: data => { this.data = data.Data;  },
+        next: data => { this.data = data.Data;console.log(this.data)  },
         error: error => console.error('Error:', error)
       });
   }

@@ -19,16 +19,20 @@ import { CommonModule } from '@angular/common';
 export const DASH_TOKEN = new InjectionToken<IDashBoardServices>('DASH_TOKEN');
 export const AUTH_TOKEN = new InjectionToken<IAssignmentService>('AUTH_TOKEN');
 export const Invoice_TOKEN = new InjectionToken<IInvoiceRepository>('Invoice_TOKEN');
-import { FormsModule } from '@angular/forms';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import * as XLSX from 'xlsx';
 import { finalize, interval } from 'rxjs';
 import { SignalrService } from '../../../Shared/SignalrService';
+import {  MatDatepickerModule } from '@angular/material/datepicker';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { provideNativeDateAdapter } from '@angular/material/core';
+import {MatProgressBar} from '@angular/material/progress-bar';
 @Component({
   selector: 'app-billingdashboard',
-  imports: [MatPaginatorModule, CommonModule, UserComponent, MatTableModule, MatCardModule, MatTooltipModule, MatCheckboxModule,FormsModule],
+  imports: [MatPaginatorModule,MatProgressBar,ReactiveFormsModule,MatFormFieldModule,MatDatepickerModule, CommonModule, UserComponent, MatTableModule, MatCardModule, MatTooltipModule, MatCheckboxModule,FormsModule],
   templateUrl: './billingdashboard.component.html',
   styleUrl: './billingdashboard.component.css',
-  providers: [
+  providers: [provideNativeDateAdapter(),
     {
       provide: DASH_TOKEN,
       useClass: DashBoardServices,
@@ -53,6 +57,9 @@ export class BillingdashboardComponent implements OnInit {
   searchText: string = '';
   selectedTemplate: string = '';
   template: string = "";
+  start: Date | null = null;
+  end: Date | null = null;
+    progressValue = 0;
   @ViewChild('InvoiceAlotPaginator') InvoiceAlot_paginator!: MatPaginator;
   constructor(@Inject(DASH_TOKEN) private dashService: IDashBoardServices, @Inject(Invoice_TOKEN) private _invoiceService: IInvoiceRepository,
     private _decrypt: EncryptionService,
@@ -74,12 +81,14 @@ export class BillingdashboardComponent implements OnInit {
     { value: 'Pending', Text: 'Pending' },
     { value: 'Completed', Text: 'Completed' }
   ];
+
   ngOnInit(): void {
     const userdetail = this._sessionStoreage.getItem('UserProfile');
     this.userdetail = JSON.parse(this._decrypt.decrypt(userdetail!));
     this.BindInvoiceAllot();
-    interval(60000).subscribe(() => {
-      //lert("Hi")
+    this.start=null;
+    this.end=null;
+    interval(60000).subscribe(() => {    
     this.BindInvoiceAllot();
   });
     //  this.signalr.startConnection();
@@ -140,8 +149,14 @@ export class BillingdashboardComponent implements OnInit {
     this.isLoading = true;
     const loggedInUser = [263, 3].includes(this.userdetail.user_Id) ? 0 : this.userdetail.user_Id;
     const flag = "Export";
+    const request={
+      "userId":loggedInUser,
+      "flag":"Export",
+      "fromDate":this.start,
+      "toDate":this.end
+    }
     
-    this._invoiceService.BillingDashboardExport(loggedInUser, flag)
+    this._invoiceService.BillingDashboardExport(request)
       .pipe(
         finalize(() => this.isLoading = false)
       )
@@ -180,10 +195,17 @@ export class BillingdashboardComponent implements OnInit {
   
   BindInvoiceAllot() {   
     
-
+ const fromdates = this.start // this.range.get('start')?.value;
+  const Todates =this.end //this.range.get('end')?.value;
     const loggedInUser =this.userdetail.user_Id //[263, 3].includes(this.userdetail.user_Id)  ? 0  : this.userdetail.user_Id;
-    
-    this._invoiceService.BillingDashboard(loggedInUser, 'Search').subscribe({
+    const request={
+      "userId":loggedInUser,
+      "flag":"Search",
+      "fromDate":fromdates,
+      "toDate":Todates
+    }
+    console.log(request);
+    this._invoiceService.BillingDashboard(request).subscribe({
       next: res => {
        
         this.InvoiceAlloted = new MatTableDataSource<any>(Array.isArray(res.Data) ? res.Data : []);

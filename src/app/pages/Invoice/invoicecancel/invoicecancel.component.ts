@@ -21,6 +21,7 @@ import { AlertpopupComponent } from '../../../common/alertpopup/alertpopup.compo
 import { finalize } from 'rxjs';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
+
 interface IrnColor {
   label: string,
   color: string
@@ -190,7 +191,7 @@ export class InvoiceCancelComponent implements OnInit, AfterViewInit {
     );
 
     const selectedInvoiceIds = filteredSelected.map(item => item.invoice_Id);
-
+    console.log(selectedInvoiceIds)
     if (!selectedInvoiceIds.length) {
       alert('Please select at least one invoice ❌');
       this.isLoading = false;
@@ -202,12 +203,12 @@ export class InvoiceCancelComponent implements OnInit, AfterViewInit {
       return;
     }
 
-    const payload = {
+   const payload = {
       invoice_Id: selectedInvoiceIds,
       remarks: this.remarkText,
-      userId: this.userdetail.user_Id
+      userId: String(this.userdetail.user_Id)
     };
-
+console.log(payload)
     this._invoiceService.BulkApproveInvoice(payload).subscribe({
       next: (res: any) => {
         console.log(res);

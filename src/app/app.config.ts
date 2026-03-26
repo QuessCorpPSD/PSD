@@ -6,6 +6,7 @@ import { routes } from './app.routes';
 import { provideClientHydration } from '@angular/platform-browser';
 import { provideToastr } from 'ngx-toastr';
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import { provideNativeDateAdapter } from '@angular/material/core';
 
 
 
@@ -17,7 +18,8 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withFetch()),
     importProvidersFrom(HttpClientModule),    
     provideClientHydration(),        
-    importProvidersFrom(BrowserAnimationsModule)
+    importProvidersFrom(BrowserAnimationsModule),
+    provideNativeDateAdapter()
     // {
     //   provide: APP_INITIALIZER,
     //   useFactory: initBackground,

@@ -34,7 +34,7 @@ const config = { headers };
         });
 
         const config = { headers };
-        console.log(this.environment.apiUrl + 'Assignment/AutoAllomentByUserId/' + val);
+       // console.log(this.environment.apiUrl + 'Assignment/AutoAllomentByUserId/' + val);
         return this.http.get<APIResponse>(this.environment.apiUrl + 'Assignment/GetAssignmentLot/' + val, config)
 
     }
