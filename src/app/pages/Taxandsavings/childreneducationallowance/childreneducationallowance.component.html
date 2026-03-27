@@ -1,0 +1,411 @@
+<div class="page-wrapper">
+    <div class="scrollable-content">
+        <mat-card-title class="main-header">
+            Children Education Allowance
+        </mat-card-title>
+        <div class="justify-content-between align-items-center mb-3 pl-4 pt-2">
+            <div class="row g-3 align-items-end">
+
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Company Code</label>
+                    <companyall (companyEmit)="handleCompanyEvent($event)"></companyall>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Financial Year</label>
+                    <select [(ngModel)]="fyear" class="form-control form-control-sm" style="height: 30px;"
+                        (ngModelChange)="onFinancialYearChange($event)">
+                        <option value="">Select</option>
+                        <option *ngFor="let y of year" [value]="y.Financial_Year_Id">{{y.Financial_Year_Name}}</option>
+
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Employee code</label>
+                    <select [(ngModel)]="ecode" class="form-control form-control-sm">
+                        <option value="">Select</option>
+                        <option *ngFor="let emp of employeeMain" [value]="emp.Employee_Id">
+                            {{ emp.Employee_Code }}
+                        </option>
+                    </select>
+
+                </div>
+
+                <div class="col-md-3 d-flex gap-2">
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-primary"
+                        matTooltip="Search" (click)="onsearch()">
+                        <mat-icon>search</mat-icon>
+                    </button>
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-success"
+                        matTooltip="Add" (click)="AddPOOpen()">
+                        <mat-icon>add</mat-icon>
+                    </button>
+
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-secondary"
+                        matTooltip="export to excel" (click)="exportToExcel()">
+                        <mat-icon>download</mat-icon>
+                    </button>
+
+                    <!-- <button class="btn btn-sm d-flex align-items-center justify-content-center btn-upload"
+                        matTooltip="Import">
+                       
+                        <mat-icon>cloud_upload</mat-icon>
+                    </button>
+
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-download"
+                        matTooltip="Template">
+                        <mat-icon>cloud_download</mat-icon>
+                    </button> -->
+
+                </div>
+            </div>
+            <div class="table-container" style="top:30px;" *ngIf="isUploadGridVisible">
+                <div class="table-scroll-window">
+                    <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+
+                        <ng-container matColumnDef="delete">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header
+                                class="fixed-width-column"></mat-header-cell>
+                            <mat-cell *matCellDef="let element" class="fixed-width-column">
+                                <img src="assets/delete.svg" style="cursor: pointer; width: 24px; height: 22px;" />
+                            </mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="edit">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header
+                                class="fixed-width-column"></mat-header-cell>
+                            <mat-cell *matCellDef="let element" class="fixed-width-column">
+                                <img src="assets/Icons/edit.svg" style="cursor: pointer; width: 24px; height: 22px;" />
+                            </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Serial_No">
+                            <mat-header-cell *matHeaderCellDef>Serial No</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.SNo }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Company_Code">
+                            <mat-header-cell *matHeaderCellDef>Company Code</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Company_Code }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Employee_Code">
+                            <mat-header-cell *matHeaderCellDef>Employee Code</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Employee_Code }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Employee_Name">
+                            <mat-header-cell *matHeaderCellDef>Employee Name</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Employee_Name }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Date_of_Joining">
+                            <mat-header-cell *matHeaderCellDef>Date of Joining</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Date_Of_Joining }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Financial_Year">
+                            <mat-header-cell *matHeaderCellDef>Financial Year</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.stateName }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="From_Date">
+                            <mat-header-cell *matHeaderCellDef>From Date</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.From_Date }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="To_Date">
+                            <mat-header-cell *matHeaderCellDef>To Date</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.To_Date }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Date">
+                            <mat-header-cell *matHeaderCellDef>Date</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Declaration_Date }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Tuition_Eligibility">
+                            <mat-header-cell *matHeaderCellDef>Tuition Eligibility</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Is_Tuition_Eligible }}</mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="Hostel_Eligibility">
+                            <mat-header-cell *matHeaderCellDef>Hostel Eligibility</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Is_Hostel_Eligible }}</mat-cell>
+                        </ng-container>
+
+                        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+
+                    </table>
+
+
+                </div>
+
+                <mat-paginator [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons></mat-paginator>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<br><br><br><br><br><br>
+
+
+<div *ngIf="isAddclicked" class="popup-overlay" (keydown.escape)="closeclick()">
+    <mat-card class="popup-card">
+        <mat-card-header class="popup-header">
+            <mat-card-title>
+                {{ isEditMode ? 'Edit Children Education Allowance' : 'Add Children Education Allowance' }}
+            </mat-card-title>
+
+            <button class="close-btn" matTooltip="Close" (click)="closeclick()">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-card-header>
+        <mat-card-content class="scroll-content">
+
+            <form [formGroup]="ceaform">
+                <div class="row g-3">
+                    <div class="col-md-3">
+                        <label class="form-label text-muted small">Company Code<span
+                                class="text-danger">*</span></label>
+                        <companyall formControlName="Company_Code" (companyEmit)="handleCompanyEvent($event)">
+                        </companyall>
+                        <div *ngIf="ceaform.get('Company_Code')?.invalid && ceaform.get('Company_Code')?.touched"
+                            class="text-danger">
+                            Company Code is required.
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label text-muted small">Financial Year<span
+                                class="text-danger">*</span></label>
+                        <select formControlName="Financial_Year" class="form-control">
+                            <option value="">Select</option>
+                            <option *ngFor="let y of yearadd" [value]="y.Financial_Year_Id">
+                                {{ y.Financial_Year_Name }}
+                            </option>
+                        </select>
+
+                        <div *ngIf="ceaform.get('Financial_Year')?.invalid && ceaform.get('Financial_Year')?.touched"
+                            class="text-danger">
+                            Financial Year is required.
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label text-muted small">Employee Code<span
+                                class="text-danger">*</span></label>
+                        <select formControlName="Employee_Code" class="form-control">
+                            <option value="">Select</option>
+                            <option *ngFor="let emp of employeePopup" [value]="emp.Employee_Id">
+                                {{ emp.Employee_Code }}
+                            </option>
+                        </select>
+
+                        <div *ngIf="ceaform.get('Employee_Code')?.invalid && ceaform.get('Employee_Code')?.touched"
+                            class="text-danger">
+                            Employee Code is required.
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label text-muted small">Employee Name<span
+                                class="text-danger">*</span></label>
+                        <input formControlName="Employee_Name" class="form-control" />
+                        <div *ngIf="ceaform.get('Employee_Name')?.invalid && ceaform.get('Employee_Name')?.touched"
+                            class="text-danger">
+                            Employee Name is required.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row g-3 py-2">
+                    <div class="col-md-3">
+                        <label class="form-label text-muted small">Date<span class="text-danger">*</span></label>
+                        <input type="date" formControlName="Date" class="form-control"
+                            (change)="onDateOrChildrenChange()" />
+                        <div *ngIf="ceaform.get('Date')?.invalid && ceaform.get('Date')?.touched" class="text-danger">
+                            Date is required.
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label text-muted small">Number Of Children<span
+                                class="text-danger">*</span></label>
+                        <select formControlName="Number_Of_Children" class="form-control"
+                            (change)="onDateOrChildrenChange()">
+                            <option>Select</option>
+                            <option [value]="1">1</option>
+                            <option [value]="2">2</option>
+                        </select>
+                        <div *ngIf="ceaform.get('Number_Of_Children')?.invalid && ceaform.get('Number_Of_Children')?.touched"
+                            class="text-danger">
+                            Number of Children is required.
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label text-muted small">Date of Joining<span
+                                class="text-danger">*</span></label>
+                        <input type="date" formControlName="Date_Of_Joining" class="form-control" />
+                        <div *ngIf="ceaform.get('Date_Of_Joining')?.invalid && ceaform.get('Date_Of_Joining')?.touched"
+                            class="text-danger">
+                            Date of Joining is required.
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label text-muted small">From Date<span class="text-danger">*</span></label>
+                        <input type="date" formControlName="From_Date" class="form-control" />
+                        <div *ngIf="ceaform.get('From_Date')?.invalid && ceaform.get('From_Date')?.touched"
+                            class="text-danger-sm">
+                            From Date is required.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row g-3 py-2">
+                    <div class="col-md-3">
+                        <label class="form-label text-muted small">To Date<span class="text-danger">*</span></label>
+                        <input type="date" formControlName="To_Date" class="form-control" />
+                        <div *ngIf="ceaform.get('To_Date')?.invalid && ceaform.get('To_Date')?.touched"
+                            class="text-danger">
+                            To Date is required.
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label text-muted small">Type<span class="text-danger">*</span></label><br />
+                        <div class="d-flex">
+                            <div class="form-check me-3">
+                                <input type="checkbox" formControlName="Hostel" id="hostel" />
+                                <label class="form-label text-muted small" for="hostel">Hostel</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" formControlName="Tuition" id="tuition" />
+                                <label class="form-label text-muted small" for="tuition">Tuition</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label text-muted small">Eligible Amount</label>
+                        <input formControlName="Eligible_Amount" type="number" class="form-control" />
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label text-muted small">Claimed Amount<span
+                                class="text-danger">*</span></label>
+                        <input formControlName="Claimed_Amount" type="number" class="form-control" />
+                        <div *ngIf="ceaform.get('Claimed_Amount')?.invalid && ceaform.get('Claimed_Amount')?.touched"
+                            class="text-danger">
+                            <div *ngIf="ceaform.get('Claimed_Amount')?.errors?.['required']">Claimed Amount is required.
+                            </div>
+                            <div *ngIf="ceaform.get('Claimed_Amount')?.errors?.['exceeded']">Claimed Amount cannot
+                                exceed Eligible Amount.</div>
+                        </div>
+                    </div>
+
+                </div>
+            </form>
+
+            <div>
+                <div class="col-md-3 d-flex gap-2 py-2">
+                    <div class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Add"
+                        (click)="AddOpen()">
+                        <mat-icon>add</mat-icon>
+                    </div>
+
+                    <div class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Delete"
+                        (click)="deleteSelectedRow()">
+                        <mat-icon>delete</mat-icon>
+                    </div>
+                </div>
+
+                <div class="table-container" style="top:30px;">
+                    <div class="table-scroll-window">
+                        <form [formGroup]="ceaform">
+                            <table mat-table [dataSource]="dataSource1" matSort class="mat-elevation-z8">
+                                <ng-container matColumnDef="sno">
+                                    <mat-header-cell *matHeaderCellDef><strong>SNo</strong></mat-header-cell>
+                                    <mat-cell *matCellDef="let row; let i = index" class="form-control"
+                                        (click)="selectRow(i)">
+                                        {{ i + 1 }}
+                                    </mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="studentName">
+                                    <mat-header-cell *matHeaderCellDef><strong>Name of the
+                                            student</strong></mat-header-cell>
+                                    <mat-cell *matCellDef="let row; let i = index" class="form-control">
+                                        <input [(ngModel)]="row.studentName" [ngModelOptions]="{standalone: true}"
+                                            placeholder="Enter name" />
+                                    </mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="schoolName">
+                                    <mat-header-cell *matHeaderCellDef><strong>School name</strong></mat-header-cell>
+                                    <mat-cell *matCellDef="let row; let i = index" class="form-control">
+                                        <input [(ngModel)]="row.schoolName" [ngModelOptions]="{standalone: true}"
+                                            placeholder="Enter school name" />
+                                    </mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="hostelName">
+                                    <mat-header-cell *matHeaderCellDef><strong>Hostel name</strong></mat-header-cell>
+                                    <mat-cell *matCellDef="let row; let i = index" class="form-control">
+                                        <input [(ngModel)]="row.hostelName" [ngModelOptions]="{standalone: true}"
+                                            placeholder="Enter hostel name" />
+                                    </mat-cell>
+                                </ng-container>
+                                <ng-container matColumnDef="phoneNumber">
+                                    <mat-header-cell *matHeaderCellDef>
+                                        <strong>Phone number</strong>
+                                    </mat-header-cell>
+
+                                    <mat-cell *matCellDef="let row; let i = index" class="form-control">
+                                        <input type="tel" [(ngModel)]="row.phoneNumber"
+                                            [ngModelOptions]="{ standalone: true }" placeholder="Enter phone number"
+                                            maxlength="10" (keypress)="allowNumbersOnly($event)" />
+                                    </mat-cell>
+
+                                </ng-container>
+
+
+                                <ng-container matColumnDef="exemptionAmount">
+                                    <mat-header-cell *matHeaderCellDef><strong>Exemption
+                                            Amount</strong></mat-header-cell>
+                                    <mat-cell *matCellDef="let row; let i = index" class="form-control">
+                                        <input [(ngModel)]="row.exemptionAmount" [ngModelOptions]="{standalone: true}"
+                                            placeholder="Enter amount" />
+                                    </mat-cell>
+                                </ng-container>
+
+                                <mat-header-row *matHeaderRowDef="displayedColumns1"></mat-header-row>
+                                <mat-row *matRowDef="let row; let i = index; columns: displayedColumns1"
+                                    (click)="selectRow(i)" [class.selected-row]="selectedRowIndex === i">
+                                </mat-row>
+                            </table>
+                        </form>
+                    </div>
+                    <mat-paginator #paginator1 [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons></mat-paginator>
+                </div>
+            </div>
+        </mat-card-content>
+
+
+        <div class="d-flex justify-content-end mt-3" style="gap: 10px; padding-right: 8px;">
+
+            <button type="button" style="border: none; border-radius: 7px; width: 80px; height: 30px;
+                           cursor: pointer; background-color: #f0f0f0; color: black;" (click)="closeclick()">
+                Cancel
+            </button>
+
+            <button type="button" style="border: none; border-radius: 7px; width: 80px; height: 30px;
+                           cursor: pointer; background-color: blue; color: white;" (click)="saveData()">
+                {{ isEditMode ? 'Update' : 'Save' }} </button>
+
+        </div>
+
+    </mat-card>
+</div>

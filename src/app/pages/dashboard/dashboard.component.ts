@@ -1,4 +1,4 @@
-import { Component,  Inject,  InjectionToken, OnInit, ViewChild } from '@angular/core';
+import { Component,  Inject,  InjectionToken, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { IDashBoardServices } from '../../Repository/IDashBoardService';
 import { CommonModule } from '@angular/common';
 import { DashBoardServices } from '../../Service/DashBoardService';
@@ -13,6 +13,7 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import { MatTableModule,MatTableDataSource  } from '@angular/material/table';
 import * as XLSX from 'xlsx';
 import * as FileSaver from 'file-saver';
+import { AllCommunityModule, ColDef, GridOptions, GridReadyEvent, ModuleRegistry, Theme, themeBalham, themeQuartz } from "ag-grid-community";
 
 export  const DASH_TOKEN=new InjectionToken<IDashBoardServices>('DASH_TOKEN');
 export  const AUTH_TOKEN=new InjectionToken<IAssignmentService>('AUTH_TOKEN');
@@ -26,30 +27,33 @@ import { AssignmentService } from '../../Service/Assignment.service';
 import { IAssignmentService } from '../../Repository/IAssignment.service';
 import { ToastrService } from 'ngx-toastr';
 
-import { MatSortModule } from '@angular/material/sort';
 
+import { AgGridModule } from 'ag-grid-angular';
+
+ModuleRegistry.registerModules([ AllCommunityModule ]);
 
 @Component({
-  selector: 'app-dashboard',
-  standalone: true,
-  imports: [MatCheckboxModule,MatPaginator,MatTooltipModule,CommonModule,FinancialYearComponent,
-            UserComponent,MatTableModule,MatFormFieldModule, MatDatepickerModule, FormsModule, 
-            ReactiveFormsModule],
-  templateUrl: './dashboard.component.html',
-  styleUrl: './dashboard.component.css',  
-  providers:[provideNativeDateAdapter(),{
+    selector: 'app-dashboard',
+    imports: [MatCheckboxModule, MatPaginator, MatTooltipModule, CommonModule, FinancialYearComponent,
+        UserComponent, MatTableModule, MatFormFieldModule, MatDatepickerModule, FormsModule,
+        ReactiveFormsModule, AgGridModule],
+    templateUrl: './dashboard.component.html',
+    styleUrls: ['./dashboard.component.css'],
+    providers: [provideNativeDateAdapter(), {
             provide: DASH_TOKEN,
             useClass: DashBoardServices,
-          },
+        },
         {
             provide: AUTH_TOKEN,
             useClass: AssignmentService,
-          }]
+        }] ,//,
+      encapsulation: ViewEncapsulation.None
 })
 export class DashboardComponent implements OnInit {
 carddashboard:any;
 dataSource:any
 pendingLots:any;
+ myTheme = themeBalham.withParams({ accentColor: 'red' });
 @ViewChild('PeningLotPaginator') PeningLot_paginator!: MatPaginator;
 
 financialyear:any;
@@ -69,7 +73,7 @@ userList:any;
 // ];
 
 displayedColumns: string[] = ['all', 'input', 'output','companyShortName','lot_Number',
-  'headCount','ctc','netPay','createdOn','allottedDateTime','assignedTo','estimateTime','qC_Verified_DateTime','score',
+  'headCount','ctc','netPay','createdOn','processDatetime','allottedDateTime','assignedTo','estimateTime','qC_Verified_DateTime','score',
   'reportingManager','invoiceGenerated','invoiceGeneratedDate','customer_Confirmation_DateTime','salaryPayout'
 
 ];
@@ -82,15 +86,24 @@ displayedPeningColumns: string[] =  ['companyShortName','lot_Number',
     lot_Number: ''
   };
   @ViewChild(MatPaginator) paginator!: MatPaginator;
-  
+    showPanel = false;
+    showCompletedPanel = false;
+    showOverduePanel = false;
+    showInprogressPanel = false;
+    showNotAssignmentPanel = false;
+    gridData:any;
+    rowData:any;
+     modules = [AllCommunityModule];
 constructor(@Inject(DASH_TOKEN) private dashService: IDashBoardServices,
     @Inject(AUTH_TOKEN) private _authService: IAssignmentService,
     private _decrypt:EncryptionService,
     private _sessionStoreage:SessionStorageService,
   private toastr: ToastrService ){}
     selection = new SelectionModel<AdminDashboardDetailUI>(true, []);
-    
+
+ 
   ngOnInit(): void {
+    this.PendingLots();
   this.BindDashBoard();
 
   const request = {
@@ -104,6 +117,171 @@ constructor(@Inject(DASH_TOKEN) private dashService: IDashBoardServices,
   this.BindDashboardDetail(request);
   this.BindPendingLot();
 }
+    
+  PendingLots():void
+  {
+   this.dashService.GetPendingLotDetail().subscribe({
+    next:res=>{this.rowData=res.Data; },
+    error:err=>{console.log(err)}
+   }) ;
+  }
+
+
+ public defaultColDef: ColDef = {
+    flex: 1,
+    minWidth: 150,
+    filter: true,
+    sortable: true,
+    floatingFilter: true
+  };
+
+
+
+   columnDefs = [
+    { 
+      field: "company_Code",
+      filter: 'agTextColumnFilter',
+    },
+    { 
+      field: "entity_Name",
+      filter: 'agTextColumnFilter',
+    },    
+    { 
+      field: "location",
+      filter: 'agTextColumnFilter',
+    }
+    ,
+    { 
+      field: "company_Name",
+      filter: 'agTextColumnFilter',
+    }
+    ,
+    { 
+      field: "pay_period",
+      filter: 'agTextColumnFilter',
+    }
+    ,
+    { 
+      field: "lot_Number",
+      filter: 'agTextColumnFilter',
+    }
+    ,
+    { 
+      field: "process_Category",
+      filter: 'agTextColumnFilter',
+    }
+    ,
+    { 
+      field: "payroll_Input_Type",
+      filter: 'agTextColumnFilter',
+    }
+    ,
+    { 
+      field: "input_Headcount",
+      filter: 'agTextColumnFilter',
+    }
+    ,
+    { 
+      field: "inputSubmittedDate",
+      filter: 'agTextColumnFilter',
+    }
+    ,
+    { 
+      field: "integratedDatetime",
+      filter: 'agTextColumnFilter',
+    }
+    ,
+    { 
+      field: "processDatetime",
+      filter: 'agTextColumnFilter',
+    }
+    ,
+    { 
+      field: "reconDatetime",
+      filter: 'agTextColumnFilter',
+    }
+    ,
+    { 
+      field: "allottedDateTime",
+      filter: 'agTextColumnFilter',
+    }
+    ,
+    { 
+      field: "qC_Verified_DateTime",
+      filter: 'agTextColumnFilter',
+    }
+    ,
+    { 
+      field: "user_Id",
+      filter: 'agTextColumnFilter',
+    }
+    ,
+    { 
+      field: "reportingManager",
+      filter: 'agTextColumnFilter',
+    }
+    ,
+    { 
+      field: "asssignedTo",
+      filter: 'agTextColumnFilter',
+    }
+    ,
+    { 
+      field: "timeTaken",
+      filter: 'agTextColumnFilter',
+    }
+    ,
+    { 
+      field: "score",
+      filter: 'agTextColumnFilter',
+    }
+  ];
+    gridOptions: GridOptions = {
+    getRowClass: (params) => {
+      return 'custom-row-border';
+    },
+    defaultColDef: {
+     flex: 1,
+    minWidth: 150,
+    filter: true,
+    sortable: true,
+    floatingFilter: true
+    }
+  };
+
+onMouseEnter(assignmentType: 'T' | 'C' | 'O' | 'I' | 'N'):void{
+  this.BindDashBoard();
+  this.showPanel = false;
+  this.showCompletedPanel = false;
+  this.showOverduePanel = false;
+  this.showInprogressPanel = false;
+  this.showNotAssignmentPanel = false;
+  switch (assignmentType) {
+    case 'T':
+      this.showPanel = true;
+      break;
+    case 'C':
+      this.showCompletedPanel = true;
+      break;
+    case 'O':
+      this.showOverduePanel = true;
+      break;
+    case 'I':
+      this.showInprogressPanel = true;
+      break;
+    case 'N':
+      this.showNotAssignmentPanel = true;
+      break;
+  }
+  this.dashService.getCategoryLotDetail(assignmentType).subscribe({
+    next:res=>{this.gridData=res.Data},
+    error:err=>{console.log(err)}
+  })
+}
+
+ 
+
+
 exportToExcelPending():void
 {
  
@@ -175,7 +353,7 @@ getScoreColor(element: any): string {
       }
     },
     error: (err) => {
-      console.error('Failed to fetch pending lots:', err);
+     // console.error('Failed to fetch pending lots:', err);
       //this.toastr.error('Unable to load pending lots. Please try again later.', 'Error');
     },
     complete: () => {

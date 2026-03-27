@@ -1,0 +1,23 @@
+<div class="headerSOP">
+</div>
+<div class="contentCategory">
+        <div style="width: 100%;">
+                <div class="Categorylist">
+                        <ul class="horizontal-list">
+                                <li><a [routerLink]="['/Master/reimbursementnavigation/reimbursement']"
+                                                class="nav-link" routerLinkActive="selectedInput"
+                                                [routerLinkActiveOptions]="{ exact: true }">Reimbursement</a>
+                                </li>
+                                <li><a [routerLink]="['/Master/reimbursementnavigation/loanandadvance']"
+                                                class="nav-link" routerLinkActive="selectedInput"
+                                                [routerLinkActiveOptions]="{ exact: true }">Loan and Advance</a>
+                                </li>
+                                 <li><a [routerLink]="['/Master/reimbursementnavigation/loanpreclosure']"
+                                                class="nav-link" routerLinkActive="selectedInput"
+                                                [routerLinkActiveOptions]="{ exact: true }">Loan Pre Closure</a>
+                                </li>
+                        </ul>
+                </div>
+        </div>
+</div>
+<router-outlet></router-outlet>

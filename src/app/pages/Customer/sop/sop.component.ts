@@ -3,12 +3,10 @@ import { Component } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
-  selector: 'app-sop',
-  standalone: true,
-
-  imports: [CommonModule,ReactiveFormsModule],
-  templateUrl: './sop.component.html',
-  styleUrl: './sop.component.css'
+    selector: 'app-sop',
+    imports: [CommonModule, ReactiveFormsModule],
+    templateUrl: './sop.component.html',
+    styleUrl: './sop.component.css'
 })
 export class SopComponent {
 form!: FormGroup;

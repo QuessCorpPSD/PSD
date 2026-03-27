@@ -24,43 +24,41 @@ import { SessionStorageService } from '../../Shared/SessionStorageService';
 import { catchError, filter, interval, map, of, Subject, switchMap, takeUntil, tap } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { EstimatetimeValidationComponent } from './estimatetime-validation/estimatetime-validation.component';
+import { TokenService } from '../../Shared/TokenService';
 
 
 
 const auth= InjectionToken<IAssignmentService>;
 @Component({
-  selector: 'app-alloted-lot',
-  standalone: true,
-  imports: [CommonModule,ReactiveFormsModule,SharepayregisterComponent,TimerComponent,ReactiveFormsModule,MatStepperModule,MatButtonModule,MatInputModule],
-  templateUrl: './alloted-lot.component.html',
-  styleUrl: './alloted-lot.component.css',
-  schemas:[CUSTOM_ELEMENTS_SCHEMA],
-   providers: [
-          {
+    selector: 'app-alloted-lot',
+    imports: [CommonModule, ReactiveFormsModule, SharepayregisterComponent, TimerComponent, ReactiveFormsModule, MatStepperModule, MatButtonModule, MatInputModule],
+    templateUrl: './alloted-lot.component.html',
+    styleUrl: './alloted-lot.component.css',
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    providers: [
+        {
             provide: auth,
             useClass: AssignmentService,
-          }
-        ],
-  animations: [
-    trigger('growOnHover', [
-      state('default', style({
-        transform: 'scale(1)'
-        
-      })),
-      state('hovered', style({
-        transform: 'scale(5,5)',
-        backgroundColor: 'White',
-        borderRadius: '2px',
-        boxShadow: '0 15px 40px rgba(0,0,0,0.3)',
-        border:'1px solid #ccc',
-        height:'15px',
-        width:'10px',
-        fontSize:'0.5em'
-        
-      })),
-      transition('default <=> hovered', animate('300ms ease-in-out')),
-    ])
-  ]
+        }
+    ],
+    animations: [
+        trigger('growOnHover', [
+            state('default', style({
+                transform: 'scale(1)'
+            })),
+            state('hovered', style({
+                transform: 'scale(5,5)',
+                backgroundColor: 'White',
+                borderRadius: '2px',
+                boxShadow: '0 15px 40px rgba(0,0,0,0.3)',
+                border: '1px solid #ccc',
+                height: '15px',
+                width: '10px',
+                fontSize: '0.5em'
+            })),
+            transition('default <=> hovered', animate('300ms ease-in-out')),
+        ])
+    ]
 })
 
 export class AllotedLotComponent implements OnInit {
@@ -81,13 +79,14 @@ private destroy$ = new Subject<void>();
   allotment:any=[];
   lotStatus:any;
   isLoading=false;
-  isDisable=false;
-  isPayDisable=false;
+  isDisable=true;
+  isPayDisable=true;
    allot:any=[];
    ismatching:boolean=false;
    isRevised:boolean=false;
    InputText:string="";
    showNodification:boolean=false; 
+    selectedFile!: File;
   constructor(private route:ActivatedRoute,
     private router:Router,
     private decry:EncryptionService,
@@ -95,6 +94,7 @@ private destroy$ = new Subject<void>();
     private _sessionStoreage:SessionStorageService ,
   @Inject(auth)private _authService:IAssignmentService,
   private snackBar: MatSnackBar,
+  private tokenservice:TokenService ,
   private fb: FormBuilder,
 
   ) {
@@ -113,6 +113,9 @@ private destroy$ = new Subject<void>();
     else{
       return false;
     }
+  }
+  downloadFile():void{
+
   }
   GetAllotmentByLots():FormArray
 {
@@ -335,6 +338,12 @@ LotestimateValidation_Old(userId)
     downloadLink.download = filename;
     downloadLink.click();
   }
+  onFileSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      this.selectedFile = input.files[0];
+    }
+  }
   PayregisterDownload()
   {
     this.isLoading=true;
@@ -345,20 +354,36 @@ LotestimateValidation_Old(userId)
       "pay_period_Id":this.lotAssignment.pay_period_id,
       "lotNumber":this.lotAssignment.lot_Number,
       "payroll_input_type":this.lotAssignment.payroll_Input_Type,
-      "pay_period":this.lotAssignment.pay_period
+      "pay_period":this.lotAssignment.pay_period,
+      "revised":this.lotAssignment.revisedtime,
+      "process_category":this.lotAssignment.process_Category
   }
 
   
   
+  
     this._authService.ReconPayRegisterDownload(request).subscribe({
-      next: res => { if(res.StatusCode==200){
-       
+      next: res => { if(res.StatusCode==200){       
         const data=res.Data;
         var base64=data.file;
-         let fileName = `${'Recon_Pay_Register'}-${this.lotAssignment.company_code} _ ${this.lotAssignment.pay_period}_ ${this.lotAssignment.lot_Number}`;
-        this.downloadExcelFromBase64(base64,fileName)
-        this.isLoading=false;
-        this.isPayDisable=false;
+        if (data.file == "No") {
+          this.isLoading = false;
+          this.isPayDisable = false;
+        }
+        else {
+          let fileName = `${'Recon_Pay_Register'}-${this.lotAssignment.company_code} _ ${this.lotAssignment.pay_period}_ ${this.lotAssignment.lot_Number}`;
+          this.downloadExcelFromBase64(base64, fileName)
+          this.isLoading = false;
+          this.isPayDisable = false;
+        }
+        if(data.incrementFile!="No" && data.incrementFile!="")
+        {
+          var increment64=data.incrementFile;
+           let fileName = `${'Recon_Pay_Register'}-${this.lotAssignment.company_code} _ ${this.lotAssignment.pay_period}_ ${this.lotAssignment.lot_Number}_Increment`;
+            this.downloadExcelFromBase64(increment64, fileName)
+          this.isLoading = false;
+          this.isPayDisable = false;
+        }
       }
 
       },
@@ -369,27 +394,29 @@ LotestimateValidation_Old(userId)
   }
 ngOnInit(): void {
   const userdetail = this._sessionStoreage.getItem('UserProfile');
-
-  if (!userdetail) return;
-
-  const user = JSON.parse(this.decry.decrypt(userdetail));
-  
+  if (!userdetail){ 
+     this._sessionStoreage.removeItem('UserProfile');
+  this._sessionStoreage.clear();
+  this.tokenservice.clearTokens();
+    //this.router.navigateByUrl('/Login')
+    }
+  else{
+  const user = JSON.parse(this.decry.decrypt(userdetail));  
   this.route.queryParams.subscribe(params => {
     const encryptedItem = params['items'];
-    if (!encryptedItem) return;
-
+        if (!encryptedItem) this.router.navigateByUrl('/Login');
     const param = this.decry.decrypt(encryptedItem);
     this.lotAssignment = JSON.parse(param);
-
     // Set input label and revised flag
     this.InputText = this.lotAssignment.revisedtime > 0 ? "Revised Input" : "Input";
     this.isRevised = this.lotAssignment.revisedtime > 0;
+    this.isPayDisable=this.lotAssignment.revisedtime==0 ? false:true;
 
     // Start validation and data loading
   //  this.LotestimateValidation(user.user_Id);
 
 //this.EstimateValidation(user.user_Id); selvaraj
-//this.LotEstimatValidate(user.user_Id)
+this.LotEstimatValidate(user.user_Id)
     this.GetAllotment(
       this.lotAssignment.company_code,
       this.lotAssignment.pay_period,
@@ -406,11 +433,10 @@ ngOnInit(): void {
       this.lotAssignment.payroll_Input_Type,
       this.lotAssignment.createdOn
     );
-
     this.TotalSecond = this.convertToSeconds(this.lotAssignment.estimate_time);
-
     this.Reqeustformodification();
   });
+}
 }
  userresponses:any;
  countdown!:number;
@@ -510,37 +536,40 @@ EstimateValidation(userId: number) {
   
 }
 
-LotEstimatValidate(userId)
-{
-  const request = {
-    "company_Id": this.lotAssignment.company_Id,
-    "payperiodId": this.lotAssignment.pay_period_id,
-    "lotnumber": this.lotAssignment.lot_Number,
-    "Payroll_Input_Type": this.lotAssignment.payroll_Input_Type,
-    "CreatedOn": this.lotAssignment.createdOn,
-    "userId": userId,
-    "ActionType":""
-  };
-  this._authService.UserLotValidation(request).subscribe({
-    next: (res) => {
-      this.userresponses = res.Data;
-      console.log(this.userresponses);
-      this.countdown = (this.userresponses.remainingMinutes || 0) * 60;
-    interval(5000).pipe(
-  takeUntil(this.destroy$),
-  tap(() => {
-    //console.log(this.countdown)
-    this.countdown--;
-    if (this.countdown <= 0) {
-      this.destroy$.next(); // Stop the timer
-      this.callFinalValidation(request, userId);
-    }
-  })
-).subscribe();
-    },
-      error:err=>console.log(err)
+  LotEstimatValidate(userId) {
+    const request = {
+      "company_Id": this.lotAssignment.company_Id,
+      "payperiodId": this.lotAssignment.pay_period_id,
+      "lotnumber": this.lotAssignment.lot_Number,
+      "Payroll_Input_Type": this.lotAssignment.payroll_Input_Type,
+      "CreatedOn": this.lotAssignment.createdOn,
+      "userId": userId,
+      "ActionType": ""
+    };
+    this._authService.UserLotValidation(request).subscribe({
+      next: (res) => {
+        if (this.userresponses) {
+          if (this.userresponses.remainingMinutes) {
+            this.userresponses = res.Data;            
+            this.countdown = (this.userresponses.remainingMinutes || 0) * 60;
+            interval(5000).pipe(
+              takeUntil(this.destroy$),
+              tap(() => {
+                //console.log(this.countdown)
+                this.countdown--;
+                if (this.countdown <= 0) {
+                  this.destroy$.next(); // Stop the timer
+                  this.callFinalValidation(request, userId);
+                }
+              })
+            ).subscribe();
+          }
+        }
+
+      },
+      error: err => console.log(err)
     })
-}
+  }
 
 callFinalValidation(request: any, userId: number) {
   this._authService.UserLotValidation(request).subscribe({
@@ -628,12 +657,39 @@ QCVerifyButtonDisable(val)
 {
   this.isDisable=val;
 }
+convertFileToBase64(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+
+    reader.readAsDataURL(file);
+
+    reader.onload = () => {
+      // Removes: data:application/pdf;base64,
+      const base64 = (reader.result as string).split(',')[1];
+      resolve(base64);
+    };
+
+    reader.onerror = error => reject(error);
+  });
+}
 QCVerify(){
   this.isLoading=true;
   const userdetail= this._sessionStoreage.getItem('UserProfile');
   var user = JSON.parse(this.decry.decrypt(userdetail!));  
   this.isDisable=true;
-const catg=this.AllotmentForm.get("allotemt")?.value;   
+  
+  if(this.selectedFile == undefined || this.selectedFile.name=='')
+  {
+    alert('select the checkin sheet');
+    this.isLoading = false;
+    this.isDisable=false;
+    return;
+  }
+  if(this.selectedFile!=undefined)
+  {
+    this.convertFileToBase64(this.selectedFile).then(base64 => {
+    //console.log('Base64:', base64);
+    const catg=this.AllotmentForm.get("allotemt")?.value;
   var request={
     "Company_Id":this.lotAssignment.company_Id,
     "CompanyCode":this.lotAssignment.company_code,
@@ -645,31 +701,71 @@ const catg=this.AllotmentForm.get("allotemt")?.value;
     "createdon":this.lotAssignment.createdOn,
     "userId":user.user_Id,
     "allotments":catg,
-    "RaiseQuery":this.AllotmentForm.get("RaiseQuery")?.value 
+    "RaiseQuery":this.AllotmentForm.get("RaiseQuery")?.value ,
+    "revised":this.lotAssignment.revised,
+    "CheckinFile":base64
 }
 
-  this._authService.QCLotVerify(request).subscribe({
-    next: res => {
-      
-      this.lotStatus = res.Data;
-      this.QCVerifyButtonDisable(res.Data.qC_Verified_Status);   
-      if(res.Data.qC_Verified_Status)
+ this._authService.QCLotVerify(request).subscribe({
+  next: res => {
+    this.lotStatus = res.Data;
+    this.QCVerifyButtonDisable(res.Data.qC_Verified_Status);   
+
+    if (res.Data.qC_Verified_Status) {
+
+     //console.log("QC Verifed" + JSON.stringify(this.allotment));
+      var inputType = this.lotAssignment.payroll_Input_Type;
+      //alert(inputType)
+      const label = (inputType == 'Salary' || inputType == 'Revised') ? 'Salary' : 'Onetime';
+
+      let fileName = `${this.lotAssignment.company_code}_${this.lotAssignment.company_name}_${label}_${this.lotAssignment.pay_period}_${this.lotAssignment.lot_Number}`;
+      fileName = fileName.replace(/\s+/g, '_'); 
+
+      if(this.lotStatus.fileResponse.file!="No")
       {
-        const inputType = this.lotAssignment.payroll_Input_Type;
-        const label = inputType === 'Salary' ? inputType : 'ONETIME';
-        let fileName = `${this.lotAssignment.company_code}_${this.lotAssignment.company_name}_${label}_${this.lotAssignment.pay_period}_${this.lotAssignment.lot_Number}`;
-        fileName = fileName.replace(/\s+/g, '_'); 
-        this.downloadExcelFromBase64(this.lotStatus.fileResponse.file,fileName);
-      }   
-      else{
-         this.isLoading=false;
-        window.alert("Pay Register not download");
+        this.selectedFile.slice();
+        this.downloadExcelFromBase64(this.lotStatus.fileResponse.file, fileName);
+      }
+      else {
+        this.isLoading = false;
+        window.alert("Pay Register not downloaded.");
       }
       
-      
-    },
-    error: error =>{ this.isLoading=false; console.error('Error:', error)}
+    } else {
+      this.isLoading = false;
+      window.alert("Pay Register not downloaded.");
+    }
+  },
+  error: (error) => {
+    this.isLoading = false;
+
+    let errorMessage = "Something went wrong. Please try again.";
+
+    if (error.status === 0) {
+      // Network error or server unreachable
+      errorMessage = "Unable to connect to server. Please check your internet or server status.";
+    } else if (error.status >= 500) {
+      // Server-side error
+      errorMessage = "Server error occurred. Please try again later.";
+    } else if (error.status === 404) {
+      errorMessage = "Requested API not found (404).";
+    } else if (error.status === 401 || error.status === 403) {
+      errorMessage = "Unauthorized access. Please login again.";
+      // optional: redirect to login
+      // this.router.navigate(['/login']);
+    } else if (error.error?.message) {
+      // API sent a specific error message
+      errorMessage = error.error.message;
+    }
+
+    console.error("QC Lot Verify API Error:", error);
+    window.alert(errorMessage);
+  }
+});
   });
+  }
+
+
 }
 
 
@@ -713,7 +809,7 @@ const userdetail= this._sessionStoreage.getItem('UserProfile');
 
   this._authService.LotStatus(request).subscribe({
     next: res => { this.lotStatus = res.Data;
-      this.QCVerifyButtonDisable(res.Data.qC_Verified_Status);
+      //this.QCVerifyButtonDisable(res.Data.qC_Verified_Status);
     },
     error: error => console.error('Error:', error)
   });
@@ -799,32 +895,15 @@ SharedPayRegisterUpload()
 
 }
 convertToSeconds(time: number): number {
-  // const parts = time.split(':');
- 
-  // if (parts.length !== 3) return 0;
-
-  // const [h, m, s] = parts.map(Number);
-  // if (isNaN(h) || isNaN(m) || isNaN(s)) return 0;
-
-  // return h * 3600 + m * 60 + s;
-
   const seconds = time * 60;
-
- return  seconds;
-   
+ return  seconds;   
 }
-  Reqeustformodification() {
-    // if (this.lotAssignment?.newJoinee.ismatching && this.lotAssignment?.attendance.ismatching &&
-    //   this.lotAssignment?.adhoc.ismatching && this.lotAssignment?.increment && this.lotAssignment?.otherInput.ismatching) {
-      this.RequestforModification = false;
-    //}
+  Reqeustformodification() {    
+      this.RequestforModification = false;    
   }
 RetuenHome(){
   this.router.navigate(['/Master/Assignment'])
 }
-
-
-   
 }
 
 export interface LotAllotmentStatus { 

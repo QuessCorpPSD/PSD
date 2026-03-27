@@ -6,11 +6,10 @@ import {FormatTimePipe} from '../timer/format-time.pipe';
 
 
 @Component({
-  selector: 'app-timer',
-  standalone: true,
-  imports: [CommonModule,FormatTimePipe],
-  templateUrl: './timer.component.html',
-  styleUrl: './timer.component.css'
+    selector: 'app-timer',
+    imports: [CommonModule, FormatTimePipe],
+    templateUrl: './timer.component.html',
+    styleUrl: './timer.component.css'
 })
 export class TimerComponent implements OnInit, OnDestroy {
   

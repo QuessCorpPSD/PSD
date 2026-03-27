@@ -14,19 +14,17 @@ import { SessionStorageService } from '../../Shared/SessionStorageService';
 const auth= InjectionToken<IAssignmentService>;
 
 @Component({
-  selector: 'assignment',
-  standalone: true,
-  imports: [CommonModule,MatTabsModule,GridviewComponent,ListviewComponent],
-  templateUrl: './assignment.component.html',
-  styleUrl: './assignment.component.css',
-   providers: [
+    selector: 'assignment',
+    imports: [CommonModule, MatTabsModule, GridviewComponent, ListviewComponent],
+    templateUrl: './assignment.component.html',
+    styleUrl: './assignment.component.css',
+    providers: [
         {
-          provide: auth,
-          useClass: AssignmentService,
+            provide: auth,
+            useClass: AssignmentService,
         }
-      ],
-  
-  schemas:[CUSTOM_ELEMENTS_SCHEMA]
+    ],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 
 export class AssignmentComponent implements OnInit, AfterViewInit {
@@ -44,13 +42,25 @@ private _sessionStoreage:SessionStorageService){
     this.isDropdownOpen = !this.isDropdownOpen;
   }
   ngOnInit(): void {
-    const user_id=this._sessionStoreage.getItem("userId");   
-   this.GetCompanyData(user_id);
+    //const user_id=this._sessionStoreage.getItem("userId");   
+    this.AutoAllotment();
+   
   }
 
-  GetCompanyData(UserId) {
+  AutoAllotment(){
+      const userdetail = this._sessionStoreage.getItem('UserProfile');
+    var user = JSON.parse(this._decrypt.decrypt(userdetail!));
+    this._authService.AutoAllotmentByUser(user.user_Id).subscribe({
+      next:res=>{console.log(res); this.GetCompanyData();},
+      error:err=>{}
+    })
+  }
+
+  GetCompanyData() {
     const userdetail = this._sessionStoreage.getItem('UserProfile');
     var user = JSON.parse(this._decrypt.decrypt(userdetail!));
+    
+    
     this._authService.GetAssignmentLot(user.user_Id, 'A').subscribe(
       {
         next: data => { this.data = data.Data; },

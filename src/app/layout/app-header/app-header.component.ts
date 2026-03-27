@@ -6,12 +6,11 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { EncryptionService } from '../../Shared/encryption.service';
 import { Router, RouterLink } from '@angular/router';
 @Component({
-  selector: 'app-header',
-  standalone: true,
-  imports: [OverlayModule,MatTooltipModule,RouterLink ],
-  templateUrl: './app-header.component.html',
-  styleUrl: './app-header.component.css',
-  encapsulation: ViewEncapsulation.None,
+    selector: 'app-header',
+    imports: [OverlayModule, MatTooltipModule, RouterLink],
+    templateUrl: './app-header.component.html',
+    styleUrl: './app-header.component.css',
+    encapsulation: ViewEncapsulation.None
 })
 export class AppHeaderComponent implements OnInit {
   username!:string;

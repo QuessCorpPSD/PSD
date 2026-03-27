@@ -1,0 +1,18 @@
+.form_class{
+    font-family: Nunito Sans;
+}
+.span_text{
+     font-family: Nunito Sans;
+     
+     color: red;
+}
+.card-header.custom-header {
+  padding: 6px 16px;
+  height: 40px;
+}
+.scroll-card {
+  max-width: 100%;
+  max-height: 400px;   /* set your desired height */
+  overflow-y: auto;    /* enable vertical scroll */
+  overflow-x: hidden;  /* hide horizontal scroll */
+}

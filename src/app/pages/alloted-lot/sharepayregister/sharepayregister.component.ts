@@ -7,21 +7,21 @@ import { IAssignmentService } from '../../../Repository/IAssignment.service';
 import { AssignmentService } from '../../../Service/Assignment.service';
 import { stringify } from 'node:querystring';
 import { SessionStorageService } from '../../../Shared/SessionStorageService';
+import { EncryptionService } from '../../../Shared/encryption.service';
 
 const auth= InjectionToken<IAssignmentService>;
 @Component({
-  selector: 'sharepayregister',
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: './sharepayregister.component.html',
-  styleUrl: './sharepayregister.component.css',
-  schemas:[CUSTOM_ELEMENTS_SCHEMA],
-   providers: [
-            {
-              provide: auth,
-              useClass: AssignmentService,
-            }
-          ]
+    selector: 'sharepayregister',
+    imports: [CommonModule],
+    templateUrl: './sharepayregister.component.html',
+    styleUrl: './sharepayregister.component.css',
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    providers: [
+        {
+            provide: auth,
+            useClass: AssignmentService,
+        }
+    ]
 })
 export class SharepayregisterComponent {
   @Output() close = new EventEmitter<void>();
@@ -30,10 +30,11 @@ export class SharepayregisterComponent {
 
   isDragging = false;
   @Input()lotAssignment!:any ;
-isLoading=false;
+  isLoading=false;
   constructor(private _snackBar: MatSnackBar, 
      @Inject(auth)private _authService:IAssignmentService,
      private _sessionStoreage:SessionStorageService,
+     private decry:EncryptionService,
     public dialog: MatDialog){}
   onFileSelected(event: Event) {
     const input = event.target as HTMLInputElement;
@@ -48,12 +49,16 @@ isLoading=false;
    
   }
   BulkFileUpload(){
-this.isLoading=true;
-    const user_id=this._sessionStoreage.getItem("userId");  
+    const userdetail = this._sessionStoreage.getItem('UserProfile');
+    if (!userdetail) return;
+  const user = JSON.parse(this.decry.decrypt(userdetail));
+    
+    this.isLoading=true;
+    
     this.files.forEach(element => {
       
       this.ConvertFile(element).subscribe((res) => {
-        console.log(this.lotAssignment);
+        
         var files_docs={
           "CompanyId":this.lotAssignment.company_Id,
           "Pay_Period_id":this.lotAssignment.pay_period_id,
@@ -61,7 +66,7 @@ this.isLoading=true;
           "FileName":element.name,
           "FileType":element.type,
           "Docs":res,
-          "LoginUser":user_id,
+          "LoginUser":String(user.user_Id),
           "Input_type":this.lotAssignment.payroll_Input_Type,
           "CompanyCode":this.lotAssignment.company_code,
           "Pay_Period":this.lotAssignment.pay_period,
@@ -69,22 +74,19 @@ this.isLoading=true;
         }
         //console.log( "JSON Created : " +JSON.stringify(files_docs));
         this._authService.PayRegisterUpload(files_docs).subscribe({
-          next:res=>{ 
-            
-            
-if(res.StatusCode==200)
-{
-  let data= res.Data;
-  if(data.status=="200")
-  {
-    window.alert("File uploaded");
-   this.closeModal();
-  }
-}
-else{
-  window.alert("File not uploaded");
-}
-          
+          next: res => {
+            console.log(res)
+            if (res.StatusCode == 200) {
+              let data = res.Data;
+              if (data.statusCode == "200") {
+                window.alert("File uploaded");
+                this.closeModal();
+              }
+            }
+            else {
+              window.alert("File not uploaded");
+            }
+
           },
           error:err=>{}
         })
@@ -97,16 +99,30 @@ else{
   
 
   }
-  ConvertFile(file:File):Observable<string>{
-    const result=new ReplaySubject<string>(1);
-    const reader = new FileReader();
-    reader.readAsDataURL(file);    
-    reader.onload = (event: ProgressEvent<FileReader>) => {
-      result.next(btoa(event.target?.result as string));
-    };
-   
-    return result;
-  }
+ConvertFile(file: File): Observable<string> {
+  const result = new ReplaySubject<string>(1);
+  const reader = new FileReader();
+
+  reader.readAsDataURL(file);
+
+  reader.onload = () => {
+    // Already base64 encoded
+    const base64 = reader.result as string;
+
+    // If you only need the pure base64 (without the data:... prefix)
+    const pureBase64 = base64.split(',')[1];
+
+    result.next(pureBase64);
+    result.complete();
+  };
+
+  reader.onerror = (error) => {
+    result.error(error);
+  };
+
+  return result.asObservable();
+}
+
  
 
   onDragOver(event: DragEvent) {

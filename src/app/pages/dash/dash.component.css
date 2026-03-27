@@ -1,0 +1,324 @@
+
+    
+.example-wrapper {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+/* styles.css */
+ .ag-theme-quartz .ag-floating-filter-input {
+  padding: 6px 8px !important;  /* ← your desired padding */
+  border: none !important;
+  background-color: #fafafa !important;
+  border-radius: 4px !important;
+  box-shadow: none !important;
+}
+
+input.ag-floating-filter-input {
+  all: unset;
+}
+
+.ag-theme-quartz .ag-floating-filter-input:focus {
+  outline: none !important;
+  box-shadow: none !important;
+  border: 1px solid #ddd !important;
+}
+.ag-root-wrapper-body {
+  overflow-x: auto !important;
+}
+.ag-theme-quartz .ag-cell, 
+.ag-theme-quartz .ag-header-cell {
+  border-right: 1px solid #ccc !important;
+  border-bottom: 1px solid #ccc !important;
+
+}
+
+.ag-theme-quartz .ag-row {
+  border-bottom: 1px solid #ccc !important;
+  
+}
+.ag-tooltip {
+  background-color: #5353c1;
+  color: #fff;
+  border-radius: 6px;
+  padding: 8px 10px;
+  font-size: 13px;
+  white-space: pre-line; 
+}
+.download-btn-container {
+  display: flex;
+  justify-content: flex-end; /* pushes to right */
+  margin-bottom: 10px;       /* space below the button */
+}
+
+.download-btn {
+  background-color: #fff;       /* white background */
+  color: #333;                  /* dark text */
+  border: 1px solid #ccc;       /* light border */
+  border-radius: 8px;           /* rounded corners */
+  padding: 6px 14px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.download-btn:hover {
+  background-color: #f5f5f5;    /* subtle hover effect */
+  border-color: #999;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+}
+
+.main-wrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    margin-left: 0;
+}
+
+@media (min-width: 1024px) {
+    .main-wrapper {
+        margin-left: 240px;
+    }
+}
+#myGrid {
+    flex: 1 1 0px;
+    width: 100%;
+}
+
+.example-header {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 13px;
+    margin-bottom: 1rem;
+}
+
+.hidden {
+    display: none;
+}
+
+.example-wrapper td.labels {
+    width: 200px;
+}
+
+.example-wrapper td.buttons-container {
+    width: 200px;
+}
+
+.example-wrapper td.buttons-container button:not(#myGrid button, #myChart button, button[class*='ag-']) {
+    padding: 0.4em;
+    margin: 0 0.2em 0 0;
+}
+.dashboard-content {
+    flex: 1;
+    /* padding: 16px;
+    overflow: auto; */
+}
+
+@media (min-width: 1024px) {
+    .dashboard-content {
+        padding: 2px;
+    }
+}
+
+/* Stats Grid */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+@media (min-width: 640px) {
+    .stats-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (min-width: 1024px) {
+    .stats-grid {
+        grid-template-columns: repeat(6, 1fr);
+        gap: 21px;
+    }
+}
+
+/* Stat Cards */
+.stat-card {
+    min-width: 151px;
+    height: 80px;
+    border-radius: 10px;
+    padding: 16px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    color: white;
+}
+
+.stat-card-blue {
+    background: conic-gradient(from 90deg, rgba(68, 70, 206, 1) 0%, rgba(51, 55, 169, 1) 50%, rgba(33, 39, 132, 1) 100%);
+}
+
+.stat-card-green {
+    background: conic-gradient(from 90deg, rgba(13, 130, 93, 1) 0%, rgba(11, 99, 71, 1) 50%, rgba(8, 68, 48, 1) 100%);
+}
+
+.stat-card-purple {
+    background: conic-gradient(from 90deg, rgba(130, 13, 122, 1) 0%, rgba(99, 11, 85, 1) 50%, rgba(68, 8, 47, 1) 100%);
+}
+
+.stat-card-yellow {
+    background: conic-gradient(from 90deg, rgba(215, 215, 51, 1) 0%, rgba(180, 180, 42, 1) 50%, rgba(144, 144, 33, 1) 100%);
+}
+
+.stat-card-red {
+    background: conic-gradient(from 90deg, rgba(206, 68, 68, 1) 0%, rgba(169, 51, 51, 1) 50%, rgba(132, 33, 33, 1) 100%);
+}
+
+.stat-card-violet {
+    background: conic-gradient(from 90deg, rgba(135, 68, 206, 1) 0%, rgba(108, 51, 169, 1) 50%, rgba(81, 33, 132, 1) 100%);
+}
+
+.stat-number {
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 22px;
+}
+
+.stat-label {
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 16px;
+    margin-top: 2px;
+}
+
+/* Appraisal Section */
+.appraisal-section {
+    background: white;
+    border: 1px solid #dedde0;
+    border-radius: 8px;
+    margin-bottom: 24px;
+    overflow: hidden;
+}
+
+
+.hover-target {
+  display: inline-block;
+  position: relative;
+  cursor: pointer;
+  /* padding: 6px;   */
+  border-radius: 4px;
+}
+
+.hover-panel {
+  position: absolute;
+  top: 100%; /* below target */
+  left: 0;
+  z-index: 1000;
+  background: rgba(90, 152, 233, 0.55);
+    color: #fff; /* best readable text */
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 8px;
+  background: linear-gradient(120deg, rgba(59, 130, 246, 0.6), rgba(16, 185, 129, 0.6));
+  min-width: 100px;
+  backdrop-filter: blur(6px); /* smooth blur for depth */
+   font-size: 12px;
+}
+/* Reduce overall height */
+.compact-range .mat-mdc-text-field-wrapper {
+  min-height: 36px !important;      /* Default ~56px */
+  height: 36px !important;
+  padding: 0 8px !important;
+  border-radius: 8px !important;    /* Rounded corners */
+  display: flex;
+  align-items: center;
+  width: 250px;
+}
+
+/* Control the outline border rounding */
+.compact-range .mat-mdc-form-field-outline {
+  border-radius: 8px !important;
+}
+
+
+/* Input text size + padding */
+.compact-range .mat-mdc-input-element {
+  padding: 2px 4px !important;
+  font-size: 13px !important;
+  height: 24px !important;
+  box-sizing: border-box;
+}
+
+/* Hide hint/error area if unused */
+.compact-range .mat-mdc-form-field-subscript-wrapper {
+  display: none !important;
+}
+
+/* Reduce label movement spacing */
+.compact-range .mat-mdc-floating-label {
+  transform: translateY(-14px) scale(0.85) !important;
+}
+/* Reduce suffix icon container size */
+.compact-date .mat-mdc-form-field-icon-suffix {
+  width: 20px !important;          /* default ~40–48px */
+  min-width: 20px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Shrink actual icon button */
+.compact-date .mat-mdc-icon-button {
+  width: 24px !important;
+  height: 24px !important;
+  padding: 0 !important;
+  border-radius: 6px;
+  background-color: #fff; /* optional background */
+  color: #333;
+}
+
+/* Optional hover effect */
+.compact-date .mat-mdc-icon-button:hover {
+  background-color: #fff;
+}
+.clean-icon .mat-mdc-icon-button {
+  background: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+  color: #555 !important; /* or your theme color */
+  width: 28px;
+  height: 28px;
+  padding: 0 !important;
+}
+/* Remove background + hover from datepicker icon */
+.no-hover-icon .mat-mdc-icon-button {
+  background: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+  color: #555 !important; /* icon color */
+  width: 28px;
+  height: 28px;
+  padding: 0 !important;
+}
+
+/* Completely disable hover and focus background */
+.no-hover-icon .mat-mdc-icon-button:hover,
+.no-hover-icon .mat-mdc-icon-button:focus,
+.no-hover-icon .mat-mdc-icon-button:active {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+/* Remove ripple animation */
+.no-hover-icon .mat-mdc-button-touch-target,
+.no-hover-icon .mat-ripple-element {
+  display: none !important;
+}
+
+/* Optional: tighten suffix spacing */
+.no-hover-icon .mat-mdc-form-field-icon-suffix {
+  padding: 0 !important;
+  margin: 0 !important;
+}

@@ -6,11 +6,10 @@ import { MatDialog } from '@angular/material/dialog';
 import { RemarkmodelComponent } from './remarkmodel/remarkmodel.component';
 
 @Component({
-  selector: 'app-listview',
-  standalone: true,
-  imports: [CommonModule,RemarkmodelComponent],
-  templateUrl: './listview.component.html',
-  styleUrl: './listview.component.css'
+    selector: 'app-listview',
+    imports: [CommonModule, RemarkmodelComponent],
+    templateUrl: './listview.component.html',
+    styleUrl: './listview.component.css'
 })
 export class ListviewComponent implements OnInit {
  @Input() data!:any;

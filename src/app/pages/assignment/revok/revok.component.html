@@ -1,0 +1,77 @@
+<div class="container">
+  <div class="row g-3 py-2">
+
+   
+       <div class="col-12 col-md-3">
+        <div class="d-flex flex-column">
+          
+          <div class="input-group">
+             <app-manager (managerselected)="ManagerSelectedvalue($event)"></app-manager>
+          </div>
+        </div>
+      </div>
+       
+    
+
+    <div class="col">
+      <div class="input-group">
+      <app-teamleader [ManagerSelected]="ManagerSelected" (temaleadSelected)="TeamLeaderSelectedvalue($event)"></app-teamleader>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="input-group">
+      <app-employee [teamlederId]="teamlederId" (EmployeeSelected)="EmployeeSelected($event)"></app-employee>
+      </div>
+    </div>
+    <div class="col">
+      <button (click)="RevokDetail()" class="btn text-white fw-semibold w-40"
+          style="height: 36px; background-color: #302CB3; border-radius: 6px; font-size: 12px; font-family: 'Nunito Sans'; letter-spacing: 0.24px;">
+          Search
+        </button>
+    </div>
+  </div>
+  <div class="row">
+    <table class="table" *ngIf="RevokDetails" >
+      <tr>
+        <th>Company Code</th>
+        <th>Company Name</th>
+        <th>Pay Period</th>
+        <th>Lot Number</th>
+        <th>Revised</th>
+        <th>Allotted Date</th>
+        <th>Start Date</th>
+        <th></th>
+      </tr>
+      <tr *ngFor="let emp of RevokDetails">
+        <td>
+          {{emp.company_code}}
+        </td>
+        <td>
+          {{emp.company_Name}}
+        </td>
+         <td>
+          {{emp.pay_period}}
+        </td>
+        <td>
+          {{emp.lot_Number}}
+        </td>
+        <td>
+          {{emp.revised}}
+        </td>
+          <td>
+          {{emp.allottedDatetime | date:'dd-MM-yyyy hh:mm a'}}
+        </td>
+         <td>
+          {{ emp.startTime | date:'dd-MM-yyyy hh:mm a' }}
+        </td>
+        <td>
+          <button (click)="Revok(emp)" class="btn text-white fw-semibold w-40"
+            style="height: 36px; background-color: #302CB3; border-radius: 6px; font-size: 12px; font-family: 'Nunito Sans'; letter-spacing: 0.24px;">
+            Revok
+          </button>
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>

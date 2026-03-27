@@ -1,0 +1,120 @@
+.container {
+  max-width: 100%;
+  margin-top: 2px auto;
+}
+
+mat-form-field {
+  margin-bottom: 2px;
+}
+
+.table-header {
+  display: flex;
+  justify-content: flex-end; 
+  margin-bottom: 2px;
+}
+.search-field {
+  width: 250px; 
+}
+
+.search-field {
+  --mat-form-field-container-height: 30px; 
+}
+
+.search-field .mat-mdc-text-field-wrapper {
+  height: 30px !important;
+  min-height: 30px !important;
+}
+
+.search-field .mat-mdc-form-field-infix {
+  padding: 1px 0 !important;
+}
+.dense {
+  --mat-form-field-container-height: 26px; 
+  font-size: 13px;
+}
+
+.dense .mat-mdc-text-field-wrapper {
+  height: 26px !important;
+  padding: 0 4px !important;
+}
+
+.dense .mat-mdc-form-field-infix {
+  padding: 2px 0 !important;
+}
+/* Wrapper */
+.mat-elevation-z8 {
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* Header Styling */
+table.mat-mdc-table thead {
+  background-color: #0d6efd; /* Bootstrap primary blue */
+  color: #fff;
+}
+
+.mat-mdc-header-cell {
+  font-weight: 600;
+  font-size: 14px;
+  text-transform: uppercase;
+  padding: 12px;
+}
+
+/* Row Styling */
+.mat-mdc-cell {
+  font-size: 13px;
+  padding: 10px 12px;
+}
+
+.mat-mdc-row:nth-child(even) {
+  background-color: #f8f9fa; /* light gray for zebra effect */
+}
+
+/* Hover effect */
+.mat-mdc-row:hover {
+  background-color: #e9f2ff !important;
+  cursor: pointer;
+}
+
+/* Search field tweaks */
+.search-field {
+  --mat-form-field-container-height: 40px;
+  margin-bottom: 12px;
+}
+
+.search-field .mat-mdc-text-field-wrapper {
+  height: 40px !important;
+}
+
+.search-field input.mat-input-element {
+  font-size: 13px;
+  padding: 4px 0;
+}
+
+/* Paginator styling */
+.mat-mdc-paginator {
+  border-top: 1px solid #f2f5f8;
+  font-size: 13px;
+}
+.mat-icon {
+  font-size: 20px;
+}
+button.mat-icon-button {
+  border: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+button.mat-icon-button:hover {
+  background: transparent !important; /* removes hover circle */
+}
+button.mat-icon-button:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+button.mat-icon-button:hover {
+  background-color: rgba(13, 110, 253, 0.08); /* light Bootstrap blue */
+  border-radius: 50%;
+}
+
+

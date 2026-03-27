@@ -16,19 +16,16 @@ import { ChartConfiguration } from 'chart.js';
 const dashboard = InjectionToken<IDashBoardServices>;
 
 @Component({
-  selector: 'app-home',
-  standalone: true,
-  imports: [CommonModule,NgxChartsModule,RouterModule,NgChartsModule,MatGridListModule ],
-  templateUrl: './home.component.html',
-  styleUrl: './home.component.css',
-  providers: [
-	  {
-		provide: dashboard,
-		useClass: DashBoardServices,
-	  }
-	],
-	
-
+    selector: 'app-home',
+    imports: [CommonModule, NgxChartsModule, RouterModule, NgChartsModule, MatGridListModule],
+    templateUrl: './home.component.html',
+    styleUrl: './home.component.css',
+    providers: [
+        {
+            provide: dashboard,
+            useClass: DashBoardServices,
+        }
+    ]
 })
 export class HomeComponent implements OnInit {
 

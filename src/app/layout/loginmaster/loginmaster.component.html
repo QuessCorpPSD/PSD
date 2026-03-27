@@ -16,7 +16,7 @@
 
             <div class="employee-and-password-fram">
                 <div class="frame-parent">
-                    <div class="frame-group">
+                    <div class="frame-group" *ngIf="Isvalid">
                         <div class="text-parent">
 
                             <div class="mb-3">
@@ -48,8 +48,42 @@
 
 
                     </div>
+                    <!-- <form>
+                    <div class="text-parent" [formGroup]="otpForm" *ngIf="!Isvalid">
+                    
+                        <div class="mb-3">
+                            <label class="form-label"><b>OTP sent by mail *</b></label>
+                            <input type="text" class="form-control" formControlName="otp" (keypress)="numberOnly($event)" maxlength="10">
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                    
+                           
+                            <div class="timer-text" *ngIf="isResendDisabled">
+                                OTP expires in <b>{{ formatTime(timeLeft) }}</b>s
+                            </div>
+                            <div class="timer-text" *ngIf="ExpireRemarks">
+                                 OTP expired. Please resend again
+                            </div>
+                   
+                           
+                            <button class="btn btn-link p-0 text-primary" style="font-size: 0.8em;" 
+                                (click)="ResendOTP()">
+                                Resend OTP
+                            </button>
+                    
+                        </div>
+                       
+                        <div class="button p-1">
+                            <button style="color: white;background-color:#302cb3 ;font-size: 16px; font-family: Nunito Sans;"
+                                class="sign-in btn" (click)="validateOtp()">Verify</button>
+                        </div>
+                    
+                    
+                    </div>
+                    </form> -->
                 </div>
             </div>
         </div>
     </div>
 </div>
+<!-- <app-breakdetails></app-breakdetails> -->

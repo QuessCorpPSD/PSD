@@ -233,6 +233,11 @@
     align-self: stretch;
     position: relative;
     font-weight: 500;
+    font-size: 14px;
+    word-wrap: break-word;
+     white-space: normal;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 .mb {
     align-self: stretch;

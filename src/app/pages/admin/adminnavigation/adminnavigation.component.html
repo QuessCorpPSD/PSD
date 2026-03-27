@@ -1,0 +1,26 @@
+<div class="headerSOP">
+</div>
+<div class="contentCategory">
+    <div style="width: 100%;">
+        <div class="Categorylist">
+            <ul class="horizontal-list">
+                <li><a [routerLink]="['/Master/admin/companypermission']" class="nav-link"
+                        routerLinkActive="selectedInput" [routerLinkActiveOptions]="{ exact: true }">Company
+                        Permission</a>
+                </li>
+                <li><a [routerLink]="['/Master/admin/passwordunlock']" class="nav-link" routerLinkActive="selectedInput"
+                        [routerLinkActiveOptions]="{ exact: true }">Password Unlock
+                    </a>
+                </li>
+                <li><a [routerLink]="['/Master/admin/payperiodunlock']" class="nav-link" routerLinkActive="selectedInput"
+                        [routerLinkActiveOptions]="{ exact: true }">PayPeriod Unlock
+                    </a>
+                </li>
+                <!-- <li><a [routerLink]="['/Master/process/reimbrusmentcalendar']" class="nav-link"
+                                                routerLinkActive="selectedInput"
+                                                [routerLinkActiveOptions]="{ exact: true }">Reimbrusment Calendar</a></li> -->
+            </ul>
+        </div>
+    </div>
+</div>
+<router-outlet></router-outlet>

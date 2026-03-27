@@ -13,17 +13,16 @@ import { EncryptionService } from '../../../Shared/encryption.service';
 const common= InjectionToken<ICommonService>;
 
 @Component({
-  selector: 'app-user-mapping',
-  standalone: true,
-  imports: [MatFormFieldModule,MatSelectModule,CommonModule,MatInputModule,ReactiveFormsModule,FormsModule],
-  templateUrl: './user-mapping.component.html',
-  styleUrl: './user-mapping.component.css',
-  providers: [
+    selector: 'app-user-mapping',
+    imports: [MatFormFieldModule, MatSelectModule, CommonModule, MatInputModule, ReactiveFormsModule, FormsModule],
+    templateUrl: './user-mapping.component.html',
+    styleUrl: './user-mapping.component.css',
+    providers: [
         {
-          provide: common,
-          useClass: CommonService,
+            provide: common,
+            useClass: CommonService,
         }
-      ]
+    ]
 })
 export class UserMappingComponent implements OnInit {
   AddUser!:FormGroup;

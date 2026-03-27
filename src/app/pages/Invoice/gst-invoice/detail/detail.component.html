@@ -1,0 +1,224 @@
+<div class="container-fluid">
+    <div class="card-body p-1">
+        <div class="row">
+            <div class="col-md-3 d-flex gap-2">
+                <button mat-mini-fab class="btn btn-sm d-flex align-items-center justify-content-center no-bg" type="button"
+                    matTooltip="Export data to excel file">
+                    <mat-icon>cloud_download</mat-icon>
+                </button>
+            
+                <button mat-mini-fab class="btn btn-sm d-flex align-items-center justify-content-center no-bg" type="button"
+                    matTooltip="Download Selected Invoice Files">
+                    <mat-icon>cloud_download</mat-icon>
+                </button>
+            
+            
+                <button mat-mini-fab class="btn btn-sm d-flex align-items-center justify-content-center no-bg" type="button"
+                    matTooltip="Download Selected Invoice Files in PDF">
+                    <mat-icon>cloud_download</mat-icon>
+                </button>
+            
+            
+                <button (click)="AddPOOpen()" mat-mini-fab class="btn btn-sm d-flex align-items-center justify-content-center no-bg" type="button"
+                    matTooltip="Create new invoice">
+                    <mat-icon>add</mat-icon>
+                </button>
+                <button matTooltip="File upload for invoice create or upload" mat-mini-fab class="btn btn-sm d-flex align-items-center justify-content-center no-bg" type="button">
+                    <mat-icon>upload</mat-icon>
+                </button>
+                 <button matTooltip="File upload for invoice reject"  mat-mini-fab class="btn btn-sm d-flex align-items-center justify-content-center no-bg" type="button">
+                    <mat-icon>close</mat-icon>
+                </button>
+            
+            
+            
+            
+            
+            </div>
+        </div>
+        <div class="row">
+            <div class="card-body rounded-2">
+  <table mat-table [dataSource]="dataSource" class="custom-table mat-elevation-z8 custom-table">
+                <ng-container matColumnDef="check">
+                    <th class="header" mat-header-cell *matHeaderCellDef>
+                        <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue()"
+                            [indeterminate]="selection.hasValue() && !isAllSelected()">
+                        </mat-checkbox>
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+        
+                        <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(element) : null"
+                            [checked]="selection.isSelected(element)">
+                        </mat-checkbox>
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="action">
+                    <th class="header" mat-header-cell *matHeaderCellDef>
+                        Action
+                    </th>
+                    <td mat-cell *matCellDef="let element" style="width: 100px;"></td>
+                </ng-container>
+                <ng-container matColumnDef="invoice_Number">
+                    <th class="header" mat-header-cell *matHeaderCellDef>
+                        Invoice Number     
+                        <mat-form-field class="custom-field">
+                            <input matInput [formControl]="invoice_NumberFilter">
+                        </mat-form-field>                   
+                    </th>
+                    
+                    <td mat-cell *matCellDef="let element" style="width: 100px;"></td>
+                </ng-container>
+                <ng-container matColumnDef="iRN_Status">
+                    <th class="header" mat-header-cell *matHeaderCellDef>
+                        IRN Status
+                        <mat-form-field class="custom-field">        
+                            <input matInput [formControl]="iRN_StatusFilter">
+                        </mat-form-field>
+                    </th>
+                    <td mat-cell *matCellDef="let element" style="width: 100px;"></td>
+                </ng-container>
+                <ng-container matColumnDef="sap_Invoice_Number">
+                    <th class="header" mat-header-cell *matHeaderCellDef>
+                        SAP Invoice No.
+        
+                    </th>
+                    <td mat-cell *matCellDef="let element" style="width: 100px;"></td>
+                </ng-container>
+                <ng-container matColumnDef="sap_Account_Number">
+                    <th class="header" mat-header-cell *matHeaderCellDef>
+                        SAP Account No.
+        
+                    </th>
+                    <td mat-cell *matCellDef="let element" style="width: 100px;"></td>
+                </ng-container>
+                <ng-container matColumnDef="invoice_Date">
+                    <th class="header" mat-header-cell *matHeaderCellDef>
+                        Invoice Date
+                        <mat-form-field class="custom-field">
+        
+                            <input matInput [formControl]="invoice_DateFilter">
+                        </mat-form-field>
+                    </th>
+                    <td mat-cell *matCellDef="let element" style="width: 100px;"></td>
+                </ng-container>
+                <ng-container matColumnDef="company_Code">
+                    <th class="header" mat-header-cell *matHeaderCellDef>
+                        Company Code
+                        <mat-form-field class="custom-field">
+        
+                            <input matInput [formControl]="CompanyCodeFilter">
+                        </mat-form-field>
+                    </th>
+                    <td mat-cell *matCellDef="let element" style="width: 100px;"></td>
+                </ng-container>
+                <ng-container matColumnDef="pay_Period">
+                    <th class="header" mat-header-cell *matHeaderCellDef>
+                        Pay Period
+                        <mat-form-field class="custom-field">
+        
+                            <input matInput [formControl]="Pay_PeriodFilter">
+                        </mat-form-field>
+                    </th>
+                    <td mat-cell *matCellDef="let element" style="width: 100px;"></td>
+                </ng-container>
+                <ng-container matColumnDef="map_Name">
+                    <th class="header" mat-header-cell *matHeaderCellDef>
+                        Map Name
+                        <mat-form-field class="custom-field">
+        
+                            <input matInput [formControl]="MapNameFilter">
+                        </mat-form-field>
+                    </th>
+                    <td mat-cell *matCellDef="let element" style="width: 100px;"></td>
+                </ng-container>
+                <ng-container matColumnDef="state_Name">
+                    <th class="header" mat-header-cell *matHeaderCellDef>
+                        State
+                        <mat-form-field class="custom-field">
+        
+                            <input matInput [formControl]="StateFilter">
+                        </mat-form-field>
+                    </th>
+                    <td mat-cell *matCellDef="let element" style="width: 100px;"></td>
+                </ng-container>
+                <ng-container matColumnDef="group_Name">
+                    <th class="header" mat-header-cell *matHeaderCellDef>
+                        Group Name
+                        <mat-form-field class="custom-field">
+        
+                            <input matInput [formControl]="group_NameFilter">
+                        </mat-form-field>
+                    </th>
+                    <td mat-cell *matCellDef="let element" style="width: 100px;"></td>
+                </ng-container>
+                <ng-container matColumnDef="invoiceType">
+                    <th class="header" mat-header-cell *matHeaderCellDef>
+                        Invoice Type
+                        <mat-form-field class="custom-field">
+        
+                            <input matInput [formControl]="invoiceTypeFilter">
+                        </mat-form-field>
+                    </th>
+                    <td mat-cell *matCellDef="let element" style="width: 100px;"></td>
+                </ng-container>
+                <ng-container matColumnDef="net_Amount">
+                    <th class="header" mat-header-cell *matHeaderCellDef>Net Amount</th>
+                    <td mat-cell *matCellDef="let element" style="width: 100px;"></td>
+                </ng-container>
+                <ng-container matColumnDef="status">
+                    <th class="header" mat-header-cell *matHeaderCellDef>Status</th>
+        
+                    <td mat-cell *matCellDef="let element" style="width: 100px;"></td>
+                </ng-container>
+                <ng-container matColumnDef="sap_Cancel_Document">
+                    <th class="header" mat-header-cell *matHeaderCellDef> SAP Cancellation Doc No.</th>
+        
+                    <td mat-cell *matCellDef="let element" style="width: 100px;"></td>
+                </ng-container>
+                <ng-container matColumnDef="sap_Credit_Note_Document">
+                    <th class="header" mat-header-cell *matHeaderCellDef> SAP Credit Note No.</th>
+        
+                    <td mat-cell *matCellDef="let element" style="width: 100px;"></td>
+                </ng-container>
+                <ng-container matColumnDef="iRN_Number">
+                    <th class="header" mat-header-cell *matHeaderCellDef> IRN Number</th>
+        
+                    <td mat-cell *matCellDef="let element" style="width: 100px;"></td>
+                </ng-container>
+                <ng-container matColumnDef="crn_Number">
+                    <th class="header" mat-header-cell *matHeaderCellDef> Credit Note Number
+                        <mat-form-field class="custom-field">
+        
+                            <input matInput [formControl]="CreditNoteFilter">
+                        </mat-form-field>
+                    </th>
+        
+        
+                    <td mat-cell *matCellDef="let element" style="width: 100px;"></td>
+                </ng-container>
+                <ng-container matColumnDef="crn_IRN_Status">
+                    <th class="header" mat-header-cell *matHeaderCellDef>
+                        Credit Note IRN Status
+                        <mat-form-field class="custom-field">
+        
+                            <input matInput [formControl]="CreditNoteIRNStatusFilter">
+                        </mat-form-field>
+                    </th>
+        
+        
+                    <td mat-cell *matCellDef="let element" style="width: 100px;"></td>
+                </ng-container>
+                <ng-container matColumnDef="crn_IRN_Number">
+                    <th class="header" mat-header-cell *matHeaderCellDef>Credit Note IRN Number</th>
+                    <td mat-cell *matCellDef="let element" style="width: 100px;"></td>
+        
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayColumnNames"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayColumnNames;"></tr>
+            </table>
+            </div>
+          
+        </div>
+       
+    </div>
+</div>

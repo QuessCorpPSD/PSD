@@ -20,17 +20,16 @@ import { state } from '@angular/animations';
 const auth = InjectionToken<ICustomersop>;
 
 @Component({
-  selector: 'app-sopnew',
-  standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FormsModule],
-  templateUrl: './sopnew.component.html',
-  styleUrl: './sopnew.component.css',
-  providers: [
-    {
-      provide: auth,
-      useClass: CustomersopService,
-    }
-  ]
+    selector: 'app-sopnew',
+    imports: [CommonModule, ReactiveFormsModule, FormsModule],
+    templateUrl: './sopnew.component.html',
+    styleUrl: './sopnew.component.css',
+    providers: [
+        {
+            provide: auth,
+            useClass: CustomersopService,
+        }
+    ]
 })
 export class SopnewComponent {
   selectedFile: File | null = null;

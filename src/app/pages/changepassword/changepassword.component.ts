@@ -9,17 +9,16 @@ import { AuthServiceService } from '../../Service/auth-service.service';
 const auth= InjectionToken<IAuthServiceService>;
 
 @Component({
-  selector: 'app-changepassword',
-  standalone: true,
-  imports: [CommonModule,ReactiveFormsModule,FormsModule],
-  templateUrl: './changepassword.component.html',
-  styleUrl: './changepassword.component.css',
-  providers: [
+    selector: 'app-changepassword',
+    imports: [CommonModule, ReactiveFormsModule, FormsModule],
+    templateUrl: './changepassword.component.html',
+    styleUrl: './changepassword.component.css',
+    providers: [
         {
-          provide: auth,
-          useClass: AuthServiceService,
+            provide: auth,
+            useClass: AuthServiceService,
         }
-      ]
+    ]
 })
 export class ChangepasswordComponent {
 forgotForm!:FormGroup

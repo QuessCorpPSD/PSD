@@ -1,0 +1,414 @@
+<div class="page-wrapper">
+    <div class="scrollable-content">
+
+        <mat-card-title style="color:#302CB3;font-size:22px;font-weight:700">
+            Loan & Advance
+        </mat-card-title>
+
+        <!-- SEARCH SECTION -->
+        <div class="row g-3 align-items-end mb-3">
+
+            <div class="col-md-3">
+                <label class="form-label text-muted small">Company Code</label>
+                <companyall (companyEmit)="handleCompanyEvent($event)"></companyall>
+            </div>
+
+            <div class="col-md-3">
+                <label class="form-label text-muted small">Employee Code</label>
+                <input class="form-control form-control-sm" [(ngModel)]="employeeCode">
+            </div>
+
+            <div class="col-md-3 d-flex gap-2">
+                <button class="btn btn-sm d-flex align-items-center justify-content-center btn-primary"
+                    matTooltip="Search">
+                    <mat-icon>search</mat-icon>
+                </button>
+                <button class="btn btn-sm d-flex align-items-center justify-content-center btn-success" matTooltip="Add"
+                    (click)="AddPOOpen()">
+                    <mat-icon>add</mat-icon>
+                </button>
+            </div>
+
+        </div>
+
+        <!-- TABLE -->
+        <div class="table-container">
+            <div class="table-scroll">
+                <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort>
+
+                    <!-- DELETE -->
+                    <ng-container matColumnDef="delete">
+                        <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                        <mat-cell *matCellDef="let row">
+                            <img src="assets/delete.svg" width="20">
+                        </mat-cell>
+                    </ng-container>
+
+                    <!-- EDIT -->
+                    <ng-container matColumnDef="edit">
+                        <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                        <mat-cell *matCellDef="let row">
+                            <img src="assets/Icons/edit.svg" width="18">
+                        </mat-cell>
+                    </ng-container>
+
+                    <!-- SNO -->
+                    <ng-container matColumnDef="sno">
+                        <mat-header-cell *matHeaderCellDef>SNo</mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{row.sno}}</mat-cell>
+                    </ng-container>
+
+                    <!-- COMPANY CODE -->
+                    <ng-container matColumnDef="companyCode">
+                        <mat-header-cell *matHeaderCellDef>Company Code</mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{row.companyCode}}</mat-cell>
+                    </ng-container>
+
+                    <!-- EMPLOYEE CODE -->
+                    <ng-container matColumnDef="employeeCode">
+                        <mat-header-cell *matHeaderCellDef>Employee Code</mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{row.employeeCode}}</mat-cell>
+                    </ng-container>
+
+                    <!-- EMPLOYEE NAME -->
+                    <ng-container matColumnDef="employeeName">
+                        <mat-header-cell *matHeaderCellDef>Employee Name</mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{row.employeeName}}</mat-cell>
+                    </ng-container>
+
+                    <!-- DEPARTMENT -->
+                    <ng-container matColumnDef="department">
+                        <mat-header-cell *matHeaderCellDef>Department</mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{row.department}}</mat-cell>
+                    </ng-container>
+
+                    <!-- DESIGNATION -->
+                    <ng-container matColumnDef="designation">
+                        <mat-header-cell *matHeaderCellDef>Designation</mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{row.designation}}</mat-cell>
+                    </ng-container>
+
+                    <!-- LOAN TYPE -->
+                    <ng-container matColumnDef="loanType">
+                        <mat-header-cell *matHeaderCellDef>Loan Type</mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{row.loanType}}</mat-cell>
+                    </ng-container>
+
+                    <!-- LOAN NUMBER -->
+                    <ng-container matColumnDef="loanNumber">
+                        <mat-header-cell *matHeaderCellDef>Loan Number</mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{row.loanNumber}}</mat-cell>
+                    </ng-container>
+
+                    <!-- TOTAL LOAN AMOUNT -->
+                    <ng-container matColumnDef="totalLoanAmount">
+                        <mat-header-cell *matHeaderCellDef>Total Loan Amount</mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{row.totalLoanAmount}}</mat-cell>
+                    </ng-container>
+
+                    <!-- INTEREST RATE -->
+                    <ng-container matColumnDef="interestRate">
+                        <mat-header-cell *matHeaderCellDef>Interest Rate</mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{row.interestRate}}%</mat-cell>
+                    </ng-container>
+
+                    <!-- EMI -->
+                    <ng-container matColumnDef="emi">
+                        <mat-header-cell *matHeaderCellDef>EMI</mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{row.emi}}</mat-cell>
+                    </ng-container>
+
+                    <!-- START DATE -->
+                    <ng-container matColumnDef="startDate">
+                        <mat-header-cell *matHeaderCellDef>Start Date</mat-header-cell>
+                        <mat-cell *matCellDef="let row">
+                            {{row.startDate | date:'dd-MM-yyyy'}}
+                        </mat-cell>
+                    </ng-container>
+
+                    <!-- DATE -->
+                    <ng-container matColumnDef="date">
+                        <mat-header-cell *matHeaderCellDef>Date</mat-header-cell>
+                        <mat-cell *matCellDef="let row">
+                            {{row.date | date:'dd-MM-yyyy'}}
+                        </mat-cell>
+                    </ng-container>
+
+                    <!-- PAY PERIOD -->
+                    <ng-container matColumnDef="payPeriod">
+                        <mat-header-cell *matHeaderCellDef>Pay Period</mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{row.payPeriod}}</mat-cell>
+                    </ng-container>
+
+                    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+
+                </table>
+
+            </div>
+            <div *ngIf="dataSource.data.length === 0" class="text-center p-4">
+                <p class="text-muted">No data to display</p>
+            </div>
+
+            <mat-paginator style="border-top: 1px solid #ddd;" [pageSizeOptions]="[5,10,25]"
+                showFirstLastButtons></mat-paginator>
+        </div>
+
+    </div>
+</div>
+<div *ngIf="isAddclicked" class="popup-overlay" (keydown.escape)="closeclick()">
+    <mat-card class="popup-card">
+        <mat-card-header class="popup-header">
+            <mat-card-title>
+                {{ isEditMode ? 'Edit Loan Creation' : 'Add Loan Creation' }}
+            </mat-card-title>
+
+            <button class="close-btn" matTooltip="Close" (click)="closeclick()">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-card-header>
+        <mat-card-content class="scroll-content">
+
+            <form [formGroup]="LoanandadvanceForm">
+
+                <div class="row g-3">
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Company Code <span
+                                class="text-danger">*</span></label>
+                        <companyall (companyEmit)="handleCompanyEvent2($event)"></companyall>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Pay Category<span
+                                class="text-danger">*</span></label>
+                        <select class="form-control" formControlName="PayCategory"></select>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Employee Code <span
+                                class="text-danger">*</span></label>
+                        <input class="form-control" formControlName="EmployeeCode" />
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Employee Name</label>
+                        <input class="form-control" formControlName="EmployeeName" />
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Department</label>
+                        <input class="form-control" formControlName="Department" />
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Designation</label>
+                        <input class="form-control" formControlName="Designation" />
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Loan Type <span class="text-danger">*</span></label>
+                        <select class="form-control" formControlName="LoanType"></select>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Loan Number</label>
+                        <input class="form-control" formControlName="LoanNumber" />
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Start Date<span class="text-danger">*</span></label>
+                        <input type="date" class="form-control" formControlName="StartDate" />
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Opening Balance<span
+                                class="text-danger">*</span></label>
+                        <input class="form-control" formControlName="OpeningBalance" />
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Loan / Advance Amount<span
+                                class="text-danger">*</span></label>
+                        <input class="form-control" formControlName="LoanAdvanceAmount" />
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Total Loan Amount</label>
+                        <input class="form-control" formControlName="TotalLoanAmount" />
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Type Of Interest</label>
+                        <select class="form-control" formControlName="TypeOfInterest">
+                            <option>Zero Interest</option>
+                            <option>Simple Interest</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Total Additional amount</label>
+                        <input class="form-control" formControlName="TotalAdditionalAmount" />
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Total Prepayment</label>
+                        <input class="form-control" formControlName="TotalPrepayment" />
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Bank Interest<span
+                                class="text-danger">*</span></label>
+                        <input class="form-control" formControlName="BankInterest" />
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Interest Rate Given</label>
+                        <input class="form-control" formControlName="InterestRateGiven" />
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Perk (%)</label>
+                        <input class="form-control" formControlName="PerkPercent" />
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">EMI<span class="text-danger">*</span></label>
+                        <input class="form-control" formControlName="EMI" />
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Number Of Installments<span
+                                class="text-danger">*</span></label>
+                        <input class="form-control" formControlName="NumberOfInstallments" />
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Date<span class="text-danger">*</span></label>
+                        <input type="date" class="form-control" formControlName="Date" />
+                    </div>
+                </div>
+            </form>
+            <div class="table-container">
+                <div class="table-scroll">
+
+                    <table mat-table [dataSource]="emiDataSource" class="mat-elevation-z8">
+
+
+
+                        <!-- SNo -->
+                        <ng-container matColumnDef="sno">
+                            <mat-header-cell *matHeaderCellDef>SNo</mat-header-cell>
+                            <mat-cell *matCellDef="let row; let i = index">
+                                {{ i + 1 }}
+                            </mat-cell>
+                        </ng-container>
+
+                        <!-- Principal O/S -->
+                        <ng-container matColumnDef="principalOS">
+                            <mat-header-cell *matHeaderCellDef>Principal (O/S)</mat-header-cell>
+                            <mat-cell *matCellDef="let row">
+                                {{ row.principalOS }}
+                            </mat-cell>
+                        </ng-container>
+
+                        <!-- Pay Seq No -->
+                        <ng-container matColumnDef="paySeqNo">
+                            <mat-header-cell *matHeaderCellDef>Pay Seq No</mat-header-cell>
+                            <mat-cell *matCellDef="let row">
+                                {{ row.paySeqNo }}
+                            </mat-cell>
+                        </ng-container>
+
+                        <!-- Principal -->
+                        <ng-container matColumnDef="principal">
+                            <mat-header-cell *matHeaderCellDef>Principal</mat-header-cell>
+                            <mat-cell *matCellDef="let row">
+                                {{ row.principal }}
+                            </mat-cell>
+                        </ng-container>
+
+                        <!-- EMI -->
+                        <ng-container matColumnDef="emi">
+                            <mat-header-cell *matHeaderCellDef>EMI</mat-header-cell>
+                            <mat-cell *matCellDef="let row">
+                                {{ row.emi }}
+                            </mat-cell>
+                        </ng-container>
+
+                        <!-- Interest -->
+                        <ng-container matColumnDef="interest">
+                            <mat-header-cell *matHeaderCellDef>Interest</mat-header-cell>
+                            <mat-cell *matCellDef="let row">
+                                {{ row.interest }}
+                            </mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="pay_period">
+                            <mat-header-cell *matHeaderCellDef>Pay Period</mat-header-cell>
+                            <mat-cell *matCellDef="let row">
+                                {{ row.pay_period }}
+                            </mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="interest_">
+                            <mat-header-cell *matHeaderCellDef>Interest(%)</mat-header-cell>
+                            <mat-cell *matCellDef="let row">
+                                {{ row.interest_ }}
+                            </mat-cell>
+                        </ng-container>
+
+                        <mat-header-row *matHeaderRowDef="emiDisplayedColumns"></mat-header-row>
+                        <mat-row *matRowDef="let row; columns: emiDisplayedColumns;"></mat-row>
+
+                    </table>
+                </div>
+                <div *ngIf="emiDataSource.data.length === 0" class="text-center p-4">
+                    <p class="text-muted">No data to display</p>
+                </div>
+
+            </div>
+
+
+        </mat-card-content>
+
+        <!-- <mat-card-actions
+      style="display: flex; padding: 14px 20px; justify-content: flex-end; align-items: center; gap: 12px; border-radius: 0 0 10px 10px;">
+
+      <button type="button" (click)="SaveData()" [disabled]="isLoading" style="margin-right: 10px;
+           width: 130px;
+           height: 30px;
+           padding: 6px 16px;
+           background: #302CB3;
+           box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.20);
+           border-radius: 6px;
+           border: none;
+           display: inline-flex;
+           justify-content: center;
+           align-items: center;
+           gap: 10px;
+           cursor: pointer;">
+
+        <span style="color: #F5F5F5;
+             font-size: 12px;
+             font-family: Montserrat;
+             font-weight: 600;
+             line-height: 22px;
+             letter-spacing: 0.24px;">
+          Save
+        </span>
+
+      </button>
+
+    </mat-card-actions> -->
+        <div class="d-flex justify-content-end mt-3" style="gap: 10px; padding-right: 8px;">
+
+            <button type="button" style="border: none; border-radius: 7px; width: 80px; height: 30px;
+                           cursor: pointer; background-color: #f0f0f0; color: black;" (click)="closeclick()">
+                Cancel
+            </button>
+
+            <button type="button" style="border: none; border-radius: 7px; width: 80px; height: 30px;
+                           cursor: pointer; background-color: blue; color: white;">
+                {{ isEditMode ? 'Update' : 'Save' }} </button>
+
+        </div>
+
+    </mat-card>
+</div>

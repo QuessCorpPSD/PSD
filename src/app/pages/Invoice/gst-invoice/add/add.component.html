@@ -1,0 +1,49 @@
+<mat-card class="custom-card">
+        <mat-card-header class="sticky-header">
+
+            <mat-card-title></mat-card-title>
+            <span class="spacer"></span>
+            <button mat-icon-button (click)="onClose()" class="no-border-icon">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-card-header>
+        <mat-card-content>
+            <mat-card>
+                <mat-card-header class="sticky-header">            
+                    <mat-card-title>Basic Details</mat-card-title>
+                    <mat-card-content>
+                         <div class="row g-3 mb-3">
+                <div class="col-md-4">
+                    <label class="form-label">Company Code<span class="text-danger">*</span></label>
+                    <companyall id="companyCode1" (companyEmit)="handleCompanyEvent($event)"></companyall>
+                  
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label">PO Category<span class="text-danger">*</span></label>
+                    <select class="form-select" formControlName="POCategory">
+                        <option value="">-- Select --</option>
+
+                        
+                    </select>
+                </div>
+
+
+
+                <div class="col-md-4">
+                    <label class="form-label">PO No<span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" formControlName="POform" />
+
+                    <!-- <select class="form-select" formControlName="POform">
+                        <option value="">-- Select --</option>
+                        <option *ngFor="let PONo of PONumber" [value]="PONo.poid">{{PONo.ponumber}}</option>
+                    </select> -->
+                </div>
+
+
+            </div>
+                    </mat-card-content>
+                </mat-card-header>
+            </mat-card>
+        </mat-card-content>
+</mat-card>

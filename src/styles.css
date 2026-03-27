@@ -1,13 +1,59 @@
 /* You can add global styles to this file, and also import other style files */
-	
+
+
+.mat-tooltip {
+  background-color: orange !important; /* change tooltip background */
+  color: white !important;             /* text color */
+  font-size: 14px !important;          /* optional */
+  border-radius: 6px !important;       /* rounded corners */
+  padding: 6px 10px !important;        /* spacing */
+}
+/* Global styles.scss or with ::ng-deep inside component */
+::ng-deep .mat-mdc-text-field-wrapper {
+  --mat-mdc-form-field-container-height: 28px !important; /* overall input height */
+}
+.cdk-overlay-container, .cdk-overlay-pane {
+  z-index: 99999999 !important;
+}
+
+/* ::ng-deep .mat-mdc-form-field-infix {
+  --mat-mdc-form-field-input-text-height: 20px !important; 
+  padding: 0 !important;
+} */
+
+::ng-deep .mat-mdc-autocomplete-panel {
+  max-height: 70px !important; /* total dropdown height */
+}
+
+::ng-deep .mat-mdc-option {
+  min-height: 24px !important;  /* each option row */
+  line-height: 24px !important;
+  font-size: 12px !important;
+  padding: 0 8px !important;
+}
+
 .container {
-    width: 1200px; /* hard-coded width */
+    width: 100%; /* hard-coded width */
   }
 @media (max-width: 768px) {
     .my-class {
       display: none !important;
     }
   }
+  .my-tooltip  {
+  background-color: #3f51b5 !important; /* Indigo */
+  color: #fff !important;
+  font-size: 14px !important;
+  padding: 8px 12px !important;
+  border-radius: 6px !important;
+  box-shadow: 0 2px 10px lab(32.82% 75.46 -99.05 / 0.3) !important;
+  max-width: 250px;
+  white-space: pre-wrap; /* Allow multiline text */
+  text-align: center;
+}
+
+
+
 * {
     max-width: 100%;  
  }

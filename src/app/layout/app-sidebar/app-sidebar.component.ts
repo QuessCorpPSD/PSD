@@ -6,11 +6,10 @@ import { RouterLink, RouterLinkActive, RouterModule, RouterOutlet } from '@angul
 
 
 @Component({
-  selector: 'app-sidebar',
-  standalone: true,
-  imports: [RouterModule,MatCardModule],
-  templateUrl: './app-sidebar.component.html',
-  styleUrl: './app-sidebar.component.css'
+    selector: 'app-sidebar',
+    imports: [RouterModule, MatCardModule],
+    templateUrl: './app-sidebar.component.html',
+    styleUrl: './app-sidebar.component.css'
 })
 
 

@@ -5,17 +5,16 @@ import { IAssignmentService } from '../../../Repository/IAssignment.service';
 import { AssignmentService } from '../../../Service/Assignment.service';
 const auth= InjectionToken<IAssignmentService>;
 @Component({
-  selector: 'app-estimatetime-validation',
-  standalone: true,
-  imports: [],
-  templateUrl: './estimatetime-validation.component.html',
-  styleUrl: './estimatetime-validation.component.css',
-   providers: [
-            {
-              provide: auth,
-              useClass: AssignmentService,
-            }
-          ]
+    selector: 'app-estimatetime-validation',
+    imports: [],
+    templateUrl: './estimatetime-validation.component.html',
+    styleUrl: './estimatetime-validation.component.css',
+    providers: [
+        {
+            provide: auth,
+            useClass: AssignmentService,
+        }
+    ]
 })
 export class EstimatetimeValidationComponent implements OnInit {
   TotalSecond:any;

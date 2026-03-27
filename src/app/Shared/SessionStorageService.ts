@@ -1,11 +1,13 @@
 import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
+import { environment } from '../../environments/environment.development';
 
 @Injectable({ providedIn: 'root' })
 export class SessionStorageService{
     private isBrowser: boolean;
-
-  constructor(@Inject(PLATFORM_ID) platformId: Object) {
+ environment = environment;
+  constructor(@Inject(PLATFORM_ID) platformId: Object,
+) {
     this.isBrowser = isPlatformBrowser(platformId);
   }
 
@@ -19,11 +21,15 @@ export class SessionStorageService{
     return this.isBrowser ? localStorage.getItem(key) : null;
   }
 
-  removeItem(key: string): void {
-    if (this.isBrowser) {
-        localStorage.removeItem(key);
-    }
+removeItem(key: string): void {
+  if (!this.isBrowser) return;
+
+  try {
+    localStorage.removeItem(key);
+  } catch (e) {
+    console.error(`Failed to remove item "${key}" from localStorage`, e);
   }
+}
 
   clear(): void {
     if (this.isBrowser) {

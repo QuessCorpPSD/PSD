@@ -8,17 +8,16 @@ import { IAssignmentService } from '../../Repository/IAssignment.service';
 const auth = InjectionToken<IAssignmentService>;
 
 @Component({
-  selector: 'app-sopform',
-  standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
-  templateUrl: './sopform.component.html',
-  styleUrl: './sopform.component.css',
-  providers: [
-    {
-      provide: auth,
-      useClass: AssignmentService,
-    }
-  ]
+    selector: 'app-sopform',
+    imports: [CommonModule, ReactiveFormsModule],
+    templateUrl: './sopform.component.html',
+    styleUrl: './sopform.component.css',
+    providers: [
+        {
+            provide: auth,
+            useClass: AssignmentService,
+        }
+    ]
 })
 export class SopformComponent implements OnInit {
   sopForm!: FormGroup;

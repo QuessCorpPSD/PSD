@@ -1,0 +1,199 @@
+<div class="page-wrapper">
+    <div class="scrollable-content">
+
+        <mat-card-title
+            style="color: #302CB3; font-size: 22px; font-family: Nunito Sans; font-weight: 600;padding-top: 12px;">Legal
+            Entity Mapping</mat-card-title>
+        <div class="container py-2">
+            <div class="row g-3 align-items-end">
+
+                <!-- Dropdown -->
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Legal Entity Code</label>
+                    <select class="form-select form-select-sm">
+                        <option>Select</option>
+                    </select>
+                </div>
+
+                <!-- Buttons -->
+                <div class="col-md-3 d-flex gap-2">
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-search"
+                        matTooltip="Search" (click)="onSearchClick()">
+                        <mat-icon>search</mat-icon>
+                    </button>
+                    <button class="btn btn-success btn-sm d-flex align-items-center justify-content-center"
+                        matTooltip="Add" (click)="AddPOOpen()">
+                        <mat-icon>add</mat-icon>
+                    </button>
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-secondary"
+                        matTooltip="ExportToExcel">
+                        <mat-icon>download</mat-icon>
+                    </button>
+
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-download"
+                        matTooltip="Template">
+                        <mat-icon>cloud_download</mat-icon>
+                    </button>
+
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-upload"
+                        matTooltip="Upload">
+                        <mat-icon>cloud_upload</mat-icon>
+                    </button>
+                </div>
+
+            </div>
+
+            <div class="table-container" style="top:30px;" *ngIf="showTable">
+                <div class=" table-scroll-window">
+
+                    <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+
+                        <!-- Delete -->
+                        <ng-container matColumnDef="delete">
+                            <mat-header-cell *matHeaderCellDef class="fixed-width-column"></mat-header-cell>
+                            <mat-cell *matCellDef="let row" class="fixed-width-column">
+                                <img src="assets/delete.svg" class="cursor:pointer;width:22px;height:24px" />
+                            </mat-cell>
+                        </ng-container>
+
+                        <!-- Edit -->
+                        <ng-container matColumnDef="edit">
+                            <mat-header-cell *matHeaderCellDef class="action-col"></mat-header-cell>
+                            <mat-cell *matCellDef="let row" class="action-col">
+                                <img src="assets/Icons/edit.svg" class="action-icon" />
+                            </mat-cell>
+                        </ng-container>
+
+                        <!-- Legal Entity Code -->
+                        <ng-container matColumnDef="LegalEntityCode">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header>
+                                Legal Entity Code
+                            </mat-header-cell>
+                            <mat-cell *matCellDef="let row">
+                                {{ row.LegalEntityCode }}
+                            </mat-cell>
+                        </ng-container>
+
+                        <!-- Legal Entity Name -->
+                        <ng-container matColumnDef="LegalEntityName">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header>
+                                Legal Entity Name
+                            </mat-header-cell>
+                            <mat-cell *matCellDef="let row">
+                                {{ row.LegalEntityName }}
+                            </mat-cell>
+                        </ng-container>
+
+                        <!-- Entity -->
+                        <ng-container matColumnDef="Entity">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header>
+                                Entity
+                            </mat-header-cell>
+                            <mat-cell *matCellDef="let row">
+                                {{ row.Entity }}
+                            </mat-cell>
+                        </ng-container>
+
+                        <!-- Effective Date -->
+                        <ng-container matColumnDef="EffectiveDate">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header>
+                                Effective Date
+                            </mat-header-cell>
+                            <mat-cell *matCellDef="let row">
+                                {{ row.EffectiveDate | date:'dd-MM-yyyy' }}
+                            </mat-cell>
+                        </ng-container>
+
+                        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                    </table>
+                </div>
+
+                <mat-paginator [pageSizeOptions]="[5,10,25]" showFirstLastButtons></mat-paginator>
+            </div>
+        </div>
+    </div>
+</div>
+<br><br><br><br><br><br>
+<div *ngIf="isAddclicked" class="popup-overlay" (keydown.escape)="closeclick()">
+    <mat-card class="popup-card">
+        <mat-card-header class="popup-header">
+            <mat-card-title class="d-flex justify-content-center align-items-center">
+                {{ isEditMode ? 'Edit Legal Entity Mapping
+                ' : 'Add Legal
+                Entity Mapping
+                ' }}
+            </mat-card-title>
+
+            <button class="close-btn" matTooltip="Close" (click)="closeclick()">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-card-header>
+
+        <mat-card-content class="scroll-content">
+
+            <form [formGroup]="legalentityform">
+                <div class="row g-3">
+
+                    <!-- Legal Entity -->
+                    <div class="col-10">
+                        <label class="form-label text-muted small">
+                            Legal Entity <span class="text-danger">*</span>
+                        </label>
+                        <select class="form-select form-select-sm" formControlName="Legal_Entity">
+                            <option>select</option>
+                        </select>
+
+                        <div *ngIf="legalentityform.get('Legal_Entity')?.touched 
+        && legalentityform.get('Legal_Entity')?.hasError('required')" class="text-danger small mt-1">
+                            Legal Entity is required
+                        </div>
+                    </div>
+
+                    <!-- Entity -->
+                    <div class="col-10">
+                        <label class="form-label text-muted small">
+                            Entity <span class="text-danger">*</span>
+                        </label>
+
+                        <select class="form-select form-select-sm" formControlName="Entity">
+                            <option>select</option>
+                        </select>
+
+                        <div *ngIf="legalentityform.get('Entity')?.touched 
+        && legalentityform.get('Entity')?.hasError('required')" class="text-danger small mt-1">
+                            Entity is required
+                        </div>
+                    </div>
+
+                    <!-- Effective Date -->
+                    <div class="col-10">
+                        <label class="form-label text-muted small">
+                            Effective Date <span class="text-danger">*</span>
+                        </label>
+
+                        <input type="date" class="form-control" formControlName="EffectiveDate">
+                    </div>
+
+                </div>
+
+            </form>
+
+        </mat-card-content>
+
+        <div class="d-flex justify-content-end mt-3" style="gap: 10px; padding-right: 8px;">
+
+            <button type="button" style="border: none; border-radius: 7px; width: 80px; height: 30px;
+                           cursor: pointer; background-color: #f0f0f0; color: black;" (click)="closeclick()">
+                Cancel
+            </button>
+
+            <button type="button" style="border: none; border-radius: 7px; width: 80px; height: 30px;
+                           cursor: pointer; background-color: blue; color: white;">
+                {{isEditMode ? 'Update' : 'Save'}}
+            </button>
+
+        </div>
+
+    </mat-card>
+</div>

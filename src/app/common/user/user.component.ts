@@ -11,22 +11,19 @@ import { UserUI } from '../../Models/UserUI';
 export  const COMM_TOKEN=new InjectionToken<ICommonService>('COMM_TOKEN');
 
 @Component({
-  selector: 'user',
-  standalone: true,
-  imports: [CommonModule,
-    ReactiveFormsModule,
-    MatAutocompleteModule,
-    MatInputModule,
-    MatFormFieldModule],
-  templateUrl: './user.component.html',
-  styleUrl: './user.component.css',
-  encapsulation: ViewEncapsulation.None ,
-    providers:[{
-      
-              provide: COMM_TOKEN,
-              useClass: CommonService,
-            
-    }]
+    selector: 'user',
+    imports: [CommonModule,
+        ReactiveFormsModule,
+        MatAutocompleteModule,
+        MatInputModule,
+        MatFormFieldModule],
+    templateUrl: './user.component.html',
+    styleUrl: './user.component.css',
+    encapsulation: ViewEncapsulation.None,
+    providers: [{
+            provide: COMM_TOKEN,
+            useClass: CommonService,
+        }]
 })
 export class UserComponent implements OnInit {
   myControl = new FormControl<string | UserUI>('');

@@ -6,14 +6,13 @@ import { AppHeaderComponent } from '../app-header/app-header.component';
 
 import { SessionStorageService } from '../../Shared/SessionStorageService';
 import { EncryptionService } from '../../Shared/encryption.service';
+import { TokenService } from '../../Shared/TokenService';
 @Component({
-  selector: 'app-master',
-  standalone: true,
-  imports: [CommonModule, RouterModule,AppHeaderComponent ],
-  templateUrl: './master.component.html',
-  styleUrl: './master.component.css',  
-  schemas:[CUSTOM_ELEMENTS_SCHEMA ]
-  
+    selector: 'app-master',
+    imports: [CommonModule, RouterModule, AppHeaderComponent],
+    templateUrl: './master.component.html',
+    styleUrl: './master.component.css',
+    schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class MasterComponent implements  OnInit {
   username = '';
@@ -21,7 +20,7 @@ export class MasterComponent implements  OnInit {
   menuHideVisibility=false;
   userRole:any;
 constructor( private _sessionStoreage:SessionStorageService, 
-  
+  private tokenservice:TokenService ,
   private _encry:EncryptionService, private router: Router,){
 
 }
@@ -34,23 +33,28 @@ constructor( private _sessionStoreage:SessionStorageService,
     //  this.menuCode.emit(this.menuId.toString());
    }
    Logout():void{
-    this._sessionStoreage.removeItem("userId");
-    this._sessionStoreage.clear();
+   
+     this._sessionStoreage.removeItem('UserProfile');
+  this._sessionStoreage.clear();
+  this.tokenservice.clearTokens();
     this.router.navigateByUrl('/Login');
    }
  
   ngOnInit(): void {
   const userdetail= this._sessionStoreage.getItem('UserProfile');
+  if(userdetail)
+  {
   var user = JSON.parse(this._encry.decrypt(userdetail!)); 
-
-
-   
   this.userRole=this.getUserRole(user.role_Id);
+  }
+  else{
+    // this.router.navigate(['/Login']);
+  }
   
     
   }
    roleIdGroups: Record<Role, number[]> = {
-  [Role.Admin]: [ 1,12, 14, 17, 20,38, 52, 263],
+  [Role.Admin]: [ 1,2,12, 4,11,14, 17, 20,38, 52, 263],
   [Role.SOP]: [0],
   [Role.Manager]: [] // fallback
 };
