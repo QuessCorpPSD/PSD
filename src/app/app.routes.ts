@@ -159,6 +159,8 @@ import { InvoiceCultureAddpoComponent } from './pages/Invoice/invoice-culture-ad
 import { OtherincomeComponent } from './pages/Invoice/otherincome/otherincome.component';
 import { VendorclientaddressComponent } from './pages/customers/vendorclientaddress/vendorclientaddress.component';
 import { MulticommercialComponent } from './pages/GlobalMasters/multicommercial/multicommercial.component';
+import { ClientgstlistComponent } from './pages/customers/clientgstlist/clientgstlist.component';
+import { VendorclientgstComponent } from './pages/customers/vendorclientgst/vendorclientgst.component';
 
 
 
@@ -374,6 +376,8 @@ export const routes: Routes = [
           { path: "corporatebank", component: CorporatebankComponent },
           { path: "clientaddress", component: ClientaddressComponent },
           { path: "vendorclientaddress", component: VendorclientaddressComponent },
+          { path: "clientgstlist", component: ClientgstlistComponent },
+          { path: "vendorclientgst", component: VendorclientgstComponent },
           { path: "itcalender", component: ITcalenderComponent },
           { path: "companypaycodemapping", component: CompanypaycodemappingComponent },
           { path: "ServiceCharge", component: ServiceChargeComponent },
@@ -412,7 +416,7 @@ export const routes: Routes = [
       { path: 'changepassword', component: ChangepasswordComponent },
 
       // Wildcard inside children
-      { path: '**', redirectTo: 'Home', pathMatch: 'full' }
+      { path: '**', redirectTo: 'dashboard', pathMatch: 'full' }
     ]
   },
   //{ path: '', redirectTo: 'Login', pathMatch: 'full' },

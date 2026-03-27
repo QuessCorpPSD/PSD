@@ -6,7 +6,6 @@ import { MatIconModule } from "@angular/material/icon";
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { AlertpopupComponent } from "../../../common/alertpopup/alertpopup.component";
 import { ClientaddressService } from '../../../Service/customersserv/clientaddress.service';
 import { EncryptionService } from '../../../Shared/encryption.service';
 import { SessionStorageService } from '../../../Shared/SessionStorageService';
@@ -17,9 +16,7 @@ import { MatCardModule } from "@angular/material/card";
 import { IClientaddress } from '../../../Repository/customer/IClientaddress';
 import { CompanyallComponent } from '../../../common/CompanyAll/companyall.component';
 import { MapnameComponent } from "../../../common/Mapname/mapname/mapname.component";
-import { StatenameComponent } from '../../../common/statename/statename.component';
 import { StateComponent } from '../../../common/state/state.component';
-import { CitynameComponent } from '../../../common/cityname/cityname.component';
 import { CitybystateComponent } from '../../../common/citybystate/citybystate.component';
 export const Pay_TOKEN = new InjectionToken<IClientaddress>('Pay_TOKEN');
 

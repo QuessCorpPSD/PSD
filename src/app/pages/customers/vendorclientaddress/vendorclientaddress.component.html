@@ -132,7 +132,7 @@
                     <!-- Effective Date -->
                     <ng-container matColumnDef="Effectivedate">
                         <mat-header-cell *matHeaderCellDef><strong>Effective Date</strong></mat-header-cell>
-                        <mat-cell *matCellDef="let row">{{row.effectiveDate}}</mat-cell>
+                        <mat-cell *matCellDef="let row">{{ row.effectiveDate | date:'dd/MM/yyyy' }}</mat-cell>
                     </ng-container>
 
                     <!-- SEZ Applicable -->
@@ -144,7 +144,7 @@
                     <!-- SEZ Expiry -->
                     <ng-container matColumnDef="SezExpiryDate">
                         <mat-header-cell *matHeaderCellDef><strong>SEZ Expiry Date</strong></mat-header-cell>
-                        <mat-cell *matCellDef="let row">{{row.seZ_ExpiryDate}}</mat-cell>
+                        <mat-cell *matCellDef="let row">{{ row.seZ_ExpiryDate | date:'dd/MM/yyyy' }}</mat-cell>
                     </ng-container>
 
                     <!-- LUT Number -->
@@ -156,13 +156,13 @@
                     <!-- LUT Date -->
                     <ng-container matColumnDef="LutDate">
                         <mat-header-cell *matHeaderCellDef><strong>LUT Date</strong></mat-header-cell>
-                        <mat-cell *matCellDef="let row">{{row.luT_Date}}</mat-cell>
+                        <mat-cell *matCellDef="let row">{{ row.luT_Date | date:'dd/MM/yyyy' }}</mat-cell>
                     </ng-container>
 
                     <!-- LUT Expiry -->
                     <ng-container matColumnDef="LutExpiryDate">
                         <mat-header-cell *matHeaderCellDef><strong>LUT Expiry Date</strong></mat-header-cell>
-                        <mat-cell *matCellDef="let row">{{row.luT_ExpiryDate}}</mat-cell>
+                        <mat-cell *matCellDef="let row">{{ row.luT_ExpiryDate | date:'dd/MM/yyyy' }}</mat-cell>
                     </ng-container>
 
                     <!-- Vendor Code -->
