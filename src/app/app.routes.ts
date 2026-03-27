@@ -156,6 +156,8 @@ import { ProcessComponent } from './pages/Process/process.component';
 import { ReimbrusmentcalenderComponent } from './pages/Process/reimbrusmentcalender/reimbrusmentcalender.component';
 import { ReprocessComponent } from './pages/Process/reprocess/reprocess.component';
 import { ClientgstlistComponent } from './pages/customers/clientgstlist/clientgstlist.component';
+import { ClientAdvancePaymentsComponent } from './pages/Bankinvoice/client-advance-payments/client-advance-payments.component';
+import { AccountReceivablenavigationComponent } from './pages/Bankinvoice/account-receivablenavigation/account-receivablenavigation.component';
 
 
 
@@ -266,6 +268,8 @@ export const routes: Routes = [
 
 
 
+
+
       {
         path: 'navigationglobal', component: GlobalmasternavigationComponent,
         children: [
@@ -338,6 +342,16 @@ export const routes: Routes = [
 
         ]
       },
+
+      {
+        path: 'AccountReceivable',
+        component: AccountReceivablenavigationComponent,
+        children: [
+          { path: 'ClientAdvancePayment', component: ClientAdvancePaymentsComponent },
+          
+        ]
+      },
+
       {
         path: 'input', component: InputnavigationComponent,
         children: [
