@@ -8,4 +8,9 @@ export interface IClientaddress {
     getcostcenter(): Observable<APIResponse>;
     PostClientAddressUpload(payload: any): Observable<APIResponse>;
     PostClientAddressDelete(clientaddressid: any, userid: any): Observable<string>
+    VendorExporttoExcel(userid: any): Observable<APIResponse>;
+    VendorSearch(payload: any): Observable<APIResponse>;
+    Vendorclientaddressaddsave(payload: any): Observable<string>;
+    PostVendorClientAddressUpload(payload: any): Observable<APIResponse>;
+    PostVendorClientAddressDelete(clientaddressid: any, userid: any): Observable<string>
 }

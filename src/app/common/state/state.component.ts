@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, forwardRef, Inject, InjectionToken, Input, OnInit, Output, ViewEncapsulation } from '@angular/core';
+import { Component, EventEmitter, forwardRef, Inject, InjectionToken, Input, OnInit, Output, SimpleChanges, ViewEncapsulation } from '@angular/core';
 import { ReactiveFormsModule, FormControl, NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatInputModule } from '@angular/material/input';
@@ -41,6 +41,7 @@ export const COMM_TOKEN = new InjectionToken<ICommonService>('COMM_TOKEN');
 export class StateComponent implements ControlValueAccessor, OnInit {
 
   @Input() disabled: boolean = false;
+  @Input() readonly: boolean = false;
   @Output() stateEmit = new EventEmitter<State>();
 
   myControl = new FormControl<State | null>(null);
@@ -66,6 +67,16 @@ export class StateComponent implements ControlValueAccessor, OnInit {
       this.userdetail = JSON.parse(this.decry.decrypt(json));
     }
     this.BindStateId();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['readonly']) {
+      if (this.readonly) {
+        this.myControl.disable({ emitEvent: false });
+      } else {
+        this.myControl.enable({ emitEvent: false });
+      }
+    }
   }
 
   BindStateId() {

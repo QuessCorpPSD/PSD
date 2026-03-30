@@ -157,6 +157,10 @@ import { LeavetypemasterComponent } from './pages/inputaggregator/leavetypemaste
 import { LeavetypemastermappingComponent } from './pages/inputaggregator/leavetypemastermapping/leavetypemastermapping.component';
 import { InvoiceCultureAddpoComponent } from './pages/Invoice/invoice-culture-addpo/invoice-culture-addpo.component';
 import { OtherincomeComponent } from './pages/Invoice/otherincome/otherincome.component';
+import { VendorclientaddressComponent } from './pages/customers/vendorclientaddress/vendorclientaddress.component';
+import { MulticommercialComponent } from './pages/GlobalMasters/multicommercial/multicommercial.component';
+import { ClientgstlistComponent } from './pages/customers/clientgstlist/clientgstlist.component';
+import { VendorclientgstComponent } from './pages/customers/vendorclientgst/vendorclientgst.component';
 import { SEZRepositoryComponent } from './pages/Invoice/sezrepository/sezrepository.component';
 
 
@@ -286,6 +290,7 @@ export const routes: Routes = [
           { path: 'city', component: CityComponent },
           { path: 'states', component: StatesComponent },
           { path: 'Formula', component: FormulaComponent },
+          { path: 'multicommercial', component: MulticommercialComponent },
           { path: 'ESIslab', component: ESIslabComponent },
           { path: 'Formula', component: FormulaComponent },
           { path: "professionaltax", component: ProfessionaltaxComponent },
@@ -371,6 +376,9 @@ export const routes: Routes = [
           { path: "payfrequency", component: PayfrequencyComponent },
           { path: "corporatebank", component: CorporatebankComponent },
           { path: "clientaddress", component: ClientaddressComponent },
+          { path: "vendorclientaddress", component: VendorclientaddressComponent },
+          { path: "clientgstlist", component: ClientgstlistComponent },
+          { path: "vendorclientgst", component: VendorclientgstComponent },
           { path: "itcalender", component: ITcalenderComponent },
           { path: "companypaycodemapping", component: CompanypaycodemappingComponent },
           { path: "ServiceCharge", component: ServiceChargeComponent },
@@ -410,7 +418,7 @@ export const routes: Routes = [
       { path: 'changepassword', component: ChangepasswordComponent },
 
       // Wildcard inside children
-      { path: '**', redirectTo: 'Home', pathMatch: 'full' }
+      { path: '**', redirectTo: 'dashboard', pathMatch: 'full' }
     ]
   },
   //{ path: '', redirectTo: 'Login', pathMatch: 'full' },

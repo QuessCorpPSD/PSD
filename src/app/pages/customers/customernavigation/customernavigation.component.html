@@ -45,6 +45,20 @@
                                                 routerLinkActive="selectedInput"
                                                 [routerLinkActiveOptions]="{ exact: true }">Client Address</a>
                                 </li>
+                                <li><a [routerLink]="['/Master/customer/vendorclientaddress']" class="nav-link"
+                                                routerLinkActive="selectedInput"
+                                                [routerLinkActiveOptions]="{ exact: true }">Vendor Client Address</a>
+                                </li>
+
+                                <li><a [routerLink]="['/Master/customer/clientgstlist']" class="nav-link"
+                                                routerLinkActive="selectedInput"
+                                                [routerLinkActiveOptions]="{ exact: true }">Client GST</a>
+                                </li>
+                                <li><a [routerLink]="['/Master/customer/vendorclientgst']" class="nav-link"
+                                                routerLinkActive="selectedInput"
+                                                [routerLinkActiveOptions]="{ exact: true }">Vendor Client GST</a>
+                                </li>
+
                                 <li><a [routerLink]="['/Master/customer/payfrequency']" class="nav-link"
                                                 routerLinkActive="selectedInput"
                                                 [routerLinkActiveOptions]="{ exact: true }">Pay Frequency</a>
