@@ -98,7 +98,7 @@ export class AddMulticommercialComponent {
     else {
       console.warn('UserProfile not found in the session Storage');
     }
-
+    this.LoadpayrollType();
     this.addformula = new FormGroup({
       CompanyId: new FormControl("", Validators.required),
       PayCategory: new FormControl("All", Validators.required),
@@ -116,6 +116,7 @@ export class AddMulticommercialComponent {
     this.editFormula = new FormGroup({
       CompanyId: new FormControl(""),
       PayCategory: new FormControl(""),
+      PayrollTypeName: new FormControl(""),
       PayCode: new FormControl(""),
       Description: new FormControl(""),
       Formula: new FormControl("", Validators.required)
@@ -123,6 +124,7 @@ export class AddMulticommercialComponent {
 
     this.editFormula.get('CompanyId')?.disable();
     this.editFormula.get('PayCategory')?.disable();
+    this.editFormula.get('PayrollTypeName')?.disable();
     this.editFormula.get('PayCode')?.disable();
     this.editFormula.get('Description')?.disable();
 
@@ -135,6 +137,7 @@ export class AddMulticommercialComponent {
         CompanyId: row.Company_Code,
         PayCategory: row.Paycateory,
         PayCode: row.Paycode_Code,
+        PayrollTypeName: row.PayrollType,
         Description: row.Formula_Name,
         Formula: row.Formula,
       });
@@ -156,8 +159,6 @@ export class AddMulticommercialComponent {
     this.companyUI = company;
 
     this.val_company = false;
-
-    this.LoadpayrollType();
     this.LoadpayCode();
   }
 
@@ -191,7 +192,7 @@ export class AddMulticommercialComponent {
 
 
   LoadpayCode() {
-    this.formula.payCode().subscribe({
+    this.formula.MultiCommercialPaycodes().subscribe({
       next: (res: any) => {
         if (res?.Data) {
           this.payCode = res.Data;
@@ -230,8 +231,8 @@ export class AddMulticommercialComponent {
       mode: "Add",
       detail: {
         Formula_Id: 0,
-        PayrollType: raw.PayrollType,
-        PayrollTypeName: raw.PayrollTypeName,
+        PayrollTypeId: raw.PayrollType,
+        PayrollType: raw.PayrollTypeName,
         Paycode_Id: raw.PayCode,
         Paycode_Code: raw.PayCode_Code || "",
         Formula_Name: raw.Description.trim() || "Formula",
@@ -271,6 +272,7 @@ export class AddMulticommercialComponent {
   Save() {
     this.isLoading = true;
     const row = this.editData.row;
+    //console.log('edit', row);
     const formvalue = this.editFormula.getRawValue();
 
     const payload = {
@@ -285,13 +287,15 @@ export class AddMulticommercialComponent {
         Company_Id: row.Company_id,
         Company_Code: row.Company_Code,
         PayCategory_Id: row.PayCategory_Id,
+        PayrollTypeId: row.PayrollTypeId,
+        PayrollType: row.PayrollType,
         Paycateory: row.Paycateory,
         Error_Message: "",
         SNo: row.SNo
       }
     };
-    console.log('Edit', payload);
-    this.formula.CreateFormula(payload).subscribe({
+    //console.log('Edit', payload);
+    this.formula.CreateMCFormula(payload).subscribe({
       next: (res: any) => {
         this.isLoading = false;
         if (res?.StatusCode === 200) {

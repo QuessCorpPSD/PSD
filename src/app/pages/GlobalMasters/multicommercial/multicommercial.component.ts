@@ -46,10 +46,10 @@ uploadedData: any[] = [];
 
   uploadDisplayedColumns: string[] = [
     'Action',
-    // 'Formula_Id',
     'SI No',
     'Company Code',
     'Pay Category',
+    'PayrollType',
     'Formula Name',
     'Formula'
   ];
@@ -97,23 +97,19 @@ uploadedData: any[] = [];
 
   Search() {
     this.isLoading = true;
-    const paycode_Id = 0;
-    this.formula.GetFormulaSearch(paycode_Id).subscribe({
+    this.formula.GetMCFormulaSearch().subscribe({
       next: res => {
-        this.uploadedData = res.Data.data.Table0;
-        if (!res.Data || res.Data.length === 0) {
+        //console.log(res);
+        if (res.Data.message == "No records found") {
           alert("No data available to display.");
           this.isLoading = false;
           return;
         }
+        this.uploadedData = res.Data.data.Table0;
         this.showTable = true;
         this.uploadedDataSource = new MatTableDataSource(this.uploadedData);
         this.uploadedDataSource.paginator = this.paginator;
         this.uploadedDataSource.sort = this.sort;
-        // if (this.uploadedDataSource.paginator) {
-        //   this.uploadedDataSource.paginator.firstPage();
-        //   this.isLoading = false;
-        // }
         this.isLoading = false;
       },
       error: err => {
@@ -137,7 +133,7 @@ uploadedData: any[] = [];
     }
     const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(data);
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "Formula");
+    XLSX.utils.book_append_sheet(wb, ws, "MultiCommercialFormula");
     const today = new Date().toISOString().split('T')[0];
     const fileName = `Formula_${today}.xlsx`;
     XLSX.writeFile(wb, fileName);
@@ -147,7 +143,7 @@ uploadedData: any[] = [];
   AddPOOpen() {
     this.dialog.open(AddMulticommercialComponent, {
       width: '40%',
-      height: '54vh',
+      height: '70vh',
       disableClose: true,
       data: { mode: 'add' }
     });
@@ -156,7 +152,7 @@ uploadedData: any[] = [];
   openEdit(row: any) {
     const dialogRef = this.dialog.open(AddMulticommercialComponent, {
       width: '40%',
-      height: '54vh',
+      height: '70vh',
       disableClose: true,
       data: { mode: 'edit', row: row }
     });
@@ -195,17 +191,20 @@ uploadedData: any[] = [];
         Company_Id: 0,
         Company_Code: "",
         PayCategory_Id: 0,
+        PayrollTypeId: 0,
+        PayrollType: "",
         Paycateory: "",
         Error_Message: "",
         SNo: 0
       }
     };
-    this.formula.CreateFormula(payload).subscribe({
+    this.formula.CreateMCFormula(payload).subscribe({
       next: (res: any) => {
         this.isLoading = false;
         if (res?.StatusCode === 200) {
           this.showAlertPopup(res?.Data?.message || "Formula Deleted successfully");
           this.Search();
+          this.isLoading = false;
         } else {
           alert("Delete failed");
           this.isLoading = false;

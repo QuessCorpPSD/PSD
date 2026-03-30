@@ -112,12 +112,12 @@ export class FormulaComponent {
     const paycode_Id = 0;
     this.formula.GetFormulaSearch(paycode_Id).subscribe({
       next: res => {
-        this.uploadedData = res.Data.data.Table0;
-        if (!res.Data || res.Data.length === 0) {
+        if (res.Data.message == "No records found") {
           alert("No data available to display.");
           this.isLoading = false;
           return;
         }
+        this.uploadedData = res.Data.data.Table0;
         this.showTable = true;
         this.uploadedDataSource = new MatTableDataSource(this.uploadedData);
         this.uploadedDataSource.paginator = this.paginator;

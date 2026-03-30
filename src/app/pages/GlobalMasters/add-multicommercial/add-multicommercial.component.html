@@ -8,8 +8,8 @@
             </mat-card-title>
 
             <span class="spacer"></span>
-            <button mat-icon-button (click)="onClose()">
-                <mat-icon>close</mat-icon>
+            <button style="border:none; background-color: transparent;" (click)="onClose()">
+                <span style="font-size: 14px;"><strong>X</strong></span>
             </button>
         </mat-card-header>
 
@@ -35,7 +35,7 @@
                 <label class="form-label text-muted small">Payroll Type:</label>
                 <div>
                     <select class="form-select form-select-sm" style="width:250px;" formControlName="PayrollType"
-                    (change)="ChangepayrollType($event)">
+                        (change)="ChangepayrollType($event)">
                         <option value="">Select Payroll Type</option>
                         <option *ngFor="let pf of payrollType" [value]="pf.PayrollTypeId">
                             {{ pf.PayrollType }}
@@ -82,13 +82,11 @@
 
             </div>
         </mat-card-content>
-
-        <div class="d-flex justify-content-end mt-3" style="gap:10px; padding-right:8px;">
-            <button type="button" class="btn btn-light" (click)="onClose()">Cancel</button>
-            <button type="button" class="btn btn-primary" (click)="SaveClick()">Save</button>
-        </div>
-
     </mat-card>
+    <div class="d-flex justify-content-end mt-3" style="gap:10px; padding-right:8px;">
+        <button type="button" class="btn btn-light" (click)="onClose()">Cancel</button>
+        <button type="button" class="btn btn-primary" (click)="SaveClick()">Save</button>
+    </div>
 </form>
 
 <form [formGroup]="editFormula" novalidate *ngIf="Edit">
@@ -114,6 +112,10 @@
                 <!-- Pay Category -->
                 <label class="form-label text-muted small">Pay Category:</label>
                 <input class="form-control form-control-sm" style="width:250px;" formControlName="PayCategory">
+
+                <!-- Pay Category -->
+                <label class="form-label text-muted small">Payroll Type:</label>
+                <input class="form-control form-control-sm" style="width:250px;" formControlName="PayrollTypeName">
 
                 <!-- Pay Code -->
                 <label class="form-label text-muted small">Formula Name:</label>

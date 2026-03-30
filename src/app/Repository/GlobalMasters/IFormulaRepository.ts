@@ -8,4 +8,6 @@ export interface IFormulaRepository {
     CreateFormula(payload: any): Observable<APIResponse>
     PayrollType(): Observable<APIResponse>;
     CreateMCFormula(payload: any): Observable<APIResponse>;
+    MultiCommercialPaycodes(): Observable<APIResponse>;
+    GetMCFormulaSearch(): Observable<APIResponse>;
 }
