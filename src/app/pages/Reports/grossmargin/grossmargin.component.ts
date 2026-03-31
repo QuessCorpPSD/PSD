@@ -1,0 +1,79 @@
+import { Component, Inject, InjectionToken } from '@angular/core';
+import { Payperiodclass } from '../../../Models/Common';
+import { CommonModule } from '@angular/common';
+import { CompanyallComponent } from '../../../common/CompanyAll/companyall.component';
+import { PayPeriodComponent } from '../../../common/payperiod/payperiod.component';
+import { EncryptionService } from '../../../Shared/encryption.service';
+import { SessionStorageService } from '../../../Shared/SessionStorageService';
+import { IreportService } from '../../../Repository/Reports/Ireportservice';
+import { ReportService } from '../../../Service/Reports/report.service';
+
+
+
+export const Invoice_TOKEN = new InjectionToken<IreportService>('Invoice_TOKEN');
+@Component({
+  selector: 'app-grossmargin',
+  imports: [CommonModule,CompanyallComponent,PayPeriodComponent],
+  templateUrl: './grossmargin.component.html',
+  styleUrl: './grossmargin.component.css',
+  providers: [
+  
+      {
+        provide: Invoice_TOKEN,
+        useClass: ReportService
+      }]
+})
+export class GrossmarginComponent {
+  selectedCompanyId!: number;
+    payPeriod!: Payperiodclass;
+    payPeriodType: string='All';
+    userdetail!:any;
+    isLoading=false;
+     constructor(private _decrypt:EncryptionService,
+  private _sessionStoreage:SessionStorageService,
+ @Inject(Invoice_TOKEN) private reportServices: IreportService
+){
+
+  }
+ handleCompanyEvent(company)
+  {
+    this.selectedCompanyId = company.companyId;
+  }
+  handlePayperiodEvent(payperiod: Payperiodclass){
+    this.payPeriod = payperiod;
+  }
+  ngOnInit(): void {
+    const userdetail = this._sessionStoreage.getItem('UserProfile');
+    this.userdetail = JSON.parse(this._decrypt.decrypt(userdetail!));
+      this.payPeriodType = "All";
+  }
+    downloadExcelFromBase64(base64: string, filename: string) {
+      this.isLoading=false;
+    const source = `data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,${base64}`;
+    const downloadLink = document.createElement('a');
+    downloadLink.href = source;
+    downloadLink.download = filename;
+    downloadLink.click();
+  }
+  downloadReport() {
+    const request = {
+      "Pay_Period": this.payPeriod.payPeriod,
+      "Submit": 0
+    }
+    this.isLoading=true;
+    this.reportServices.GrossMarginReport(request).subscribe({
+      next: ({ Data }) => {
+        // directly destructured
+        console.log(Data);
+        this.downloadExcelFromBase64(Data.file,Data.fileName)
+        //this.handleReport(Data);
+      },
+      error: (err) => {
+        console.error('Error fetching Gross Margin Report:', err);
+      },
+      complete: () => {
+        console.log('Request completed');
+      }
+    });
+  }
+}

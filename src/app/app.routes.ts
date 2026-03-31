@@ -158,6 +158,7 @@ import { LeavetypemastermappingComponent } from './pages/inputaggregator/leavety
 import { InvoiceCultureAddpoComponent } from './pages/Invoice/invoice-culture-addpo/invoice-culture-addpo.component';
 import { OtherincomeComponent } from './pages/Invoice/otherincome/otherincome.component';
 import { SEZRepositoryComponent } from './pages/Invoice/sezrepository/sezrepository.component';
+import { GrossmarginComponent } from './pages/Reports/grossmargin/grossmargin.component';
 
 
 
@@ -196,6 +197,9 @@ export const routes: Routes = [
       { path: 'gstinvoice', component: GstinvoiceComponent },
       //{ path: 'process', component: ReprocessComponent },
       { path: 'changepassword', component: ChangepasswordComponent },
+       {
+        path:'grossmargin',component:GrossmarginComponent
+      },
       {
         path: 'process',
         component: ProcessComponent,
@@ -351,6 +355,7 @@ export const routes: Routes = [
         //  path:"inputaggregatorclient",component:InputaggregatorwithclientComponent
         ]
       },
+     
       {
         path: 'admin', component: AdminnavigationComponent,
         children: [
