@@ -139,25 +139,27 @@ import { LeavetypemasterComponent } from './pages/inputaggregator/leavetypemaste
 import { LeavetypemastermappingComponent } from './pages/inputaggregator/leavetypemastermapping/leavetypemastermapping.component';
 import { InvoiceCultureAddpoComponent } from './pages/Invoice/invoice-culture-addpo/invoice-culture-addpo.component';
 import { OtherincomeComponent } from './pages/Invoice/otherincome/otherincome.component';
-import { AllowReProcessComponent } from './pages/Process/allow-re-process/allow-re-process.component';
-import { ArrearAttendanceComponent } from './pages/Process/arrear-attendance/arrear-attendance.component';
-import { AttendanceComponent } from './pages/Process/attendance/attendance.component';
-import { AttendancebatchidUpdateComponent } from './pages/Process/attendancebatchid-update/attendancebatchid-update.component';
-import { FFprocessComponent } from './pages/Process/ffprocess/ffprocess.component';
-import { FNFRevokeComponent } from './pages/Process/fnfrevoke/fnfrevoke.component';
-import { ITAdjustmentComponent } from './pages/Process/itadjustment/itadjustment.component';
-import { LockpayperiodComponent } from './pages/Process/lockpayperiod/lockpayperiod.component';
-import { LOPAdjustmentsComponent } from './pages/Process/lopadjustments/lopadjustments.component';
-import { OneTimeReplacementComponent } from './pages/Process/one-time-replacement/one-time-replacement.component';
-import { PayProcessComponent } from './pages/Process/pay-process/pay-process.component';
-import { PayregisteruploadComponent } from './pages/Process/payregisterupload/payregisterupload.component';
-import { PaytransactionComponent } from './pages/Process/paytransaction/paytransaction.component';
-import { ProcessComponent } from './pages/Process/process.component';
-import { ReimbrusmentcalenderComponent } from './pages/Process/reimbrusmentcalender/reimbrusmentcalender.component';
-import { ReprocessComponent } from './pages/Process/reprocess/reprocess.component';
+
 import { ClientgstlistComponent } from './pages/customers/clientgstlist/clientgstlist.component';
 import { ClientAdvancePaymentsComponent } from './pages/Bankinvoice/client-advance-payments/client-advance-payments.component';
 import { AccountReceivablenavigationComponent } from './pages/Bankinvoice/account-receivablenavigation/account-receivablenavigation.component';
+import { AllowReProcessComponent } from './pages/process/allow-re-process/allow-re-process.component';
+import { ArrearAttendanceComponent } from './pages/process/arrear-attendance/arrear-attendance.component';
+import { AttendanceComponent } from './pages/process/attendance/attendance.component';
+import { AttendancebatchidUpdateComponent } from './pages/process/attendancebatchid-update/attendancebatchid-update.component';
+import { FFprocessComponent } from './pages/process/ffprocess/ffprocess.component';
+import { FNFRevokeComponent } from './pages/process/fnfrevoke/fnfrevoke.component';
+import { ITAdjustmentComponent } from './pages/process/itadjustment/itadjustment.component';
+import { LockpayperiodComponent } from './pages/process/lockpayperiod/lockpayperiod.component';
+import { LOPAdjustmentsComponent } from './pages/process/lopadjustments/lopadjustments.component';
+import { OneTimeReplacementComponent } from './pages/process/one-time-replacement/one-time-replacement.component';
+import { PayProcessComponent } from './pages/process/pay-process/pay-process.component';
+import { PayregisteruploadComponent } from './pages/process/payregisterupload/payregisterupload.component';
+import { PaytransactionComponent } from './pages/process/paytransaction/paytransaction.component';
+import { ProcessComponent } from './pages/process/process.component';
+import { ReimbrusmentcalenderComponent } from './pages/process/reimbrusmentcalender/reimbrusmentcalender.component';
+import { ReprocessComponent } from './pages/process/reprocess/reprocess.component';
+import { InvoicecollectionComponent } from './pages/Bankinvoice/invoicecollection/invoicecollection.component';
 
 
 
@@ -348,7 +350,8 @@ export const routes: Routes = [
         component: AccountReceivablenavigationComponent,
         children: [
           { path: 'ClientAdvancePayment', component: ClientAdvancePaymentsComponent },
-          
+          { path: 'invoicecollection', component: InvoicecollectionComponent },
+
         ]
       },
 
