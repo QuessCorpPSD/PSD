@@ -1,7 +1,7 @@
 <div class="page-wrapper">
 
     <div class="scrollable-content">
-        <mat-card-title style="color: #302CB3; font-size: 22px; font-family: Montserrat; font-weight: 700;">Cilent
+        <mat-card-title style="color: #302CB3; font-size: 22px; font-family: Montserrat; font-weight: 700;">Vendor Cilent
             Address List</mat-card-title>
 
         <div class="container py-2">
@@ -36,7 +36,7 @@
 
                     <!-- Action -->
                     <ng-container matColumnDef="Action">
-                        <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                        <mat-header-cell *matHeaderCellDef><strong>Action</strong></mat-header-cell>
                         <mat-cell *matCellDef="let row">
                             <div class="action-wrapper">
                                 <button class="btn btn-sm" matTooltip="Edit" (click)="editOpen(row)">
@@ -45,15 +45,15 @@
 
                                 <!-- <button class="btn btn-sm" matTooltip="Delete" (click)="deleteClientAddress(row)">
                                     <mat-icon>delete</mat-icon>
-                                </button> -->
+                                </button> -->   
                             </div>
                         </mat-cell>
                     </ng-container>
 
                     <!-- Client Address Id -->
-                    <ng-container matColumnDef="Client_Address_Id">
-                        <mat-header-cell *matHeaderCellDef><strong>Client Address Id</strong></mat-header-cell>
-                        <mat-cell *matCellDef="let row">{{row.clientAddressId}}</mat-cell>
+                    <ng-container matColumnDef="VendorClientAddressId">
+                        <mat-header-cell *matHeaderCellDef><strong>VendorClientAddressId</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{row.vendorClientAddressId}}</mat-cell>
                     </ng-container>
 
                     <ng-container matColumnDef="companyId">
@@ -150,7 +150,7 @@
                     <!-- LUT Number -->
                     <ng-container matColumnDef="LutNumber">
                         <mat-header-cell *matHeaderCellDef><strong>LUT Number</strong></mat-header-cell>
-                        <mat-cell *matCellDef="let row">{{ row.luT_Number }}</mat-cell>
+                        <mat-cell *matCellDef="let row">{{row.luT_Number}}</mat-cell>
                     </ng-container>
 
                     <!-- LUT Date -->

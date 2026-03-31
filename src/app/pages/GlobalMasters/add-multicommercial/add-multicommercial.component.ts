@@ -18,10 +18,8 @@ import { FormualService } from '../../../Service/GlobalMasters/formula.service';
 export const Formula_TOKEN = new InjectionToken<IFormulaRepository>('Formula_TOKEN');
 
 @Component({
-  selector: 'app-add-formulas',
-  standalone: true,
-  imports: [
-    CommonModule,
+  selector: 'app-add-multicommercial',
+  imports: [    CommonModule,
     MatIconModule,
     MatTooltipModule,
     MatTableModule,
@@ -30,19 +28,18 @@ export const Formula_TOKEN = new InjectionToken<IFormulaRepository>('Formula_TOK
     CompanyallComponent,
     ReactiveFormsModule,
     FormsModule,
-    AlertpopupComponent
-  ],
-  templateUrl: './add-formulas.component.html',
-  styleUrl: './add-formulas.component.css',
-  providers: [{
-    provide: Formula_TOKEN,
-    useClass: FormualService,
-  }]
+    AlertpopupComponent],
+  templateUrl: './add-multicommercial.component.html',
+  styleUrl: './add-multicommercial.component.css',
+    providers: [{
+      provide: Formula_TOKEN,
+      useClass: FormualService,
+    }]
 })
-export class AddFormulasComponent {
+export class AddMulticommercialComponent {
 
   constructor(
-    private dialogRef: MatDialogRef<AddFormulasComponent>,
+    private dialogRef: MatDialogRef<AddMulticommercialComponent>,
     @Inject(Formula_TOKEN) private formula: IFormulaRepository,
     private decry: EncryptionService,
     private _sessionStoreage: SessionStorageService,
@@ -63,7 +60,7 @@ export class AddFormulasComponent {
   isLoading: boolean = false;
 
 
-  payCategory: any[] = [];
+  payrollType: any[] = [];
   selectedPayCategory: any = null;
 
   payCode: any[] = [];
@@ -101,20 +98,25 @@ export class AddFormulasComponent {
     else {
       console.warn('UserProfile not found in the session Storage');
     }
-
+    this.LoadpayrollType();
     this.addformula = new FormGroup({
       CompanyId: new FormControl("", Validators.required),
-      PayCategory: new FormControl("", Validators.required),
-      PayCategory_Name: new FormControl("", Validators.required),
+      PayCategory: new FormControl("All", Validators.required),
+      PayrollType: new FormControl("", Validators.required),
+      PayrollTypeName: new FormControl("", Validators.required),
+      //PayCategory_Name: new FormControl("", Validators.required),
       PayCode: new FormControl("", Validators.required),
       PayCode_Code: new FormControl("", Validators.required),
       Description: new FormControl(""),
       Formula: new FormControl("", Validators.required)
     });
 
+    this.addformula.get('PayCategory')?.disable();
+
     this.editFormula = new FormGroup({
       CompanyId: new FormControl(""),
       PayCategory: new FormControl(""),
+      PayrollTypeName: new FormControl(""),
       PayCode: new FormControl(""),
       Description: new FormControl(""),
       Formula: new FormControl("", Validators.required)
@@ -122,6 +124,7 @@ export class AddFormulasComponent {
 
     this.editFormula.get('CompanyId')?.disable();
     this.editFormula.get('PayCategory')?.disable();
+    this.editFormula.get('PayrollTypeName')?.disable();
     this.editFormula.get('PayCode')?.disable();
     this.editFormula.get('Description')?.disable();
 
@@ -134,6 +137,7 @@ export class AddFormulasComponent {
         CompanyId: row.Company_Code,
         PayCategory: row.Paycateory,
         PayCode: row.Paycode_Code,
+        PayrollTypeName: row.PayrollType,
         Description: row.Formula_Name,
         Formula: row.Formula,
       });
@@ -155,42 +159,40 @@ export class AddFormulasComponent {
     this.companyUI = company;
 
     this.val_company = false;
-
-    this.LoadpayCategory(this.selectedCompanyId);
     this.LoadpayCode();
   }
 
 
 
-  LoadpayCategory(companyId: number) {
-    this.formula.payCategory(companyId).subscribe({
+  LoadpayrollType() {
+    this.formula.PayrollType().subscribe({
       next: (res: any) => {
         //console.log('PayCategory', res);
         if (res?.Data?.data?.Table0) {
-          this.payCategory = res.Data.data.Table0;
+          this.payrollType = res.Data.data.Table0;
         }
       },
-      error: err => console.error(" Pay Category API Error:", err)
+      error: err => console.error(" PayrollType API Error:", err)
     });
   }
 
-  ChangepayCategory(event: Event) {
+  ChangepayrollType(event: Event) {
     const selectElement = event.target as HTMLSelectElement;
 
     const value = selectElement.value;
     const text = selectElement.options[selectElement.selectedIndex].text;
 
     this.addformula.patchValue({
-      PayCategory: value,
-      PayCategory_Name: text
+      PayrollType: value,
+      PayrollTypeName: text
     });
 
-    this.addformula.get('PayCategory')?.markAsTouched();
+    this.addformula.get('PayrollType')?.markAsTouched();
   }
 
 
   LoadpayCode() {
-    this.formula.payCode().subscribe({
+    this.formula.MultiCommercialPaycodes().subscribe({
       next: (res: any) => {
         if (res?.Data) {
           this.payCode = res.Data;
@@ -222,7 +224,6 @@ export class AddFormulasComponent {
       return;
     }
     this.isLoading = true;
-    const pc = this.payCode.find(x => x.paycode_Id == this.selectedPayCode);
     const raw = this.addformula.getRawValue();
     //console.log('Form values', raw);
     const payload = {
@@ -230,19 +231,21 @@ export class AddFormulasComponent {
       mode: "Add",
       detail: {
         Formula_Id: 0,
+        PayrollTypeId: raw.PayrollType,
+        PayrollType: raw.PayrollTypeName,
         Paycode_Id: raw.PayCode,
         Paycode_Code: raw.PayCode_Code || "",
         Formula_Name: raw.Description.trim() || "Formula",
         Formula: raw.Formula?.trim() || "",
         Company_Id: raw.CompanyId.companyId,
         Company_Code: raw.CompanyId.companyCode || "",
-        PayCategory_Id: raw.PayCategory || 0,
-        Paycateory: raw.PayCategory_Name || "",
+        PayCategory_Id: 0,
+        Paycateory: "All",
         Error_Message: "",
         SNo: 0
       }
     };
-    this.formula.CreateFormula(payload).subscribe({
+    this.formula.CreateMCFormula(payload).subscribe({
       next: (res: any) => {
         this.isLoading = false;
         //console.log('response', res);
@@ -269,6 +272,7 @@ export class AddFormulasComponent {
   Save() {
     this.isLoading = true;
     const row = this.editData.row;
+    //console.log('edit', row);
     const formvalue = this.editFormula.getRawValue();
 
     const payload = {
@@ -283,13 +287,15 @@ export class AddFormulasComponent {
         Company_Id: row.Company_id,
         Company_Code: row.Company_Code,
         PayCategory_Id: row.PayCategory_Id,
+        PayrollTypeId: row.PayrollTypeId,
+        PayrollType: row.PayrollType,
         Paycateory: row.Paycateory,
         Error_Message: "",
         SNo: row.SNo
       }
     };
-    console.log('Edit', payload);
-    this.formula.CreateFormula(payload).subscribe({
+    //console.log('Edit', payload);
+    this.formula.CreateMCFormula(payload).subscribe({
       next: (res: any) => {
         this.isLoading = false;
         if (res?.StatusCode === 200) {
@@ -311,5 +317,6 @@ export class AddFormulasComponent {
   onClose() {
     this.dialogRef.close('updated');
   }
+
 
 }

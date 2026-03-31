@@ -4,12 +4,12 @@
 
         <mat-card-header class="sticky-header">
             <mat-card-title style="color:#302CB3; font-size:22px; font-weight:700;">
-                Add Formula
+                Add Multi Commercial Formula
             </mat-card-title>
 
             <span class="spacer"></span>
-            <button mat-icon-button (click)="onClose()">
-                <mat-icon>close</mat-icon>
+            <button style="border:none; background-color: transparent;" (click)="onClose()">
+                <span style="font-size: 14px;"><strong>X</strong></span>
             </button>
         </mat-card-header>
 
@@ -30,18 +30,21 @@
 
                 <!-- Pay Category -->
                 <label class="form-label text-muted small">Pay Category:</label>
+                <input class="form-control form-control-sm" style="width:250px;" formControlName="PayCategory">
+
+                <label class="form-label text-muted small">Payroll Type:</label>
                 <div>
-                    <select class="form-select form-select-sm" style="width:250px;" formControlName="PayCategory"
-                    (change)="ChangepayCategory($event)">
-                        <option value="">Select Pay Category</option>
-                        <option *ngFor="let pf of payCategory" [value]="pf.Band_Id">
-                            {{ pf.Band_Name }}
+                    <select class="form-select form-select-sm" style="width:250px;" formControlName="PayrollType"
+                        (change)="ChangepayrollType($event)">
+                        <option value="">Select Payroll Type</option>
+                        <option *ngFor="let pf of payrollType" [value]="pf.PayrollTypeId">
+                            {{ pf.PayrollType }}
                         </option>
                     </select>
 
-                    <div *ngIf="addformula.get('PayCategory')?.touched && addformula.get('PayCategory')?.invalid"
+                    <div *ngIf="addformula.get('PayrollType')?.touched && addformula.get('PayrollType')?.invalid"
                         class="text-danger small mt-1">
-                        Pay Category is required
+                        Payroll Type is required
                     </div>
                 </div>
 
@@ -79,13 +82,11 @@
 
             </div>
         </mat-card-content>
-
-        <div class="d-flex justify-content-end mt-3" style="gap:10px; padding-right:8px;">
-            <button type="button" class="btn btn-light" (click)="onClose()">Cancel</button>
-            <button type="button" class="btn btn-primary" (click)="SaveClick()">Save</button>
-        </div>
-
     </mat-card>
+    <div class="d-flex justify-content-end mt-3" style="gap:10px; padding-right:8px;">
+        <button type="button" class="btn btn-light" (click)="onClose()">Cancel</button>
+        <button type="button" class="btn btn-primary" (click)="SaveClick()">Save</button>
+    </div>
 </form>
 
 <form [formGroup]="editFormula" novalidate *ngIf="Edit">
@@ -93,7 +94,7 @@
     <mat-card class="custom-card">
 
         <mat-card-header class="sticky-header">
-            <mat-card-title style="color:#302CB3;">Edit Formula</mat-card-title>
+            <mat-card-title style="color:#302CB3;">Edit Multi Commercial Formula</mat-card-title>
             <span class="spacer"></span>
             <button mat-icon-button (click)="onClose()">
                 <mat-icon>close</mat-icon>
@@ -111,6 +112,10 @@
                 <!-- Pay Category -->
                 <label class="form-label text-muted small">Pay Category:</label>
                 <input class="form-control form-control-sm" style="width:250px;" formControlName="PayCategory">
+
+                <!-- Pay Category -->
+                <label class="form-label text-muted small">Payroll Type:</label>
+                <input class="form-control form-control-sm" style="width:250px;" formControlName="PayrollTypeName">
 
                 <!-- Pay Code -->
                 <label class="form-label text-muted small">Formula Name:</label>

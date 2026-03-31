@@ -6,7 +6,6 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { AddFormulasComponent } from '../add-formulas/add-formulas.component';
 import { PaycodeComponent } from "../../../common/paycode/paycode.component";
 import { EncryptionService } from '../../../Shared/encryption.service';
 import { SessionStorageService } from '../../../Shared/SessionStorageService';
@@ -16,23 +15,24 @@ import { IFormulaRepository } from '../../../Repository/GlobalMasters/IFormulaRe
 import { MatCardModule } from "@angular/material/card";
 import { AlertpopupComponent } from "../../../common/alertpopup/alertpopup.component";
 import { FormsModule } from '@angular/forms';
+import { AddMulticommercialComponent } from '../add-multicommercial/add-multicommercial.component';
 
 export const Formula_TOKEN = new InjectionToken<IFormulaRepository>('Formula_TOKEN');
 
+
 @Component({
-  selector: 'app-formula',
-  standalone: true,
+  selector: 'multicommercial',
   imports: [CommonModule, FormsModule, MatIconModule, MatTooltipModule, MatTableModule, MatPaginator, MatCardModule, AlertpopupComponent],
-  templateUrl: './formula.component.html',
-  styleUrl: './formula.component.css',
-  providers: [{
-    provide: Formula_TOKEN,
-    useClass: FormualService,
-  }
-  ]
+  templateUrl: './multicommercial.component.html',
+  styleUrl: './multicommercial.component.css',
+    providers: [{
+      provide: Formula_TOKEN,
+      useClass: FormualService,
+    }
+    ]
 })
-export class FormulaComponent {
-  uploadedData: any[] = [];
+export class MulticommercialComponent {
+uploadedData: any[] = [];
   showTable: boolean = false;
 
   paycodeUI: any;
@@ -46,10 +46,10 @@ export class FormulaComponent {
 
   uploadDisplayedColumns: string[] = [
     'Action',
-    // 'Formula_Id',
     'SI No',
     'Company Code',
     'Pay Category',
+    'PayrollType',
     'Formula Name',
     'Formula'
   ];
@@ -89,18 +89,6 @@ export class FormulaComponent {
       "description": ""
     }
     this.Search();
-    // this.uploadedDataSource.filterPredicate = (data: any, filter: string) => {
-    //   const formulaname = filter.toLowerCase();
-    //   console.log(data.Formula_Name);
-    //   return (
-    //     data.Formula_Name?.toLowerCase().includes(formulaname) ||
-    //     data.Company_Code?.toLowerCase().includes(formulaname)
-    //     // data.Month_Name?.toLowerCase().includes(searchText) ||
-    //     // data.From_Value?.toString().includes(searchText) ||
-    //     // data.To_Value?.toString().includes(searchText)
-    //   );
-    // };
-
   }
 
   handlePaycodeEvent(paycode: any) {
@@ -109,9 +97,9 @@ export class FormulaComponent {
 
   Search() {
     this.isLoading = true;
-    const paycode_Id = 0;
-    this.formula.GetFormulaSearch(paycode_Id).subscribe({
+    this.formula.GetMCFormulaSearch().subscribe({
       next: res => {
+        //console.log(res);
         if (res.Data.message == "No records found") {
           alert("No data available to display.");
           this.isLoading = false;
@@ -122,10 +110,6 @@ export class FormulaComponent {
         this.uploadedDataSource = new MatTableDataSource(this.uploadedData);
         this.uploadedDataSource.paginator = this.paginator;
         this.uploadedDataSource.sort = this.sort;
-        // if (this.uploadedDataSource.paginator) {
-        //   this.uploadedDataSource.paginator.firstPage();
-        //   this.isLoading = false;
-        // }
         this.isLoading = false;
       },
       error: err => {
@@ -149,7 +133,7 @@ export class FormulaComponent {
     }
     const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(data);
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "Formula");
+    XLSX.utils.book_append_sheet(wb, ws, "MultiCommercialFormula");
     const today = new Date().toISOString().split('T')[0];
     const fileName = `Formula_${today}.xlsx`;
     XLSX.writeFile(wb, fileName);
@@ -157,18 +141,18 @@ export class FormulaComponent {
   }
 
   AddPOOpen() {
-    this.dialog.open(AddFormulasComponent, {
+    this.dialog.open(AddMulticommercialComponent, {
       width: '40%',
-      height: '75vh',
+      height: '70vh',
       disableClose: true,
       data: { mode: 'add' }
     });
   }
 
   openEdit(row: any) {
-    const dialogRef = this.dialog.open(AddFormulasComponent, {
+    const dialogRef = this.dialog.open(AddMulticommercialComponent, {
       width: '40%',
-      height: '75vh',
+      height: '70vh',
       disableClose: true,
       data: { mode: 'edit', row: row }
     });
@@ -207,17 +191,20 @@ export class FormulaComponent {
         Company_Id: 0,
         Company_Code: "",
         PayCategory_Id: 0,
+        PayrollTypeId: 0,
+        PayrollType: "",
         Paycateory: "",
         Error_Message: "",
         SNo: 0
       }
     };
-    this.formula.CreateFormula(payload).subscribe({
+    this.formula.CreateMCFormula(payload).subscribe({
       next: (res: any) => {
         this.isLoading = false;
         if (res?.StatusCode === 200) {
           this.showAlertPopup(res?.Data?.message || "Formula Deleted successfully");
           this.Search();
+          this.isLoading = false;
         } else {
           alert("Delete failed");
           this.isLoading = false;
@@ -230,8 +217,4 @@ export class FormulaComponent {
     });
 
   }
-
-
 }
-
-

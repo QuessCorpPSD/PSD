@@ -6,6 +6,7 @@ import { MatIconModule } from "@angular/material/icon";
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { AlertpopupComponent } from "../../../common/alertpopup/alertpopup.component";
 import { ClientaddressService } from '../../../Service/customersserv/clientaddress.service';
 import { EncryptionService } from '../../../Shared/encryption.service';
 import { SessionStorageService } from '../../../Shared/SessionStorageService';
@@ -16,16 +17,17 @@ import { MatCardModule } from "@angular/material/card";
 import { IClientaddress } from '../../../Repository/customer/IClientaddress';
 import { CompanyallComponent } from '../../../common/CompanyAll/companyall.component';
 import { MapnameComponent } from "../../../common/Mapname/mapname/mapname.component";
+import { StatenameComponent } from '../../../common/statename/statename.component';
 import { StateComponent } from '../../../common/state/state.component';
+import { CitynameComponent } from '../../../common/cityname/cityname.component';
 import { CitybystateComponent } from '../../../common/citybystate/citybystate.component';
 export const Pay_TOKEN = new InjectionToken<IClientaddress>('Pay_TOKEN');
 
 @Component({
-  selector: 'clientaddress',
-  standalone: true,
+  selector: 'vendorclientaddress',
   imports: [MatPaginatorModule, MatTableModule, MatIconModule, CommonModule, FormsModule, ReactiveFormsModule, MatTooltipModule, MatCardModule, CompanyallComponent, MapnameComponent, StateComponent, CitybystateComponent],
-  templateUrl: './clientaddress.component.html',
-  styleUrl: './clientaddress.component.css',
+  templateUrl: './vendorclientaddress.component.html',
+  styleUrl: './vendorclientaddress.component.css',
   providers: [
     {
       provide: Pay_TOKEN,
@@ -33,8 +35,9 @@ export const Pay_TOKEN = new InjectionToken<IClientaddress>('Pay_TOKEN');
     }
   ]
 })
-export class ClientaddressComponent {
-  Clientaddress: any;
+export class VendorclientaddressComponent {
+
+Clientaddress: any;
   userdetail: any;
   clientaddress!: FormGroup;
   clientaddressEdit!: FormGroup;
@@ -65,7 +68,7 @@ export class ClientaddressComponent {
   isLoading: boolean = false;
   uploadDisplayedColumns: string[] = [
     'Action',
-    'Client_Address_Id',
+    'VendorClientAddressId',
     'Companycode',
     'State',
     'MapName',
@@ -375,7 +378,7 @@ export class ClientaddressComponent {
   deleteClientAddress(row: any): void {
     const userId = this.userdetail.user_Id;
 
-    this.service.PostClientAddressDelete(row.clientAddressId, userId)
+    this.service.PostVendorClientAddressDelete(row.vendorClientAddressId, userId)
       .subscribe({
         next: (res: string) => {
           if (res.includes('Success')) {
@@ -402,7 +405,7 @@ export class ClientaddressComponent {
 
     const userId = this.userdetail.user_Id;
 
-    this.service.Search(userId).subscribe({
+    this.service.VendorSearch(userId).subscribe({
       next: (res) => {
         this.Clientaddress = res?.Data;
         console.log('search', this.Clientaddress);
@@ -417,7 +420,7 @@ export class ClientaddressComponent {
           this.dataSource.sort = this.sort;
           this.uploadDisplayedColumns = [
             'Action',
-            'Client_Address_Id',
+            'VendorClientAddressId',
             'Companycode',
             'State',
             'MapName',
@@ -466,7 +469,7 @@ export class ClientaddressComponent {
 
     const Companyid = this.userdetail.user_Id;
 
-    this.service.ExporttoExcel(Companyid).subscribe({
+    this.service.VendorExporttoExcel(Companyid).subscribe({
       next: (res) => {
         this.isLoading = false;
 
@@ -582,7 +585,7 @@ export class ClientaddressComponent {
     formData.append('file', file);
     formData.append('userId', this.userdetail.user_Id);
 
-    this.service.PostClientAddressUpload(formData).subscribe({
+    this.service.PostVendorClientAddressUpload(formData).subscribe({
       next: (res) => {
 
         if (!res || !res.Data) {
@@ -676,7 +679,7 @@ export class ClientaddressComponent {
       const payload = {
         Action: "Edit",
         UserId: this.userdetail.user_Id,
-        ClientAddressId: this.rowData.clientAddressId,
+        VendorClientAddressId: this.rowData.vendorClientAddressId,
 
         CompanyId: this.rowData.companyId,
         CostCenterMappingId: this.rowData.costCenterMappingId,
@@ -717,7 +720,7 @@ export class ClientaddressComponent {
       console.log('Edit Payload', payload);
       console.log('Client Address Form Value', JSON.stringify(payload));
 
-      this.service.clientaddressaddsave(payload).subscribe({
+      this.service.Vendorclientaddressaddsave(payload).subscribe({
         next: (res: string) => {
           const cleanMessage = res.replace(/<br\s*\/?>/gi, '\n');
 
@@ -752,7 +755,7 @@ export class ClientaddressComponent {
     const payload = {
       Action: "Add",
       UserId: this.userdetail.user_Id,
-      ClientAddressId: 0,
+      VendorClientAddressId: 0,
       CompanyId: raw.company?.companyId || 0,
       StateId: raw.state?.state_Id || 0,
       CostCenterMappingId: raw.Costcentermapping?.mapNameId || 0,
@@ -795,7 +798,7 @@ export class ClientaddressComponent {
       CreatedBy: this.userdetail.user_Id
     };
 
-    this.service.clientaddressaddsave(payload).subscribe({
+    this.service.Vendorclientaddressaddsave(payload).subscribe({
       next: (res: string) => {
         const cleanMessage = res.replace(/<br\s*\/?>/gi, '\n');
         if (cleanMessage.includes('Success')) {
@@ -813,3 +816,4 @@ export class ClientaddressComponent {
     });
   }
 }
+
