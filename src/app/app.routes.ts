@@ -163,6 +163,7 @@ import { ClientgstlistComponent } from './pages/customers/clientgstlist/clientgs
 import { VendorclientgstComponent } from './pages/customers/vendorclientgst/vendorclientgst.component';
 import { SEZRepositoryComponent } from './pages/Invoice/sezrepository/sezrepository.component';
 import { GrossmarginComponent } from './pages/Reports/grossmargin/grossmargin.component';
+import { SEZRepositoryApprovalComponent } from './pages/Invoice/sezrepository-approval/sezrepository-approval.component';
 import { SalaryReleaseMenuComponent } from './pages/SalaryReleaseNew/salary-release-menu/salary-release-menu.component';
 import { BatchcreationprocessComponent } from './pages/SalaryReleaseNew/batchcreationprocess/batchcreationprocess.component';
 import { SalaryReleaseProcessComponent } from './pages/SalaryReleaseNew/salary-release-process/salary-release-process.component';
@@ -429,7 +430,7 @@ export const routes: Routes = [
           //{ path: 'creditnoteupdate', component: CreditnoteupdateComponent },
           { path: 'companyinvoiceformat', component: CompanyinvoiceformatComponent },
           { path: 'OtherIncome', component: OtherincomeComponent },
-          { path: 'sezapproval', component: SEZRepositoryComponent },
+          { path: 'sezrepository-approval', component: SEZRepositoryApprovalComponent },
 
         ]
       },
