@@ -162,6 +162,7 @@ import { MulticommercialComponent } from './pages/GlobalMasters/multicommercial/
 import { ClientgstlistComponent } from './pages/customers/clientgstlist/clientgstlist.component';
 import { VendorclientgstComponent } from './pages/customers/vendorclientgst/vendorclientgst.component';
 import { SEZRepositoryComponent } from './pages/Invoice/sezrepository/sezrepository.component';
+import { GrossmarginComponent } from './pages/Reports/grossmargin/grossmargin.component';
 import { SEZRepositoryApprovalComponent } from './pages/Invoice/sezrepository-approval/sezrepository-approval.component';
 
 
@@ -201,6 +202,9 @@ export const routes: Routes = [
       { path: 'gstinvoice', component: GstinvoiceComponent },
       //{ path: 'process', component: ReprocessComponent },
       { path: 'changepassword', component: ChangepasswordComponent },
+       {
+        path:'grossmargin',component:GrossmarginComponent
+      },
       {
         path: 'process',
         component: ProcessComponent,
@@ -357,6 +361,7 @@ export const routes: Routes = [
         //  path:"inputaggregatorclient",component:InputaggregatorwithclientComponent
         ]
       },
+     
       {
         path: 'admin', component: AdminnavigationComponent,
         children: [
