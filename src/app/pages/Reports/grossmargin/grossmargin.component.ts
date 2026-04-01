@@ -29,6 +29,8 @@ export class GrossmarginComponent {
     payPeriodType: string='All';
     userdetail!:any;
     isLoading=false;
+    selectedFile: File | null = null;
+  uploadProgress: number | null = null;
      constructor(private _decrypt:EncryptionService,
   private _sessionStoreage:SessionStorageService,
  @Inject(Invoice_TOKEN) private reportServices: IreportService
@@ -55,6 +57,45 @@ export class GrossmarginComponent {
     downloadLink.download = filename;
     downloadLink.click();
   }
+   onFileSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files?.length) {
+      this.selectedFile = input.files[0];
+    }
+  }
+  
+isDragging = false;
+
+
+
+// Drag events
+onDragOver(event: DragEvent) {
+  event.preventDefault();
+  this.isDragging = true;
+}
+
+onDragLeave(event: DragEvent) {
+  event.preventDefault();
+  this.isDragging = false;
+}
+
+onDrop(event: DragEvent) {
+  event.preventDefault();
+  this.isDragging = false;
+
+  if (event.dataTransfer?.files.length) {
+    this.selectedFile = event.dataTransfer.files[0];
+  }
+}
+
+// Remove file
+removeFile() {
+  this.selectedFile = null;
+}
+    uploadFile() {
+    
+    if (!this.selectedFile){ alert('Select The File') 
+      return;}}
   downloadReport() {
     const request = {
       "Pay_Period": this.payPeriod.payPeriod,

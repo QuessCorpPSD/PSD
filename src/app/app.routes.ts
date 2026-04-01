@@ -163,6 +163,11 @@ import { ClientgstlistComponent } from './pages/customers/clientgstlist/clientgs
 import { VendorclientgstComponent } from './pages/customers/vendorclientgst/vendorclientgst.component';
 import { SEZRepositoryComponent } from './pages/Invoice/sezrepository/sezrepository.component';
 import { GrossmarginComponent } from './pages/Reports/grossmargin/grossmargin.component';
+import { SalaryReleaseMenuComponent } from './pages/SalaryReleaseNew/salary-release-menu/salary-release-menu.component';
+import { BatchcreationprocessComponent } from './pages/SalaryReleaseNew/batchcreationprocess/batchcreationprocess.component';
+import { SalaryReleaseProcessComponent } from './pages/SalaryReleaseNew/salary-release-process/salary-release-process.component';
+
+import { SalaryReleaseStatusComponent } from './pages/SalaryReleaseNew/salary-release-status/salary-release-status.component';
 
 
 
@@ -184,7 +189,16 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/forgot/forgot.component')
       .then(c => c.ForgotComponent)
   },
-
+  {
+        path: 'salaryreleasemenu',
+        component: SalaryReleaseMenuComponent,
+        children: [
+          
+          { path: 'batchcreation', component: BatchcreationprocessComponent },
+          { path: 'SalaryReleaseProcess', component: SalaryReleaseProcessComponent },          
+          { path: 'SalaryReleaseStatus', component: SalaryReleaseStatusComponent },
+        ]
+      },
   // Master layout with children
   {
     path: 'Master', component: MasterComponent, children: [
