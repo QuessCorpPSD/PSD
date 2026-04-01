@@ -162,6 +162,7 @@ import { MulticommercialComponent } from './pages/GlobalMasters/multicommercial/
 import { ClientgstlistComponent } from './pages/customers/clientgstlist/clientgstlist.component';
 import { VendorclientgstComponent } from './pages/customers/vendorclientgst/vendorclientgst.component';
 import { SEZRepositoryComponent } from './pages/Invoice/sezrepository/sezrepository.component';
+import { SEZRepositoryApprovalComponent } from './pages/Invoice/sezrepository-approval/sezrepository-approval.component';
 
 
 
@@ -410,7 +411,7 @@ export const routes: Routes = [
           //{ path: 'creditnoteupdate', component: CreditnoteupdateComponent },
           { path: 'companyinvoiceformat', component: CompanyinvoiceformatComponent },
           { path: 'OtherIncome', component: OtherincomeComponent },
-          { path: 'sezapproval', component: SEZRepositoryComponent },
+          { path: 'sezrepository-approval', component: SEZRepositoryApprovalComponent },
 
         ]
       },
