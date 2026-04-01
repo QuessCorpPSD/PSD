@@ -5,6 +5,12 @@ export interface Company {
   displayName: string
   companyId:number
 }
+
+export interface Frequency {
+  frequencey_Id: number
+  financial_Year_Id: number
+  pay_Period: string
+}
 export interface State {
   state_Id: number
   state_Name: string

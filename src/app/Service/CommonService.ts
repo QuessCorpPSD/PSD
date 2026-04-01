@@ -373,4 +373,10 @@ export class CommonService implements ICommonService {
     console.log(url);
     return this.http.get<APIResponse>(url);
   }
+
+  GetAllFrequency(): Observable<APIResponse> {
+    const url = `${this.environment.apiUrl}Common/GetCommonPayperiod`;
+    //console.log(url);
+    return this.http.get<APIResponse>(url);
+  }
 }

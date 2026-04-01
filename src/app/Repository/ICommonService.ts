@@ -65,4 +65,5 @@ export interface ICommonService {
     GetMapNamebyCompany(companyId: any): Observable<APIResponse>;
     GetAutoEntityLocation(companyId: any): Observable<APIResponse>;
     GetAllcityBystate(stateId: any): Observable<APIResponse>;
+    GetAllFrequency(): Observable<APIResponse>;
 }
