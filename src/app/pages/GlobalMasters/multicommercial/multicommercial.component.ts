@@ -141,11 +141,17 @@ uploadedData: any[] = [];
   }
 
   AddPOOpen() {
-    this.dialog.open(AddMulticommercialComponent, {
+    const dialogRef =this.dialog.open(AddMulticommercialComponent, {
       width: '40%',
       height: '70vh',
       disableClose: true,
       data: { mode: 'add' }
+    });
+
+      dialogRef.afterClosed().subscribe(result => {
+      if (result === 'updated') {
+        this.Search();
+      }
     });
   }
 
