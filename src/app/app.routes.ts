@@ -169,6 +169,7 @@ import { BatchcreationprocessComponent } from './pages/SalaryReleaseNew/batchcre
 import { SalaryReleaseProcessComponent } from './pages/SalaryReleaseNew/salary-release-process/salary-release-process.component';
 
 import { SalaryReleaseStatusComponent } from './pages/SalaryReleaseNew/salary-release-status/salary-release-status.component';
+import { DownloadbatchComponent } from './pages/SalaryReleaseNew/downloadbatch/downloadbatch.component';
 
 
 
@@ -191,15 +192,18 @@ export const routes: Routes = [
       .then(c => c.ForgotComponent)
   },
   {
-        path: 'salaryreleasemenu',
+       path: 'salaryreleasemenu',
         component: SalaryReleaseMenuComponent,
         children: [
-          
+         
+          { path: 'downloadbatch', component: DownloadbatchComponent },
           { path: 'batchcreation', component: BatchcreationprocessComponent },
           { path: 'SalaryReleaseProcess', component: SalaryReleaseProcessComponent },          
           { path: 'SalaryReleaseStatus', component: SalaryReleaseStatusComponent },
         ]
-      },
+
+      }
+    ,
   // Master layout with children
   {
     path: 'Master', component: MasterComponent, children: [

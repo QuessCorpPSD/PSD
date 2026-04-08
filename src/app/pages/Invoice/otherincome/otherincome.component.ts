@@ -590,7 +590,7 @@ export class OtherincomeComponent {
     const childDetail: ChildDetail[] = [];
 
     const selectedItems = this.filteredSelectedItems;
-    console.log(selectedItems);
+    
     selectedItems.forEach(item => {
       childDetail.push({
         InvoiceCulture_id: 0,
