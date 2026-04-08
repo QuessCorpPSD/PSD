@@ -1,9 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { environment } from '../../../environments/environment.development';
-import { ISalaryReleaseApproval } from '../../Repository/SalaryRequestNew/ISalaryReleaseApproval';
+import { environment } from '../../../../environments/environment.development';
+import { ISalaryReleaseApproval } from '../../../Repository/SalaryRequestNew/ISalaryReleaseApproval';
 import { Observable } from 'rxjs';
-import { APIResponse } from '../../Models/apiresponse';
+import { APIResponse } from '../../../Models/apiresponse';
 
 @Injectable({
   providedIn: 'root'

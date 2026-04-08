@@ -170,6 +170,7 @@ import { SalaryReleaseProcessComponent } from './pages/SalaryReleaseNew/salary-r
 
 import { SalaryReleaseStatusComponent } from './pages/SalaryReleaseNew/salary-release-status/salary-release-status.component';
 import { DownloadbatchComponent } from './pages/SalaryReleaseNew/downloadbatch/downloadbatch.component';
+import { SalaryReleaseApproveComponent } from './pages/SalaryReleaseNew/salary-release-approve/salary-release-approve.component';
 
 
 
@@ -191,19 +192,6 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/forgot/forgot.component')
       .then(c => c.ForgotComponent)
   },
-  {
-       path: 'salaryreleasemenu',
-        component: SalaryReleaseMenuComponent,
-        children: [
-         
-          { path: 'downloadbatch', component: DownloadbatchComponent },
-          { path: 'batchcreation', component: BatchcreationprocessComponent },
-          { path: 'SalaryReleaseProcess', component: SalaryReleaseProcessComponent },          
-          { path: 'SalaryReleaseStatus', component: SalaryReleaseStatusComponent },
-        ]
-
-      }
-    ,
   // Master layout with children
   {
     path: 'Master', component: MasterComponent, children: [
@@ -211,7 +199,7 @@ export const routes: Routes = [
       { path: 'Assignment', component: AssignmentComponent },
       { path: 'Severity', component: SeverityComponent },
       { path: 'AllottedLot', component: AllotedLotComponent },
-      { path: 'Break', component: BreakdetailComponent },      
+      { path: 'Break', component: BreakdetailComponent },
       { path: 'user', component: UserListComponent },
       { path: 'dashboard', component: DashboardComponent },
       { path: 'app-revok', component: RevokComponent },
@@ -220,8 +208,8 @@ export const routes: Routes = [
       { path: 'gstinvoice', component: GstinvoiceComponent },
       //{ path: 'process', component: ReprocessComponent },
       { path: 'changepassword', component: ChangepasswordComponent },
-       {
-        path:'grossmargin',component:GrossmarginComponent
+      {
+        path: 'grossmargin', component: GrossmarginComponent
       },
       {
         path: 'process',
@@ -278,11 +266,8 @@ export const routes: Routes = [
         path: 'PromationNavigation', component: PromotionNavigationComponent,
         children: [
           { path: 'Increament', component: IncreamentComponent },
-
-
         ]
       },
-
       {
         path: 'Separation',
         component: SeparationNavigationComponent,
@@ -291,10 +276,6 @@ export const routes: Routes = [
           { path: 'fullfinalSettlement', component: FullfinalsettlementComponent },
         ]
       },
-
-
-
-
       {
         path: 'navigationglobal', component: GlobalmasternavigationComponent,
         children: [
@@ -343,9 +324,6 @@ export const routes: Routes = [
           { path: "taxanddeclarationactual", component: TaxdeclationandactualComponent },
           { path: 'IncomeLoss', component: IncomeLossOnHousePropertyComponent },
           { path: 'HRAcalculation', component: HRAcalculationComponent },
-
-
-
         ]
       },
       {
@@ -354,8 +332,6 @@ export const routes: Routes = [
           { path: "loanandadvance", component: LoanandadvanceComponent },
           { path: 'loanpreclosure', component: ReimbursementLoanPreClosureComponent },
           { path: 'reimbursement', component: ReimbrusementComponent }
-
-
         ]
       },
       {
@@ -364,31 +340,25 @@ export const routes: Routes = [
           { path: "legalentitymapping", component: LegalEntityMappingComponent },
           { path: "taxremittancegeneration", component: TaxRemittanceGenerationComponent },
           { path: "taxremittancedetail", component: TaxremittancedetailComponent }
-
-
-
         ]
       },
       {
-        path:'input',component:InputnavigationComponent,
-        children:[
-            { path: "inputaggregatorclient", component: InputaggregatorwithclientComponent },
+        path: 'input', component: InputnavigationComponent,
+        children: [
+          { path: "inputaggregatorclient", component: InputaggregatorwithclientComponent },
           { path: "inputaggregatorattendance", component: InputaggregatorattendanceComponent },
           { path: "leavemaster", component: LeavetypemasterComponent },
           { path: "leavemastermapping", component: LeavetypemastermappingComponent }
-        //  path:"inputaggregatorclient",component:InputaggregatorwithclientComponent
+          //  path:"inputaggregatorclient",component:InputaggregatorwithclientComponent
         ]
       },
-     
       {
         path: 'admin', component: AdminnavigationComponent,
         children: [
           { path: "companypermission", component: CompanypermissionComponent, },
           { path: "passwordunlock", component: PasswordunlockComponent, },
           { path: "payperiodunlock", component: PayperiodunlockComponent, },
-
         ]
-
       },
       {
         path: 'customer', component: CustomernavigationComponent,
@@ -409,36 +379,46 @@ export const routes: Routes = [
           { path: "employee", component: EmployeeComponents },
           { path: "cancelledinvoicerepository", component: CancelledinvoicerepositoryComponent },
           { path: "Company", component: CompanyComponent },
-
         ]
       },
       {
         path: 'invoicenavigation',
         component: InvoicenavigationComponent,
         children: [
-          {path:'billingdashboard',component:BillingdashboardComponent},
+          { path: 'billingdashboard', component: BillingdashboardComponent },
           { path: 'initiate', component: DraftInvoiceComponent },
           { path: 'provisionalinvoice', component: ProvisionalinvoiceComponent },
           { path: 'perfomainvoice', component: PerfomainvoiceComponent },
           { path: 'billabledays', component: BillableDaysComponent },
           { path: 'gstinvoice', component: GstinvoiceComponent },
-           { path: 'einvoice', component: EInvoiceComponent },
-          { path: 'billingpayfrequency', component: BillingpayfrequencyComponent },          
+          { path: 'einvoice', component: EInvoiceComponent },
+          { path: 'billingpayfrequency', component: BillingpayfrequencyComponent },
           { path: 'poinitiate', component: POInitiateComponent },
-           {path:'IRN',component:EInvoiceComponent},
+          { path: 'IRN', component: EInvoiceComponent },
           { path: 'app-invoice-culture', component: InvoiceCultureAddpoComponent },
           { path: 'ClientBillableReportDatewise', component: ClientbillablereportsdatewiseComponent },
           //{ path: 'creditnote', component: CreditnoteComponent },
-         // { path: 'creditnoteapprove', component: CreditnoteapproveComponent },
-         { path: 'invoicecancel', component: InvoiceCancelComponent },
+          // { path: 'creditnoteapprove', component: CreditnoteapproveComponent },
+          { path: 'invoicecancel', component: InvoiceCancelComponent },
           //{ path: 'creditnoteupdate', component: CreditnoteupdateComponent },
           { path: 'companyinvoiceformat', component: CompanyinvoiceformatComponent },
           { path: 'OtherIncome', component: OtherincomeComponent },
           { path: 'sezrepository-approval', component: SEZRepositoryApprovalComponent },
-
         ]
       },
+      {
+        path: 'salaryreleasemenu',
+        component: SalaryReleaseMenuComponent,
+        children: [
 
+          { path: 'downloadbatch', component: DownloadbatchComponent },
+          { path: 'batchcreation', component: BatchcreationprocessComponent },
+          { path: 'SalaryReleaseProcess', component: SalaryReleaseProcessComponent },
+          { path: 'SalaryReleaseApproval', component: SalaryReleaseApproveComponent },
+          { path: 'SalaryReleaseStatus', component: SalaryReleaseStatusComponent },
+        ]
+
+      },
       { path: 'changepassword', component: ChangepasswordComponent },
 
       // Wildcard inside children
