@@ -251,7 +251,7 @@ export class AddMulticommercialComponent {
         //console.log('response', res);
         if (res?.Data?.message == 'Formula created successfully') {
           alert(res?.Data?.message);
-          this.dialogRef.close(true);
+          this.dialogRef.close('updated');
           this.isLoading = false;
         } else if (res?.Data?.message){
           alert(res?.Data?.message);
@@ -306,6 +306,7 @@ export class AddMulticommercialComponent {
           alert("Save failed");
           this.isLoading = false;
         }
+
       },
       error: () => {
         alert("API Error");

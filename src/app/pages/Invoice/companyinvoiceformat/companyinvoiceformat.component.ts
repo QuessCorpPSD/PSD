@@ -37,7 +37,7 @@ import { GroupnameComponent } from "../../../common/groupname/groupname.componen
     MatButtonModule,
     //CompanyComponent,
     MatTooltipModule,
-    MatCheckboxModule, MatCardModule, CompanyComponent, GroupnameComponent],
+    MatCheckboxModule, MatCardModule, CompanyComponent, GroupnameComponent, MatIconModule],
   templateUrl: './companyinvoiceformat.component.html',
   styleUrl: './companyinvoiceformat.component.css'
 })
@@ -73,6 +73,7 @@ export class CompanyinvoiceformatComponent {
   groupValue?: number;
   editData?: any;
   Id?: number;
+  searchText: string = '';
 
   displayedColumns: string[] = [
     "edit",
@@ -105,6 +106,10 @@ export class CompanyinvoiceformatComponent {
     this.userdetail = JSON.parse(this._decrypt.decrypt(userdetail!));
 
     this.SearchClick();
+  }
+
+  applyFilter() {
+    this.dataSource.filter = this.searchText.trim().toLowerCase();
   }
 
   SearchClick() {
@@ -154,7 +159,7 @@ export class CompanyinvoiceformatComponent {
     this.BindInvoiceFormat();
 
     this.companyValue = rowData.company_Code;
-    this.comapnyId=rowData.companyId;
+    this.comapnyId = rowData.companyId;
     this.groupValue = rowData.group_Name;
     this.groupId = rowData.groupDetailId;
     this.Id = rowData.id;
@@ -169,7 +174,7 @@ export class CompanyinvoiceformatComponent {
     this.BindInvoiceType();
   }
 
-    InvoiceFormatOnclick(event: any) {
+  InvoiceFormatOnclick(event: any) {
     this.BindInvoiceFormat();
   }
 
@@ -247,7 +252,7 @@ export class CompanyinvoiceformatComponent {
         console.log(cleanMessage);
         if (cleanMessage.includes('Success')) {
           alert('Company Invoice Format Created Successfully');
-          this.isAddclicked=false;
+          this.isAddclicked = false;
           this.SearchClick();
         } else {
           alert(cleanMessage);
@@ -281,7 +286,7 @@ export class CompanyinvoiceformatComponent {
         console.log(cleanMessage);
         if (cleanMessage.includes('Success')) {
           alert('Company Invoice Format Updated Successfully');
-          this.iseditclicked=false;
+          this.iseditclicked = false;
           this.SearchClick();
         } else {
           alert(cleanMessage);

@@ -172,7 +172,8 @@ export class SEZRepositoryApprovalComponent {
     if (company) {
       this.companyUI = company;
       this.Company_Code = company.company_Code;
-      console.log('company', this.companyUI);
+      this.selectedCompanyId = company.companyId;
+      console.log('company', this.selectedCompanyId);
 
       if (!this.companyUI) {
         alert("Select Company Code");
@@ -248,14 +249,12 @@ export class SEZRepositoryApprovalComponent {
   }
 
   applyFilter() {
-    const text = (this.searchText || '').toLowerCase().trim();
-
-    if (!text) {
-      this.filteredRows = [...this.rows];
-      return;
-    }
-
-
+    // const text = (this.searchText || '').toLowerCase().trim();
+    // if (!text) {
+    //   this.filteredRows = [...this.rows];
+    //   return;
+    // }
+    this.dataSource.filter = this.searchText.trim().toLowerCase();
   }
 
   get selectedRowsCount(): number {
