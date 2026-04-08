@@ -100,7 +100,7 @@ export class OtherincomeComponent {
     this.addOtherIncome = new FormGroup({
       CompanyCode: new FormControl('', Validators.required),
       CompanyName: new FormControl('', Validators.required),
-      ServiceCharge: new FormControl('', Validators.required),
+      ServiceCharge: new FormControl('2', Validators.required),
       InvoiceRefNo: new FormControl({ value: '', disabled: true }),
       MapName: new FormControl('', Validators.required),
       Location: new FormControl('', Validators.required),
@@ -348,10 +348,11 @@ export class OtherincomeComponent {
   }
 
   loadPaycodes(): void {
-    this.service.getAllPaycode(this.selectedCC).subscribe({
+    this.service.getAllPaycodes(this.selectedCC).subscribe({
       next: (res) => {
+        console.log(res);
         this.typeInvoiceList = res?.Data?.data?.Table0 || [];
-        this.availableItems = res?.Data?.data?.Table0 || [];
+        this.availableItems = res?.Data || [];
         this.filteredAvailableItems = [...this.availableItems];
 
         this.applyFilters();
@@ -589,7 +590,7 @@ export class OtherincomeComponent {
     const childDetail: ChildDetail[] = [];
 
     const selectedItems = this.filteredSelectedItems;
-
+    console.log(selectedItems);
     selectedItems.forEach(item => {
       childDetail.push({
         InvoiceCulture_id: 0,

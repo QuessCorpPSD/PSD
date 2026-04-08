@@ -74,6 +74,11 @@ export class OtherincomecultureService implements IOtherIncomeCulture {
       `${environment.apiUrl}InvoiceCulture/GetAllPayCodeFromCompanyOI/${companyId}`
     );
   }
+    getAllPaycodes(companyId: number): Observable<APIResponse> {
+    return this.http.get<APIResponse>(
+      `${environment.apiUrl}Paycode/GetPayCode/${companyId}`
+    );
+  }
 
 
 }

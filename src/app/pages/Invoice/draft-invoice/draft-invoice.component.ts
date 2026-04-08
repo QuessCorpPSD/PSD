@@ -308,6 +308,10 @@ export class DraftInvoiceComponent implements OnInit {
         if (res.Data.file != "No") {
           this.downloadExcelFromBase64(res.Data.file, res.Data.fileName)
         }
+        else{
+          alert("Data not exists");
+          this.isLoading = false;
+        }
 
       },
       error: err => {

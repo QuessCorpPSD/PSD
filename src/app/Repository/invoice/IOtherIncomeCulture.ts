@@ -13,5 +13,6 @@ export interface IOtherIncomeCulture {
     UploadInvoiceCulture(formData: FormData): Observable<APIResponse>
     ExportToExcel(userId: number): Observable<APIResponse>
     getAllPaycode(companyId: number): Observable<APIResponse>
+    getAllPaycodes(companyId: number): Observable<APIResponse>
 }
 

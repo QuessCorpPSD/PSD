@@ -120,9 +120,9 @@
         <div class="card-header bg-white border-0 pb-0">
           <h6 class="fw-bold text-success mb-1">
             <i class="bi bi-upload me-2"></i>
-            Upload Accrued File
+           Download Gross margin Report
           </h6>
-          <small class="text-muted">Upload your accrual file here</small>
+        
         </div>
 
         <div class="card-body d-flex flex-column">
@@ -130,27 +130,23 @@
           <!-- Pay Period -->
           <div class="mb-3">
             <label class="form-label gm-label">Pay Period</label>
-            <PayPeriod
-              [selectedCompanyId]="selectedCompanyId"
-              [payPeriodType]="payPeriodType"
-              (payperiodEmit)="handlePayperiodEvent($event)">
-            </PayPeriod>
+             <payperiodall (FrequencyEmit)="handleFrequencyEvent($event)">
+                       
+                    </payperiodall>
           </div>
+           <div class="mb-3">
+            <button style="width: 100px;margin-top: 2px;"
+  class="btn gm-btn-upload w-100" (click)="downloadReport()"
+ 
+  >
 
-          <!-- File Upload -->
-          <div class="mb-3">
-            <label class="form-label gm-label">Select File</label>
-            <input 
-              type="file"
-              class="form-control"
-              (change)="onFileSelected($event)" />
-          </div>
+  <span class="d-flex align-items-center justify-content-center gap-2">
+    <i class="bi bi-cloud-arrow-up"></i>
+   Download
+  </span>
 
-         
-
-        
-     
-
+</button>
+           </div>
         </div>
       </div>
     </div>

@@ -260,7 +260,7 @@
                                         (cdkDropListDropped)="drop($event)" class="drag-drop-list">
 
                                         <div class="drag-drop-box" *ngFor="let item of filteredAvailableItems" cdkDrag>
-                                            {{ item.Paycode_Code }}
+                                            {{ item.payCodeName }}
                                         </div>
 
                                     </div>
@@ -279,7 +279,7 @@
 
                                         <div class="drag-drop-box-selected" *ngFor="let item of filteredSelectedItems"
                                             cdkDrag>
-                                            {{ item.Paycode_Code }}
+                                            {{ item.payCodeName }}
                                         </div>
                                     </div>
                                 </div>

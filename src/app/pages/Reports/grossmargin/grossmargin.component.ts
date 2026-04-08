@@ -7,13 +7,14 @@ import { EncryptionService } from '../../../Shared/encryption.service';
 import { SessionStorageService } from '../../../Shared/SessionStorageService';
 import { IreportService } from '../../../Repository/Reports/Ireportservice';
 import { ReportService } from '../../../Service/Reports/report.service';
+import { PayperiodallComponent } from '../../../common/PayperiodAll/payperiodall.component';
 
 
 
 export const Invoice_TOKEN = new InjectionToken<IreportService>('Invoice_TOKEN');
 @Component({
   selector: 'app-grossmargin',
-  imports: [CommonModule,CompanyallComponent,PayPeriodComponent],
+  imports: [CommonModule,CompanyallComponent,PayPeriodComponent,PayperiodallComponent],
   templateUrl: './grossmargin.component.html',
   styleUrl: './grossmargin.component.css',
   providers: [
@@ -26,6 +27,7 @@ export const Invoice_TOKEN = new InjectionToken<IreportService>('Invoice_TOKEN')
 export class GrossmarginComponent {
   selectedCompanyId!: number;
     payPeriod!: Payperiodclass;
+    downloadpayPeriod!: string;
     payPeriodType: string='All';
     userdetail!:any;
     isLoading=false;
@@ -73,7 +75,10 @@ onDragOver(event: DragEvent) {
   event.preventDefault();
   this.isDragging = true;
 }
-
+          handleFrequencyEvent(frequency: any) {
+      console.log('frequency', frequency);
+     this.downloadpayPeriod =frequency.pay_Period
+  } 
 onDragLeave(event: DragEvent) {
   event.preventDefault();
   this.isDragging = false;
@@ -97,8 +102,13 @@ removeFile() {
     if (!this.selectedFile){ alert('Select The File') 
       return;}}
   downloadReport() {
+    if(this.downloadpayPeriod==null|| this.downloadpayPeriod==undefined)
+    {
+      alert('Please select Pay period');
+      return;
+    }
     const request = {
-      "Pay_Period": this.payPeriod.payPeriod,
+      "Pay_Period": this.downloadpayPeriod,
       "Submit": 0
     }
     this.isLoading=true;

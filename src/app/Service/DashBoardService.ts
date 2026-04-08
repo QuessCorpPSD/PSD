@@ -102,8 +102,7 @@ export class DashBoardServices implements IDashBoardServices {
     }
 
     SaveInvoiceAllotEdit(reqNo: string, userId: number):Observable<APIResponse>{
-        const url = `${this.environment.apiUrl}DashBoard/SaveInvoiceAllotEdit/${reqNo}/${userId}`;
-        console.log(url);
+        const url = `${this.environment.apiUrl}DashBoard/SaveInvoiceAllotEdit/${reqNo}/${userId}`;       
         return this.http.get<APIResponse>(url);
     }
 }
