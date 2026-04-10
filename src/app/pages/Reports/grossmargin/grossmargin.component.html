@@ -120,7 +120,7 @@
         <div class="card-header bg-white border-0 pb-0">
           <h6 class="fw-bold text-success mb-1">
             <i class="bi bi-upload me-2"></i>
-           Download Gross margin Report
+            Reports
           </h6>
         
         </div>
@@ -134,19 +134,27 @@
                        
                     </payperiodall>
           </div>
-           <div class="mb-3">
-            <button style="width: 100px;margin-top: 2px;"
-  class="btn gm-btn-upload w-100" (click)="downloadReport()"
- 
-  >
+      <div class="mb-3 d-flex gap-2">
+  <button 
+    style="width: 150px;" 
+    class="btn gm-btn-upload"
+    (click)="downloadReport()">
+    <span class="d-flex align-items-center justify-content-center gap-2">
+      <i class="bi bi-cloud-arrow-up"></i>
+      Gross Margin
+    </span>
+  </button>
 
-  <span class="d-flex align-items-center justify-content-center gap-2">
-    <i class="bi bi-cloud-arrow-up"></i>
-   Download
-  </span>
-
-</button>
-           </div>
+  <button 
+    style="width: 220px;" 
+    class="btn gm-btn-upload"
+    (click)="unprosseddownloadReport()">
+    <span class="d-flex align-items-center justify-content-center gap-2">
+      <i class="bi bi-cloud-arrow-up"></i>
+      Unprocessed Gross Margin
+    </span>
+  </button>
+</div>
         </div>
       </div>
     </div>

@@ -109,6 +109,7 @@ removeFile() {
     }
     const request = {
       "Pay_Period": this.downloadpayPeriod,
+      "ReportType":"GM",
       "Submit": 0
     }
     this.isLoading=true;
@@ -116,6 +117,32 @@ removeFile() {
       next: ({ Data }) => {
         // directly destructured
         console.log(Data);
+        this.downloadExcelFromBase64(Data.file,Data.fileName)
+        //this.handleReport(Data);
+      },
+      error: (err) => {
+        console.error('Error fetching Gross Margin Report:', err);
+      },
+      complete: () => {
+        console.log('Request completed');
+      }
+    });
+  }
+   unprosseddownloadReport() {
+    if(this.downloadpayPeriod==null|| this.downloadpayPeriod==undefined)
+    {
+      alert('Please select Pay period');
+      return;
+    }
+    const request = {
+      "Pay_Period": this.downloadpayPeriod,
+      "ReportType":"UGM",
+      "Submit": 0
+    }
+    this.isLoading=true;
+    this.reportServices.GrossMarginReport(request).subscribe({
+      next: ({ Data }) => {
+      
         this.downloadExcelFromBase64(Data.file,Data.fileName)
         //this.handleReport(Data);
       },
