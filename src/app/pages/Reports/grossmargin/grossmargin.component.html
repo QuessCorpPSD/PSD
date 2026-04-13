@@ -135,26 +135,26 @@
                     </payperiodall>
           </div>
       <div class="mb-3 d-flex gap-2">
-  <button 
-    style="width: 150px;" 
-    class="btn gm-btn-upload"
-    (click)="downloadReport()">
-    <span class="d-flex align-items-center justify-content-center gap-2">
-      <i class="bi bi-cloud-arrow-up"></i>
-      Gross Margin
-    </span>
-  </button>
-
-  <button 
-    style="width: 220px;" 
-    class="btn gm-btn-upload"
-    (click)="unprosseddownloadReport()">
-    <span class="d-flex align-items-center justify-content-center gap-2">
-      <i class="bi bi-cloud-arrow-up"></i>
-      Unprocessed Gross Margin
-    </span>
-  </button>
-</div>
+        <button style="width: 120px;" class="btn gm-btn-upload" (click)="downloadReport()">
+          <span class="d-flex align-items-center justify-content-center gap-2">
+            <i class="bi bi-cloud-arrow-up"></i>
+            Gross Margin
+          </span>
+        </button>
+      
+        <button style="width: 120px;" class="btn gm-btn-upload" (click)="unprosseddownloadReport()">
+          <span class="d-flex align-items-center justify-content-center gap-2">
+            <i class="bi bi-cloud-arrow-up"></i>
+            Unprocessed
+          </span>
+        </button>
+        <button style="width: 100px;" class="btn gm-btn-upload" (click)="unprosseddownloadReport()">
+          <span class="d-flex align-items-center justify-content-center gap-2">
+            <i class="bi bi-cloud-arrow-up"></i>
+            Freeze
+          </span>
+        </button>
+      </div>
         </div>
       </div>
     </div>

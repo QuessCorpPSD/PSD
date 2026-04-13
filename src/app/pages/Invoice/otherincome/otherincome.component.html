@@ -144,7 +144,7 @@
                 <div class="row g-3 mb-3">
                     <div class="col-md-4">
                         <label class="form-label">Company Code<span class="text-danger">*</span></label>
-                        <companyall (companyEmit)="handleCompany($event)" formControlName="CompanyCode">
+                        <companyall (companyEmit)="handleCompanyAdd($event)" formControlName="CompanyCode">
                         </companyall>
                         <div class="text-danger small" *ngIf="addOtherIncome.get('CompanyCode')?.touched 
                         && addOtherIncome.get('CompanyCode')?.hasError('required')">
@@ -174,7 +174,7 @@
                     </div> -->
                 <div class="col-md-4">
                         <label class="form-label">Map Name<span class="text-danger">*</span></label>
-                        <mapname [selectedCompanyId]="selectedCC" (mapnameEmit)="handleMapNameEvent($event)"></mapname>
+                        <mapname [selectedCompanyId]="CompanySelectedCC" (mapnameEmit)="handleMapNameEvent($event)"></mapname>
                         <!-- <select class="form-select" formControlName="MapName">
                             <option value="">-- Select --</option>
                             <option *ngFor="let f of financialYear" [value]="f.Financial_Year_Id">
@@ -239,54 +239,66 @@
 
                  
                 </div>
-                <div class="row g-3 mb-3">
+                <div *ngIf="isPaycodesLoaded" class="row g-3 mb-3">
                     <div class="col-md-12">
                         <label class="form-label">Type Of Invoice<span class="text-danger"></span></label>
                     </div>
-                    <div class="col-md-2"></div>
+                  
                     <div class="col-md-8">
+                          <paycodedragdrop  (selectedItemsChange)="getselectedValues($event)" [availables]="availableItems"  [selects]="selectedItems"
+                                    valueField="value" textField="text"  (itemsMoved)="onItemsMoved($event)">
+                                </paycodedragdrop>
+                        
                         <div class="type-scroll" *ngIf="selectedCC > 0">
                             <div class="row">
-
-                                <!-- AVAILABLE PAYCODES -->
-                                <div class="col-md-6">
-                                    <!-- <label>Default Paycodes</label> -->
-
-                                    <input type="text" class="form-control form-control-sm mb-2"
-                                        placeholder="Search Available Paycode" [formControl]="availableSearchInput">
-
-                                    <div cdkDropList id="availableList" #availables="cdkDropList"
-                                        [cdkDropListData]="filteredAvailableItems" [cdkDropListConnectedTo]="[selects]"
-                                        (cdkDropListDropped)="drop($event)" class="drag-drop-list">
-
-                                        <div class="drag-drop-box" *ngFor="let item of filteredAvailableItems" cdkDrag>
-                                            {{ item.payCodeName }}
-                                        </div>
-
-                                    </div>
-                                </div>
-
-                                <!-- SELECTED PAYCODES -->
-                                <div class="col-md-6">
-                                    <!-- <label>Mapped Paycodes</label> -->
-
-                                    <input type="text" class="form-control form-control-sm mb-2"
-                                        placeholder="Search Mapped Paycode" [formControl]="selectedSearchInput">
-
-                                    <div cdkDropList id="selectedList" #selects="cdkDropList"
-                                        [cdkDropListData]="selectedDragItems" [cdkDropListConnectedTo]="[availables]"
-                                        (cdkDropListDropped)="drop($event)" class="drag-drop-list">
-
-                                        <div class="drag-drop-box-selected" *ngFor="let item of filteredSelectedItems"
-                                            cdkDrag>
-                                            {{ item.payCodeName }}
-                                        </div>
-                                    </div>
-                                </div>
+                        
+                              
+                                <!-- <div class="col-md-6">
+                                                            
+                        
+                                                            <input type="text" class="form-control form-control-sm mb-2"
+                                                                placeholder="Search Available Paycode" [formControl]="availableSearchInput">
+                        
+                                                                <div cdkDropList #availables="cdkDropList" [cdkDropListData]="filteredAvailableItems"
+                                                                    [cdkDropListConnectedTo]="[selects]" (cdkDropListDropped)="drop($event)" class="drag-drop-list">
+                                                                
+                                                                    <div class="drag-drop-box" *ngFor="let item of filteredAvailableItems" cdkDrag>
+                                                                        {{ item.text }}
+                                                                    </div>
+                                                                
+                                                                </div>
+                                                          
+                                                                [cdkDropListData]="filteredAvailableItems" [cdkDropListConnectedTo]="[selects]"
+                                                                (cdkDropListDropped)="drop($event)" class="drag-drop-list">
+                        
+                                                                <div class="drag-drop-box" *ngFor="let item of filteredAvailableItems" cdkDrag>
+                                                                    {{ item.payCodeName }}
+                                                                </div>
+                        
+                                                            </div> 
+                                                        </div>
+                        
+                                                       
+                                                        <div class="col-md-6">
+                                                          
+                        
+                                                            <input type="text" class="form-control form-control-sm mb-2"
+                                                                placeholder="Search Mapped Paycode" [formControl]="selectedSearchInput">
+                        
+                                                            <div cdkDropList id="selectedList" #selects="cdkDropList"
+                                                                [cdkDropListData]="selectedDragItems" [cdkDropListConnectedTo]="[availables]"
+                                                                (cdkDropListDropped)="drop($event)" class="drag-drop-list">
+                        
+                                                                <div class="drag-drop-box-selected" *ngFor="let item of filteredSelectedItems"
+                                                                    cdkDrag>
+                                                                    {{ item.text }}
+                                                                </div>
+                                                            </div>
+                                                        </div> -->
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-2"></div>
+                    
                 </div>
             </form>
 
@@ -294,7 +306,7 @@
 
             <!-- </mat-card-footer> -->
         </mat-card-content>
-        <mat-card-actions class="d-flex justify-content-end mt-3" style="gap: 10px; padding-right: 8px;">\
+        <mat-card-actions class="d-flex justify-content-end mt-3" style="gap: 10px; padding-right: 8px;">
             <div class="d-flex justify-content-end mt-3">
                 <div class="btn-1"
                     style="display: flex; justify-content: flex-end; gap: 10px; width: 100%; padding-right: 7px;">
