@@ -97,7 +97,7 @@ import { DesignationComponent } from './pages/customers/designation/designation.
 import { ITcalenderComponent } from './pages/customers/itcalender/itcalender.component';
 import { PayfrequencyComponent } from './pages/customers/payfrequency/payfrequency.component';
 import { ServiceChargeComponent } from './pages/customers/ServiceChargeMaster/service-charge/service-charge.component';
-
+import { VendorServiceChargeComponent } from './pages/customers/vendor-service-charge/vendor-service-charge.component';
 import { AdminnavigationComponent } from './pages/admin/adminnavigation/adminnavigation.component';
 import { CompanypermissionComponent } from './pages/admin/companypermission/companypermission.component';
 import { PasswordunlockComponent } from './pages/admin/passwordunlock/passwordunlock.component';
@@ -376,6 +376,7 @@ export const routes: Routes = [
           { path: "itcalender", component: ITcalenderComponent },
           { path: "companypaycodemapping", component: CompanypaycodemappingComponent },
           { path: "ServiceCharge", component: ServiceChargeComponent },
+          { path: "VendorServiceCharge", component: VendorServiceChargeComponent },
           { path: "employee", component: EmployeeComponents },
           { path: "cancelledinvoicerepository", component: CancelledinvoicerepositoryComponent },
           { path: "Company", component: CompanyComponent },
