@@ -80,10 +80,13 @@ export class SEZRepositoryApprovalComponent {
     //'delete',
     'invoiceNo',
     'documentName',
+    'ackNo',
     'uploadedData',
     'document_Remarks',
+    'requestedBy',
     'approvalStatus',
     'uploadStatus'
+
   ];
 
   constructor(private _sessionStoreage: SessionStorageService, private decry: EncryptionService, private router: Router, public fb: FormBuilder

@@ -1,0 +1,118 @@
+<form [formGroup]="VendorServiceChargeAddForm" (ngSubmit)="onSave()"  novalidate>
+    <mat-card class="custom-card">
+        <mat-card-header class="sticky-header">
+
+            <!-- <mat-card-title>Add Designation</mat-card-title> -->
+            <mat-card-title style="color: #302CB3;">Add Vendor Service Charge</mat-card-title>
+
+            <span class="spacer"></span>
+            <button mat-icon-button (click)="onClose()" class="no-border-icon">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-card-header>
+        <mat-card-content class="scroll-content">
+            <br />
+         <div class="row g-3 mb-3">
+
+  <div class="col-md-3">
+    <label class="form-label">Company Code<span class="text-danger">*</span></label>
+    <companyall (companyEmit)="handleCompany($event)"></companyall>
+  <div class="text-danger small"
+  *ngIf="VendorServiceChargeAddForm.get('CompanyId')?.touched &&
+         VendorServiceChargeAddForm.get('CompanyId')?.hasError('required')">
+  Company is required
+</div>
+  </div>
+
+  <div class="col-md-3">
+    <label class="form-label">Map Name<span class="text-danger">*</span></label>
+    <mapname [selectedCompanyId]="selectedCC"
+             (mapnameEmit)="handleMapNameEvent($event)">
+    </mapname>
+    <div class="text-danger small"
+  *ngIf="VendorServiceChargeAddForm.get('MapNameId')?.touched &&
+         VendorServiceChargeAddForm.get('MapNameId')?.hasError('required')">
+  Map Name is required
+</div>
+  </div>
+
+  <div class="col-md-3">
+    <label class="form-label">Type <span class="text-danger">*</span></label>
+    <select class="form-select" formControlName="Type" >
+      <option value="">-- Select --</option>
+      <option *ngFor="let c of TypeList" [value]="c.geN_iID"  >
+        {{ c.geN_vDescription }}
+      </option>
+    </select>
+    <div class="text-danger small" *ngIf="VendorServiceChargeAddForm.get('Type')?.touched && VendorServiceChargeAddForm.get('Type')?.hasError('required')"> Type is required </div>
+  </div>
+
+  <div class="col-md-3">
+    <label class="form-label">Billing Type <span class="text-danger">*</span></label>
+    <select class="form-select" formControlName="BillingType" >
+      <option value="">-- Select --</option>
+      <option *ngFor="let c of BillingTypeList" [value]="c.geN_iID">
+        {{ c.geN_vDescription }}
+      </option>
+    </select>
+    <!--<div class="text-danger small" *ngIf="VendorServiceChargeAddForm.get('BillingType')?.touched && VendorServiceChargeAddForm.get('BillingType')?.hasError('required')"> Billing Type is required </div>-->
+  </div>
+
+</div>
+<div class="row g-3 mb-3">
+
+  <div class="col-md-3">
+    <label class="form-label">From Value</label>
+    <input type="text" class="form-control" formControlName="FromValue"  (keypress)="allowDecimal($event)"  placeholder="Enter From Value">
+    <!--<div class="text-danger small" *ngIf="VendorServiceChargeAddForm.get('FromValue')?.touched && VendorServiceChargeAddForm.get('FromValue')?.hasError('required')"> From Value is required </div>-->
+  </div>
+
+  <div class="col-md-3">
+    <label class="form-label">To Value</label>
+    <input type="text" class="form-control" formControlName="ToValue"  (keypress)="allowDecimal($event)" placeholder="Enter To Value">
+    <!--<div class="text-danger small" *ngIf="VendorServiceChargeAddForm.get('ToValue')?.touched && VendorServiceChargeAddForm.get('ToValue')?.hasError('required')"> To Value is required </div>-->
+  </div>
+
+  <div class="col-md-3">
+    <label class="form-label">Amount</label>
+    <input type="text" class="form-control" formControlName="Amount"  (keypress)="allowDecimal($event)"   placeholder="Enter Amount">
+    <div class="text-danger small" *ngIf="VendorServiceChargeAddForm.get('Amount')?.touched && VendorServiceChargeAddForm.get('Amount')?.hasError('required')"> Amount is required </div>
+  </div>
+
+  <div class="col-md-3">
+    <label class="form-label">Effective Date</label>
+    <input type="datetime-local" class="form-control" formControlName="EffectiveDate"  [min]="minDate">
+    <div class="text-danger small" *ngIf="VendorServiceChargeAddForm.get('EffectiveDate')?.touched && VendorServiceChargeAddForm.get('EffectiveDate')?.hasError('required')"> Effective Date is required </div>
+
+  </div>
+
+</div>
+        </mat-card-content>
+        <mat-card-footer class="footer">
+            <div class="d-flex justify-content-end mt-3">
+                <div class="btn-1"
+                    style="display: flex; justify-content: flex-end; gap: 10px; width: 100%; padding-right: 7px;">
+
+                    <button type="button"
+                        style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: #f0f0f0; color: black;"
+                        (click)="onClose()">
+                        Cancel
+                    </button>
+
+                    <button type="submit"
+                        style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: blue; color: white; "
+                        >
+                        Save
+                    </button>
+                </div>
+            </div>
+        </mat-card-footer>
+    </mat-card>
+</form>
+<div *ngIf="isLoading" class="loading-overlay">
+    <img src="assets\Loading.gif" alt="Loading...">
+</div>
+
+<app-alertpopup *ngIf="showPopup" [message]="popupMessage" [submessage]="popupSubMessage" class="centered-popup"
+    (close)="showPopup = false">
+</app-alertpopup>
