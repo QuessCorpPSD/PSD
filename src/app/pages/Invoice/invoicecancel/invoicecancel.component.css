@@ -140,13 +140,6 @@ overflow-x: auto;
   text-overflow: ellipsis;
 }
 
-.top-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-  flex-wrap: wrap;
-  padding: 0 16px;
-}
 
 .select-drop2 {
   font-family: "Nunito Sans";
@@ -818,4 +811,37 @@ width: auto;
 .remarks-input {
   height: 30px;
   padding: 4px 8px;
+}
+.global-search {
+  height: 36px;
+  padding: 6px 14px;
+  border: 1px solid #d1d5db;   /* softer border */
+  border-radius: 20px;         /* 🔥 more rounded (pill look) */
+  outline: none;
+  font-size: 13px;
+
+  /* ✨ better alignment */
+  display: flex;
+  align-items: center;
+
+  /* ✨ subtle shadow */
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+
+  /* ✨ smooth interaction */
+  transition: all 0.2s ease;
+
+}
+.global-search:focus {
+  border-color: #302CB3;  /* match your theme */
+  box-shadow: 0 0 0 2px rgba(48, 44, 179, 0.15);
+}
+.filter-bar {
+  display: flex;
+  align-items: center;   /* 🔥 perfect vertical alignment */
+  gap: 10px;
+}
+.top-actions {
+  display: flex;
+  align-items: center;   /* ✅ perfect vertical alignment */
+  gap: 10px;
 }

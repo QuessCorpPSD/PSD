@@ -82,16 +82,23 @@ export class InvoiceCancelComponent implements OnInit, AfterViewInit {
        gridData: any[] = [];
          selectedTemplate: string = ''; 
            template: string = "";
+     filterValues: any = {
+  columns: {},
+  template: '',
+  dates: {},
+  global: ''
+};
 
   displayedColumns: string[] = ['select'
-    , 'pdfdownload', 'docDownload', 'invoice_Number', 'invoice_Date', 'company_Code','pay_Period','map_Name','amount', 'cgsT_Amount', 'sgsT_Amount', 'igsT_Amount', 'net_Amount', 'creditNote_Status', 'creditNoteNumber', 'cancelledOn','crn_IRN_Status','crn_IRN_Number','remarks'];
+    , 'pdfdownload', 'docDownload', 'invoice_Number', 'invoice_Date','irN_Status', 'company_Code','pay_Period','map_Name','amount', 'cgsT_Amount', 'sgsT_Amount', 'igsT_Amount', 'net_Amount', 'creditNote_Status', 'creditNoteNumber', 'cancelledOn','crn_IRN_Status','crn_IRN_Number','remarks'];
     filterDisplayedColumns: string[] = [...this.displayedColumns];
   columnFilters: { [key: string]: string } = {};
   selection = new SelectionModel<Invoicecancelgrid>(true, []);
  TemplateOptions = [
+   { value: '', Text: 'All' }, 
     { value: 'requested', Text: 'Requested' },
     { value: 'approved', Text: 'Approved' },
-    { value: 'rejected', Text: 'Rejected' }
+     { value: 'cancelled', Text: 'Cancelled' }
   ];
 
   constructor(
@@ -112,21 +119,72 @@ export class InvoiceCancelComponent implements OnInit, AfterViewInit {
     this.userdetail = JSON.parse(this._decrypt.decrypt(userdetail!));
     this.InvoiceSearch();
      this.BindIRNColors();
-    this.dataSource.filterPredicate = (data: any, filter: string): boolean => {
-    const searchTerms = JSON.parse(filter);
+  this.dataSource.filterPredicate = (data: any, filter: string): boolean => {
 
-    return Object.keys(searchTerms).every(column => {
-      const filterValue = searchTerms[column];
-      const dataValue = data[column];
+  let searchTerms: any = {};
+  try {
+    searchTerms = JSON.parse(filter);
+  } catch {
+    return true;
+  }
 
-      if (!filterValue) return true;
+  // ✅ COLUMN FILTER
+  const columnMatch = Object.keys(searchTerms.columns || {}).every(col => {
+    const values: string[] = searchTerms.columns[col];
 
-      return dataValue
-        ?.toString()
-        .toLowerCase()
-        .includes(filterValue);
-    });
-  };
+    if (!values || values.length === 0) return true;
+
+    const cellValue = data[col]?.toString().toLowerCase() || '';
+
+    return values.some(val => cellValue.includes(val));
+  });
+
+  // ✅ TEMPLATE FILTER
+  let templateMatch = true;
+  switch (searchTerms.template) {
+    case 'requested':
+      templateMatch = data.creditNote_Status === 'Requested';
+      break;
+    case 'approved':
+      templateMatch = data.creditNote_Status === 'Approved';
+      break;
+    case 'cancelled':
+      templateMatch = data.creditNote_Status === 'Cancelled';
+      break;
+  }
+
+  // ✅ DATE FILTER
+  const dateMatch = Object.keys(searchTerms.dates || {}).every(col => {
+    const values: string[] = searchTerms.dates[col];
+
+    if (!values || values.length === 0) return true;
+
+    const rowDate = new Date(data[col]);
+    if (isNaN(rowDate.getTime())) return false;
+
+    const formatted = rowDate
+      .toLocaleDateString('en-GB', {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric'
+      })
+      .replace(',', '')
+      .toLowerCase();
+
+    return values.some(v => formatted.includes(v));
+  });
+
+  let globalMatch = true;
+  if (searchTerms.global) {
+    const search = searchTerms.global.toLowerCase();
+
+    globalMatch = Object.values(data).some(val =>
+      String(val).toLowerCase().includes(search)
+    );
+  }
+
+  return columnMatch && templateMatch && dateMatch && globalMatch;
+};
   }
 
   ngAfterViewInit() {
@@ -272,7 +330,7 @@ console.log(payload)
     const payload = {
       invoice_Id: selectedInvoiceIds,
       remarks: this.remarkText,
-      userId: this.userdetail.user_Id
+      userId: String(this.userdetail.user_Id)
     };
     
     this._invoiceService.BulkRejectCancelRequest(payload).subscribe({
@@ -549,51 +607,10 @@ console.log(payload)
       error: err => { }
     })
   }
- onTemplateChange(searchText: string = ''): void {
-
-    this.template = this.selectedTemplate;
-
-    const filterValue = `${this.template}|${searchText}`;
-
-    this.dataSource.filterPredicate = (data: any, filter: string): boolean => {
-
-      const [template, searchText = ''] = filter.split('|');
-      const searchValues = searchText
-        .toLowerCase()
-        .split(',')
-        .map(v => v.trim())
-        .filter(Boolean);
-
-
-      let templateMatch = true;
-
-      switch (template) {
-        case 'requested':
-          templateMatch = data.creditNote_Status == 'Requested';
-          break;
-
-        case 'approved':
-          templateMatch = data.creditNote_Status=='Approved';
-          break;
-
-        case 'rejected':
-          templateMatch = data.creditNote_Status=='Rejected';
-          break;
-      }
-
-      const textMatch =
-        searchValues.length === 0 ||
-        searchValues.some(search =>
-          Object.values(data).some(val =>
-            String(val).toLowerCase().includes(search)
-          )
-        );
-
-      return templateMatch && textMatch;
-    };
-
-    this.dataSource.filter = filterValue;
-  }
+onTemplateChange() {
+  this.filterValues.template = this.selectedTemplate || ''; // ✅ reset when empty
+  this.applyMainFilter();
+}
  /* applyFilter(event: Event, column: string) {
     const value = (event.target as HTMLInputElement).value
       .trim()
@@ -605,55 +622,35 @@ console.log(payload)
  applyFilter(event: Event, column: string) {
   const inputValue = (event.target as HTMLInputElement).value || '';
 
-  // Split comma-separated invoice numbers
   const searchValues = inputValue
     .split(',')
     .map(v => v.trim().toLowerCase())
     .filter(v => v);
 
-  this.dataSource.filterPredicate = (data: any, filter: string) => {
-    if (!searchValues.length) return true;
+  this.filterValues.columns[column] = searchValues;
 
-    const cellValue = data[column]?.toString().toLowerCase() || '';
-
-    // Match ANY invoice number
-    return searchValues.some(val => cellValue.includes(val));
-  };
-
-  // Trigger filtering
-  this.dataSource.filter = searchValues.join(',');
+  this.applyMainFilter();
 }
  applyDateFilter(event: any, column: string) {
   const inputValue = event.target.value || '';
 
-  // Split comma-separated date values
   const searchDates = inputValue
     .split(',')
     .map(v => v.trim().toLowerCase())
     .filter(v => v);
 
-  this.dataSource.filterPredicate = (data: any, filter: string) => {
-    if (!searchDates.length) return true;
+  this.filterValues.dates[column] = searchDates;
 
-    const rowDate = new Date(data[column]);
-    if (isNaN(rowDate.getTime())) return false;
-
-    // Convert row date → dd MMM yyyy
-    const formattedRowDate = rowDate
-      .toLocaleDateString('en-GB', {
-        day: '2-digit',
-        month: 'short',
-        year: 'numeric'
-      })
-      .replace(',', '')
-      .toLowerCase();
-
-    // Match ANY date from comma-separated input
-    return searchDates.some(date => formattedRowDate.includes(date));
-  };
-
-  // Trigger filter refresh
-  this.dataSource.filter = searchDates.join(',');
+  this.applyMainFilter();
 }
+applyGlobalFilter(event: Event) {
+  const value = (event.target as HTMLInputElement).value || '';
 
+  this.filterValues.global = value.trim().toLowerCase();
+
+  this.applyMainFilter();
+}
+applyMainFilter() {
+  this.dataSource.filter = JSON.stringify(this.filterValues);
+}
 }

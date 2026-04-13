@@ -8,13 +8,22 @@
         </div>
         <div class="gst-actions">
             <div class="top-actions action-row">
-                <div style="display: inline-block; margin-right: 10px;">
+                <div >
+                <input placeholder="Search"
+       (keyup)="applyGlobalFilter($event)"  class="global-search" />
+       </div>
+                <div >
                     <label style="position: relative; display: inline-block;">
+<select [(ngModel)]="selectedTemplate"
+        (change)="onTemplateChange()"
+        class="select-drop">
 
-                        <select [(ngModel)]="selectedTemplate" (change)="onTemplateChange()" class="select-drop">
-                            <option value="" disabled selected hidden>Filter</option>
-                            <option *ngFor="let item of TemplateOptions" [value]="item.value">{{ item.Text }}</option>
-                        </select>
+  <option *ngFor="let item of TemplateOptions"
+          [value]="item.value">
+    {{ item.Text }}
+  </option>
+
+</select>
                         <i
                             style="position: absolute; top: 50%; right: 15px; transform: translateY(-50%); pointer-events: none;">
                             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14"
@@ -55,7 +64,7 @@
                         </i>
                     </label>
                 </div>
-                <div style="display: inline-block; margin-right: 10px;"> 
+                <div > 
               <button (click)="invoiceApprove()"
         style="width: 120px; height: 30px; color: white;padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; background: #302CB3; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.20); border-radius: 6px; justify-content: center; align-items: center; gap: 10px; display: inline-flex; border: none;">
         <div
@@ -63,7 +72,7 @@
           Approve</div>
       </button>
       </div>
-      <div style="display: inline-block; margin-right: 10px;"> 
+      <div > 
       <button (click)="invoiceReject()"
         style="width: 100px; height: 30px; color: white;padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; background: #302CB3; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.20); border-radius: 6px; justify-content: center; align-items: center; gap: 10px; display: inline-flex; border: none;">
         <div
@@ -142,8 +151,7 @@
                        <mat-header-cell *matHeaderCellDef mat-sort-header>
             <div class="header-with-filter">
               <span>Invoice Number</span>
-              <input class="form-control form-control-sm filter-input" placeholder="Search"
-                (keyup)="applyDateFilter($event,'invoice_Number')" />
+          
             </div>
           </mat-header-cell>
                         <mat-cell *matCellDef="let element" class="fixed-width-column4"><span [ngStyle]="{
@@ -169,20 +177,45 @@
           <mat-header-cell *matHeaderCellDef mat-sort-header>
             <div class="header-with-filter">
               <span>Invoice Date</span>
-              <input class="form-control form-control-sm filter-input" placeholder="Search"
-                (keyup)="applyDateFilter($event,'invoice_Date')" />
             </div>
           </mat-header-cell>
           <mat-cell *matCellDef="let element">
             {{ element.invoice_Date | date:'dd MMM yyyy' }}
           </mat-cell>
         </ng-container>
+          <ng-container matColumnDef="irN_Status">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>
+            <div class="header-with-filter">
+              <span>IRN Status</span>
+            </div>
+          </mat-header-cell>
+           <mat-cell *matCellDef="let element" class="fixed-width-column2">
+
+                            <div style="display: flex; align-items: center;">
+
+                                <!-- Color Box -->
+                                <!-- 'legend-processing': element.IRN_Status === 'Processing',-->
+                                <span class="legend-box" [ngClass]="{
+                        'legend-pending': element.irN_Status === 'Pending',
+                        'legend-requested': element.irN_Status === 'Requested' || element.crn_IRN_Status === 'Processing',
+                        'legend-generated': element.irN_Status === 'Generated',
+                        'legend-rejected': element.irN_Status === 'Rejected'                  
+                    }" [title]="element.irN_Status"></span>
+
+                                <!-- Status Text -->
+                                <span matTooltip="{{ element.irN_Status }}"
+                                    style="white-space: nowrap; max-width: 140px; overflow: hidden; text-overflow: ellipsis;">
+
+                                </span>
+                            </div>
+                         
+                        </mat-cell>
+        </ng-container>
           <ng-container matColumnDef="company_Code">
           <mat-header-cell *matHeaderCellDef mat-sort-header>
             <div class="header-with-filter">
               <span>Company Code</span>
-              <input class="form-control form-control-sm filter-input" placeholder="Search"
-                (keyup)="applyFilter($event,'company_Code')" />
+             
             </div>
           </mat-header-cell>
           <mat-cell *matCellDef="let element">
@@ -194,8 +227,7 @@
           <mat-header-cell *matHeaderCellDef mat-sort-header>
             <div class="header-with-filter">
               <span>Pay Period</span>
-              <input class="form-control form-control-sm filter-input" placeholder="Search"
-                (keyup)="applyFilter($event,'pay_Period')" />
+              
             </div>
           </mat-header-cell>
           <mat-cell *matCellDef="let element">
@@ -208,8 +240,7 @@
           <mat-header-cell *matHeaderCellDef mat-sort-header>
             <div class="header-with-filter">
               <span>Map Name</span>
-              <input class="form-control form-control-sm filter-input" placeholder="Search"
-                (keyup)="applyFilter($event,'map_Name')" />
+              
             </div>
           </mat-header-cell>
           <mat-cell *matCellDef="let element">
@@ -250,8 +281,7 @@
           <mat-header-cell *matHeaderCellDef mat-sort-header>
             <div class="header-with-filter">
               <span>Credit Note Status</span>
-              <input class="form-control form-control-sm filter-input" placeholder="Search"
-                (keyup)="applyFilter($event,'creditNote_Status')" />
+            
             </div>
           </mat-header-cell>
           <mat-cell *matCellDef="let element">{{ element.creditNote_Status }}</mat-cell>
@@ -262,8 +292,7 @@
           <mat-header-cell *matHeaderCellDef mat-sort-header>
             <div class="header-with-filter">
               <span>Credit Note</span>
-              <input class="form-control form-control-sm filter-input" placeholder="Search"
-                (keyup)="applyFilter($event,'creditNoteNumber')" />
+              
             </div>
           </mat-header-cell>
           <mat-cell *matCellDef="let element">{{ element.creditNoteNumber }}</mat-cell>
