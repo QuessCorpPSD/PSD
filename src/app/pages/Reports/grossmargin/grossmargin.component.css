@@ -84,7 +84,7 @@
 .upload-box {
   border: 2px dashed #d1d5db;
   border-radius: 12px;
-  padding: 25px;
+  padding: 4px;
   background: #fafbff;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -114,15 +114,16 @@
 }
 
 .file-icon {
-  font-size: 22px;
+  font-size: 12px;
   color: #28a745;
 }
 .gm-btn-upload {
   background: linear-gradient(135deg, #28a745, #4cd964);
   border: none;
   color: #fff;
-  padding: 12px;
+  padding: 4px 1px;
   font-weight: 600;
+  font-size: 14px;     /* optional */
   border-radius: 12px;
   transition: all 0.3s ease;
 }

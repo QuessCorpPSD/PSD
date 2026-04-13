@@ -52,6 +52,7 @@ export class MapnameComponent implements ControlValueAccessor, OnChanges {
   }
 
   ngOnChanges() {
+    
     if (this.selectedCompanyId) {
       this.Bindmapname(this.selectedCompanyId);
     }
