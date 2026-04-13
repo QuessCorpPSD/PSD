@@ -172,6 +172,16 @@
                         <mat-cell *matCellDef="let row">{{ row.uploadStatus }}</mat-cell>
                     </ng-container>
 
+                    <ng-container matColumnDef="requestedBy">
+                        <mat-header-cell *matHeaderCellDef>Requested By</mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.requestedBy }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="ackNo">
+                        <mat-header-cell *matHeaderCellDef>Ack No</mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.ackNo }}</mat-cell>
+                    </ng-container>
+
                     <!-- Header Row -->
                     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
 
