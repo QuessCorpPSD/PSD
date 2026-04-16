@@ -171,6 +171,7 @@ import { SalaryReleaseProcessComponent } from './pages/SalaryReleaseNew/salary-r
 import { SalaryReleaseStatusComponent } from './pages/SalaryReleaseNew/salary-release-status/salary-release-status.component';
 import { DownloadbatchComponent } from './pages/SalaryReleaseNew/downloadbatch/downloadbatch.component';
 import { SalaryReleaseApproveComponent } from './pages/SalaryReleaseNew/salary-release-approve/salary-release-approve.component';
+import { SezcertificateuploadComponent } from './pages/customers/sezcertificateupload/sezcertificateupload.component';
 
 
 
@@ -380,6 +381,8 @@ export const routes: Routes = [
           { path: "employee", component: EmployeeComponents },
           { path: "cancelledinvoicerepository", component: CancelledinvoicerepositoryComponent },
           { path: "Company", component: CompanyComponent },
+          { path: "sezcertificateupload", component: SezcertificateuploadComponent }
+          
         ]
       },
       {

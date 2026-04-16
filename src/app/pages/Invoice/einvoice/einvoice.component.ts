@@ -93,7 +93,7 @@ export class EInvoiceComponent {
   cacheData: any;
   showPanel = false;
   selectedCompanyId!: number;
-  PayregisterTemplate:string=''
+  PayregisterTemplate: string = ''
   payPeriodType: string = "All";
   constructor(private _sessionStoreage: SessionStorageService,
     private decry: EncryptionService, private fb: FormBuilder, @Inject(Invoice_TOKEN) private invoiceService: IInvoiceRepository
@@ -104,11 +104,11 @@ export class EInvoiceComponent {
     { value: 'irngenerated', Text: 'IRN Generated' }
   ];
 
-   PayRegisterOptions = [
+  PayRegisterOptions = [
     { value: 'R', Text: 'Regular' },
     { value: 'OI', Text: 'OI' },
     { value: 'Split', Text: 'Split' },
-    { value: 'Clear', Text: 'Clear'}
+    { value: 'Clear', Text: 'Clear' }
 
   ];
 
@@ -116,26 +116,25 @@ export class EInvoiceComponent {
     { name: 'Narration', selected: false },
     { name: 'PO_Number', selected: false }
   ];
-onPayRegisterChange(){
+  onPayRegisterChange() {
 
-}
-DownloadNetPaySummary(){
+  }
+  DownloadNetPaySummary() {
 
-  this.invoiceService.DownloadNetPaySummary(this.selectedCompanyId, this.pay_period ).subscribe({
-    next:res=> {
-      const files=res.Data
-      if(files.file!="N")
-      {
-        const currentDate = new Date();
-        this.downloadExcelFromBase64(files.file,`Net Pay Summary_${currentDate}.xlsx`)
-      }
-      else{
-        alert("File is not available")
-      }
-    },
-    error:err=>{}
-  })
-}
+    this.invoiceService.DownloadNetPaySummary(this.selectedCompanyId, this.pay_period).subscribe({
+      next: res => {
+        const files = res.Data
+        if (files.file != "N") {
+          const currentDate = new Date();
+          this.downloadExcelFromBase64(files.file, `Net Pay Summary_${currentDate}.xlsx`)
+        }
+        else {
+          alert("File is not available")
+        }
+      },
+      error: err => { }
+    })
+  }
   handleCompanyEvent(company: any) {
     this.companyUI = company;
     this.Company_Code = company.company_Code;
@@ -282,10 +281,13 @@ DownloadNetPaySummary(){
   }
 
   isAllSelected(): boolean {
-    const numSelected = this.selection.selected.length;
-    const numFilteredRows = this.dataSource.filteredData.length;
+    const startIndex = this.paginator.pageIndex * this.paginator.pageSize;
+    const endIndex = startIndex + this.paginator.pageSize;
 
-    return numFilteredRows > 0 && numSelected === numFilteredRows;
+    const pageData = this.dataSource.filteredData.slice(startIndex, endIndex);
+
+    return pageData.length > 0 &&
+      pageData.every(row => this.selection.isSelected(row));
   }
 
 
@@ -298,12 +300,17 @@ DownloadNetPaySummary(){
     if (this.isAllSelected()) {
       this.selection.clear();
     } else {
-      this.selection.clear(); // avoid mixing previous selections
-      this.dataSource.filteredData.forEach(row =>
-        this.selection.select(row)
-      );
+      this.selection.clear();
+
+      const startIndex = this.paginator.pageIndex * this.paginator.pageSize;
+      const endIndex = startIndex + this.paginator.pageSize;
+
+      const pageData = this.dataSource.filteredData.slice(startIndex, endIndex);
+
+      pageData.forEach(row => this.selection.select(row));
     }
   }
+
 
 
   toggleRow(row: EInvoiceGrid) {
@@ -452,29 +459,29 @@ DownloadNetPaySummary(){
   }
 
 
- confirmIRN(): void {
+  confirmIRN(): void {
     const filteredSelected = this.selection.selected.filter((item: any) =>
       this.dataSource.filteredData.includes(item)
     );
- 
+
     const hasB2COrB2BEXMT = filteredSelected.some(item =>
       item.Invoice_Category === 'B2C' || item.Invoice_Category === 'B2BEXMT'
     );
- 
+
     const hasPROInvoice = filteredSelected.some(item =>
       item.Invoice_Number?.includes('PRO')
     );
- 
+
     if (hasB2COrB2BEXMT) {
       alert('Cannot Initiate IRN for B2C or B2BEXMPT Catgory');
       return;
     }
- 
-    else if (hasPROInvoice){
+
+    else if (hasPROInvoice) {
       alert('Cannot Initiate IRN for Provisional Invoices');
       return;
     }
- 
+
     else {
       const confirmed = confirm("Are you sure you want to Generate IRN for the Selected Invoice(s)");
       if (confirmed) {
@@ -482,7 +489,7 @@ DownloadNetPaySummary(){
       }
     }
   }
- 
+
 
   // DownloadInvoice(invoiceId: number, invoice_Number: string) {
   //   this.isLoading = true;
@@ -602,8 +609,8 @@ DownloadNetPaySummary(){
     if (InitiateIRN) {
       this.invoiceService.InitiateIRN(InitiateIRN).subscribe({
         next: res => {
-         console.log(res);          
-            const errorMessage = res.data.error_Message;;
+          console.log(res);
+          const errorMessage = res.data.error_Message;;
           if (errorMessage) {
             //console.log(errorMessage);
             alert(errorMessage);
@@ -975,8 +982,8 @@ DownloadNetPaySummary(){
   }
 
   PayRegisterDownload(): void {
-    if (this.PayregisterTemplate==='Clear'){
-      this.PayregisterTemplate='';
+    if (this.PayregisterTemplate === 'Clear') {
+      this.PayregisterTemplate = '';
       return;
     }
     if (!this.companyUI) {
@@ -997,7 +1004,7 @@ DownloadNetPaySummary(){
       Company_Name: this.companyUI.companyName,
       Pay_Period_Id: this.payperiodUI.payfrequencyid,
       Pay_Period: this.payperiodUI.payPeriod,
-      Data_From:this.PayregisterTemplate
+      Data_From: this.PayregisterTemplate
     }
 
     this.invoiceService.GetConsolidatedPayRegister(payload)

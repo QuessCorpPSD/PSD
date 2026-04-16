@@ -7,4 +7,7 @@ export interface ISEZRepositoryService {
     //UploadSEZDocument(formData: FormData): Observable<APIResponse>;
     GetUploadedFile(invoice_Id: number): Observable<APIResponse>;
     BulkApproveSEZ(payload: any): Observable<APIResponse>;
+    SearchSEZCertificate(companyId: number): Observable<APIResponse>;
+    UploadSEZCertificate(formData: FormData): Observable<APIResponse>
+    GetUploadedCertificate(Id: number): Observable<APIResponse>;
 }   

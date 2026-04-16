@@ -34,4 +34,20 @@ export class SEZRepositoryService implements ISEZRepositoryService {
         const url = `${this.environment.apiUrl}SEZRepositoryApproval/BulkApproveSEZ`;
         return this.http.post<APIResponse>(url, payload);
     }
+
+    SearchSEZCertificate(companyId: number): Observable<APIResponse> {
+        const url = `${this.environment.apiUrl}SEZRepositoryApproval/SearchSEZCertificate/${companyId}`;
+        //console.log(url);
+        return this.http.get<APIResponse>(url)
+    }
+    UploadSEZCertificate(formData: FormData): Observable<APIResponse> {
+        const url = `${this.environment.apiUrl}SEZRepositoryApproval/UploadSEZCertificate`;
+        //console.log(url);
+        return this.http.post<APIResponse>(url, formData)
+    }
+    GetUploadedCertificate(Id: number): Observable<APIResponse> {
+        const url = `${this.environment.apiUrl}SEZRepositoryApproval/GetUploadedCertificate/${Id}`;
+        console.log(Id);
+        return this.http.get<APIResponse>(url);
+    }
 }
