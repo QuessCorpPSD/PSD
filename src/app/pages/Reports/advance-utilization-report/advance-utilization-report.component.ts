@@ -1,6 +1,5 @@
 import { Component, Inject, InjectionToken } from '@angular/core';
 import * as XLSX from 'xlsx';
-import { IotherIncomeProcess } from '../../../Repository/Reports/IotherIncomeProcess';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
@@ -63,10 +62,10 @@ Payperiod: any = [];
           const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(jsonData);
           const wb: XLSX.WorkBook = XLSX.utils.book_new();
 
-          XLSX.utils.book_append_sheet(wb, ws, "OtherIncomeProcess");
+          XLSX.utils.book_append_sheet(wb, ws, "AdvanceUitilizationReport");
 
           const timestamp = new Date().toISOString().split('T')[0];
-          const fileName = `OtherIncomeProcess_${timestamp}.xlsx`;
+          const fileName = `AdvanceUtilizationReport  _${timestamp}.xlsx`;
 
           XLSX.writeFile(wb, fileName);
         }
