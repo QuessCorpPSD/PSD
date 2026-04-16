@@ -68,7 +68,8 @@
                             <mat-header-cell *matHeaderCellDef mat-sort-header
                                 class="fixed-width-column"></mat-header-cell>
                             <mat-cell *matCellDef="let element" class="fixed-width-column">
-                                <img src="assets/delete.svg" style="cursor: pointer; width: 24px; height: 22px;"
+                                <img src="assets/eye-open.svg" style="cursor: pointer; width: 18px; height: 22px;" />
+                                <img src="assets/delete.svg" style="cursor: pointer; width: 18px; height: 22px;"
                                     (click)="deleteClick(element.invoiceCulture_id, element.invoiceType)" />
                             </mat-cell>
                         </ng-container>
@@ -76,7 +77,7 @@
                             <mat-header-cell *matHeaderCellDef mat-sort-header
                                 class="fixed-width-column"></mat-header-cell>
                             <mat-cell *matCellDef="let element" class="fixed-width-column">
-                                <img src="assets/Icons/edit.svg" style="cursor: pointer; width: 24px; height: 22px;" />
+                                
                             </mat-cell>
                         </ng-container> -->
 
@@ -295,6 +296,166 @@
                                                                 </div>
                                                             </div>
                                                         </div> -->
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </form>
+
+            <!-- <mat-card-footer class="footer"> -->
+
+            <!-- </mat-card-footer> -->
+        </mat-card-content>
+        <mat-card-actions class="d-flex justify-content-end mt-3" style="gap: 10px; padding-right: 8px;">
+            <div class="d-flex justify-content-end mt-3">
+                <div class="btn-1"
+                    style="display: flex; justify-content: flex-end; gap: 10px; width: 100%; padding-right: 7px;">
+
+                    <button type="button" (click)="closeclick()"
+                        style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: #f0f0f0; color: black;">
+                        Cancel
+                    </button>
+
+                    <button type="button" (click)="SaveData()"
+                        style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: blue; color: white;">
+                        Save
+                    </button>
+
+                </div>
+            </div>
+            <!-- <button type="Cancel" (click)="closeclick()">Cancel</button>
+            <button type="submit" (click)="SaveData()">Save</button> -->
+        </mat-card-actions>
+    </mat-card>
+</div>
+<div *ngIf="isAddclicked" class="popup-overlay" (keydown.escape)="closeclick()">
+    <mat-card class="popup-card">
+        <mat-card-header class="popup-header">
+            <mat-card-title class="d-flex justify-content-center align-items-center">
+                {{ isEditMode ? 'Edit Other Income Culture' : 'Add Other Income Culture' }}
+            </mat-card-title>
+
+            <button class="close-btn" matTooltip="Close" (click)="closeclick()">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-card-header>
+        <mat-card-content class="scroll-content">
+            <form [formGroup]="addOtherIncome" novalidate>
+                <!-- Row 1 -->
+                <div class="row g-3 mb-3">
+                    <div class="col-md-4">
+                        <label class="form-label">Company Code<span class="text-danger">*</span></label>
+                        <companyall (companyEmit)="handleCompanyAdd($event)" formControlName="CompanyCode">
+                        </companyall>
+                        <div class="text-danger small" *ngIf="addOtherIncome.get('CompanyCode')?.touched 
+                        && addOtherIncome.get('CompanyCode')?.hasError('required')">
+                            companycode is required
+                        </div>
+                    </div>
+                    <!-- <div class="col-md-4">
+                        <label class="form-label">Invoice Ref No</label>
+                        <input type="text" class="form-control" formControlName="InvoiceRefNo" />
+                    </div> -->
+                    <!-- <div class="col-md-4">
+                        <label class="form-label">Company Name<span class="text-danger"></span></label>
+                        <input type="text" class="form-control" formControlName="CompanyName" />
+                    </div> -->
+                    <!-- <div class="col-md-4">
+                        <label class="form-label">Service Charge<span class="text-danger">*</span></label>
+                        <select class="form-select" formControlName="ServiceCharge">
+                            <option value="">-- Select --</option>
+                            <option *ngFor="let sc of ServiceChargeOptions" [value]="sc.service_Charge_Master_Id">
+                                {{ sc.service_Charge_Master_Name }}
+                            </option>
+                        </select>
+                        <div class="text-danger small" *ngIf="addOtherIncome.get('ServiceCharge')?.touched 
+             && addOtherIncome.get('ServiceCharge')?.hasError('required')">
+                            Service Charge is required
+                        </div>
+                    </div> -->
+                <div class="col-md-4">
+                        <label class="form-label">Map Name<span class="text-danger">*</span></label>
+                        <mapname [selectedCompanyId]="CompanySelectedCC" (mapnameEmit)="handleMapNameEvent($event)"></mapname>
+                        <!-- <select class="form-select" formControlName="MapName">
+                            <option value="">-- Select --</option>
+                            <option *ngFor="let f of financialYear" [value]="f.Financial_Year_Id">
+                                {{f.Financial_Year}}
+                            </option>
+                        </select> -->
+                        <div class="text-danger small" *ngIf="addOtherIncome.get('MapName')?.touched 
+             && addOtherIncome.get('MapName')?.hasError('required')">
+                            Map Name is required
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Location<span class="text-danger"></span></label>
+                        <input type="text" class="form-control" formControlName="Location" />
+                    </div>
+                </div>
+                <!-- Row 2 -->
+                <div class="row g-3 mb-3">
+
+                   
+                    <div class="col-md-4">
+
+                        <label class="form-label">Invoice Type<span class="text-danger">*</span></label>
+                        <select class="form-select" formControlName="InvoiceType">
+                            <option value="">-- Select --</option>
+                            <option *ngFor="let t of InvoiceTypeList" [ngValue]="t">{{ t.invoiceType }}</option>
+                        </select>
+                        <div class="text-danger small" *ngIf="addOtherIncome.get('InvoiceType')?.touched 
+             && addOtherIncome.get('InvoiceType')?.hasError('required')">
+                            Invoice Type is required
+                        </div>
+                    </div>
+                       <div class="col-md-4">
+                        <label class="form-label">Invoice Category<span class="text-danger">*</span></label>
+                        <select class="form-select" formControlName="InvoiceCategory">
+                            <option value="">-- Select --</option>
+                            <option *ngFor="let c of InvoiceCategoryList" [value]="c.geN_iID">
+                                {{ c.geN_vDescription }}
+                            </option>
+                        </select>
+                        <div class="text-danger small" *ngIf="addOtherIncome.get('InvoiceCategory')?.touched 
+             && addOtherIncome.get('InvoiceCategory')?.hasError('required')">
+                            Invoice Category is required
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">State<span class="text-danger">*</span></label>
+                        <state formControlName="state" (stateEmit)="stateEvent($event)"></state>
+                        <!-- <select class="form-select" formControlName="State">
+                            <option value="">-- Select --</option>
+                            <option *ngFor="let f of financialYear" [value]="f.Financial_Year_Id">
+                                {{f.Financial_Year}}
+                            </option>
+                        </select> -->
+                        <div class="text-danger small" *ngIf="addOtherIncome.get('state')?.touched 
+             && addOtherIncome.get('state')?.hasError('required')">
+                            State is required
+                        </div>
+                    </div>
+                </div>
+                <div class="row g-3 mb-3">
+
+                 
+                </div>
+                <div *ngIf="isPaycodesLoaded" class="row g-3 mb-3">
+                    <div class="col-md-12">
+                        <label class="form-label">Type Of Invoice<span class="text-danger"></span></label>
+                    </div>
+                  
+                    <div class="col-md-8">
+                          <paycodedragdrop  (selectedItemsChange)="getselectedValues($event)" [availables]="availableItems"  [selects]="selectedItems"
+                                    valueField="value" textField="text"  (itemsMoved)="onItemsMoved($event)">
+                                </paycodedragdrop>
+                        
+                        <div class="type-scroll" *ngIf="selectedCC > 0">
+                            <div class="row">
+                        
+                              
+                                
                             </div>
                         </div>
                     </div>

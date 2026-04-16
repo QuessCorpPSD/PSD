@@ -30,5 +30,20 @@ export class ReportService implements IreportService {
             .set('Accept', 'application/json')
     return this.http.post<APIResponse>(this.env.apiUrl + 'Reports/GetGrossMarginReport', inputval,{ headers: config });
   }
+    Accuralsupload(payload: any): Observable<APIResponse>{
+    var inputval = JSON.stringify(payload);
+    const config = new HttpHeaders({
+            'Cache-Control': 'no-cache, no-store, must-revalidate',
+            'Pragma': 'no-cache',
+            'Expires': '0'
+        }).set('Content-Type', 'application/json')
+            .set('Accept', 'application/json')
+    return this.http.post<APIResponse>(this.env.apiUrl + 'Reports/AccuralsUpload', inputval,{ headers: config });
+  }
+   AccuralTemplate() {
+    return this.http.get<any>(
+      `${this.env.apiUrl}Reports/GetAccrualsTemplate`
+    );
+  }
 
 }

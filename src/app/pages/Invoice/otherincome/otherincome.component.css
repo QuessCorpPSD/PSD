@@ -44,13 +44,13 @@
 
 .custom-mat-table th,
 .custom-mat-table td {
-    padding: 3px 5px;
+    padding: 1px 2px;
     white-space: nowrap;
 }
 
 .fixed-width-column {
     width: 50px;
-    min-width: 30px;
+    min-width: 20px;
     max-width: 75px;
     overflow: hidden;
     white-space: nowrap;

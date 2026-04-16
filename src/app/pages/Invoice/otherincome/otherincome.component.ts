@@ -132,15 +132,15 @@ textField!:string;
       InvoiceCategory: new FormControl('', Validators.required),
       state: new FormControl('', Validators.required),
     })
-    this.addOtherIncome.get("InvoiceType")?.valueChanges.subscribe(value=>{
-    
-      if(value.invoiceType_Id==1)
-      {        
-        this.isPaycodesLoaded=false;
-      }
-      else{       
-        this.loadPaycodes();
-         this.isPaycodesLoaded=true;
+    this.addOtherIncome.get("InvoiceType")?.valueChanges.subscribe(value => {
+      if (value) {
+        if (value.invoiceType_Id == 1) {
+          this.isPaycodesLoaded = false;
+        }
+        else {
+          this.loadPaycodes();
+          this.isPaycodesLoaded = true;
+        }
       }
     })
     // 🔍 Available search
@@ -295,7 +295,7 @@ textField!:string;
   getselectedValues(selected)
   {
     this.selected=selected;
-    console.log(selected);
+   
   }
 CompanySelectedCC!:number;
 handleCompanyAdd(company)
@@ -361,7 +361,7 @@ this.selectedCC = Number(this.CompanySelectedCC) || 0;
     this.isLoading = true;
     this.service.InvoiceType().subscribe({
       next: (res: any) => {
-        console.log(res)
+       
         this.InvoiceTypeList = Array.isArray(res.Data) ? res.Data : [];
         this.isLoading = false;
       },

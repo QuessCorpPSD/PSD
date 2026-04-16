@@ -13,10 +13,17 @@
       <div class="card gm-card h-100">
 
         <div class="card-header bg-white border-0 pb-0">
-          <h5 class="fw-bold text-primary mb-1">
-            <i class="bi bi-building me-2"></i>
-           Accrual File upload
-          </h5>
+        <h5 class="fw-bold text-primary mb-1 d-flex align-items-center gap-2">
+  <i class="bi bi-building"></i>
+  Accrual File Upload
+
+  <i class="bi bi-download ms-2 text-success"
+     style="cursor: pointer;"
+     title="Download"
+     >
+     <img (click)="AccouralTemplateDownload()" src="assets/download_enabled.svg">
+  </i>
+</h5>
           
         </div>
 

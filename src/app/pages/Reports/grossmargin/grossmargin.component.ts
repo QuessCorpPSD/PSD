@@ -32,7 +32,9 @@ export class GrossmarginComponent {
     userdetail!:any;
     isLoading=false;
     selectedFile: File | null = null;
-  uploadProgress: number | null = null;
+    base64Data!:any;
+    FileName!:any;
+    uploadProgress: number | null = null;
      constructor(private _decrypt:EncryptionService,
   private _sessionStoreage:SessionStorageService,
  @Inject(Invoice_TOKEN) private reportServices: IreportService
@@ -63,8 +65,21 @@ export class GrossmarginComponent {
     const input = event.target as HTMLInputElement;
     if (input.files?.length) {
       this.selectedFile = input.files[0];
+      this.convertToBase64(this.selectedFile);
     }
   }
+  convertToBase64(file: File) {
+  const reader = new FileReader();
+  reader.onload = () => {
+    const base64String = reader.result as string;
+    const base64Only = base64String.split(',')[1];
+    
+    this.base64Data = base64Only;
+    this.FileName = base64String.split(',')[0];
+   
+  };
+  reader.readAsDataURL(file);
+}
   
 isDragging = false;
 
@@ -97,10 +112,49 @@ onDrop(event: DragEvent) {
 removeFile() {
   this.selectedFile = null;
 }
-    uploadFile() {
-    
-    if (!this.selectedFile){ alert('Select The File') 
-      return;}}
+  uploadFile() {
+
+    if (!this.selectedFile) {
+      alert('Select The File')
+      return;
+    }
+    if(this.selectedCompanyId==undefined)
+    {
+      alert('Select the Company');
+      return;
+    }
+    if(this.payPeriod==undefined)
+    {
+      alert('Select the Period');
+      return;
+    }
+    this.isLoading=true;
+    const request={
+      "CompanyId":this.selectedCompanyId,
+      "PayPeriodId":this.payPeriod.payfrequencyid,
+      "CreatedBy":3,
+      "File":this.base64Data,
+      "FileName":this.FileName
+    }
+    this.reportServices.Accuralsupload(request).subscribe({
+      next:res=>{
+          const response=res.Data;
+          if(response.statusCode==200)
+          {
+            alert(response.statusMessage);
+            this.isLoading=false;
+            this.selectedFile=null;
+          }
+          else {
+            alert(response.statusMessage);
+            this.isLoading = false;
+          }
+      },
+      error:err=>{
+        this.isLoading=false;
+      }
+    })
+  }
   downloadReport() {
     if(this.downloadpayPeriod==null|| this.downloadpayPeriod==undefined)
     {
@@ -127,6 +181,14 @@ removeFile() {
         console.log('Request completed');
       }
     });
+  }
+  AccouralTemplateDownload(){
+    this.reportServices.AccuralTemplate().subscribe({
+      next:res=>{
+          const files=res.Data;         
+         this.downloadExcelFromBase64(files.file,files.fileName)
+      }
+    })
   }
    unprosseddownloadReport() {
     if(this.downloadpayPeriod==null|| this.downloadpayPeriod==undefined)
