@@ -77,7 +77,6 @@ private _filter(value: string): FinancialYear[] {
 
   onOptionSelected(option: any) {
     this.selectedOption = option;
-    console.log(option);
    this.financialEmit.emit(this.selectedOption);
   }
 }
