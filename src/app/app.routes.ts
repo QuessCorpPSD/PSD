@@ -171,6 +171,7 @@ import { SalaryReleaseProcessComponent } from './pages/SalaryReleaseNew/salary-r
 import { SalaryReleaseStatusComponent } from './pages/SalaryReleaseNew/salary-release-status/salary-release-status.component';
 import { DownloadbatchComponent } from './pages/SalaryReleaseNew/downloadbatch/downloadbatch.component';
 import { SalaryReleaseApproveComponent } from './pages/SalaryReleaseNew/salary-release-approve/salary-release-approve.component';
+import { AdvanceUtilizationReportComponent } from './pages/Reports/advance-utilization-report/advance-utilization-report.component';
 
 
 
@@ -259,7 +260,8 @@ export const routes: Routes = [
           { path: 'otherIncomeProcessReport', component: OtherIncomeProcessReportComponent },
           { path: 'employeReportProcess', component: EmployeeReportProcessComponent },
           { path: 'IncreamnetReport', component: IncrementReportComponent },
-          { path: 'Report', component: ReportComponent }
+          { path: 'Report', component: ReportComponent },
+           { path: 'AdvanceUtilizationReport', component: AdvanceUtilizationReportComponent },
         ]
       },
       {
