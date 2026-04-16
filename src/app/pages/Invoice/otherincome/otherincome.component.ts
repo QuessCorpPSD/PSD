@@ -20,7 +20,9 @@ import { MapnameComponent } from "../../../common/Mapname/mapname/mapname.compon
 import { Router } from '@angular/router';
 export const Pay_Token = new InjectionToken<IOtherIncomeCulture>('Pay_Token');
 import { CdkDragDrop, DragDropModule, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
-import { IListBoxItem } from '../attribute/attribute.component';
+import { PaycodedragdropComponent } from './paycodedragdrop/paycodedragdrop.component';
+
+
 
 interface ChildDetail {
   InvoiceCulture_id: number;
@@ -29,10 +31,24 @@ interface ChildDetail {
   Paycode_Code: string;
   HasAccess: boolean;
 }
-
+export interface IListBoxItem {
+  value: string;
+  text: string;
+}
+export interface AttributeItem {
+  payCodeName: string;
+  payCode_Id?: any;   // optional if needed
+}
+export interface IItemsMovedEvent {
+  available: Array<{}>;
+  selected: Array<{}>;
+  movedItems: Array<{}>;
+  from: 'selected' | 'available';
+  to: 'selected' | 'available';
+}
 @Component({
   selector: 'app-otherincome',
-  imports: [CommonModule, DragDropModule, FormsModule, ReactiveFormsModule, MatCardModule, MatIconModule, MatPaginatorModule, MatTableModule, CompanyallComponent, MatTooltipModule, MatCheckboxModule, StateComponent, MapnameComponent],
+  imports: [CommonModule,PaycodedragdropComponent, DragDropModule, FormsModule, ReactiveFormsModule, MatCardModule, MatIconModule, MatPaginatorModule, MatTableModule, CompanyallComponent, MatTooltipModule, MatCheckboxModule, StateComponent, MapnameComponent],
   templateUrl: './otherincome.component.html',
   styleUrl: './otherincome.component.css',
   providers: [
@@ -52,12 +68,16 @@ export class OtherincomeComponent {
   selectedSearchInput = new FormControl('');
 
   // Data arrays
-  availableItems: any[] = [];
-  filteredAvailableItems: any[] = [];
-
-  selectedDragItems: any[] = [];
-  filteredSelectedItems: any[] = [];
-
+  //availableItems: any[] = [];
+  
+  filteredAvailableItems: Array<IListBoxItem> = [];
+ availableItems: any[] = [];
+  selectedItems: any[] = [];
+  currentSelectItems: any[] = [];
+  selectedDragItems:Array<IListBoxItem> = [];
+  filteredSelectedItems: Array<IListBoxItem> = [];
+valueField!:string;
+textField!:string;
   selectedCompanyId!: number;
   showTable = false;
   isAddclicked = false;
@@ -85,6 +105,8 @@ export class OtherincomeComponent {
   typeInvoiceList: any;
   isPaycodesLoaded = false;
   searchText: string = "";
+
+   
   constructor(private _decrypt: EncryptionService, private _sessionStoreage: SessionStorageService, @Inject(Pay_Token) private service: OtherincomecultureService, private router: Router) { }
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -92,7 +114,9 @@ export class OtherincomeComponent {
   ngAfterViewInit() {
     this.uploadedDataSource.paginator = this.paginator;
   }
-
+  onItemsMoved(event): void {
+    this.currentSelectItems = event.selected;
+  }
   ngOnInit(): void {
     this.loadServiceCharges();
     this.loadInvoiceTypes();
@@ -108,24 +132,33 @@ export class OtherincomeComponent {
       InvoiceCategory: new FormControl('', Validators.required),
       state: new FormControl('', Validators.required),
     })
-
+    this.addOtherIncome.get("InvoiceType")?.valueChanges.subscribe(value=>{
+    
+      if(value.invoiceType_Id==1)
+      {        
+        this.isPaycodesLoaded=false;
+      }
+      else{       
+        this.loadPaycodes();
+         this.isPaycodesLoaded=true;
+      }
+    })
     // 🔍 Available search
-    this.availableSearchInput.valueChanges.subscribe(value => {
-      const search = value?.toLowerCase() || '';
+    // this.availableSearchInput.valueChanges.subscribe(value => {
+    //   const search = value.text ;
+    //   this.filteredAvailableItems = this.availableItems.filter(item =>
+    //     item.text.toLowerCase().includes(search)
+    //   );
+    // });
 
-      this.filteredAvailableItems = this.availableItems.filter(item =>
-        item.Paycode_Code.toLowerCase().includes(search)
-      );
-    });
+    // // 🔍 Selected search
+    // this.selectedSearchInput.valueChanges.subscribe(value => {
+    //   const search =String(text);
 
-    // 🔍 Selected search
-    this.selectedSearchInput.valueChanges.subscribe(value => {
-      const search = value?.toLowerCase() || '';
-
-      this.filteredSelectedItems = this.selectedDragItems.filter(item =>
-        item.Paycode_Code.toLowerCase().includes(search)
-      );
-    });
+    //   this.filteredSelectedItems = this.selectedDragItems.filter(item =>
+    //     item.text.toLowerCase().includes(search)
+    //   );
+    // });
 
     this.addOtherIncome.get('CompanyName')?.disable();
     this.addOtherIncome.get('InvoiceRefNo')?.disable();
@@ -189,46 +222,58 @@ export class OtherincomeComponent {
     });
   }
 
-  drop(event: CdkDragDrop<any[]>) {
+  // drop(event: CdkDragDrop<any[]>) {
 
+  //   if (event.previousContainer === event.container) {
+  //     // Reorder inside same list
+  //     moveItemInArray(
+  //       event.container.data,
+  //       event.previousIndex,
+  //       event.currentIndex
+  //     );
+
+  //   } else {
+
+  //     const item = event.previousContainer.data[event.previousIndex];
+
+  //     // 👉 Move to selected
+  //     if (event.container.id === 'selectedList') {
+
+  //       this.selectedDragItems.push(item);
+
+  //       this.availableItems = this.availableItems.filter(
+  //         x => x.Paycode_Id !== item.Paycode_Id
+  //       );
+
+  //     }
+
+  //     // 👉 Move back to available
+  //     else if (event.container.id === 'availableList') {
+
+  //       this.availableItems.push(item);
+
+  //       this.selectedDragItems = this.selectedDragItems.filter(
+  //         x => x.Paycode_Id !== item.Paycode_Id
+  //       );
+  //     }
+  //   }
+
+  //   // 🔥 Always refresh filtered lists
+  //   this.filteredAvailableItems = [...this.availableItems];
+  //   this.filteredSelectedItems = [...this.selectedDragItems];
+  // }
+
+    drop(event: CdkDragDrop<IListBoxItem[]>) {
     if (event.previousContainer === event.container) {
-      // Reorder inside same list
-      moveItemInArray(
-        event.container.data,
-        event.previousIndex,
-        event.currentIndex
-      );
-
+      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
-
-      const item = event.previousContainer.data[event.previousIndex];
-
-      // 👉 Move to selected
-      if (event.container.id === 'selectedList') {
-
-        this.selectedDragItems.push(item);
-
-        this.availableItems = this.availableItems.filter(
-          x => x.Paycode_Id !== item.Paycode_Id
-        );
-
-      }
-
-      // 👉 Move back to available
-      else if (event.container.id === 'availableList') {
-
-        this.availableItems.push(item);
-
-        this.selectedDragItems = this.selectedDragItems.filter(
-          x => x.Paycode_Id !== item.Paycode_Id
-        );
-      }
+      transferArrayItem(event.previousContainer.data, event.container.data, event.previousIndex, event.currentIndex);
     }
+    // clear marked available items and emit event
 
-    // 🔥 Always refresh filtered lists
-    this.filteredAvailableItems = [...this.availableItems];
-    this.filteredSelectedItems = [...this.selectedDragItems];
+   
   }
+
   
   disablePaycodeCheckboxes() {
     this.typeInvoiceList.forEach(t => {
@@ -246,16 +291,33 @@ export class OtherincomeComponent {
   handleCompanyEvent(company) {
     this.selectedCompanyId = company.companyId;
   }
+  selected:any;
+  getselectedValues(selected)
+  {
+    this.selected=selected;
+    console.log(selected);
+  }
+CompanySelectedCC!:number;
+handleCompanyAdd(company)
+{
+this.CompanySelectedCC = company.companyId;
+this.selectedCC = Number(this.CompanySelectedCC) || 0;
+  this.addOtherIncome.patchValue({
+      // CompanyCode: company.companyCode,
+      CompanyName: company.companyName
+    });
+   this.loadPaycodes();
+}
 
   handleCompany(company) {
     this.CompanyId = company;
     this.selectedCC = Number(company.companyId) || 0;
-    this.addOtherIncome.patchValue({
-      // CompanyCode: company.companyCode,
-      CompanyName: company.companyName
-    });
-    console.log("company", company)
-    this.loadPaycodes();
+    // this.addOtherIncome.patchValue({
+    //   // CompanyCode: company.companyCode,
+    //   CompanyName: company.companyName
+    // });
+    // console.log("company", company)
+    
   }
 
   stateEvent(event: any) {
@@ -299,6 +361,7 @@ export class OtherincomeComponent {
     this.isLoading = true;
     this.service.InvoiceType().subscribe({
       next: (res: any) => {
+        console.log(res)
         this.InvoiceTypeList = Array.isArray(res.Data) ? res.Data : [];
         this.isLoading = false;
       },
@@ -313,6 +376,7 @@ export class OtherincomeComponent {
   loadInvoiceCategories(): void {
     this.service.InvoiceCategory().subscribe({
       next: (res: any) => {
+        
         this.InvoiceCategoryList = Array.isArray(res.Data) ? res.Data : [];
       },
       error: err => {
@@ -330,7 +394,7 @@ export class OtherincomeComponent {
       const search = value?.toLowerCase() || '';
 
       this.filteredAvailableItems = this.availableItems.filter(item =>
-        item.Paycode_Code.toLowerCase().includes(search)
+        item.value.toLowerCase().includes(search)
       );
     });
 
@@ -339,22 +403,22 @@ export class OtherincomeComponent {
       const search = value?.toLowerCase() || '';
 
       this.filteredSelectedItems = this.selectedDragItems.filter(item =>
-        item.Paycode_Code.toLowerCase().includes(search)
+        item.value.toLowerCase().includes(search)
       );
     });
 
     // Initialize selected list
     this.filteredSelectedItems = [...this.selectedDragItems];
   }
-
-  loadPaycodes(): void {
-    this.service.getAllPaycodes(this.selectedCC).subscribe({
+  InvoiceCategory:boolean=false;
+  loadPaycodes(): void {   
+    this.service.getAllPaycodes(this.CompanySelectedCC).subscribe({
       next: (res) => {
-        console.log(res);
+        
         this.typeInvoiceList = res?.Data?.data?.Table0 || [];
-        this.availableItems = res?.Data || [];
-        this.filteredAvailableItems = [...this.availableItems];
-
+       // this.availableItems = res?.Data || [];
+       // this.filteredAvailableItems = [...this.availableItems];
+        this.availableItems =res.Data
         this.applyFilters();
         // Create controls dynamically for each checkbox
         this.typeInvoiceList.forEach(t => {
@@ -559,13 +623,18 @@ export class OtherincomeComponent {
 
   AddOtherImcome() {
     this.isAddclicked = true;
+    this.availableItems=[];
+    this.selectedItems=[];
   }
 
   SaveData() {
-    if (this.addOtherIncome.invalid) {
-      this.addOtherIncome.markAllAsTouched();
-      return;
-    }
+    // if (this.addOtherIncome.invalid) {
+    //   this.addOtherIncome.markAllAsTouched();
+    //   return;
+    // }
+
+      
+  
 
     this.isLoading = true;
     const formValue = this.addOtherIncome.getRawValue();
@@ -589,17 +658,19 @@ export class OtherincomeComponent {
 
     const childDetail: ChildDetail[] = [];
 
-    const selectedItems = this.filteredSelectedItems;
-    
+    const selectedItems = this.selected;
+    if(selectedItems)
+    {
     selectedItems.forEach(item => {
       childDetail.push({
         InvoiceCulture_id: 0,
-        Company_Id: this.selectedCC,
-        Paycode_Id: item.Paycode_Id,
-        Paycode_Code: item.Paycode_Code,
+        Company_Id: this.CompanySelectedCC,
+        Paycode_Id:Number(item.value),
+        Paycode_Code: item.text,
         HasAccess: true
       });
     });
+  }
 
     const payload = {
       createdBy: this.userdetail.user_Id,
@@ -609,25 +680,27 @@ export class OtherincomeComponent {
     };
 
     this.service.postInvoiceCulture(payload).subscribe({
-      next: (res) => {
-        if (res.Data.message == "Invoice Culture/Structure Already Exists") {
-          this.isLoading = false;
-          alert(res.Data.message);
-          return;
-        }
-        else if (res.Data.data.Table0) {
-          this.datatable = res.Data.data.Table0;
+      next: (res) => {       
+         this.datatable = res.Data.data.Table0;
           this.downloadExcel(this.datatable, "OtherIncomeCulture  _Validations");
           this.router.navigate(['/Master/invoicenavigation/OtherIncome']);
           this.isAddclicked = false;
           this.addOtherIncome.reset();
-          this.onSearch();
+          //this.onSearch();
           this.isLoading = false;
-        }
-        else {
-          alert("No validations returned");
-          this.isLoading = false;
-        }
+        // if (res.Data.message.includes("Successfully")) {
+          
+          
+        // }
+        // else if (res.Data.data.Table0) {
+        //  this.isLoading = false;
+        //   alert(res.Data.message);
+        //   return;
+        // }
+        // else {
+        //   alert("No validations returned");
+        //   this.isLoading = false;
+        // }
       },
       error: err => {
         console.error('Error fetching data:', err.message);
