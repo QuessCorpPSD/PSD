@@ -176,11 +176,17 @@ export class InvoiceCancelComponent implements OnInit, AfterViewInit {
 
   let globalMatch = true;
   if (searchTerms.global) {
-    const search = searchTerms.global.toLowerCase();
 
-    globalMatch = Object.values(data).some(val =>
-      String(val).toLowerCase().includes(search)
-    );
+ const searchValues = searchTerms.global
+    .split(',')
+    .map(v => v.trim().toLowerCase())
+    .filter(v => v);
+
+  const invoiceValue = data.invoice_Number?.toString().toLowerCase() || '';
+
+   globalMatch =
+    searchValues.length === 0 ||
+    searchValues.some(val => invoiceValue.includes(val));
   }
 
   return columnMatch && templateMatch && dateMatch && globalMatch;
