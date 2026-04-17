@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment.development';
@@ -59,8 +59,7 @@ export class OtherincomecultureService implements IOtherIncomeCulture {
 
 
   UploadInvoiceCulture(formData: FormData): Observable<APIResponse> {
-    const url = `${environment.apiUrl}InvoiceCulture / PostUploadInvoiceCulture`;
-    console.log(url);
+    const url = `${environment.apiUrl}InvoiceCulture/PostUploadInvoiceCulture`;    
     return this.http.post<APIResponse>(url, formData);
   }
 
@@ -74,11 +73,26 @@ export class OtherincomecultureService implements IOtherIncomeCulture {
       `${environment.apiUrl}InvoiceCulture/GetAllPayCodeFromCompanyOI/${companyId}`
     );
   }
-    getAllPaycodes(companyId: number): Observable<APIResponse> {
-    return this.http.get<APIResponse>(
-      `${environment.apiUrl}Paycode/GetPayCode/${companyId}`
-    );
+    // getAllPaycodes(companyId: number): Observable<APIResponse> {
+    // return this.http.get<APIResponse>(
+    //   `${environment.apiUrl}Paycode/GetPayCode/${companyId}`
+    // );
+    //  getAllPaycodes(companyId: number): Observable<APIResponse> {
+    // return this.http.get<APIResponse>(
+    //   `${environment.apiUrl}Paycode/GetPayCode/${companyId}`
+    // );
+      getAllPaycodes(val): Observable<APIResponse> {
+        var inputval = JSON.stringify(val);
+        const config = new HttpHeaders({
+            'Cache-Control': 'no-cache, no-store, must-revalidate',
+            'Pragma': 'no-cache',
+            'Expires': '0'
+        }).set('Content-Type', 'application/json')
+            .set('Accept', 'application/json')
+            
+        return this.http.post<APIResponse>(environment.apiUrl + 'Paycode/GetPayCode', inputval, { headers: config })
+    }
   }
 
 
-}
+

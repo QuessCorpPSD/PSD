@@ -248,7 +248,7 @@ onSave() {
   }
 
   const payload = {
-    Created_By: this.userdetail?.user_Id,
+    Created_By: String(this.userdetail?.user_Id),
     Mode: 'Add',
     CompanyId: Number(this.selectedCC),
 

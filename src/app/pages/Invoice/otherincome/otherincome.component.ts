@@ -138,7 +138,7 @@ textField!:string;
           this.isPaycodesLoaded = false;
         }
         else {
-          this.loadPaycodes();
+        //  this.loadPaycodes();
           this.isPaycodesLoaded = true;
         }
       }
@@ -306,7 +306,12 @@ this.selectedCC = Number(this.CompanySelectedCC) || 0;
       // CompanyCode: company.companyCode,
       CompanyName: company.companyName
     });
-   this.loadPaycodes();
+    const req={
+      "company_Id":this.CompanySelectedCC,
+      "Culture_Id":0,
+      "Type":'N'
+    }
+   this.loadPaycodes(req);
 }
 
   handleCompany(company) {
@@ -386,7 +391,15 @@ this.selectedCC = Number(this.CompanySelectedCC) || 0;
     });
 
   }
+Editedcloseclick(){
+  this.isAddclicked = false;
+    this.uploadedDataSource.data = [];
+    this.addOtherIncome.reset();
+    this.showInvoiceTypeError = false;
+    this.selectedCC = 0;
+    this.isEditMode=false
 
+}
   applyFilterscdkDrop() {
 
     // Available filter
@@ -411,22 +424,24 @@ this.selectedCC = Number(this.CompanySelectedCC) || 0;
     this.filteredSelectedItems = [...this.selectedDragItems];
   }
   InvoiceCategory:boolean=false;
-  loadPaycodes(): void {   
-    this.service.getAllPaycodes(this.CompanySelectedCC).subscribe({
+  loadPaycodes(val): void {   
+    
+    this.service.getAllPaycodes(val).subscribe({
       next: (res) => {
-        
-        this.typeInvoiceList = res?.Data?.data?.Table0 || [];
+        console.log(res);
+        //this.typeInvoiceList = res?.Data?.data?.Table0 || [];
        // this.availableItems = res?.Data || [];
        // this.filteredAvailableItems = [...this.availableItems];
-        this.availableItems =res.Data
+        this.availableItems =res.Data.availablePaycode;
+        this.selectedItems=res.Data.mappedPaycode;
         this.applyFilters();
         // Create controls dynamically for each checkbox
-        this.typeInvoiceList.forEach(t => {
-          const name = t.Paycode_Id.toString();
-          if (!this.addOtherIncome.contains(name)) {
-            this.addOtherIncome.addControl(name, new FormControl(false));
-          }
-        });
+        // this.typeInvoiceList.forEach(t => {
+        //   const name = t.Paycode_Id.toString();
+        //   if (!this.addOtherIncome.contains(name)) {
+        //     this.addOtherIncome.addControl(name, new FormControl(false));
+        //   }
+        // });
         this.isPaycodesLoaded = true;
       },
       error: err => console.error(err)
@@ -625,8 +640,42 @@ this.selectedCC = Number(this.CompanySelectedCC) || 0;
     this.isAddclicked = true;
     this.availableItems=[];
     this.selectedItems=[];
+    this.isEditMode=false;
   }
-
+  CompanyName:string='';
+  EditedCompany_Id!:number;
+  MapName:string=''
+  MapName_Id!:number;
+  isPaycodesEditLoaded=false;
+  selectedInvoiceType:any;
+  Invoice_Category_Id:any
+EditOtherIncome(element)
+{
+  console.log("Edited")
+  console.log(element);
+  this.availableItems=[];
+  this.selectedItems=[];
+  this.selectedCompanyId = element.company_Id
+  this.CompanyName=`${element.company_Code}-${element.company_Name}`;
+  this.selectedInvoiceType=element.invoiceType_Id;
+  this.Invoice_Category_Id=element.invoice_Category_Id;
+  this.MapName=element.map_Name;
+  this.MapName_Id=element.map_Name_Id;
+  this.isAddclicked = false;
+  this.isEditMode = true;
+  this.isPaycodesEditLoaded=true;
+  const req={
+      "company_Id":element.company_Id,
+      "Culture_Id":element.invoiceCulture_id,
+      "Type":'E'
+    }
+    this.loadPaycodes(req)
+  
+}
+OnchagedInvoiceType(event)
+{
+  console.log(event.value);
+}
   SaveData() {
     // if (this.addOtherIncome.invalid) {
     //   this.addOtherIncome.markAllAsTouched();

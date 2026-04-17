@@ -45,8 +45,11 @@ export class CompanyallComponent {
   companyCode: Company[] = [];
   filteredOptions$!: Observable<Company[]>;
   selectedOption?: Company | null;
+  @Input() CompanyId: any;
   userdetail!: any;
+
   @Output() companyEmit = new EventEmitter<Company | null>();
+
 
   constructor(
     @Inject(COMM_TOKEN) private _commonService: ICommonService,
