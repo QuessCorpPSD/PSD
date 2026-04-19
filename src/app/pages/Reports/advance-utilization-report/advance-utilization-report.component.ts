@@ -47,7 +47,7 @@ Payperiod: any = [];
       alert('Please select payperiod');
       return;
     }
-
+ this.isLoading=true;
     this.service.Exporttoexcel(this.PayPeriod).subscribe({
       next: (res) => {
         try {
@@ -68,9 +68,11 @@ Payperiod: any = [];
           const fileName = `AdvanceUtilizationReport  _${timestamp}.xlsx`;
 
           XLSX.writeFile(wb, fileName);
+           this.isLoading=false;
         }
         catch (err) {
           console.error(err);
+           this.isLoading=false;
         }
       }
     });

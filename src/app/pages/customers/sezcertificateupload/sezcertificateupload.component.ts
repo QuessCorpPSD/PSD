@@ -318,7 +318,14 @@ export class SezcertificateuploadComponent {
           if (res.StatusCode === 200) {
             const data = res.Data;
             var base64 = data.file;
+            if(base64!="N")
+            {
             this.downloadExcelFromBase64(base64, data.fileName);
+            }
+            else
+            {
+               alert(data.fileName);
+            }
           } else {
             alert("File Path not found!");
           }

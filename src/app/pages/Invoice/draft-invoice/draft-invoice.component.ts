@@ -323,6 +323,9 @@ export class DraftInvoiceComponent implements OnInit {
   toggleRow(event) {
 
   }
+  SplitRegister(){
+    
+  }
   isAllSelected() {
     const numSelected = this.selection.selected.length;
     const numRows = this.dataSource.data.length;

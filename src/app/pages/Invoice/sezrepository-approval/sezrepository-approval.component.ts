@@ -23,7 +23,8 @@ import { FinancialYearComponent } from '../../../common/financial-year/financial
 import { CompanyallComponent } from '../../../common/CompanyAll/companyall.component';
 import { PayPeriodComponent } from '../../../common/payperiod/payperiod.component';
 import { PayperiodsequenceComponent } from "../../../common/payperiodsequence/payperiodsequence.component";
-
+import * as XLSX from 'xlsx';
+import * as FileSaver from 'file-saver';
 const sezservice = InjectionToken<ISEZRepositoryService>;
 
 interface ViewRow {
@@ -237,8 +238,30 @@ export class SEZRepositoryApprovalComponent {
   }
 
   onExportClick() {
+    this.isLoading=true;
+const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.dataSource.data);
+  const workbook: XLSX.WorkBook = {
+    Sheets: { 'Sheet1': worksheet },
+    SheetNames: ['Sheet1']
+  };
 
+  const excelBuffer: any = XLSX.write(workbook, {
+    bookType: 'xlsx',
+    type: 'array'
+  });
+const now = new Date();
+const formattedDate = now.toISOString().slice(0,19).replace(/[:T]/g, '-');
+
+this.saveAsExcelFile(excelBuffer, `SezApproval_${formattedDate}`);
+  this.saveAsExcelFile(excelBuffer, 'SezApproval'+Date());
   }
+  saveAsExcelFile(buffer: any, fileName: string): void {
+  const data: Blob = new Blob([buffer], {
+    type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8'
+  });
+  this.isLoading=false;
+  FileSaver.saveAs(data, `${fileName}_${new Date().getTime()}.xlsx`);
+}
 
   onImportClick(fileInput) {
 
@@ -399,6 +422,9 @@ export class SEZRepositoryApprovalComponent {
       this.rows = this.rows.filter(r => r !== row);
       this.filteredRows = [...this.rows];
     }
+  }
+  exportdata(){
+
   }
 
   downloadFile(invoice_Id: number) {
