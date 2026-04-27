@@ -173,6 +173,8 @@ import { DownloadbatchComponent } from './pages/SalaryReleaseNew/downloadbatch/d
 import { SalaryReleaseApproveComponent } from './pages/SalaryReleaseNew/salary-release-approve/salary-release-approve.component';
 import { AdvanceUtilizationReportComponent } from './pages/Reports/advance-utilization-report/advance-utilization-report.component';
 import { SezcertificateuploadComponent } from './pages/customers/sezcertificateupload/sezcertificateupload.component';
+import { BankInvoiceNavigationComponent } from './pages/BankInvoice/bank-invoice-navigation/bank-invoice-navigation.component';
+import { BankAdviceSplitCultureComponent } from './pages/BankInvoice/bank-advice-split-culture/bank-advice-split-culture.component';
 
 
 
@@ -424,6 +426,12 @@ export const routes: Routes = [
           { path: 'SalaryReleaseStatus', component: SalaryReleaseStatusComponent },
         ]
 
+      },
+      {
+        path: 'bankinvoicenavigation', component: BankInvoiceNavigationComponent,
+        children: [
+          { path: 'bankadvicesplitculture', component: BankAdviceSplitCultureComponent }
+        ]
       },
       { path: 'changepassword', component: ChangepasswordComponent },
 
