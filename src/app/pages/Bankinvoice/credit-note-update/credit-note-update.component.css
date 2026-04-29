@@ -259,10 +259,10 @@
 }
 
 .popup-card {
-    width: 730px;
-    max-width: 73%;
+    width: 800px;
+    max-width: 85%;
     height: 80vh;
-    max-height: 80vh;
+    max-height: 85vh;
     overflow-y: auto;
 }
 
@@ -407,9 +407,24 @@ input {
     overflow-y: hidden;
 }
 
-.transfer-btn{
-    border-radius: 7px;
-    background: skyblue;
-    color: inherit;
-    border: none;
+/* RESET ALL TEXT TO BLACK */
+.popup-card {
+    color: black;
+}
+
+/* KEEP ONLY TITLE BLUE */
+.popup-header mat-card-title {
+    color: #2d2dbb;
+}
+
+/* TOP INFO TEXT BLACK */
+.popup-card b,
+.popup-card span {
+    color: black;
+}
+
+/* TABLE TEXT BLACK */
+table th,
+table td {
+    color: black !important;
 }

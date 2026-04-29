@@ -1,1 +1,494 @@
-<p>client-advance-payments works!</p>
+<div class="page-wrapper">
+    <div class="scrollable-content">
+        <mat-card-title class="main-header">
+            Client Advance Payments
+        </mat-card-title>
+        <div class="container py-2">
+            <div class="row g-3 align-items-end">
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Company Code<span class="text-danger">*</span></label>
+                    <companyall (companyEmit)="handleCompanyEvent($event)"></companyall>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Company Name</label>
+                    <input type="text" class="form-control" [(ngModel)]="companyname" />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">From Date: <span class="text-danger">*</span></label>
+                    <input type="date" class="form-control" [(ngModel)]="startDate" />
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label">To Date: <span class="text-danger">*</span></label>
+                    <input type="date" class="form-control" [(ngModel)]="endDate" />
+                </div>
+
+                <div class="col-md-2 d-flex gap-2">
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-search"
+                        matTooltip="Search" (click)="onSearch()">
+                        <mat-icon>search</mat-icon>
+                    </button>
+                    <button class="btn btn-secondary btn-sm d-flex align-items-center justify-content-center"
+                        matTooltip="export to excel" (click)="exportToExcel()">
+                        <mat-icon>download</mat-icon>
+                    </button>
+
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-upload"
+                        matTooltip="Import" (click)="ImportClick(fileInput)">
+                        <input type="file" #fileInput style="display: none;" (change)="onFileChange($event)"
+                            accept=".xlsx, .xls" />
+                        <mat-icon>cloud_upload</mat-icon>
+                    </button>
+
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-download"
+                        matTooltip="Template" (click)="DownloadClientAdvancePaymentTemplate()">
+                        <mat-icon>cloud_download</mat-icon>
+                    </button>
+
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-add" matTooltip="Add"
+                        (click)="AddLtaOpen()">
+                        <mat-icon>add</mat-icon>
+                    </button>
+                </div>
+
+            </div>
+
+            <div class="table-container" style="top:30px;" [hidden]="!showTable">
+                <div class="table-scroll-window">
+                    <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+
+                  
+                        <ng-container matColumnDef="delete">
+                            <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                            <mat-cell *matCellDef="let element" (click)="onDeleteRow(element)">
+                                <mat-icon>delete</mat-icon>
+
+                            </mat-cell>
+                        </ng-container>
+
+                        <!-- Edit -->
+                        <!-- <ng-container matColumnDef="edit">
+                            <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                            <mat-cell *matCellDef="let element">
+
+                                <mat-icon>edit</mat-icon>
+
+                            </mat-cell> -->
+                        <!-- </ng-container> -->
+
+                 
+                        <ng-container matColumnDef="sno">
+                            <mat-header-cell *matHeaderCellDef>SNo</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Serial_No }}</mat-cell>
+                        </ng-container>
+
+                  
+                        <ng-container matColumnDef="companyCode">
+                            <mat-header-cell *matHeaderCellDef>Company Code</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Company_Code }}</mat-cell>
+                        </ng-container>
+
+                 
+                        <ng-container matColumnDef="referenceNumber">
+                            <mat-header-cell *matHeaderCellDef>Reference Number</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Reference_Id }}</mat-cell>
+                        </ng-container>
+
+                     
+                        <ng-container matColumnDef="CompanyName">
+                            <mat-header-cell *matHeaderCellDef>Company Name</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Company_Name }}</mat-cell>
+                        </ng-container>
+
+                 
+                        <ng-container matColumnDef="CreatedMode">
+                            <mat-header-cell *matHeaderCellDef>Created Mode</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.OnAccountTypeText }}</mat-cell>
+                        </ng-container>
+
+              
+                        <ng-container matColumnDef="ModeOfCollections">
+                            <mat-header-cell *matHeaderCellDef>Mode of Collections</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.ModeOfCollectionsText }}</mat-cell>
+                        </ng-container>
+
+            
+                        <ng-container matColumnDef="ChequeUTRNumber">
+                            <mat-header-cell *matHeaderCellDef>Cheque/UTR Number</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.UTRChequeNumber }}</mat-cell>
+                        </ng-container>
+
+                       
+                        <ng-container matColumnDef="ChequeDate">
+                            <mat-header-cell *matHeaderCellDef>Cheque Date</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Cheque_Date }}</mat-cell>
+                        </ng-container>
+
+                  
+                        <ng-container matColumnDef="CreditDate">
+                            <mat-header-cell *matHeaderCellDef>Credit Date</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Credit_Date }}</mat-cell>
+                        </ng-container>
+
+                
+                        <ng-container matColumnDef="BankName">
+                            <mat-header-cell *matHeaderCellDef>Bank Name</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Bank_Name }}</mat-cell>
+                        </ng-container>
+
+                   
+                        <ng-container matColumnDef="AccountNumber">
+                            <mat-header-cell *matHeaderCellDef>Account Number</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.OnAccountNumbersText }}</mat-cell>
+                        </ng-container>
+
+                      
+                        <ng-container matColumnDef="Amount">
+                            <mat-header-cell *matHeaderCellDef>Amount</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Amount }}</mat-cell>
+                        </ng-container>
+
+                 
+                        <ng-container matColumnDef="Action">
+                            <mat-header-cell *matHeaderCellDef>Action</mat-header-cell>
+                            <mat-cell *matCellDef="let element">
+                                <button class="transfer-btn" (click)="openTransferPopup(element)">
+                                    Transfer
+                                </button>
+                            </mat-cell>
+                        </ng-container>
+
+          
+                        <ng-container matColumnDef="Remarks">
+                            <mat-header-cell *matHeaderCellDef>Remarks</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Remarks }}</mat-cell>
+                        </ng-container>
+
+                     
+                        <ng-container matColumnDef="username">
+                            <mat-header-cell *matHeaderCellDef>Username</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.User_Name }}</mat-cell>
+                        </ng-container>
+
+                 
+                        <ng-container matColumnDef="PostedDate">
+                            <mat-header-cell *matHeaderCellDef>Posted Date</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Posted_Date }}</mat-cell>
+                        </ng-container>
+
+            
+                        <ng-container matColumnDef="GroupName">
+                            <mat-header-cell *matHeaderCellDef>Group Name</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Group_Name }}</mat-cell>
+                        </ng-container>
+
+                       
+                        <ng-container matColumnDef="SubCustomerCode">
+                            <mat-header-cell *matHeaderCellDef>Sub Customer Code</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Sub_Customer_code }}</mat-cell>
+                        </ng-container>
+
+                 
+                        <ng-container matColumnDef="PostingDate">
+                            <mat-header-cell *matHeaderCellDef>Posting Date</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Posting_Date }}</mat-cell>
+                        </ng-container>
+
+                       
+                        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+
+                    
+                        <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="onRowClick(row)"
+                            [class.selected-row]="selectedRow === row">
+                        </mat-row>
+
+                    </table>
+                </div>
+
+                <div *ngIf="dataSource.data.length===0" class="text-center p-4">
+                    <p class="text-muted">No data to display</p>
+                </div>
+
+                <mat-paginator #paginator [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons
+                    style="border-top: 1px solid #ddd;">
+                </mat-paginator>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div *ngIf="isAddclicked" class="popup-overlay" (keydown.escape)="closeclick()">
+    <mat-card class="popup-card">
+        <mat-card-header class="popup-header">
+            <mat-card-title class="d-flex justify-content-center align-items-center">
+                {{ isEditMode ? 'Edit Client Advance Payment' : 'Add Client Advance Payment' }}
+            </mat-card-title>
+
+            <button class="close-btn" matTooltip="Close" (click)="closeclick()">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-card-header>
+        <mat-card-content class="scroll-content">
+
+            <form [formGroup]="ClientAdvance" novalidate>
+
+
+                <div class="row g-3 mb-3">
+                    <div class="col-md-4">
+                        <label class="form-label">Company Code <span class="text-danger">*</span></label>
+                        <companyall formControlName="CompanyCode" (companyEmit)="handleCompanyEvent1($event)">
+                        </companyall>
+                        <div class="text-danger small"
+                            *ngIf="ClientAdvance.get('CompanyCode')?.touched && ClientAdvance.get('CompanyCode')?.hasError('required')">
+                            Company Code is required
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label">Company Name <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" formControlName="CompanyName" readonly />
+                        <!-- <div class="text-danger small"
+                            *ngIf="ClientAdvance.get('CompanyName')?.touched && ClientAdvance.get('CompanyName')?.hasError('required')">
+                            Company Name is required
+                        </div> -->
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label">Mode Of Collections <span class="text-danger">*</span></label>
+                        <select class="form-control" formControlName="ModeOfCollections">
+                            <option value="">Select</option>
+                            <option *ngFor="let item of ModeOfCollectionList" [value]="item.ModeOfCollectionsValue">
+                                {{ item.ModeOfCollectionsText }}
+                            </option>
+                        </select>
+                        <div class="text-danger small"
+                            *ngIf="ClientAdvance.get('ModeOfCollections')?.touched && ClientAdvance.get('ModeOfCollections')?.hasError('required')">
+                            Mode Of Collections is required
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Row 2 -->
+                <div class="row g-3 mb-3">
+                    <div class="col-md-4">
+                        <label class="form-label">Group Name</label>
+                        <select class="form-control" formControlName="GroupName">
+                            <option value="">Select</option>
+                            <option *ngFor="let item of GroupNameList" [value]="item.Group_Detail_Id">
+                                {{ item.Group_Name }}
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label">Credit Date <span class="text-danger">*</span></label>
+                        <input type="date" class="form-control" formControlName="CreditDate" />
+                        <div class="text-danger small"
+                            *ngIf="ClientAdvance.get('CreditDate')?.touched && ClientAdvance.get('CreditDate')?.hasError('required')">
+                            Credit Date is required
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label">UTR/Cheque Number <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" formControlName="UTRChequeNumber" />
+                        <div class="text-danger small"
+                            *ngIf="ClientAdvance.get('UTRChequeNumber')?.touched && ClientAdvance.get('UTRChequeNumber')?.hasError('required')">
+                            UTR/Cheque Number is required
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Row 3 -->
+                <div class="row g-3 mb-3">
+                    <div class="col-md-4">
+                        <label class="form-label">Bank Name <span class="text-danger">*</span></label>
+                        <select class="form-control" formControlName="BankName" (change)="onBankChange()">
+                            <option value="">Select</option>
+                            <option *ngFor="let item of BankNameList" [value]="item.Bank_Id">
+                                {{ item.Bank_Name }}
+                            </option>
+                        </select>
+                        <div class="text-danger small"
+                            *ngIf="ClientAdvance.get('BankName')?.touched && ClientAdvance.get('BankName')?.hasError('required')">
+                            Bank Name is required
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label">Cheque Date</label>
+                        <input type="date" class="form-control" formControlName="ChequeDate" />
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label">Account Number <span class="text-danger">*</span></label>
+                        <select class="form-control" formControlName="AccountNumber">
+                            <option value="">--Select--</option>
+                            <option *ngFor="let item of AccountNumberList" [value]="item.OnAccountNumbersValue">
+                                {{ item.OnAccountNumbersText }}
+                            </option>
+                        </select>
+                        <div class="text-danger small"
+                            *ngIf="ClientAdvance.get('AccountNumber')?.touched && ClientAdvance.get('AccountNumber')?.hasError('required')">
+                            Account Number is required
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Row 4 -->
+                <div class="row g-3 mb-3">
+                    <div class="col-md-4">
+                        <label class="form-label">Amount<span class="text-danger">*</span></label>
+                        <input type="number" class="form-control" formControlName="Amount" />
+                        <div class="text-danger small"
+                            *ngIf="ClientAdvance.get('Amount')?.touched && ClientAdvance.get('Amount')?.hasError('required')">
+                            Amount is required
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label">Posting Date <span class="text-danger">*</span></label>
+                        <input type="date" class="form-control" formControlName="PostingDate" />
+                        <div class="text-danger small"
+                            *ngIf="ClientAdvance.get('PostingDate')?.touched && ClientAdvance.get('PostingDate')?.hasError('required')">
+                            Posting Date is required
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Row 5 -->
+                <div class="row">
+                    <div class="col-md-12">
+                        <label class="form-label">Remarks<span class="text-danger">*</span></label>
+                        <textarea class="form-control" rows="3" formControlName="Remarks"></textarea>
+                        <div class="text-danger small"
+                            *ngIf="ClientAdvance.get('Remarks')?.touched && ClientAdvance.get('Remarks')?.hasError('required')">
+                            Remarks is required
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+
+            <!-- <mat-card-footer class="footer"> -->
+            <div class="d-flex justify-content-end mt-3" style="gap: 10px; padding-right: 8px;">
+                <!-- <div> -->
+
+                <button type="Cancel"
+                    style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: #f0f0f0; color: black;"
+                    (click)="closeclick()">
+                    Cancel
+                </button>
+
+                <button type="button" (click)="onSave()"
+                    style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: blue; color: white;">
+                    Save
+                </button>
+                <!-- </div> -->
+            </div>
+            <!-- </mat-card-footer> -->
+        </mat-card-content>
+
+    </mat-card>
+</div>
+
+
+<div *ngIf="isTransferClicked" class="popup-overlay">
+    <mat-card class="popup-card">
+        <mat-card-header class="popup-header">
+            <mat-card-title class="d-flex justify-content-center align-items-center">
+                Client Advance Payment Transfer
+            </mat-card-title>
+
+            <button class="close-btn" matTooltip="Close" (click)="closeTransferPopup()">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-card-header>
+
+        <mat-card-content class="scroll-content">
+
+            <div class="row g-3 mb-3">
+
+                <div class="col-md-4">
+                    <label class="form-label">From Company Code</label>
+                    <input type="text" class="form-control" [value]="transferData?.Company_Code" readonly />
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label">From Company Name</label>
+                    <input type="text" class="form-control" [value]="transferData?.Company_Name" readonly />
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label">Reference Number</label>
+                    <input type="text" class="form-control" [value]="transferData?.Reference_Id" readonly />
+                </div>
+
+            </div>
+
+            <div class="row g-3 mb-3">
+                <div class="col-md-4">
+                    <label class="form-label">Max Transferable Amount</label>
+                    <input type="text" class="form-control" [value]="transferData?.Amount" readonly />
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label">To Company Code</label>
+                    <app-companyfilter [companyID]="transferData?.Company_Id"
+                        (companyEmit)="handleToCompanyFilterEvent($event)">
+                    </app-companyfilter>
+
+
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label">To Amount</label>
+                    <input type="number" class="form-control" [(ngModel)]="transferAmount" [max]="transferData?.Amount"
+                        min="1" (input)="validateTransferAmount()" />
+
+
+                </div>
+
+            </div>
+
+            <div class="row g-3 mb-3">
+
+                <div class="col-md-4">
+                    <label class="form-label">Group Name</label>
+                    <select class="form-control" [(ngModel)]="selectedGroupId">
+                        <option value="">Select</option>
+                        <option *ngFor="let g of GroupNameList" [value]="g.Group_Detail_Id">
+                            {{ g.Group_Name }}
+                        </option>
+                    </select>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label">Posting Date</label>
+                    <input type="date" class="form-control" [(ngModel)]="transferPostingDate" />
+                </div>
+
+            </div>
+
+            <div class="d-flex justify-content-end mt-3" style="gap: 10px; padding-right: 8px;">
+
+                <button type="button" style="border: none; border-radius: 7px; width: 80px; height: 30px;
+                 background-color: #f0f0f0; color: black;" (click)="closeTransferPopup()">
+                    Cancel
+                </button>
+
+                <button type="button" style="border: none; border-radius: 7px; width: 80px; height: 30px;
+                 background-color: blue; color: white;" (click)="onTransfer()">
+                    Save
+                </button>
+
+            </div>
+
+        </mat-card-content>
+    </mat-card>
+</div>
+<div *ngIf="isLoading" class="loading-overlay">
+    <img src="assets/Loading.gif" alt="Loading...">
+</div>

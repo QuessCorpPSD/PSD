@@ -158,6 +158,19 @@ import { ReprocessComponent } from './pages/Process/reprocess/reprocess.componen
 import { ClientgstlistComponent } from './pages/customers/clientgstlist/clientgstlist.component';
 import { ClientAdvancePaymentsComponent } from './pages/Bankinvoice/client-advance-payments/client-advance-payments.component';
 import { AccountReceivablenavigationComponent } from './pages/Bankinvoice/account-receivablenavigation/account-receivablenavigation.component';
+import { ClientAdvanceReportComponent } from './pages/Bankinvoice/client-advance-report/client-advance-report.component';
+import { CollectionpendingreportComponent } from './pages/Bankinvoice/collectionpendingreport/collectionpendingreport.component';
+import { InvoiceCollectionreportComponent } from './pages/Bankinvoice/invoice-collectionreport/invoice-collectionreport.component';
+import { ForecastComponent } from './pages/Bankinvoice/forecast/forecast.component';
+import { CreditNoteApproveComponent } from './pages/Bankinvoice/credit-note-approve/credit-note-approve.component';
+import { CreditNoteUpdateComponent } from './pages/Bankinvoice/credit-note-update/credit-note-update.component';
+import { ClientledgerreportComponent } from './pages/Bankinvoice/clientledgerreport/clientledgerreport.component';
+import { GenericuploadComponent } from './pages/Bankinvoice/genericupload/genericupload.component';
+import { LTDSreportComponent } from './pages/Bankinvoice/ltdsreport/ltdsreport.component';
+import { UnpaidInvoiceReportComponent } from './pages/Bankinvoice/unpaid-invoice-report/unpaid-invoice-report.component';
+import { InvoiceBatchConsolidationReportComponent } from './pages/Bankinvoice/invoice-batch-consolidation-report/invoice-batch-consolidation-report.component';
+import { ReIssueProcessApproveComponent } from './pages/Bankinvoice/re-issue-process-approve/re-issue-process-approve.component';
+import { ReIssueProcessReportComponent } from './pages/Bankinvoice/re-issue-process-report/re-issue-process-report.component';
 
 
 
@@ -348,7 +361,17 @@ export const routes: Routes = [
         component: AccountReceivablenavigationComponent,
         children: [
           { path: 'ClientAdvancePayment', component: ClientAdvancePaymentsComponent },
-          
+          { path: 'ClientAdvanceReport', component: ClientAdvanceReportComponent },
+          { path: 'collectionpendingreport', component: CollectionpendingreportComponent },
+          { path: 'invoicecollectionreport', component: InvoiceCollectionreportComponent },
+          { path: 'Forecast', component: ForecastComponent },
+          { path: 'CreditNoteApproval', component: CreditNoteApproveComponent },
+          { path: 'CreditNoteUpdate', component: CreditNoteUpdateComponent },
+          { path: 'Clientledgerreport', component: ClientledgerreportComponent },
+          { path: 'LTDSreport', component: LTDSreportComponent },
+          { path: 'Genericupload', component: GenericuploadComponent },
+          { path: 'UnpaidInvoiceReport', component: UnpaidInvoiceReportComponent },
+        
         ]
       },
 
@@ -410,7 +433,7 @@ export const routes: Routes = [
           //{ path: 'creditnote', component: CreditnoteComponent },
           // { path: 'creditnoteapprove', component: CreditnoteapproveComponent },
           { path: 'invoicecancel', component: InvoiceCancelComponent },
-          //{ path: 'creditnoteupdate', component: CreditnoteupdateComponent },
+          { path: 'creditnoteupdate', component: CreditnoteupdateComponent },
           { path: 'companyinvoiceformat', component: CompanyinvoiceformatComponent },
           { path: 'OtherIncome', component: OtherincomeComponent },
 

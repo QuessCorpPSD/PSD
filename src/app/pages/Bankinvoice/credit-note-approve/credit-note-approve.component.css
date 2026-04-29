@@ -259,10 +259,10 @@
 }
 
 .popup-card {
-    width: 730px;
-    max-width: 73%;
-    height: 80vh;
-    max-height: 80vh;
+    width: 1000px;
+    max-width: 85%;
+    height: 85vh;
+    max-height: 85vh;
     overflow-y: auto;
 }
 
@@ -407,9 +407,16 @@ input {
     overflow-y: hidden;
 }
 
-.transfer-btn{
-    border-radius: 7px;
-    background: skyblue;
-    color: inherit;
-    border: none;
+.selected {
+    background-color: #d3d3d3;
+}
+
+/* Highlight the entire row */
+.mat-row.selected {
+    background-color: #d3d3d3 !important;
+}
+
+/* Remove white background from inputs to reveal row highlight */
+.mat-row.selected input {
+    background-color: transparent !important;
 }

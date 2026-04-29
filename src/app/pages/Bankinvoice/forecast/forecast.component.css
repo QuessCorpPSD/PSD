@@ -259,10 +259,10 @@
 }
 
 .popup-card {
-    width: 730px;
-    max-width: 73%;
-    height: 80vh;
-    max-height: 80vh;
+    width: 800px;
+    max-width: 85%;
+    height: 85vh;
+    max-height: 85vh;
     overflow-y: auto;
 }
 
@@ -405,11 +405,4 @@ input {
 
 .container.py-2 {
     overflow-y: hidden;
-}
-
-.transfer-btn{
-    border-radius: 7px;
-    background: skyblue;
-    color: inherit;
-    border: none;
 }

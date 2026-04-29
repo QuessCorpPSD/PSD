@@ -35,4 +35,6 @@ export class DynamicuploadService implements IDynamicUpload {
         formData
       );
   }
+
+  
 }
