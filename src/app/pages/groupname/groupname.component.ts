@@ -31,7 +31,7 @@ export const COMM_TOKEN = new InjectionToken<ICommonService>('COMM_TOKEN');
   }]
 })
 export class GroupnameComponent {
-@Input() selectedCompanyId?: number;
+  @Input() selectedCompanyId?: number;
   options: string[] = [];
   searchText: string = '';
   myControl = new FormControl<string | Groupnameclass>('');
@@ -47,11 +47,30 @@ export class GroupnameComponent {
       this.Bindmapname(this.selectedCompanyId);
     }
   }
-
   Bindmapname(selectedCompanyId: any) {
     this._commonService.GetSitesByCompanyId(selectedCompanyId).subscribe({
       next: res => {
-        this.siteName = res.Data;
+
+        this.siteName = res.Data || [];
+
+        // 👉 If API returns empty
+        if (this.siteName.length === 0) {
+          const noData: Groupnameclass[] = [{
+                siteName: 'Not Available',
+                siteCode: '0',
+                isDisabled: true
+              }];
+
+          this.filteredOptions$ = this.myControl.valueChanges.pipe(
+            startWith(''),
+            map(() => noData)
+          );
+
+          this.myControl.setValue(noData[0]);
+
+          return;
+        }
+
         this.filteredOptions$ = this.myControl.valueChanges.pipe(
           startWith(''),
           map(value => {
@@ -60,7 +79,7 @@ export class GroupnameComponent {
             if (typeof value === 'string') {
               searchText = value;
             } else if (value && typeof value === 'object' && 'siteName' in value) {
-              searchText = value?.siteName;
+              searchText = value.siteName;
             }
 
             return this._filter(searchText);
@@ -69,9 +88,7 @@ export class GroupnameComponent {
       },
       error: err => console.error(err.message)
     });
-    console.log
   }
-
   private _filter(value: string): Groupnameclass[] {
     const filterValue = value.toLowerCase();
     return this.siteName.filter(option =>

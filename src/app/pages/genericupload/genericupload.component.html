@@ -1,0 +1,66 @@
+<div class="fm-page">
+  <div class="fm-header">
+    <h1 class="fm-title">Generic Upload</h1>
+  </div>
+
+  <div class="fm-card">
+
+    <!-- Searchable Dropdown -->
+    <div class="fm-field">
+      <label class="fm-label" for="fileSearch">Upload Type</label>
+      <div class="fm-dropdown-wrap" (clickOutside)="closeDropdown()">
+        <input id="fileSearch" class="fm-search-input" type="text" placeholder="Select Upload..." autocomplete="off"
+          [(ngModel)]="searchQuery" (focus)="openDropdown()" (input)="onSearch()" />
+        <span class="fm-chevron" [class.open]="dropdownOpen">&#9660;</span>
+
+        <ul class="fm-dropdown-list" *ngIf="dropdownOpen" role="listbox">
+          <li *ngFor="let item of filteredOptions" class="fm-dropdown-item" [class.selected]="item === selectedFile"
+            [class.disabled]="item.isDisabled" (click)="selectItem(item)" role="option"
+            [attr.aria-selected]="item === selectedFile">
+            {{ item.GEN_vDescription }}
+          </li>
+          <li *ngIf="filteredOptions.length === 0" class="fm-no-results">
+            No results found
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <hr class="fm-divider" />
+
+    <!-- Action Buttons -->
+    <div class="fm-field">
+      <span class="fm-label">Actions</span>
+      <div class="fm-actions">
+
+        <!-- Download Button -->
+        <button class="fm-btn fm-btn-primary" (click)="handleDownload()" [disabled]="isDownloading">
+          <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M7.5 10.5L3.5 6.5H6V1H9V6.5H11.5L7.5 10.5Z" fill="currentColor" />
+            <rect x="2" y="12" width="11" height="1.5" rx="0.75" fill="currentColor" />
+          </svg>
+          {{ isDownloading ? 'Downloading...' : 'Template' }}
+        </button>
+
+        <button type="button" class="fm-btn fm-btn-secondary fm-upload-label" (click)="ImportClick(fileInput)">
+          <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M7.5 4.5L11.5 8.5H9V14H6V8.5H3.5L7.5 4.5Z" fill="currentColor" />
+            <rect x="2" y="1.5" width="11" height="1.5" rx="0.75" fill="currentColor" />
+          </svg>
+          Upload file
+        </button>
+
+        <input type="file" #fileInput (change)="onFileSelected($event)" accept=".xlsx, .xls" style="display: none;" />
+
+      </div>
+    </div>
+
+    <!-- Status Message -->
+    <div class="fm-status" *ngIf="statusMessage" [innerHTML]="statusMessage"></div>
+
+  </div>
+</div>
+
+<div *ngIf="isLoading" class="loading-overlay">
+  <img src="assets\Loading.gif" alt="Loading...">
+</div>

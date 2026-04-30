@@ -173,6 +173,7 @@ import { DownloadbatchComponent } from './pages/SalaryReleaseNew/downloadbatch/d
 import { SalaryReleaseApproveComponent } from './pages/SalaryReleaseNew/salary-release-approve/salary-release-approve.component';
 import { AdvanceUtilizationReportComponent } from './pages/Reports/advance-utilization-report/advance-utilization-report.component';
 import { SezcertificateuploadComponent } from './pages/customers/sezcertificateupload/sezcertificateupload.component';
+import { GenericuploadComponent } from './pages/genericupload/genericupload.component';
 
 
 
@@ -383,7 +384,8 @@ export const routes: Routes = [
           { path: "employee", component: EmployeeComponents },
           { path: "cancelledinvoicerepository", component: CancelledinvoicerepositoryComponent },
           { path: "Company", component: CompanyComponent },
-          { path: "sezcertificateupload", component: SezcertificateuploadComponent }
+          { path: "sezcertificateupload", component: SezcertificateuploadComponent },
+          { path: "genericupload", component: GenericuploadComponent }
           
         ]
       },
@@ -401,7 +403,7 @@ export const routes: Routes = [
           { path: 'billingpayfrequency', component: BillingpayfrequencyComponent },
           { path: 'poinitiate', component: POInitiateComponent },
           { path: 'IRN', component: EInvoiceComponent },
-          { path: 'app-invoice-culture', component: InvoiceCultureAddpoComponent },
+          { path: 'app-invoice-culture', component: InvoiceCultureComponent },
           { path: 'ClientBillableReportDatewise', component: ClientbillablereportsdatewiseComponent },
           //{ path: 'creditnote', component: CreditnoteComponent },
           // { path: 'creditnoteapprove', component: CreditnoteapproveComponent },
