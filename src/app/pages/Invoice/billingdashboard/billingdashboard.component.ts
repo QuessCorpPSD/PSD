@@ -1,5 +1,5 @@
 
-import { Component, Inject, InjectionToken, OnInit, ViewChild } from '@angular/core';
+import { Component, Inject, InjectionToken, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { UserComponent } from '../../../common/user/user.component';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
@@ -21,7 +21,7 @@ export const AUTH_TOKEN = new InjectionToken<IAssignmentService>('AUTH_TOKEN');
 export const Invoice_TOKEN = new InjectionToken<IInvoiceRepository>('Invoice_TOKEN');
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import * as XLSX from 'xlsx';
-import { finalize, interval } from 'rxjs';
+import { finalize, interval, Subscription } from 'rxjs';
 import { SignalrService } from '../../../Shared/SignalrService';
 import {  MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -44,7 +44,7 @@ import {MatProgressBar} from '@angular/material/progress-bar';
     }
   ]
 })
-export class BillingdashboardComponent implements OnInit {
+export class BillingdashboardComponent implements OnInit,OnDestroy {
   userList: any;
   AllotedTo?: number;
   InvoiceAlloted: any;
@@ -81,16 +81,45 @@ export class BillingdashboardComponent implements OnInit {
     { value: 'Pending', Text: 'Pending' },
     { value: 'Completed', Text: 'Completed' }
   ];
+  private timerSub!: Subscription;
+  startTimer() {
+    if (!this.timerSub || this.timerSub.closed) {
+      this.timerSub = interval(60000).subscribe(() => {
+         this.BindInvoiceAllot();
+      });
+    }
+  }
+   stopTimer() {
+    if (this.timerSub) {
+      this.timerSub.unsubscribe();
+    }
+  }
+
+ 
+
+  ngOnDestroy() {
+    this.stopTimer();
+  }
 
   ngOnInit(): void {
     const userdetail = this._sessionStoreage.getItem('UserProfile');
     this.userdetail = JSON.parse(this._decrypt.decrypt(userdetail!));
-    this.BindInvoiceAllot();
+   
     this.start=null;
     this.end=null;
-    interval(60000).subscribe(() => {    
-    this.BindInvoiceAllot();
-  });
+      this.BindInvoiceAllot();
+   // this.startTimer();
+
+    // document.addEventListener('visibilitychange', () => {
+    //   if (document.visibilityState === 'visible') {
+    //     this.startTimer();
+    //   } else {
+    //     this.stopTimer();
+    //   }
+    // });
+  //   interval(60000).subscribe(() => {    
+  //   this.BindInvoiceAllot();
+  // });
     //  this.signalr.startConnection();
 
     // this.signalr.onGridUpdate(() => {

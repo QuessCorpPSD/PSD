@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Inject, InjectionToken, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, Inject, InjectionToken, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { InvoicetypeComponent } from '../../../common/invoicetype/invoicetype.component';
@@ -30,7 +30,7 @@ import { ChatMessage } from '../../../Models/Common';
 import { ChatWindow } from '../../../Models/Common';
 import * as XLSX from 'xlsx';
 import * as FileSaver from 'file-saver';
-import { finalize, lastValueFrom } from 'rxjs';
+import { finalize, interval, lastValueFrom, Subscription } from 'rxjs';
 import { SignalrService } from '../../../Shared/SignalrService';
 
 export const Invoice_TOKEN = new InjectionToken<IInvoiceRepository>('Invoice_TOKEN');
@@ -226,7 +226,7 @@ export class DraftInvoiceComponent implements OnInit {
         });
       }
       this.isdisabled = false;
-      console.log(allResponses);
+      //console.log(allResponses);
       this.downloadExcelValidate(allResponses, "ProvisionalInvoiceInitiateLog");
       this.isLoading = false;
       // this.showPopup = true;
@@ -367,7 +367,8 @@ export class DraftInvoiceComponent implements OnInit {
     this.dataSource = new MatTableDataSource<any>([]);
     //this.loadGrid();
 
-    this.InvoiceSearch();  // auto refresh grid
+   this.InvoiceSearch();  // auto refresh grid
+   
     
     // this._invoiceService.InitialSearch(request).subscribe({
     //   next: res => {
