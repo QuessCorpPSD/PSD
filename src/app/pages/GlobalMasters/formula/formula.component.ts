@@ -16,12 +16,14 @@ import { IFormulaRepository } from '../../../Repository/GlobalMasters/IFormulaRe
 import { MatCardModule } from "@angular/material/card";
 import { AlertpopupComponent } from "../../../common/alertpopup/alertpopup.component";
 import { FormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 
 export const Formula_TOKEN = new InjectionToken<IFormulaRepository>('Formula_TOKEN');
 
 @Component({
   selector: 'app-formula',
   standalone: true,
+  imports: [CommonModule, FormsModule, MatIconModule, MatTooltipModule, MatTableModule, MatPaginator, MatCardModule, AlertpopupComponent],
   imports: [CommonModule, FormsModule, MatIconModule, MatTooltipModule, MatTableModule, MatPaginator, MatCardModule, AlertpopupComponent],
   templateUrl: './formula.component.html',
   styleUrl: './formula.component.css',
@@ -110,6 +112,7 @@ export class FormulaComponent {
   Search() {
     this.isLoading = true;
     const paycode_Id = 0;
+   
     this.formula.GetFormulaSearch(paycode_Id).subscribe({
       next: res => {
         if (res.Data.message == "No records found") {
@@ -133,6 +136,11 @@ export class FormulaComponent {
         this.isLoading = false;
       }
     });
+  }
+
+  applyFilter() {
+    const filterValue = this.formulaname?.trim().toLowerCase();
+    this.uploadedDataSource.filter = filterValue;
   }
 
   applyFilter() {
@@ -176,6 +184,7 @@ export class FormulaComponent {
     dialogRef.afterClosed().subscribe(result => {
       if (result === 'updated') {
         this.Search();
+        this.Search();
       }
     });
   }
@@ -217,6 +226,7 @@ export class FormulaComponent {
         this.isLoading = false;
         if (res?.StatusCode === 200) {
           this.showAlertPopup(res?.Data?.message || "Formula Deleted successfully");
+          this.Search();
           this.Search();
         } else {
           alert("Delete failed");
