@@ -109,6 +109,25 @@ export class ClientgstlistComponent {
     // "State Code"
   ];
 
+  
+  filterDisplayedColumns: string[] = [
+  "filteredit",
+  "filterclientGstId",
+  "filtercompany_Code",
+  "filtergroup_Name",
+  "filterstate_Name",
+  "filterclientInvoicingState_Name",
+  "filterinvoicingState_Name",
+  "filtergstTypeName",
+  "filtergstNumber",
+  "filterpanNumber",
+  "filtertanNumber",
+  "filterusername",
+  "filtercreatedOn",
+  "filtersapCustomerCode",
+  "filterinvoiceCategory",
+  ];
+
   dataSource = new MatTableDataSource<any>([]);
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -165,7 +184,31 @@ export class ClientgstlistComponent {
 
   }
 
+  applyFilter(event: Event, column: string) {
+    const inputValue = (event.target as HTMLInputElement).value || '';
 
+    // Split comma-separated invoice numbers
+    const searchValues = inputValue
+      .split(',')
+      .map(v => v.trim().toLowerCase())
+      .filter(v => v);
+
+    this.dataSource.filterPredicate = (data: any, filter: string) => {
+      if (!searchValues.length) return true;
+
+      const cellValue = data[column]?.toString().toLowerCase() || '';
+
+      // Match ANY invoice number
+      return searchValues.some(val => cellValue.includes(val));
+    };
+
+    // Trigger filtering
+    this.dataSource.filter = searchValues.join(',');
+  }
+
+  clearFilter() {
+  this.dataSource.filter = '';
+}
 
   handleCompanyEvent(company: any) {
 

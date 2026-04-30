@@ -65,9 +65,9 @@ export class InvoiceCultureService implements Iinvoiceculture {
     return this.http.post<APIResponse>(url, formData);
   }
 
-  ExportToExcel(userId: number) {
-    return this.http.get<APIResponse>(
-      environment.apiUrl + `InvoiceCulture/InvoiceCultureExport/` + userId);
+  ExportToExcel(comapnyId: number) {
+    return this.http.post<APIResponse>(
+      environment.apiUrl + `InvoiceCulture/InvoiceCultureExport`,comapnyId );
   }
 
   getAllPaycode(companyId: number): Observable<APIResponse> {

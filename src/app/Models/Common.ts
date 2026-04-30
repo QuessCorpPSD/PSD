@@ -42,6 +42,7 @@ export interface InputTypeclass {
 export interface Groupnameclass {
   siteCode: string
   siteName: string
+  isDisabled?: boolean
 }
 
 export interface Cityclass {

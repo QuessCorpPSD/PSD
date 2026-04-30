@@ -32,7 +32,96 @@
             <div class="table-container" style="top:30px;">
                 <div class="table-scroll-window">
                     <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+                        <!--Filter Rows-->
+                        <ng-container matColumnDef="filteredit">
+                            <mat-header-cell *matHeaderCellDef class="fixed-width-column"><span (click)="clearFilter()">Clear</span>
+                            </mat-header-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="filterclientGstId">
+                            <mat-header-cell *matHeaderCellDef>
+                                <input style="width:100%;" class="form-control form-control-sm" placeholder="Search"
+                                    (keyup)="applyFilter($event, 'clientGstId')">
+                            </mat-header-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="filtercompany_Code">
+                            <mat-header-cell *matHeaderCellDef>
+                                <input style="width:100%;" class="form-control form-control-sm" placeholder="Search"
+                                    (keyup)="applyFilter($event, 'company_Code')">
+                            </mat-header-cell>
+                        </ng-container>
 
+                        <ng-container matColumnDef="filtergroup_Name">
+                            <mat-header-cell *matHeaderCellDef>
+                                <input style="width:100%;" class="form-control form-control-sm" placeholder="Search"
+                                    (keyup)="applyFilter($event, 'group_Name')">
+                            </mat-header-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="filterstate_Name">
+                            <mat-header-cell *matHeaderCellDef>
+                                <input style="width:100%;" class="form-control form-control-sm" placeholder="Search"
+                                    (keyup)="applyFilter($event, 'state_Name')">
+                            </mat-header-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="filterclientInvoicingState_Name">
+                            <mat-header-cell *matHeaderCellDef>
+                                <input style="width:100%;" class="form-control form-control-sm" placeholder="Search"
+                                    (keyup)="applyFilter($event, 'clientInvoicingState_Name')">
+                            </mat-header-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="filterinvoicingState_Name">
+                            <mat-header-cell *matHeaderCellDef>
+                                <input style="width:100%;" class="form-control form-control-sm" placeholder="Search"
+                                    (keyup)="applyFilter($event, 'invoicingState_Name')">
+                            </mat-header-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="filtergstTypeName">
+                            <mat-header-cell *matHeaderCellDef>
+                                <input style="width:100%;" class="form-control form-control-sm" placeholder="Search"
+                                    (keyup)="applyFilter($event, 'gstTypeName')">
+                            </mat-header-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="filtergstNumber">
+                            <mat-header-cell *matHeaderCellDef>
+                                <input style="width:100%;" class="form-control form-control-sm" placeholder="Search"
+                                    (keyup)="applyFilter($event, 'gstNumber')">
+                            </mat-header-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="filterpanNumber">
+                            <mat-header-cell *matHeaderCellDef>
+                                <input style="width:100%;" class="form-control form-control-sm" placeholder="Search"
+                                    (keyup)="applyFilter($event, 'panNumber')">
+                            </mat-header-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="filtertanNumber">
+                            <mat-header-cell *matHeaderCellDef>
+                                <input style="width:100%;" class="form-control form-control-sm" placeholder="Search"
+                                    (keyup)="applyFilter($event, 'tanNumber')">
+                            </mat-header-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="filterusername">
+                            <mat-header-cell *matHeaderCellDef>
+                                <input style="width:100%;" class="form-control form-control-sm" placeholder="Search"
+                                    (keyup)="applyFilter($event, 'username')">
+                            </mat-header-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="filtercreatedOn">
+                            <mat-header-cell *matHeaderCellDef class="fixed-width-column">
+                            </mat-header-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="filtersapCustomerCode">
+                            <mat-header-cell *matHeaderCellDef>
+                                <input style="width:100%;" class="form-control form-control-sm" placeholder="Search"
+                                    (keyup)="applyFilter($event, 'sapCustomerCode')">
+                            </mat-header-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="filterinvoiceCategory">
+                            <mat-header-cell *matHeaderCellDef>
+                                <input style="width:100%;" class="form-control form-control-sm" placeholder="Search"
+                                    (keyup)="applyFilter($event, 'invoiceCategory')">
+                            </mat-header-cell>
+                        </ng-container>
+    <!-- Filter Row End -->
 
                         <ng-container matColumnDef="Edit">
                             <mat-header-cell *matHeaderCellDef class="fixed-width-column">
@@ -234,6 +323,7 @@
                         </ng-container>
 
                         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                        <mat-header-row *matHeaderRowDef="filterDisplayedColumns" class="filter-row"></mat-header-row>
                         <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
 
                     </table>
@@ -290,17 +380,17 @@
                     </div>
 
                     <div class="col-md-4">
-                        <label class="form-label text-muted small">Group Name<span class="text-danger">*</span></label>
+                        <label class="form-label text-muted small">Group Name</label>
                         <input *ngIf="isEditMode" class="form-control form-control-sm" [value]="selectedGroupName"
                             readonly />
 
                         <groupname *ngIf="!isEditMode" formControlName="GroupName"
                             [selectedCompanyId]="selectedCompanyId" (sitenameEmit)="handleGroupEvent($event)">
                         </groupname>
-                        <small class="text-danger"
+                        <!-- <small class="text-danger"
                             *ngIf="clientform.get('GroupName')?.touched && clientform.get('GroupName')?.invalid">
                             Group Name is required
-                        </small>
+                        </small> -->
                     </div>
 
                     <div class="col-md-4">

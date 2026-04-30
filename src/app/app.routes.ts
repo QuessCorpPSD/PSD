@@ -175,6 +175,7 @@ import { AdvanceUtilizationReportComponent } from './pages/Reports/advance-utili
 import { SezcertificateuploadComponent } from './pages/customers/sezcertificateupload/sezcertificateupload.component';
 import { BankInvoiceNavigationComponent } from './pages/BankInvoice/bank-invoice-navigation/bank-invoice-navigation.component';
 import { BankAdviceSplitCultureComponent } from './pages/BankInvoice/bank-advice-split-culture/bank-advice-split-culture.component';
+import { GenericuploadComponent } from './pages/genericupload/genericupload.component';
 
 
 
@@ -385,7 +386,8 @@ export const routes: Routes = [
           { path: "employee", component: EmployeeComponents },
           { path: "cancelledinvoicerepository", component: CancelledinvoicerepositoryComponent },
           { path: "Company", component: CompanyComponent },
-          { path: "sezcertificateupload", component: SezcertificateuploadComponent }
+          { path: "sezcertificateupload", component: SezcertificateuploadComponent },
+          { path: "genericupload", component: GenericuploadComponent }
           
         ]
       },
@@ -403,7 +405,7 @@ export const routes: Routes = [
           { path: 'billingpayfrequency', component: BillingpayfrequencyComponent },
           { path: 'poinitiate', component: POInitiateComponent },
           { path: 'IRN', component: EInvoiceComponent },
-          { path: 'app-invoice-culture', component: InvoiceCultureAddpoComponent },
+          { path: 'app-invoice-culture', component: InvoiceCultureComponent },
           { path: 'ClientBillableReportDatewise', component: ClientbillablereportsdatewiseComponent },
           //{ path: 'creditnote', component: CreditnoteComponent },
           // { path: 'creditnoteapprove', component: CreditnoteapproveComponent },

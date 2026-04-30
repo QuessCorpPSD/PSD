@@ -134,7 +134,7 @@ export class InvoiceCultureComponent implements AfterViewInit {
 
     this.isLoading = true;
     this.isTableVisible = false;
-    const spiltTypeId = 1
+    const spiltTypeId = 0;
 
     this.invoiceService.InvoicecultureSearch(this.comapnyId, spiltTypeId).subscribe({
       next: (res: any) => {
@@ -307,7 +307,7 @@ export class InvoiceCultureComponent implements AfterViewInit {
     }
 
     this.isLoading = true;
-    this.invoiceService.ExportToExcel(this.userdetail.user_Id)
+    this.invoiceService.ExportToExcel(this.comapnyId)
       .pipe(
         finalize(() => this.isLoading = false)
       ).subscribe({
@@ -323,7 +323,6 @@ export class InvoiceCultureComponent implements AfterViewInit {
   }
 
   downloadExcelFromBase64(base64: string, filename: string) {
-    this.isLoading = false;
     const source = `data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,${base64}`;
     const downloadLink = document.createElement('a');
     downloadLink.href = source;

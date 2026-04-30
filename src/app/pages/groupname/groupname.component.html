@@ -12,7 +12,7 @@
   >
     <mat-option style="font-size: 11px;min-height: 15px;"
       *ngFor="let option of filteredOptions$ | async"
-      [value]="option"
+      [value]="option"  [disabled]="option.isDisabled"
     >
       {{ option.siteName }}
     </mat-option>

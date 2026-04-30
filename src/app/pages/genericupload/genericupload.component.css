@@ -1,0 +1,333 @@
+/* =====================
+   Page Layout
+   ===================== */
+.fm-page {
+  padding: 2rem 1.5rem;
+  max-width: 600px;
+  font-family: sans-serif;
+  color: #1a1a1a;
+}
+
+.fm-header {
+  margin-bottom: 2rem;
+}
+
+.fm-title {
+  color: #302CB3;
+  font-size: 22px;
+  font-family: Montserrat;
+  font-weight: 700;
+}
+
+.fm-subtitle {
+  font-size: 14px;
+  color: #6b6b6b;
+  margin: 0;
+}
+
+/* =====================
+   Card
+   ===================== */
+.fm-card {
+  background: #ffffff;
+  border: 0.5px solid rgba(0, 0, 0, 0.15);
+  border-radius: 12px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* =====================
+   Field & Label
+   ===================== */
+.fm-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.fm-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: #6b6b6b;
+}
+
+/* =====================
+   Searchable Dropdown
+   ===================== */
+.fm-dropdown-wrap {
+  position: relative;
+}
+
+.fm-search-input {
+  width: 100%;
+  height: 40px;
+  padding: 0 40px 0 12px;
+  border: 0.5px solid rgba(0, 0, 0, 0.3);
+  border-radius: 8px;
+  font-size: 14px;
+  color: #1a1a1a;
+  background: #ffffff;
+  outline: none;
+  transition: box-shadow 0.15s, border-color 0.15s;
+  cursor: pointer;
+}
+
+.fm-search-input:focus {
+  box-shadow: 0 0 0 2px rgba(24, 95, 165, 0.35);
+  border-color: transparent;
+}
+
+.fm-chevron {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: #6b6b6b;
+  font-size: 12px;
+  transition: transform 0.2s;
+}
+
+.fm-chevron.open {
+  transform: translateY(-50%) rotate(180deg);
+}
+
+.fm-dropdown-list {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  background: #ffffff;
+  border: 0.5px solid rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  z-index: 100;
+  overflow: hidden;
+  list-style: none;
+  margin: 0;
+  padding: 4px 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  max-height: 240px;
+  overflow-y: auto;
+}
+
+.fm-dropdown-item {
+  padding: 10px 12px;
+  font-size: 14px;
+  color: #1a1a1a;
+  cursor: pointer;
+  transition: background 0.1s;
+}
+
+.fm-dropdown-item:hover {
+  background: #f5f5f3;
+}
+
+.fm-dropdown-item.selected {
+  background: #e6f1fb;
+  color: #185fa5;
+  font-weight: 500;
+}
+
+.fm-no-results {
+  padding: 10px 12px;
+  font-size: 14px;
+  color: #6b6b6b;
+}
+
+/* =====================
+   Divider
+   ===================== */
+.fm-divider {
+  border: none;
+  border-top: 0.5px solid rgba(0, 0, 0, 0.1);
+  margin: 0;
+}
+
+/* =====================
+   Action Buttons
+   ===================== */
+.fm-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.fm-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 40px;
+  padding: 0 18px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s, opacity 0.15s, transform 0.1s;
+  border: 0.5px solid rgba(0, 0, 0, 0.2);
+}
+
+.fm-btn:active {
+  transform: scale(0.98);
+}
+
+.fm-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.fm-btn-primary {
+  background: #1a1a1a;
+  color: #ffffff;
+  border-color: transparent;
+}
+
+.fm-btn-primary:hover:not(:disabled) {
+  opacity: 0.85;
+}
+
+.fm-btn-secondary {
+  background: #ffffff;
+  color: #1a1a1a;
+}
+
+.fm-btn-secondary:hover {
+  background: #f5f5f3;
+}
+
+/* =====================
+   Upload Label (styled as button)
+   ===================== */
+.fm-upload-label {
+  cursor: pointer;
+}
+
+.fm-upload-label input[type='file'] {
+  display: none;
+}
+
+/* =====================
+   Status Message
+   ===================== */
+.fm-status {
+  font-size: 13px;
+  color: #6b6b6b;
+  padding: 10px 12px;
+  background: #f5f5f3;
+  border-radius: 8px;
+  line-height: 1.5;
+}
+
+.fm-status strong {
+  color: #1a1a1a;
+  font-weight: 500;
+}
+
+/* =====================
+   Dark Mode
+   ===================== */
+@media (prefers-color-scheme: dark) {
+  .fm-page {
+    color: #f0f0f0;
+  }
+
+  .fm-title {
+    color: #f0f0f0;
+  }
+
+  .fm-subtitle {
+    color: #9a9a9a;
+  }
+
+  .fm-card {
+    background: #1e1e1e;
+    border-color: rgba(255, 255, 255, 0.12);
+  }
+
+  .fm-label {
+    color: #9a9a9a;
+  }
+
+  .fm-search-input {
+    background: #2a2a2a;
+    border-color: rgba(255, 255, 255, 0.2);
+    color: #f0f0f0;
+  }
+
+  .fm-search-input:focus {
+    box-shadow: 0 0 0 2px rgba(133, 183, 235, 0.4);
+  }
+
+  .fm-chevron {
+    color: #9a9a9a;
+  }
+
+  .fm-dropdown-list {
+    background: #2a2a2a;
+    border-color: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  }
+
+  .fm-dropdown-item {
+    color: #f0f0f0;
+  }
+
+  .fm-dropdown-item:hover {
+    background: #333333;
+  }
+
+  .fm-dropdown-item.selected {
+    background: #0c447c;
+    color: #b5d4f4;
+  }
+
+  .fm-no-results {
+    color: #9a9a9a;
+  }
+
+  .fm-divider {
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+
+  .fm-btn {
+    border-color: rgba(255, 255, 255, 0.18);
+  }
+
+  .fm-btn-primary {
+    background: #f0f0f0;
+    color: #1a1a1a;
+  }
+
+  .fm-btn-secondary {
+    background: #2a2a2a;
+    color: #f0f0f0;
+  }
+
+  .fm-btn-secondary:hover {
+    background: #333333;
+  }
+
+  .fm-status {
+    background: #2a2a2a;
+    color: #9a9a9a;
+  }
+
+  .fm-status strong {
+    color: #f0f0f0;
+  }
+}
+
+
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
