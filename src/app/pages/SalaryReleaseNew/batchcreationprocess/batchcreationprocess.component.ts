@@ -18,6 +18,9 @@ import { SessionStorageService } from '../../../Shared/SessionStorageService';
 import * as XLSX from 'xlsx';
 import { SelectionModel } from '@angular/cdk/collections';
 import { BatchcreationService } from '../../../Service/Service/SalaryRequestNew/batchcreation.service';
+import { MatIcon, MatIconModule } from "@angular/material/icon";
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatCardModule } from "@angular/material/card";
 export const Pay_TOKEN = new InjectionToken<IBatchreation>('Pay_TOKEN');
 
 @Component({
@@ -25,7 +28,7 @@ export const Pay_TOKEN = new InjectionToken<IBatchreation>('Pay_TOKEN');
   standalone: true,
   imports: [CommonModule, MatTableModule, MatCheckboxModule, MatPaginatorModule, MatSort,
     MatSelectModule, MatInputModule, MatFormFieldModule, ReactiveFormsModule, FormsModule,
-    AlertpopupComponent],
+    AlertpopupComponent, MatIconModule, MatTooltipModule, MatCardModule],
   templateUrl: './batchcreationprocess.component.html',
   styleUrl: './batchcreationprocess.component.css',
   providers: [

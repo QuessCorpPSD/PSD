@@ -22,12 +22,14 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatCardModule } from '@angular/material/card';
 import { ISalaryReleaseApproval } from '../../../Repository/SalaryRequestNew/ISalaryReleaseApproval';
+import * as FileSaver from 'file-saver';
+
 export const Pay_TOKEN = new InjectionToken<ISalaryReleaseApproval>('Pay_TOKEN');
 
 @Component({
   selector: 'app-salary-release-approve',
   standalone: true,
-  imports: [CommonModule, MatTableModule, MatCheckboxModule, MatPaginatorModule, MatSort,
+  imports: [CommonModule, MatTableModule, MatCheckboxModule, MatPaginator, MatSort,
     MatSelectModule, MatInputModule, MatFormFieldModule, ReactiveFormsModule, FormsModule,
     AlertpopupComponent, MatIconModule, MatTooltipModule, MatCardModule],
   templateUrl: './salary-release-approve.component.html',
@@ -61,7 +63,11 @@ export class SalaryReleaseApproveComponent {
   CollectionStatus: any;
   collectionStatus: any;
   remarks: any;
-
+  currentView: 'search' | 'upload' | null = null;
+  uploadDataSource = new MatTableDataSource<any>([]);
+  isUploadTableVisible = false;
+  selectedUploadRows: any[] = [];
+  dynamicUploadColumns: string[] = [];
   @ViewChild('paginator') paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
@@ -151,7 +157,7 @@ export class SalaryReleaseApproveComponent {
       return;
     }
 
-    this.istablevisible = true;
+    this.currentView = 'search';
     this.isLoading = true;
 
     const batchtype = this.Batchtype;
@@ -447,8 +453,221 @@ export class SalaryReleaseApproveComponent {
     });
   }
 
+  onFileUpload(event: any) {
+    if (!this.Batchtype) {
+      alert("Please Select Batchtype");
+      return;
+    }
 
+    if (!this.CollectionStatus) {
+      alert("Please Select CollectionStatus");
+      return;
+    }
+    const file = event.target.files[0];
+    if (!file) return;
+    this.isLoading = true;
+    const reader = new FileReader();
 
+    reader.onload = (e: any) => {
+      const wb = XLSX.read(e.target.result, { type: 'binary' });
+      const ws = wb.Sheets[wb.SheetNames[0]];
+
+      const jsonData: any[] = XLSX.utils.sheet_to_json(ws);
+
+      if (!jsonData || jsonData.length === 0) {
+        alert('Empty file');
+        return;
+      }
+
+      const headers = Object.keys(jsonData[0]).map(h =>
+        h.trim().toLowerCase().replace(/\s+/g, '_')
+      );
+      const updatedData = jsonData.map((row: any) => {
+        const newRow: any = { selected: false };
+
+        Object.keys(row).forEach(key => {
+          const cleanKey = key.trim().toLowerCase().replace(/\s+/g, '_');
+          newRow[cleanKey] = row[key];
+        });
+
+        return newRow;
+      });
+
+      this.dynamicUploadColumns = ['select', ...headers];
+
+      this.uploadDataSource = new MatTableDataSource(updatedData);
+      this.currentView = 'upload';
+      this.selectedUploadRows = [];
+    };
+
+    reader.readAsBinaryString(file);
+    this.isLoading = false;
+  }
+
+  sendUploadRequest() {
+    if (!this.Batchtype) {
+      alert("Please Select Batchtype");
+      return;
+    }
+
+    if (!this.CollectionStatus) {
+      alert("Please Select CollectionStatus");
+      return;
+    }
+
+    if (this.selectedUploadRows.length === 0) {
+      alert("No rows selected");
+      return;
+    }
+
+    const payload = {
+      BatchType: this.Batchtype,
+      CollectionStatus: this.CollectionStatus,
+      UserId: this.userdetail.user_Id,
+
+      approvedata: this.selectedUploadRows.map((r: any) => ({
+        InvoiceNumber: (r.invoicenumber ?? r.invoice_number ?? '').toString(),
+        Status: r.status,
+        Remarks: r.remarks   
+      }))
+    };
+
+    console.log("Upload Payload:", payload);
+
+    this.service.Apporoval(payload).subscribe({
+      next: (res: any) => {
+
+        let excelData: any[] = [];
+
+        if (res.Data && Array.isArray(res.Data) && res.Data[0]?.validation) {
+
+          excelData = res.Data.map((item: any, index: number) => ({
+
+            Message: item.validation
+          }));
+
+        }
+        else if (res.Data && Array.isArray(res.Data)) {
+
+          excelData = res.Data.map((item: any, index: number) => ({
+
+            ...item
+          }));
+
+        }
+        else {
+          excelData = [{
+            Status: "INFO",
+            Message: res?.Data?.message
+          }];
+        }
+
+        const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(excelData);
+        const wb: XLSX.WorkBook = XLSX.utils.book_new();
+
+        XLSX.utils.book_append_sheet(wb, ws, 'Upload Result');
+
+        const fileName = `Upload_Result_${new Date().toISOString().split('T')[0]}.xlsx`;
+
+        XLSX.writeFile(wb, fileName);
+
+        alert("Result downloaded in Excel");
+        this.searchClick();
+      },
+
+      error: (err: any) => {
+        console.error('Error while processing upload request', err);
+
+        const errorsObj = err?.error?.Data?.errors;
+
+        if (!errorsObj) {
+          alert('No error data found');
+          return;
+        }
+
+        const errorData: any[] = [];
+
+        Object.keys(errorsObj).forEach((key) => {
+          const messages = errorsObj[key];
+          messages.forEach((msg: string) => {
+            errorData.push({
+              Field: key,
+              Error_Message: msg
+            });
+          });
+        });
+
+        const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(errorData);
+        const wb: XLSX.WorkBook = XLSX.utils.book_new();
+
+        XLSX.utils.book_append_sheet(wb, ws, 'Error');
+
+        XLSX.writeFile(wb, `Upload_Error_${new Date().getTime()}.xlsx`);
+
+        alert('❌ Upload failed. Error file downloaded.');
+      }
+    });
+  }
+
+  onUploadRowSelect(row: any) {
+    if (row.selected) {
+      if (!this.selectedUploadRows.includes(row)) {
+        this.selectedUploadRows.push(row);
+      }
+    } else {
+      this.selectedUploadRows = this.selectedUploadRows.filter(r => r !== row);
+    }
+  }
+
+  selectAllUploadRows(event: any) {
+    const checked = event.checked;
+
+    this.uploadDataSource.data.forEach(row => {
+      row.selected = checked;
+    });
+
+    this.selectedUploadRows = checked ? [...this.uploadDataSource.data] : [];
+  }
+
+  isAllUploadSelected(): boolean {
+    const numSelected = this.selectedUploadRows.length;
+    const numRows = this.uploadDataSource.data.length;
+    return numSelected === numRows && numRows > 0;
+  }
+
+  isSomeUploadSelected(): boolean {
+    const numSelected = this.selectedUploadRows.length;
+    const numRows = this.uploadDataSource.data.length;
+    return numSelected > 0 && numSelected < numRows;
+  }
+
+  downloadTemplate() {
+    const userid = this.userdetail.user_Id;
+    const flag = 'BankAdviceApprove';
+    this.service.Downloadtemplate(flag, userid).subscribe({
+      next: (res) => {
+        const data = res?.Data?.data?.Table0 ?? [];
+
+        if (!data.length) {
+          alert('No template data available.');
+          return;
+        }
+
+        const worksheet = XLSX.utils.json_to_sheet(data);
+        const workbook: XLSX.WorkBook = {
+          Sheets: { 'SalaryReleasetemplate': worksheet },
+          SheetNames: ['SalaryReleasetemplate']
+        };
+
+        const buffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+        const blob = new Blob([buffer], { type: 'application/octet-stream' });
+        FileSaver.saveAs(blob, `SalaryReleasePending/Approval_${Date.now()}.xlsx`);
+      },
+      error: (err) => {
+        console.error('Error downloading template', err);
+      }
+    });
+  }
 }
 
 

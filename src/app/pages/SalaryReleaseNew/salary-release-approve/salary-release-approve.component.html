@@ -8,7 +8,7 @@
         <div class="container py-2">
             <div class="row g-3 align-items-end">
 
-                <div class="col-md-2">
+                <div class="col-md-3">
                     <label class="form-label text-muted small">Batch Type<span class="text-danger">*</span></label>
                     <select class="form-select form-select-sm" [(ngModel)]="Batchtype" placeholder="select">
                         <option value="">Select</option>
@@ -17,7 +17,7 @@
                 </div>
 
 
-                <div class="col-md-2">
+                <div class="col-md-3">
                     <label class="form-label text-muted small">Collection Status<span
                             class="text-danger">*</span></label>
                     <select style class="form-select form-select-sm" [(ngModel)]="CollectionStatus"
@@ -29,7 +29,7 @@
                     </select>
                 </div>
 
-                <div class="col-md-2">
+                <div class="col-md-3">
                     <label class="form-label text-muted small">Remarks</label>
                     <input class="form-control form-control-sm" type="text" [(ngModel)]="remarks" />
 
@@ -44,9 +44,14 @@
                         matTooltip="ExportToExcel" (click)="exportToExcel()">
                         <mat-icon>download</mat-icon>
                     </button>
-                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-upload"
-                        matTooltip="Upload">
+                    <button class="btn btn-sm btn-upload" (click)="fileInput.click()" matTooltip="Upload">
                         <mat-icon>cloud_upload</mat-icon>
+                    </button>
+
+                    <input #fileInput type="file" accept=".xlsx,.xls" hidden (change)="onFileUpload($event)">
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-download"
+                        matTooltip="Download Template" (click)="downloadTemplate()">
+                        <mat-icon>cloud_download</mat-icon>
                     </button>
                     <button class="btn btn-sm d-flex align-items-center justify-content-center btn-approve"
                         (click)="Approval()" matTooltip="Approve">
@@ -61,6 +66,10 @@
 
 
                 </div>
+                <button *ngIf="selectedUploadRows.length > 0 && !(currentView === 'search')" class="btn btn-primary btn-sm" style="margin-left: auto; width: 100px;"
+                    (click)="sendUploadRequest()">
+                    Request
+                </button>
                 <!-- <div style="padding-top: 26px; width: 150px; height: 52px; flex-direction: column; align-items: flex-end; display: inline-flex"
                 (click)="searchClick()">
                 <button
@@ -164,7 +173,7 @@
             </button> -->
                     </div>
                 </div>
-                <div class="card-body rounded-4 py-0" *ngIf="istablevisible">
+                <div class="card-body rounded-4 py-0" [hidden]="!(currentView === 'search')">
                     <div class="example-container mat-elevation-z8">
                         <table mat-table [dataSource]="dataSource" matSort class="custom-table mat-elevation-z8">
                             <ng-container matColumnDef="select">
@@ -275,13 +284,50 @@
                         </table>
                     </div>
 
-                    <mat-paginator class="mat-footer-paginator" [pageSizeOptions]="[5, 10, 25, 100]"
+                    <mat-paginator #paginator class="mat-footer-paginator" [pageSizeOptions]="[5, 10, 25, 100]"
                         showFirstLastButtons stickyEnd>
                     </mat-paginator>
                 </div>
+                <div class="card-body rounded-4 py-0" *ngIf="currentView === 'upload'">
+                    <div class="example-container mat-elevation-z8">
+                        <table mat-table [dataSource]="uploadDataSource" class="custom-table">
 
+                            <!-- Checkbox -->
+                            <ng-container matColumnDef="select">
+                                <mat-header-cell *matHeaderCellDef>
+                                    <mat-checkbox (change)="selectAllUploadRows($event)"
+                                        [checked]="isAllUploadSelected()" [indeterminate]="isSomeUploadSelected()">
+                                    </mat-checkbox> </mat-header-cell>
+                                <mat-cell *matCellDef="let row">
+                                    <mat-checkbox [(ngModel)]="row.selected" (change)="onUploadRowSelect(row)">
+                                    </mat-checkbox>
+                                </mat-cell>
+                            </ng-container>
+
+
+
+                            <ng-container *ngFor="let col of dynamicUploadColumns.slice(1)" [matColumnDef]="col">
+
+                                <mat-header-cell *matHeaderCellDef>
+                                    {{ col }}
+                                </mat-header-cell>
+
+                                <mat-cell *matCellDef="let row">
+                                    {{ row[col] }}
+                                </mat-cell>
+
+                            </ng-container>
+
+                            <mat-header-row *matHeaderRowDef="dynamicUploadColumns"></mat-header-row>
+                            <mat-row *matRowDef="let row; columns: dynamicUploadColumns;"></mat-row>
+
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
+
+
         <div *ngIf="showPopup" class="overlay">
             <app-alertpopup *ngIf="showPopup" [message]="popupMessage" [submessage]="popupSubMessage"
                 class="centered-popup" (close)="showPopup = false"></app-alertpopup>

@@ -68,4 +68,8 @@ export class BatchcreationService implements IBatchreation {
     );
   }
 
+  Downloadtemplate(flag: any, userid: any): Observable<APIResponse> {
+    return this.http.get<APIResponse>(this.env.apiUrl + 'BatchGeneration/GetTemplate/' + flag + '/' + userid);
+  }
+
 }

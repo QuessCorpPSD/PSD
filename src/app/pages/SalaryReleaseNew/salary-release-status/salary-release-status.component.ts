@@ -29,7 +29,7 @@ export const Pay_TOKEN = new InjectionToken<ISalaryReleaseStatus>('Pay_TOKEN');
   standalone: true,
   imports: [CommonModule, MatTableModule, MatCheckboxModule, MatPaginatorModule, MatSort,
     MatSelectModule, MatInputModule, MatFormFieldModule, ReactiveFormsModule, FormsModule,
-    AlertpopupComponent, MatCardModule, MatIconModule,MatTooltipModule],
+    AlertpopupComponent, MatCardModule, MatIconModule, MatTooltipModule],
   templateUrl: './salary-release-status.component.html',
   styleUrl: './salary-release-status.component.css',
   providers: [
@@ -297,6 +297,11 @@ export class SalaryReleaseStatusComponent {
     this.isLoading = true;
     const input = event.target as HTMLInputElement;
     const file = input?.files?.[0];
+    if (!this.selectedBatchType) {
+      alert('Please select a Batch Type.');
+      this.isLoading = false;
+      return;
+    }
 
     if (!file) {
       console.error('Please upload one Excel file.');
@@ -304,11 +309,6 @@ export class SalaryReleaseStatusComponent {
       return;
     }
 
-    if (!this.selectedBatchType) {
-      alert('Please select a Batch Type.');
-      this.isLoading = false;
-      return;
-    }
 
     if (!this.userdetail || !this.userdetail.user_Id) {
       alert('User details not found.');
@@ -322,83 +322,111 @@ export class SalaryReleaseStatusComponent {
     formData.append('UserId', this.userdetail.user_Id);
 
     this.service.Upload(formData).subscribe({
+      // next: (res) => {
+      //   this.isLoading = false;
+      //   const message = res?.Data?.error_Message;
+      //   if (message.toLowerCase().includes('success')) {
+      //     alert(message);
+      //     return;
+      //   }
+
+
+      //   const { parsed, msg } = this.tryParseResponse(res?.Data?.error_Message);
+
+
+
+
+      //   if (res?.StatusCode === 200) {
+      //     const rawErr = res?.Data[0];
+      //     let errorArray: any[] = [];
+
+      //     try {
+      //       if (typeof rawErr === 'string') {
+      //         const tryJson = JSON.parse(rawErr);
+      //         errorArray = Array.isArray(tryJson) ? tryJson : [tryJson];
+      //       } else if (Array.isArray(rawErr)) {
+      //         errorArray = rawErr;
+      //       } else if (rawErr) {
+      //         errorArray = [rawErr];
+      //       }
+      //     } catch {
+      //       errorArray = rawErr ? [{ Error_Message: String(rawErr) }] : [];
+      //     }
+
+      //     const exportData = errorArray.map((item: any) => ({
+      //       Error_Message: item?.error_Message || ''
+      //     }));
+
+      //     const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
+      //     const workbook: XLSX.WorkBook = {
+      //       Sheets: { ErrorMessages: worksheet },
+      //       SheetNames: ['ErrorMessages']
+      //     };
+      //     XLSX.writeFile(workbook, 'ErrorMessages_salaryreleaseststus.xlsx');
+
+      //     this.showPopup = true;
+      //     this.popupMessage = 'Import Failed.';
+      //     return;
+      //   }
+
+
+      //   const fallback =
+      //     msg ||
+      //     (Array.isArray(parsed) ? JSON.stringify(parsed) :
+      //       (parsed && typeof parsed === 'object' && parsed.error_Message) ? parsed.error_Message :
+      //         (parsed ? JSON.stringify(parsed) : ''));
+
+      //   if (fallback) {
+      //     alert(fallback);
+      //   } else {
+      //     alert(res.Data?.error_Message);
+      //   }
+      // },
       next: (res) => {
         this.isLoading = false;
 
-        // Check for success message
-        if (res?.Data?.response?.includes("Row(s) Uploaded Successfully.")) {
-          this.showPopup = true;
-          this.popupMessage = res.Data.response;
-          return;
-        }
+        const data = res?.Data;
 
-        
-        const { parsed, msg } = this.tryParseResponse(res?.Data?.response);
+        // if (!data || !Array.isArray(data)) {
+        //   alert('Invalid response');
+        //   return;
+        // }
 
-        
-        const successMsg = 'EmployeePO data uploaded successfully.';
-        const successMatch =
-          (Array.isArray(parsed) && parsed[0]?.Message?.trim() === successMsg) ||
-          (parsed && typeof parsed === 'object' && parsed?.Message?.trim() === successMsg);
 
-        if (res?.StatusCode === 200 && successMatch) {
-          this.showPopup = true;
-          this.popupMessage = successMsg;
-          return;
-        }
 
-        // Case: failure message
-        if (res?.StatusCode === 200 && msg?.trim() === 'Failed to import.') {
-          const rawErr = res?.Data?.errors?.[0];
-          let errorArray: any[] = [];
+        const hasError = data.some((item: any) => item.error_Message);
 
-          try {
-            if (typeof rawErr === 'string') {
-              const tryJson = JSON.parse(rawErr);
-              errorArray = Array.isArray(tryJson) ? tryJson : [tryJson];
-            } else if (Array.isArray(rawErr)) {
-              errorArray = rawErr;
-            } else if (rawErr) {
-              errorArray = [rawErr];
-            }
-          } catch {
-            errorArray = rawErr ? [{ Error_Message: String(rawErr) }] : [];
-          }
+        if (res?.StatusCode === 200 && hasError) {
 
-          const exportData = errorArray.map((item: any) => ({
-            Error_Message: item?.Error_Message || ''
-          }));
+          const exportData = data
+            .filter((item: any) => item.error_Message)
+            .map((item: any) => ({
+              Error_Message: item.error_Message
+            }));
 
           const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
           const workbook: XLSX.WorkBook = {
             Sheets: { ErrorMessages: worksheet },
             SheetNames: ['ErrorMessages']
           };
-          XLSX.writeFile(workbook, 'ErrorMessages_salaryreleaseststus.xlsx');
 
-          this.showPopup = true;
-          this.popupMessage = 'Import Failed.';
+          XLSX.writeFile(workbook, 'ErrorMessages_salaryreleasestatus.xlsx');
+
           return;
         }
 
-       
-        const fallback =
-          msg ||
-          (Array.isArray(parsed) ? JSON.stringify(parsed) :
-            (parsed && typeof parsed === 'object' && parsed.Error_Message) ? parsed.Error_Message :
-              (parsed ? JSON.stringify(parsed) : ''));
+        const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(data);
+        const workbook: XLSX.WorkBook = {
+          Sheets: { Success: worksheet },
+          SheetNames: ['Success']
+        };
 
-        if (fallback) {
-          alert(fallback);
-        } else {
-          alert('Error while processing response.');
-        }
+        XLSX.writeFile(workbook, 'Success_salaryreleasestatus.xlsx');
+
       },
       error: (err) => {
         console.error('Upload failed', err);
-        this.isLoading = false;
-        this.showPopup = true;
-        this.popupMessage = 'Upload failed.';
+
       }
     });
   }
@@ -441,7 +469,7 @@ export class SalaryReleaseStatusComponent {
 
         const buffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
         const blob = new Blob([buffer], { type: 'application/octet-stream' });
-        FileSaver.saveAs(blob, `SalaryReleasetemplate_${Date.now()}.xlsx`);
+        FileSaver.saveAs(blob, `SalaryReleasestatustemplate_${Date.now()}.xlsx`);
       },
       error: (err) => {
         console.error('Error downloading template', err);

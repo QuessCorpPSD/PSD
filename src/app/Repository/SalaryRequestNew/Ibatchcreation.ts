@@ -11,4 +11,5 @@ export interface IBatchreation {
     BatchId(batchtype: any, batchdate: any, userid: any): Observable<APIResponse>;
     generate(payload: any): Observable<APIResponse>;
     Reject(payload: any): Observable<APIResponse>;
+    Downloadtemplate(flag: any, userid: any): Observable<APIResponse>;
 }
