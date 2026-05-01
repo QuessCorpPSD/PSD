@@ -142,7 +142,7 @@ import { InvoiceCultureAddpoComponent } from './pages/Invoice/invoice-culture-ad
 import { OtherincomeComponent } from './pages/Invoice/otherincome/otherincome.component';
 import { VendorclientaddressComponent } from './pages/customers/vendorclientaddress/vendorclientaddress.component';
 import { MulticommercialComponent } from './pages/GlobalMasters/multicommercial/multicommercial.component';
-import { ClientgstlistComponent } from './pages/customers/clientgstlist/clientgstlist.component';
+
 import { VendorclientgstComponent } from './pages/customers/vendorclientgst/vendorclientgst.component';
 import { SEZRepositoryComponent } from './pages/Invoice/sezrepository/sezrepository.component';
 import { GrossmarginComponent } from './pages/Reports/grossmargin/grossmargin.component';
@@ -158,7 +158,7 @@ import { AdvanceUtilizationReportComponent } from './pages/Reports/advance-utili
 import { SezcertificateuploadComponent } from './pages/customers/sezcertificateupload/sezcertificateupload.component';
 import { BankInvoiceNavigationComponent } from './pages/BankInvoice/bank-invoice-navigation/bank-invoice-navigation.component';
 import { BankAdviceSplitCultureComponent } from './pages/BankInvoice/bank-advice-split-culture/bank-advice-split-culture.component';
-import { GenericuploadComponent } from './pages/genericupload/genericupload.component';
+
 import { AllowReProcessComponent } from './pages/Process/allow-re-process/allow-re-process.component';
 import { ArrearAttendanceComponent } from './pages/Process/arrear-attendance/arrear-attendance.component';
 import { AttendanceComponent } from './pages/Process/attendance/attendance.component';
@@ -188,9 +188,7 @@ import { ClientledgerreportComponent } from './pages/Bankinvoice/clientledgerrep
 import { GenericuploadComponent } from './pages/Bankinvoice/genericupload/genericupload.component';
 import { LTDSreportComponent } from './pages/Bankinvoice/ltdsreport/ltdsreport.component';
 import { UnpaidInvoiceReportComponent } from './pages/Bankinvoice/unpaid-invoice-report/unpaid-invoice-report.component';
-import { InvoiceBatchConsolidationReportComponent } from './pages/Bankinvoice/invoice-batch-consolidation-report/invoice-batch-consolidation-report.component';
-import { ReIssueProcessApproveComponent } from './pages/Bankinvoice/re-issue-process-approve/re-issue-process-approve.component';
-import { ReIssueProcessReportComponent } from './pages/Bankinvoice/re-issue-process-report/re-issue-process-report.component';
+
 
 
 
