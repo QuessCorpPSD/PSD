@@ -1,0 +1,159 @@
+<div class="page-wrapper">
+  <div class="scrollable-content">
+    <mat-card-title class="main-header">
+      Client Advance Payment Report
+    </mat-card-title>
+    <div class="container py-2">
+      <div class="row g-3 align-items-end">
+
+        <div class="col-md-3">
+          <label class="form-label text-muted small">
+            Date Type<span class="text-danger">*</span>
+          </label>
+
+          <select class="form-select form-select-sm" [(ngModel)]="selectedDateType">
+            <option value="">Select</option>
+            <option *ngFor="let d of DateTypeList" [value]="d.GEN_iID">
+              {{ d.GEN_vDescription }}
+            </option>
+          </select>
+        </div>
+        <div class="col-md-3">
+          <label class="form-label text-muted small">Company Code<span class="text-danger">*</span></label>
+          <companyall (companyEmit)="handleCompanyEvent($event)"></companyall>
+        </div>
+
+        <!-- <div class="col-md-3">
+                    <label class="form-label text-muted small">Company Name</label>
+                    <input type="text" class="form-control" [(ngModel)]="companyname" />
+                </div> -->
+        <div class="col-md-3">
+          <label class="form-label">From Date: <span class="text-danger">*</span></label>
+          <input type="date" class="form-control" [(ngModel)]="startDate" />
+        </div>
+
+        <div class="col-md-3">
+          <label class="form-label">To Date: <span class="text-danger">*</span></label>
+          <input type="date" class="form-control" [(ngModel)]="endDate" />
+        </div>
+
+        <div class="col-md-2 d-flex gap-2">
+          <button class="btn btn-sm d-flex align-items-center justify-content-center btn-search" matTooltip="Search"
+            (click)="onSearch()">
+            <mat-icon>search</mat-icon>
+          </button>
+          <button class="btn btn-secondary btn-sm d-flex align-items-center justify-content-center"
+            matTooltip="export to excel" (click)="exportToExcel()">
+            <mat-icon>download</mat-icon>
+          </button>
+        </div>
+      </div>
+
+      <div class="table-container" style="top:30px;" *ngIf="showTable">
+        <div class="table-scroll-window">
+          <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+
+            <!-- SNo -->
+            <ng-container matColumnDef="sno">
+              <mat-header-cell *matHeaderCellDef>SNo</mat-header-cell>
+              <mat-cell *matCellDef="let element">{{ element.Serial_No }}</mat-cell>
+            </ng-container>
+
+            <!-- Company Code -->
+            <ng-container matColumnDef="companyCode">
+              <mat-header-cell *matHeaderCellDef>Company Code</mat-header-cell>
+              <mat-cell *matCellDef="let element">{{ element.Client_Code }}</mat-cell>
+            </ng-container>
+
+            <!-- Company Name -->
+            <ng-container matColumnDef="CompanyName">
+              <mat-header-cell *matHeaderCellDef>Company Name</mat-header-cell>
+              <mat-cell *matCellDef="let element">{{ element.Company_Name }}</mat-cell>
+            </ng-container>
+
+            <!-- Reference Number -->
+            <ng-container matColumnDef="referenceNumber">
+              <mat-header-cell *matHeaderCellDef>Reference Number</mat-header-cell>
+              <mat-cell *matCellDef="let element">{{ element.Reference_Id }}</mat-cell>
+            </ng-container>
+
+            <!-- RTGS No -->
+            <ng-container matColumnDef="RTGSNo">
+              <mat-header-cell *matHeaderCellDef>RTGS No</mat-header-cell>
+              <mat-cell *matCellDef="let element">{{ element.UTRChequeNumber }}</mat-cell>
+            </ng-container>
+
+            <!-- Payment Date -->
+            <ng-container matColumnDef="PaymentDate">
+              <mat-header-cell *matHeaderCellDef>Payment Date</mat-header-cell>
+              <mat-cell *matCellDef="let element">{{ element.Payment_Date }}</mat-cell>
+            </ng-container>
+
+            <!-- Transaction Amount -->
+            <ng-container matColumnDef="TransactionAmount">
+              <mat-header-cell *matHeaderCellDef>Transaction Amount</mat-header-cell>
+              <mat-cell *matCellDef="let element">{{ element.Transaction_Amount }}</mat-cell>
+            </ng-container>
+
+            <!-- Adjusted Amount -->
+            <ng-container matColumnDef="AdjustedAmount">
+              <mat-header-cell *matHeaderCellDef>Adjusted Amount</mat-header-cell>
+              <mat-cell *matCellDef="let element">{{ element.Adjusted_Amount }}</mat-cell>
+            </ng-container>
+
+            <!-- Balance Amount -->
+            <ng-container matColumnDef="BalanceAmount">
+              <mat-header-cell *matHeaderCellDef>Balance Amount</mat-header-cell>
+              <mat-cell *matCellDef="let element">{{ element.Balance_Amount }}</mat-cell>
+            </ng-container>
+
+            <!-- Description -->
+            <ng-container matColumnDef="Description">
+              <mat-header-cell *matHeaderCellDef>Description</mat-header-cell>
+              <mat-cell *matCellDef="let element">{{ element.Description }}</mat-cell>
+            </ng-container>
+
+            <!-- User Name -->
+            <ng-container matColumnDef="UserName">
+              <mat-header-cell *matHeaderCellDef>User Name</mat-header-cell>
+              <mat-cell *matCellDef="let element">{{ element.User_Name }}</mat-cell>
+            </ng-container>
+
+            <!-- Posted Date -->
+            <ng-container matColumnDef="PostedDate">
+              <mat-header-cell *matHeaderCellDef>Posted Date</mat-header-cell>
+              <mat-cell *matCellDef="let element">{{ element.Posted_Date }}</mat-cell>
+            </ng-container>
+
+            <!-- Group Name -->
+            <ng-container matColumnDef="GroupName">
+              <mat-header-cell *matHeaderCellDef>Group Name</mat-header-cell>
+              <mat-cell *matCellDef="let element">{{ element.Group_Name }}</mat-cell>
+            </ng-container>
+
+            <!-- Sub Customer Code -->
+            <ng-container matColumnDef="SubCustomerCode">
+              <mat-header-cell *matHeaderCellDef>Sub Customer Code</mat-header-cell>
+              <mat-cell *matCellDef="let element">{{ element.Sub_Customer_code }}</mat-cell>
+            </ng-container>
+
+            <!-- Header & Row -->
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+
+          </table>
+        </div>
+
+        <div *ngIf="dataSource.data.length===0" class="text-center p-4">
+          <p class="text-muted">No data to display</p>
+        </div>
+
+        <mat-paginator [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons style="border-top: 1px solid #ddd;">
+        </mat-paginator>
+      </div>
+    </div>
+  </div>
+</div>
+<div *ngIf="isLoading" class="loading-overlay">
+    <img src="assets/Loading.gif" alt="Loading...">
+</div>

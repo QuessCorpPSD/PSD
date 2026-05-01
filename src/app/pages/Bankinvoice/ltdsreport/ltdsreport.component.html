@@ -1,0 +1,79 @@
+<div class="page-wrapper">
+    <div class="scrollable-content">
+        <mat-card-title class="main-header">
+            LTDS Report
+        </mat-card-title>
+        <div class="container py-2">
+            <div class="row g-3 align-items-end">
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">
+                        Report Type<span class="text-danger">*</span>
+                    </label>
+
+                    <select class="form-control form-control-sm" [(ngModel)]="selectedReportType"
+                        (change)="onReportTypeChange()">
+
+                        <option value="">--Select--</option>
+
+                        <option *ngFor="let r of ReportTypeList" [value]="r.ReportTypeId">
+                            {{ r.ReportTypeValue }}
+                        </option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">
+                        Financial Year<span class="text-danger">*</span>
+                    </label>
+
+                    <select class="form-select form-select-sm" [(ngModel)]="selectedFinancialYear">
+                        <option value="">Select</option>
+
+                        <option *ngFor="let fy of FinancialYearList" [value]="fy.Financial_Year_Id">
+                            {{ fy.Financial_Year_Name }}
+                        </option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">TAN</label>
+                    <input type="text" class="form-control form-control-sm">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Start Date: <span class="text-danger">*</span></label>
+                    <input type="date" class="form-control" [(ngModel)]="startDate" />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">End Date: <span class="text-danger">*</span></label>
+                    <input type="date" class="form-control" [(ngModel)]="endDate" />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Vertical</label>
+
+                    <select class="form-control form-control-sm" [(ngModel)]="selectedBusinessUnit"
+                        [disabled]="isVerticalDisabled">
+
+                        <option value="">--Select--</option>
+
+                        <option *ngFor="let b of BusinessUnitList" [value]="b.Entity_Id">
+                            {{ b.Entity_Name }}
+                        </option>
+                    </select>
+                </div>
+
+
+                <div class="col-md-2 d-flex gap-2">
+                    <!-- <button class="btn btn-sm d-flex align-items-center justify-content-center btn-search"
+                        matTooltip="Search" (click)="onSearch()">
+                        <mat-icon>search</mat-icon>
+                    </button> -->
+                    <button class="btn btn-secondary btn-sm d-flex align-items-center justify-content-center"
+                        matTooltip="export to excel" (click)="exportToExcel()">
+                        <mat-icon>download</mat-icon>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div *ngIf="isLoading" class="loading-overlay">
+    <img src="assets/Loading.gif" alt="Loading...">
+</div>

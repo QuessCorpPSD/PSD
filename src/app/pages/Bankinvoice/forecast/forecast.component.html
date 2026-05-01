@@ -1,0 +1,369 @@
+<div class="page-wrapper">
+    <div class="scrollable-content">
+        <mat-card-title class="main-header">
+            Forecast
+        </mat-card-title>
+        <div class="container py-2">
+            <div class="row g-3 align-items-end">
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Company Code<span class="text-danger">*</span></label>
+                    <companyall (companyEmit)="handleCompanyEvent($event)"></companyall>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Company Name</label>
+                    <input type="text" class="form-control" [(ngModel)]="companyname" />
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">
+                        Month<span class="text-danger">*</span>
+                    </label>
+                    <PayPeriod [selectedCompanyId]="selectedCompanyId" [payPeriodType]="payPeriodType"
+                        (payperiodEmit)="handlePayperiodEvent($event)">
+                    </PayPeriod>
+                </div>
+
+                <div class="col-md-2 d-flex gap-2">
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-search"
+                        matTooltip="Search" (click)="onSearch()">
+                        <mat-icon>search</mat-icon>
+                    </button>
+                    <button class="btn btn-secondary btn-sm d-flex align-items-center justify-content-center"
+                        matTooltip="export to excel" (click)="exportToExcel()">
+                        <mat-icon>download</mat-icon>
+                    </button>
+
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-upload"
+                        matTooltip="Import" (click)="ImportClick(fileInput)">
+                        <input type="file" #fileInput style="display: none;" (change)="onFileChange($event)"
+                            accept=".xlsx, .xls" />
+                        <mat-icon>cloud_upload</mat-icon>
+                    </button>
+
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-download"
+                        matTooltip="Template" (click)="DownloadForecastTemplate()">
+                        <mat-icon>cloud_download</mat-icon>
+                    </button>
+
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-add" matTooltip="Add"
+                        (click)="AddLtaOpen()">
+                        <mat-icon>add</mat-icon>
+                    </button>
+                </div>
+
+            </div>
+
+            <div class="table-container" style="top:30px;" [hidden]="!showTable">
+                <div class="table-scroll-window">
+                    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+                        <!-- Delete -->
+                        <ng-container matColumnDef="delete">
+                            <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                            <mat-cell *matCellDef="let element">
+                                <mat-icon (click)="onDeleteRow(element)">delete</mat-icon>
+                            </mat-cell>
+                        </ng-container>
+
+                        <!-- Edit -->
+                        <ng-container matColumnDef="edit">
+                            <mat-header-cell *matHeaderCellDef></mat-header-cell>
+
+                            <mat-cell *matCellDef="let element">
+                                <button mat-icon-button (click)="onEditRow(element)">
+                                    <mat-icon>edit</mat-icon>
+                                </button>
+                            </mat-cell>
+                        </ng-container>
+
+                        <!-- SNo -->
+                        <ng-container matColumnDef="Sno">
+                            <mat-header-cell *matHeaderCellDef>SNo</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.SNo }}</mat-cell>
+                        </ng-container>
+
+                        <!-- Company Code -->
+                        <ng-container matColumnDef="companyCode">
+                            <mat-header-cell *matHeaderCellDef>Company Code</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Company_Code }}</mat-cell>
+                        </ng-container>
+
+                        <!-- Company Name -->
+                        <ng-container matColumnDef="CompanyName">
+                            <mat-header-cell *matHeaderCellDef>Company Name</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Company_Name }}</mat-cell>
+                        </ng-container>
+
+                        <!-- Invoice Number -->
+                        <ng-container matColumnDef="InvoiceNumber">
+                            <mat-header-cell *matHeaderCellDef>Invoice Number</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Invoice_number }}</mat-cell>
+                        </ng-container>
+
+                        <!-- Pay Period -->
+                        <ng-container matColumnDef="Payperiod">
+                            <mat-header-cell *matHeaderCellDef>Pay Period</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Pay_Period }}</mat-cell>
+                        </ng-container>
+
+                        <!-- Region -->
+                        <ng-container matColumnDef="Region">
+                            <mat-header-cell *matHeaderCellDef>Region</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Region }}</mat-cell>
+                        </ng-container>
+
+                        <!-- SBU -->
+                        <ng-container matColumnDef="Sbu">
+                            <mat-header-cell *matHeaderCellDef>SBU</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Sbu }}</mat-cell>
+                        </ng-container>
+
+                        <!-- ZM Forecast -->
+                        <ng-container matColumnDef="ZMForecast">
+                            <mat-header-cell *matHeaderCellDef>ZM Forecast</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Projection_Amount }}</mat-cell>
+                        </ng-container>
+
+                        <!-- Collected Amount -->
+                        <ng-container matColumnDef="CollectedAmount">
+                            <mat-header-cell *matHeaderCellDef>Collected</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Collected_Amount }}</mat-cell>
+                        </ng-container>
+
+                        <!-- Balance -->
+                        <ng-container matColumnDef="BalanceAmount">
+                            <mat-header-cell *matHeaderCellDef>Balance</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Balance_Amount }}</mat-cell>
+                        </ng-container>
+
+                        <!-- Management Forecast -->
+                        <ng-container matColumnDef="ManagementForest">
+                            <mat-header-cell *matHeaderCellDef>Management Forecast</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Final_Projection }}</mat-cell>
+                        </ng-container>
+
+                        <!-- Mode -->
+                        <ng-container matColumnDef="ModeOfPayment">
+                            <mat-header-cell *matHeaderCellDef>Mode</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Mode_Of_Payment }}</mat-cell>
+                        </ng-container>
+
+                        <!-- Status -->
+                        <ng-container matColumnDef="Status">
+                            <mat-header-cell *matHeaderCellDef>Status</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.STATUS }}</mat-cell>
+                        </ng-container>
+
+                        <!-- Username -->
+                        <ng-container matColumnDef="username">
+                            <mat-header-cell *matHeaderCellDef>User</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.User_Name }}</mat-cell>
+                        </ng-container>
+
+                        <!-- Posted Date -->
+                        <ng-container matColumnDef="PostedDate">
+                            <mat-header-cell *matHeaderCellDef>Posted Date</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Posted_Date }}</mat-cell>
+                        </ng-container>
+
+                        <!-- Header -->
+                        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+
+                        <!-- Rows -->
+                        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+
+                    </table>
+                </div>
+
+                <div *ngIf="dataSource.data.length===0" class="text-center p-4">
+                    <p class="text-muted">No data to display</p>
+                </div>
+
+                <mat-paginator #paginator [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons
+                    style="border-top: 1px solid #ddd;">
+                </mat-paginator>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div *ngIf="isAddclicked" class="popup-overlay" (keydown.escape)="closeclick()">
+    <mat-card class="popup-card">
+        <mat-card-header class="popup-header">
+            <mat-card-title class="d-flex justify-content-center align-items-center">
+                {{ isEditMode ? 'Edit Forecast' : 'Add Forecast' }}
+            </mat-card-title>
+
+            <button class="close-btn" matTooltip="Close" (click)="closeclick()">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-card-header>
+        <mat-card-content class="scroll-content">
+
+            <form [formGroup]="Forecast" novalidate>
+
+                <div class="row g-3 mb-3">
+
+                    <!-- Company Code -->
+                    <div class="col-md-4">
+                        <label class="form-label">Company Code <span class="text-danger">*</span></label>
+
+                        <!-- EDIT MODE -->
+                        <input *ngIf="isEditMode" class="form-control" [value]="selectedCompanyCode" readonly />
+
+                        <!-- ADD MODE -->
+                        <companyall *ngIf="!isEditMode" formControlName="CompanyCode"
+                            (companyEmit)="handleCompanyEvent1($event)">
+                        </companyall>
+
+                        <div class="text-danger small"
+                            *ngIf="!isEditMode && Forecast.get('CompanyCode')?.touched && Forecast.get('CompanyCode')?.hasError('required')">
+                            Company Code is required
+                        </div>
+                    </div>
+
+                    <!-- Company Name -->
+                    <div class="col-md-4">
+                        <label class="form-label">Company Name</label>
+                        <input type="text" class="form-control" formControlName="CompanyName" readonly />
+                    </div>
+
+                    <!-- Pay Period -->
+                    <!-- Pay Period -->
+                    <div class="col-md-4">
+                        <label class="form-label">Pay Period <span class="text-danger">*</span></label>
+
+                        <!-- EDIT MODE -->
+                        <input *ngIf="isEditMode" class="form-control" [value]="payperiods" readonly />
+
+                        <!-- ADD MODE -->
+                        <PayPeriod *ngIf="!isEditMode" [selectedCompanyId]="selectedCompanyId"
+                            [payPeriodType]="payPeriodType" (payperiodEmit)="handlePayperiodEvent1($event)">
+                        </PayPeriod>
+
+                        <div class="text-danger small"
+                            *ngIf="Forecast.get('PayPeriod')?.touched && Forecast.get('PayPeriod')?.hasError('required')">
+                            Pay Period is required
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Row 2 -->
+                <div class="row g-3 mb-3">
+
+                    <!-- SBU -->
+                    <div class="col-md-4">
+                        <label class="form-label">SBU <span class="text-danger">*</span></label>
+                        <select class="form-control" formControlName="Sbu">
+                            <option value="">Select</option>
+                            <option *ngFor="let item of SbuList" [value]="item.GEN_iID">
+                                {{ item.GEN_vDescription }}
+                            </option>
+                        </select>
+
+                        <div class="text-danger small"
+                            *ngIf="Forecast.get('Sbu')?.touched && Forecast.get('Sbu')?.hasError('required')">
+                            SBU is required
+                        </div>
+                    </div>
+
+                    <!-- Region -->
+                    <div class="col-md-4">
+                        <label class="form-label">Region <span class="text-danger">*</span></label>
+                        <select class="form-control" formControlName="Region">
+                            <option value="">Select</option>
+                            <option *ngFor="let item of RegionList" [value]="item.GEN_iID">
+                                {{ item.GEN_vDescription }}
+                            </option>
+                        </select>
+
+                        <div class="text-danger small"
+                            *ngIf="Forecast.get('Region')?.touched && Forecast.get('Region')?.hasError('required')">
+                            Region is required
+                        </div>
+                    </div>
+
+                    <!-- Location -->
+                    <div class="col-md-4">
+                        <label class="form-label">Location</label>
+                        <input type="text" class="form-control" formControlName="Location" readonly />
+                    </div>
+                </div>
+
+                <!-- Row 3 -->
+                <div class="row g-3 mb-3">
+
+                    <!-- ZM Forecast -->
+                    <div class="col-md-4">
+                        <label class="form-label">ZM Forecast</label>
+                        <input type="number" class="form-control" formControlName="ZMForecast" />
+                    </div>
+
+                    <!-- Collected Amount -->
+                    <div class="col-md-4">
+                        <label class="form-label">Collected Amount</label>
+                        <input type="number" class="form-control" formControlName="CollectedAmount" />
+                    </div>
+
+                    <!-- Balance Amount -->
+                    <div class="col-md-4">
+                        <label class="form-label">Balance Amount</label>
+                        <input type="number" class="form-control" formControlName="BalanceAmount" />
+                    </div>
+
+                </div>
+
+                <!-- Row 4 -->
+                <div class="row g-3 mb-3">
+
+                    <!-- Management Forecast -->
+                    <div class="col-md-4">
+                        <label class="form-label">Management Forecast</label>
+                        <input type="number" class="form-control" formControlName="ManagementForecast" />
+                    </div>
+
+                    <!-- Invoice Number -->
+                    <div class="col-md-4">
+                        <label class="form-label">Invoice Number</label>
+                        <select class="form-control" formControlName="InvoiceNumber">
+                            <option value="">Select</option>
+                            <option *ngFor="let item of InvoiceList" [value]="item.INVOICE_ID">
+                                {{ item.INVOICE_NUMBER }}
+                            </option>
+                        </select>
+                    </div>
+
+                </div>
+
+            </form>
+
+            <!-- <mat-card-footer class="footer"> -->
+            <div class="d-flex justify-content-end mt-3" style="gap: 10px; padding-right: 8px;">
+                <!-- <div> -->
+
+                <button type="Cancel"
+                    style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: #f0f0f0; color: black;"
+                    (click)="closeclick()">
+                    Cancel
+                </button>
+
+                <button type="button" (click)="onSave()"
+                    style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: blue; color: white;">
+                    {{ isEditMode ? 'Update' : 'Save' }}
+                </button>
+                <!-- </div> -->
+            </div>
+            <!-- </mat-card-footer> -->
+        </mat-card-content>
+
+    </mat-card>
+</div>
+
+
+
+<div *ngIf="isLoading" class="loading-overlay">
+    <img src="assets/Loading.gif" alt="Loading...">
+</div>

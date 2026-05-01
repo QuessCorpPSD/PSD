@@ -16,14 +16,25 @@
                             matTooltip="Export" (click)="exportToExcel()">
                             <mat-icon>download</mat-icon>
                         </button>
+<<<<<<< HEAD
                         <button class="btn btn-sm d-flex align-items-center justify-content-center btn-download"
                             matTooltip="Template" (click)="DownloadTemplate()">
                             <mat-icon>cloud_download</mat-icon>
                         </button>
+=======
+
+>>>>>>> Bank_Invoice
                         <button class="btn btn-sm d-flex align-items-center justify-content-center btn-upload"
                             matTooltip="Import" (click)="ImportClick(fileInput)">
                             <mat-icon>cloud_upload</mat-icon>
                         </button>
+<<<<<<< HEAD
+=======
+                        <button class="btn btn-sm d-flex align-items-center justify-content-center btn-download"
+                            matTooltip="Template" (click)="DownloadTemplate()">
+                            <mat-icon>cloud_download</mat-icon>
+                        </button>
+>>>>>>> Bank_Invoice
                         <input type="file" #fileInput style="display: none;" (click)="fileInput.value=''"
                             (change)="onFileSelected($event)" accept=".xlsx, .xls" />
                     </div>
@@ -32,6 +43,7 @@
             <div class="table-container" style="top:30px;">
                 <div class="table-scroll-window">
                     <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+<<<<<<< HEAD
                         <!--Filter Rows-->
                         <ng-container matColumnDef="filteredit">
                             <mat-header-cell *matHeaderCellDef class="fixed-width-column"><span (click)="clearFilter()">Clear</span>
@@ -122,6 +134,9 @@
                             </mat-header-cell>
                         </ng-container>
     <!-- Filter Row End -->
+=======
+
+>>>>>>> Bank_Invoice
 
                         <ng-container matColumnDef="Edit">
                             <mat-header-cell *matHeaderCellDef class="fixed-width-column">
@@ -212,13 +227,21 @@
                         <!-- CREATED BY -->
                         <ng-container matColumnDef="Created By">
                             <mat-header-cell *matHeaderCellDef>Created By</mat-header-cell>
+<<<<<<< HEAD
                             <mat-cell *matCellDef="let element">{{ element.userName }}</mat-cell>
+=======
+                            <mat-cell *matCellDef="let element">{{ element.createdBy }}</mat-cell>
+>>>>>>> Bank_Invoice
                         </ng-container>
 
                         <!-- CREATED ON -->
                         <ng-container matColumnDef="Created On">
                             <mat-header-cell *matHeaderCellDef>Created On</mat-header-cell>
+<<<<<<< HEAD
                             <mat-cell *matCellDef="let element">{{ element.createdOn | date:'dd/MM/yyyy' }}</mat-cell>
+=======
+                            <mat-cell *matCellDef="let element">{{ element.createdOn }}</mat-cell>
+>>>>>>> Bank_Invoice
                         </ng-container>
 
                         <!-- SUB CUSTOMER CODE -->
@@ -323,7 +346,10 @@
                         </ng-container>
 
                         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+<<<<<<< HEAD
                         <mat-header-row *matHeaderRowDef="filterDisplayedColumns" class="filter-row"></mat-header-row>
+=======
+>>>>>>> Bank_Invoice
                         <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
 
                     </table>
@@ -380,17 +406,28 @@
                     </div>
 
                     <div class="col-md-4">
+<<<<<<< HEAD
                         <label class="form-label text-muted small">Group Name</label>
+=======
+                        <label class="form-label text-muted small">Group Name<span class="text-danger">*</span></label>
+>>>>>>> Bank_Invoice
                         <input *ngIf="isEditMode" class="form-control form-control-sm" [value]="selectedGroupName"
                             readonly />
 
                         <groupname *ngIf="!isEditMode" formControlName="GroupName"
                             [selectedCompanyId]="selectedCompanyId" (sitenameEmit)="handleGroupEvent($event)">
                         </groupname>
+<<<<<<< HEAD
                         <!-- <small class="text-danger"
                             *ngIf="clientform.get('GroupName')?.touched && clientform.get('GroupName')?.invalid">
                             Group Name is required
                         </small> -->
+=======
+                        <small class="text-danger"
+                            *ngIf="clientform.get('GroupName')?.touched && clientform.get('GroupName')?.invalid">
+                            Group Name is required
+                        </small>
+>>>>>>> Bank_Invoice
                     </div>
 
                     <div class="col-md-4">
@@ -449,7 +486,11 @@
                     <div class="col-md-4">
                         <label class="form-label text-muted small">GST Number<span class="text-danger">*</span></label>
 
+<<<<<<< HEAD
                         <input type="text" class="form-control form-control-sm" formControlName="GSTNumber">
+=======
+                        <input type="number" class="form-control form-control-sm" formControlName="GSTNumber">
+>>>>>>> Bank_Invoice
                         <small class="text-danger"
                             *ngIf="clientform.get('GSTNumber')?.touched && clientform.get('GSTNumber')?.invalid">
                             GST Number is required
@@ -461,7 +502,11 @@
                     <div class="col-md-4">
                         <label class="form-label text-muted small">PAN Number<span class="text-danger">*</span></label>
 
+<<<<<<< HEAD
                         <input type="text" class="form-control form-control-sm" formControlName="PANNumber">
+=======
+                        <input type="number" class="form-control form-control-sm" formControlName="PANNumber">
+>>>>>>> Bank_Invoice
                         <small class="text-danger"
                             *ngIf="clientform.get('PANNumber')?.touched && clientform.get('PANNumber')?.invalid">
                             PAN Number is required
@@ -470,7 +515,11 @@
 
                     <div class="col-md-4">
                         <label class="form-label text-muted small">TAN Number<span class="text-danger">*</span></label>
+<<<<<<< HEAD
                         <input type="text" class="form-control form-control-sm" formControlName="TANNumber">
+=======
+                        <input type="number" class="form-control form-control-sm" formControlName="TANNumber">
+>>>>>>> Bank_Invoice
                         <small class="text-danger"
                             *ngIf="clientform.get('TANNumber')?.touched && clientform.get('TANNumber')?.invalid">
                             TAN Number is required

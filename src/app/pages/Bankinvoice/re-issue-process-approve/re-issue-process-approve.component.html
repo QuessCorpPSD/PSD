@@ -1,0 +1,272 @@
+<div class="page-wrapper">
+    <div class="scrollable-content">
+        <mat-card-title class="main-header">
+            Re Issue Process Approve
+        </mat-card-title>
+        <div class="container py-2">
+            <div class="row g-3 align-items-end">
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Company Code</label>
+                    <companyall (companyEmit)="handleCompanyEvent($event)"></companyall>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Pay Period</label>
+                    <PayPeriod [selectedCompanyId]="selectedCompanyId" [payPeriodType]="payPeriodTypefromParentall"
+                        (payperiodEmit)="handlePayperiodEvent($event)"></PayPeriod>
+                </div>
+
+
+                <div class="col-md-3">
+                    <label class="form-label">From Date: </label>
+                    <input type="date" class="form-control" [(ngModel)]="startDate" />
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label">To Date: </label>
+                    <input type="date" class="form-control" [(ngModel)]="endDate" />
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">
+                        Re-Issue Types
+                    </label>
+
+                    <select class="form-select form-select-sm" [(ngModel)]="selectedReIssueType">
+                        <option value="">Select</option>
+                        <option *ngFor="let item of ReIssueTypeList" [value]="item.GEN_iID">
+                            {{ item.GEN_vDescription }}
+                        </option>
+                    </select>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">
+                        Cheque Status
+                    </label>
+
+                    <select class="form-select form-select-sm" [(ngModel)]="selectedChequeStatus">
+                        <option value="">Select</option>
+                        <option *ngFor="let item of ChequeStatusList" [value]="item.GEN_iID">
+                            {{ item.GEN_vDescription }}
+                        </option>
+                    </select>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">
+                        Cancellation Charges
+                    </label>
+
+                    <select class="form-select form-select-sm" [(ngModel)]="selectedCancellationCharges">
+                        <option value="">Select</option>
+                        <option *ngFor="let item of CancellationChargesList" [value]="item.GEN_iID">
+                            {{ item.GEN_vDescription }}
+                        </option>
+                    </select>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">
+                        Status
+                    </label>
+
+                    <select class="form-select form-select-sm" [(ngModel)]="selectedStatus">
+                        <option value="">Select</option>
+                        <option *ngFor="let item of StatusList" [value]="item.GEN_iID">
+                            {{ item.GEN_vDescription }}
+                        </option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Remarks <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" [(ngModel)]="Remarks" />
+                </div>
+
+
+                <div class="col-md-2 d-flex gap-2">
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-search"
+                        matTooltip="Search" (click)="onSearch()">
+                        <mat-icon>search</mat-icon>
+                    </button>
+                    <button class="btn btn-secondary btn-sm d-flex align-items-center justify-content-center"
+                        matTooltip="export to excel" (click)="exportToExcel()">
+                        <mat-icon>download</mat-icon>
+                    </button>
+
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-upload"
+                        matTooltip="Import" (click)="ImportClick(fileInput)">
+
+                        <input type="file" #fileInput style="display: none;" (change)="onFileChange($event)"
+                            accept=".xlsx,.xls" />
+
+                        <mat-icon>cloud_upload</mat-icon>
+                    </button>
+
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-download"
+                        matTooltip="Template" (click)="DownloadReissueApproveTemplate()">
+                        <mat-icon>cloud_download</mat-icon>
+                    </button>
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-approve"
+                        (click)="Approval()" matTooltip="Approve">
+                        <mat-icon class="approve-icon">check_circle</mat-icon>
+                    </button>
+
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-reject"
+                        matTooltip="Reject" (click)="Reject()">
+                        <mat-icon class="reject-icon">cancel</mat-icon>
+                    </button>
+
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-hold"
+                        matTooltip="Hold" (click)="Hold()">
+                        <mat-icon class="hold-icon">pause_circle</mat-icon>
+                    </button>
+                </div>
+
+            </div>
+
+            <!-- PLACE THIS ABOVE TABLE-CONTAINER -->
+
+            <div class="d-flex align-items-center justify-content-end" style="padding-top: 10px; padding-right: 10px;"
+                *ngIf="showTable">
+
+                <div style="
+      display: inline-flex;
+      align-items: center;
+      border-radius: 10px;
+      border: 1px solid #7E7E7E;
+      width: 260px;
+      height: 30px;
+      background-color: white;
+      padding: 0 10px;
+    ">
+
+                    <i style="
+        margin-right: 6px;
+        display: flex;
+        align-items: center;
+      ">
+                        <mat-icon style="
+          font-size: 18px;
+          width: 18px;
+          height: 18px;
+          color: #7E7E7E;
+        ">
+                            search
+                        </mat-icon>
+                    </i>
+
+                    <input type="text" [(ngModel)]="searchText" (keyup)="applyFilters()" placeholder="Search" style="
+        border: none;
+        outline: none;
+        width: 100%;
+        font-size: 12px;
+        background-color: transparent;
+      " />
+
+                </div>
+
+            </div>
+
+            <div class="table-container" style="top:30px;" [hidden]="!showTable">
+                <div class="table-scroll-window">
+                    <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+                        <ng-container matColumnDef="select">
+                            <mat-header-cell *matHeaderCellDef>
+                                <input type="checkbox" [checked]="isAllSelected()"
+                                    (change)="toggleAllRows($event.target)">
+                            </mat-header-cell>
+
+                            <mat-cell *matCellDef="let row">
+                                <input type="checkbox" [checked]="row.selected"
+                                    (change)="toggleRow(row, $event.target)">
+                            </mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="sno">
+                            <mat-header-cell *matHeaderCellDef>SNo</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.SNo }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="companyCode">
+                            <mat-header-cell *matHeaderCellDef>Company Code</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Company_Code }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="payperiod">
+                            <mat-header-cell *matHeaderCellDef>Pay Period</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Pay_Period }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="invoicenumber">
+                            <mat-header-cell *matHeaderCellDef>Invoice Number</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Invoice_No }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="employeecode">
+                            <mat-header-cell *matHeaderCellDef>Employee Code</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Employee_Code }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="employeename">
+                            <mat-header-cell *matHeaderCellDef>Employee Name</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Employee_Name }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Checknumber">
+                            <mat-header-cell *matHeaderCellDef>Check Number</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.UTR_CHEQUE_NO }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="CheckAmount">
+                            <mat-header-cell *matHeaderCellDef>Check Amount</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Cheque_Amount }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="ReIssuetyes">
+                            <mat-header-cell *matHeaderCellDef>ReIssue</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.ReIssue_Type }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="PayMode">
+                            <mat-header-cell *matHeaderCellDef>Pay Mode</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Pay_Mode }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="BankName">
+                            <mat-header-cell *matHeaderCellDef>Bank Name</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Bank_Name }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="AccountNumber">
+                            <mat-header-cell *matHeaderCellDef>Account Number</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Account_No }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="IFSCcode">
+                            <mat-header-cell *matHeaderCellDef>IFSC Code</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.IFSC_Code }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Remarks">
+                            <mat-header-cell *matHeaderCellDef>Remarks</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Remarks }}</mat-cell>
+                        </ng-container>
+                        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+
+                    </table>
+                </div>
+
+                <div *ngIf="dataSource.data.length===0" class="text-center p-4">
+                    <p class="text-muted">No data to display</p>
+                </div>
+
+                <mat-paginator #paginator [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons
+                    style="border-top: 1px solid #ddd;">
+                </mat-paginator>
+            </div>
+        </div>
+    </div>
+</div>
+<div *ngIf="isLoading" class="loading-overlay">
+    <img src="assets/Loading.gif" alt="Loading...">
+</div>

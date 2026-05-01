@@ -14,11 +14,19 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { IStateRepository } from '../../../Repository/GlobalMasters/IState.service';
 import { EncryptionService } from '../../../Shared/encryption.service';
 import { SessionStorageService } from '../../../Shared/SessionStorageService';
+<<<<<<< HEAD
 import { Pay_TOKEN } from '../clientaddress/clientaddress.component';
 import { CompanyallComponent } from '../../../common/CompanyAll/companyall.component';
 import { StateComponent } from '../../../common/state/state.component';
 import { IClienGSTList } from '../../../Repository/customer/IClientGstlist';
 import { ClientGSTListService } from '../../../Service/customersserv/client-gstlist.service';
+=======
+import { Pay_TOKEN } from '../clientaddress-new/clientaddress-new.component';
+import { CompanyallComponent } from '../../../common/CompanyAll/companyall.component';
+import { StateComponent } from '../../../common/state/state.component';
+import { IClienGSTList } from '../../../Repository/customer/IClientGstlist';
+import { ClientGSTListService } from '../../../Service/CUSTOMER/client-gstlist.service';
+>>>>>>> Bank_Invoice
 export const Client_TOKEN = new InjectionToken<IClienGSTList>('Pay_TOKEN');
 import * as XLSX from 'xlsx';
 import FileSaver from 'file-saver';
@@ -28,6 +36,7 @@ import { GroupnameComponent } from '../../groupname/groupname.component';
 
 @Component({
   selector: 'clientgstlist',
+  selector: 'app-clientgstlist',
   imports: [
     CommonModule,
     FormsModule,
@@ -79,7 +88,12 @@ export class ClientgstlistComponent {
 
 
   displayedColumns: string[] = [
+<<<<<<< HEAD
     //"Delete",
+=======
+
+    "Delete",
+>>>>>>> Bank_Invoice
     "Edit",
     // "Action",
     "Client Gst Id",
@@ -109,6 +123,7 @@ export class ClientgstlistComponent {
     // "State Code"
   ];
 
+<<<<<<< HEAD
   
   filterDisplayedColumns: string[] = [
   "filteredit",
@@ -128,6 +143,8 @@ export class ClientgstlistComponent {
   "filterinvoiceCategory",
   ];
 
+=======
+>>>>>>> Bank_Invoice
   dataSource = new MatTableDataSource<any>([]);
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -184,6 +201,7 @@ export class ClientgstlistComponent {
 
   }
 
+<<<<<<< HEAD
   applyFilter(event: Event, column: string) {
     const inputValue = (event.target as HTMLInputElement).value || '';
 
@@ -209,6 +227,9 @@ export class ClientgstlistComponent {
   clearFilter() {
   this.dataSource.filter = '';
 }
+=======
+
+>>>>>>> Bank_Invoice
 
   handleCompanyEvent(company: any) {
 
