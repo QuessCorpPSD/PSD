@@ -14,6 +14,7 @@ export const COMM_TOKEN = new InjectionToken<ICommonService>('COMM_TOKEN');
 
 @Component({
     selector: 'PayPeriod',
+     standalone: true, 
     imports: [
         CommonModule,
         ReactiveFormsModule,
@@ -31,6 +32,7 @@ export const COMM_TOKEN = new InjectionToken<ICommonService>('COMM_TOKEN');
 })
 export class PayPeriodComponent implements OnChanges {
   @Input() selectedCompanyId?: number;
+  @Input() financialYearId!: number;
   @Input() payPeriodType?: string;
 
   options: string[] = [];
@@ -46,13 +48,13 @@ export class PayPeriodComponent implements OnChanges {
   
 
   }
-  ngOnChanges() {
-    if (this.selectedCompanyId) {
-      this.BindPayperiod(this.selectedCompanyId);
-    }
-      
-  }
 
+ngOnChanges() {
+  if (this.selectedCompanyId && this.payPeriodType) {
+    console.log("Calling BindPayperiod", this.selectedCompanyId, this.payPeriodType);
+    this.BindPayperiod(this.selectedCompanyId);
+  }
+}
 
 
   BindPayperiod(selectedCompanyId: any) {

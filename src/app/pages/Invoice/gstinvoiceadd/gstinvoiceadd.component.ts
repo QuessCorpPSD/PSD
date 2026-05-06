@@ -61,7 +61,9 @@ import { ChangeDetectorRef } from '@angular/core';
 })
 export class GstinvoiceaddComponent {
   selectedCompanyId!: number;
+  financialYearId!:number;
   companyList: any[] = [];
+  payPeriodList: any[] = [];
    selectedCompany: any;
   @ViewChild(MatAccordion) accordion!: MatAccordion;
   accordionLoaded = false;
@@ -104,41 +106,48 @@ invoiceId!: number;
     this.selectedCompanyId = company.companyId;
 
     this.addGstInvoice.patchValue({
-      CompanyName: company.companyName
+      CompanyName: company.companyName,
+      companyId: company.companyId
     });
   }
 
   handleFinancialYear(year) {
     this.selectedFinancialYear = year.financial_Year_Id;
     this.addGstInvoice.patchValue({
-      FinancialYear: year.financial_Year_Id
+      FinancialYear: year.financial_Year_Id,
+        PayPeriod: null
     });
+     this.GetPayPeriod();
   }
 
   groupnameEvent(event: any) {
-  this.siteId = event.siteCode;
+  this.siteId = event.siteId;
   this.selectedSiteName = event.siteName;
 
   this.addGstInvoice.patchValue({
     GroupDetail: {
       siteCode: event.siteCode,
+      siteId:event.siteId,
       siteName: event.siteName
     }
-  }, { emitEvent: false });
+       });
+        this.addGstInvoice.get('GroupDetail')?.markAsTouched();
 }
 
   mapnameEvent(event) {
     this.mapNameId = event.mapNameId;
     this.selectedMap = event.mapName;
     this.addGstInvoice.patchValue({
-      CostCenterMapping: event.mapNameId
+      CostCenterMapping:{ mapNameId: event.mapNameId, mapName: event.mapName}
     });
+        this.addGstInvoice.get('CostCenterMapping')?.markAsTouched();
   }
-citynameEvent(event) {
+
+  citynameEvent(event) {
     this.cityId = event.city_Id;
     this.selectedCity = event.city_Name;
     this.addGstInvoice.patchValue({
-      City: event.city_Id
+      City:{ city_Id: event.city_Id, city_Name: event.city_Name}
     });
      this.addGstInvoice.get('City')?.markAsTouched();
   }
@@ -154,7 +163,7 @@ citynameEvent(event) {
     this.payperiodId = payperiod.payfrequencyid;
 
     this.addGstInvoice.patchValue({
-      PayPeriod: payperiod.payPeriod
+      PayPeriod: payperiod.payfrequencyid
     });
   }
 
@@ -349,7 +358,7 @@ const request = {
       //Invoice_Id: null
       Action: this.data?.mode === 'edit' ? 'Edit' : 'Add',
       Invoice_Id: this.data?.invoiceId ?? null,
-      Created_Mode: null,
+      Created_Mode: "Manual",
 
       UserId: this.userdetail?.user_Id?.toString() ?? null,
       
@@ -370,7 +379,7 @@ const request = {
       Amount: formValue?.Amount?.toString() ?? null,
       StateId: this.stateId?.toString() ?? null,
      //StateId: "1",
-      //InvoicingStateId: "1",
+    //InvoicingStateId: this.stateId?.toString() ?? null,
 
       CGST_Percentage: formValue?.CGSTper?.toString() ?? 0,
       SGST_Percentage: formValue?.SGSTper?.toString() ?? 0,
@@ -424,7 +433,7 @@ const request = {
       Remarks: formValue?.Remarks?.toString() ?? null,
       Status: formValue?.Status?.toString() ?? null,
 
-      IsActive: null,
+      IsActive: "1",
       WO_Date: formValue?.WODate?.toString() ?? null,
       InvoiceNotes: formValue?.InvoiceNotes?.toString() ?? null,
 
@@ -438,7 +447,7 @@ const request = {
 
       Onboarding_Charge: formValue?.OnboardingCharge?.toString() ?? null,
 
-      Group_Detail_Id: null,
+      Group_Detail_Id: this.siteId?.toString() ?? null,
 
       TaxableAmount1: null,
       TaxableAmount1_Note: null,
@@ -490,7 +499,6 @@ const request = {
 
     this.gst.addGstInvoice(payload).subscribe({
       next: (res: any) => {
-
 if (res?.StatusCode === 200 && res?.Data?.length > 0) {
 
   const invoiceId = res.Data[0].Invoice_Id;
@@ -798,16 +806,14 @@ if (! this.selectedFinancialYear ) return;
 
   this.gst.GetPayPeriod(request).subscribe({
     next: (res: any) => {
+      this.payPeriodList = res?.Data || [];
 
-      const p = res?.Data?.[0];
+    const p = this.payPeriodList[0]; 
       if (!p) return;
-      this.addGstInvoice.patchValue({
-        PayPeriod: {
-          payfrequencyid: p.pay_Frequency_Detail_Id ?? 0,
-          payPeriod: p.pay_Period ?? null
-        }
-      });
-
+     this.handlePayperiodEvent({
+        payfrequencyid: Number(p.pay_Frequency_Detail_Id),
+        payPeriod: p.pay_Period
+      } as any);
     },
     error: err => {
       console.error('GetPayPeriod error:', err);
@@ -877,41 +883,35 @@ loadInvoiceForEdit(invoiceId: number) {
       if (res?.StatusCode === 200 && res?.Data?.length > 0) {
 
         const inv = res.Data[0];
-console.log('Company List:', this.companyList);
+console.log('Company List:', inv);
+
 console.log('Invoice Company_Id:', inv.Company_Id);
-        this.selectedCompanyId=inv.Company_Id;
-this.selectedCompany = this.companyList.find(
-  c => Number(c.companyId) === Number(inv.Company_Id)
-);
+    this.selectedCompanyId = Number(inv.Company_Id);
 
-        //this.companyId = inv.Company_Id;
-    
-console.log('Selected Company:', this.selectedCompany);    //this.cityId = inv.City_Id;
-        //this.selectedCity = inv.City_Name;
-   this.selectedCompanyId = inv.companyId;
 
-        console.log("PRINT ", inv);
-  console.log("Company Event",this.selectedCompany);
+setTimeout(() => {
           this.addGstInvoice.patchValue({
-companyCode: this.selectedCompany,
+CompanyName: inv.Company_Code,
+companyId: inv.Company_Id,
  City: {
-    cityId: inv.City_Id,
-    cityName: inv.City_Name
+    city_Id: inv.City_Id,
+    city_Name: inv.City_Name
   },
   PayPeriod: {
-    payfrequencyid: inv.Pay_Period_Id,
+    payfrequencyid: Number(inv.Pay_Period_Id),
     payPeriod: inv.Pay_Period
   },
   CostCenterMapping: {
   mapNameId: inv.Cost_Center_Mapping_Id,
   mapName: inv.Map_Name
 },
-
 GroupDetail: {
   siteId: inv.Group_Detail_Id,
+  siteCode: inv.Group_Name,
   siteName: inv.Group_Name
 },
-            InvoiceNumber: inv.Invoice_Number,
+
+       InvoiceNumber: inv.Invoice_Number,
             NofEmployees: inv.No_Of_Employees,
             InvoiceType: inv.Invoice_Type_Id,
 
@@ -990,6 +990,7 @@ GroupDetail: {
             UTGSTper: inv.UTGST_Percentage
 
           }, { emitEvent: false });
+          }, 300);
 
 this.addGstInvoice.get('InvoiceDate')?.setValue(
   inv.Invoice_Date ? inv.Invoice_Date.split('T')[0] : null
@@ -1006,10 +1007,7 @@ this.cdRef.detectChanges();
           this.calculateGstAmounts();
           this.getNetAmount();
 this.cdRef.detectChanges();
-     this.handleCompanyEvent({
-  companyId: this.selectedCompany?.companyId,
-companyName: this.selectedCompany?.companyName
-}); 
+    
 
         // ✅ Disable fields
         this.addGstInvoice.get('InvoiceNumber')?.disable();
@@ -1028,10 +1026,27 @@ companyName: this.selectedCompany?.companyName
   });
 }
 
-ngOnChanges() {
+
+ngOnChanges(changes: any) {
+
+  // Set selected company (OK to keep)
   if (this.selectedCompanyId && this.companyList?.length) {
     this.selectedCompany =
       this.companyList.find(c => c.company_Id === this.selectedCompanyId);
+  }
+
+  if (this.isEditMode) {
+    return;
+  }
+
+  // Normal flow (only for create mode)
+  if (
+    changes['financialYearId'] ||
+    changes['selectedCompanyId']
+  ) {
+    if (this.financialYearId && this.selectedCompanyId) {
+      this.GetPayPeriod();
+    }
   }
 }
 
