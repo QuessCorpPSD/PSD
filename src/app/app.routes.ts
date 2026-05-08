@@ -177,6 +177,8 @@ import { BankInvoiceNEFTCultureComponent } from './pages/SalaryReleaseNew/bank-i
 import { InvoiceBatchConsolidationReportComponent } from './pages/SalaryReleaseNew/invoice-batch-consolidation-report/invoice-batch-consolidation-report.component';
 import { ReIssueProcessApproveComponent } from './pages/SalaryReleaseNew/re-issue-process-approve/re-issue-process-approve.component';
 import { ReIssueProcessReportComponent } from './pages/SalaryReleaseNew/re-issue-process-report/re-issue-process-report.component';
+import { BanknonvoicenavigationComponent } from './pages/banknonvoice/banknonvoicenavigation/banknonvoicenavigation.component';
+import { BankneftcultureComponent } from './pages/banknonvoice/bankneftculture/bankneftculture.component';
 
 
 
@@ -360,6 +362,16 @@ export const routes: Routes = [
         ]
       },
       {
+        path: 'banknonvoicenavigation', component: BanknonvoicenavigationComponent,
+        children: [
+          { path: "bankneftculture", component: BankneftcultureComponent },
+          // { path: "inputaggregatorattendance", component: InputaggregatorattendanceComponent },
+          // { path: "leavemaster", component: LeavetypemasterComponent },
+          // { path: "leavemastermapping", component: LeavetypemastermappingComponent }
+          //  path:"inputaggregatorclient",component:InputaggregatorwithclientComponent
+        ]
+      },
+      {
         path: 'admin', component: AdminnavigationComponent,
         children: [
           { path: "companypermission", component: CompanypermissionComponent, },
@@ -427,7 +439,7 @@ export const routes: Routes = [
           { path: 'SalaryReleaseApproval', component: SalaryReleaseApproveComponent },
           { path: 'SalaryReleaseStatus', component: SalaryReleaseStatusComponent },
           { path: 'bankinvoiceneftculuture', component: BankInvoiceNEFTCultureComponent },
-           { path: 'InvoiceBatchConsolidationReport', component: InvoiceBatchConsolidationReportComponent },
+          { path: 'InvoiceBatchConsolidationReport', component: InvoiceBatchConsolidationReportComponent },
           { path: 'ReIssueProcessApprove', component: ReIssueProcessApproveComponent },
           { path: 'ReIssueProcessReport', component: ReIssueProcessReportComponent },
 
