@@ -174,6 +174,9 @@ import { SalaryReleaseApproveComponent } from './pages/SalaryReleaseNew/salary-r
 import { AdvanceUtilizationReportComponent } from './pages/Reports/advance-utilization-report/advance-utilization-report.component';
 import { SezcertificateuploadComponent } from './pages/customers/sezcertificateupload/sezcertificateupload.component';
 import { BankInvoiceNEFTCultureComponent } from './pages/SalaryReleaseNew/bank-invoice-neftculture/bank-invoice-neftculture.component';
+import { InvoiceBatchConsolidationReportComponent } from './pages/SalaryReleaseNew/invoice-batch-consolidation-report/invoice-batch-consolidation-report.component';
+import { ReIssueProcessApproveComponent } from './pages/SalaryReleaseNew/re-issue-process-approve/re-issue-process-approve.component';
+import { ReIssueProcessReportComponent } from './pages/SalaryReleaseNew/re-issue-process-report/re-issue-process-report.component';
 
 
 
@@ -424,6 +427,9 @@ export const routes: Routes = [
           { path: 'SalaryReleaseApproval', component: SalaryReleaseApproveComponent },
           { path: 'SalaryReleaseStatus', component: SalaryReleaseStatusComponent },
           { path: 'bankinvoiceneftculuture', component: BankInvoiceNEFTCultureComponent },
+           { path: 'InvoiceBatchConsolidationReport', component: InvoiceBatchConsolidationReportComponent },
+          { path: 'ReIssueProcessApprove', component: ReIssueProcessApproveComponent },
+          { path: 'ReIssueProcessReport', component: ReIssueProcessReportComponent },
 
         ]
 

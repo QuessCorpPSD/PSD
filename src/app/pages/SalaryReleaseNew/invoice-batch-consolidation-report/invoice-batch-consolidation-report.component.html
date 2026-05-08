@@ -1,0 +1,97 @@
+<div class="page-wrapper">
+    <div class="scrollable-content">
+        <mat-card-title class="main-header">
+            Invoice Batch Consolidation Report
+        </mat-card-title>
+        <div class="container py-2">
+            <div class="row g-3 align-items-end">
+
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">
+                        Report Type<span class="text-danger">*</span>
+                    </label>
+
+                    <select class="form-select form-select-sm" [(ngModel)]="selectedReportType">
+
+                        <option value="">Select</option>
+                        <option value="InvoiceBatchConsolidate">Batch Consolidate</option>
+                        <option value="InvoiceBatchSummary">Batch Summary</option>
+                    </select>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label">start Date: <span class="text-danger">*</span></label>
+                    <input type="date" class="form-control" [(ngModel)]="startDate" />
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label">End Date: <span class="text-danger">*</span></label>
+                    <input type="date" class="form-control" [(ngModel)]="endDate" />
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Search By </label>
+                    <input type="text" class="form-control form-control-sm" placeholder="EmployeeId or InvoiceNo"
+                        [(ngModel)]="searchText">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">
+                        Entity<span class="text-danger">*</span>
+                    </label>
+
+                    <div class="dropdown w-100">
+
+                        <button class="form-select form-select-sm text-start" type="button" data-bs-toggle="dropdown">
+                            {{ selectedEntityIds.length > 0 ? selectedEntityIds.length + ' Selected' : 'Select' }}
+                        </button>
+
+                        <!-- Dropdown -->
+                        <div class="dropdown-menu entity-dropdown p-2 w-100" data-bs-auto-close="outside">
+
+                            <!-- Header -->
+                            <div class="d-flex justify-content-between mb-2">
+                                <button class="btn btn-light btn-sm" (click)="selectAll(); $event.stopPropagation()">
+                                    Check All
+                                </button>
+
+                                <button class="btn btn-light btn-sm" (click)="unselectAll(); $event.stopPropagation()">
+                                    Uncheck All
+                                </button>
+                            </div>
+
+                            <!-- List -->
+                            <div style="max-height: 200px; overflow-y: auto;">
+
+                                <div *ngFor="let e of EntityList" class="form-check">
+
+                                    <input class="form-check-input" type="checkbox" [value]="e.Entity_Id"
+                                        [checked]="selectedEntityIds.includes(e.Entity_Id)"
+                                        (click)="$event.stopPropagation()"
+                                        (change)="onEntitySelect(e.Entity_Id, $event)" />
+
+                                    <label class="form-check-label">
+                                        {{ e.Entity_Name }}
+                                    </label>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-2 d-flex gap-2">
+
+                    <button class="btn btn-secondary btn-sm d-flex align-items-center justify-content-center"
+                        matTooltip="export to excel" (click)="exportToExcel()">
+                        <mat-icon>download</mat-icon>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div *ngIf="isLoading" class="loading-overlay">
+    <img src="assets/Loading.gif" alt="Loading...">
+</div>
