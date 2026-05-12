@@ -176,6 +176,7 @@ import { SezcertificateuploadComponent } from './pages/customers/sezcertificateu
 import { BankInvoiceNavigationComponent } from './pages/BankInvoice/bank-invoice-navigation/bank-invoice-navigation.component';
 import { BankAdviceSplitCultureComponent } from './pages/BankInvoice/bank-advice-split-culture/bank-advice-split-culture.component';
 import { GenericuploadComponent } from './pages/genericupload/genericupload.component';
+import { DraftInvoiceQCComponent } from './pages/Invoice/draft-invoice-qc/draft-invoice-qc.component';
 
 
 
@@ -265,7 +266,7 @@ export const routes: Routes = [
           { path: 'employeReportProcess', component: EmployeeReportProcessComponent },
           { path: 'IncreamnetReport', component: IncrementReportComponent },
           { path: 'Report', component: ReportComponent },
-           { path: 'AdvanceUtilizationReport', component: AdvanceUtilizationReportComponent },
+          { path: 'AdvanceUtilizationReport', component: AdvanceUtilizationReportComponent },
         ]
       },
       {
@@ -388,7 +389,7 @@ export const routes: Routes = [
           { path: "Company", component: CompanyComponent },
           { path: "sezcertificateupload", component: SezcertificateuploadComponent },
           { path: "genericupload", component: GenericuploadComponent }
-          
+
         ]
       },
       {
@@ -397,6 +398,7 @@ export const routes: Routes = [
         children: [
           { path: 'billingdashboard', component: BillingdashboardComponent },
           { path: 'initiate', component: DraftInvoiceComponent },
+          { path: 'DraftInvoiceQC', component: DraftInvoiceQCComponent },
           { path: 'provisionalinvoice', component: ProvisionalinvoiceComponent },
           { path: 'perfomainvoice', component: PerfomainvoiceComponent },
           { path: 'billabledays', component: BillableDaysComponent },
