@@ -291,9 +291,10 @@ export class BillingdashboardComponent implements OnInit,OnDestroy {
         const error = res.Data;
         const message = error?.[0]?.[""];
         
-
         if (message === 'Updated successfully') {
           alert('Updated successfully');
+          this.iseditClicked=false;
+          this.BindInvoiceAllot();
         }
         else {
           alert('Update Failed.');
