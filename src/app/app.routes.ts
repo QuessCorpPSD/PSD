@@ -179,6 +179,11 @@ import { ReIssueProcessApproveComponent } from './pages/SalaryReleaseNew/re-issu
 import { ReIssueProcessReportComponent } from './pages/SalaryReleaseNew/re-issue-process-report/re-issue-process-report.component';
 import { BanknonvoicenavigationComponent } from './pages/banknonvoice/banknonvoicenavigation/banknonvoicenavigation.component';
 import { BankneftcultureComponent } from './pages/banknonvoice/bankneftculture/bankneftculture.component';
+import { BonusBatchCreationComponent } from './pages/banknonvoice/bonus-batch-creation/bonus-batch-creation.component';
+import { GratuityBatchGenerationComponent } from './pages/banknonvoice/gratuity-batch-generation/gratuity-batch-generation.component';
+import { PartialBatchCreationComponent } from './pages/banknonvoice/partial-batch-creation/partial-batch-creation.component';
+import { PartialSalaryReleaseStatusComponent } from './pages/banknonvoice/partial-salary-release-status/partial-salary-release-status.component';
+import { SalaryreleaseprocessComponent } from './pages/banknonvoice/salaryreleaseprocess/salaryreleaseprocess.component';
 
 
 
@@ -365,10 +370,12 @@ export const routes: Routes = [
         path: 'banknonvoicenavigation', component: BanknonvoicenavigationComponent,
         children: [
           { path: "bankneftculture", component: BankneftcultureComponent },
-          // { path: "inputaggregatorattendance", component: InputaggregatorattendanceComponent },
-          // { path: "leavemaster", component: LeavetypemasterComponent },
-          // { path: "leavemastermapping", component: LeavetypemastermappingComponent }
-          //  path:"inputaggregatorclient",component:InputaggregatorwithclientComponent
+          { path: "PartialSalaryReleaseStatus", component: PartialSalaryReleaseStatusComponent },
+          { path: "PartialBatchCreation", component: PartialBatchCreationComponent },
+          { path: "Salaryreleaseprocess", component: SalaryreleaseprocessComponent },
+          { path: "GratuityBatchGeneration", component: GratuityBatchGenerationComponent },
+          { path: "BonusBatchCreation", component: BonusBatchCreationComponent },
+
         ]
       },
       {
