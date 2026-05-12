@@ -94,6 +94,8 @@ export class DraftInvoiceComponent implements OnInit {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
+ 
+
   onTemplateChange(searchText: string = ''): void {
 
     this.template = this.selectedTemplate;

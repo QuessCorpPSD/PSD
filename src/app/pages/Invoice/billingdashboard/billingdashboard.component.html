@@ -62,10 +62,9 @@
     </div>
     <div style="display: inline-block; margin-right: 10px;">
       <label style="position: relative; display: inline-block;">
-        <button (click)="onExportInvoice()" class="select-drop">
-          Export
-        </button>
-        <i style="position: absolute; top: 50%; right: 15px; transform: translateY(-50%); pointer-events: none;">
+        <button (click)="onExportInvoice()" class="select-drop1">
+          Export 
+           <i style="position: absolute; top: 50%; right: 15px; transform: translateY(-50%); pointer-events: none;">
           <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" fill="none">
             <path
               d="M6.5 1C6.5 0.723858 6.27614 0.5 6 0.5C5.72386 0.5 5.5 0.723858 5.5 1V6.79289L4.35355 5.64645C4.15829 5.45118 3.84171 5.45118 3.64645 5.64645C3.45118 5.84171 3.45118 6.15829 3.64645 6.35355L5.64609 8.3532C5.6473 8.3544 5.64851 8.35561 5.64973 8.3568C5.6969 8.40313 5.75098 8.43822 5.80861 8.46206C5.86713 8.48633 5.93125 8.4998 5.9985 8.5L6 8.5L6.0015 8.5C6.13732 8.4996 6.26039 8.44505 6.35027 8.3568C6.35149 8.35561 6.3527 8.3544 6.35391 8.3532L8.35355 6.35355C8.54882 6.15829 8.54882 5.84171 8.35355 5.64645C8.15829 5.45118 7.84171 5.45118 7.64645 5.64645L6.5 6.79289V1Z"
@@ -75,7 +74,14 @@
               fill="#7E7E7E" />
           </svg>
         </i>
+        </button>       
       </label>
+        <button (click)="invoiceRevoked()" *ngIf="IsRevokPermission"
+            style="width: 100px; height: 35px; color: white;padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; background: #302CB3; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.20); border-radius: 6px; justify-content: center; align-items: center; gap: 10px; display: inline-flex; border: none;display: inline-block; margin-left:5px;">
+            <div
+                style="color: var(--background, #F5F5F5); font-size: 12px; font-family: Nunito Sans; font-weight: 600; line-height: 22.40px; letter-spacing: 0.24px; word-wrap: break-word">
+                Revoked</div>
+        </button>
     </div>
   </div>
 <div class="basic-container">
@@ -85,28 +91,21 @@
   <div id="myGrid" class="ag-theme-quartz" style="width: 100%;  overflow-x: auto; ">
     <div class="card-body rounded-4">
       <div class="example-container mat-elevation-z8 auto-table">
-        <table mat-table [dataSource]="InvoiceAlloted" class="auto-table">
-          <ng-container matColumnDef="select">
-            <mat-header-cell *matHeaderCellDef>
-              <mat-checkbox (change)="toggleAllRows()" [checked]="selection.hasValue() && isAllSelected()"
-                [indeterminate]="isPartialSelected()">
-              </mat-checkbox>
-            </mat-header-cell>
-            <mat-cell *matCellDef="let element">
-              <mat-checkbox (click)="$event.stopPropagation()" (change)="toggleRow(element)"
-                [checked]="selection.isSelected(element)">
-              </mat-checkbox>
-            </mat-cell>
-          </ng-container>
+        <table mat-table [dataSource]="InvoiceAlloted" class="custom-table mat-elevation-z8 custom-table">
+         <ng-container matColumnDef="revoked">
+                <th mat-header-cell *matHeaderCellDef>
+                    <mat-checkbox [checked]="selection.hasValue()"
+                        [indeterminate]="selection.hasValue() && !isAllSelected()">
+                    </mat-checkbox>
+                </th>
+                <td mat-cell *matCellDef="let element" >
 
-          <!-- <ng-container matColumnDef="edit">
-              <mat-header-cell *matHeaderCellDef mat-sort-header></mat-header-cell>
-              <mat-cell *matCellDef="let element">
-                <img src="assets\icons\edit.svg" alt="edit"
-                  style="cursor: pointer; width: 24px; height: 22px;"
-                  (click)="EditClick(element.req_No)" />
-              </mat-cell>
-            </ng-container> -->
+                    <mat-checkbox (click)="$event.stopPropagation()" *ngIf="element.isedit"
+                        (change)="$event ? selection.toggle(element) : null" [checked]="selection.isSelected(element)">
+                    </mat-checkbox>
+                </td>
+            </ng-container>
+          
 
           <ng-container matColumnDef="edit">
             <th mat-header-cell *matHeaderCellDef>Edit</th>

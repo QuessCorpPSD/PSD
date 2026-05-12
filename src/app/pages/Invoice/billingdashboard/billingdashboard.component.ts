@@ -64,7 +64,7 @@ export class BillingdashboardComponent implements OnInit,OnDestroy {
   constructor(@Inject(DASH_TOKEN) private dashService: IDashBoardServices, @Inject(Invoice_TOKEN) private _invoiceService: IInvoiceRepository,
     private _decrypt: EncryptionService,
     private _sessionStoreage: SessionStorageService,private signalr:SignalrService) { }
-  displayedInvoiceColumns: string[] = ['edit','status'
+  displayedInvoiceColumns: string[] = ['revoked','edit','status'
     , 'Req_No'
     , 'RequestDatetime'
     , 'Company_Code'
@@ -94,13 +94,50 @@ export class BillingdashboardComponent implements OnInit,OnDestroy {
       this.timerSub.unsubscribe();
     }
   }
+IsRevokPermission:boolean=false;
+  isRevokoption()
+  {
+    const firstRow = this.InvoiceAlloted?.data?.[0];
+ // console.log(firstRow);
+  this.IsRevokPermission = !!firstRow?.isedit;
 
- 
+  }
+  
 
   ngOnDestroy() {
     this.stopTimer();
   }
+ invoiceRevoked():void{
+if (this.selection.selected.length == 0) {
+      alert("Please Select atleast one row");
+      return;
+    }
+   
 
+    const distinctReqNo = [...new Set(this.selection.selected.map((x: any) => x.req_No))];
+
+if (distinctReqNo.length > 1) {
+  this.selection.clear();
+  alert('Multiple Req No selection is not allowed');
+  return;
+} 
+
+this.isLoading=true;
+    this._invoiceService.InvoiceRequestRevok(this.selection.selected[0].req_No,this.selection.selected[0].invoiceType,this.userdetail.user_Id).subscribe({
+      next:res=>{
+        console.log(res.Data);
+        alert(res.Data.error_Messages);
+        this.isLoading=false;
+        this.selection.clear();
+        this.BindInvoiceAllot();
+        return;
+      },
+      error:err=>{
+        this.isLoading=false;
+      }
+    })
+this.isLoading=false;
+  }
   ngOnInit(): void {
     const userdetail = this._sessionStoreage.getItem('UserProfile');
     this.userdetail = JSON.parse(this._decrypt.decrypt(userdetail!));
@@ -233,12 +270,14 @@ export class BillingdashboardComponent implements OnInit,OnDestroy {
       "fromDate":fromdates,
       "toDate":Todates
     }
-    console.log(request);
+    
     this._invoiceService.BillingDashboard(request).subscribe({
       next: res => {
        
         this.InvoiceAlloted = new MatTableDataSource<any>(Array.isArray(res.Data) ? res.Data : []);
         this.InvoiceAlloted.paginator = this.InvoiceAlot_paginator;
+        console.log( this.InvoiceAlloted);
+        this.isRevokoption();
       },
       error: err => { }
     });

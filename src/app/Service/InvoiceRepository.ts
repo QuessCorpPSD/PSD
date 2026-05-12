@@ -128,6 +128,11 @@ export class InvoiceRepository implements IInvoiceRepository {
             .set('Accept', 'application/json')
         return this.http.post<APIResponse>(url, JSON.stringify(IntiationExportRequest), { headers });
     }
+    InvoiceRequestRevok(reqNo,invoiceType,userId):Observable<APIResponse>
+    {
+ const url = `${this.environment.apiUrl}InvoiceInitiation/RequestRevok/${reqNo}/${invoiceType}/${userId}`;
+return this.http.get<APIResponse>(url);
+    }
     InvoiceInitiate(val): Observable<APIResponse> {
 
         const url = `${this.environment.apiUrl}InvoiceInitiation/InvoiceInitiate`;
