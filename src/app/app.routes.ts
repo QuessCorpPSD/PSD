@@ -177,6 +177,10 @@ import { BankInvoiceNavigationComponent } from './pages/BankInvoice/bank-invoice
 import { BankAdviceSplitCultureComponent } from './pages/BankInvoice/bank-advice-split-culture/bank-advice-split-culture.component';
 import { GenericuploadComponent } from './pages/genericupload/genericupload.component';
 import { DraftInvoiceQCComponent } from './pages/Invoice/draft-invoice-qc/draft-invoice-qc.component';
+import { BankInvoiceNEFTCultureComponent } from './pages/SalaryReleaseNew/bank-invoice-neftculture/bank-invoice-neftculture.component';
+import { InvoiceBatchConsolidationReportComponent } from './pages/SalaryReleaseNew/invoice-batch-consolidation-report/invoice-batch-consolidation-report.component';
+import { ReIssueProcessApproveComponent } from './pages/SalaryReleaseNew/re-issue-process-approve/re-issue-process-approve.component';
+import { ReIssueProcessReportComponent } from './pages/SalaryReleaseNew/re-issue-process-report/re-issue-process-report.component';
 
 
 
@@ -428,6 +432,12 @@ export const routes: Routes = [
           { path: 'SalaryReleaseProcess', component: SalaryReleaseProcessComponent },
           { path: 'SalaryReleaseApproval', component: SalaryReleaseApproveComponent },
           { path: 'SalaryReleaseStatus', component: SalaryReleaseStatusComponent },
+          { path: 'bankinvoiceneftculuture', component: BankInvoiceNEFTCultureComponent },
+           { path: 'InvoiceBatchConsolidationReport', component: InvoiceBatchConsolidationReportComponent },
+          { path: 'ReIssueProcessApprove', component: ReIssueProcessApproveComponent },
+          { path: 'ReIssueProcessReport', component: ReIssueProcessReportComponent },
+          { path: 'bankadvicesplitculture', component: BankAdviceSplitCultureComponent }
+
         ]
 
       },
