@@ -16,23 +16,44 @@
                     <input type="date" class="form-control" [(ngModel)]="endDate" />
                 </div>
                 <div class="col-md-2 d-flex gap-2">
+
+                    <!-- Search -->
+
                     <button class="btn btn-sm d-flex align-items-center justify-content-center btn-search"
-                        matTooltip="Search">
+                        matTooltip="Search" (click)="onSearch()">
+
                         <mat-icon>search</mat-icon>
-                    </button>
-                    <button class="btn btn-secondary btn-sm d-flex align-items-center justify-content-center"
-                        matTooltip="export to excel">
-                        <mat-icon>download</mat-icon>
+
                     </button>
 
-                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-upload"
-                        matTooltip="Import">
-                        <!-- <input type="file" #fileInput style="display: none;" (change)="onFileChange($event)"
-                            accept=".xlsx, .xls" /> -->
-                        <mat-icon>cloud_upload</mat-icon>
+                    <!-- Export -->
+
+                    <button class="btn btn-secondary btn-sm d-flex align-items-center justify-content-center"
+                        matTooltip="Export To Excel" (click)="exportToExcel()">
+
+                        <mat-icon>download</mat-icon>
+
                     </button>
+
+                    <!-- Hidden File Upload -->
+
+                    <input type="file" #fileInput style="display: none;" (change)="onFileChange($event)"
+                        accept=".xlsx,.xls" />
+
+                    <!-- Import -->
+
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-upload"
+                        matTooltip="Import" (click)="ImportClick(fileInput)">
+
+                        <mat-icon>cloud_upload</mat-icon>
+
+                    </button>
+
+                    <!-- Template Download -->
+
                     <button class="btn btn-sm d-flex align-items-center justify-content-center btn-download"
-                        matTooltip="Template">
+                        matTooltip="Template" (click)="DownloadTemplate()">
+
                         <mat-icon>cloud_download</mat-icon>
                     </button>
                 </div>

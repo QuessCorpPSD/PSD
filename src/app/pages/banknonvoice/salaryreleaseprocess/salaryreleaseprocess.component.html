@@ -1,47 +1,23 @@
-<div class="row gap-3 py-2">
-    <div class="justify-content-between align-items-center mb-3">
-        <mat-card-title
-            style="color: #302CB3; font-size: 22px; font-family: Montserrat; font-weight: 600;padding-left: 12px;">Salary
-            Release Process
+<div class="page-wrapper">
+    <div class="scrollable-content">
+        <mat-card-title class="main-header">
+            Salary Release Process
         </mat-card-title>
-        <div style="padding-top: 12px;">
+        <div class="container py-2">
+            <div class="row g-3 align-items-end">
 
-            <div class="d-flex gap-2" style="padding-left: 20px;">
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Batch Id<span class="text-danger">*</span></label>
+                    <select class="form-select form-select-sm" [(ngModel)]="selectedBatchId" name="BatchId">
 
-                <div class="left-align" style="display: flex; align-items: flex-end; gap: 20px;">
-                    <div style="width: 200px; display: flex; flex-direction: column;">
+                        <option value="">Select</option>
+                        <option *ngFor="let batch of batchList" [value]="batch.Value">
+                            {{ batch.Label }}
+                        </option>
 
-                        <label class="form-label text-muted small">Batch Type<span class="text-danger">*</span></label>
-
-                        <select class="form-select form-select-sm" [(ngModel)]="selectedBatchType" name="BatchType">
-
-                            <option value="">Select</option>
-                            <!-- <option *ngFor="let bt of batchtype" [value]="bt.value">
-                                {{ bt.name }}
-                            </option> -->
-
-                        </select>
-                    </div>
-                    <!-- Batch Id -->
-                    <div style="width: 200px; display: flex; flex-direction: column;">
-
-                        <label class="form-label text-muted small">Batch Id<span class="text-danger">*</span></label>
-
-                        <select class="form-select form-select-sm" [(ngModel)]="selectedBatchId" name="BatchId">
-
-                            <option value="">Select</option>
-                            <!-- <option *ngFor="let batch of batchList" [value]="batch.batchId">
-                                {{ batch.batchId }}
-                            </option> -->
-
-                        </select>
-
-                    </div>
-
-                    <!-- Batch Type (New Dropdown) -->
-
-
-                    <!-- Search Button -->
+                    </select>
+                </div>
+                <div class="col-md-2 d-flex gap-2">
                     <div (click)="search()">
                         <button
                             style="width: 130px; height: 30px; padding: 6px 16px; background: #302CB3; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.20); border-radius: 6px; display: flex; justify-content: center; align-items: center; border: none;">
@@ -62,133 +38,106 @@
                             </div>
                         </button>
                     </div>
-
                 </div>
-            </div>
-        </div>
-        <div *ngIf="isLoading" class="loading-overlay">
-            <img src="assets/Loading.gif" alt="Loading...">
-        </div>
 
-        <div style="width:100%; padding-top: 18px; gap: 15px;" class="right-align">
-            <!-- <div>
-                <label style="position: relative; display: inline-block;">
-                    <button class="select-drop">
-                        Export
-                    </button>
-                    <i
-                        style="position: absolute; top: 50%; right: 15px; transform: translateY(-50%); pointer-events: none;">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" fill="none">
-                            <path
-                                d="M6.5 1C6.5 0.723858 6.27614 0.5 6 0.5C5.72386 0.5 5.5 0.723858 5.5 1V6.79289L4.35355 5.64645C4.15829 5.45118 3.84171 5.45118 3.64645 5.64645C3.45118 5.84171 3.45118 6.15829 3.64645 6.35355L5.64609 8.3532C5.6473 8.3544 5.64851 8.35561 5.64973 8.3568C5.6969 8.40313 5.75098 8.43822 5.80861 8.46206C5.86713 8.48633 5.93125 8.4998 5.9985 8.5L6 8.5L6.0015 8.5C6.13732 8.4996 6.26039 8.44505 6.35027 8.3568C6.35149 8.35561 6.3527 8.3544 6.35391 8.3532L8.35355 6.35355C8.54882 6.15829 8.54882 5.84171 8.35355 5.64645C8.15829 5.45118 7.84171 5.45118 7.64645 5.64645L6.5 6.79289V1Z"
-                                fill="#7E7E7E" />
-                            <path
-                                d="M1.5 8C1.77614 8 2 8.22386 2 8.5V10C2 10.2761 2.22386 10.5 2.5 10.5H9.5C9.77614 10.5 10 10.2761 10 10V8.5C10 8.22386 10.2239 8 10.5 8C10.7761 8 11 8.22386 11 8.5V10C11 10.8284 10.3284 11.5 9.5 11.5H2.5C1.67157 11.5 1 10.8284 1 10V8.5C1 8.22386 1.22386 8 1.5 8Z"
-                                fill="#7E7E7E" />
-                        </svg>
-                    </i>
-                </label>
-            </div> -->
-            <div *ngIf="istablevisible" style="    display: flex;    align-items: center;    border-radius: 10px;    border: 1px solid #7E7E7E;
-    width: 170px;    height: 30px;    background-color: white;    padding: 0 10px;  ">
-                <i style="margin-right: 6px; display: flex;">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
-                        <path fill-rule="evenodd" clip-rule="evenodd"
-                            d="M8.30883 9.01596C7.539 9.63177 6.5625 10 5.5 10C3.01472 10 1 7.98528 1 5.5C1 3.01472 3.01472 1 5.5 1C7.98528 1 10 3.01472 10 5.5C10 6.56251 9.63176.53901 9.01594 8.30885L10.8535 10.1465C11.0488 10.3417 11.0488 10.6583 10.8535 10.8536C10.6583 11.0488 10.3417 11.0488 10.1464 10.8536L8.30883 9.01596ZM2 5.5C2 3.567 3.567 2 5.5 2C7.433 2 9 3.567 9 5.5C9 6.44299 8.62707 7.29888 8.02066 7.92823C8.00355 7.94139 7.98711 7.95579 7.97144 7.97146C7.95578 7.98712 7.94137 8.00357 7.92822 8.02067C7.29887 8.62708 6.44299 9 5.5 9C3.567 9 2 7.433 2 5.5Z"
-                            fill="#7E7E7E" />
-                    </svg>
-                </i>
-
-                <input type="text" [(ngModel)]="searchText" (keyup.enter)="applyFilter()" placeholder="Search"
-                    style="      border: none;      outline: none;      flex: 1;      font-size: 12px;      background-color: transparent;    " />
             </div>
 
-        </div>
-        <div class="card-body rounded-4 py-0" *ngIf="istablevisible">
-            <div class="example-container mat-elevation-z8">
-                <table mat-table [dataSource]="dataSource" matSort class="custom-table mat-elevation-z8">
+            <div class="table-container" style="top:30px;">
+                <div class="table-scroll-window">
+                    <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
 
-                    <ng-container matColumnDef="SINo">
-                        <mat-header-cell *matHeaderCellDef> SI No </mat-header-cell>
-                        <mat-cell *matCellDef="let element; let i = index">
-                            {{ i + 1 }}
-                        </mat-cell>
-                    </ng-container>
+                        <ng-container matColumnDef="SINo">
+                            <mat-header-cell *matHeaderCellDef> SI No </mat-header-cell>
+                            <mat-cell *matCellDef="let element; let i = index">
+                                {{ i + 1 }}
+                            </mat-cell>
+                        </ng-container>
 
-                    <!-- Company Code -->
-                    <ng-container matColumnDef="CompanyCode">
-                        <mat-header-cell *matHeaderCellDef mat-sort-header> Company Code </mat-header-cell>
-                        <mat-cell *matCellDef="let element">
-                            {{ element.Company_Code }}
-                        </mat-cell>
-                    </ng-container>
+                        <!-- Company Code -->
+                        <ng-container matColumnDef="CompanyCode">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> Company Code </mat-header-cell>
+                            <mat-cell *matCellDef="let element">
+                                {{ element.Company_Code }}
+                            </mat-cell>
+                        </ng-container>
 
-                    <!-- Employee Code -->
-                    <ng-container matColumnDef="EmployeeCode">
-                        <mat-header-cell *matHeaderCellDef mat-sort-header> Employee Code </mat-header-cell>
-                        <mat-cell *matCellDef="let element">
-                            {{ element.Employee_Code }}
-                        </mat-cell>
-                    </ng-container>
+                        <!-- Employee Code -->
+                        <ng-container matColumnDef="EmployeeCode">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> Employee Code </mat-header-cell>
+                            <mat-cell *matCellDef="let element">
+                                {{ element.Employee_Code }}
+                            </mat-cell>
+                        </ng-container>
 
-                    <!-- Employee Name -->
-                    <ng-container matColumnDef="EmployeeName">
-                        <mat-header-cell *matHeaderCellDef mat-sort-header> Employee Name </mat-header-cell>
-                        <mat-cell *matCellDef="let element">
-                            {{ element.Employee_Name }}
-                        </mat-cell>
-                    </ng-container>
+                        <!-- Employee Name -->
+                        <ng-container matColumnDef="EmployeeName">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> Employee Name </mat-header-cell>
+                            <mat-cell *matCellDef="let element">
+                                {{ element.Employee_Name }}
+                            </mat-cell>
+                        </ng-container>
 
-                    <!-- Batch Id -->
-                    <ng-container matColumnDef="BatchId">
-                        <mat-header-cell *matHeaderCellDef mat-sort-header> Batch Id </mat-header-cell>
-                        <mat-cell *matCellDef="let element">
-                            {{ element.Batchid }}
-                        </mat-cell>
-                    </ng-container>
+                        <!-- Batch Id -->
+                        <ng-container matColumnDef="BatchId">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> Batch Id </mat-header-cell>
+                            <mat-cell *matCellDef="let element">
+                                {{ element.Batchid }}
+                            </mat-cell>
+                        </ng-container>
 
-                    <!-- Invoice No -->
-                    <ng-container matColumnDef="InvoiceNo">
-                        <mat-header-cell *matHeaderCellDef mat-sort-header> Invoice No </mat-header-cell>
-                        <mat-cell *matCellDef="let element">
-                            {{ element.Invoice_No }}
-                        </mat-cell>
-                    </ng-container>
+                        <!-- Invoice No -->
+                        <ng-container matColumnDef="InvoiceNo">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> Invoice No </mat-header-cell>
+                            <mat-cell *matCellDef="let element">
+                                {{ element.Invoice_No }}
+                            </mat-cell>
+                        </ng-container>
 
-                    <!-- Net Pay -->
-                    <ng-container matColumnDef="NetPay">
-                        <mat-header-cell *matHeaderCellDef mat-sort-header> Net Pay </mat-header-cell>
-                        <mat-cell *matCellDef="let element">
-                            ₹ {{ element.Net_Pay }}
-                        </mat-cell>
-                    </ng-container>
+                        <!-- Net Pay -->
+                        <ng-container matColumnDef="NetPay">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> Net Pay </mat-header-cell>
+                            <mat-cell *matCellDef="let element">
+                                ₹ {{ element.Net_Pay }}
+                            </mat-cell>
+                        </ng-container>
 
-                    <!-- Bank Name -->
-                    <ng-container matColumnDef="BankName">
-                        <mat-header-cell *matHeaderCellDef mat-sort-header> Bank Name </mat-header-cell>
-                        <mat-cell *matCellDef="let element">
-                            {{ element.Bank_Name }}
-                        </mat-cell>
-                    </ng-container>
+                        <!-- Bank Name -->
+                        <ng-container matColumnDef="BankName">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> Bank Name </mat-header-cell>
+                            <mat-cell *matCellDef="let element">
+                                {{ element.Bank_Name }}
+                            </mat-cell>
+                        </ng-container>
 
-                    <!-- NEFT Bank Name -->
-                    <ng-container matColumnDef="NeftBankName">
-                        <mat-header-cell *matHeaderCellDef mat-sort-header> NEFT Bank Name </mat-header-cell>
-                        <mat-cell *matCellDef="let element">
-                            {{ element.Neft_Bank_Name }}
-                        </mat-cell>
-                    </ng-container>
-                    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-                    <mat-row *matRowDef="let row;let i = index;  columns: displayedColumns;"></mat-row>
-                </table>
+                        <!-- NEFT Bank Name -->
+                        <ng-container matColumnDef="NeftBankName">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> NEFT Bank Name </mat-header-cell>
+                            <mat-cell *matCellDef="let element">
+                                {{ element.Neft_Bank_Name }}
+                            </mat-cell>
+                        </ng-container>
+                        <!-- Header Row -->
+                        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+
+                        <!-- Data Rows -->
+                        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+
+                    </table>
+                </div>
+
+                <div *ngIf="dataSource.data.length===0" class="text-center p-4">
+                    <p class="text-muted">No data to display</p>
+                </div>
+
+                <mat-paginator #paginator [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons
+                    style="border-top: 1px solid #ddd;">
+                </mat-paginator>
             </div>
-
-            <mat-paginator #paginator class="mat-footer-paginator" [pageSizeOptions]="[5, 10, 25, 100]"
-                showFirstLastButtons stickyEnd>
-            </mat-paginator>
         </div>
     </div>
 </div>
+
+
 <div *ngIf="isLoading" class="loading-overlay">
     <img src="assets/Loading.gif" alt="Loading...">
 </div>

@@ -15,12 +15,14 @@ import { SessionStorageService } from '../../../Shared/SessionStorageService';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
-export const Common_TOKEN = new InjectionToken<IPartialBatchCreation>('Common_TOKEN');
+export const Common_TOKEN = new InjectionToken<IBonusBatchGeneration>('Common_TOKEN');
 
 import FileSaver from 'file-saver';
 import * as XLSX from 'xlsx';
 import { IPartialBatchCreation } from '../../../Repository/banknonvoice/IPartialBatchCreation';
 import { PartialBatchCreationService } from '../../../Service/banknonvoice/partial-batch-creation.service';
+import { IBonusBatchGeneration } from '../../../Repository/banknonvoice/IBonusBatchCreation';
+import { BonusBatchGenerationService } from '../../../Service/banknonvoice/bonus-batch-creation.service';
 
 
 @Component({
@@ -45,7 +47,7 @@ import { PartialBatchCreationService } from '../../../Service/banknonvoice/parti
   templateUrl: './bonus-batch-creation.component.html',
   styleUrl: './bonus-batch-creation.component.css',
   providers: [
-    { provide: Common_TOKEN, useClass: PartialBatchCreationService }
+    { provide: Common_TOKEN, useClass: BonusBatchGenerationService }
   ],
 })
 export class BonusBatchCreationComponent {
@@ -54,7 +56,6 @@ export class BonusBatchCreationComponent {
   isLoading = false;
   userdetail!: any;
   user_Id: any;
-
   companyList: any[] = [];
   selectedCompanyId: any = 0;
   selectedCompanyCode: any = '';
@@ -80,7 +81,7 @@ export class BonusBatchCreationComponent {
 
   constructor(
     private decry: EncryptionService,
-    private service: PartialBatchCreationService,
+    private service: BonusBatchGenerationService,
     private _sessionStoreage: SessionStorageService
   ) { }
 
@@ -137,6 +138,247 @@ export class BonusBatchCreationComponent {
         x => x.Salary_Process_Initiate_detail_Id !== row.Salary_Process_Initiate_detail_Id
       );
     }
+  }
+
+  onSearch() {
+
+    this.isLoading = true;
+
+    if (!this.selectedCompanyId) {
+
+      alert('Please Select Company');
+
+      this.isLoading = false;
+
+      this.showTable = false;
+
+      return;
+    }
+
+    this.showTable = true;
+
+    const entityId = this.selectedCompanyId || 0;
+
+    this.service.GetBonusReleaseProcessdata(entityId).subscribe({
+
+      next: (res) => {
+
+        if (res?.Data?.statusCode === '400') {
+
+          alert(res.Data.message);
+
+          this.dataSource.data = [];
+
+          this.isLoading = false;
+
+          return;
+        }
+
+        this.uploadData = res?.Data?.data?.Table0 ?? [];
+
+        if (this.uploadData.length === 0) {
+
+          alert('No data found');
+
+          this.dataSource.data = [];
+
+          this.isLoading = false;
+
+          return;
+        }
+
+        this.dataSource =
+          new MatTableDataSource(this.uploadData);
+
+        this.dataSource.paginator =
+          this.paginator;
+
+        this.dataSource.sort =
+          this.sort;
+
+        this.displayedColumns = [
+          'select',
+          'CompanyCode',
+          'PayPeriod',
+          'BatchId'
+        ];
+
+        this.isLoading = false;
+      },
+
+      error: (err) => {
+
+        console.error('Error loading data', err);
+
+        alert('Failed to load data');
+
+        this.isLoading = false;
+      }
+
+    });
+  }
+
+  formatDate(date: any): string {
+
+    if (!date) return '';
+
+    const d = new Date(date);
+
+    const day =
+      ('0' + d.getDate()).slice(-2);
+
+    const month =
+      ('0' + (d.getMonth() + 1)).slice(-2);
+
+    const year =
+      d.getFullYear();
+
+    return `${day}-${month}-${year}`;
+  }
+
+  onGenerate() {
+
+    if (this.selectedRows.length === 0) {
+
+      alert('Please select atleast one record');
+
+      return;
+    }
+
+    const payload = {
+
+      Company_Id: Number(this.selectedCompanyId),
+
+      CreatedBy: Number(this.userdetail.user_Id),
+
+      Remarks: this.Remarks,
+
+      bonusBatch: this.selectedRows.map((item: any) => ({
+
+        Bank_Advice_Approvals_Id:
+          item.Bank_Advice_Approvals_Id,
+
+        NonInvoice_Batchid:
+          item.NonInvoice_Batchid,
+
+        Company_Code:
+          item.Company_Code,
+
+        Pay_Period:
+          item.Pay_Period
+
+      }))
+    };
+
+    this.service.Batchgenerate(payload).subscribe({
+
+      next: (res: any) => {
+
+        let msg = "";
+
+        if (res?.Data?.response) {
+
+          try {
+
+            const result =
+              JSON.parse(res.Data.response);
+
+            msg =
+              result[0]?.Error_Message;
+
+          } catch {
+
+            msg = res.Data.response;
+          }
+        }
+
+        if (
+          msg &&
+          msg.toLowerCase().includes("success")
+        ) {
+
+          alert(msg);
+
+          this.selectedRows = [];
+
+          this.onSearch();
+
+        } else {
+
+          alert(msg || "Generate Failed");
+        }
+      },
+
+      error: () => {
+
+        alert("Error while generating batch");
+      }
+    });
+  }
+
+  onReject(row: any) {
+
+    if (!confirm('Are you sure you want to reject this batch?')) {
+      return;
+    }
+
+    const payload = {
+
+      Bank_Advice_Approvals_Id:
+        row.Bank_Advice_Approvals_Id,
+
+      NonInvoice_Batchid:
+        row.NonInvoice_Batchid,
+
+      Remarks:
+        this.Remarks,
+
+      CreatedBy:
+        Number(this.userdetail.user_Id)
+    };
+
+    this.service.RejectBatch(payload).subscribe({
+
+      next: (res: any) => {
+
+        let msg = "";
+
+        if (res?.Data?.response) {
+
+          try {
+
+            const result =
+              JSON.parse(res.Data.response);
+
+            msg =
+              result[0]?.Error_Message;
+
+          } catch {
+
+            msg = res.Data.response;
+          }
+        }
+
+        if (
+          msg &&
+          msg.toLowerCase().includes("success")
+        ) {
+
+          alert(msg);
+
+          this.onSearch();
+
+        } else {
+
+          alert(msg || "Reject Failed");
+        }
+      },
+
+      error: () => {
+
+        alert("Error while rejecting batch");
+      }
+    });
   }
 
 

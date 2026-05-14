@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ViewChild } from '@angular/core';
+import { Component, InjectionToken, ViewChild } from '@angular/core';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -12,14 +12,21 @@ import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { AlertpopupComponent } from '../../../common/alertpopup/alertpopup.component';
 import { EncryptionService } from '../../../Shared/encryption.service';
 import { SessionStorageService } from '../../../Shared/SessionStorageService';
-
+import { SalaryreleaseprocessService } from '../../../Service/banknonvoice/salaryreleaseprocess.service';
+import { ISalaryReleaseProcess } from '../../../Repository/banknonvoice/ISalaryReleaseProcess';
+export const Common_TOKEN = new InjectionToken<ISalaryReleaseProcess>('Common_TOKEN');
+import FileSaver from 'file-saver';
+import * as XLSX from 'xlsx';
 @Component({
   selector: 'app-salaryreleaseprocess',
   imports: [CommonModule, MatTableModule, MatCheckboxModule, MatPaginatorModule, MatSort,
     MatSelectModule, MatInputModule, MatFormFieldModule, ReactiveFormsModule, FormsModule,
     MatCardModule],
   templateUrl: './salaryreleaseprocess.component.html',
-  styleUrl: './salaryreleaseprocess.component.css'
+  styleUrl: './salaryreleaseprocess.component.css',
+  providers: [
+    { provide: Common_TOKEN, useClass: SalaryreleaseprocessService }
+  ],
 })
 export class SalaryreleaseprocessComponent {
   companyUI: any;
@@ -55,12 +62,14 @@ export class SalaryreleaseprocessComponent {
   ];
 
 
+
   @ViewChild('paginator') paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
 
 
   constructor(private decry: EncryptionService,
+    private service: SalaryreleaseprocessService,
     private _sessionStoreage: SessionStorageService,) { }
 
   handleCompanyEvent(company: any) {
@@ -101,37 +110,30 @@ export class SalaryreleaseprocessComponent {
       "userId": this.userdetail.user_Id,
       "userName": this.userdetail.userName,
     };
-    // this.Bindbatchtype();
+    this.BindBatchId();
     this.payPeriodTypefromParent = "All";
 
   }
 
 
+  BindBatchId() {
 
-
-  // Bindbatchtype() {
-  //   this.service.Batchtype(this.userdetail.user_Id).subscribe({
-  //     next: res => {
-  //       this.batchtype = res.Data;
-  //     }
-  //   });
-  //   this.BindBatchId();
-  // }
-
-
-  // BindBatchId() {
-
-  //   this.service.Batchload(
-  //     this.selectedBatchType,
-  //     this.userdetail.user_Id
-  //   )
-  //     .subscribe({
-  //       next: res => {
-  //         this.batchList = res.Data;
-  //       }
-  //     });
-  // }
-
+    // this.isLoading = true;
+    this.service
+      .GetNonInvoiceBatchid(0)
+      .subscribe({
+        next: (res: any) => {
+          this.batchList =
+            res?.Data?.data?.Table0 || [];
+          this.isLoading = false;
+        },
+        error: (err) => {
+          console.error(err);
+          alert('Failed to load Batch Id');
+          this.isLoading = false;
+        }
+      });
+  }
   applyFilter() {
     const filterValue = this.searchText.trim().toLowerCase();
     this.dataSource.filter = filterValue;
@@ -139,52 +141,99 @@ export class SalaryreleaseprocessComponent {
   }
 
   search() {
-    this.istablevisible = true;
-    // this.isLoading = true;
 
-    // if (!this.selectedBatchType) {
-    //   alert("Please Select Batch Type");
-    //   return;
-    // }
+    if (!this.selectedBatchId) {
+      alert('Please Select Batch Id');
+      return;
+    }
 
-    // if (!this.selectedBatchId) {
-    //   alert("Please Select Batch Id");
-    //   return;
-    // }
+    this.isLoading = true;
 
-    // this.istablevisible = true;
-    // this.isLoading = true;
+    this.service.SearchDetails(this.selectedBatchId)
+      .subscribe({
 
-    // const batchType = this.selectedBatchType;
-    // const batchId = this.selectedBatchId || 0;
-    // const userId = this.userdetail.user_Id;
+        next: (res: any) => {
 
-    // this.service.Search(batchType, batchId, userId)
-    //   .subscribe({
-    //     next: res => {
+          const tableData = res?.Data?.data?.Table0 || [];
 
-    //       const tableData = res?.Data?.data?.Table0;
+          if (tableData.length === 0) {
+            alert('No data found');
+            this.dataSource.data = [];
+            this.isLoading = false;
+            return;
+          }
 
-    //       if (!tableData || tableData.length === 0) {
-    //         alert("No data available to display.");
-    //         return;
-    //       }
+          this.dataSource = new MatTableDataSource(tableData);
 
-    //       this.dataSource = new MatTableDataSource<any>(tableData);
-    //       this.dataSource.paginator = this.paginator;
-    //       this.dataSource.sort = this.sort;
-    //     },
+          this.dataSource.paginator = this.paginator;
+          this.dataSource.sort = this.sort;
 
-    //     error: err => {
-    //       this.isLoading = false;
-    //       console.error('Error fetching data:', err);
-    //       alert('Error while fetching data');
-    //     },
+          this.isLoading = false;
+        },
 
-    //     complete: () => {
-    //       this.isLoading = false;
-    //     }
-    //   });
+        error: (err) => {
+
+          console.error(err);
+          alert('Error while fetching data');
+
+          this.isLoading = false;
+        }
+      });
+  }
+
+  exportToExcel(): void {
+
+    if (!this.selectedBatchId) {
+      alert('Please Select Batch Id');
+      return;
+    }
+
+    this.isLoading = true;
+
+    const payload = {
+      batchId: this.selectedBatchId
+    };
+
+    this.service.SalaryReleaseExport(payload)
+      .subscribe({
+
+        next: (res: any) => {
+
+          this.isLoading = false;
+
+          const jsonData = res?.Data?.data?.Table0;
+
+          if (!jsonData || jsonData.length === 0) {
+            alert('No data available');
+            return;
+          }
+
+          const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(jsonData);
+
+          const wb: XLSX.WorkBook = XLSX.utils.book_new();
+
+          XLSX.utils.book_append_sheet(
+            wb,
+            ws,
+            'SalaryReleaseProcess'
+          );
+
+          const date = new Date().toISOString().split('T')[0];
+
+          const fileName = `SalaryReleaseProcess_${date}.xlsx`;
+
+          XLSX.writeFile(wb, fileName);
+        },
+
+        error: (err) => {
+
+          this.isLoading = false;
+
+          console.error(err);
+
+          alert('Export failed');
+        }
+      });
   }
 
   onInitiate() {
