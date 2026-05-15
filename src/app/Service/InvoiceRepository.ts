@@ -46,8 +46,8 @@ export class InvoiceRepository implements IInvoiceRepository {
             .set('Accept', 'application/json')
         return this.http.post<APIResponse>(url, JSON.stringify(val), { headers });
     }
-    DownloadNetPaySummary (companyId,payperiodId): Observable<APIResponse> {
-        const url = `${this.environment.apiUrl}EInvoice/GetNetPaySummary/`+companyId+'/'+payperiodId;
+    DownloadNetPaySummary(companyId, payperiodId): Observable<APIResponse> {
+        const url = `${this.environment.apiUrl}EInvoice/GetNetPaySummary/` + companyId + '/' + payperiodId;
         //console.log(url);
         return this.http.get<APIResponse>(url);
     }
@@ -161,6 +161,11 @@ return this.http.get<APIResponse>(url);
         //console.log('Sending PO save payload:', payload);
         return this.http.post<APIResponse>(
             this.environment.apiUrl + 'InvoiceInitiation/ProvisionalInvoiceInitiate', requestPayload);
+    }
+    VendorInvoiceInitiate(requestPayload: any): Observable<APIResponse> {
+        //console.log('Sending PO save payload:', payload);
+        return this.http.post<APIResponse>(
+            this.environment.apiUrl + 'InvoiceInitiation/VendorInvoiceInitiate', requestPayload);
     }
     ExportToExcel(val): Observable<APIResponse> {
         const url = `${this.environment.apiUrl}InvoiceInitiation/ExportToExcel`;
@@ -291,7 +296,7 @@ return this.http.get<APIResponse>(url);
     //     );
     // }
 
-     BillingDashboard(request): Observable<APIResponse> {
+    BillingDashboard(request): Observable<APIResponse> {
 
         const url = `${this.environment.apiUrl}Invoice/BillingDashboardByUserId`;
         return this.http.post<APIResponse>(url, request);
@@ -301,7 +306,7 @@ return this.http.get<APIResponse>(url);
     }
 
     BillingDashboardExport(request): Observable<APIResponse> {
- const url = `${this.environment.apiUrl}Invoice/BillingDashboardExport`;
+        const url = `${this.environment.apiUrl}Invoice/BillingDashboardExport`;
         return this.http.post<APIResponse>(url, request);
         // return this.http.get<APIResponse>(
         //     this.environment.apiUrl + 'Invoice/BillingDashboardExport/' + user_Id + '/' + flag

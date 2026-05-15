@@ -252,7 +252,7 @@
                 <th mat-header-cell *matHeaderCellDef> Call Rate</th>
                 <td mat-cell *matCellDef="let element">{{ element.calrt }}</td>
             </ng-container>
-             <ng-container matColumnDef="eapct">
+            <ng-container matColumnDef="eapct">
                 <th mat-header-cell *matHeaderCellDef> EAPCOST </th>
                 <td mat-cell *matCellDef="let element">{{ element.eapct }}</td>
             </ng-container>
@@ -272,7 +272,35 @@
                     {{ element.data_From }}</td>
             </ng-container>
 
+            <ng-container matColumnDef="expense_ID">
+                <th mat-header-cell *matHeaderCellDef> Expense_ID</th>
+                <td mat-cell *matCellDef="let element">{{ element.expense_ID }}</td>
+            </ng-container>
 
+            <ng-container matColumnDef="fI_Document_Number">
+                <th mat-header-cell *matHeaderCellDef> FI_Document_Number</th>
+                <td mat-cell *matCellDef="let element">{{ element.fI_Document_Number }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="group_Detail_Id">
+                <th mat-header-cell *matHeaderCellDef>Group_Detail_Id</th>
+                <td mat-cell *matCellDef="let element">{{ element.group_Detail_Id }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="group_Name">
+                <th mat-header-cell *matHeaderCellDef>Group_Name</th>
+                <td mat-cell *matCellDef="let element">{{ element.group_Name }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="service_Description">
+                <th mat-header-cell *matHeaderCellDef>Service_Description</th>
+                <td mat-cell *matCellDef="let element">{{ element.service_Description }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="state_name">
+                <th mat-header-cell *matHeaderCellDef>State Name</th>
+                <td mat-cell *matCellDef="let element">{{ element.state_name }}</td>
+            </ng-container>
 
             <tr mat-header-row *matHeaderRowDef="displayColumns"></tr>
             <tr mat-row *matRowDef="let row; columns: displayColumns;"></tr>
