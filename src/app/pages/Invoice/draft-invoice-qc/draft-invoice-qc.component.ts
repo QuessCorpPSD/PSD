@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, InjectionToken, ViewChild } from '@angular/core';
+import { Component, Inject, InjectionToken, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -13,6 +13,8 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { IInvoiceRepository } from '../../../Repository/IInvoiceRepository';
 import { InvoiceRepository } from '../../../Service/InvoiceRepository';
 import { SelectionModel } from '@angular/cdk/collections';
+import { EncryptionService } from '../../../Shared/encryption.service';
+import { SessionStorageService } from '../../../Shared/SessionStorageService';
 export const Invoice_TOKEN = new InjectionToken<IInvoiceRepository>('Invoice_TOKEN');
 
 @Component({
@@ -28,16 +30,24 @@ export const Invoice_TOKEN = new InjectionToken<IInvoiceRepository>('Invoice_TOK
     }
   ]
 })
-export class DraftInvoiceQCComponent {
+export class DraftInvoiceQCComponent implements OnInit {
   @ViewChild('PeningLotPaginator') PeningLot_paginator!: MatPaginator;
   searchText: string = '';
   userdetail: any;
   isLoading: boolean = false;
   dataSource = new MatTableDataSource<any>([]);
   selection = new SelectionModel<any>(true, []);
-  displayColumns = ['action', 'serial_No', 'invoiceType', 'Req_No', 'invoice_remarks', 'company_Code', 'map_name', 'net_CTC', 'netPay', 'lotNo', 'input_No', 'pO_Number', 'employee_Head_Count', 'service_Charge', 'serviceChargeAmount', 'service_Charge_Master', 'service_Charge_Type', 'bgvbl', 'astfee', 'discT1', 'discT2', 'idcard', 'email', 'regfee', 'trnfee', 'ggdbt', 'ppekit', 'vmsfee', 'edufee', 'ntpry', 'renmac', 'draded', 'othdd', 'mbapp', 'calcrg', 'calrt', 'narration', 'eapct', 'hosac']
+  displayColumns = ['action',  'invoiceType', 'Req_No','invoice_Number', 'company_Code',  'net_CTC', 'netPay', 'lotNo', 'input_No', 'employee_Head_Count',  'serviceChargeAmount']
 
-
+constructor(@Inject(Invoice_TOKEN) private _invoiceService: IInvoiceRepository, private _decrypt: EncryptionService,
+    private _sessionStoreage: SessionStorageService,){
+  
+}
+ngOnInit(): void {
+  const userdetail = this._sessionStoreage.getItem('UserProfile');
+    this.userdetail = JSON.parse(this._decrypt.decrypt(userdetail!));
+  this.InvoiceSearch(this.userdetail.user_Id)
+}
   applyFilter(searchText: string = '') {
     this.dataSource.filterPredicate = (data: any, filter: string): boolean => {
       const searchValues = filter
@@ -59,7 +69,11 @@ export class DraftInvoiceQCComponent {
     this.dataSource.filter = searchText.trim().toLowerCase();
   }
 
+InvoiceQC(){
+  let selected=this.selection.selected;
 
+  console.log(selected);
+}
   toggleRow(event: any) {
 
   }
@@ -87,6 +101,17 @@ export class DraftInvoiceQCComponent {
   }
 
 
-
+ InvoiceSearch(userId) {    
+    this.isLoading = true;   
+    this._invoiceService.InitialSearchQC(userId).subscribe({
+      next: res => {
+        this.dataSource = new MatTableDataSource<any>(Array.isArray(res.Data) ? res.Data : []);       
+        this.dataSource.paginator = this.PeningLot_paginator;
+        console.log(res.Data);
+        this.isLoading = false;
+      },
+      error: err => { }
+    });
+  }
 
 }

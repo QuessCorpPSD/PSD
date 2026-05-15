@@ -6,6 +6,6 @@ export interface ISalaryReleaseApproval {
     Batchtype(userid: any): Observable<APIResponse>;
     Export(batchtype: any, CollectionStatus: any, userid: any): Observable<APIResponse>;
     Apporoval(payload: any): Observable<APIResponse>;
-
+    Downloadtemplate(flag: any, userid: any): Observable<APIResponse>;
 
 }

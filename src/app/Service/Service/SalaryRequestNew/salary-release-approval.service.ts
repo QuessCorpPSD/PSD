@@ -33,7 +33,9 @@ export class SalaryReleaseApprovalService implements ISalaryReleaseApproval {
   }
 
 
-
+  Downloadtemplate(flag: any, userid: any): Observable<APIResponse> {
+    return this.http.get<APIResponse>(this.env.apiUrl + 'BatchGeneration/GetTemplate/' + flag + '/' + userid);
+  }
 
 
 

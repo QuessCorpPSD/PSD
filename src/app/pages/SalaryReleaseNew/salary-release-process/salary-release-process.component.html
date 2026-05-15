@@ -10,10 +10,8 @@
 
                 <div class="left-align" style="display: flex; align-items: flex-end; gap: 20px;">
                     <div style="width: 200px; display: flex; flex-direction: column;">
-                        <div
-                            style="color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Montserrat; font-weight: 500; margin-bottom: 4px;">
-                            Batch Type<span class="text-danger">*</span>
-                        </div>
+
+                        <label class="form-label text-muted small">Batch Type<span class="text-danger">*</span></label>
 
                         <select class="form-select form-select-sm" [(ngModel)]="selectedBatchType"
                             (change)="BindBatchId()" name="BatchType">
@@ -27,10 +25,8 @@
                     </div>
                     <!-- Batch Id -->
                     <div style="width: 200px; display: flex; flex-direction: column;">
-                        <div
-                            style="color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Montserrat; font-weight: 500; margin-bottom: 4px;">
-                            Batch Id<span class="text-danger">*</span>
-                        </div>
+                       
+                        <label class="form-label text-muted small">Batch Id<span class="text-danger">*</span></label>
 
                         <select class="form-select form-select-sm" [(ngModel)]="selectedBatchId" name="BatchId">
 
@@ -94,7 +90,7 @@
                     </i>
                 </label>
             </div> -->
-            <div style="    display: flex;    align-items: center;    border-radius: 10px;    border: 1px solid #7E7E7E;
+            <div  *ngIf="istablevisible" style="    display: flex;    align-items: center;    border-radius: 10px;    border: 1px solid #7E7E7E;
     width: 170px;    height: 30px;    background-color: white;    padding: 0 10px;  ">
                 <i style="margin-right: 6px; display: flex;">
                     <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
@@ -188,8 +184,8 @@
                 </table>
             </div>
 
-            <mat-paginator #paginator class="mat-footer-paginator" [pageSizeOptions]="[5, 10, 25, 100]" showFirstLastButtons
-                stickyEnd>
+            <mat-paginator #paginator class="mat-footer-paginator" [pageSizeOptions]="[5, 10, 25, 100]"
+                showFirstLastButtons stickyEnd>
             </mat-paginator>
         </div>
     </div>

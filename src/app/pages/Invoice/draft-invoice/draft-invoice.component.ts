@@ -357,7 +357,7 @@ export class DraftInvoiceComponent implements OnInit {
   ngOnInit(): void {
     const userdetail = this._sessionStoreage.getItem('UserProfile');
     this.userdetail = JSON.parse(this._decrypt.decrypt(userdetail!));
-    console.log(this.userdetail);
+    
     this.payPeriodType = "All";
     const request = {
       // "Company_Id": 0,

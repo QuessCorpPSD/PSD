@@ -1,4 +1,4 @@
-<div class="row gap-3 py-2">
+<!-- <div class="row gap-3 py-2">
     <div class="justify-content-between align-items-center mb-3">
         <div class="d-flex gap-2" style="padding-left: 20px;">
 
@@ -299,7 +299,7 @@
             </mat-paginator>
         </div>
     </div>
-</div>
+</div> -->
 <div *ngIf="showPopup" class="overlay">
     <app-alertpopup *ngIf="showPopup" [message]="popupMessage" [submessage]="popupSubMessage" class="centered-popup"
         (close)="showPopup = false"></app-alertpopup>
@@ -307,4 +307,192 @@
 
 <div *ngIf="isLoading" class="loading-overlay">
     <img src="assets/Loading.gif" alt="Loading...">
+</div>
+<div class="row gap-3 py-2">
+    <div class="justify-content-between align-items-center mb-3">
+        <mat-card-title
+            style="color: #302CB3; font-size: 22px; font-family: Montserrat; font-weight: 600;padding-left: 12px;">
+            Batch Creation Process
+        </mat-card-title>
+        <div class="container py-2">
+            <div class="row g-3 align-items-end">
+
+                <div class="col-md-3">
+                    <label for="batchType" class="form-label text-muted small">Batch Type</label>
+                    <select id="batchType" class="form-select form-select-sm" [(ngModel)]="Batchtype">
+                        <option value="">Select Type</option>
+                        <option *ngFor="let bt of batchtype" [value]="bt.value">{{ bt.name }}</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label for="entity" class="form-label text-muted small">Batch Unit Name/Entity</label>
+                    <select id="entity" class="form-select form-select-sm" [(ngModel)]="entity">
+                        <option *ngFor="let et of entitylist" [value]="et.entity_Id">{{ et.entity_Name }}</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label for="batchCreationType" class="form-label text-muted small">Batch Creation Types</label>
+                    <select id="batchCreationType" class="form-select form-select-sm" [(ngModel)]="Batchcreate">
+                        <option *ngFor="let bc of batchcreate" [value]="bc.geN_iID">{{ bc.geN_vDescription }}</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label for="remarks" class="form-label text-muted small">Remarks</label>
+                    <input id="remarks" type="text" class="form-control form-control-sm" [(ngModel)]="remarks" />
+                </div>
+                <div class="col-md-3 d-flex gap-2 button-group">
+
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-search"
+                        (click)="search()" matTooltip="Search">
+                        <mat-icon>search</mat-icon>
+                    </button>
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-secondary"
+                        matTooltip="ExportToExcel" (click)="exportToExcel()">
+                        <mat-icon>download</mat-icon>
+                    </button>
+                    <!-- <button class="btn btn-sm d-flex align-items-center justify-content-center btn-upload"
+                        matTooltip="Upload">
+                        <mat-icon>cloud_upload</mat-icon>
+                    </button>
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-download"
+                        matTooltip="Download Template">
+                        <mat-icon>cloud_download</mat-icon>
+                    </button> -->
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-approve"
+                        (click)="Generate()" matTooltip="Generate">
+                        <mat-icon class="approve-icon">check_circle</mat-icon>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="card-body rounded-4 py-0" *ngIf="istablevisible">
+            <div class="example-container mat-elevation-z8">
+                <table mat-table [dataSource]="dataSource" matSort class="custom-table mat-elevation-z8">
+
+                    <ng-container matColumnDef="select">
+                        <mat-header-cell *matHeaderCellDef>
+                            <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="isAllSelected()"
+                                [indeterminate]="selection.hasValue() && !isAllSelected()">
+                            </mat-checkbox>
+                        </mat-header-cell>
+
+                        <mat-cell *matCellDef="let row">
+                            <mat-checkbox (click)="$event.stopPropagation()"
+                                (change)="$event ? selection.toggle(row) : null" [checked]="selection.isSelected(row)">
+                            </mat-checkbox>
+                        </mat-cell>
+                    </ng-container>
+
+
+                    <ng-container matColumnDef="Invoice_No">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>
+                            <div class="cell-center">
+                                Invoice No
+                            </div>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <div class="cell-center">
+                                <span class="offer-style">{{ element.Invoice_No }}</span>
+                            </div>
+                        </mat-cell>
+                    </ng-container>
+
+
+                    <ng-container matColumnDef="company_code">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>
+                            <div class="cell-center">
+                                Company Code
+                            </div>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <div class="cell-center">{{ element.Company_Code }}
+                            </div>
+                        </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="map_name">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>
+                            <div class="cell-center-wrap-normal">
+                                Map Name
+                            </div>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <div class="cell-center-wrap-normal">
+                                {{ element.Map_Name }}</div>
+                        </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="payperiod">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>
+                            <div class="cell-center-wrap-normal">
+                                Pay Period
+                            </div>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <div class="cell-center-wrap clickable">{{ element.Pay_Period
+                                }}
+                            </div>
+                        </mat-cell>
+                    </ng-container>
+
+
+                    <ng-container matColumnDef="Netamount">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>
+                            <div class="cell-center">
+                                Net Amount
+                            </div>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <div class="cell-center-wrap clickable">₹ {{
+                                element.Net_Amount }}
+                            </div>
+                        </mat-cell>
+                    </ng-container>
+
+
+                    <ng-container matColumnDef="Noofemployees">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>
+                            <div class="cell-center">
+                                No Of Employees
+                            </div>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <div class="cell-center-wrap clickable">{{ element.No_of_Employees
+                                }}
+                            </div>
+                        </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="remarks">
+                        <mat-header-cell *matHeaderCellDef>Remarks</mat-header-cell>
+                        <mat-cell *matCellDef="let element; let i = index">
+                            <input type="text" [(ngModel)]="element.Remarks" placeholder="Enter remarks"
+                                [ngClass]="{'invalid-remarks': element.showError}"
+                                (ngModelChange)="element.showError = false"
+                                style="width:120px; height:28px; border:1px solid #D9D9D9; border-radius:4px; padding:4px; font-size:12px;">
+                            <div *ngIf="element.showError" style="color:red; font-size:10px; margin-top:2px;">
+                                Remarks is required
+                            </div>
+                        </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="reject">
+                        <mat-header-cell *matHeaderCellDef>Action</mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <button (click)="ConfirmReject(element)"
+                                style="background:#E53935; color:white; border:none; padding:4px 10px; border-radius:4px; font-size:12px;">
+                                Reject
+                            </button>
+                        </mat-cell>
+                    </ng-container>
+                    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                    <mat-row *matRowDef="let row;let i = index;  columns: displayedColumns;"></mat-row>
+                </table>
+            </div>
+
+            <mat-paginator #holdPaginator class="mat-footer-paginator" [pageSizeOptions]="[5, 10, 25, 100]"
+                showFirstLastButtons stickyEnd>
+            </mat-paginator>
+        </div>
+    </div>
 </div>

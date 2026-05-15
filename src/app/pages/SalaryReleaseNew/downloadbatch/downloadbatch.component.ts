@@ -17,6 +17,9 @@ import { SessionStorageService } from '../../../Shared/SessionStorageService';
 import * as XLSX from 'xlsx';
 import * as FileSaver from 'file-saver';
 import { BatchcreationService } from '../../../Service/Service/SalaryRequestNew/batchcreation.service';
+import { MatCardModule } from "@angular/material/card";
+import { MatIcon, MatIconModule } from "@angular/material/icon";
+import { MatTooltipModule } from '@angular/material/tooltip';
 export const Pay_TOKEN = new InjectionToken<IBatchreation>('Pay_TOKEN');
 
 @Component({
@@ -24,7 +27,7 @@ export const Pay_TOKEN = new InjectionToken<IBatchreation>('Pay_TOKEN');
   standalone: true,
   imports: [CommonModule, MatTableModule, MatCheckboxModule, MatPaginatorModule,
     MatSelectModule, MatInputModule, MatFormFieldModule, ReactiveFormsModule, FormsModule,
-    AlertpopupComponent],
+    AlertpopupComponent, MatCardModule, MatIconModule, MatTooltipModule],
   templateUrl: './downloadbatch.component.html',
   styleUrl: './downloadbatch.component.css',
   providers: [
@@ -127,7 +130,7 @@ export class DownloadbatchComponent {
         const blob = response.body;
 
         // Get filename from backend header
-        let fileName = this.BatchId + '.rar'; 
+        let fileName = this.BatchId + '.rar';
 
         const contentDisposition = response.headers.get('content-disposition');
         if (contentDisposition) {

@@ -52,7 +52,8 @@ export interface IInvoiceRepository {
     BulkRejectCancelRequest(payload: any):Observable<APIResponse>;
    ProvisionalInvoiceInitiate(requestPayload: any): Observable<APIResponse> ;
    DownloadNetPaySummary(companyId,payperiodId):Observable<APIResponse>;
-   InvoiceRequestRevok(reqNo,invoiceType,userId):Observable<APIResponse>
+   InvoiceRequestRevok(reqNo,invoiceType,userId):Observable<APIResponse>;
+   InitialSearchQC(val): Observable<APIResponse>
     //DownloadInvoiceIRN(invoiceId: number): Observable<HttpResponse<Blob>>
     
    

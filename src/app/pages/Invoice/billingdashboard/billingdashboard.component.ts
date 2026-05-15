@@ -126,7 +126,7 @@ this.isLoading=true;
     this._invoiceService.InvoiceRequestRevok(this.selection.selected[0].req_No,this.selection.selected[0].invoiceType,this.userdetail.user_Id).subscribe({
       next:res=>{
         console.log(res.Data);
-        alert(res.Data.error_Messages);
+        alert(res.Data.error_Message);
         this.isLoading=false;
         this.selection.clear();
         this.BindInvoiceAllot();
