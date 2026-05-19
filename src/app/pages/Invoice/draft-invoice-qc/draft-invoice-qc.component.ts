@@ -70,9 +70,30 @@ ngOnInit(): void {
   }
 
 InvoiceQC(){
-  let selected=this.selection.selected;
+  const selectedList = this.dataSource.data
+  .filter(row => this.selection.isSelected(row))
+  .map(item => ({
+    Req_No: item.req_No,
+    Invoice_Number: item.invoice_Number
+  }));
+const request={
+  "invoiceQCModels":selectedList,
+  "CreatedBy":this.userdetail.user_Id
+}
+this.isLoading=true;
+ this._invoiceService.PostInvoiceQCdetail(request).subscribe({
+  next:res=>{
+    alert(res.Data.error_Message);    
+    this.InvoiceSearch(this.userdetail.user_Id);
+    this.isLoading=false;
+    this.selection.clear();
+    return;
 
-  console.log(selected);
+  },
+  error:err=>{
+this.isLoading=false;
+  }
+ })
 }
   toggleRow(event: any) {
 

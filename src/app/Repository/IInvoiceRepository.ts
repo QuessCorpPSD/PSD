@@ -55,6 +55,7 @@ export interface IInvoiceRepository {
    DownloadNetPaySummary(companyId,payperiodId):Observable<APIResponse>;
    InvoiceRequestRevok(reqNo,invoiceType,userId):Observable<APIResponse>;
    InitialSearchQC(val): Observable<APIResponse>
+    PostInvoiceQCdetail(val): Observable<APIResponse>;
     //DownloadInvoiceIRN(invoiceId: number): Observable<HttpResponse<Blob>>
     
    
