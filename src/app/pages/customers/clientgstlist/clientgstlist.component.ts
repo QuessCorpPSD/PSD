@@ -109,23 +109,23 @@ export class ClientgstlistComponent {
     // "State Code"
   ];
 
-  
+
   filterDisplayedColumns: string[] = [
-  "filteredit",
-  "filterclientGstId",
-  "filtercompany_Code",
-  "filtergroup_Name",
-  "filterstate_Name",
-  "filterclientInvoicingState_Name",
-  "filterinvoicingState_Name",
-  "filtergstTypeName",
-  "filtergstNumber",
-  "filterpanNumber",
-  "filtertanNumber",
-  "filterusername",
-  "filtercreatedOn",
-  "filtersapCustomerCode",
-  "filterinvoiceCategory",
+    "filteredit",
+    "filterclientGstId",
+    "filtercompany_Code",
+    "filtergroup_Name",
+    "filterstate_Name",
+    "filterclientInvoicingState_Name",
+    "filterinvoicingState_Name",
+    "filtergstTypeName",
+    "filtergstNumber",
+    "filterpanNumber",
+    "filtertanNumber",
+    "filterusername",
+    "filtercreatedOn",
+    "filtersapCustomerCode",
+    "filterinvoiceCategory",
   ];
 
   dataSource = new MatTableDataSource<any>([]);
@@ -182,33 +182,66 @@ export class ClientgstlistComponent {
       ],
     });
 
+    this.dataSource.filterPredicate = (data: any, filter: string): boolean => {
+
+      const searchTerms = JSON.parse(filter);
+
+      return Object.keys(searchTerms).every(key => {
+
+        const value = searchTerms[key];
+
+        if (!value) {
+          return true;
+        }
+
+        return data[key]
+          ?.toString()
+          .toLowerCase()
+          .includes(value);
+      });
+    };
   }
 
+  
+  filterValues: any = {
+    clientGstId: '',
+    company_Code: '',
+    group_Name: '',
+    state_Name: '',
+    clientInvoicingState_Name: '',
+    invoicingState_Name: '',
+    gstTypeName: '',
+    gstNumber: '',
+    panNumber: '',
+    tanNumber: '',
+    userName: '',
+    sapCustomerCode: '',
+    invoiceCategory: ''
+  };
+
   applyFilter(event: Event, column: string) {
-    const inputValue = (event.target as HTMLInputElement).value || '';
 
-    // Split comma-separated invoice numbers
-    const searchValues = inputValue
-      .split(',')
-      .map(v => v.trim().toLowerCase())
-      .filter(v => v);
+    const filterValue = (event.target as HTMLInputElement).value
+      .trim()
+      .toLowerCase();
 
-    this.dataSource.filterPredicate = (data: any, filter: string) => {
-      if (!searchValues.length) return true;
+    this.filterValues[column] = filterValue;
 
-      const cellValue = data[column]?.toString().toLowerCase() || '';
+    this.dataSource.filter = JSON.stringify(this.filterValues);
 
-      // Match ANY invoice number
-      return searchValues.some(val => cellValue.includes(val));
-    };
-
-    // Trigger filtering
-    this.dataSource.filter = searchValues.join(',');
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
   }
 
   clearFilter() {
-  this.dataSource.filter = '';
-}
+
+    Object.keys(this.filterValues).forEach(key => {
+      this.filterValues[key] = '';
+    });
+
+    this.dataSource.filter = JSON.stringify(this.filterValues);
+  }
 
   handleCompanyEvent(company: any) {
 
