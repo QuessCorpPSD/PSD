@@ -179,6 +179,10 @@ import { ReIssueProcessApproveComponent } from './pages/SalaryReleaseNew/re-issu
 import { ReIssueProcessReportComponent } from './pages/SalaryReleaseNew/re-issue-process-report/re-issue-process-report.component';
 import { BanknonvoicenavigationComponent } from './pages/banknonvoice/banknonvoicenavigation/banknonvoicenavigation.component';
 import { BankneftcultureComponent } from './pages/banknonvoice/bankneftculture/bankneftculture.component';
+import { FinanceholdreportComponent } from './pages/banknonvoice/financeholdreport/financeholdreport.component';
+import { BankconsolidatedreportComponent } from './pages/banknonvoice/bankconsolidatedreport/bankconsolidatedreport.component';
+import { DownloadbatchbanknonvoiceComponent } from './pages/banknonvoice/downloadbatchbanknonvoice/downloadbatchbanknonvoice.component';
+import { BonusaccumulatedreportnonvoiceComponent } from './pages/banknonvoice/bonusaccumulatedreportnonvoice/bonusaccumulatedreportnonvoice.component';
 
 
 
@@ -365,10 +369,10 @@ export const routes: Routes = [
         path: 'banknonvoicenavigation', component: BanknonvoicenavigationComponent,
         children: [
           { path: "bankneftculture", component: BankneftcultureComponent },
-          // { path: "inputaggregatorattendance", component: InputaggregatorattendanceComponent },
-          // { path: "leavemaster", component: LeavetypemasterComponent },
-          // { path: "leavemastermapping", component: LeavetypemastermappingComponent }
-          //  path:"inputaggregatorclient",component:InputaggregatorwithclientComponent
+          { path: "financeholdreport", component: FinanceholdreportComponent },
+          { path: "bankconsolidatedreport", component: BankconsolidatedreportComponent },
+          { path: "downloadbatch", component: DownloadbatchbanknonvoiceComponent },
+          { path: "bonusaccumulatedreport", component: BonusaccumulatedreportnonvoiceComponent }
         ]
       },
       {

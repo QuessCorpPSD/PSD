@@ -198,6 +198,7 @@
       align-items: center;
       text-align: center;
       height: 32px !important;
+      /* ensures consistent width for scrolling */
       white-space: nowrap;
   }
 
@@ -218,14 +219,8 @@
       white-space: nowrap;
   }
 
-  ::ng-deep .bankname {
-      display: flex;
-      justify-content: left;
-      align-items: left;
-      text-align: left;
 
-  }
-
+  /* ===== Row Styling ===== */
   ::ng-deep .mat-row {
       height: 32px !important;
   }
@@ -389,7 +384,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 10px 12px;
+      padding: 0 12px;
       font-size: 18px;
       color: #302cb3;
       font-weight: 600;
@@ -476,10 +471,3 @@
       font-size: 14px;
   }
 
-  ::ng-deep .action-wrapper {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 5px;
-      width: 100%;
-  }
