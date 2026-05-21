@@ -44,7 +44,7 @@ import { GroupnameComponent } from '../../groupname/groupname.component';
     GroupnameComponent],
   templateUrl: './vendorclientgst.component.html',
   styleUrl: './vendorclientgst.component.css',
-    providers: [
+  providers: [
     {
       provide: Pay_TOKEN,
       useClass: ClientGSTListService,
@@ -110,7 +110,53 @@ export class VendorclientgstComponent {
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
+  filterValues: any = {
+    vendorClientGstId: '',
+    company_Code: '',
+    group_Name: '',
+    state_Name: '',
+    clientInvoicingState_Name: '',
+    invoicingState_Name: '',
+    gstTypeName: '',
+    gstNumber: '',
+    panNumber: '',
+    tanNumber: '',
+    userName: '',
+    createdOn: '',
+    sapCustomerCode: '',
+    invoiceCategory: ''
+  };
 
+  filterColumns: string[] = [
+    //'filterDelete',
+    'filterEdit',
+
+    'filterVendorClientGstId',
+    'filterCompanyCode',
+    'filterGroupName',
+    'filterState',
+    'filterClientInvoicingState',
+    'filterQuessInvoicingState',
+    'filterGstType',
+    'filterGstNumber',
+    'filterPanNumber',
+    'filterTanNumber',
+    'filterCreatedBy',
+    'filterCreatedOn',
+    'filterSubCustomerCode',
+    'filterInvoiceCategory',
+
+    // 'filterTotalCount',
+    // 'filterCompanyId',
+    // 'filterStateId',
+    // 'filterInvoicingStateId',
+    // 'filterClientInvoicingStateId',
+    // 'filterGroupDetailId',
+    // 'filterRemarks',
+    // 'filterGstTypeId',
+    // 'filterInvoiceCategoryId',
+    // 'filterStateCode'
+  ];
   constructor(
     @Inject(Pay_TOKEN) private service: IClienGSTList,
     private fb: FormBuilder,
@@ -118,7 +164,29 @@ export class VendorclientgstComponent {
     private _sessionStoreage: SessionStorageService,
     private decry: EncryptionService,
   ) { }
+  applyFilter(event: Event, column: string) {
 
+    const filterValue = (event.target as HTMLInputElement).value;
+
+    this.filterValues[column] = filterValue;
+
+    this.dataSource.filter = JSON.stringify(this.filterValues);
+
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
+  }
+
+  clearFilter() {
+
+    Object.keys(this.filterValues).forEach(key => {
+      this.filterValues[key] = '';
+    });
+
+    this.dataSource.filter = '';
+
+    this.dataSource.filter = JSON.stringify(this.filterValues);
+  }
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
@@ -133,6 +201,8 @@ export class VendorclientgstComponent {
 
       this.onsearch();
       this.BindInvoiceCategory();
+
+
 
     }
     else {
@@ -159,7 +229,34 @@ export class VendorclientgstComponent {
         ]
       ],
     });
+    this.dataSource.filterPredicate = (data: any, filter: string): boolean => {
 
+      const searchTerms = JSON.parse(filter);
+
+      return Object.keys(searchTerms).every(key => {
+
+        const searchValue = searchTerms[key];
+
+        if (!searchValue) {
+          return true;
+        }
+
+        let dataValue = data[key];
+
+        if (dataValue === null || dataValue === undefined) {
+          dataValue = '';
+        }
+
+        if (typeof dataValue === 'boolean') {
+          dataValue = dataValue ? 'yes' : 'no';
+        }
+
+        return dataValue
+          .toString()
+          .toLowerCase()
+          .includes(searchValue.toString().toLowerCase());
+      });
+    };
   }
 
 
