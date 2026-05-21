@@ -19,6 +19,9 @@ export class MasterComponent implements  OnInit {
   menuCode:string='1';
   menuHideVisibility=false;
   userRole:any;
+  Process_category:string='';
+isinvoiceuser:boolean=false;
+ispayrolluser:boolean=false;
 constructor( private _sessionStoreage:SessionStorageService, 
   private tokenservice:TokenService ,
   private _encry:EncryptionService, private router: Router,){
@@ -42,14 +45,32 @@ constructor( private _sessionStoreage:SessionStorageService,
  
   ngOnInit(): void {
   const userdetail= this._sessionStoreage.getItem('UserProfile');
-  if(userdetail)
-  {
-  var user = JSON.parse(this._encry.decrypt(userdetail!)); 
-  this.userRole=this.getUserRole(user.role_Id);
+ if (userdetail) {
+
+  const user = JSON.parse(this._encry.decrypt(userdetail));
+
+  this.userRole = this.getUserRole(user.role_Id);
+
+  const processCategory = user.process_Category?.trim()?.charAt(0);
+
+  this.ispayrolluser = true;
+  this.isinvoiceuser = true;
+if(this.userRole!='admin')
+{
+  switch (processCategory) {
+
+    case 'P':
+      this.isinvoiceuser = false;
+      break;
+
+    case 'B':
+      this.ispayrolluser = false;
+      break;
   }
-  else{
-    // this.router.navigate(['/Login']);
-  }
+}
+  this.Process_category = user.process_Category;
+}
+  
   
     
   }
