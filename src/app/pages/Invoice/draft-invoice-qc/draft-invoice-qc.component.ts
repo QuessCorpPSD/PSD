@@ -70,7 +70,7 @@ ngOnInit(): void {
   }
 
 InvoiceQC(){
-  const selectedList = this.dataSource.data
+  const selectedList = this.dataSource.filteredData
   .filter(row => this.selection.isSelected(row))
   .map(item => ({
     Req_No: item.req_No,
