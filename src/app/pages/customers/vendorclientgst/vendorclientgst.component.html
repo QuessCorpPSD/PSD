@@ -1,6 +1,7 @@
 <div class="page-wrapper">
     <div class="scrollable-content">
-        <mat-card-title style="color: #302CB3; font-size: 22px; font-family: Montserrat; font-weight: 700;">Vendor Client GST
+        <mat-card-title style="color: #302CB3; font-size: 22px; font-family: Montserrat; font-weight: 700;">Vendor
+            Client GST
             List</mat-card-title>
         <div class="justify-content-between align-items-center mb-3">
             <div class="container py-3">
@@ -32,6 +33,225 @@
             <div class="table-container" style="top:30px;">
                 <div class="table-scroll-window">
                     <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+                        <!-- FILTER EDIT -->
+                        <ng-container matColumnDef="filterEdit">
+                            <mat-header-cell *matHeaderCellDef>
+                                <span style="cursor:pointer;color:blue;text-decoration:underline"
+                                    (click)="clearFilter()">
+                                    Clear
+                                </span>
+                            </mat-header-cell>
+                        </ng-container>
+
+                        <!-- FILTER DELETE -->
+                        <ng-container matColumnDef="filterDelete">
+                            <mat-header-cell *matHeaderCellDef>
+
+                            </mat-header-cell>
+                        </ng-container>
+
+                        <!-- FILTER VENDOR CLIENT GST ID -->
+                        <ng-container matColumnDef="filterVendorClientGstId">
+                            <mat-header-cell *matHeaderCellDef>
+                                <input matInput class="form-control form-control-sm"
+                                    [(ngModel)]="filterValues.vendorClientGstId"
+                                    (input)="applyFilter($event,'vendorClientGstId')">
+                            </mat-header-cell>
+                        </ng-container>
+
+                        <!-- FILTER COMPANY CODE -->
+                        <ng-container matColumnDef="filterCompanyCode">
+                            <mat-header-cell *matHeaderCellDef>
+                                <input matInput class="form-control form-control-sm"
+                                    [(ngModel)]="filterValues.company_Code"
+                                    (input)="applyFilter($event,'company_Code')">
+                            </mat-header-cell>
+                        </ng-container>
+
+                        <!-- FILTER GROUP NAME -->
+                        <ng-container matColumnDef="filterGroupName">
+                            <mat-header-cell *matHeaderCellDef>
+                                <input matInput class="form-control form-control-sm"
+                                    [(ngModel)]="filterValues.group_Name" (input)="applyFilter($event,'group_Name')">
+                            </mat-header-cell>
+                        </ng-container>
+
+                        <!-- FILTER STATE -->
+                        <ng-container matColumnDef="filterState">
+                            <mat-header-cell *matHeaderCellDef>
+                                <input matInput class="form-control form-control-sm"
+                                    [(ngModel)]="filterValues.state_Name" (input)="applyFilter($event,'state_Name')">
+                            </mat-header-cell>
+                        </ng-container>
+
+                        <!-- FILTER CLIENT INVOICING STATE -->
+                        <ng-container matColumnDef="filterClientInvoicingState">
+                            <mat-header-cell *matHeaderCellDef>
+                                <input matInput class="form-control form-control-sm"
+                                    [(ngModel)]="filterValues.clientInvoicingState_Name"
+                                    (input)="applyFilter($event,'clientInvoicingState_Name')">
+                            </mat-header-cell>
+                        </ng-container>
+
+                        <!-- FILTER QUESS INVOICING STATE -->
+                        <ng-container matColumnDef="filterQuessInvoicingState">
+                            <mat-header-cell *matHeaderCellDef>
+                                <input matInput class="form-control form-control-sm"
+                                    [(ngModel)]="filterValues.invoicingState_Name"
+                                    (input)="applyFilter($event,'invoicingState_Name')">
+                            </mat-header-cell>
+                        </ng-container>
+
+                        <!-- FILTER GST TYPE -->
+                        <ng-container matColumnDef="filterGstType">
+                            <mat-header-cell *matHeaderCellDef>
+                                <input matInput class="form-control form-control-sm"
+                                    [(ngModel)]="filterValues.gstTypeName" (input)="applyFilter($event,'gstTypeName')">
+                            </mat-header-cell>
+                        </ng-container>
+
+                        <!-- FILTER GST NUMBER -->
+                        <ng-container matColumnDef="filterGstNumber">
+                            <mat-header-cell *matHeaderCellDef>
+                                <input matInput class="form-control form-control-sm"
+                                    [(ngModel)]="filterValues.gstNumber" (input)="applyFilter($event,'gstNumber')">
+                            </mat-header-cell>
+                        </ng-container>
+
+                        <!-- FILTER PAN NUMBER -->
+                        <ng-container matColumnDef="filterPanNumber">
+                            <mat-header-cell *matHeaderCellDef>
+                                <input matInput class="form-control form-control-sm"
+                                    [(ngModel)]="filterValues.panNumber" (input)="applyFilter($event,'panNumber')">
+                            </mat-header-cell>
+                        </ng-container>
+
+                        <!-- FILTER TAN NUMBER -->
+                        <ng-container matColumnDef="filterTanNumber">
+                            <mat-header-cell *matHeaderCellDef>
+                                <input matInput class="form-control form-control-sm"
+                                    [(ngModel)]="filterValues.tanNumber" (input)="applyFilter($event,'tanNumber')">
+                            </mat-header-cell>
+                        </ng-container>
+
+                        <!-- FILTER CREATED BY -->
+                        <ng-container matColumnDef="filterCreatedBy">
+                            <mat-header-cell *matHeaderCellDef>
+                                <input matInput class="form-control form-control-sm" [(ngModel)]="filterValues.userName"
+                                    (input)="applyFilter($event,'userName')">
+                            </mat-header-cell>
+                        </ng-container>
+
+                        <!-- FILTER CREATED ON -->
+                        <ng-container matColumnDef="filterCreatedOn">
+                            <mat-header-cell *matHeaderCellDef>
+                                <!-- <input type="date" class="form-control form-control-sm"
+                                    [(ngModel)]="filterValues.createdOn" (input)="applyFilter($event,'createdOn')"> -->
+                            </mat-header-cell>
+                        </ng-container>
+
+                        <!-- FILTER SUB CUSTOMER CODE -->
+                        <ng-container matColumnDef="filterSubCustomerCode">
+                            <mat-header-cell *matHeaderCellDef>
+                                <input matInput class="form-control form-control-sm"
+                                    [(ngModel)]="filterValues.sapCustomerCode"
+                                    (input)="applyFilter($event,'sapCustomerCode')">
+                            </mat-header-cell>
+                        </ng-container>
+
+                        <!-- FILTER INVOICE CATEGORY -->
+                        <ng-container matColumnDef="filterInvoiceCategory">
+                            <mat-header-cell *matHeaderCellDef>
+                                <input matInput class="form-control form-control-sm"
+                                    [(ngModel)]="filterValues.invoiceCategory"
+                                    (input)="applyFilter($event,'invoiceCategory')">
+                            </mat-header-cell>
+                        </ng-container>
+
+                        <!-- FILTER TOTAL COUNT -->
+                        <ng-container matColumnDef="filterTotalCount">
+                            <mat-header-cell *matHeaderCellDef>
+                                <input matInput class="form-control form-control-sm"
+                                    [(ngModel)]="filterValues.totalCount" (input)="applyFilter($event,'totalCount')">
+                            </mat-header-cell>
+                        </ng-container>
+
+                        <!-- FILTER COMPANY ID -->
+                        <ng-container matColumnDef="filterCompanyId">
+                            <mat-header-cell *matHeaderCellDef>
+                                <input matInput class="form-control form-control-sm"
+                                    [(ngModel)]="filterValues.companyId" (input)="applyFilter($event,'companyId')">
+                            </mat-header-cell>
+                        </ng-container>
+
+                        <!-- FILTER STATE ID -->
+                        <ng-container matColumnDef="filterStateId">
+                            <mat-header-cell *matHeaderCellDef>
+                                <input matInput class="form-control form-control-sm" [(ngModel)]="filterValues.stateId"
+                                    (input)="applyFilter($event,'stateId')">
+                            </mat-header-cell>
+                        </ng-container>
+
+                        <!-- FILTER INVOICING STATE ID -->
+                        <ng-container matColumnDef="filterInvoicingStateId">
+                            <mat-header-cell *matHeaderCellDef>
+                                <input matInput class="form-control form-control-sm"
+                                    [(ngModel)]="filterValues.invoicingStateId"
+                                    (input)="applyFilter($event,'invoicingStateId')">
+                            </mat-header-cell>
+                        </ng-container>
+
+                        <!-- FILTER CLIENT INVOICING STATE ID -->
+                        <ng-container matColumnDef="filterClientInvoicingStateId">
+                            <mat-header-cell *matHeaderCellDef>
+                                <input matInput class="form-control form-control-sm"
+                                    [(ngModel)]="filterValues.clientInvoicingStateId"
+                                    (input)="applyFilter($event,'clientInvoicingStateId')">
+                            </mat-header-cell>
+                        </ng-container>
+
+                        <!-- FILTER GROUP DETAIL ID -->
+                        <ng-container matColumnDef="filterGroupDetailId">
+                            <mat-header-cell *matHeaderCellDef>
+                                <input matInput class="form-control form-control-sm"
+                                    [(ngModel)]="filterValues.group_Detail_Id"
+                                    (input)="applyFilter($event,'group_Detail_Id')">
+                            </mat-header-cell>
+                        </ng-container>
+
+                        <!-- FILTER REMARKS -->
+                        <ng-container matColumnDef="filterRemarks">
+                            <mat-header-cell *matHeaderCellDef>
+                                <input matInput class="form-control form-control-sm" [(ngModel)]="filterValues.remarks"
+                                    (input)="applyFilter($event,'remarks')">
+                            </mat-header-cell>
+                        </ng-container>
+
+                        <!-- FILTER GST TYPE ID -->
+                        <ng-container matColumnDef="filterGstTypeId">
+                            <mat-header-cell *matHeaderCellDef>
+                                <input matInput class="form-control form-control-sm"
+                                    [(ngModel)]="filterValues.gstTypeId" (input)="applyFilter($event,'gstTypeId')">
+                            </mat-header-cell>
+                        </ng-container>
+
+                        <!-- FILTER INVOICE CATEGORY ID -->
+                        <ng-container matColumnDef="filterInvoiceCategoryId">
+                            <mat-header-cell *matHeaderCellDef>
+                                <input matInput class="form-control form-control-sm"
+                                    [(ngModel)]="filterValues.invoiceCategoryId"
+                                    (input)="applyFilter($event,'invoiceCategoryId')">
+                            </mat-header-cell>
+                        </ng-container>
+
+                        <!-- FILTER STATE CODE -->
+                        <ng-container matColumnDef="filterStateCode">
+                            <mat-header-cell *matHeaderCellDef>
+                                <input matInput class="form-control form-control-sm"
+                                    [(ngModel)]="filterValues.stateCode" (input)="applyFilter($event,'stateCode')">
+                            </mat-header-cell>
+                        </ng-container>
+
 
 
                         <ng-container matColumnDef="Edit">
@@ -234,6 +454,8 @@
                         </ng-container>
 
                         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                        <mat-header-row *matHeaderRowDef="filterColumns"></mat-header-row>
+
                         <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
 
                     </table>
