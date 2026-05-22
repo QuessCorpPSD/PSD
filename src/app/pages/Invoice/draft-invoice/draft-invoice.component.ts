@@ -246,17 +246,19 @@ export class DraftInvoiceComponent implements OnInit {
           Array.isArray(this.UploadedResponse?.Data) &&
           this.UploadedResponse.Data.length > 0
         ) {
-          const errorData = this.UploadedResponse.Data;
+          const parsedData = this.UploadedResponse.Data.flatMap((item: string) =>
+              JSON.parse(item)
+            );
 
           const worksheet: XLSX.WorkSheet =
-            XLSX.utils.json_to_sheet(errorData);
+            XLSX.utils.json_to_sheet(parsedData);
 
           const workbook: XLSX.WorkBook = {
-            Sheets: { ErrorMessages: worksheet },
-            SheetNames: ['ErrorMessages']
-          };
+              Sheets: { ProvisionalInvoiceLog: worksheet },
+              SheetNames: ['ProvisionalInvoiceLog']
+            };
 
-          XLSX.writeFile(workbook, 'ProvisionalInvoiceLog.xlsx');
+            XLSX.writeFile(workbook, 'ProvisionalInvoiceLog.xlsx');
           this.isdisabled = false;
           this.InvoiceSearch();
           this.selection.clear();
