@@ -1,7 +1,8 @@
 <div class="page-wrapper">
 
     <div class="scrollable-content">
-        <mat-card-title style="color: #302CB3; font-size: 22px; font-family: Montserrat; font-weight: 700;">Vendor Cilent
+        <mat-card-title style="color: #302CB3; font-size: 22px; font-family: Montserrat; font-weight: 700;">Vendor
+            Cilent
             Address List</mat-card-title>
 
         <div class="container py-2">
@@ -33,7 +34,244 @@
             <div class="table-scroll">
 
                 <mat-table [dataSource]="dataSource" matSort class="custom-table mat-elevation-z8 auto-fit-table">
+                    <!-- Filter Action -->
+                    <ng-container matColumnDef="filterAction">
+                        <mat-header-cell *matHeaderCellDef>
+                            <span style="cursor:pointer;color:blue;text-decoration:underline" (click)="clearFilter()">
+                                Clear
+                            </span>
+                        </mat-header-cell>
+                    </ng-container>
 
+                    <!-- VendorClientAddressId -->
+                    <ng-container matColumnDef="filterVendorClientAddressId">
+                        <mat-header-cell *matHeaderCellDef>
+                            <input matInput class="form-control form-control-sm"
+                                [(ngModel)]="filterValues.vendorClientAddressId"
+                                (input)="applyFilter($event, 'vendorClientAddressId')">
+                        </mat-header-cell>
+                    </ng-container>
+
+                    <!-- Company Code -->
+                    <ng-container matColumnDef="filterCompanycode">
+                        <mat-header-cell *matHeaderCellDef>
+                            <input matInput class="form-control form-control-sm" [(ngModel)]="filterValues.company_Code"
+                                (input)="applyFilter($event, 'company_Code')">
+                        </mat-header-cell>
+                    </ng-container>
+
+                    <!-- State -->
+                    <ng-container matColumnDef="filterState">
+                        <mat-header-cell *matHeaderCellDef>
+                            <input matInput class="form-control form-control-sm" [(ngModel)]="filterValues.state_Name"
+                                (input)="applyFilter($event, 'state_Name')">
+                        </mat-header-cell>
+                    </ng-container>
+
+                    <!-- Map Name -->
+                    <ng-container matColumnDef="filterMapName">
+                        <mat-header-cell *matHeaderCellDef>
+                            <input matInput class="form-control form-control-sm" [(ngModel)]="filterValues.map_Name"
+                                (input)="applyFilter($event, 'map_Name')">
+                        </mat-header-cell>
+                    </ng-container>
+
+                    <!-- SAC Code -->
+                    <ng-container matColumnDef="filterSACCode">
+                        <mat-header-cell *matHeaderCellDef>
+                            <input matInput class="form-control form-control-sm" [(ngModel)]="filterValues.saC_Code"
+                                (input)="applyFilter($event, 'saC_Code')">
+                        </mat-header-cell>
+                    </ng-container>
+
+                    <!-- Billing Client Name -->
+                    <ng-container matColumnDef="filterBilling_Client_Name">
+                        <mat-header-cell *matHeaderCellDef>
+                            <input matInput class="form-control form-control-sm"
+                                [(ngModel)]="filterValues.billingClientName"
+                                (input)="applyFilter($event, 'billingClientName')">
+                        </mat-header-cell>
+                    </ng-container>
+
+                    <!-- Billing Address -->
+                    <ng-container matColumnDef="filterbillingaddress">
+                        <mat-header-cell *matHeaderCellDef>
+                            <input matInput class="form-control form-control-sm"
+                                [(ngModel)]="filterValues.billingAddress"
+                                (input)="applyFilter($event, 'billingAddress')">
+                        </mat-header-cell>
+                    </ng-container>
+
+                    <!-- Billing State -->
+                    <ng-container matColumnDef="filterbillingstate">
+                        <mat-header-cell *matHeaderCellDef>
+                            <input matInput class="form-control form-control-sm"
+                                [(ngModel)]="filterValues.billingStateName"
+                                (input)="applyFilter($event, 'billingStateName')">
+                        </mat-header-cell>
+                    </ng-container>
+
+                    <!-- Shipping Same As Billing -->
+                    <ng-container matColumnDef="filterShippingaddresssameasbilling">
+                        <mat-header-cell *matHeaderCellDef>
+                            <input matInput class="form-control form-control-sm"
+                                [(ngModel)]="filterValues.isShippingAddressSameAsBilling"
+                                (input)="applyFilter($event, 'isShippingAddressSameAsBilling')">
+                        </mat-header-cell>
+                    </ng-container>
+
+                    <!-- Shipping Client Name -->
+                    <ng-container matColumnDef="filterShippingclientname">
+                        <mat-header-cell *matHeaderCellDef>
+                            <input matInput class="form-control form-control-sm"
+                                [(ngModel)]="filterValues.shippingClientName"
+                                (input)="applyFilter($event, 'shippingClientName')">
+                        </mat-header-cell>
+                    </ng-container>
+
+                    <!-- Shipping Address -->
+                    <ng-container matColumnDef="filterShippingaddress">
+                        <mat-header-cell *matHeaderCellDef>
+                            <input matInput class="form-control form-control-sm"
+                                [(ngModel)]="filterValues.shippingAddress"
+                                (input)="applyFilter($event, 'shippingAddress')">
+                        </mat-header-cell>
+                    </ng-container>
+
+                    <!-- Shipping State -->
+                    <ng-container matColumnDef="filterShippingstate">
+                        <mat-header-cell *matHeaderCellDef>
+                            <input matInput class="form-control form-control-sm"
+                                [(ngModel)]="filterValues.shippingStateName"
+                                (input)="applyFilter($event, 'shippingStateName')">
+                        </mat-header-cell>
+                    </ng-container>
+
+                    <!-- Effective Date -->
+                    <ng-container matColumnDef="filterEffectivedate">
+                        <mat-header-cell *matHeaderCellDef>
+                            <!-- <input type="date" class="form-control form-control-sm"
+                                [(ngModel)]="filterValues.effectiveDate" (input)="applyFilter($event, 'effectiveDate')"> -->
+                        </mat-header-cell>
+                    </ng-container>
+
+                    <!-- SEZ Applicable -->
+                    <ng-container matColumnDef="filterSezApplicable">
+                        <mat-header-cell *matHeaderCellDef>
+                            <input matInput class="form-control form-control-sm"
+                                [(ngModel)]="filterValues.seZ_Applicable"
+                                (input)="applyFilter($event, 'seZ_Applicable')">
+                        </mat-header-cell>
+                    </ng-container>
+
+                    <!-- SEZ Expiry -->
+                    <ng-container matColumnDef="filterSezExpiryDate">
+                        <mat-header-cell *matHeaderCellDef>
+                            <!-- <input type="date" class="form-control form-control-sm"
+                                [(ngModel)]="filterValues.seZ_ExpiryDate"
+                                (input)="applyFilter($event, 'seZ_ExpiryDate')"> -->
+                        </mat-header-cell>
+                    </ng-container>
+
+                    <!-- LUT Number -->
+                    <ng-container matColumnDef="filterLutNumber">
+                        <mat-header-cell *matHeaderCellDef>
+                            <input matInput class="form-control form-control-sm" [(ngModel)]="filterValues.luT_Number"
+                                (input)="applyFilter($event, 'luT_Number')">
+                        </mat-header-cell>
+                    </ng-container>
+
+                    <!-- LUT Date -->
+                    <ng-container matColumnDef="filterLutDate">
+                        <mat-header-cell *matHeaderCellDef>
+                            <!-- <input type="date" class="form-control form-control-sm" [(ngModel)]="filterValues.luT_Date"
+                                (input)="applyFilter($event, 'luT_Date')"> -->
+                        </mat-header-cell>
+                    </ng-container>
+
+                    <!-- LUT Expiry -->
+                    <ng-container matColumnDef="filterLutExpiryDate">
+                        <mat-header-cell *matHeaderCellDef>
+                            <!-- <input type="date" class="form-control form-control-sm"
+                                [(ngModel)]="filterValues.luT_ExpiryDate"
+                                (input)="applyFilter($event, 'luT_ExpiryDate')"> -->
+                        </mat-header-cell>
+                    </ng-container>
+
+                    <!-- Vendor Code -->
+                    <ng-container matColumnDef="filterVendorCode">
+                        <mat-header-cell *matHeaderCellDef>
+                            <input matInput class="form-control form-control-sm" [(ngModel)]="filterValues.vendorCode"
+                                (input)="applyFilter($event, 'vendorCode')">
+                        </mat-header-cell>
+                    </ng-container>
+
+                    <!-- GST Number -->
+                    <ng-container matColumnDef="filtergstnumber">
+                        <mat-header-cell *matHeaderCellDef>
+                            <input matInput class="form-control form-control-sm" [(ngModel)]="filterValues.gstNumber"
+                                (input)="applyFilter($event, 'gstNumber')">
+                        </mat-header-cell>
+                    </ng-container>
+
+                    <!-- Billing Location -->
+                    <ng-container matColumnDef="filterBillingLocation">
+                        <mat-header-cell *matHeaderCellDef>
+                            <input matInput class="form-control form-control-sm" [(ngModel)]="filterValues.city_Name"
+                                (input)="applyFilter($event, 'city_Name')">
+                        </mat-header-cell>
+                    </ng-container>
+
+                    <!-- Shipping Location -->
+                    <ng-container matColumnDef="filterShippingLocation">
+                        <mat-header-cell *matHeaderCellDef>
+                            <input matInput class="form-control form-control-sm"
+                                [(ngModel)]="filterValues.shippingCity_Name"
+                                (input)="applyFilter($event, 'shippingCity_Name')">
+                        </mat-header-cell>
+                    </ng-container>
+
+                    <!-- Billing PinCode -->
+                    <ng-container matColumnDef="filterBillingPincode">
+                        <mat-header-cell *matHeaderCellDef>
+                            <input matInput class="form-control form-control-sm"
+                                [(ngModel)]="filterValues.billingPinCode"
+                                (input)="applyFilter($event, 'billingPinCode')">
+                        </mat-header-cell>
+                    </ng-container>
+
+                    <!-- Shipping PinCode -->
+                    <ng-container matColumnDef="filterShippingPincode">
+                        <mat-header-cell *matHeaderCellDef>
+                            <input matInput class="form-control form-control-sm"
+                                [(ngModel)]="filterValues.shippingPinCode"
+                                (input)="applyFilter($event, 'shippingPinCode')">
+                        </mat-header-cell>
+                    </ng-container>
+
+                    <!-- SAP Bill To -->
+                    <ng-container matColumnDef="filterSapBillTo">
+                        <mat-header-cell *matHeaderCellDef>
+                            <input matInput class="form-control form-control-sm" [(ngModel)]="filterValues.sapBillTo"
+                                (input)="applyFilter($event, 'sapBillTo')">
+                        </mat-header-cell>
+                    </ng-container>
+
+                    <!-- SAP Ship To -->
+                    <ng-container matColumnDef="filterSapShipTo">
+                        <mat-header-cell *matHeaderCellDef>
+                            <input matInput class="form-control form-control-sm" [(ngModel)]="filterValues.sapShipTo"
+                                (input)="applyFilter($event, 'sapShipTo')">
+                        </mat-header-cell>
+                    </ng-container>
+
+                    <!-- Address Code -->
+                    <ng-container matColumnDef="filterAddressCode">
+                        <mat-header-cell *matHeaderCellDef>
+                            <input matInput class="form-control form-control-sm" [(ngModel)]="filterValues.addressCode"
+                                (input)="applyFilter($event, 'addressCode')">
+                        </mat-header-cell>
+                    </ng-container>
                     <!-- Action -->
                     <ng-container matColumnDef="Action">
                         <mat-header-cell *matHeaderCellDef><strong>Action</strong></mat-header-cell>
@@ -45,7 +283,7 @@
 
                                 <!-- <button class="btn btn-sm" matTooltip="Delete" (click)="deleteClientAddress(row)">
                                     <mat-icon>delete</mat-icon>
-                                </button> -->   
+                                </button> -->
                             </div>
                         </mat-cell>
                     </ng-container>
@@ -230,6 +468,8 @@
                     </ng-container>
 
                     <mat-header-row *matHeaderRowDef="uploadDisplayedColumns"></mat-header-row>
+                    <mat-header-row *matHeaderRowDef="filterColumns" class="filter-row">
+                    </mat-header-row>
                     <mat-row *matRowDef="let row; columns: uploadDisplayedColumns"></mat-row>
 
                 </mat-table>
