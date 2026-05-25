@@ -16,7 +16,8 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { EncryptionService } from '../../../Shared/encryption.service';
 import { SessionStorageService } from '../../../Shared/SessionStorageService';
 export const Invoice_TOKEN = new InjectionToken<IInvoiceRepository>('Invoice_TOKEN');
-
+import * as XLSX from 'xlsx';
+import * as FileSaver from 'file-saver';
 @Component({
   selector: 'app-draft-invoice-qc',
   imports: [CommonModule, MatFormFieldModule,
@@ -68,7 +69,35 @@ ngOnInit(): void {
 
     this.dataSource.filter = searchText.trim().toLowerCase();
   }
+Export(){
+   if (this.selection.selected.length === 0) {
+    alert('No rows selected');
+    return;
+  }
+    const selectedList = this.dataSource.filteredData
+    .filter(row => this.selection.isSelected(row))
+    .map(item => ({
+      "Request No": item.req_No,
+      "Invoice Number": item.invoice_Number,
+      "Input NO": item.input_No,
+      "Lot No": item.lotNo,
+      "Company Code": item.company_Code,
+      "employee_Head_Count": item.employee_Head_Count,
+      "Net_CTC": item.net_CTC,
+      "Netpay": item.netPay,
+      "Service Charge Amount": item.serviceChargeAmount
+    }));
+  const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(selectedList);
 
+  // Create workbook
+  const workbook: XLSX.WorkBook = {
+    Sheets: { 'SelectedInvoices': worksheet },
+    SheetNames: ['SelectedInvoices']
+  };
+
+  // Export Excel file
+  XLSX.writeFile(workbook, 'Selected_Invoices.xlsx');
+}
 InvoiceQC(){
   const selectedList = this.dataSource.filteredData
   .filter(row => this.selection.isSelected(row))
