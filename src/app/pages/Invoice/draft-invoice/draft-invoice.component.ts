@@ -192,7 +192,9 @@ export class DraftInvoiceComponent implements OnInit {
     else if (this.selection.selected[0].invoiceType === 'Vendor'){
       this.VendorInvoiceInitiate();
     }
-
+ else if (this.selection.selected[0].invoiceType === 'MiscInvoice'){
+      this.MiscInvoiceInvoiceInitiate();
+    }
   }
 
   InvoiceInitiateClick() {
@@ -646,5 +648,93 @@ export class DraftInvoiceComponent implements OnInit {
 
   keepChatOpen(reqNo: string): void {
     clearTimeout(this.hoverTimers[reqNo]);
+  }
+
+  MiscInvoiceInvoiceInitiate(){
+    //this.isLoading = true;
+    console.log('Misc');
+    const selectedRows = this.selection.selected;
+    console.log('Selected', selectedRows);
+
+    if (selectedRows.length === 0) {
+      alert("Please select at least one row");
+      this.isLoading = false;
+      return;
+    }
+
+    const allResponses: any[] = [];
+    const InitiateParams = Array.from(
+      new Set(
+        selectedRows
+          .map(r =>
+            JSON.stringify({
+              UserId: String(this.userdetail.user_Id),
+              Created_Mode:"Upload",
+              Company_Id: String(r.company_Id),
+              Company_Code: String(r.company_Code),
+              Pay_Period_Id: String(r.pay_Period_Id),
+              Pay_Period: String(r.pay_Period),
+              Input_No: String(r.input_No),
+              Cost_Center_Mapping_Id: String(r.map_Name_Id),
+              Map_Name: String(r.map_name),
+              Group_Detail_Id: String(r.group_Detail_Id),
+              Group_Name: String(r.group_Name),
+              InvoiceType_Id: '1',
+              Amount: String(r.net_CTC),
+              NetPay: String(r.netPay),
+              State_Name: String(r.state_name),
+              Service_Charge_Amount: String(r.serviceChargeAmount)
+            })
+          )
+      )
+    ).map(item => JSON.parse(item));
+
+    const requestPayload = {
+      request: InitiateParams,
+      CreatedBy: this.userdetail.user_Id
+    }
+
+    console.log("Sending API for row:", requestPayload);
+
+    this._invoiceService.MiscInvoiceInitiate(requestPayload).subscribe({
+      next: res => {
+        if (!res.Data) {
+          alert("No Data Returned");
+          this.isLoading = false;
+          return;
+        }
+        console.log('result', res.Data);
+        this.UploadedResponse = res;
+        if (
+          Array.isArray(this.UploadedResponse?.Data) &&
+          this.UploadedResponse.Data.length > 0
+        ) {
+          const errorData = this.UploadedResponse.Data;
+
+          const worksheet: XLSX.WorkSheet =
+            XLSX.utils.json_to_sheet(errorData);
+
+          const workbook: XLSX.WorkBook = {
+            Sheets: { ErrorMessages: worksheet },
+            SheetNames: ['ErrorMessages']
+          };
+
+          XLSX.writeFile(workbook, 'ProvisionalInvoiceLog.xlsx');
+          this.isdisabled = false;
+          this.InvoiceSearch();
+          this.selection.clear();
+          this.selection = new SelectionModel<any>(true, []);
+          this.isLoading = false;
+          this.dialogRef.close();
+          this.remarks = '';
+          this.selectedTemplate = '';
+          this.isLoading = false;
+        }
+        else {
+          alert('Error while processing response.');
+          this.isLoading = false;
+        }
+      },
+    });
   }
 }
