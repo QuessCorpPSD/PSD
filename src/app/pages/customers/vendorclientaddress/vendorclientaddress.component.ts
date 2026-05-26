@@ -37,7 +37,7 @@ export const Pay_TOKEN = new InjectionToken<IClientaddress>('Pay_TOKEN');
 })
 export class VendorclientaddressComponent {
 
-Clientaddress: any;
+  Clientaddress: any;
   userdetail: any;
   clientaddress!: FormGroup;
   clientaddressEdit!: FormGroup;
@@ -104,7 +104,92 @@ Clientaddress: any;
   showClientPopup = false;
   sameAsBilling = false;
 
+  filterColumns: string[] = [
+    'filterAction',
+    'filterVendorClientAddressId',
+    'filterCompanycode',
+    'filterState',
+    'filterMapName',
+    'filterSACCode',
+    'filterBilling_Client_Name',
+    'filterbillingaddress',
+    'filterbillingstate',
+    'filterShippingaddresssameasbilling',
+    'filterShippingclientname',
+    'filterShippingaddress',
+    'filterShippingstate',
+    'filterEffectivedate',
+    'filterSezApplicable',
+    'filterSezExpiryDate',
+    'filterLutNumber',
+    'filterLutDate',
+    'filterLutExpiryDate',
+    'filterVendorCode',
+    'filtergstnumber',
+    'filterBillingLocation',
+    'filterShippingLocation',
+    'filterBillingPincode',
+    'filterShippingPincode',
+    'filterSapBillTo',
+    'filterSapShipTo',
+    'filterAddressCode'
+  ];
 
+  filterValues: any = {
+    vendorClientAddressId: '',
+    company_Code: '',
+    state_Name: '',
+    map_Name: '',
+    saC_Code: '',
+    billingClientName: '',
+    billingAddress: '',
+    billingStateName: '',
+    isShippingAddressSameAsBilling: '',
+    shippingClientName: '',
+    shippingAddress: '',
+    shippingStateName: '',
+    effectiveDate: '',
+    seZ_Applicable: '',
+    seZ_ExpiryDate: '',
+    luT_Number: '',
+    luT_Date: '',
+    luT_ExpiryDate: '',
+    vendorCode: '',
+    gstNumber: '',
+    city_Name: '',
+    shippingCity_Name: '',
+    billingLocationId: '',
+    shippingLocationId: '',
+    billingPinCode: '',
+    shippingPinCode: '',
+    sapBillTo: '',
+    sapShipTo: '',
+    addressCode: ''
+  };
+
+  applyFilter(event: Event, column: string) {
+
+    const filterValue = (event.target as HTMLInputElement).value;
+
+    this.filterValues[column] = filterValue;
+
+    this.dataSource.filter = JSON.stringify(this.filterValues);
+
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
+  }
+
+  clearFilter() {
+
+    Object.keys(this.filterValues).forEach(key => {
+      this.filterValues[key] = '';
+    });
+
+    this.dataSource.filter = '';
+
+    this.dataSource.filter = JSON.stringify(this.filterValues);
+  }
   AddPOOpen() {
     this.isEditMode = false;
     this.clientaddress.reset();
@@ -449,6 +534,34 @@ Clientaddress: any;
             'AddressCode'];
 
           this.isLoading = false;
+          this.dataSource.filterPredicate = (data: any, filter: string): boolean => {
+
+            const searchTerms = JSON.parse(filter);
+
+            return Object.keys(searchTerms).every(key => {
+
+              const searchValue = searchTerms[key];
+
+              if (!searchValue) {
+                return true;
+              }
+
+              let dataValue = data[key];
+
+              if (dataValue === null || dataValue === undefined) {
+                dataValue = '';
+              }
+
+              if (typeof dataValue === 'boolean') {
+                dataValue = dataValue ? 'yes' : 'no';
+              }
+
+              return dataValue
+                .toString()
+                .toLowerCase()
+                .includes(searchValue.toString().toLowerCase());
+            });
+          };
 
         } else {
           this.isLoading = false;
