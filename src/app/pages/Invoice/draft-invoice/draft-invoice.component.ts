@@ -73,8 +73,8 @@ export class DraftInvoiceComponent implements OnInit {
   TemplateOptions = [
     { value: 'Proforma', Text: 'Draft' },
     { value: 'Provisional', Text: 'Provisional' },
-    { value: 'Vendor', Text: 'Vendor' }
-
+    { value: 'Vendor', Text: 'Vendor' },
+    { value: 'MiscInvoice', Text: 'MiscInvoice' }
   ];
   //@ViewChild(PayPeriod) PayPeriodComponent!: Payperiodclass;
   displayColumns = ['action', 'download', 'serial_No', 'invoiceType', 'Req_No', 'invoice_remarks', 'company_Code', 'map_name', 'net_CTC', 'netPay', 'lotNo', 'input_No', 'pO_Number', 'employee_Head_Count', 'service_Charge', 'serviceChargeAmount', 'service_Charge_Master', 'service_Charge_Type', 'bgvbl', 'astfee', 'discT1', 'discT2', 'idcard', 'email', 'regfee', 'trnfee', 'ggdbt', 'ppekit', 'vmsfee', 'edufee', 'ntpry', 'renmac', 'draded', 'othdd', 'mbapp', 'calcrg', 'calrt', 'narration', 'eapct', 'hosac']
@@ -126,6 +126,9 @@ export class DraftInvoiceComponent implements OnInit {
 
         case 'Vendor':
           templateMatch = data.invoiceType == 'Vendor';
+          break;
+          case 'MiscInvoice':
+          templateMatch = data.invoiceType == 'MiscInvoice';
           break;
       }
 
@@ -681,11 +684,12 @@ export class DraftInvoiceComponent implements OnInit {
               Map_Name: String(r.map_name),
               Group_Detail_Id: String(r.group_Detail_Id),
               Group_Name: String(r.group_Name),
-              InvoiceType_Id: '1',
+              Invoice_Type_Id: String(r.invoiceType_Id),
               Amount: String(r.net_CTC),
               NetPay: String(r.netPay),
               State_Name: String(r.state_name),
-              Service_Charge_Amount: String(r.serviceChargeAmount)
+              Service_Charge_Amount: String(r.serviceChargeAmount),
+              Req_No: String(r.req_No)
             })
           )
       )
