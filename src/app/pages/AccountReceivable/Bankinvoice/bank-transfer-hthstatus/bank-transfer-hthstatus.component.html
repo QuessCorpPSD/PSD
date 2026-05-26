@@ -1,0 +1,260 @@
+<div class="page-wrapper">
+    <div class="scrollable-content">
+        <mat-card-title class="main-header">
+            Bank Transfer HTH Status
+        </mat-card-title>
+        <div class="container py-2">
+            <div class="row g-3 align-items-end">
+                <div class="col-md-3">
+                    <label class="form-label">Start Date: <span class="text-danger">*</span></label>
+                    <input type="date" class="form-control" [(ngModel)]="startDate" />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">End Date: <span class="text-danger">*</span></label>
+                    <input type="date" class="form-control" [(ngModel)]="endDate" />
+                </div>
+                <div class="col-md-2 d-flex gap-2">
+
+                    <!-- SEARCH BUTTON -->
+
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-search"
+                        matTooltip="Search" (click)="onSearch()">
+
+                        <mat-icon>search</mat-icon>
+
+                    </button>
+
+                    <!-- EXPORT BUTTON -->
+
+                    <button class="btn btn-secondary btn-sm d-flex align-items-center justify-content-center"
+                        matTooltip="Export To Excel" (click)="exportToExcel()">
+
+                        <mat-icon>download</mat-icon>
+                    </button>
+
+                </div>
+            </div>
+            <div class="d-flex align-items-center justify-content-end" style="padding-top: 10px; padding-right: 40px;"
+                *ngIf="showTable">
+                <!-- Search Box -->
+                <div style="display: inline-flex; align-items: center;
+                   border-radius: 10px;
+               border: 1px solid #7E7E7E;
+               width: 260px;
+               height: 30px;
+               background-color: white;
+               padding: 0 10px;">
+                    <i style="margin-right: 6px; display: flex; align-items: center;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
+                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                d="M8.30883 9.01596C7.539 9.63177 6.5625 10 5.5 10C3.01472 10 1 7.98528 1 5.5C1 3.01472 3.01472 1 5.5 1C7.98528 1 10 3.01472 10 5.5C10 6.56251 9.63176.53901 9.01594 8.30885L10.8535 10.1465C11.0488 10.3417 11.0488 10.6583 10.8535 10.8536C10.6583 11.0488 10.3417 11.0488 10.1464 10.8536L8.30883 9.01596ZM2 5.5C2 3.567 3.567 2 5.5 2C7.433 2 9 3.567 9 5.5C9 6.44299 8.62707 7.29888 8.02066 7.92823C8.00355 7.94139 7.98711 7.95579 7.97144 7.97146C7.95578 7.98712 7.94137 8.00357 7.92822 8.02067C7.29887 8.62708 6.44299 9 5.5 9C3.567 9 2 7.433 2 5.5Z"
+                                fill="#7E7E7E" />
+                        </svg>
+                    </i>
+                    <input type="text" [(ngModel)]="searchText" (keyup)="applyFilters()" placeholder="Search" style="border: none; outline: none; width: 100%;
+                   font-size: 12px; background-color: transparent;" />
+                </div>
+            </div>
+
+            <div class="table-container" style="top:30px;" *ngIf="showTable">
+                <div class="table-scroll-window">
+                    <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+
+                        <!-- SNo -->
+                        <ng-container matColumnDef="sno">
+                            <mat-header-cell *matHeaderCellDef>SNo</mat-header-cell>
+                            <mat-cell *matCellDef="let element; let i = index">
+                                {{ i + 1 }}
+                            </mat-cell>
+                        </ng-container>
+
+                        <!-- Batch Id -->
+                        <ng-container matColumnDef="batchId">
+                            <mat-header-cell *matHeaderCellDef>Batch Id</mat-header-cell>
+                            <mat-cell *matCellDef="let element">
+                                {{ element.BatchId }}
+                            </mat-cell>
+                        </ng-container>
+
+                        <!-- NEFT Bank Id -->
+                        <ng-container matColumnDef="neftBankId">
+                            <mat-header-cell *matHeaderCellDef>NEFT Bank Id</mat-header-cell>
+                            <mat-cell *matCellDef="let element">
+                                {{ element.NEFT_Bank_id }}
+                            </mat-cell>
+                        </ng-container>
+
+                        <!-- Is Non Invoice -->
+                        <ng-container matColumnDef="isNonInvoice">
+                            <mat-header-cell *matHeaderCellDef>Is Non Invoice</mat-header-cell>
+                            <mat-cell *matCellDef="let element">
+                                {{ element.IsNonInvoice }}
+                            </mat-cell>
+                        </ng-container>
+
+                        <!-- HTH -->
+                        <ng-container matColumnDef="hth">
+                            <mat-header-cell *matHeaderCellDef>HTH</mat-header-cell>
+                            <mat-cell *matCellDef="let element">
+                                {{ element.HTH }}
+                            </mat-cell>
+                        </ng-container>
+
+                        <!-- HTH Date -->
+                        <ng-container matColumnDef="hthDate">
+                            <mat-header-cell *matHeaderCellDef>HTH Date</mat-header-cell>
+                            <mat-cell *matCellDef="let element">
+                                {{ element.HTH_Date }}
+                            </mat-cell>
+                        </ng-container>
+
+                        <!-- Batch Type -->
+                        <ng-container matColumnDef="batchType">
+                            <mat-header-cell *matHeaderCellDef>Batch Type</mat-header-cell>
+                            <mat-cell *matCellDef="let element">
+                                {{ element.BatchType }}
+                            </mat-cell>
+                        </ng-container>
+
+                        <!-- Amount -->
+                        <ng-container matColumnDef="amount">
+                            <mat-header-cell *matHeaderCellDef>Amount</mat-header-cell>
+                            <mat-cell *matCellDef="let element">
+                                {{ element.Amount }}
+                            </mat-cell>
+                        </ng-container>
+
+                        <!-- Head Count -->
+                        <ng-container matColumnDef="headCount">
+                            <mat-header-cell *matHeaderCellDef>Head Count</mat-header-cell>
+                            <mat-cell *matCellDef="let element">
+                                {{ element.Head_Count }}
+                            </mat-cell>
+                        </ng-container>
+
+                        <!-- File Sno -->
+                        <ng-container matColumnDef="fileSno">
+                            <mat-header-cell *matHeaderCellDef>File Sno</mat-header-cell>
+                            <mat-cell *matCellDef="let element">
+                                {{ element.File_Sno }}
+                            </mat-cell>
+                        </ng-container>
+
+                        <!-- File Name -->
+                        <ng-container matColumnDef="fileName">
+                            <mat-header-cell *matHeaderCellDef>File Name</mat-header-cell>
+                            <mat-cell *matCellDef="let element">
+                                {{ element.File_Name }}
+                            </mat-cell>
+                        </ng-container>
+
+                        <!-- Transfer Status -->
+                        <ng-container matColumnDef="transferStatus">
+                            <mat-header-cell *matHeaderCellDef>Transfer Status</mat-header-cell>
+                            <mat-cell *matCellDef="let element">
+                                {{ element.Transfer_Status }}
+                            </mat-cell>
+                        </ng-container>
+
+                        <!-- Transfer Date -->
+                        <ng-container matColumnDef="transferDate">
+                            <mat-header-cell *matHeaderCellDef>Transfer Date</mat-header-cell>
+                            <mat-cell *matCellDef="let element">
+                                {{ element.Transfer_Date }}
+                            </mat-cell>
+                        </ng-container>
+
+                        <!-- Response Status -->
+                        <ng-container matColumnDef="responseStatus">
+                            <mat-header-cell *matHeaderCellDef>Response Status</mat-header-cell>
+                            <mat-cell *matCellDef="let element">
+                                {{ element.Response_Status }}
+                            </mat-cell>
+                        </ng-container>
+
+                        <!-- Response Date -->
+                        <ng-container matColumnDef="responseDate">
+                            <mat-header-cell *matHeaderCellDef>Response Date</mat-header-cell>
+                            <mat-cell *matCellDef="let element">
+                                {{ element.Response_Date }}
+                            </mat-cell>
+                        </ng-container>
+
+                        <!-- Response File -->
+                        <ng-container matColumnDef="responseFile">
+                            <mat-header-cell *matHeaderCellDef>Response File</mat-header-cell>
+                            <mat-cell *matCellDef="let element">
+                                {{ element.Responce_File }}
+                            </mat-cell>
+                        </ng-container>
+
+                        <!-- UTR Integration Status -->
+                        <ng-container matColumnDef="utrIntegrationStatus">
+                            <mat-header-cell *matHeaderCellDef>UTR Integration Status</mat-header-cell>
+                            <mat-cell *matCellDef="let element">
+                                {{ element.UTR_Integration_Status }}
+                            </mat-cell>
+                        </ng-container>
+
+                        <!-- UTR Integration Date -->
+                        <ng-container matColumnDef="utrIntegrationDate">
+                            <mat-header-cell *matHeaderCellDef>UTR Integration Date</mat-header-cell>
+                            <mat-cell *matCellDef="let element">
+                                {{ element.UTR_Integration_Date }}
+                            </mat-cell>
+                        </ng-container>
+
+                        <!-- Created By -->
+                        <ng-container matColumnDef="createdBy">
+                            <mat-header-cell *matHeaderCellDef>Created By</mat-header-cell>
+                            <mat-cell *matCellDef="let element">
+                                {{ element.Created_By }}
+                            </mat-cell>
+                        </ng-container>
+
+                        <!-- Created On -->
+                        <ng-container matColumnDef="createdOn">
+                            <mat-header-cell *matHeaderCellDef>Created On</mat-header-cell>
+                            <mat-cell *matCellDef="let element">
+                                {{ element.Created_on }}
+                            </mat-cell>
+                        </ng-container>
+
+                        <!-- Modified By -->
+                        <ng-container matColumnDef="modifiedBy">
+                            <mat-header-cell *matHeaderCellDef>Modified By</mat-header-cell>
+                            <mat-cell *matCellDef="let element">
+                                {{ element.Modified_By }}
+                            </mat-cell>
+                        </ng-container>
+
+                        <!-- Modified On -->
+                        <ng-container matColumnDef="modifiedOn">
+                            <mat-header-cell *matHeaderCellDef>Modified On</mat-header-cell>
+                            <mat-cell *matCellDef="let element">
+                                {{ element.Modified_on }}
+                            </mat-cell>
+                        </ng-container>
+
+                        <!-- Header & Row -->
+
+                        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+
+                        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+
+                    </table>
+                </div>
+
+                <div *ngIf="dataSource.data.length===0" class="text-center p-4">
+                    <p class="text-muted">No data to display</p>
+                </div>
+
+                <mat-paginator [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons style="border-top: 1px solid #ddd;">
+                </mat-paginator>
+            </div>
+        </div>
+    </div>
+</div>
+<div *ngIf="isLoading" class="loading-overlay">
+    <img src="assets/Loading.gif" alt="Loading...">
+</div>

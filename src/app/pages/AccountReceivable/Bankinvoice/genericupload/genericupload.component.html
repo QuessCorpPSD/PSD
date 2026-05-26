@@ -1,0 +1,44 @@
+<div class="page-wrapper" style="padding-top: 2%;">
+    <div class="scrollable-content">
+
+        <!-- HEADER -->
+        <mat-card-title class="main-header">
+            Generic Upload </mat-card-title>
+
+        <!-- FILTER BAR -->
+        <div class="container-fluid py-2">
+
+            <div class="row align-items-end">
+
+                <!-- Company Code -->
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">Upload Type</label>
+
+                    <select class="form-control form-control-sm" [(ngModel)]="selectedUploadType"
+                        (change)="onUploadTypeChange($event)">
+                        <option *ngFor="let ut of Uploadtype" [value]="ut.GEN_vDescription">
+                            {{ ut.GEN_vDescription }}
+                        </option>
+                    </select>
+                </div>
+                <div class="col-md-3 d-flex gap-2">
+
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-upload"
+                        matTooltip="Import" (click)="ImportClick(fileInput)">
+                        <mat-icon>cloud_upload</mat-icon>
+                    </button>
+                    <input type="file" #fileInput style="display:none" (change)="onFileChange($event)" />
+
+
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-download"
+                        matTooltip="Template" (click)="DownloadTemplate()">
+                        <mat-icon>cloud_download</mat-icon>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div *ngIf="isLoading" class="loading-overlay">
+    <img src="assets/Loading.gif" alt="Loading...">
+</div>

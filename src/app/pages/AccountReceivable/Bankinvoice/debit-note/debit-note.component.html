@@ -1,0 +1,330 @@
+<div class="page-wrapper">
+    <div class="scrollable-content">
+        <mat-card-title class="main-header">
+            Debit Note
+        </mat-card-title>
+        <div class="container py-2">
+            <div class="row g-3 align-items-end">
+
+
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Client Name</label>
+                    <companyall (companyEmit)="handleCompanyEvent($event)"></companyall>
+                </div>
+                <div class="col-md-3">
+                    <label for="EmployeeCode" class="form-label text-muted small">Employee Code</label>
+                    <input type="text" id="EmployeeCode" [(ngModel)]="employeeCode"
+                        class="form-control form-control-sm" />
+                </div>
+                <div class="col-md-3">
+                    <label for="StartDate" class="form-label text-muted small">Frome Date</label>
+                    <input type="Date" id="StartDate" [(ngModel)]="startDate" class="form-control form-control-sm" />
+                </div>
+                <div class="col-md-3">
+                    <label for="EndDate" class="form-label text-muted small">To Date</label>
+                    <input type="Date" id="EndDate" [(ngModel)]="endDate" class="form-control form-control-sm" />
+                </div>
+
+                <div class="col-md-2 d-flex gap-2">
+
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-search"
+                        matTooltip="Search" (click)="searchClick()">
+                        <mat-icon>search</mat-icon>
+                    </button>
+
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-secondary"
+                        matTooltip="ExportToExcel" (click)="exportToExcel()">
+                        <mat-icon>download</mat-icon>
+                    </button>
+
+
+                    <!-- <button class="btn btn-sm d-flex align-items-center justify-content-center btn-upload"
+                        matTooltip="Upload" (click)="ImportClick(fileInput)">
+                        <mat-icon>cloud_upload</mat-icon>
+                    </button> -->
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-download"
+                        matTooltip="Download">
+                        <mat-icon>cloud_download</mat-icon>
+                    </button>
+
+                    <!-- <input type="file" #fileInput style="display: none;" (click)="fileInput.value=''"
+                        (change)="onFileChange($event)" accept=".xlsx, .xls" /> -->
+
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-approve"
+                        matTooltip="Approve">
+                        <mat-icon class="approve-icon">check_circle</mat-icon>
+                    </button>
+
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-reject"
+                        matTooltip="Reject">
+                        <mat-icon class="reject-icon">cancel</mat-icon>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+        <div class="table-container" style="top:30px;">
+            <div class="table-scroll-window">
+                <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+                    <!-- <ng-container matColumnDef="delete">
+                        <mat-header-cell *matHeaderCellDef>Delete</mat-header-cell>
+                        <mat-cell *matCellDef="let row">
+                            <img src="assets/delete.svg" style="cursor:pointer;width:22px;height:24px" />
+                        </mat-cell>
+                    </ng-container> -->
+
+                    <ng-container matColumnDef="select">
+                        <mat-header-cell *matHeaderCellDef>
+                            <div class="cell-center">
+                                <mat-checkbox></mat-checkbox>
+                            </div>
+                        </mat-header-cell>
+
+                        <mat-cell *matCellDef="let element">
+                            <div class="cell-center">
+                                <mat-checkbox></mat-checkbox>
+                            </div>
+                        </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="DebitNote_Id">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>DebitNote Id</mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.DebitNote_Id }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="DebitNote_No">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>Debit Note Number</mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.DebitNote_No }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Company_Code">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>Company Code</mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.Company_Code }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Client_Name">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>Client Name</mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.Client_Name }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Employee_id">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>Employee Id</mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.Employee_id }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="SubClientCode">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>Sub Client Code</mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.SubClientCode }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Invoice_Number">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>Invoice Number</mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.Invoice_Number }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Pay_Period_Id">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>Pay Period</mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.Pay_Period_Id }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="ShortAmount">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>Short Amount</mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.ShortAmount }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="PayCode">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>Pay Code</mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.PayCode }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Debit_Note_Amount">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>Debit Note Amount</mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.Debit_Note_Amount }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Actual_Amount">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>Actual Amount</mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.Actual_Amount }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="DebitNoteType_Id">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>Debit Note Type ID</mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.DebitNoteType_Id }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Debit_NoteType">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>Debit Note Type</mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.Debit_NoteType }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Is_GST_Applicable">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>GST Applicable</mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.Is_GST_Applicable ? 'Yes' : 'No' }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Remarks">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>Remarks</mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.Remarks }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Amount_In_Words">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>Amount In Words</mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.Amount_In_Words }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="DebitNote_Date">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>Debit Note Date</mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.DebitNote_Date | date:'dd/MM/yyyy' }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="IsActive">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>Is Active</mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.IsActive }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="CreatedBy">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>Created By</mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.CreatedBy }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="CreatedOn">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>Created On</mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.CreatedOn }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="ModifiedBy">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>Modified By</mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.ModifiedBy }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="ModifiedOn">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>CreateModified On</mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.ModifiedOn }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Sap_Reference_Number">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>Sap Reference Number</mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.Sap_Reference_Number }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="SAC_Code">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>SAC Code</mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.SAC_Code }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="CGST_Percentage">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>CGST Percentage</mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.CGST_Percentage }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="SGST_Percentage">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>SGST Percentage</mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.SGST_Percentage }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="UTGST_Percentage">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>UTGST Percentage</mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.UTGST_Percentage }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="IGST_Percentage">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>IGST Percentage</mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.IGST_Percentage }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="CGST_Amount">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>CGST Amount</mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.CGST_Amount }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="SGST_Amount">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>SGST Amount</mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.SGST_Amount }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="UTGST_Amount">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>UTGST Amount</mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.UTGST_Amount }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="IGST_Amount">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>IGST Amount</mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.IGST_Amount }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Balance_Amount">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>Balance Amount</mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.Balance_Amount }}</mat-cell>
+                    </ng-container>
+
+
+                    <ng-container matColumnDef="Naration">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>Naration</mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.Naration }}</mat-cell>
+                    </ng-container>
+
+
+                    <ng-container matColumnDef="IsMovedToSap">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>IsMovedToSap </mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.IsMovedToSap }}</mat-cell>
+                    </ng-container>
+
+
+                    <ng-container matColumnDef="Status">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>Status</mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.Status }}</mat-cell>
+                    </ng-container>
+
+
+                    <ng-container matColumnDef="Particulars">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>Particulars</mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.Particulars }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Ref_Id">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>Ref Id</mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.Ref_Id }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="ClientGstNumber">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>Client GST Number</mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.ClientGstNumber }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="ClientPanNumber">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>Client Pan Number</mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.ClientPanNumber }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="ClientTanNumber">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>Client Tan Number</mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.ClientTanNumber }}</mat-cell>
+                    </ng-container>
+
+                    <!-- <ng-container matColumnDef="FileStatus">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>File Status</mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.FileStatus }}</mat-cell>
+                    </ng-container> -->
+
+                    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+
+                    <!-- Data Rows -->
+                    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+
+                </table>
+            </div>
+
+            <div *ngIf="dataSource.data.length===0" class="text-center p-4">
+                <p class="text-muted">No data to display</p>
+            </div>
+
+            <mat-paginator #paginator [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons
+                style="border-top: 1px solid #ddd;">
+            </mat-paginator>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="isLoading" class="loading-overlay">
+    <img src="assets/Loading.gif" alt="Loading...">
+</div>

@@ -1,0 +1,354 @@
+<div class="page-wrapper">
+    <div class="scrollable-content">
+        <mat-card-title class="main-header">
+            Credit Note Update
+        </mat-card-title>
+        <div class="container py-2">
+            <div class="row g-3 align-items-end">
+
+                <!-- Company -->
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">
+                        Company Code<span class="text-danger">*</span>
+                    </label>
+                    <companyall (companyEmit)="handleCompanyEvent($event)"></companyall>
+                </div>
+
+                <!-- From Date -->
+                <div class="col-md-3">
+                    <label class="form-label">From Date: <span class="text-danger">*</span></label>
+                    <input type="date" class="form-control" [(ngModel)]="startDate" />
+                </div>
+
+                <!-- To Date -->
+                <div class="col-md-3">
+                    <label class="form-label">To Date: <span class="text-danger">*</span></label>
+                    <input type="date" class="form-control" [(ngModel)]="endDate" />
+                </div>
+
+                <!-- Small Buttons -->
+                <div class="col-md-2 d-flex align-items-end gap-2">
+                    <button class="btn btn-sm btn-search" matTooltip="Search" (click)="SearchClick()">
+                        <mat-icon>search</mat-icon>
+                    </button>
+
+                    <button class="btn btn-secondary btn-sm" matTooltip="Export" (click)="exportToExcel()">
+                        <mat-icon>download</mat-icon>
+                    </button>
+
+                    <button class="btn btn-sm btn-upload" matTooltip="Cancel" (click)="ImportClick(fileInput)">
+                        <mat-icon>cloud_upload</mat-icon>
+                    </button>
+
+                    <button class="btn btn-sm btn-download" matTooltip="Template"
+                        (click)="DownloadCreditNoteTemplate()">
+                        <mat-icon>cloud_download</mat-icon>
+                    </button>
+                </div>
+                <input #fileInput type="file" accept=".xlsx, .xls" style="display: none"
+                    (change)="onFileChange($event)" />
+
+
+            </div>
+
+            <!-- SECOND ROW (Bulk buttons) -->
+            <div class="row mt-4">
+                <div class="col-md-12 d-flex gap-2">
+                    <button class="btn btn-info btn-sm" (click)="BulkDownloadCreditNotes('CreditNote')">
+                        CRN Bulk Download
+                    </button>
+
+                    <button class="btn btn-info btn-sm" (click)="BulkDownloadCreditNotes('DebitNote')">
+                        DBN Bulk Download
+                    </button>
+                </div>
+            </div>
+            <div class="table-container" style="top:30px;" [hidden]="!showTable">
+                <div class="table-scroll-window">
+                    <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+
+                        <!-- Edit -->
+                        <ng-container matColumnDef="edit">
+                            <mat-header-cell *matHeaderCellDef>Edit</mat-header-cell>
+                            <mat-cell *matCellDef="let element">
+                                <mat-icon (click)="openEditPopup(element)">edit</mat-icon>
+                            </mat-cell>
+                        </ng-container>
+
+                        <!-- Select -->
+                        <ng-container matColumnDef="select">
+                            <mat-header-cell *matHeaderCellDef class="fixed-width-column">
+                                <mat-checkbox (change)="toggleAllRows()"
+                                    [checked]="selection.hasValue() && isAllSelected()"
+                                    [indeterminate]="isPartialSelected()">
+                                </mat-checkbox>
+                            </mat-header-cell>
+                            <mat-cell *matCellDef="let element" class="fixed-width-column">
+                                <mat-checkbox (click)="$event.stopPropagation()" (change)="toggleRow(element)"
+                                    [checked]="selection.isSelected(element)">
+                                </mat-checkbox>
+                            </mat-cell>
+                        </ng-container>
+
+                        <!-- Company Code -->
+                        <ng-container matColumnDef="CompanyCode">
+                            <mat-header-cell *matHeaderCellDef>Company Code</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Company_Code }}</mat-cell>
+                        </ng-container>
+
+                        <!-- Company Name -->
+                        <ng-container matColumnDef="CompanyName">
+                            <mat-header-cell *matHeaderCellDef>Company Name</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Company_name }}</mat-cell>
+                        </ng-container>
+
+                        <!-- Credit Note Number -->
+                        <ng-container matColumnDef="CreditNoteNumber">
+                            <mat-header-cell *matHeaderCellDef>Credit Note No</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.CreditNote_No }}</mat-cell>
+                        </ng-container>
+
+                        <!-- Credit Note Amount -->
+                        <ng-container matColumnDef="CreditNoteAmount">
+                            <mat-header-cell *matHeaderCellDef>Credit Note Amount</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Credit_Note_Amount }}</mat-cell>
+                        </ng-container>
+
+                        <!-- Adjusted Amount -->
+                        <ng-container matColumnDef="AdjustedAmount">
+                            <mat-header-cell *matHeaderCellDef>Adjusted Amount</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Adjusted_amount }}</mat-cell>
+                        </ng-container>
+
+                        <!-- Balance Amount -->
+                        <ng-container matColumnDef="BalanceAmount">
+                            <mat-header-cell *matHeaderCellDef>Balance Amount</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Actual_Amount }}</mat-cell>
+                        </ng-container>
+
+                        <!-- Base Amount -->
+                        <ng-container matColumnDef="BaseAmount">
+                            <mat-header-cell *matHeaderCellDef>Base Amount</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Actual_Credit_Note_Amount }}</mat-cell>
+                        </ng-container>
+
+                        <!-- GST Amount -->
+                        <ng-container matColumnDef="GstAmount">
+                            <mat-header-cell *matHeaderCellDef>GST Amount</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.GstAmount }}</mat-cell>
+                        </ng-container>
+
+                        <!-- Status -->
+                        <ng-container matColumnDef="Status">
+                            <mat-header-cell *matHeaderCellDef>Status</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Credit_Note_Status }}</mat-cell>
+                        </ng-container>
+
+                        <!-- Credit Note Type -->
+                        <ng-container matColumnDef="CreditNoteType">
+                            <mat-header-cell *matHeaderCellDef>Type</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Credit_Note_Type_Text }}</mat-cell>
+                        </ng-container>
+
+                        <!-- SAP Reference -->
+                        <ng-container matColumnDef="SapReferenceNumber">
+                            <mat-header-cell *matHeaderCellDef>SAP Ref</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.SAPRef_Number }}</mat-cell>
+                        </ng-container>
+
+                        <!-- Reference Number -->
+                        <ng-container matColumnDef="ReferenceNumber">
+                            <mat-header-cell *matHeaderCellDef>Reference No</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Ref_Id }}</mat-cell>
+                        </ng-container>
+
+                        <!-- Invoice Number -->
+                        <ng-container matColumnDef="InvoiceNumber">
+                            <mat-header-cell *matHeaderCellDef>Invoice No</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Invoice_Number }}</mat-cell>
+                        </ng-container>
+
+                        <!-- SAC Code -->
+                        <ng-container matColumnDef="SACCode">
+                            <mat-header-cell *matHeaderCellDef>SAC Code</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.SAC_Code }}</mat-cell>
+                        </ng-container>
+
+                        <!-- IRN Status -->
+                        <ng-container matColumnDef="IRNStatus">
+                            <mat-header-cell *matHeaderCellDef>IRN Status</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.IRN_Status }}</mat-cell>
+                        </ng-container>
+
+                        <!-- IRN Number -->
+                        <ng-container matColumnDef="IRNNumber">
+                            <mat-header-cell *matHeaderCellDef>IRN Number</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.IRN_Number }}</mat-cell>
+                        </ng-container>
+
+                        <!-- DBN IRN Status -->
+                        <ng-container matColumnDef="DBNRNStatus">
+                            <mat-header-cell *matHeaderCellDef>DBN IRN Status</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.DBN_IRN_Status }}</mat-cell>
+                        </ng-container>
+
+                        <!-- DBN IRN Number -->
+                        <ng-container matColumnDef="DBNIRNNumber">
+                            <mat-header-cell *matHeaderCellDef>DBN IRN Number</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.DBN_IRN_Number }}</mat-cell>
+                        </ng-container>
+
+                        <!-- CRN PDF -->
+                        <ng-container matColumnDef="CRNPDF">
+                            <mat-header-cell *matHeaderCellDef>CRN PDF</mat-header-cell>
+                            <mat-cell *matCellDef="let element">
+                                <!-- <button (click)="downloadCRN(element)">Download</button> -->
+                            </mat-cell>
+                        </ng-container>
+
+                        <!-- DBN PDF -->
+                        <ng-container matColumnDef="DBN_PDF">
+                            <mat-header-cell *matHeaderCellDef>DBN PDF</mat-header-cell>
+                            <mat-cell *matCellDef="let element">
+                                <!-- <button (click)="downloadDBN(element)">Download</button> -->
+                            </mat-cell>
+                        </ng-container>
+
+                        <!-- Header & Row -->
+                        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+
+                    </table>
+
+                </div>
+                <mat-paginator #paginator [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons
+                    style="border-top: 1px solid #ddd;">
+                </mat-paginator>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+<div *ngIf="isLoading" class="loading-overlay">
+    <img src="assets/Loading.gif" alt="Loading...">
+</div>
+
+
+
+<div *ngIf="isEditPopupOpen" class="popup-overlay">
+    <mat-card class="popup-card">
+
+        <!-- 🔹 HEADER -->
+        <mat-card-header class="popup-header">
+            <mat-card-title class="d-flex justify-content-center align-items-center">
+                Credit Note Edit
+            </mat-card-title>
+
+
+            <button class="close-btn" matTooltip="Close" (click)="closeEditPopup()">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-card-header>
+
+        <!-- 🔹 CONTENT -->
+        <mat-card-content class="scroll-content">
+
+            <!-- 🔥 TOP INFO (LIKE MVC) -->
+            <div class="mb-3" style="font-size: 14px;">
+                <b>Credit Note No:</b> {{ selectedRow?.CreditNote_No }}
+                <span style="margin-left: 30px;">
+                    <b>Purpose:</b> {{ selectedRow?.Credit_Note_Type_Text }}
+                </span>
+                <span style="margin-left: 30px;">
+                    <b>Invoice Num:</b> {{ selectedRow?.Invoice_Number }}
+                </span>
+            </div>
+
+            <!-- 🔹 TABLE -->
+            <div class="table-container">
+
+                <table mat-table [dataSource]="popupTableData" class="mat-elevation-z8">
+
+                    <!-- Employee Code -->
+                    <ng-container matColumnDef="Employee_Code">
+                        <mat-header-cell *matHeaderCellDef>Employee Code</mat-header-cell>
+                        <mat-cell *matCellDef="let row">
+                            {{ row.Employee_Code }}
+                        </mat-cell>
+                    </ng-container>
+
+                    <!-- Reference Number -->
+                    <ng-container matColumnDef="Reference_Number">
+                        <mat-header-cell *matHeaderCellDef>Reference Number</mat-header-cell>
+                        <mat-cell *matCellDef="let row">
+                            {{ row.Reference_Number }}
+                        </mat-cell>
+                    </ng-container>
+
+                    <!-- Credit Note Amount -->
+                    <ng-container matColumnDef="Credit_Note_Amount">
+                        <mat-header-cell *matHeaderCellDef>Credit Note Amount</mat-header-cell>
+                        <mat-cell *matCellDef="let row">
+                            {{ row.Credit_Note_Amount }}
+                        </mat-cell>
+                    </ng-container>
+
+                    <!-- Credit Note Date -->
+                    <ng-container matColumnDef="Credit_Note_Date">
+                        <mat-header-cell *matHeaderCellDef>Credit Note Date</mat-header-cell>
+                        <mat-cell *matCellDef="let row">
+                            {{ row.Credit_Note_Date }}
+                        </mat-cell>
+                    </ng-container>
+
+                    <!-- Header & Rows -->
+                    <mat-header-row *matHeaderRowDef="popupDisplayedColumns"></mat-header-row>
+                    <mat-row *matRowDef="let row; columns: popupDisplayedColumns;"></mat-row>
+
+                </table>
+
+            </div>
+
+            <!-- 🔥 MOVED BELOW TABLE (IMPORTANT FIX) -->
+            <div class="row g-3 mt-3">
+
+                <div class="col-md-4">
+                    <label class="form-label"><b>Credit Note Status</b></label>
+
+                    <select class="form-control" [(ngModel)]="creditNoteStatus">
+
+                        <option value="Approved">Approved</option>
+                        <option value="Canceled">Canceled</option>
+
+                    </select>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label"><b>SAP Reference No</b></label>
+
+                    <input type="text" class="form-control" [(ngModel)]="sapReferenceNo" />
+                </div>
+            </div>
+            <!-- 🔹 ACTIONS -->
+            <div class="d-flex justify-content-end mt-3" style="gap: 10px; padding-right: 8px;">
+
+                <button type="button" style="border: none; border-radius: 7px; width: 80px; height: 30px;
+          background-color: #f0f0f0; color: black;" (click)="closeEditPopup()">
+                    Cancel
+                </button>
+
+                <button type="button" style="border: none; border-radius: 7px; width: 80px; height: 30px;
+          background-color: blue; color: white;" (click)="saveEdit()">
+                    Save
+                </button>
+
+            </div>
+
+        </mat-card-content>
+    </mat-card>
+</div>
+<div *ngIf="isLoading" class="loading-overlay">
+    <img src="assets/Loading.gif" alt="Loading...">
+</div>

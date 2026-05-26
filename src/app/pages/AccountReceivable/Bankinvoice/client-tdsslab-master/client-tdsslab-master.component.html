@@ -1,0 +1,306 @@
+<div class="page-wrapper">
+    <div class="scrollable-content">
+        <mat-card-title class="main-header">
+            Client TDS Slab Master
+        </mat-card-title>
+        <div class="container py-2">
+            <div class="row g-3 align-items-end">
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Company Code</label>
+                    <companyall (companyEmit)="handleCompany($event)"></companyall>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Company Name</label>
+                    <input type="text" class="form-control" [(ngModel)]="companyName" />
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Financial Year</label>
+                    <financial-year (financialEmit)="handleFinancialYear($event)">
+                    </financial-year>
+                </div>
+
+                <div class="col-md-2 d-flex gap-2">
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-search"
+                        matTooltip="Search" (click)="onSearch()">
+                        <mat-icon>search</mat-icon>
+                    </button>
+                    <button class="btn btn-secondary btn-sm d-flex align-items-center justify-content-center"
+                        matTooltip="export to excel" (click)="exportToExcel()">
+                        <mat-icon>download</mat-icon>
+                    </button>
+
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-upload"
+                        matTooltip="Import" (click)="ImportClick(fileInput)">
+                        <mat-icon>cloud_upload</mat-icon>
+                    </button>
+
+                    <input type="file" #fileInput style="display: none;" (click)="fileInput.value=''"
+                        (change)="onFileChange($event)" accept=".xlsx, .xls" />
+
+                    <!-- <button class="btn btn-sm d-flex align-items-center justify-content-center btn-download"
+                        matTooltip="Template">
+                        <mat-icon>cloud_download</mat-icon>
+                    </button> -->
+
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-add" matTooltip="Add"
+                        (click)="addTdsSlabOpen()">
+                        <mat-icon>add</mat-icon>
+                    </button>
+                    <!--  <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Template"
+        (click)="DownloadTemplate()">
+        <mat-icon>cloud_download</mat-icon>
+      </button> -->
+                    <!-- <input type="file" #fileInput style="display: none;" (click)="fileInput.value=''"
+                        (change)="onFileChange($event)" accept=".xlsx, .xls" /> -->
+                </div>
+
+            </div>
+            <div class="table-container" style="top:30px;" *ngIf="showTable">
+                <div class="table-scroll-window">
+                    <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+                        <ng-container matColumnDef="delete">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header
+                                class="fixed-width-column"></mat-header-cell>
+                            <mat-cell *matCellDef="let element" class="fixed-width-column">
+                                <mat-icon (click)="deleteTds(element)">delete</mat-icon>
+                            </mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="edit">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header
+                                class="fixed-width-column"></mat-header-cell>
+                            <mat-cell *matCellDef="let element" class="fixed-width-column">
+                                <mat-icon (click)="editTds(element)">edit</mat-icon>
+                            </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="slNo">
+                            <mat-header-cell *matHeaderCellDef>SNo</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Serial_No }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="companyCode">
+                            <mat-header-cell *matHeaderCellDef>Company Code</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Company_Code }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="companyName">
+                            <mat-header-cell *matHeaderCellDef>Company Name</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Company_Name }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="typeOfSection">
+                            <mat-header-cell *matHeaderCellDef>Type Of Section</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Type_Of_Selection_Text }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="TdsExemptionvalue">
+                            <mat-header-cell *matHeaderCellDef>TDS Exemption Value</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.TDS_Exemption_Value }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="tds">
+                            <mat-header-cell *matHeaderCellDef>TDS%</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.TDS_Percentage }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="financialYear">
+                            <mat-header-cell *matHeaderCellDef>Financial Year</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Financial_Year_Name }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="fromDate">
+                            <mat-header-cell *matHeaderCellDef>From Date</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.From_Date }}</mat-cell>
+                        </ng-container>
+
+
+                        <ng-container matColumnDef="toDate">
+                            <mat-header-cell *matHeaderCellDef>To Date</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.To_Date }}</mat-cell>
+                        </ng-container>
+
+
+                        <ng-container matColumnDef="natureOfBusiness">
+                            <mat-header-cell *matHeaderCellDef>Nature Of Business</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Nature_Of_Business }}</mat-cell>
+                        </ng-container>
+
+
+                        <ng-container matColumnDef="tanNumber">
+                            <mat-header-cell *matHeaderCellDef>TAN Number</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.TAN }}</mat-cell>
+                        </ng-container>
+
+
+                        <ng-container matColumnDef="panNumber">
+                            <mat-header-cell *matHeaderCellDef>PAN Number</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.PAN }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="ldsCertificate">
+                            <mat-header-cell *matHeaderCellDef>LDS Certificate</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Certificate_Name }}</mat-cell>
+                        </ng-container>
+
+                        <mat-header-row *matHeaderRowDef="uploadDisplayedColumns"></mat-header-row>
+
+                        <!-- Data Rows -->
+                        <mat-row *matRowDef="let row; columns: uploadDisplayedColumns"></mat-row>
+
+                    </table>
+                </div>
+                <div *ngIf="dataSource.data.length===0" class="text-center p-4">
+                    <p class="text-muted">No data to display</p>
+                </div>
+                <mat-paginator [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons
+                    style="border-top: 1px solid #ddd;"></mat-paginator>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="isAddclicked" class="popup-overlay" (keydown.escape)="closeclick()">
+    <mat-card class="popup-card">
+        <mat-card-header class="popup-header">
+            <mat-card-title class="d-flex justify-content-center align-items-center">
+                {{ isEditMode ? 'Edit TDS Slab Master' : 'Add TDS Slab Master' }}
+            </mat-card-title>
+
+            <button class="close-btn" matTooltip="Close" (click)="closeclick()">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-card-header>
+        <mat-card-content class="scroll-content">
+            <form [formGroup]="addTDSSlab" novalidate>
+                <!-- Row 1 -->
+                <div class="row g-3 mb-3">
+                    <div class="col-md-4">
+                        <label class="form-label">Company Code<span class="text-danger">*</span></label>
+                        <companyall (companyEmit)="handleCompanyEvent($event)">
+                        </companyall>
+                        <div class="text-danger small" *ngIf="addTDSSlab.get('CompanyCode')?.touched 
+             && addTDSSlab.get('CompanyCode')?.hasError('required')">
+                            companycode is required
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Company Name</label>
+                        <input type="text" class="form-control" formControlName="CompanyName" />
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Type Of Section<span class="text-danger">*</span></label>
+                        <select class="form-select" formControlName="TypeOfSection">
+                            <option value="">-- Select --</option>
+                            <option value="1044">194C</option>
+                            <option value="1045">194J</option>
+                            <option value="1046">194H</option>
+                            <option value="1395">194A</option>
+                            <!-- <option *ngFor="let e of empCode" [value]="e.Employee_Id">
+                                {{ e.Employee_code }}
+                            </option> -->
+                        </select>
+                        <div class="text-danger small" *ngIf="addTDSSlab.get('TypeOfSection')?.touched 
+             && addTDSSlab.get('TypeOfSection')?.hasError('required')">
+                            TypeOfSection is required
+                        </div>
+                    </div>
+                </div>
+                <!-- Row 2 -->
+                <div class="row g-3 mb-3">
+                    <div class="col-md-4">
+                        <label class="form-label">Nature Of Business<span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" formControlName="NatureOfBusiness" />
+                        <!-- <select class="form-select" formControlName="NatureOfBusiness">
+                            <option value="">-- Select --</option>
+                            <option *ngFor="let e of empCode" [value]="e.Employee_Id">
+                                {{ e.Employee_code }}
+                            </option>
+                        </select> -->
+                        <div class="text-danger small" *ngIf="addTDSSlab.get('NatureOfBusiness')?.touched 
+             && addTDSSlab.get('NatureOfBusiness')?.hasError('required')">
+                            NatureOfBusiness is required
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">TDS Exemption Value<span class="text-danger">*</span></label>
+                        <input type="number" class="form-control" formControlName="TDSExemptionValue" />
+                        <div class="text-danger small" *ngIf="addTDSSlab.get('TDSExemptionValue')?.touched 
+             && addTDSSlab.get('TDSExemptionValue')?.hasError('required')">
+                            TDSExemptionValue is required
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">TDS Percentage<span class="text-danger">*</span></label>
+                        <input type="number" class="form-control" formControlName="TDSPercentage" />
+                        <div class="text-danger small" *ngIf="addTDSSlab.get('TDSPercentage')?.touched 
+             && addTDSSlab.get('TDSPercentage')?.hasError('required')">
+                            TDSPercentage is required
+                        </div>
+
+                    </div>
+                </div>
+                <div class="row g-3 mb-3">
+                    <div class="col-md-4">
+                        <label class="form-label">Financial Year<span class="text-danger">*</span></label>
+                        <financial-year (financialEmit)="handleFYear($event)">
+                        </financial-year>
+                        <div class="text-danger small" *ngIf="addTDSSlab.get('FYear')?.touched 
+             && addTDSSlab.get('FYear')?.hasError('required')">
+                            FinancialYear is required
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">From Date</label>
+                        <input type="date" class="form-control" formControlName="FromDate" />
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">To Date</label>
+                        <input type="date" class="form-control" formControlName="ToDate" />
+                    </div>
+
+                </div>
+                <div class="row g-3 mb-3">
+                    <div class="col-md-4">
+                        <label class="form-label">TAN Number<span class="text-danger">*</span></label>
+                        <input type="number" class="form-control" formControlName="TANNumber" />
+                        <div class="text-danger small" *ngIf="addTDSSlab.get('TANNumber')?.touched 
+             && addTDSSlab.get('TANNumber')?.hasError('required')">
+                            TANNumber is required
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">PAN Number<span class="text-danger">*</span></label>
+                        <input type="number" class="form-control" formControlName="PANNumber" />
+                        <div class="text-danger small" *ngIf="addTDSSlab.get('PANNumber')?.touched 
+             && addTDSSlab.get('PANNumber')?.hasError('required')">
+                            PANNumber is required
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+            <!-- <mat-card-footer class="footer"> -->
+            <div class="d-flex justify-content-end mt-3" style="gap: 10px; padding-right: 8px;">
+                <!-- <div> -->
+
+                <button type="Cancel"
+                    style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: #f0f0f0; color: black;"
+                    (click)="closeclick()">
+                    Cancel
+                </button>
+
+                <button type="submit"
+                    style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: blue; color: white;"
+                    (click)="saveTDSSlab()">
+                    Save
+                </button>
+                <!-- </div> -->
+            </div>
+            <!-- </mat-card-footer> -->
+        </mat-card-content>
+
+    </mat-card>
+</div>

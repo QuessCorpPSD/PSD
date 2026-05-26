@@ -181,6 +181,23 @@ import { BankInvoiceNEFTCultureComponent } from './pages/SalaryReleaseNew/bank-i
 import { InvoiceBatchConsolidationReportComponent } from './pages/SalaryReleaseNew/invoice-batch-consolidation-report/invoice-batch-consolidation-report.component';
 import { ReIssueProcessApproveComponent } from './pages/SalaryReleaseNew/re-issue-process-approve/re-issue-process-approve.component';
 import { ReIssueProcessReportComponent } from './pages/SalaryReleaseNew/re-issue-process-report/re-issue-process-report.component';
+import { AccountReceivablenavigationComponent } from './pages/AccountReceivable/Bankinvoice/account-receivablenavigation/account-receivablenavigation.component';
+import { ClientAdvancePaymentsComponent } from './pages/AccountReceivable/Bankinvoice/client-advance-payments/client-advance-payments.component';
+import { ClientAdvanceReportComponent } from './pages/AccountReceivable/Bankinvoice/client-advance-report/client-advance-report.component';
+import { CollectionpendingreportComponent } from './pages/AccountReceivable/Bankinvoice/collectionpendingreport/collectionpendingreport.component';
+import { ForecastComponent } from './pages/AccountReceivable/Bankinvoice/forecast/forecast.component';
+import { InvoiceCollectionreportComponent } from './pages/AccountReceivable/Bankinvoice/invoice-collectionreport/invoice-collectionreport.component';
+import { CreditNoteApproveComponent } from './pages/AccountReceivable/Bankinvoice/credit-note-approve/credit-note-approve.component';
+import { CreditNoteUpdateComponent } from './pages/AccountReceivable/Bankinvoice/credit-note-update/credit-note-update.component';
+import { ClientledgerreportComponent } from './pages/AccountReceivable/Bankinvoice/clientledgerreport/clientledgerreport.component';
+import { LTDSreportComponent } from './pages/AccountReceivable/Bankinvoice/ltdsreport/ltdsreport.component';
+import { UnpaidInvoiceReportComponent } from './pages/AccountReceivable/Bankinvoice/unpaid-invoice-report/unpaid-invoice-report.component';
+import { CreditMatrixComponent } from './pages/AccountReceivable/Bankinvoice/credit-matrix/credit-matrix.component';
+import { DebitNoteComponent } from './pages/AccountReceivable/Bankinvoice/debit-note/debit-note.component';
+import { BankTransferHTHStatusComponent } from './pages/AccountReceivable/Bankinvoice/bank-transfer-hthstatus/bank-transfer-hthstatus.component';
+import { ClientTDSSlabMasterComponent } from './pages/AccountReceivable/Bankinvoice/client-tdsslab-master/client-tdsslab-master.component';
+import { InvoiceCollectionComponent } from './pages/AccountReceivable/Bankinvoice/invoice-collection/invoice-collection.component';
+import { APARAdjustmentupdateComponent } from './pages/AccountReceivable/Bankinvoice/aparadjustmentupdate/aparadjustmentupdate.component';
 
 
 
@@ -221,6 +238,32 @@ export const routes: Routes = [
       {
         path: 'grossmargin', component: GrossmarginComponent
       },
+      {
+        path: 'AccountReceivable',
+        component: AccountReceivablenavigationComponent,
+        children: [
+          { path: 'ClientAdvancePayment', component: ClientAdvancePaymentsComponent },
+          { path: 'ClientAdvanceReport', component: ClientAdvanceReportComponent },
+          { path: 'collectionpendingreport', component: CollectionpendingreportComponent },
+          { path: 'invoicecollectionreport', component: InvoiceCollectionreportComponent },
+          { path: 'Forecast', component: ForecastComponent },
+          { path: 'CreditNoteApproval', component: CreditNoteApproveComponent },
+          { path: 'CreditNoteUpdate', component: CreditNoteUpdateComponent },
+          { path: 'Clientledgerreport', component: ClientledgerreportComponent },
+          { path: 'LTDSreport', component: LTDSreportComponent },
+          { path: 'Genericupload', component: GenericuploadComponent },
+          { path: 'UnpaidInvoiceReport', component: UnpaidInvoiceReportComponent },
+          { path: "CreditMatrix", component: CreditMatrixComponent },
+          { path: "DebitNote", component: DebitNoteComponent },
+          { path: "BankTransferHTH", component: BankTransferHTHStatusComponent },
+          { path: "ClientTDSSlabMaster", component: ClientTDSSlabMasterComponent },
+          { path: "invoicecollection", component: InvoiceCollectionComponent },
+          { path: "aparadjustmentupdate", component: APARAdjustmentupdateComponent }
+
+
+        ]
+      },
+
       {
         path: 'process',
         component: ProcessComponent,

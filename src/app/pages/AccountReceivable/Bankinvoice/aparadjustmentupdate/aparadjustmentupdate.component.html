@@ -1,0 +1,199 @@
+<div class="page-wrapper">
+    <div class="scrollable-content">
+        <mat-card-title class="main-header">
+            APARAdjustment Update
+        </mat-card-title>
+        <div class="container py-4">
+            <div class="row g-3 align-items-end">
+
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Company Code</label>
+                    <companyall (companyEmit)="handleCompanyEvent($event)"></companyall>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Start Date</label>
+                    <input type="date" class="w-100 custom-height rounded-1 select-drop" appearance="outline"
+                        style="background-color: white;height:30px;" [(ngModel)]="StartDate" />
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">End Date</label>
+                    <input type="date" class="w-100 custom-height rounded-1 select-drop" appearance="outline"
+                        style="background-color: white;height:30px;" [(ngModel)]="EndDate" />
+                </div>
+
+                <div class="col-md-3 d-flex gap-2">
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-search"
+                        matTooltip="Search" (click)="SearchClick()">
+                        <mat-icon>search</mat-icon>
+                    </button>
+
+                    <button class="btn btn-secondary btn-sm d-flex align-items-center justify-content-center"
+                        matTooltip="export to excel" (click)="exportToExcel()">
+                        <mat-icon>download</mat-icon>
+                    </button>
+
+
+                    <!-- <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="CRN Download">
+                <mat-icon>download</mat-icon>
+            </button> -->
+
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-upload"
+                        matTooltip="Import" (click)="ImportClick(fileInput)">
+                        <input type="file" #fileInput style="display: none;" (click)="fileInput.value=''"
+                            (change)="onFileChange($event)" accept=".xlsx, .xls" />
+                        <mat-icon>cloud_upload</mat-icon>
+                    </button>
+
+                    <!-- Cancel Button -->
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-edit"
+                        matTooltip="Cancel" (click)="CancelClick(cancelFileInput)">
+
+                        <input type="file" #cancelFileInput hidden accept=".xlsx, .xls"
+                            (change)="onCancelFileChange($event)" />
+
+                        <mat-icon>cancel</mat-icon>
+                    </button>
+
+                </div>
+
+            </div>
+        </div>
+
+
+        <div class="table-container">
+            <div class="table-scroll-window">
+                <table mat-table #searchgrid [dataSource]="dataSource" matSort class="custom-table table-scroll">
+
+                    <ng-container matColumnDef="edit">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header class="fixed-width-column"></mat-header-cell>
+                        <mat-cell *matCellDef="let element" class="fixed-width-column">
+                            <mat-icon>edit</mat-icon>
+                        </mat-cell>
+                    </ng-container>
+
+                    <!-- Checkbox Column -->
+                    <ng-container matColumnDef="select">
+                        <mat-header-cell *matHeaderCellDef class="fixed-width-column">
+                            <mat-checkbox (change)="toggleAllRows()" [checked]="selection.hasValue() && isAllSelected()"
+                                [indeterminate]="isPartialSelected()">
+                            </mat-checkbox>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let element" class="fixed-width-column">
+                            <mat-checkbox (click)="$event.stopPropagation()" (change)="toggleRow(element)"
+                                [checked]="selection.isSelected(element)">
+                            </mat-checkbox>
+                        </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Company_Code">
+                        <mat-header-cell *matHeaderCellDef>Company Code</mat-header-cell>
+                        <mat-cell *matCellDef="let element">{{ element.company_Code }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Company_name">
+                        <mat-header-cell *matHeaderCellDef>Company Name</mat-header-cell>
+                        <mat-cell *matCellDef="let element">{{ element.company_Name }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="aparadjustment_no">
+                        <mat-header-cell *matHeaderCellDef>APAR Adjustment Number</mat-header-cell>
+                        <mat-cell *matCellDef="let element">{{ element.aparadjustment_no }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="aparadjustment_amount">
+                        <mat-header-cell *matHeaderCellDef>APAR Adjustment Amount</mat-header-cell>
+                        <mat-cell *matCellDef="let element">{{ element.aparadjustment_amount }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Adjusted_amount">
+                        <mat-header-cell *matHeaderCellDef>Adjusted Amount</mat-header-cell>
+                        <mat-cell *matCellDef="let element">{{ element.adjusted_amount }}</mat-cell>
+                    </ng-container>
+
+
+
+                    <ng-container matColumnDef="balance_amount">
+                        <mat-header-cell *matHeaderCellDef>Balance Amount</mat-header-cell>
+                        <mat-cell *matCellDef="let element">{{ element.balance_amount }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="base_amount">
+                        <mat-header-cell *matHeaderCellDef>Base Amount</mat-header-cell>
+                        <mat-cell *matCellDef="let element">{{ element.base_amount }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="GstAmount">
+                        <mat-header-cell *matHeaderCellDef>GST Amount</mat-header-cell>
+                        <mat-cell *matCellDef="let element">{{ element.gstAmount }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="status">
+                        <mat-header-cell *matHeaderCellDef>Status</mat-header-cell>
+                        <mat-cell *matCellDef="let element">{{ element.status }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="aparadjustment_type">
+                        <mat-header-cell *matHeaderCellDef>APAR Adjustment Type</mat-header-cell>
+                        <mat-cell *matCellDef="let element">{{ element.aparadjustment_type }}</mat-cell>
+                    </ng-container>
+
+
+                    <ng-container matColumnDef="Sap_Reference_Number">
+                        <mat-header-cell *matHeaderCellDef>Sap Reference Number</mat-header-cell>
+                        <mat-cell *matCellDef="let element">{{ element.sap_Reference_Number }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Ref_No">
+                        <mat-header-cell *matHeaderCellDef>Ref_Number</mat-header-cell>
+                        <mat-cell *matCellDef="let element">{{ element.ref_No}}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Invoice_Number">
+                        <mat-header-cell *matHeaderCellDef>Invoice Number</mat-header-cell>
+                        <mat-cell *matCellDef="let element">{{ element.invoice_Number }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="SAC_Code">
+                        <mat-header-cell *matHeaderCellDef>SAC Code</mat-header-cell>
+                        <mat-cell *matCellDef="let element">{{ element.sAC_Code }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="IRN_Status">
+                        <mat-header-cell *matHeaderCellDef>IRN_Status</mat-header-cell>
+                        <mat-cell *matCellDef="let element">{{ element.IRN_Status }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="IRN_Number">
+                        <mat-header-cell *matHeaderCellDef>IRN_Number</mat-header-cell>
+                        <mat-cell *matCellDef="let element">{{ element.IRN_Number }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="DBN_IRN_Status">
+                        <mat-header-cell *matHeaderCellDef>DBN IRN Status</mat-header-cell>
+                        <mat-cell *matCellDef="let element">{{ element.dBN_IRN_Status }}</mat-cell>
+                    </ng-container>
+
+
+                    <ng-container matColumnDef="DBN_IRN_Number">
+                        <mat-header-cell *matHeaderCellDef>DBN_IRN_Number</mat-header-cell>
+                        <mat-cell *matCellDef="let element">{{ element.DBN_IRN_Number }}</mat-cell>
+                    </ng-container>
+
+                    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+
+                </table>
+
+            </div>
+
+            <mat-paginator [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons></mat-paginator>
+
+        </div>
+    </div>
+</div>
+
+<div *ngIf="isLoading" class="loading-overlay">
+    <img src="assets/Loading.gif" alt="Loading...">
+</div>
