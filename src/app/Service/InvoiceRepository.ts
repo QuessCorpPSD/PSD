@@ -179,6 +179,11 @@ return this.http.get<APIResponse>(url);
         return this.http.post<APIResponse>(
             this.environment.apiUrl + 'InvoiceInitiation/VendorInvoiceInitiate', requestPayload);
     }
+      MiscInvoiceInitiate(requestPayload: any): Observable<APIResponse> {
+        //console.log('Sending PO save payload:', payload);
+        return this.http.post<APIResponse>(
+            this.environment.apiUrl + 'InvoiceInitiation/MiscInvoiceInitiate', requestPayload);
+    }
     ExportToExcel(val): Observable<APIResponse> {
         const url = `${this.environment.apiUrl}InvoiceInitiation/ExportToExcel`;
         const headers = new HttpHeaders({
