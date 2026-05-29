@@ -11,7 +11,7 @@
     (optionSelected)="onOptionSelected($event.option.value)"
   >
     <mat-option style="font-size: 11px;min-height: 15px;"
-      *ngFor="let option of filteredStates$ | async"
+      *ngFor="let option of filteredOptions$ | async"
       [value]="option"
     >
       {{ option.state_Name }}

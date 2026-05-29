@@ -44,6 +44,7 @@ export class MapnameComponent implements ControlValueAccessor, OnChanges {
   mapNameclass: Mapnameclass[] = [];
   filteredOptions$!: Observable<Mapnameclass[]>;
   selectedOption?: Mapnameclass;
+  private pendingValue: any;
   onChange: any = () => { };
   onTouched: any = () => { };
   @Output() mapnameEmit = new EventEmitter<Mapnameclass>();
@@ -58,28 +59,31 @@ export class MapnameComponent implements ControlValueAccessor, OnChanges {
     }
   }
 
-  Bindmapname(selectedCompanyId: any) {
-    this._commonService.GetMapNamebyCompany(selectedCompanyId).subscribe({
-      next: res => {
-        this.mapNameclass = res.Data;
-        this.filteredOptions$ = this.myControl.valueChanges.pipe(
-          startWith(''),
-          map(value => {
-            let searchText = '';
+ Bindmapname(selectedCompanyId: any) {
+  this._commonService.GetMapNamebyCompany(selectedCompanyId).subscribe({
+    next: res => {
 
-            if (typeof value === 'string') {
-              searchText = value;
-            } else if (value && typeof value === 'object' && 'mapName' in value) {
-              searchText = value?.mapName;
-            }
+      this.mapNameclass = res.Data;
 
-            return this._filter(searchText);
-          })
-        );
-      },
-      error: err => console.error(err.message)
-    });
-  }
+      this.filteredOptions$ = this.myControl.valueChanges.pipe(
+        startWith(''),
+        map(value => {
+          let searchText = '';
+
+          if (typeof value === 'string') {
+            searchText = value;
+          } else if (value && typeof value === 'object') {
+            searchText = value.mapName;
+          }
+
+          return this._filter(searchText);
+        })
+      );
+
+      this.tryResolve();
+    }
+  });
+}
 
   private _filter(value: string): Mapnameclass[] {
     const filterValue = value.toLowerCase();
@@ -94,20 +98,33 @@ export class MapnameComponent implements ControlValueAccessor, OnChanges {
     return option?.mapName ?? '';
   };
 
-  onOptionSelected(option: any) {
-    this.selectedOption = option;
-    this.mapnameEmit.emit(this.selectedOption);
+ onOptionSelected(option: Mapnameclass) {
+
+  this.selectedOption = option;
+
+  // Update textbox display
+  this.myControl.setValue(option, { emitEvent: false });
+
+  // Pass value to parent reactive form
+  this.onChange(option.mapNameId);
+
+  // Mark touched
+  this.onTouched();
+
+  // Emit event
+  this.mapnameEmit.emit(option);
+}
+ writeValue(value: any): void {
+
+  this.pendingValue = value;
+console.log("Write Map Value", value);
+  if (!value) {
+    this.myControl.setValue(null);
+    return;
   }
 
-  writeValue(value: Mapnameclass | null): void {
-    if (value) {
-      this.selectedOption = value;
-      this.myControl.setValue(value, { emitEvent: false });
-    } else {
-      this.myControl.reset();
-    }
-  }
-
+  this.tryResolve();
+}
   registerOnChange(fn: any): void {
     this.onChange = fn;
   }
@@ -119,4 +136,17 @@ export class MapnameComponent implements ControlValueAccessor, OnChanges {
   setDisabledState(isDisabled: boolean): void {
     isDisabled ? this.myControl.disable() : this.myControl.enable();
   }
+  private tryResolve() {
+
+  if (!this.mapNameclass?.length || !this.pendingValue) return;
+
+  const selected = this.mapNameclass.find(
+    x => x.mapNameId == this.pendingValue
+  );
+
+  if (selected) {
+    this.selectedOption = selected;
+    this.myControl.setValue(selected, { emitEvent: false });
+  }
+}
 }

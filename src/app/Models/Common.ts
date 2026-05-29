@@ -17,6 +17,8 @@ export interface State {
 }
 export interface Payperiodclass {
   payfrequencyid: number
+  pay_Frequency_Detail_Id:number
+  pay_Period:string
   paySequenceNo: string
   payPeriod: string
   displayName: string;
@@ -75,4 +77,5 @@ export interface citynameclass {
 export interface statenameclass {
   state_Id: number
   state_Name: string
+  stateId: number
 }

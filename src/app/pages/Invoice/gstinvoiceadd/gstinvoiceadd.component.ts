@@ -72,12 +72,17 @@ export class GstinvoiceaddComponent {
   BillingType: any;
   NetDeductionType: any;
   selectedFinancialYear: any;
+  selectedPayPeriod: any;
   PayCode: any;
   payperiodId: any;
   payPeriod!: Payperiodclass;
   payPeriodType!: string;
   userdetail: any;
   selectedMapId: any;
+  selectedsiteId: any;
+  selectedCityId: any;
+  selectedStateId: any;
+  selectedPayPeriodId: any;
   siteId: number = 0;
   selectedSiteName: string = '';
   companyId: number = 0;
@@ -85,6 +90,7 @@ export class GstinvoiceaddComponent {
   selectedMap: any;
   cityId:any;
   selectedCity:any;
+  selectedcityId:any;
    stateId:any;
   selectedState:any;
   ctcSign: string = '-';
@@ -106,56 +112,72 @@ invoiceId!: number;
     this.addGstInvoice.patchValue({
       CompanyName: company.companyName
     });
+     this.onChange();
   }
 
-  handleFinancialYear(year) {
+  handleFinancialYear(year: any) {
     this.selectedFinancialYear = year.financial_Year_Id;
     this.addGstInvoice.patchValue({
       FinancialYear: year.financial_Year_Id
     });
+     this.onChange();
   }
 
   groupnameEvent(event: any) {
   this.siteId = event.siteCode;
+  this.selectedsiteId = event.siteCode;
   this.selectedSiteName = event.siteName;
 
-  this.addGstInvoice.patchValue({
-    GroupDetail: {
-      siteCode: event.siteCode,
-      siteName: event.siteName
-    }
-  }, { emitEvent: false });
+ this.addGstInvoice.patchValue({
+  GroupDetail: event.siteCode
+}, { emitEvent: false });
+ this.addGstInvoice.get('GroupDetail')?.markAsTouched();
+  this.onChange();
 }
-
   mapnameEvent(event) {
+    //console.log("Map Event:", event); // Debug log to check the event data
+   this.selectedMapId = event.mapNameId;
     this.mapNameId = event.mapNameId;
     this.selectedMap = event.mapName;
     this.addGstInvoice.patchValue({
       CostCenterMapping: event.mapNameId
     });
+    this.addGstInvoice.get('CostCenterMapping')?.markAsTouched();
+     this.onChange();
   }
 citynameEvent(event) {
     this.cityId = event.city_Id;
     this.selectedCity = event.city_Name;
+    this.selectedCityId= event.city_Id;
     this.addGstInvoice.patchValue({
       City: event.city_Id
     });
      this.addGstInvoice.get('City')?.markAsTouched();
+      this.onChange();
   }
   statenameEvent(event) {
     this.stateId = event.stateId;
     this.selectedState = event.state_Name;
+    this.selectedStateId = event.stateId;
     this.addGstInvoice.patchValue({
       StateName: event.stateId
     });
+    this.addGstInvoice.get('StateName')?.markAsTouched();
+     this.onChange();
   }
   handlePayperiodEvent(payperiod: Payperiodclass) {
     this.payPeriod = payperiod;
-    this.payperiodId = payperiod.payfrequencyid;
-
+    this.payperiodId = payperiod.pay_Frequency_Detail_Id;
+    this.selectedPayPeriodId= payperiod.pay_Frequency_Detail_Id;
+//console.log("Selected Pay Period:", this.payperiodId  , payperiod);
     this.addGstInvoice.patchValue({
-      PayPeriod: payperiod.payPeriod
+      PayPeriod: payperiod.pay_Frequency_Detail_Id
     });
+
+     if (payperiod?.pay_Frequency_Detail_Id) {
+    this.UpdateParticulars();
+     this.onChange();
+  }
   }
 
   ngOnInit(): void {
@@ -173,7 +195,7 @@ citynameEvent(event) {
     this.addGstInvoice = new FormGroup({
       InvoiceNumber: new FormControl(  { value: 'NEW', disabled: true }, Validators.required),
       companyCode: new FormControl('', Validators.required),
-      CompanyName: new FormControl('', Validators.required),
+      CompanyName: new FormControl(''),
       GroupDetail: new FormControl(''),
       CostCenterMapping: new FormControl('', Validators.required),
       City: new FormControl('', Validators.required),
@@ -272,6 +294,17 @@ citynameEvent(event) {
       EAPCT:new FormControl(""),
       HOSAC:new FormControl(""),
     });
+       this.addGstInvoice.get('FinancialYear')?.valueChanges.subscribe(yearId => {
+
+    this.selectedFinancialYear = yearId;
+
+    // reset PayPeriod first
+    this.addGstInvoice.get('PayPeriod')?.reset(null, { emitEvent: false });
+
+    this.GetPayPeriod();
+   
+    });
+   
      this.addGstInvoice.valueChanges
     .pipe(debounceTime(300)) // prevents too many calls
     .subscribe(() => {
@@ -348,18 +381,19 @@ const request = {
       //Action: "Add",
       //Invoice_Id: null
       Action: this.data?.mode === 'edit' ? 'Edit' : 'Add',
-      Invoice_Id: this.data?.invoiceId ?? null,
+    Invoice_Id: this.isEditMode
+  ? String(this.data?.invoiceId ?? '')
+  : null,
       Created_Mode: null,
 
       UserId: this.userdetail?.user_Id?.toString() ?? null,
-      
       Invoice_Number: formValue?.InvoiceNumber?.toString() ?? null,
       Company_Id: this.selectedCompanyId?.toString() ?? null,
       Cost_Center_Mapping_Id: this.mapNameId?.toString() ?? null,
 
       City_Id: this.cityId?.toString() ?? null,
 
-      Financial_Year_Id: this.selectedFinancialYear?.toString() ?? null,
+      Financial_Year_Id: formValue?.FinancialYear?.toString() ?? null,
       Pay_Period_Id: this.payperiodId?.toString() ?? null,
       Invoice_Type_Id: formValue?.InvoiceType?.toString() ?? null,
 
@@ -424,21 +458,20 @@ const request = {
       Remarks: formValue?.Remarks?.toString() ?? null,
       Status: formValue?.Status?.toString() ?? null,
 
-      IsActive: null,
+      IsActive: "1",
       WO_Date: formValue?.WODate?.toString() ?? null,
       InvoiceNotes: formValue?.InvoiceNotes?.toString() ?? null,
-
-      CreatedBy: this.userdetail?.user_Id?.toString() ?? null,
-      CreatedOn: today?.toString() ?? null,
-      ModifiedBy: null,
-      ModifiedOn: null,
+       CreatedBy:  this.isEditMode ?null:this.userdetail?.user_Id?.toString() ??null,
+      CreatedOn:  this.isEditMode ?null:today?.toString() ??null,
+ModifiedBy:  this.isEditMode ?this.userdetail?.user_Id?.toString() : null,
+ModifiedOn: this.isEditMode ? today?.toString() : null,
 
       Discrepancy_By: formValue?.DiscrepancyBy?.toString() ?? null,
       Discrepancy_Reason: formValue?.DiscrepancyReason?.toString() ?? null,
 
       Onboarding_Charge: formValue?.OnboardingCharge?.toString() ?? null,
 
-      Group_Detail_Id: null,
+      Group_Detail_Id:this.siteId?.toString() ?? null,
 
       TaxableAmount1: null,
       TaxableAmount1_Note: null,
@@ -503,9 +536,26 @@ if (res?.StatusCode === 200 && res?.Data?.length > 0) {
       alert(res?.Message || 'Invoice creation failed');
     }
   },
-      error: saveErr => {
-        console.error('Create GST Invoice error:', saveErr);
-      }
+     error: saveErr => {
+
+    console.error('Create GST Invoice error:', saveErr);
+
+    let errorMessage = 'Invoice creation failed';
+
+    if (saveErr?.error?.text) {
+      errorMessage = saveErr.error.text;
+    }
+    else if (typeof saveErr?.error === 'string') {
+      errorMessage = saveErr.error;
+    }
+    else if (saveErr?.message) {
+      errorMessage = saveErr.message;
+    }
+
+    errorMessage = errorMessage.replace(/<br\s*\/?>/gi, '\n');
+
+    alert(errorMessage);
+  }
     });
     
   }
@@ -520,6 +570,7 @@ closeForm() {
    this.successMessage = null;
      this.dialogRef.close();
 }
+
 onChange() {
   if (!this.selectedCompanyId || !this.stateId) return;
 
@@ -766,13 +817,14 @@ UpdateParticulars(): void {
   const request = { Company_Id: CompanyId ,
   UserId: this.toBlank(this.userdetail?.user_Id)
   };
+  console.log("Request for particulars:", request);
   this.gst.GetParticulars(request)
     .subscribe({
       next: (res: any) => {
 
       if (res?.StatusCode === 200 && res?.Data?.length > 0) {
 
-        const payPeriodText = this.toBlank(this.payPeriod.payPeriod);
+        const payPeriodText = this.toBlank(this.payPeriod.pay_Period);
         this.addGstInvoice.get('Particulars')?.setValue(
           `${res.Data[0].Particulars} ${payPeriodText}`
         );
@@ -787,13 +839,13 @@ toggleCtcSign(event: any): void {
   this.ctcSign = event.target.checked ? '+' : '-';
 }
 GetPayPeriod() {
+
   const CompanyId = this.toBlank(this.selectedCompanyId);
-  if (!CompanyId) {
-    return;
-  }
-if (! this.selectedFinancialYear ) return;
-   const request = { Company_Id: CompanyId ,
-  Financial_Year_Id: this.toBlank( this.selectedFinancialYear)
+  if (!CompanyId || !this.selectedFinancialYear) return;
+
+  const request = {
+    Company_Id: CompanyId,
+    Financial_Year_Id: this.toBlank(this.selectedFinancialYear)
   };
 
   this.gst.GetPayPeriod(request).subscribe({
@@ -801,17 +853,13 @@ if (! this.selectedFinancialYear ) return;
 
       const p = res?.Data?.[0];
       if (!p) return;
-      this.addGstInvoice.patchValue({
-        PayPeriod: {
-          payfrequencyid: p.pay_Frequency_Detail_Id ?? 0,
-          payPeriod: p.pay_Period ?? null
-        }
-      });
-
-    },
-    error: err => {
-      console.error('GetPayPeriod error:', err);
+   this.payperiodId= p.pay_Frequency_Detail_Id;
+      // ✅ ONLY set value, do NOT reload list
+      this.addGstInvoice.get('PayPeriod')?.setValue(
+        p.pay_Frequency_Detail_Id
+      );
     }
+ 
   });
 }
 logInvalidControls(form: FormGroup, parentKey: string = ''): void {
@@ -840,8 +888,11 @@ loadInvoiceDetails(invoiceId: number) {
       if (res?.StatusCode === 200) {
         console.log(res.Data);
         this.invoiceDetails = res.Data[0]; 
-         this.successMessage = `Invoice Number : - ${this.invoiceDetails.Invoice_Number} created successfully`;
-      }
+    //     this.successMessage = `Invoice Number : - ${this.invoiceDetails.Invoice_Number} created successfully`;
+  this.successMessage = this.isEditMode
+  ? `Invoice Number : ${this.invoiceDetails.Invoice_Number} updated successfully`
+  : `Invoice Number : ${this.invoiceDetails.Invoice_Number} created successfully`;    
+  }
     }
   });
 }
@@ -883,35 +934,33 @@ console.log('Invoice Company_Id:', inv.Company_Id);
 this.selectedCompany = this.companyList.find(
   c => Number(c.companyId) === Number(inv.Company_Id)
 );
-
-        //this.companyId = inv.Company_Id;
+       //this.companyId = inv.Company_Id;
     
 console.log('Selected Company:', this.selectedCompany);    //this.cityId = inv.City_Id;
         //this.selectedCity = inv.City_Name;
-   this.selectedCompanyId = inv.companyId;
-
+   this.selectedCompanyId = inv.Company_Id;
+   this.selectedFinancialYear = inv.Financial_Year_Id;
+   this.selectedPayPeriodId = inv.Pay_Period_Id;
+   this.selectedMapId=inv.Cost_Center_Mapping_Id;
+   this.selectedsiteId=inv.Group_Detail_Id;
+  this.selectedStateId=inv.StateId;
+this.selectedcityId=inv.City_Id;
+this.mapNameId = inv.Cost_Center_Mapping_Id;
+this.siteId = inv.Group_Detail_Id;
+this.stateId = inv.StateId;
+this.cityId = inv.City_Id;
+this.payperiodId = inv.Pay_Period_Id;
         console.log("PRINT ", inv);
-  console.log("Company Event",this.selectedCompany);
+  console.log("Company Event",this.selectedCompanyId);
           this.addGstInvoice.patchValue({
-companyCode: this.selectedCompany,
- City: {
-    cityId: inv.City_Id,
-    cityName: inv.City_Name
-  },
-  PayPeriod: {
-    payfrequencyid: inv.Pay_Period_Id,
-    payPeriod: inv.Pay_Period
-  },
-  CostCenterMapping: {
-  mapNameId: inv.Cost_Center_Mapping_Id,
-  mapName: inv.Map_Name
-},
-
-GroupDetail: {
-  siteId: inv.Group_Detail_Id,
-  siteName: inv.Group_Name
-},
-            InvoiceNumber: inv.Invoice_Number,
+companyCode: inv.Company_Id,
+ GroupDetail: inv.Group_Detail_Id,
+  CostCenterMapping: inv.Cost_Center_Mapping_Id,
+  City: inv.City_Id,
+  StateName: inv.StateId,
+  PayPeriod: inv.Pay_Period_Id,
+  FinancialYear: inv.Financial_Year_Id,
+ InvoiceNumber: inv.Invoice_Number,
             NofEmployees: inv.No_Of_Employees,
             InvoiceType: inv.Invoice_Type_Id,
 
@@ -1005,11 +1054,6 @@ this.cdRef.detectChanges();
 
           this.calculateGstAmounts();
           this.getNetAmount();
-this.cdRef.detectChanges();
-     this.handleCompanyEvent({
-  companyId: this.selectedCompany?.companyId,
-companyName: this.selectedCompany?.companyName
-}); 
 
         // ✅ Disable fields
         this.addGstInvoice.get('InvoiceNumber')?.disable();
@@ -1017,8 +1061,8 @@ companyName: this.selectedCompany?.companyName
 
         if (this.isEditMode) {
           [
-            'GroupDetail','City','StateName','PayPeriod','FinancialYear',
-            'CostCenterMapping','Amount','InvoiceType','ServiceChargeAmount',
+            'companyCode','GroupDetail','CostCenterMapping','City','StateName',
+            'Amount','InvoiceType','ServiceChargeAmount',
             'InvoiceDate','NofEmployees','AbsorptionAmt','Particulars',
             'SourcingChargeAmount','TaxableAmount1','CTCAdjustmentAmount'
           ].forEach(c => this.addGstInvoice.get(c)?.disable());

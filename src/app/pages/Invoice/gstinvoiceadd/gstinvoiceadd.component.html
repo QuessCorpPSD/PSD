@@ -28,7 +28,7 @@
                                 </div>
                                 <div class="col-md-3">
                                     <label class="form-label">Company Code<span class="text-danger">*</span></label>
-                                    <companyall (companyEmit)="handleCompanyEvent($event);onChange()"
+                                    <companyall (companyEmit)="handleCompanyEvent($event);"
                                         formControlName="companyCode">
                                     </companyall>
                                     <div class="text-danger small" *ngIf="addGstInvoice.get('companyCode')?.touched 
@@ -43,7 +43,7 @@
                                 <div class="col-md-3">
                                     <label class="form-label">Group Detail<span class="text-danger"></span></label>
                                     <groupname [selectedCompanyId]="selectedCompanyId"
-                                        (sitenameEmit)="groupnameEvent($event);onChange()" formControlName="GroupDetail">
+                                        (sitenameEmit)="groupnameEvent($event);" formControlName="GroupDetail">
                                     </groupname>
                                 </div>
                             </div>
@@ -77,7 +77,7 @@
 
                                 <div class="col-md-3">
                                     <label class="form-label">Financial Year<span class="text-danger">*</span></label>
-                                    <financial-year (financialEmit)="handleFinancialYear($event);GetPayPeriod();"
+                                    <financial-year (financialEmit)="handleFinancialYear($event);"
                                         formControlName="FinancialYear">
                                     </financial-year>
                                     <div class="text-danger small" *ngIf="addGstInvoice.get('FinancialYear')?.touched 
@@ -87,9 +87,12 @@
                                 </div>
                                 <div class="col-md-3">
                                     <label class="form-label">Pay Period<span class="text-danger">*</span></label>
-                                    <PayPeriod [selectedCompanyId]="selectedCompanyId" [payPeriodType]="payPeriodType"
-                                        (payperiodEmit)="handlePayperiodEvent($event);UpdateParticulars();" formControlName="PayPeriod">
-                                    </PayPeriod>
+                                    <PayPeriod
+        [selectedCompanyId]="selectedCompanyId"
+        [selectedFinancialYear]="selectedFinancialYear"
+        (payperiodEmit)="handlePayperiodEvent($event)"
+        formControlName="PayPeriod">
+    </PayPeriod>
                                     <div class="text-danger small" *ngIf="addGstInvoice.get('PayPeriod')?.touched 
              && addGstInvoice.get('PayPeriod')?.hasError('required')">
                                         PayPeriod is required
@@ -118,7 +121,7 @@
                                     <label class="form-label">State<span class="text-danger">*</span></label>
 
                                     <statename [selectedCompanyId]="selectedCompanyId" 
-                                        (statenameEmit)="statenameEvent($event);onChange()" formControlName="StateName" >
+                                        (statenameEmit)="statenameEvent($event)" formControlName="StateName" >
                                     </statename>
                                     <div class="text-danger small" *ngIf="addGstInvoice.get('StateName')?.touched 
              && addGstInvoice.get('StateName')?.hasError('required')">

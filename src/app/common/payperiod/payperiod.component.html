@@ -14,7 +14,7 @@
       *ngFor="let option of filteredOptions$ | async"
       [value]="option"
     >
-      {{ option.payPeriod }}
+      {{ option.pay_Period || option.payPeriod }}
     </mat-option>
   </mat-autocomplete>
 </mat-form-field>
