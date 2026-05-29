@@ -72,34 +72,13 @@ export class InvoiceRepository implements IInvoiceRepository {
     }
 
     InitiateIRN(InitiateIRN: any): Observable<APIResponse> {
-        const url = `${this.environment.apiUrl}GSTInvoice/InitiateIRN`;      
+        const url = `${this.environment.apiUrl}GSTInvoice/InitiateIRN`;
         return this.http.post<APIResponse>(url, InitiateIRN);
     }
     GetIRNColors(): Observable<APIResponse> {
         const url = `${this.environment.apiUrl}GSTInvoice/GetAllInvoiceTypeColors`;
         //console.log(url);
         return this.http.get<APIResponse>(url);
-    }
-    BillableSearch(val): Observable<APIResponse> {
-        var inputval = JSON.stringify(val);
-
-        const config = new HttpHeaders({
-            'Cache-Control': 'no-cache, no-store, must-revalidate',
-            'Pragma': 'no-cache',
-            'Expires': '0'
-        }).set('Content-Type', 'application/json')
-            .set('Accept', 'application/json')
-        return this.http.post<APIResponse>(this.environment.apiUrl + "BillableDays/SearchDetails", inputval, { headers: config })
-    }
-    BillableDaysSearchExport(val): Observable<APIResponse> {
-        var inputval = JSON.stringify(val);
-        const config = new HttpHeaders({
-            'Cache-Control': 'no-cache, no-store, must-revalidate',
-            'Pragma': 'no-cache',
-            'Expires': '0'
-        }).set('Content-Type', 'application/json')
-            .set('Accept', 'application/json')
-        return this.http.post<APIResponse>(this.environment.apiUrl + "BillableDays/ExportToExcel", inputval, { headers: config })
     }
     BillableUpload(request: any): Observable<APIResponse> {
         var billableDaysModelRequest = JSON.stringify(request);
@@ -112,6 +91,30 @@ export class InvoiceRepository implements IInvoiceRepository {
         console.log(billableDaysModelRequest);
         return this.http.post<APIResponse>(this.environment.apiUrl + "BillableDays/BillableDaysUpload", billableDaysModelRequest, { headers: config })
     }
+
+    BillableDaysSearchExport(val): Observable<APIResponse> {
+        var inputval = JSON.stringify(val);
+        const config = new HttpHeaders({
+            'Cache-Control': 'no-cache, no-store, must-revalidate',
+            'Pragma': 'no-cache',
+            'Expires': '0'
+        }).set('Content-Type', 'application/json')
+            .set('Accept', 'application/json')
+        return this.http.post<APIResponse>(this.environment.apiUrl + "BillableDays/ExportToExcel", inputval, { headers: config })
+    }
+
+    BillableSearch(val): Observable<APIResponse> {
+        var inputval = JSON.stringify(val);
+
+        const config = new HttpHeaders({
+            'Cache-Control': 'no-cache, no-store, must-revalidate',
+            'Pragma': 'no-cache',
+            'Expires': '0'
+        }).set('Content-Type', 'application/json')
+            .set('Accept', 'application/json')
+        return this.http.post<APIResponse>(this.environment.apiUrl + "BillableDays/SearchDetails", inputval, { headers: config })
+    }
+
     BillableTemplateDownload(importtype): Observable<APIResponse> {
         return this.http.get<APIResponse>(this.environment.apiUrl + 'BillableDays/DownloadTemplate/' + importtype);
     }
@@ -189,7 +192,7 @@ export class InvoiceRepository implements IInvoiceRepository {
         const url = `${this.environment.apiUrl}GSTInvoice/PostCancelReject`;
         return this.http.post(url, formData, { responseType: 'text' });
     }
- 
+
 
     GetGSTInvoice(userId: number): Observable<APIResponse> {
         const url = `${this.environment.apiUrl}GSTInvoice/GetGSTInvoice/${userId}`;
@@ -264,7 +267,7 @@ export class InvoiceRepository implements IInvoiceRepository {
 
         return this.http.post<APIResponse>(url, formData);
     }
-   
+
 
 
 }
