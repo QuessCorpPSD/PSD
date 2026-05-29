@@ -61,7 +61,9 @@ import { ChangeDetectorRef } from '@angular/core';
 })
 export class GstinvoiceaddComponent {
   selectedCompanyId!: number;
+  financialYearId!:number;
   companyList: any[] = [];
+  payPeriodList: any[] = [];
    selectedCompany: any;
   @ViewChild(MatAccordion) accordion!: MatAccordion;
   accordionLoaded = false;
@@ -110,7 +112,8 @@ invoiceId!: number;
     this.selectedCompanyId = company.companyId;
 
     this.addGstInvoice.patchValue({
-      CompanyName: company.companyName
+      CompanyName: company.companyName,
+      companyId: company.companyId
     });
      this.onChange();
   }
@@ -118,7 +121,8 @@ invoiceId!: number;
   handleFinancialYear(year: any) {
     this.selectedFinancialYear = year.financial_Year_Id;
     this.addGstInvoice.patchValue({
-      FinancialYear: year.financial_Year_Id
+      FinancialYear: year.financial_Year_Id,
+        PayPeriod: null
     });
      this.onChange();
   }
@@ -140,17 +144,18 @@ invoiceId!: number;
     this.mapNameId = event.mapNameId;
     this.selectedMap = event.mapName;
     this.addGstInvoice.patchValue({
-      CostCenterMapping: event.mapNameId
+      CostCenterMapping:{ mapNameId: event.mapNameId, mapName: event.mapName}
     });
     this.addGstInvoice.get('CostCenterMapping')?.markAsTouched();
      this.onChange();
   }
-citynameEvent(event) {
+
+  citynameEvent(event) {
     this.cityId = event.city_Id;
     this.selectedCity = event.city_Name;
     this.selectedCityId= event.city_Id;
     this.addGstInvoice.patchValue({
-      City: event.city_Id
+      City:{ city_Id: event.city_Id, city_Name: event.city_Name}
     });
      this.addGstInvoice.get('City')?.markAsTouched();
       this.onChange();
@@ -404,7 +409,7 @@ const request = {
       Amount: formValue?.Amount?.toString() ?? null,
       StateId: this.stateId?.toString() ?? null,
      //StateId: "1",
-      //InvoicingStateId: "1",
+    //InvoicingStateId: this.stateId?.toString() ?? null,
 
       CGST_Percentage: formValue?.CGSTper?.toString() ?? 0,
       SGST_Percentage: formValue?.SGSTper?.toString() ?? 0,
@@ -458,6 +463,7 @@ const request = {
       Remarks: formValue?.Remarks?.toString() ?? null,
       Status: formValue?.Status?.toString() ?? null,
 
+      IsActive: "1",
       IsActive: "1",
       WO_Date: formValue?.WODate?.toString() ?? null,
       InvoiceNotes: formValue?.InvoiceNotes?.toString() ?? null,
@@ -523,7 +529,6 @@ ModifiedOn: this.isEditMode ? today?.toString() : null,
 
     this.gst.addGstInvoice(payload).subscribe({
       next: (res: any) => {
-
 if (res?.StatusCode === 200 && res?.Data?.length > 0) {
 
   const invoiceId = res.Data[0].Invoice_Id;
@@ -850,8 +855,9 @@ GetPayPeriod() {
 
   this.gst.GetPayPeriod(request).subscribe({
     next: (res: any) => {
+      this.payPeriodList = res?.Data || [];
 
-      const p = res?.Data?.[0];
+    const p = this.payPeriodList[0]; 
       if (!p) return;
    this.payperiodId= p.pay_Frequency_Detail_Id;
       // ✅ ONLY set value, do NOT reload list
@@ -928,7 +934,8 @@ loadInvoiceForEdit(invoiceId: number) {
       if (res?.StatusCode === 200 && res?.Data?.length > 0) {
 
         const inv = res.Data[0];
-console.log('Company List:', this.companyList);
+console.log('Company List:', inv);
+
 console.log('Invoice Company_Id:', inv.Company_Id);
         this.selectedCompanyId=inv.Company_Id;
 this.selectedCompany = this.companyList.find(
@@ -1039,6 +1046,7 @@ companyCode: inv.Company_Id,
             UTGSTper: inv.UTGST_Percentage
 
           }, { emitEvent: false });
+          }, 300);
 
 this.addGstInvoice.get('InvoiceDate')?.setValue(
   inv.Invoice_Date ? inv.Invoice_Date.split('T')[0] : null
@@ -1072,10 +1080,27 @@ this.cdRef.detectChanges();
   });
 }
 
-ngOnChanges() {
+
+ngOnChanges(changes: any) {
+
+  // Set selected company (OK to keep)
   if (this.selectedCompanyId && this.companyList?.length) {
     this.selectedCompany =
       this.companyList.find(c => c.company_Id === this.selectedCompanyId);
+  }
+
+  if (this.isEditMode) {
+    return;
+  }
+
+  // Normal flow (only for create mode)
+  if (
+    changes['financialYearId'] ||
+    changes['selectedCompanyId']
+  ) {
+    if (this.financialYearId && this.selectedCompanyId) {
+      this.GetPayPeriod();
+    }
   }
 }
 

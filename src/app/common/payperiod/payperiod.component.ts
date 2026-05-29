@@ -13,6 +13,7 @@ import { Payperiodclass } from '../../Models/Common';
 export const COMM_TOKEN = new InjectionToken<ICommonService>('COMM_TOKEN');
 export const Invoice_TOKEN = new InjectionToken<IInvoiceRepository>('Invoice_TOKEN');
 @Component({
+<<<<<<< HEAD
   selector: 'PayPeriod',
   standalone: true,
   imports: [
@@ -40,11 +41,35 @@ export const Invoice_TOKEN = new InjectionToken<IInvoiceRepository>('Invoice_TOK
       multi: true
     }
   ]
+=======
+    selector: 'PayPeriod',
+     standalone: true, 
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        MatAutocompleteModule,
+        MatInputModule,
+        MatFormFieldModule
+    ],
+    templateUrl: './payperiod.component.html',
+    styleUrl: './payperiod.component.css',
+    encapsulation: ViewEncapsulation.None,
+    providers: [{
+            provide: COMM_TOKEN,
+            useClass: CommonService,
+        }]
+>>>>>>> 740069465ed43eed7e9643a763b4a398eb506a93
 })
 export class PayPeriodComponent implements ControlValueAccessor, OnChanges {
   @Input() selectedCompanyId?: number;
+<<<<<<< HEAD
    @Input() payPeriodType?: string;
    @Input() selectedFinancialYear?: any;
+=======
+  @Input() financialYearId!: number;
+  @Input() payPeriodType?: string;
+
+>>>>>>> 740069465ed43eed7e9643a763b4a398eb506a93
   options: string[] = [];
   searchText: string = '';
   myControl = new FormControl<string | Payperiodclass>('');
@@ -60,6 +85,14 @@ export class PayPeriodComponent implements ControlValueAccessor, OnChanges {
   }
 
 ngOnChanges() {
+<<<<<<< HEAD
+=======
+  if (this.selectedCompanyId && this.payPeriodType) {
+    console.log("Calling BindPayperiod", this.selectedCompanyId, this.payPeriodType);
+    this.BindPayperiod(this.selectedCompanyId);
+  }
+}
+>>>>>>> 740069465ed43eed7e9643a763b4a398eb506a93
 
   if (this.selectedCompanyId && this.selectedFinancialYear) {
 console.log("Selected Company Id and Financial Year", this.selectedCompanyId, this.selectedFinancialYear);
