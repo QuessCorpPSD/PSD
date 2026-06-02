@@ -198,6 +198,7 @@ import { BankTransferHTHStatusComponent } from './pages/AccountReceivable/Bankin
 import { ClientTDSSlabMasterComponent } from './pages/AccountReceivable/Bankinvoice/client-tdsslab-master/client-tdsslab-master.component';
 import { InvoiceCollectionComponent } from './pages/AccountReceivable/Bankinvoice/invoice-collection/invoice-collection.component';
 import { APARAdjustmentupdateComponent } from './pages/AccountReceivable/Bankinvoice/aparadjustmentupdate/aparadjustmentupdate.component';
+import { InvoiceruleComponent } from './pages/customers/invoicerule/invoicerule.component';
 
 
 
@@ -435,7 +436,8 @@ export const routes: Routes = [
           { path: "cancelledinvoicerepository", component: CancelledinvoicerepositoryComponent },
           { path: "Company", component: CompanyComponent },
           { path: "sezcertificateupload", component: SezcertificateuploadComponent },
-          { path: "genericupload", component: GenericuploadComponent }
+          { path: "genericupload", component: GenericuploadComponent },
+          { path: "invoicerule", component: InvoiceruleComponent },
 
         ]
       },
@@ -476,7 +478,7 @@ export const routes: Routes = [
           { path: 'SalaryReleaseApproval', component: SalaryReleaseApproveComponent },
           { path: 'SalaryReleaseStatus', component: SalaryReleaseStatusComponent },
           { path: 'bankinvoiceneftculuture', component: BankInvoiceNEFTCultureComponent },
-           { path: 'InvoiceBatchConsolidationReport', component: InvoiceBatchConsolidationReportComponent },
+          { path: 'InvoiceBatchConsolidationReport', component: InvoiceBatchConsolidationReportComponent },
           { path: 'ReIssueProcessApprove', component: ReIssueProcessApproveComponent },
           { path: 'ReIssueProcessReport', component: ReIssueProcessReportComponent },
           { path: 'bankadvicesplitculture', component: BankAdviceSplitCultureComponent }
