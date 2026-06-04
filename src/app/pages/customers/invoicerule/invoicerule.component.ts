@@ -26,6 +26,8 @@ import { AlertpopupComponent } from "../../../common/alertpopup/alertpopup.compo
 import { IinvoiceRuleService } from '../../../Repository/customer/IinvoiceRuleService';
 import * as XLSX from 'xlsx';
 import * as FileSaver from 'file-saver';
+import { finalize } from 'rxjs';
+import { AsyncKeyword } from 'typescript';
 
 @Component({
   selector: 'invoicerule',
@@ -61,6 +63,9 @@ export class InvoiceruleComponent {
   excelFile: File | null = null;
   showPreviewModal: boolean = false;
   showSearchGrid: boolean = true;
+  selectedInvoiceRuleId: number = 0;
+  templateresponse: any;
+  editCompany: any;
   months = [
     { id: 1, text: 'January' },
     { id: 2, text: 'February' },
@@ -92,6 +97,16 @@ export class InvoiceruleComponent {
     { id: 1, text: 'Yes' },
     { id: 2, text: 'No' },
   ]
+
+  standardSelectweekend = [
+    { id: 1, text: 'Yes' },
+    { id: 0, text: 'No' },
+  ]
+
+  typeofbillingSelect = [
+    { id: 1, text: 'Bill To Rate' },
+    { id: 2, text: 'Billable Report' },
+  ]
   dataSource = new MatTableDataSource<InvoiceRuleGrid>([]);
   invoiceruleform!: FormGroup;
 
@@ -99,8 +114,11 @@ export class InvoiceruleComponent {
   @ViewChild(MatSort) sort!: MatSort;
 
   displayedColumns: string[] = [
-    'companyCode', 'siteName', 'daysPerMonth', 'weekends',
-    'holidays', 'compOff', 'delete'
+    'delete', 'companyCode', 'siteName', 'billingType', 'asPerTimesheetText', 'daysPerMonth',
+    'weekends', 'holidays', 'compOff', 'maternity', 'leaveAddition', 'discounts', 'rebates',
+    'serviceFee', 'reimbursement', 'gratuity', 'ot', 'leaveRule', 'billableDaysFormula',
+    'leavetypesText', 'leavePeriod', 'carryforward', 'noofCarryfarward', 'typE_OF_BILLING_NAME',
+    'payroll_weekends_billable'
   ];
 
   constructor(@Inject(IR_TOKEN) private invoicerule: IinvoiceRuleService, private _sessionStoreage: SessionStorageService,
@@ -129,12 +147,11 @@ export class InvoiceruleComponent {
     if (!this.sitenameUI) {
       this.sitenameUI = {
         siteCode: '0',
-        siteName: ''
+        siteName: '** Select **'
       };
     }
 
     if (this.companyUI) {
-      this.isLoading = true;
       this.BindDashBoard(this.companyUI.companyId, this.sitenameUI.siteCode)
     }
   }
@@ -171,7 +188,6 @@ export class InvoiceruleComponent {
     const json = this._sessionStoreage.getItem('UserProfile');
     if (json) {
       this.userdetail = JSON.parse(this.decry.decrypt(json));
-      //console.log(this.userdetail.userId);
     } else {
       console.warn('UserProfile not found in session storage');
     }
@@ -200,7 +216,8 @@ export class InvoiceruleComponent {
       rebates: ['', Validators.required],
       discounts: ['', Validators.required],
       billabledaysformula: ['', Validators.required],
-      weekend_billable: ['', Validators.required]
+      weekend_billable: ['', Validators.required],
+      type_of_billing: ['', Validators.required]
     });
 
     this.invoiceruleform.get('daysAsPerTimesheet')?.valueChanges.subscribe((checked: boolean) => {
@@ -220,26 +237,23 @@ export class InvoiceruleComponent {
         noOfCarryCtrl?.reset();
       }
     });
-    //this.invoiceruleform.get('payperiodto')?.disable();
   }
   BindDashBoard(companyId: number, siteId: string) {
-    this.invoicerule.GetAllInvoiceRule(companyId, siteId).subscribe({
-      next: res => {
-        if (!res.Data || res.Data.length === 0) {
-          alert("No data available to display.");
-          this.isLoading = false;
-          return;
+    this.invoicerule.GetAllInvoiceRule(companyId, siteId).
+      pipe(finalize(() => { this.isLoading = false; })).subscribe({
+        next: res => {
+          if (!res.Data || res.Data.length === 0) {
+            alert("No data available to display.");
+            return;
+          }
+          this.dataSource = new MatTableDataSource<any>(res.Data);
+          this.dataSource.paginator = this.paginator;
+          this.dataSource.sort = this.sort;
+        },
+        error: err => {
+          console.error('Error fetching data:', err.message);
         }
-        this.dataSource = new MatTableDataSource<any>(res.Data);
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
-        this.isLoading = false;
-      },
-      error: err => {
-        console.error('Error fetching data:', err.message);
-        this.isLoading = false;
-      }
-    });
+      });
   }
 
   Addclicked(): void {
@@ -256,7 +270,7 @@ export class InvoiceruleComponent {
         }
       });
     } else {
-      console.log("Cancelled");
+
     }
 
   }
@@ -286,6 +300,10 @@ export class InvoiceruleComponent {
       billabledaysformula: ''
     });
     this.isAddclicked = false;
+    this.isEditMode = false;
+    this.selectedInvoiceRuleId = 0;
+    this.companyUI = null;
+    this.sitenameUI = null;
   }
 
   TemplateClick(): void {
@@ -317,7 +335,6 @@ export class InvoiceruleComponent {
           if (res.StatusCode == 200) {
             const data = res.Data;
             var base64 = data.file;
-            //console.log(data.FileName);
             this.downloadExcelFromBase64(base64, data.fileName)
             this.isLoading = false;
           }
@@ -330,8 +347,6 @@ export class InvoiceruleComponent {
   }
 
   ExportClick(): void {
-    alert('1');
-    this.isLoading = true;
     this.InvoiceRuleExport();
   }
 
@@ -347,26 +362,28 @@ export class InvoiceruleComponent {
     formData.append('companyCode', this.companyUI.companyCode);
     if (!this.sitenameUI) {
       this.sitenameUI = {
-        siteCode: 0,
+        siteCode: '0',
         siteName: ''
       }
-      formData.append('siteCode', this.sitenameUI.siteCode);
-      this.invoicerule.InvoiceRuleExport(formData).subscribe({
+    }
+    formData.append('siteCode', this.sitenameUI.siteCode);
+    this.isLoading = true;
+    this.invoicerule.InvoiceRuleExport(formData)
+      .pipe(finalize(() => {
+        this.isLoading = false;
+      })).subscribe({
         next: res => {
           if (res.StatusCode == 200) {
             const data = res.Data;
             var base64 = data.file;
             this.downloadExcelFromBase64(base64, data.fileName)
-            this.companyUI = {};
-            this.sitenameUI = {};
-            this.isLoading = false;
-
+            this.companyUI = null;
+            this.sitenameUI = null;
           }
         },
         error: error => console.error('Error:', error)
       })
-    }
-    this.isLoading = false;
+
     return;
   }
 
@@ -408,6 +425,12 @@ export class InvoiceruleComponent {
       this.invoiceruleform.markAllAsTouched();
       return;
     }
+
+    if (this.isEditMode) {
+      this.UpdateInvoiceRule();
+      return;
+    }
+
     const formValue = this.invoiceruleform.value;
     const InvoiceRuleAdd = {
       companyId: this.companyUI?.companyId,
@@ -422,11 +445,11 @@ export class InvoiceruleComponent {
       comppoffrule: formValue.comppoffrule.text,
       maternityleave: formValue.maternityleave.text,
       leavetypes: formValue.leavetypes.id,
-      leavecredit: formValue.leavecredit,
+      leavecredit: String(formValue.leavecredit),
       leaverule: formValue.leaverule.text,
       payperiodfrom: formValue.payperiodfrom.text,
       payperiodto: formValue.payperiodto,
-      carryforward: formValue.carryforward.text,
+      carryforward: String(formValue.carryforward.id),
       noofcarryforwards: formValue.noofcarryforwards,
       otrule: formValue.otrule.text,
       gratuity: formValue.gratuity.text,
@@ -435,11 +458,15 @@ export class InvoiceruleComponent {
       rebates: formValue.rebates.text,
       discounts: formValue.discounts.text,
       billabledaysformula: formValue.billabledaysformula,
-      userId: this.userdetail.user_Id,
-      payroll_weekends_billable: formValue.weekend_billable
+      userId: String(this.userdetail.user_Id),
+      payroll_weekends_billable: String(formValue.weekend_billable),
+      type_of_billing: String(formValue.type_of_billing.id),
+      type_of_billing_name: String(formValue.type_of_billing.text)
     };
-
-    this.invoicerule.PostAddInvoiceRule(InvoiceRuleAdd).subscribe({
+    this.isLoading = true;
+    this.invoicerule.PostAddInvoiceRule(InvoiceRuleAdd).pipe(finalize(() => {
+      this.isLoading = false;
+    })).subscribe({
       next: (res) => {
         const errormsg = res.Data[0].msg;
 
@@ -447,6 +474,7 @@ export class InvoiceruleComponent {
           this.isAddclicked = false;
           this.showPopup = true;
           this.popupMessage = "Invoice Rule Added Successfully";
+          this.sitenameUI = null;
           this.BindDashBoard(this.companyUI.companyId, this.sitenameUI.siteCode)
         }
         else {
@@ -483,91 +511,239 @@ export class InvoiceruleComponent {
       }
     });
   }
-  onImportClick(fileInput: HTMLInputElement): void {
-    fileInput.click();
-  }
-
-  onFileChange(event: any): void {
-    this.isLoading = true;
-    const target: DataTransfer = <DataTransfer>(event.target);
-
-    if (!target.files || target.files.length !== 1) {
-      console.error('Please upload only one Excel file.');
-      this.isLoading = false;
-      return;
-    }
-
-    const file = target.files[0];
-    this.excelFile = target.files[0];
-    const reader: FileReader = new FileReader();
-    reader.onload = (e: any) => {
-      const binaryStr: string = e.target.result;
-      try {
-        const workbook: XLSX.WorkBook = XLSX.read(binaryStr, { type: 'binary' });
-        const sheetName: string = workbook.SheetNames[0];
-        const sheet: XLSX.WorkSheet = workbook.Sheets[sheetName];
-        const jsonData = XLSX.utils.sheet_to_json(sheet);
-        const top100 = jsonData.slice(0, 100);
-        this.excelPreviewData = top100;  // 🔹 Store for popup preview
-        this.showPreviewModal = true;     // 🔹 Trigger modal
-        this.showSearchGrid = false;     // 🔹 Trigger modal
-        this.isLoading = false;
-      } catch (error) {
-        console.error('Error reading Excel file:', error);
-      }
-    };
-
-    reader.readAsBinaryString(file);
-  }
-
 
 
   getTableColumns(): string[] {
     return this.excelPreviewData?.length ? Object.keys(this.excelPreviewData[0]) : [];
   }
 
-  downloadExcel(data: any[], templateId: string): void {
+  editClick(row: any) {
+
+    this.isEditMode = true;
+    this.isAddclicked = true;
+
+    this.companyUI = {
+      companyId: row.companyId,
+      companyCode: row.companyCode
+    };
+
+    this.sitenameUI = {
+      siteCode: row.siteId,
+      siteName: row.siteName
+    };
+
+    this.selectedInvoiceRuleId = row.invoicingRulesID;
+
+    this.invoiceruleform.patchValue({
+
+      billingType: this.billingType.find(x =>
+        x.text.toUpperCase() === row.billingType.toUpperCase()),
+
+      daysAsPerTimesheet: Number(row.asPerTimesheet) === 1,
+
+      dayspermonth: row.daysPerMonth,
+
+      weekendsrule: this.standardSelect.find(x =>
+        x.text.toUpperCase() === row.weekends.toUpperCase()),
+
+      holidaysrule: this.standardSelect.find(x =>
+        x.text.toUpperCase() === row.holidays.toUpperCase()),
+
+      comppoffrule: this.standardSelect.find(x =>
+        x.text.toUpperCase() === row.compOff.toUpperCase()),
+
+      maternityleave: this.standardSelect.find(x =>
+        x.text.toUpperCase() === row.maternity.toUpperCase()),
+
+      leavetypes: this.leavetypes.find(x =>
+        x.id == +row.leavetypes),
+
+      leavecredit: row.leaveAddition,
+
+      leaverule: this.standardSelect.find(x =>
+        x.text.toUpperCase() === row.leaveRule.toUpperCase()),
+
+      carryforward: this.standardSelect.find(
+        x => x.text.toUpperCase() === String(row.carryforward).toUpperCase()
+      ),
+      noofcarryforwards: row.noofCarryfarward,
+
+      otrule: this.standardSelect.find(x =>
+        x.text.toUpperCase() === row.ot.toUpperCase()),
+
+      gratuity: this.standardSelect.find(x =>
+        x.text.toUpperCase() === row.gratuity.toUpperCase()),
+
+      reimbursement: this.standardSelect.find(x =>
+        x.text.toUpperCase() === row.reimbursement.toUpperCase()),
+
+      servicefeeonexpenses: this.standardSelect.find(x =>
+        x.text.toUpperCase() === row.serviceFee.toUpperCase()),
+
+      rebates: this.standardSelect.find(x =>
+        x.text.toUpperCase() === row.rebates.toUpperCase()),
+
+      discounts: this.standardSelect.find(x =>
+        x.text.toUpperCase() === row.discounts.toUpperCase()),
+
+      billabledaysformula: row.billableDaysFormula,
+
+      weekend_billable:
+        row.payroll_weekends_billable?.toUpperCase() === 'YES' ? 1 : 0,
+
+      type_of_billing: this.typeofbillingSelect.find(x =>
+        x.id == +row.typE_OF_BILLING_ID)
+    });
+
+    // Leave Period Example: "March-February"
+    if (row.leavePeriod) {
+
+      const fromMonth = row.leavePeriod.split('-')[0];
+
+      const payMonth = this.months.find(x =>
+        x.text.toUpperCase() === fromMonth.toUpperCase());
+
+      this.invoiceruleform.patchValue({
+        payperiodfrom: payMonth,
+        payperiodto: row.leavePeriod.split('-')[1]
+      });
+    }
+  }
+
+  UpdateInvoiceRule() {
+
+    const formValue = this.invoiceruleform.value;
+
+    const payload = {
+      invoicingRulesID: this.selectedInvoiceRuleId,
+      billingtype: String(formValue.billingType.text),
+      daysAsPerTimesheet: formValue.daysAsPerTimesheet,
+      dayspermonth: formValue.dayspermonth,
+      weekendsrule: String(formValue.weekendsrule.text),
+      holidaysrule: String(formValue.holidaysrule.text),
+      comppoffrule: String(formValue.comppoffrule.text),
+      maternityleave: String(formValue.maternityleave.text),
+      leavetypes: formValue.leavetypes.id,
+      leavecredit: String(formValue.leavecredit),
+      leaverule: String(formValue.leaverule.text),
+      payperiodfrom: String(formValue.payperiodfrom.text),
+      payperiodto: String(formValue.payperiodto),
+      carryforward: String(formValue.carryforward.id),
+      noofcarryforwards: formValue.noofcarryforwards,
+      otrule: String(formValue.otrule.text),
+      gratuity: String(formValue.gratuity.text),
+      reimbursement: String(formValue.reimbursement.text),
+      servicefeeonexpenses: String(formValue.servicefeeonexpenses.text),
+      rebates: String(formValue.rebates.text),
+      discounts: String(formValue.discounts.text),
+      billabledaysformula: String(formValue.billabledaysformula),
+      payroll_weekends_billable: String(formValue.weekend_billable),
+      type_of_billing: String(formValue.type_of_billing.id),
+      type_of_billing_name: String(formValue.type_of_billing.text),
+      userId: String(this.userdetail.user_Id)
+    };
+
+    this.invoicerule.PostUpdateInvoiceRule(payload).subscribe({
+      next: (res) => {
+
+        this.showPopup = true;
+        this.popupMessage = 'Invoice Rule Updated Successfully';
+
+        this.isAddclicked = false;
+        this.isEditMode = false;
+        this.sitenameUI = null;
+
+        this.BindDashBoard(
+          this.companyUI.companyId,
+          this.sitenameUI.siteCode
+        );
+      }
+    });
+  }
+
+  DownloadTemplate() {
+
+    if (!this.companyUI) {
+      alert('Please select Company');
+      return;
+    }
+
+    if (!this.sitenameUI) {
+      this.sitenameUI = {
+        siteCode: 0,
+        siteName: '** Select **'
+      }
+    }
+
+    this.invoicerule.GetInvoiceruleTemplate(this.companyUI.companyId, this.sitenameUI.siteName).subscribe({
+      next: res => {
+        const data = res?.Data?.data?.Table0 ?? [];
+        if (!data.length) {
+          alert('No template data available.');
+          return;
+        }
+
+        const worksheet = XLSX.utils.json_to_sheet(data);
+        const workbook: XLSX.WorkBook = {
+          Sheets: { 'InvoiceRule': worksheet },
+          SheetNames: ['InvoiceRule']
+        };
+
+        const buffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+        const blob = new Blob([buffer], { type: 'application/octet-stream' });
+        FileSaver.saveAs(blob, `InvoiceRule_Template.xlsx`);
+      },
+      error: err => {
+        console.error('Error downloading template', err);
+        alert('Failed to download template');
+      }
+    });
+  }
+
+  downloadExcel(data: any[]): void {
     const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(data);
     const workbook: XLSX.WorkBook = {
-      Sheets: { 'Sheet1': worksheet },
-      SheetNames: ['Sheet1']
+      Sheets: { 'InvoiceRule': worksheet },
+      SheetNames: ['InvoiceRule']
     };
 
     const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
     const blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
 
-    const fileName = `${templateId}.xlsx`;
+    var fileName;
+    fileName = `Invoice_Rule_Template.xlsx`;
     FileSaver.saveAs(blob, fileName);
   }
+  ImportClick(fileInput: HTMLInputElement): void {
+    fileInput.value = '';
+    fileInput.click();
+  }
 
-  submitExcelData(): void {
-    this.showPreviewModal = false;
-    this.isLoading = true;
-    if (!this.excelFile) {
-      console.error("⚠️ No file selected.");
+  onFileChange(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input?.files?.[0];
+
+    if (!file) {
+      console.error('Please upload only one Excel file.');
       return;
     }
+    this.isLoading = true;
     const formData = new FormData();
-    if (this.excelFile) {
-      formData.append('file', this.excelFile);
-      formData.append('userId', this.userdetail.user_Id);
+    formData.append('file', file);
+    formData.append('userId', String(this.userdetail.user_Id));
 
-      this.invoicerule.PostInvoiceRuleUpload(formData).subscribe({
-        next: res => {
-          this.datatable = res.Data;
-          if (this.datatable && Array.isArray(this.datatable) && this.datatable.length > 0) {
-            this.downloadExcel(this.datatable, "InvoiceRule_Validations");
-            this.isLoading = false;
-          } else {
-            alert("No validations returned");
-            this.isLoading = false;
-          }
-        },
-        error: err => {
-          console.error('❌ Upload failed', err);
-          this.isLoading = false;
-        }
-      });
-    }
+    this.invoicerule.PostInvoiceRuleUpload(formData).pipe(
+      finalize(() => {
+        this.isLoading = false;
+      })
+    ).subscribe({
+      next: (res) => {
+
+      },
+      error: (err) => {
+        console.error(' Upload failed', err);
+        alert('Upload failed due to a network or server error.');
+      }
+    });
   }
 }

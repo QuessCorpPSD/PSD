@@ -8,4 +8,6 @@ PostDeleteInvoiceRule(invoicingRulesID: number):Observable<APIResponse>;
 GetInvoiceRuleTemplate(formData:FormData):Observable<APIResponse>;
 PostInvoiceRuleUpload(formData:FormData):Observable<APIResponse>;
 InvoiceRuleExport(formData:FormData):Observable<APIResponse>;
+PostUpdateInvoiceRule(InvoiceRuleAdd: any):Observable<APIResponse>;
+GetInvoiceruleTemplate(companyId:number, site:string):Observable<APIResponse>;
 }
