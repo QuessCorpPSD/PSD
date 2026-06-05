@@ -28,6 +28,7 @@ import * as XLSX from 'xlsx';
 import * as FileSaver from 'file-saver';
 import { finalize } from 'rxjs';
 import { AsyncKeyword } from 'typescript';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'invoicerule',
@@ -720,6 +721,7 @@ export class InvoiceruleComponent {
   }
 
   onFileChange(event: Event): void {
+
     const input = event.target as HTMLInputElement;
     const file = input?.files?.[0];
 
@@ -738,12 +740,56 @@ export class InvoiceruleComponent {
       })
     ).subscribe({
       next: (res) => {
+        const messages = res?.Data?.map((x: any) => x.Message) || [];
 
+        if (messages.some((msg: string) =>
+          msg.toLowerCase().includes('uploaded successfully'))) {
+
+          alert(messages[0]);
+          return;
+        }
+
+        if (messages.length > 0) {
+          this.downloadValidationErrors(res.Data);
+          alert('Validation failed. Error file downloaded.');
+          return;
+        }
       },
       error: (err) => {
         console.error(' Upload failed', err);
         alert('Upload failed due to a network or server error.');
       }
     });
+  }
+
+  downloadValidationErrors(errors: any[]) {
+
+    const excelData = errors.map((x, index) => ({
+      'S.No': index + 1,
+      'Error Message': x.Message
+    }));
+
+    const worksheet: XLSX.WorkSheet =
+      XLSX.utils.json_to_sheet(excelData);
+
+    const workbook: XLSX.WorkBook = {
+      Sheets: { Errors: worksheet },
+      SheetNames: ['Errors']
+    };
+
+    const excelBuffer: any =
+      XLSX.write(workbook, {
+        bookType: 'xlsx',
+        type: 'array'
+      });
+
+    const blob = new Blob(
+      [excelBuffer],
+      {
+        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+      }
+    );
+
+    saveAs(blob, 'InvoiceRuleUploadErrors.xlsx');
   }
 }
