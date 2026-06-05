@@ -725,7 +725,7 @@ export class DraftInvoiceComponent implements OnInit {
             SheetNames: ['ErrorMessages']
           };
 
-          XLSX.writeFile(workbook, 'ProvisionalInvoiceLog.xlsx');
+          XLSX.writeFile(workbook, 'MiscInvoiceLog.xlsx');
           this.isdisabled = false;
           this.InvoiceSearch();
           this.selection.clear();

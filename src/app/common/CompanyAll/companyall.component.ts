@@ -47,7 +47,7 @@ export class CompanyallComponent {
   selectedOption?: Company | null;
   @Input() CompanyId: any;
   userdetail!: any;
-
+private pendingValue: any;
   @Output() companyEmit = new EventEmitter<Company | null>();
 
 
@@ -64,11 +64,22 @@ export class CompanyallComponent {
   onChange: (value: any) => void = () => {};
   onTouched: () => void = () => {};
 
-  writeValue(value: Company | null): void {
+ /*
+ writeValue(value: Company | null): void {
     this.selectedOption = value ?? null;
     this.myControl.setValue(value);
+  } */
+writeValue(value: any): void {
+
+  this.pendingValue = value;
+
+  if (!value) {
+    this.myControl.setValue(null);
+    return;
   }
 
+  this.tryResolveValue();
+}
   registerOnChange(fn: any): void {
     this.onChange = fn;
   }
@@ -89,24 +100,43 @@ export class CompanyallComponent {
     this.BindCompanyCode();
   }
 
-  BindCompanyCode() {
-    this._commonService.GetCompanyCodes(this.userdetail.user_Id).subscribe({
-      next: res => {
-        this.companyCode = res.Data;
-        this.filteredOptions$ = this.myControl.valueChanges.pipe(
-          startWith(''),
-          map(value => {
-            let searchText = '';
-            if (typeof value === 'string') searchText = value;
-            else if (value && 'displayName' in value) searchText = value.displayName;
-            return this._filter(searchText);
-          })
-        );
-      },
-      error: err => console.error(err.message)
-    });
-  }
+ BindCompanyCode() {
+  this._commonService.GetCompanyCodes(this.userdetail.user_Id).subscribe({
+    next: res => {
 
+      this.companyCode = res.Data;
+
+      this.filteredOptions$ = this.myControl.valueChanges.pipe(
+        startWith(''),
+        map(value => {
+          let searchText = '';
+
+          if (typeof value === 'string') {
+            searchText = value;
+          } else if (value && 'displayName' in value) {
+            searchText = value.displayName;
+          }
+
+          return this._filter(searchText);
+        })
+      );
+      this.tryResolveValue();
+    }
+  });
+}
+private tryResolveValue() {
+
+  if (!this.companyCode?.length || !this.pendingValue) return;
+
+  const selected = this.companyCode.find(
+    x => x.companyId == this.pendingValue || x == this.pendingValue
+  );
+
+  if (selected) {
+    this.selectedOption = selected;
+    this.myControl.setValue(selected, { emitEvent: false });
+  }
+}
   private _filter(value: string): Company[] {
     const filterValue = value.toLowerCase();
     return this.companyCode.filter(option =>
