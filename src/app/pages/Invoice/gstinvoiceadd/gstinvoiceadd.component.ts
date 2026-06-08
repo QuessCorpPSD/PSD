@@ -174,7 +174,7 @@ invoiceId!: number;
     this.payPeriod = payperiod;
     this.payperiodId = payperiod.pay_Frequency_Detail_Id;
     this.selectedPayPeriodId= payperiod.pay_Frequency_Detail_Id;
-//console.log("Selected Pay Period:", this.payperiodId  , payperiod);
+console.log("Selected Pay Period:", this.payperiodId  , payperiod);
     this.addGstInvoice.patchValue({
       PayPeriod: payperiod.pay_Frequency_Detail_Id
     });
@@ -463,7 +463,6 @@ const request = {
       Remarks: formValue?.Remarks?.toString() ?? null,
       Status: formValue?.Status?.toString() ?? null,
 
-      IsActive: "1",
       IsActive: "1",
       WO_Date: formValue?.WODate?.toString() ?? null,
       InvoiceNotes: formValue?.InvoiceNotes?.toString() ?? null,
@@ -923,7 +922,7 @@ createNewInvoice() {
 loadInvoiceForEdit(invoiceId: number) {
 
   const payload = {
-    Action: "Get",
+    Action: 'Get',
     UserId: this.userdetail?.user_Id?.toString() ?? null,
     Invoice_Id: this.toBlank(invoiceId)
   };
@@ -934,40 +933,48 @@ loadInvoiceForEdit(invoiceId: number) {
       if (res?.StatusCode === 200 && res?.Data?.length > 0) {
 
         const inv = res.Data[0];
-console.log('Company List:', inv);
 
-console.log('Invoice Company_Id:', inv.Company_Id);
-        this.selectedCompanyId=inv.Company_Id;
-this.selectedCompany = this.companyList.find(
-  c => Number(c.companyId) === Number(inv.Company_Id)
-);
-       //this.companyId = inv.Company_Id;
-    
-console.log('Selected Company:', this.selectedCompany);    //this.cityId = inv.City_Id;
-        //this.selectedCity = inv.City_Name;
-   this.selectedCompanyId = inv.Company_Id;
-   this.selectedFinancialYear = inv.Financial_Year_Id;
-   this.selectedPayPeriodId = inv.Pay_Period_Id;
-   this.selectedMapId=inv.Cost_Center_Mapping_Id;
-   this.selectedsiteId=inv.Group_Detail_Id;
-  this.selectedStateId=inv.StateId;
-this.selectedcityId=inv.City_Id;
-this.mapNameId = inv.Cost_Center_Mapping_Id;
-this.siteId = inv.Group_Detail_Id;
-this.stateId = inv.StateId;
-this.cityId = inv.City_Id;
-this.payperiodId = inv.Pay_Period_Id;
-        console.log("PRINT ", inv);
-  console.log("Company Event",this.selectedCompanyId);
+        console.log('Invoice Details:', inv);
+
+        // Set selected values
+        this.selectedCompanyId = inv.Company_Id;
+        this.selectedFinancialYear = inv.Financial_Year_Id;
+        this.selectedPayPeriodId = inv.Pay_Period_Id;
+        this.selectedMapId = inv.Cost_Center_Mapping_Id;
+        this.selectedsiteId = inv.Group_Detail_Id;
+        this.selectedStateId = inv.StateId;
+        this.selectedcityId = inv.City_Id;
+
+        this.mapNameId = inv.Cost_Center_Mapping_Id;
+        this.siteId = inv.Group_Detail_Id;
+        this.stateId = inv.StateId;
+        this.cityId = inv.City_Id;
+        this.payperiodId = inv.Pay_Period_Id;
+
+        this.selectedCompany = this.companyList?.find(
+          c => Number(c.companyId) === Number(inv.Company_Id)
+        );
+
+        console.log('Selected Company:', this.selectedCompany);
+
+        // Optional delay if child dropdowns need time to load
+        setTimeout(() => {
+
           this.addGstInvoice.patchValue({
-companyCode: inv.Company_Id,
- GroupDetail: inv.Group_Detail_Id,
-  CostCenterMapping: inv.Cost_Center_Mapping_Id,
-  City: inv.City_Id,
-  StateName: inv.StateId,
-  PayPeriod: inv.Pay_Period_Id,
-  FinancialYear: inv.Financial_Year_Id,
- InvoiceNumber: inv.Invoice_Number,
+
+            companyCode: inv.Company_Id,
+            GroupDetail: inv.Group_Detail_Id,
+            CostCenterMapping: inv.Cost_Center_Mapping_Id,
+            City: inv.City_Id,
+            StateName: inv.StateId,
+            PayPeriod: inv.Pay_Period_Id,
+            FinancialYear: inv.Financial_Year_Id,
+
+            InvoiceDate: inv.Invoice_Date
+              ? inv.Invoice_Date.split('T')[0]
+              : null,
+
+            InvoiceNumber: inv.Invoice_Number,
             NofEmployees: inv.No_Of_Employees,
             InvoiceType: inv.Invoice_Type_Id,
 
@@ -1046,40 +1053,46 @@ companyCode: inv.Company_Id,
             UTGSTper: inv.UTGST_Percentage
 
           }, { emitEvent: false });
-          }, 300);
 
-this.addGstInvoice.get('InvoiceDate')?.setValue(
-  inv.Invoice_Date ? inv.Invoice_Date.split('T')[0] : null
-);
-
-this.cdRef.detectChanges();
-     
-          // ✅ Prevent NG0100
-          this.addGstInvoice.patchValue({
-            Amount: inv.Amount,
-            NetAmount: inv.Net_Amount
-          }, { emitEvent: false });
+          this.cdRef.detectChanges();
 
           this.calculateGstAmounts();
           this.getNetAmount();
 
-        // ✅ Disable fields
-        this.addGstInvoice.get('InvoiceNumber')?.disable();
-        this.addGstInvoice.get('companyCode')?.disable();
+          // Disable controls
+          this.addGstInvoice.get('InvoiceNumber')?.disable();
+          this.addGstInvoice.get('companyCode')?.disable();
 
-        if (this.isEditMode) {
-          [
-            'companyCode','GroupDetail','CostCenterMapping','City','StateName',
-            'Amount','InvoiceType','ServiceChargeAmount',
-            'InvoiceDate','NofEmployees','AbsorptionAmt','Particulars',
-            'SourcingChargeAmount','TaxableAmount1','CTCAdjustmentAmount'
-          ].forEach(c => this.addGstInvoice.get(c)?.disable());
-        }
+          if (this.isEditMode) {
+            [
+              'companyCode',
+              'GroupDetail',
+              'CostCenterMapping',
+              'City',
+              'StateName',
+              'Amount',
+              'InvoiceType',
+              'ServiceChargeAmount',
+              'InvoiceDate',
+              'NofEmployees',
+              'AbsorptionAmt',
+              'Particulars',
+              'SourcingChargeAmount',
+              'TaxableAmount1',
+              'CTCAdjustmentAmount'
+            ].forEach(control =>
+              this.addGstInvoice.get(control)?.disable()
+            );
+          }
+
+        }, 300);
       }
+    },
+    error: (err) => {
+      console.error('Error loading invoice:', err);
     }
   });
 }
-
 
 ngOnChanges(changes: any) {
 
