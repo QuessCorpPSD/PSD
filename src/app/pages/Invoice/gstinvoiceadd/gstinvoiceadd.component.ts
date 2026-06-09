@@ -174,7 +174,7 @@ invoiceId!: number;
     this.payPeriod = payperiod;
     this.payperiodId = payperiod.pay_Frequency_Detail_Id;
     this.selectedPayPeriodId= payperiod.pay_Frequency_Detail_Id;
-//console.log("Selected Pay Period:", this.payperiodId  , payperiod);
+console.log("Selected Pay Period:", this.payperiodId  , payperiod);
     this.addGstInvoice.patchValue({
       PayPeriod: payperiod.pay_Frequency_Detail_Id
     });
@@ -929,7 +929,7 @@ loadInvoiceForEdit(invoiceId: number) {
 
         const inv = res.Data[0];
 
-        
+        console.log('Invoice Details:', inv);
 
         // Set selected values
         this.selectedCompanyId = inv.Company_Id;
@@ -950,7 +950,7 @@ loadInvoiceForEdit(invoiceId: number) {
           c => Number(c.companyId) === Number(inv.Company_Id)
         );
 
-        
+        console.log('Selected Company:', this.selectedCompany);
 
         // Optional delay if child dropdowns need time to load
         setTimeout(() => {

@@ -49,15 +49,7 @@
                                     <input type="text" class="form-control" formControlName="CompanyName" readonly>
                                 </div>
                                 <div class="col-md-3">
-                                    <label class="form-label">Group Detail<span class="text-danger"></span></label>
-                                    <!--<groupname [selectedCompanyId]="selectedCompanyId"   
-                                        (sitenameEmit)="groupnameEvent($event);" formControlName="GroupDetail">
-                                    </groupname>-->
-                                    <groupname 
-  [selectedCompanyId]="selectedCompanyId"
-  (sitenameEmit)="groupnameEvent($event)"
-  formControlName="GroupDetail">
-</groupname>
+                                    <label class="form-label">Group Detail<span class="text-danger"></span></label>                         
                                     <groupname [selectedCompanyId]="selectedCompanyId"
                                         (sitenameEmit)="groupnameEvent($event);" formControlName="GroupDetail">
                                     </groupname>
@@ -110,9 +102,6 @@
              && addGstInvoice.get('PayPeriod')?.hasError('required')">
                                         PayPeriod is required
                                     </div>
-                                    <!-- <select class="form-select" formControlName="PayPeriod">
-                                        <option value="">-- Select --</option>
-                                    </select> -->
                                 </div>
                                 </div>
                                  <div class="row g-3 mb-2">

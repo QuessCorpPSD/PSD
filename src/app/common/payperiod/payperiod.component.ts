@@ -40,14 +40,11 @@ export const Invoice_TOKEN = new InjectionToken<IInvoiceRepository>('Invoice_TOK
       multi: true
     }
   ]
-
 })
 export class PayPeriodComponent implements ControlValueAccessor, OnChanges {
   @Input() selectedCompanyId?: number;
-@Input() financialYearId?: number;
-   @Input() payPeriodType?: string;
-   @Input() selectedFinancialYear?: any;
-
+  @Input() financialYearId?: number;
+  @Input() payPeriodType?: string;
   options: string[] = [];
   searchText: string = '';
   myControl = new FormControl<string | Payperiodclass>('');
@@ -64,11 +61,11 @@ export class PayPeriodComponent implements ControlValueAccessor, OnChanges {
 
 ngOnChanges() {
 
-  if (this.selectedCompanyId && this.selectedFinancialYear) {
-console.log("Selected Company Id and Financial Year", this.selectedCompanyId, this.selectedFinancialYear);
+  if (this.selectedCompanyId && this.financialYearId) {
+console.log("Selected Company Id and Financial Year", this.selectedCompanyId, this.financialYearId);
     this.BindPayperiodnew(
       this.selectedCompanyId,
-      this.selectedFinancialYear
+      this.financialYearId
     );
   }
   else if (this.selectedCompanyId) {
