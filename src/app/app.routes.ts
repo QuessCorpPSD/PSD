@@ -186,6 +186,9 @@ import { BonussalaryreleaseComponent } from './pages/banknonvoice/bonussalaryrel
 import { BankconsolidatedreportComponent } from './pages/banknonvoice/bankconsolidatedreport/bankconsolidatedreport.component';
 import { BonusaccumulatedreportnonvoiceComponent } from './pages/banknonvoice/bonusaccumulatedreportnonvoice/bonusaccumulatedreportnonvoice.component';
 import { GenericuploadComponent } from './pages/banknonvoice/genericupload/genericupload.component';
+import { GratuityBatchGenerationComponent } from './pages/banknonvoice/gratuity-batch-generation/gratuity-batch-generation.component';
+import { BonusBatchCreationComponent } from './pages/banknonvoice/bonus-batch-creation/bonus-batch-creation.component';
+import { SalaryreleaseprocessComponent } from './pages/banknonvoice/salaryreleaseprocess/salaryreleaseprocess.component';
 
 
 
@@ -379,6 +382,9 @@ export const routes: Routes = [
           {path: "bankconsolidatedreport", component: BankconsolidatedreportComponent},
           {path: "bonusaccumulatedreportnonvoice", component: BonusaccumulatedreportnonvoiceComponent},
           {path: "genericupload", component: GenericuploadComponent},
+          {path: "Salaryreleaseprocess", component: SalaryreleaseprocessComponent},
+          {path: "GratuityBatchGeneration", component: GratuityBatchGenerationComponent},
+          {path: "BonusBatchCreation", component: BonusBatchCreationComponent},
           // { path: "inputaggregatorattendance", component: InputaggregatorattendanceComponent },
           // { path: "leavemaster", component: LeavetypemasterComponent },
           // { path: "leavemastermapping", component: LeavetypemastermappingComponent }
