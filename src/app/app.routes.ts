@@ -179,6 +179,13 @@ import { ReIssueProcessApproveComponent } from './pages/SalaryReleaseNew/re-issu
 import { ReIssueProcessReportComponent } from './pages/SalaryReleaseNew/re-issue-process-report/re-issue-process-report.component';
 import { BanknonvoicenavigationComponent } from './pages/banknonvoice/banknonvoicenavigation/banknonvoicenavigation.component';
 import { BankneftcultureComponent } from './pages/banknonvoice/bankneftculture/bankneftculture.component';
+import { GratuitydownloadbatchComponent } from './pages/banknonvoice/gratuitydownloadbatch/gratuitydownloadbatch.component';
+import { SalaryreleasestatusComponent } from './pages/banknonvoice/salaryreleasestatus/salaryreleasestatus.component';
+import { PartialsalaryreleaseComponent } from './pages/banknonvoice/partialsalaryrelease/partialsalaryrelease.component';
+import { BonussalaryreleaseComponent } from './pages/banknonvoice/bonussalaryrelease/bonussalaryrelease.component';
+import { BankconsolidatedreportComponent } from './pages/banknonvoice/bankconsolidatedreport/bankconsolidatedreport.component';
+import { BonusaccumulatedreportnonvoiceComponent } from './pages/banknonvoice/bonusaccumulatedreportnonvoice/bonusaccumulatedreportnonvoice.component';
+import { GenericuploadComponent } from './pages/banknonvoice/genericupload/genericupload.component';
 
 
 
@@ -365,6 +372,13 @@ export const routes: Routes = [
         path: 'banknonvoicenavigation', component: BanknonvoicenavigationComponent,
         children: [
           { path: "bankneftculture", component: BankneftcultureComponent },
+          { path: "gratuitydownloadbatch", component: GratuitydownloadbatchComponent },
+          { path: "salaryreleasestatus", component: SalaryreleasestatusComponent },
+          { path: "partialsalaryrelease", component: PartialsalaryreleaseComponent },
+          { path: "bonussalaryrelease", component: BonussalaryreleaseComponent },
+          {path: "bankconsolidatedreport", component: BankconsolidatedreportComponent},
+          {path: "bonusaccumulatedreportnonvoice", component: BonusaccumulatedreportnonvoiceComponent},
+          {path: "genericupload", component: GenericuploadComponent},
           // { path: "inputaggregatorattendance", component: InputaggregatorattendanceComponent },
           // { path: "leavemaster", component: LeavetypemasterComponent },
           // { path: "leavemastermapping", component: LeavetypemastermappingComponent }
