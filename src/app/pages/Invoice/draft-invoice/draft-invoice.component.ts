@@ -703,7 +703,9 @@ export class DraftInvoiceComponent implements OnInit {
     console.log("Sending API for row:", requestPayload);
 
     this._invoiceService.MiscInvoiceInitiate(requestPayload).subscribe({
+
       next: res => {
+       
         if (!res.Data) {
           alert("No Data Returned");
           this.isLoading = false;
@@ -741,6 +743,17 @@ export class DraftInvoiceComponent implements OnInit {
           this.isLoading = false;
         }
       },
+       error: (err) => {
+    console.log(err);
+
+    if (err.status === 200 && err.error?.text) {
+      alert(err.error.text);
+    } else {
+      alert('An error occurred while processing the request.');
+    }
+
+    this.isLoading = false;
+  }
     });
   }
 }
