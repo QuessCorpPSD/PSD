@@ -199,9 +199,8 @@ import { ClientTDSSlabMasterComponent } from './pages/AccountReceivable/Bankinvo
 import { InvoiceCollectionComponent } from './pages/AccountReceivable/Bankinvoice/invoice-collection/invoice-collection.component';
 import { APARAdjustmentupdateComponent } from './pages/AccountReceivable/Bankinvoice/aparadjustmentupdate/aparadjustmentupdate.component';
 import { InvoiceruleComponent } from './pages/customers/invoicerule/invoicerule.component';
-
-
-
+import { ProvisionalInvoiceReportComponent } from './pages/Reports/provisional-invoice-report/provisional-invoice-report.component';
+import { CreditNoteReportComponent } from './pages/Reports/credit-note-report/credit-note-report.component';
 
 
 export const routes: Routes = [
@@ -315,6 +314,8 @@ export const routes: Routes = [
           { path: 'IncreamnetReport', component: IncrementReportComponent },
           { path: 'Report', component: ReportComponent },
           { path: 'AdvanceUtilizationReport', component: AdvanceUtilizationReportComponent },
+          { path: 'ProvisionalInvoiceReport', component: ProvisionalInvoiceReportComponent },
+          { path: 'CreditNoteReport', component: CreditNoteReportComponent },
         ]
       },
       {
