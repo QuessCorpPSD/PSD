@@ -363,6 +363,11 @@
           <mat-header-cell *matHeaderCellDef mat-sort-header>Remarks</mat-header-cell>
           <mat-cell *matCellDef="let element">{{ element.remarks }}</mat-cell>
         </ng-container>
+         <ng-container matColumnDef="reRaiseInvoice">
+           <mat-header-cell *matHeaderCellDef mat-sort-header>Re-Raise Invoice</mat-header-cell>
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Re-RaiseInvoice</mat-header-cell>
+          <mat-cell *matCellDef="let element">{{ element.reRaiseInvoice }}</mat-cell>
+        </ng-container>
                     <!-- Header and Row Declaration -->
                     <mat-header-row *matHeaderRowDef="displayedColumns" sticky></mat-header-row>
                     <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
