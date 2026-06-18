@@ -197,17 +197,45 @@ export class POInitiateComponent {
 
     this.isLoading = true;
 
-    this._invoiceService.RequestPOInvoice(this.selectedCompanyId, this.payPeriod.payfrequencyid).subscribe({
+    this._invoiceService.RequestPOInvoice(this.selectedCompanyId, this.payPeriod.payfrequencyid, "BillableDays").subscribe({
       next: res => {
         this.datatable = res.Data.data.Table0;
         console.table(this.datatable);
         if (this.datatable && Array.isArray(this.datatable) && this.datatable.length > 0) {
           this.downloadExcel(this.datatable, "invoice_request");
+          this.InvoiceSearch();
           this.isLoading = false;
         } else {
           alert("No data found");
           this.isLoading = false;
         }
+      },
+      error: err => {
+        console.log(err);
+      }
+    })
+  }
+
+  InitiationRevoke(): void {
+
+    if (this.selectedCompanyId == undefined) {
+      alert("Select Company ");
+      return;
+    }
+
+    if (this.payPeriod == undefined) {
+      alert("Select PayPeriod ");
+      return;
+    }
+
+    this.isLoading = true;
+
+    this._invoiceService.RequestPOInvoice(this.selectedCompanyId, this.payPeriod.payfrequencyid, 'Delete').subscribe({
+      next: res => {
+        const ErrorMsg = res.Data.data.Table0[0].Error_Message;
+        alert(ErrorMsg);
+        this.isLoading = false;
+        this.InvoiceSearch();
       },
       error: err => {
         console.log(err);

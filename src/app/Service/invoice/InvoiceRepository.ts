@@ -246,9 +246,9 @@ export class InvoiceRepository implements IInvoiceRepository {
             environment.apiUrl + `POInvoiceInitiate/POInvoiceInitiateExport/${companyId}/${payPeriodId}`);
     }
 
-    RequestPOInvoice(companyId: number, payPeriodId: number): Observable<any> {
+    RequestPOInvoice(companyId: number, payPeriodId: number, flag: string): Observable<any> {
         return this.http.get<APIResponse>(
-            environment.apiUrl + `POInvoiceInitiate/POInvoiceRequest/${companyId}/${payPeriodId}`);
+            environment.apiUrl + `POInvoiceInitiate/POInvoiceRequest/${companyId}/${payPeriodId}/${flag}`);
     }
 
     UploadBillable(formData: FormData): Observable<APIResponse> {

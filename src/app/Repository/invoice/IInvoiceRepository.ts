@@ -27,7 +27,7 @@ export interface IInvoiceRepository {
     POSearch(companyId: number, payPeriodId: number): Observable<APIResponse>;
     POInvoiceInitiate(payload: any): Observable<APIResponse>;
     ExportPOInvoice(companyId: number, payPeriodId: number): Observable<any>;
-    RequestPOInvoice(companyId: number, payPeriodId: number): Observable<any>;
+    RequestPOInvoice(companyId: number, payPeriodId: number, flag: string): Observable<any>;
     POInvoiceUpload(payload: FormData): Observable<APIResponse>;
     GetAllAttributeAddAndUpdate(val): Observable<APIResponse>
     GetAllAttribute(val): Observable<APIResponse>
