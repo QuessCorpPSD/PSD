@@ -50,7 +50,7 @@ export class ClientaddressService implements IClientaddress {
   }
   PostClientAddressDelete(clientaddressid: any, userid: any): Observable<string> {
     return this.http.get<string>(
-      this.env.apiUrl + 'ClientAddress/PostDeleteClientAddress/' + clientaddressid + '/' + userid,
+      this.env.apiUrl + 'ClientAddress/PostDeleteClientAddress/' + clientaddressid + '/' + userid + 'Search',
       { responseType: 'text' as 'json' }
     );
   }
