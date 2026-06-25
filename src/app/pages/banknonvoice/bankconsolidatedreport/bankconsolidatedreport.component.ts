@@ -1,5 +1,6 @@
 import { Component, Inject, InjectionToken } from '@angular/core';
 import { MatIcon, MatIconModule } from "@angular/material/icon";
+<<<<<<< HEAD
 import { BankneftcultureService } from '../../../Service/banknonvoice/bankneftculture.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -14,21 +15,40 @@ const Pay_TOKEN = new InjectionToken<IBatchConsolidationReport>('Pay_TOKEN');
 @Component({
   selector: 'app-bankconsolidatedreport',
   imports: [MatIconModule, CommonModule, FormsModule],
+=======
+import { IBankNonInvoiceNEFTCulture } from '../../../Repository/banknonvoice/Ibankneftculture';
+import { BankneftcultureService } from '../../../Service/banknonvoice/bankneftculture.service';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+
+const Pay_TOKEN = new InjectionToken<IBankNonInvoiceNEFTCulture>('Pay_TOKEN');
+
+@Component({
+  selector: 'app-bankconsolidatedreport',
+  imports: [MatIconModule,CommonModule,FormsModule],
+>>>>>>> banknonInvoice_moni
   templateUrl: './bankconsolidatedreport.component.html',
   styleUrl: './bankconsolidatedreport.component.css',
   providers: [
     {
       provide: Pay_TOKEN,
+<<<<<<< HEAD
       useClass: BatchconsolidationService,
     }
   ]
 
+=======
+      useClass: BankneftcultureService,
+    }
+  ]
+>>>>>>> banknonInvoice_moni
 })
 export class BankconsolidatedreportComponent {
   EntityList: any[] = [];
   selectedEntityIds: number[] = [];
   selectedReportType: string = '';
   searchText: string = '';
+<<<<<<< HEAD
   isLoading: boolean = false;
   reporttypes: any;
   fromdate: any;
@@ -40,6 +60,11 @@ export class BankconsolidatedreportComponent {
     private decry: EncryptionService,
     private _sessionStoreage: SessionStorageService,
   ) { }
+=======
+
+  constructor(@Inject(Pay_TOKEN) private service: IBankNonInvoiceNEFTCulture,) { }
+
+>>>>>>> banknonInvoice_moni
   onEntitySelect(id: number, event: Event) {
     const checked = (event.target as HTMLInputElement).checked;
 
@@ -53,7 +78,11 @@ export class BankconsolidatedreportComponent {
   }
 
   selectAll() {
+<<<<<<< HEAD
     this.selectedEntityIds = this.EntityList.map(e => e.Company_Id);
+=======
+    this.selectedEntityIds = this.EntityList.map(e => e.Entity_Id);
+>>>>>>> banknonInvoice_moni
   }
 
   unselectAll() {
@@ -61,6 +90,7 @@ export class BankconsolidatedreportComponent {
   }
   ngOnInit() {
     this.getBusinessUnit();
+<<<<<<< HEAD
     this.getentity();
   }
   getBusinessUnit() {
@@ -116,6 +146,17 @@ export class BankconsolidatedreportComponent {
         console.error('Error loading data for export', err);
         this.isLoading = false;
       },
+=======
+  }
+  getBusinessUnit() {
+    this.service.GetBusinessUnit().subscribe({
+      next: (res: any) => {
+        this.EntityList = res?.Data?.data?.Table0 ?? [];
+      },
+      error: () => {
+        alert('Failed to load Business Units');
+      }
+>>>>>>> banknonInvoice_moni
     });
   }
 

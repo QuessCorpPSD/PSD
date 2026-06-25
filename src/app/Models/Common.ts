@@ -3,7 +3,14 @@ export interface Company {
   companyCode: string
   companyName: string
   displayName: string
-  companyId:number
+  companyId: number
+}
+
+export interface CompanyGSTInvoice {
+  companyId: number
+  companyCode: string
+  companyName: string
+  displayName: string
 }
 
 export interface Frequency {

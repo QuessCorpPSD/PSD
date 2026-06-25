@@ -179,6 +179,10 @@ import { ReIssueProcessApproveComponent } from './pages/SalaryReleaseNew/re-issu
 import { ReIssueProcessReportComponent } from './pages/SalaryReleaseNew/re-issue-process-report/re-issue-process-report.component';
 import { BanknonvoicenavigationComponent } from './pages/banknonvoice/banknonvoicenavigation/banknonvoicenavigation.component';
 import { BankneftcultureComponent } from './pages/banknonvoice/bankneftculture/bankneftculture.component';
+import { FinanceholdreportComponent } from './pages/banknonvoice/financeholdreport/financeholdreport.component';
+import { BankconsolidatedreportComponent } from './pages/banknonvoice/bankconsolidatedreport/bankconsolidatedreport.component';
+import { DownloadbatchbanknonvoiceComponent } from './pages/banknonvoice/downloadbatchbanknonvoice/downloadbatchbanknonvoice.component';
+import { BonusaccumulatedreportnonvoiceComponent } from './pages/banknonvoice/bonusaccumulatedreportnonvoice/bonusaccumulatedreportnonvoice.component';
 import { GratuitydownloadbatchComponent } from './pages/banknonvoice/gratuitydownloadbatch/gratuitydownloadbatch.component';
 import { SalaryreleasestatusComponent } from './pages/banknonvoice/salaryreleasestatus/salaryreleasestatus.component';
 import { PartialsalaryreleaseComponent } from './pages/banknonvoice/partialsalaryrelease/partialsalaryrelease.component';
@@ -385,10 +389,10 @@ export const routes: Routes = [
           {path: "Salaryreleaseprocess", component: SalaryreleaseprocessComponent},
           {path: "GratuityBatchGeneration", component: GratuityBatchGenerationComponent},
           {path: "BonusBatchCreation", component: BonusBatchCreationComponent},
-          // { path: "inputaggregatorattendance", component: InputaggregatorattendanceComponent },
-          // { path: "leavemaster", component: LeavetypemasterComponent },
-          // { path: "leavemastermapping", component: LeavetypemastermappingComponent }
-          //  path:"inputaggregatorclient",component:InputaggregatorwithclientComponent
+          { path: "financeholdreport", component: FinanceholdreportComponent },
+          { path: "bankconsolidatedreport", component: BankconsolidatedreportComponent },
+          { path: "downloadbatch", component: DownloadbatchbanknonvoiceComponent },
+          { path: "bonusaccumulatedreport", component: BonusaccumulatedreportnonvoiceComponent }
         ]
       },
       {

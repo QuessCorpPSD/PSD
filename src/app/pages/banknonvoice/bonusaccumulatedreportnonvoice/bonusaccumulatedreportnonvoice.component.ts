@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { Component, Inject, InjectionToken } from '@angular/core';
 import { MatIcon } from "@angular/material/icon";
 import { CompanyallComponent } from "../../../common/CompanyAll/companyall.component";
@@ -23,10 +24,22 @@ const Pay_TOKEN = new InjectionToken<IBonusAccumulatedReport>('Pay_TOKEN');
       useClass: BonusaccumulatedService,
     }
   ]
+=======
+import { Component } from '@angular/core';
+import { MatIcon } from "@angular/material/icon";
+import { CompanyallComponent } from "../../../common/CompanyAll/companyall.component";
+
+@Component({
+  selector: 'app-bonusaccumulatedreportnonvoice',
+  imports: [MatIcon, CompanyallComponent],
+  templateUrl: './bonusaccumulatedreportnonvoice.component.html',
+  styleUrl: './bonusaccumulatedreportnonvoice.component.css'
+>>>>>>> banknonInvoice_moni
 })
 export class BonusaccumulatedreportnonvoiceComponent {
   selectedCompanyId: any;
   selectedCompanyCode: any;
+<<<<<<< HEAD
   isLoading: boolean = false;
   companyId: any;
   fromdate: any;
@@ -38,10 +51,13 @@ export class BonusaccumulatedreportnonvoiceComponent {
     private _sessionStoreage: SessionStorageService,
   ) { }
 
+=======
+>>>>>>> banknonInvoice_moni
   handleCompanyEvent(company) {
     this.selectedCompanyId = company.companyId;
     this.selectedCompanyCode = company.companyId;
   }
+<<<<<<< HEAD
 
   formatDateForAPI(dateStr: string): string {
     const [year, month, day] = dateStr.split('-');
@@ -86,4 +102,6 @@ export class BonusaccumulatedreportnonvoiceComponent {
       },
     });
   }
+=======
+>>>>>>> banknonInvoice_moni
 }
