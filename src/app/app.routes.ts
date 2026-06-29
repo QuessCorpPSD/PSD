@@ -180,9 +180,7 @@ import { ReIssueProcessReportComponent } from './pages/SalaryReleaseNew/re-issue
 import { BanknonvoicenavigationComponent } from './pages/banknonvoice/banknonvoicenavigation/banknonvoicenavigation.component';
 import { BankneftcultureComponent } from './pages/banknonvoice/bankneftculture/bankneftculture.component';
 import { FinanceholdreportComponent } from './pages/banknonvoice/financeholdreport/financeholdreport.component';
-import { BankconsolidatedreportComponent } from './pages/banknonvoice/bankconsolidatedreport/bankconsolidatedreport.component';
 import { DownloadbatchbanknonvoiceComponent } from './pages/banknonvoice/downloadbatchbanknonvoice/downloadbatchbanknonvoice.component';
-import { BonusaccumulatedreportnonvoiceComponent } from './pages/banknonvoice/bonusaccumulatedreportnonvoice/bonusaccumulatedreportnonvoice.component';
 import { GratuitydownloadbatchComponent } from './pages/banknonvoice/gratuitydownloadbatch/gratuitydownloadbatch.component';
 import { SalaryreleasestatusComponent } from './pages/banknonvoice/salaryreleasestatus/salaryreleasestatus.component';
 import { PartialsalaryreleaseComponent } from './pages/banknonvoice/partialsalaryrelease/partialsalaryrelease.component';
