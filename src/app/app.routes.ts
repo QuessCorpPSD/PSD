@@ -201,6 +201,7 @@ import { APARAdjustmentupdateComponent } from './pages/AccountReceivable/Bankinv
 import { InvoiceruleComponent } from './pages/customers/invoicerule/invoicerule.component';
 import { ProvisionalInvoiceReportComponent } from './pages/Reports/provisional-invoice-report/provisional-invoice-report.component';
 import { CreditNoteReportComponent } from './pages/Reports/credit-note-report/credit-note-report.component';
+import { HthbankstatusComponent } from './pages/SalaryReleaseNew/hthbankstatus/hthbankstatus.component';
 
 
 export const routes: Routes = [
@@ -482,7 +483,8 @@ export const routes: Routes = [
           { path: 'InvoiceBatchConsolidationReport', component: InvoiceBatchConsolidationReportComponent },
           { path: 'ReIssueProcessApprove', component: ReIssueProcessApproveComponent },
           { path: 'ReIssueProcessReport', component: ReIssueProcessReportComponent },
-          { path: 'bankadvicesplitculture', component: BankAdviceSplitCultureComponent }
+          { path: 'bankadvicesplitculture', component: BankAdviceSplitCultureComponent },
+          { path: 'hthbankstatus', component: HthbankstatusComponent }
 
         ]
 

@@ -1,0 +1,277 @@
+<div class="row gap-3 py-2">
+    <div class="justify-content-between align-items-center mb-3">
+        <mat-card-title
+            style="color: #302CB3; font-size: 22px; font-family: Montserrat; font-weight: 600;padding-left: 12px;">HTH
+            Bank Status
+        </mat-card-title>
+        <div class="container py-2">
+            <div class="row g-3 align-items-end">
+
+
+                <div class="col-md-3">
+                    <label for="StartDate" class="form-label text-muted small">From Date</label>
+                    <input type="Date" id="StartDate" [(ngModel)]="fromdate" class="form-control form-control-sm" />
+                </div>
+                <div class="col-md-3">
+                    <label for="EndDate" class="form-label text-muted small">To Date</label>
+                    <input type="Date" id="EndDate" [(ngModel)]="todate" class="form-control form-control-sm" />
+                </div>
+
+                <div class="col-md-3 d-flex gap-2 button-group" style="flex-wrap: nowrap;">
+
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-search"
+                        matTooltip="Search" (click)="onsearch()">
+                        <mat-icon>search</mat-icon>
+                    </button>
+
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-secondary"
+                        matTooltip="ExportToExcel" (click)="exportToExcel()">
+                        <mat-icon>download</mat-icon>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+        <div *ngIf="istablevisible" style="
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;   /* move to right */
+    align-items: flex-end;
+    padding-right: 20px;         /* space from right */
+    margin-top: 15px;            /* move slightly down */
+  ">
+            <div style="
+      display: flex;
+      align-items: center;
+      border-radius: 10px;
+      border: 1px solid #7E7E7E;
+      width: 180px;
+      height: 30px;
+      background-color: white;
+      padding: 0 10px;
+    ">
+                <i style="margin-right: 6px; display: flex;">
+                </i>
+
+                <input type="text" [(ngModel)]="searchText" (keyup.enter)="applyFilter()" placeholder="Search" style="
+        border: none;
+        outline: none;
+        flex: 1;
+        font-size: 12px;
+        background-color: transparent;
+      " />
+            </div>
+        </div>
+        <div *ngIf="isLoading" class="loading-overlay">
+            <img src="assets/Loading.gif" alt="Loading...">
+        </div>
+        <div class="card-body rounded-4 py-0" *ngIf="istablevisible">
+            <div class="example-container mat-elevation-z8">
+                <table mat-table #searchgrid [dataSource]="dataSource" matSort class="custom-table mat-elevation-z8">
+
+                    <ng-container matColumnDef="SINo">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>
+                            <div class="cell-center">SI No</div>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let element; let i = index">
+                            <div class="cell-center">
+                                {{ i + 1 }}
+                            </div>
+                        </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Id">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>
+                            <div class="cell-center">Id</div>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <div class="cell-center">{{ element.Id }}</div>
+                        </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="BatchId">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>
+                            <div class="cell-center">Batch Id</div>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <div class="cell-center">{{ element.BatchId }}</div>
+                        </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="NEFT_Bank_id">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>
+                            <div class="cell-center">NEFT Bank Id</div>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <div class="cell-center">{{ element.NEFT_Bank_id }}</div>
+                        </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="IsNonInvoice">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>
+                            <div class="cell-center">Is NonInvoice</div>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <div class="cell-center">{{ element.IsNonInvoice }}</div>
+                        </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="HTH">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>
+                            <div class="cell-center">HTH</div>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <div class="cell-center">{{ element.HTH }}</div>
+                        </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="HTH_Date">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>
+                            <div class="cell-center">HTH Date</div>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <div class="cell-center">{{ element.HTH_Date }}</div>
+                        </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="BatchType">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>
+                            <div class="cell-center">Batch Type</div>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <div class="cell-center">{{ element.BatchType }}</div>
+                        </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Amount">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>
+                            <div class="cell-center">Amount</div>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <div class="cell-center">{{ element.Amount }}</div>
+                        </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Head_Count">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>
+                            <div class="cell-center">Head Count</div>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <div class="cell-center">{{ element.Head_Count }}</div>
+                        </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="File_Sno">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>
+                            <div class="cell-center">File Sno</div>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <div class="cell-center">{{ element.File_Sno }}</div>
+                        </mat-cell>
+                    </ng-container>
+                     <ng-container matColumnDef="File_Name">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>
+                            <div class="cell-center">File Name</div>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <div class="cell-center">{{ element.File_Name }}</div>
+                        </mat-cell>
+                    </ng-container>
+                     <ng-container matColumnDef="Transfer_Status">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>
+                            <div class="cell-center">Transfer Status</div>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <div class="cell-center">{{ element.Transfer_Status }}</div>
+                        </mat-cell>
+                    </ng-container>
+                     <ng-container matColumnDef="Transfer_Date">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>
+                            <div class="cell-center">Transfer Date</div>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <div class="cell-center">{{ element.Transfer_Date }}</div>
+                        </mat-cell>
+                    </ng-container>
+                     <ng-container matColumnDef="Response_Status">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>
+                            <div class="cell-center">Response Status</div>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <div class="cell-center">{{ element.Response_Status }}</div>
+                        </mat-cell>
+                    </ng-container>
+                     <ng-container matColumnDef="Response_Date">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>
+                            <div class="cell-center">Response Date</div>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <div class="cell-center">{{ element.Response_Date }}</div>
+                        </mat-cell>
+                    </ng-container>
+                     <ng-container matColumnDef="Responce_File">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>
+                            <div class="cell-center">Response File</div>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <div class="cell-center">{{ element.Responce_File }}</div>
+                        </mat-cell>
+                    </ng-container>
+                     <ng-container matColumnDef="UTR_Integration_Status">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>
+                            <div class="cell-center">UTR Integration Status</div>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <div class="cell-center">{{ element.UTR_Integration_Status }}</div>
+                        </mat-cell>
+                    </ng-container>
+                     <ng-container matColumnDef="UTR_Integration_Date">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>
+                            <div class="cell-center">UTR Integration Date</div>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <div class="cell-center">{{ element.UTR_Integration_Date }}</div>
+                        </mat-cell>
+                    </ng-container>
+                     <ng-container matColumnDef="Created_By">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>
+                            <div class="cell-center">Created By</div>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <div class="cell-center">{{ element.Created_By }}</div>
+                        </mat-cell>
+                    </ng-container>
+                     <ng-container matColumnDef="Created_On">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>
+                            <div class="cell-center">Created On</div>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <div class="cell-center">{{ element.Created_on }}</div>
+                        </mat-cell>
+                    </ng-container>
+                     <ng-container matColumnDef="Modified_By">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>
+                            <div class="cell-center">Modified By</div>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <div class="cell-center">{{ element.Modified_By }}</div>
+                        </mat-cell>
+                    </ng-container>
+                     <ng-container matColumnDef="Modified_on">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>
+                            <div class="cell-center">Modified on</div>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <div class="cell-center">{{ element.Modified_on }}</div>
+                        </mat-cell>
+                    </ng-container>
+                    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                    <mat-row *matRowDef="let row;let i = index;  columns: displayedColumns;"></mat-row>
+                </table>
+            </div>
+             <mat-paginator #paginator class="mat-footer-paginator" [pageSizeOptions]="[5, 10, 25, 100]"
+                showFirstLastButtons stickyEnd>
+            </mat-paginator>
+        </div>
+    </div>
+</div>
