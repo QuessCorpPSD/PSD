@@ -68,7 +68,8 @@
                             <mat-header-cell *matHeaderCellDef mat-sort-header
                                 class="fixed-width-column"></mat-header-cell>
                             <mat-cell *matCellDef="let element" class="fixed-width-column">
-                                <img src="assets/icons/edit.svg" (click)="EditOtherIncome(element)" style="cursor: pointer; width: 18px; height: 22px;" />
+                                <img src="assets/icons/edit.svg" (click)="EditOtherIncome(element)"
+                                    style="cursor: pointer; width: 18px; height: 22px;" />
                                 <img src="assets/delete.svg" style="cursor: pointer; width: 18px; height: 22px;"
                                     (click)="deleteClick(element.invoiceCulture_id, element.invoiceType)" />
                             </mat-cell>
@@ -173,9 +174,10 @@
                             Service Charge is required
                         </div>
                     </div> -->
-                <div class="col-md-4">
+                    <div class="col-md-4">
                         <label class="form-label">Map Name<span class="text-danger">*</span></label>
-                        <mapname [selectedCompanyId]="CompanySelectedCC" (mapnameEmit)="handleMapNameEvent($event)"></mapname>
+                        <mapname [selectedCompanyId]="CompanySelectedCC" (mapnameEmit)="handleMapNameEvent($event)">
+                        </mapname>
                         <!-- <select class="form-select" formControlName="MapName">
                             <option value="">-- Select --</option>
                             <option *ngFor="let f of financialYear" [value]="f.Financial_Year_Id">
@@ -195,7 +197,7 @@
                 <!-- Row 2 -->
                 <div class="row g-3 mb-3">
 
-                   
+
                     <div class="col-md-4">
 
                         <label class="form-label">Invoice Type<span class="text-danger">*</span></label>
@@ -208,7 +210,7 @@
                             Invoice Type is required
                         </div>
                     </div>
-                       <div class="col-md-4">
+                    <div class="col-md-4">
                         <label class="form-label">Invoice Category<span class="text-danger">*</span></label>
                         <select class="form-select" formControlName="InvoiceCategory">
                             <option value="">-- Select --</option>
@@ -238,22 +240,23 @@
                 </div>
                 <div class="row g-3 mb-3">
 
-                 
+
                 </div>
                 <div *ngIf="isPaycodesLoaded" class="row g-3 mb-3">
                     <div class="col-md-12">
                         <label class="form-label">Type Of Invoice<span class="text-danger"></span></label>
                     </div>
-                  
+
                     <div class="col-md-8">
-                          <paycodedragdrop  (selectedItemsChange)="getselectedValues($event)" [availables]="availableItems"  [selects]="selectedItems"
-                                    valueField="value" textField="text"  (itemsMoved)="onItemsMoved($event)">
-                                </paycodedragdrop>
-                        
+                        <paycodedragdrop (selectedItemsChange)="getselectedValues($event)" [availables]="availableItems"
+                            [selects]="selectedItems" valueField="value" textField="text"
+                            (itemsMoved)="onItemsMoved($event)">
+                        </paycodedragdrop>
+
                         <div class="type-scroll" *ngIf="selectedCC > 0">
                             <div class="row">
-                        
-                              
+
+
                                 <!-- <div class="col-md-6">
                                                             
                         
@@ -299,7 +302,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                 </div>
             </form>
 
@@ -341,87 +344,90 @@
             </button>
         </mat-card-header>
         <mat-card-content class="scroll-content">
-            
-                <!-- Row 1 -->
-                <div class="row g-3 mb-3">
-                    <div class="col-md-4">
-                        <label class="form-label">Company Code<span class="text-danger">*</span></label>                       
-                        <input type="text" [disabled]="true" [(ngModel)]="CompanyName">
-                        
-                    </div>
-                  
+
+            <!-- Row 1 -->
+            <div class="row g-3 mb-3">
+                <div class="col-md-4">
+                    <label class="form-label">Company Code<span class="text-danger">*</span></label>
+                    <input type="text" [disabled]="true" [(ngModel)]="CompanyName">
+
+                </div>
+
                 <div class="col-md-4">
                     <label class="form-label">Map Name<span class="text-danger">*</span></label>
                     <input type="text" [disabled]="true" [(ngModel)]="MapName">
                 </div>
-                    <div class="col-md-4">
-                        <label class="form-label">Location<span class="text-danger"></span></label>
-                         <input type="text" [disabled]="true" placeholder="Location">
+                <div class="col-md-4">
+                    <label class="form-label">Location<span class="text-danger"></span></label>
+                    <input type="text" [disabled]="true" placeholder="Location">
+                </div>
+            </div>
+            <!-- Row 2 -->
+            <div class="row g-3 mb-3">
+                <div class="col-md-4">
+                    <label class="form-label">Invoice Type<span class="text-danger">*</span></label>
+                    <select class="form-select" [(ngModel)]="selectedInvoiceType"
+                        (change)="OnchagedInvoiceType($event)">
+                        <option value="">-- Select --</option>
+                        <option *ngFor="let t of InvoiceTypeList" [ngValue]="t.invoiceType_Id">{{ t.invoiceType }}
+                        </option>
+                    </select>
+
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Invoice Category<span class="text-danger">*</span></label>
+                    <select class="form-select" [(ngModel)]="Invoice_Category_Id">
+                        <option value="">-- Select --</option>
+                        <option *ngFor="let c of InvoiceCategoryList" [value]="c.geN_iID">
+                            {{ c.geN_vDescription }}
+                        </option>
+                    </select>
+                    <div class="text-danger small" *ngIf="addOtherIncome.get('InvoiceCategory')?.touched 
+             && addOtherIncome.get('InvoiceCategory')?.hasError('required')">
+                        Invoice Category is required
                     </div>
                 </div>
-                <!-- Row 2 -->
-                <div class="row g-3 mb-3">                   
-                    <div class="col-md-4">
-                        <label class="form-label">Invoice Type<span class="text-danger">*</span></label>
-                        <select class="form-select" [(ngModel)]="selectedInvoiceType" (change)="OnchagedInvoiceType($event)">
-                            <option value="">-- Select --</option>
-                            <option *ngFor="let t of InvoiceTypeList" [ngValue]="t.invoiceType_Id">{{ t.invoiceType }}</option>
-                        </select>
-                        
-                    </div>
-                       <div class="col-md-4">
-                        <label class="form-label">Invoice Category<span class="text-danger">*</span></label>
-                        <select class="form-select" [(ngModel)]="Invoice_Category_Id" >
-                            <option value="">-- Select --</option>
-                            <option *ngFor="let c of InvoiceCategoryList" [value]="c.geN_iID">
-                                {{ c.geN_vDescription }}
-                            </option>
-                        </select>
-                        <div class="text-danger small" *ngIf="addOtherIncome.get('InvoiceCategory')?.touched 
-             && addOtherIncome.get('InvoiceCategory')?.hasError('required')">
-                            Invoice Category is required
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <label class="form-label">State<span class="text-danger">*</span></label>
-                        <state  (stateEmit)="stateEvent($event)"></state>
-                        <!-- <select class="form-select" formControlName="State">
+                <div class="col-md-4">
+                    <label class="form-label">State<span class="text-danger">*</span></label>
+                    <state (stateEmit)="stateEvent($event)"></state>
+                    <!-- <select class="form-select" formControlName="State">
                             <option value="">-- Select --</option>
                             <option *ngFor="let f of financialYear" [value]="f.Financial_Year_Id">
                                 {{f.Financial_Year}}
                             </option>
                         </select> -->
-                        <div class="text-danger small" *ngIf="addOtherIncome.get('state')?.touched 
+                    <div class="text-danger small" *ngIf="addOtherIncome.get('state')?.touched 
              && addOtherIncome.get('state')?.hasError('required')">
-                            State is required
-                        </div>
+                        State is required
                     </div>
                 </div>
-                <div class="row g-3 mb-3">
+            </div>
+            <div class="row g-3 mb-3">
 
-                 
+
+            </div>
+            <div *ngIf="isPaycodesEditLoaded" class="row g-3 mb-3">
+                <div class="col-md-12">
+                    <label class="form-label">Type Of Invoice<span class="text-danger"></span></label>
                 </div>
-                <div *ngIf="isPaycodesEditLoaded" class="row g-3 mb-3">
-                    <div class="col-md-12">
-                        <label class="form-label">Type Of Invoice<span class="text-danger"></span></label>
-                    </div>
-                  
-                    <div class="col-md-8">
-                          <paycodedragdrop  (selectedItemsChange)="getselectedValues($event)" [availables]="availableItems"  [selects]="selectedItems"
-                                    valueField="value" textField="text"  (itemsMoved)="onItemsMoved($event)">
-                                </paycodedragdrop>
-                        
-                        <div class="type-scroll" *ngIf="selectedCC > 0">
-                            <div class="row">
-                        
-                              
-                                
-                            </div>
+
+                <div class="col-md-8">
+                    <paycodedragdrop (selectedItemsChange)="getselectedValues($event)" [availables]="availableItems"
+                        [selects]="selectedItems" valueField="value" textField="text"
+                        (itemsMoved)="onItemsMoved($event)">
+                    </paycodedragdrop>
+
+                    <div class="type-scroll" *ngIf="selectedCC > 0">
+                        <div class="row">
+
+
+
                         </div>
                     </div>
-                    
                 </div>
-            
+
+            </div>
+
 
             <!-- <mat-card-footer class="footer"> -->
 

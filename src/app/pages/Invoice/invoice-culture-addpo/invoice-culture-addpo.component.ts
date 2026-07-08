@@ -18,6 +18,7 @@ import * as XLSX from 'xlsx';
 import * as FileSaver from 'file-saver';
 import { Router } from '@angular/router';
 import { StateComponent } from '../../../common/state/state.component';
+import { IListBoxItem, PaycodedragdropComponent } from "../otherincome/paycodedragdrop/paycodedragdrop.component";
 
 
 interface ChildDetail {
@@ -35,12 +36,20 @@ interface ChildDetail {
   imports: [
     CommonModule, ReactiveFormsModule, FormsModule, MatIconModule,
     MatCheckboxModule, MatTableModule, MatPaginatorModule, MatSortModule,
-    CompanyallComponent, MapnameComponent, MatCardModule, StateComponent
+    CompanyallComponent, MapnameComponent, MatCardModule, StateComponent,
+    PaycodedragdropComponent
   ],
   templateUrl: './invoice-culture-addpo.component.html',
   styleUrls: ['./invoice-culture-addpo.component.css']
 })
 export class InvoiceCultureAddpoComponent implements AfterViewInit {
+  availableFilterPlaceholder = 'Search & Select available Attribute';
+
+  selectedFilterPlaceholder = ' Search & Selected Attribute';
+
+  // Search inputs
+  availableSearchInput = new FormControl('');
+  selectedSearchInput = new FormControl('');
   InvoiceCultureForm!: FormGroup;
   showTypeOfInvoice = false;
   companyUI: any;
@@ -58,6 +67,12 @@ export class InvoiceCultureAddpoComponent implements AfterViewInit {
   displayedColumns: string[] = [];
   isPaycodesLoaded = false;
   datatable: Array<{ [key: string]: any }> = [];
+  filteredAvailableItems: Array<IListBoxItem> = [];
+  availableItems: any[] = [];
+  selectedItems: any[] = [];
+  currentSelectItems: any[] = [];
+  selectedDragItems: Array<IListBoxItem> = [];
+  filteredSelectedItems: Array<IListBoxItem> = [];
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -147,6 +162,40 @@ export class InvoiceCultureAddpoComponent implements AfterViewInit {
 
     this.InvoiceCultureForm.get('MapName')?.markAsTouched();
     this.InvoiceCultureForm.get('CostCenterMapping')?.markAsTouched();
+  }
+
+  selected: any;
+  getselectedValues(selected) {
+    this.selected = selected;
+
+  }
+
+  onItemsMoved(event): void {
+    this.currentSelectItems = event.selected;
+  }
+
+  applyFilterscdkDrop() {
+
+    // Available filter
+    this.availableSearchInput.valueChanges.subscribe(value => {
+      const search = value?.toLowerCase() || '';
+
+      this.filteredAvailableItems = this.availableItems.filter(item =>
+        item.value.toLowerCase().includes(search)
+      );
+    });
+
+    // Selected filter
+    this.selectedSearchInput.valueChanges.subscribe(value => {
+      const search = value?.toLowerCase() || '';
+
+      this.filteredSelectedItems = this.selectedDragItems.filter(item =>
+        item.value.toLowerCase().includes(search)
+      );
+    });
+
+    // Initialize selected list
+    this.filteredSelectedItems = [...this.selectedDragItems];
   }
 
   initializeForm(): void {
@@ -305,13 +354,28 @@ export class InvoiceCultureAddpoComponent implements AfterViewInit {
     this.showInvoiceTypeError = selectedCount === 0;
   }
 
+  // checkInvoiceTypeSelection() {
+  //   const selectedCount = this.typeInvoiceList.filter(t =>
+  //     this.InvoiceCultureForm.get(t.Paycode_Id.toString())?.value
+  //   ).length;
+  //   this.showInvoiceTypeError = selectedCount === 0;
+  // }
   checkInvoiceTypeSelection() {
-    const selectedCount = this.typeInvoiceList.filter(t =>
-      this.InvoiceCultureForm.get(t.Paycode_Id.toString())?.value
-    ).length;
-    this.showInvoiceTypeError = selectedCount === 0;
-  }
 
+    if (!this.typeInvoiceList?.length) {
+      return;
+    }
+
+    const selectedCount =
+      this.typeInvoiceList.filter(t =>
+        this.InvoiceCultureForm.get(
+          t.Paycode_Id.toString()
+        )?.value
+      ).length;
+
+    this.showInvoiceTypeError =
+      selectedCount === 0;
+  }
   onInvoiceCategoryChange(categoryId: string): void {
     if (!categoryId) {
       return;
@@ -363,26 +427,63 @@ export class InvoiceCultureAddpoComponent implements AfterViewInit {
       }
     });
   }
-
   loadPaycodes(): void {
     this.poService.getAllPaycode(this.selectedCC).subscribe({
       next: (res) => {
-        this.typeInvoiceList = res?.Data?.data?.Table0 || [];
 
-        // Create checkbox controls dynamically
-        this.typeInvoiceList.forEach(t => {
+        console.log('API Response', res);
+
+        this.typeInvoiceList =
+          res?.Data?.data?.Table0 || [];
+
+        this.availableItems =
+          this.typeInvoiceList.map((x: any) => ({
+            value: x.Paycode_Id.toString(),
+            text: x.Paycode_Code
+          }));
+
+        this.selectedItems = [];
+
+        console.log('availableItems', this.availableItems);
+
+        this.typeInvoiceList.forEach((t: any) => {
           const controlName = t.Paycode_Id.toString();
+
           if (!this.InvoiceCultureForm.contains(controlName)) {
-            this.InvoiceCultureForm.addControl(controlName, new FormControl(false));
+            this.InvoiceCultureForm.addControl(
+              controlName,
+              new FormControl(false)
+            );
           }
         });
+
         this.isPaycodesLoaded = true;
       },
       error: (err) => {
-        console.error('Error loading invoice types', err);
+        console.error(err);
       }
     });
   }
+
+  // loadPaycodes(): void {
+  //   this.poService.getAllPaycode(this.selectedCC).subscribe({
+  //     next: (res) => {
+  //       this.typeInvoiceList = res?.Data?.data?.Table0 || [];
+
+  //       // Create checkbox controls dynamically
+  //       this.typeInvoiceList.forEach(t => {
+  //         const controlName = t.Paycode_Id.toString();
+  //         if (!this.InvoiceCultureForm.contains(controlName)) {
+  //           this.InvoiceCultureForm.addControl(controlName, new FormControl(false));
+  //         }
+  //       });
+  //       this.isPaycodesLoaded = true;
+  //     },
+  //     error: (err) => {
+  //       console.error('Error loading invoice types', err);
+  //     }
+  //   });
+  // }
 
   loadInvoiceTypes(): void {
     this.isLoading = true;
