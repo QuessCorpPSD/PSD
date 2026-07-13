@@ -18,12 +18,13 @@ import { CompanyallComponent } from '../../../common/CompanyAll/companyall.compo
 import { MapnameComponent } from "../../../common/Mapname/mapname/mapname.component";
 import { StateComponent } from '../../../common/state/state.component';
 import { CitybystateComponent } from '../../../common/citybystate/citybystate.component';
+import { MatMenuModule } from '@angular/material/menu';
 export const Pay_TOKEN = new InjectionToken<IClientaddress>('Pay_TOKEN');
 
 @Component({
   selector: 'clientaddress',
   standalone: true,
-  imports: [MatPaginatorModule, MatTableModule, MatIconModule, CommonModule, FormsModule, ReactiveFormsModule, MatTooltipModule, MatCardModule, CompanyallComponent, MapnameComponent, StateComponent, CitybystateComponent],
+  imports: [MatPaginatorModule, MatTableModule, MatIconModule, CommonModule, FormsModule, ReactiveFormsModule, MatTooltipModule, MatCardModule, CompanyallComponent, MapnameComponent, StateComponent, CitybystateComponent, MatMenuModule],
   templateUrl: './clientaddress.component.html',
   styleUrl: './clientaddress.component.css',
   providers: [
@@ -53,6 +54,7 @@ export class ClientaddressComponent {
   showErrors = false;
   isEditMode: boolean = false;
   rowData: any;
+  UploadType: any;
 
   constructor(private dialog: MatDialog, @Inject(Pay_TOKEN) private service: IClientaddress, private decry: EncryptionService,
     private _sessionStoreage: SessionStorageService, private fb: FormBuilder,) { }
@@ -599,7 +601,7 @@ export class ClientaddressComponent {
     document.body.removeChild(downloadLink);
   }
 
-  downloadTemplate() {
+  AddTemplate(): void {
     const templateData = [
       {
         Company_Code: "",
@@ -643,12 +645,61 @@ export class ClientaddressComponent {
     const buffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
     const blob = new Blob([buffer], { type: 'application/octet-stream' });
 
-    FileSaver.saveAs(blob, `ClientAddress_Template.xlsx`)
+    FileSaver.saveAs(blob, `ClientAddress_AddTemplate.xlsx`)
+  }
+
+  EditTemplate(): void {
+    const templateData = [
+      {
+        ClientAddressId: "",
+        Company_Code: "",
+        StateName: "",
+        Map_Name: "",
+        Billing_Client_Name: "",
+        Billing_Address: "",
+        Billing_State: "",
+        Is_Shipping_Address_Same_As_Billing: "",
+        Shipping_Client_Name: "",
+        Shipping_Address: "",
+        Shipping_State: "",
+        Effective_Date: "",
+        SEZ_Applicable: "",
+        SEZ_ExpiryDate: "",
+        SAC_Code: "",
+        GST_Number: "",
+        LUT_Number: "",
+        LUT_Date: "",
+        LUT_ExpiryDate: "",
+        Vendor_Code: "",
+        Billing_City_Name: "",
+        Billing_Pin_Code: "",
+        Shipping_City_Name: "",
+        Shipping_Pin_Code: "",
+        GST_Excemption: "",
+        SapBillTo: "",
+        SapShipTo: "",
+        AddressCode: "",
+        ClientGstNumber: "",
+      }
+    ];
+
+    const workSheet = XLSX.utils.json_to_sheet(templateData);
+
+    const workbook: XLSX.WorkBook = {
+      Sheets: { 'Table': workSheet },
+      SheetNames: ['Table']
+    };
+
+    const buffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    const blob = new Blob([buffer], { type: 'application/octet-stream' });
+
+    FileSaver.saveAs(blob, `ClientAddress_EditTemplate.xlsx`)
   }
 
 
-  ImportClick(fileInput: HTMLInputElement): void {
+  ImportClick(fileInput: HTMLInputElement, Action: string): void {
     fileInput.value = '';
+    this.UploadType = Action;
     fileInput.click();
   }
 
@@ -665,6 +716,7 @@ export class ClientaddressComponent {
 
     const formData = new FormData();
     formData.append('file', file);
+    formData.append('flag', this.UploadType);
     formData.append('userId', this.userdetail.user_Id);
 
     this.service.PostClientAddressUpload(formData).subscribe({
@@ -679,6 +731,7 @@ export class ClientaddressComponent {
         if (res?.Data?.response?.includes("Row(s) Uploaded Successfully.")) {
           this.isLoading = false;
           this.showAlertPopup("Row(s) Uploaded Successfully.")
+          this.onsearch();
           return;
         }
 

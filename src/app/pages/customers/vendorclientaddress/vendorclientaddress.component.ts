@@ -21,11 +21,12 @@ import { StatenameComponent } from '../../../common/statename/statename.componen
 import { StateComponent } from '../../../common/state/state.component';
 import { CitynameComponent } from '../../../common/cityname/cityname.component';
 import { CitybystateComponent } from '../../../common/citybystate/citybystate.component';
+import { MatMenuModule } from '@angular/material/menu';
 export const Pay_TOKEN = new InjectionToken<IClientaddress>('Pay_TOKEN');
 
 @Component({
   selector: 'vendorclientaddress',
-  imports: [MatPaginatorModule, MatTableModule, MatIconModule, CommonModule, FormsModule, ReactiveFormsModule, MatTooltipModule, MatCardModule, CompanyallComponent, MapnameComponent, StateComponent, CitybystateComponent],
+  imports: [MatPaginatorModule, MatTableModule, MatIconModule, CommonModule, FormsModule, ReactiveFormsModule, MatTooltipModule, MatCardModule, CompanyallComponent, MapnameComponent, StateComponent, CitybystateComponent, MatMenuModule],
   templateUrl: './vendorclientaddress.component.html',
   styleUrl: './vendorclientaddress.component.css',
   providers: [
@@ -103,6 +104,7 @@ export class VendorclientaddressComponent {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   showClientPopup = false;
   sameAsBilling = false;
+  UploadType: string = '';
 
   filterColumns: string[] = [
     'filterAction',
@@ -630,7 +632,7 @@ export class VendorclientaddressComponent {
     document.body.removeChild(downloadLink);
   }
 
-  downloadTemplate() {
+  AddTemplate() {
     const templateData = [
       {
         Company_Code: "",
@@ -674,12 +676,63 @@ export class VendorclientaddressComponent {
     const buffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
     const blob = new Blob([buffer], { type: 'application/octet-stream' });
 
-    FileSaver.saveAs(blob, `ClientAddress_Template.xlsx`)
+    FileSaver.saveAs(blob, `ClientAddress_AddTemplate.xlsx`)
+  }
+
+  EditTemplate() {
+    const templateData = [
+      {
+        VendorClientAddressId: "",
+        Company_Code: "",
+        StateName: "",
+        Map_Name: "",
+        Billing_Client_Name: "",
+        Billing_Address: "",
+        Billing_State: "",
+        Is_Shipping_Address_Same_As_Billing: "",
+        Shipping_Client_Name: "",
+        Shipping_Address: "",
+        Shipping_State: "",
+        Effective_Date: "",
+        SEZ_Applicable: "",
+        SEZ_ExpiryDate: "",
+        SAC_Code: "",
+        GST_Number: "",
+        LUT_Number: "",
+        LUT_Date: "",
+        LUT_ExpiryDate: "",
+        Vendor_Code: "",
+        Billing_City_Name: "",
+        Billing_Pin_Code: "",
+        Shipping_City_Name: "",
+        Shipping_Pin_Code: "",
+        GST_Excemption: "",
+        SapBillTo: "",
+        SapShipTo: "",
+        AddressCode: "",
+        ClientGstNumber: "",
+      }
+    ];
+
+    const workSheet = XLSX.utils.json_to_sheet(templateData);
+
+    const workbook: XLSX.WorkBook = {
+      Sheets: { 'Table': workSheet },
+      SheetNames: ['Table']
+    };
+
+    const buffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    const blob = new Blob([buffer], { type: 'application/octet-stream' });
+
+    FileSaver.saveAs(blob, `ClientAddress_EditTemplate.xlsx`)
   }
 
 
-  ImportClick(fileInput: HTMLInputElement): void {
+
+
+  ImportClick(fileInput: HTMLInputElement, Action: string): void {
     fileInput.value = '';
+    this.UploadType=Action;
     fileInput.click();
   }
 
@@ -696,6 +749,7 @@ export class VendorclientaddressComponent {
 
     const formData = new FormData();
     formData.append('file', file);
+    formData.append('flag', this.UploadType);
     formData.append('userId', this.userdetail.user_Id);
 
     this.service.PostVendorClientAddressUpload(formData).subscribe({
