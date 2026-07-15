@@ -17,13 +17,36 @@
                             <mat-icon>download</mat-icon>
                         </button>
                         <button class="btn btn-sm d-flex align-items-center justify-content-center btn-download"
-                            matTooltip="Template" (click)="DownloadTemplate()">
+                            matTooltip="Template" [matMenuTriggerFor]="templateMenu">
                             <mat-icon>cloud_download</mat-icon>
                         </button>
+
+                        <mat-menu #templateMenu="matMenu">
+                            <button mat-menu-item (click)="AddTemplate()">
+                                <mat-icon>add</mat-icon>
+                                <span>Add</span>
+                            </button>
+
+                            <button mat-menu-item (click)="EditTemplate()">
+                                <mat-icon>edit</mat-icon>
+                                <span>Edit</span>
+                            </button>
+                        </mat-menu>
                         <button class="btn btn-sm d-flex align-items-center justify-content-center btn-upload"
-                            matTooltip="Import" (click)="ImportClick(fileInput)">
+                            matTooltip="Import" [matMenuTriggerFor]="uploadMenu">
                             <mat-icon>cloud_upload</mat-icon>
                         </button>
+                        <mat-menu #uploadMenu="matMenu">
+                            <button mat-menu-item (click)="ImportClick(fileInput, 'Add')">
+                                <mat-icon>add</mat-icon>
+                                <span>Add</span>
+                            </button>
+
+                            <button mat-menu-item (click)="ImportClick(fileInput, 'Edit')">
+                                <mat-icon>edit</mat-icon>
+                                <span>Edit</span>
+                            </button>
+                        </mat-menu>
                         <input type="file" #fileInput style="display: none;" (click)="fileInput.value=''"
                             (change)="onFileSelected($event)" accept=".xlsx, .xls" />
                     </div>
@@ -34,7 +57,8 @@
                     <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
                         <!--Filter Rows-->
                         <ng-container matColumnDef="filteredit">
-                            <mat-header-cell *matHeaderCellDef class="fixed-width-column" style="text-align: center;;"><span
+                            <mat-header-cell *matHeaderCellDef class="fixed-width-column"
+                                style="text-align: center;;"><span
                                     style="cursor:pointer;color:blue;text-decoration:underline;"
                                     (click)="clearFilter()">
                                     Clear

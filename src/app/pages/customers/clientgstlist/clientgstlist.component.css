@@ -397,3 +397,27 @@ input {
     background: white;
     z-index: 20;
 }
+
+.download-container {
+    position: relative;
+    display: inline-block;
+}
+
+.hover-actions {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(50%);
+    display: none;
+    gap: 6px;
+    margin-top: 4px;
+    background: #fff;
+    padding: 6px;
+    border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.2);
+    z-index: 1000;
+}
+
+.download-container:hover .hover-actions {
+    display: flex;
+}

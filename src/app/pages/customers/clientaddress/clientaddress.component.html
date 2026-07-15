@@ -17,13 +17,36 @@
                         <mat-icon>download</mat-icon>
                     </button>
                     <button class="btn btn-sm d-flex align-items-center justify-content-center btn-download"
-                        matTooltip="Template" (click)="downloadTemplate()">
+                        matTooltip="Template" [matMenuTriggerFor]="templateMenu">
                         <mat-icon>cloud_download</mat-icon>
                     </button>
+
+                    <mat-menu #templateMenu="matMenu">
+                        <button mat-menu-item (click)="AddTemplate()">
+                            <mat-icon>add</mat-icon>
+                            <span>Add</span>
+                        </button>
+
+                        <button mat-menu-item (click)="EditTemplate()">
+                            <mat-icon>edit</mat-icon>
+                            <span>Edit</span>
+                        </button>
+                    </mat-menu>
                     <button class="btn btn-sm d-flex align-items-center justify-content-center btn-upload"
-                        matTooltip="Import" (click)="ImportClick(fileInput)">
+                        matTooltip="Import" [matMenuTriggerFor]="uploadMenu">
                         <mat-icon>cloud_upload</mat-icon>
                     </button>
+                    <mat-menu #uploadMenu="matMenu">
+                        <button mat-menu-item (click)="ImportClick(fileInput, 'Add')">
+                            <mat-icon>add</mat-icon>
+                            <span>Add</span>
+                        </button>
+
+                        <button mat-menu-item (click)="ImportClick(fileInput, 'Edit')">
+                            <mat-icon>edit</mat-icon>
+                            <span>Edit</span>
+                        </button>
+                    </mat-menu>
                     <input type="file" #fileInput style="display: none;" (click)="fileInput.value=''"
                         (change)="onFileChange($event)" accept=".xlsx, .xls" />
                 </div>
@@ -145,8 +168,8 @@
 
                     <ng-container matColumnDef="filterSezApplicable">
                         <mat-header-cell *matHeaderCellDef>
-                            <input  class="form-control form-control-sm"
-                                [(ngModel)]="filterValues.seZ_Applicable" (input)="applyFilter($event, 'seZ_Applicable')">
+                            <input class="form-control form-control-sm" [(ngModel)]="filterValues.seZ_Applicable"
+                                (input)="applyFilter($event, 'seZ_Applicable')">
 
                         </mat-header-cell>
                     </ng-container>

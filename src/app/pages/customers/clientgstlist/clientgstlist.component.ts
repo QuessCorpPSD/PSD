@@ -24,6 +24,7 @@ import * as XLSX from 'xlsx';
 import FileSaver from 'file-saver';
 import { State } from '../../../Models/Common';
 import { GroupnameComponent } from '../../groupname/groupname.component';
+import { MatMenuModule } from '@angular/material/menu';
 
 
 @Component({
@@ -42,8 +43,8 @@ import { GroupnameComponent } from '../../groupname/groupname.component';
     MatTooltipModule, MatCardModule,
     CompanyallComponent,
     StateComponent,
-    GroupnameComponent
-
+    GroupnameComponent,
+    MatMenuModule
   ],
   templateUrl: './clientgstlist.component.html',
   styleUrl: './clientgstlist.component.css',
@@ -70,6 +71,7 @@ export class ClientgstlistComponent {
   selectedState: any = null;
   selectedGroupId: number | null = null;
   selectedGroupName: string = '';
+  UploadType: string = '';
 
   GSTTypeList: any[] = [];
 
@@ -542,8 +544,9 @@ export class ClientgstlistComponent {
     });
   }
 
-  ImportClick(fileInput: HTMLInputElement): void {
+  ImportClick(fileInput: HTMLInputElement, Action: string): void {
     fileInput.value = '';
+    this.UploadType=Action;
     fileInput.click();
   }
 
@@ -563,6 +566,7 @@ export class ClientgstlistComponent {
     const formData = new FormData();
     formData.append('file', file);
     formData.append('userId', this.userdetail.user_Id);
+    formData.append('flag', this.UploadType);
 
     this.service.PostClientGSTUpload(formData).subscribe({
 
@@ -857,7 +861,7 @@ export class ClientgstlistComponent {
       }
     });
   }
-  DownloadTemplate() {
+  AddTemplate(): void {
     const templateData = [
       {
         Company_Code: "",
@@ -885,7 +889,39 @@ export class ClientgstlistComponent {
     const buffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
     const blob = new Blob([buffer], { type: 'application/octet-stream' });
 
-    FileSaver.saveAs(blob, `Client_GST_Template_${Date.now()}.xlsx`);
+    FileSaver.saveAs(blob, `ClientGST_AddTemplate_${Date.now()}.xlsx`);
+  }
+
+  EditTemplate(): void {
+    const templateData = [
+      {
+        ClientGstId:"",
+        Company_Code: "",
+        State: "",
+        GST_Number: "",
+        PAN_Number: "",
+        TAN_Number: "",
+        Quess_Invoicing_State: "",
+        Client_Invoicing_State: "",
+        Group_Name: "",
+        Remarks: "",
+        GstTypeName: "",
+        SubCustomerCode: "",
+        Invoice_Category: "",
+        Ship_To_GST_Number: ""
+      }
+    ];
+
+    const ws = XLSX.utils.json_to_sheet(templateData);
+    const wb = {
+      Sheets: { 'ClientGSTTemplate': ws },
+      SheetNames: ['ClientGSTTemplate']
+    };
+
+    const buffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+    const blob = new Blob([buffer], { type: 'application/octet-stream' });
+
+    FileSaver.saveAs(blob, `ClientGST_EditTemplate_${Date.now()}.xlsx`);
   }
 }
 
