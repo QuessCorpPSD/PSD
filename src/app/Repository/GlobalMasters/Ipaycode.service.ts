@@ -6,5 +6,7 @@ export interface IPAycodeService {
     SearchPayCode(payload: any): Observable<APIResponse>;
     CreatePayCode(payload: any): Observable<APIResponse>;
     GetPageType(): Observable<APIResponse>;
-
+    GetAllPTRule(val):Observable<APIResponse>;
+    GetAllPTPayCode(companyId):Observable<APIResponse>;
+    CreateFlexiState(val):Observable<APIResponse>;
 }

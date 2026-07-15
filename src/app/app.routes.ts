@@ -201,6 +201,7 @@ import { APARAdjustmentupdateComponent } from './pages/AccountReceivable/Bankinv
 import { InvoiceruleComponent } from './pages/customers/invoicerule/invoicerule.component';
 import { ProvisionalInvoiceReportComponent } from './pages/Reports/provisional-invoice-report/provisional-invoice-report.component';
 import { CreditNoteReportComponent } from './pages/Reports/credit-note-report/credit-note-report.component';
+import { PTRuleComponent } from './pages/customers/ptrule/ptrule.component';
 
 
 export const routes: Routes = [
@@ -439,6 +440,7 @@ export const routes: Routes = [
           { path: "sezcertificateupload", component: SezcertificateuploadComponent },
           { path: "genericupload", component: GenericuploadComponent },
           { path: "invoicerule", component: InvoiceruleComponent },
+          { path: "ptrule", component: PTRuleComponent },
 
         ]
       },

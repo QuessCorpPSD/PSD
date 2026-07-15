@@ -223,17 +223,20 @@
         </div>
       </div>
       <div class="stat-card stat-card-orange">
-          <div class="hover-target" (mouseenter)="onMouseEnter('P')" (mouseleave)="showProcessAssignmentPanel = false">
+        <div class="download-icon" (click)="downloadProcessing('R')">          
+          <mat-icon>download</mat-icon>
+        </div>
+        <div class="hover-target" (mouseenter)="onMouseEnter('P')" (mouseleave)="showProcessAssignmentPanel = false">
           <div class="stat-number">{{carddashboard.processing}}</div>
           <div class="stat-label py-2">Processing</div>
           <div class="hover-panel" *ngIf="showProcessAssignmentPanel">
             <table>
               <!-- <thead>
-                      <tr>
-                        <th>Category</th>
-                        <th>Assigment</th>
-                      </tr>
-                    </thead> -->
+                            <tr>
+                              <th>Category</th>
+                              <th>Assigment</th>
+                            </tr>
+                          </thead> -->
               <tbody>
                 <tr *ngFor="let item of gridData">
                   <td>{{item.process_Category}}</td>
@@ -244,9 +247,12 @@
             </table>
           </div>
         </div>
-       
+      
       </div>
       <div class="stat-card stat-card-violet">
+           <div class="download-icon" (click)="downloadProcessing('Y')">          
+          <mat-icon>download</mat-icon>
+        </div>
         <div class="stat-number">{{carddashboard.yettocome}}</div>
         <div class="stat-label">Yet to Come</div>
       </div>

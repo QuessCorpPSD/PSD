@@ -1,0 +1,128 @@
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+ag-theme-quartz .ag-floating-filter-input:focus {
+  outline: none !important;
+  box-shadow: none !important;
+  border: 1px solid #ddd !important;
+}
+.ag-root-wrapper-body {
+  overflow-x: auto !important;
+}
+.ag-theme-quartz .ag-cell, 
+.ag-theme-quartz .ag-header-cell {
+  border-right: 1px solid #ccc !important;
+  border-bottom: 1px solid #ccc !important;
+
+}
+
+.ag-theme-quartz .ag-row {
+  border-bottom: 1px solid #ccc !important;
+  
+}
+.custom-select {
+  width: 100%;
+  padding: 8px 12px;
+  font-size: 14px;
+  border: 1px solid #ced4da;
+  border-radius: 6px;
+  background-color: #fff;
+  color: #333;
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.custom-select:hover {
+  border-color: #0d6efd;
+}
+
+.custom-select:focus {
+  border-color: #0d6efd;
+  box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+}
+.modal-box {
+  width: 500px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 5px 20px rgba(0,0,0,.3);
+  animation: popup .2s ease;
+}
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 20px;
+    background-color: #f1f3f5;
+    color: #2a2626;
+    border-bottom: 1px solid #ddd;
+}
+
+.modal-title {
+    font-size: 18px;
+    font-weight: 600;
+}
+.modal-footer {
+  padding: 15px;
+  border-bottom: 1px solid #ddd;
+}
+
+.modal-footer {
+  border-top: 1px solid #ddd;
+  border-bottom: none;
+  text-align: right;
+}
+
+.modal-body {
+  padding: 20px;
+}
+
+.close-btn {
+  float: right;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+@keyframes popup {
+  from {
+    transform: scale(.8);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+.btn-cancel {
+    padding: 8px 20px;
+    border: 1px solid #6c757d;
+    background-color: #ffffff;
+    color: #6c757d;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.btn-cancel:hover {
+    background-color: #6c757d;
+    color: #ffffff;
+}
+
+.btn-cancel:active {
+    transform: scale(0.98);
+}
+
+.btn-cancel:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}

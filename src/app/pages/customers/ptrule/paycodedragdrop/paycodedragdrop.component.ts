@@ -1,29 +1,13 @@
+import { CdkDragDrop, DragDropModule, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Inject, InjectionToken, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
-import { DragDropModule, CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
-import { MatCardModule } from "@angular/material/card";
-import { MatIconModule } from '@angular/material/icon';
-import { AttributeAddComponent } from '../attribute-add/attribute-add.component';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import * as XLSX from 'xlsx';
-
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 export interface IListBoxItem {
   value: string;
   text: string;
 }
 
-export interface AttributeParams {
-  CompanyId: number;
-  PayPeriodId: number;
-  LotNo: string;
-  Map_Name_Id: number;
-  Invoice_Category_Id: number;
-  CreatedBy: string;
-}
-/**
-* Helper interface to emit event when
-* items are moved between boxes
-*/
+
 export interface AttributeItem {
   text: string;
   value?: any;   // optional if needed
@@ -36,21 +20,20 @@ export interface IItemsMovedEvent {
   to: 'selected' | 'available';
 }
 @Component({
-  selector: 'attribute',
-  imports: [CommonModule, AttributeAddComponent, ReactiveFormsModule, MatIconModule, DragDropModule, MatCardModule],
-  templateUrl: './attribute.component.html',
-  styleUrl: './attribute.component.css'
+  selector: 'paycodedragdrop',
+  imports: [DragDropModule,CommonModule],
+  templateUrl: './paycodedragdrop.component.html',
+  styleUrl: './paycodedragdrop.component.css'
 })
-export class AttributeComponent implements OnInit, OnChanges {
+export class PaycodedragdropComponent implements OnInit{
   availableItems: Array<IListBoxItem> = [];
   filteredAvailableItems: Array<IListBoxItem> = [];
   selectedItems: Array<IListBoxItem> = [];
   listBoxForm!: FormGroup;
   finalHeaders: any;
-  SelectedRows: Array<AttributeParams> = [];
+  SelectedRows: Array<AttributeItem> = [];
   isLoading = false;
-
-  @Output() close = new EventEmitter<void>();
+   @Output() close = new EventEmitter<void>();
   @Input() Company_Code?: string;
   @Input() pay_period?: string;
   IsAdd: boolean = false;
@@ -77,9 +60,9 @@ export class AttributeComponent implements OnInit, OnChanges {
   // text displayed over the selected items list box
   @Input() selectedText = 'Selected UserNames';
   // set placeholder text in available items list box
-  @Input() availableFilterPlaceholder = 'Search & Select available Attribute';
+  @Input() availableFilterPlaceholder = 'Search & Select available PayCode';
   // set placeholder text in selected items list box
-  @Input() selectedFilterPlaceholder = ' Search & Selected Attribute';
+  @Input() selectedFilterPlaceholder = ' Search & Selected PayCode';
   @Input() AttributeType?: string;
   @Input() ScreenName?: string;
   @Input() SelectedAttributeRows: any[] = [];
@@ -93,19 +76,16 @@ export class AttributeComponent implements OnInit, OnChanges {
       selectedSearchInput: [''],
     });
   }
-  ngOnInit(): void {
+    ngOnInit(): void {
 
     this.filteredAvailableItems = [...this.availableItems]
 
     console.log('1', this.filteredAvailableItems);
 
     this.listBoxForm.get("availableSearchInput")?.valueChanges.subscribe(response => {
-
       const searchText = response?.trim().toLowerCase() ?? "";
-
       // Step 1: Start from all available items
       let filtered = [...this.availableItems];
-
       // Step 2: Apply search filter (if any)
       if (searchText !== "") {
         filtered = filtered.filter(x =>
@@ -117,19 +97,13 @@ export class AttributeComponent implements OnInit, OnChanges {
       filtered = filtered.filter(a =>
         !this.selectedItems.some(s => s.value === a.value)
       );
-
       // Step 4: Assign to UI list
       this.filteredAvailableItems = filtered;
-
       console.log('2', this.filteredAvailableItems);
     });
 
   }
-  ngOnChanges(changes: SimpleChanges): void {
-
-  }
-
-  drop(event: CdkDragDrop<IListBoxItem[]>) {
+   drop(event: CdkDragDrop<IListBoxItem[]>) {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
@@ -144,55 +118,4 @@ export class AttributeComponent implements OnInit, OnChanges {
       to: 'selected',
     });
   }
-  AttributeAdd() {
-    this.IsAdd = true;
-  }
-
-  closeclick() {
-
-    this.close.emit();
-  }
-  AttributesTemplateclick() {
-
-    if (this.selectedItems.length == 0) {
-      alert('Please select atleast one Attributes');
-      return;
-    }
-
-    const selectedAttributes = this.selectedItems
-      .map(attr => attr.value);
-
-    const baseHeaders = ["LotNo", "Employee_Code"];
-    const GSTheaders = ["Invoice_Number"];
-
-    this.finalHeaders = [...GSTheaders, ...selectedAttributes];
-    const data: any[][] = [this.finalHeaders];
-
-    const ws: XLSX.WorkSheet = XLSX.utils.aoa_to_sheet(data);
-
-    const wb: XLSX.WorkBook = XLSX.utils.book_new();
-
-    XLSX.utils.book_append_sheet(wb, ws, "Split");
-
-    XLSX.writeFile(wb, "Attributes_Template.xlsx");
-
-  }
-
-
-  // drop(event: CdkDragDrop<string[]>) {
-  //   if (event.previousContainer === event.container) {
-  //     moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
-  //   } else {
-  //     transferArrayItem(event.previousContainer.data,
-  //                       event.container.data,
-  //                       event.previousIndex,
-  //                       event.currentIndex);
-  //   }
-  // }
-  closeDialog() {
-    //this.dialogRef.close();
-  }
 }
-
-
-

@@ -1,0 +1,54 @@
+<div class="row">
+    <!-- Available Items -->
+    <div class="col-md-6">
+        <input
+            type="text"
+            class="form-control form-control-sm mb-2"
+            placeholder="{{ availableFilterPlaceholder }}"
+            formControlName="availableSearchInput" />
+
+        <div
+            cdkDropList
+            #availables="cdkDropList"
+            [cdkDropListData]="filteredAvailableItems"
+            [cdkDropListConnectedTo]="[selects]"
+            (cdkDropListDropped)="drop($event)"
+            class="drag-drop-list">
+
+            <div
+                class="drag-drop-box"
+                *ngFor="let item of filteredAvailableItems"
+                cdkDrag>
+                {{ item.text }}
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Selected Items -->
+    <div class="col-md-6">
+        <input
+            type="text"
+            class="form-control form-control-sm mb-2"
+            [placeholder]="selectedFilterPlaceholder"
+            formControlName="selectedSearchInput"
+            #selectedSearchInput />
+
+        <div
+            cdkDropList
+            #selects="cdkDropList"
+            [cdkDropListData]="selectedItems"
+            [cdkDropListConnectedTo]="[availables]"
+            (cdkDropListDropped)="drop($event)"
+            class="drag-drop-list">
+
+            <div
+                class="drag-drop-box-selected"
+                *ngFor="let item of selectedItems"
+                cdkDrag>
+                {{ item.text }}
+            </div>
+
+        </div>
+    </div>
+</div>

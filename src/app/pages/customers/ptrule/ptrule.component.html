@@ -1,0 +1,54 @@
+<div class="card-body">
+    <div class="row">
+        <div class="col-3"> <state (stateEmit)="getstate($event)"></state></div>
+        <div class="col-3  d-flex gap-2"> 
+            <button (click)="SearchWithState()" style="width: 80px; height: 30px; color: white;padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; background: #302CB3; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.20); border-radius: 6px; justify-content: center; align-items: center; gap: 10px; display: inline-flex; border: none;">Search</button> 
+            <button (click)="onExportCsv()" style="width: 80px; height: 30px; color: white;padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; background: #302CB3; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.20); border-radius: 6px; justify-content: center; align-items: center; gap: 10px; display: inline-flex; border: none;">Export</button>
+             <button (click)="IsAddPTRule()" style="width: 80px; height: 30px; color: white;padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; background: #302CB3; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.20); border-radius: 6px; justify-content: center; align-items: center; gap: 10px; display: inline-flex; border: none;">Add</button></div>
+       
+    </div>
+    <div class="row p-1">
+        <ag-grid-angular  class="ag-theme-quartz" [gridOptions]="gridOptions" style="width: 100%; height: 400px;" [columnDefs]="columnDefs"
+            [defaultColDef]="defaultColDef" [rowData]="rowData" (gridReady)="onGridReady($event)"   [pagination]="true"
+    [paginationPageSize]="10"
+    [paginationPageSizeSelector]="[10,20,50,100]">
+        </ag-grid-angular>
+    </div>
+   
+<div class="modal-overlay" *ngIf="isAdd">
+  <div class="modal-box">
+
+   <div class="modal-header">
+  <span class="modal-title">Add PT Rule</span>
+
+  <button class="close-btn" (click)="closeModal()">
+    ✖
+  </button>
+</div>
+    <div class="modal-body">
+  <div class="d-flex flex-column gap-3">
+    <state (stateEmit)="getSelectedstate($event)"></state>
+
+    <!-- <select
+    class="form-select custom-select"
+    multiple
+    [(ngModel)]="selectedPayCodes"
+    (ngModelChange)="onPaycodeChange($event)">
+
+    <option *ngFor="let paycode of paycodes" [ngValue]="paycode">
+        {{ paycode.paycode_Code }}
+    </option>
+</select> -->
+<paycodedragdrop  [availables]="availableItems" valueField="value" textField="text"
+            [selects]="selectedItems" valueField="value" textField="text" (itemsMoved)="onItemsMoved($event)"></paycodedragdrop>
+</div>
+    </div>
+
+    <div class="modal-footer">
+      <button (click)="closeModal()" style="width: 80px; height: 30px; color: white;padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; background: #302CB3; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.20); border-radius: 6px; justify-content: center; align-items: center; gap: 10px; display: inline-flex; border: none;">Cancel</button><button style="width: 80px; height: 30px; color: white;padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; background: #302CB3; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.20); border-radius: 6px; justify-content: center; align-items: center; gap: 10px; display: inline-flex; border: none;" (click)="SaveData()">Save</button>
+    </div>
+
+  </div>
+</div>
+
+</div>

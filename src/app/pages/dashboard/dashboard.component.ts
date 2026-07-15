@@ -29,6 +29,7 @@ import { ToastrService } from 'ngx-toastr';
 
 
 import { AgGridModule } from 'ag-grid-angular';
+import { MatIconModule } from '@angular/material/icon';
 
 ModuleRegistry.registerModules([ AllCommunityModule ]);
 
@@ -36,7 +37,7 @@ ModuleRegistry.registerModules([ AllCommunityModule ]);
     selector: 'app-dashboard',
     imports: [MatCheckboxModule, MatPaginator, MatTooltipModule, CommonModule, FinancialYearComponent,
         UserComponent, MatTableModule, MatFormFieldModule, MatDatepickerModule, FormsModule,
-        ReactiveFormsModule, AgGridModule],
+        ReactiveFormsModule, AgGridModule,MatIconModule],
     templateUrl: './dashboard.component.html',
     styleUrls: ['./dashboard.component.css'],
     providers: [provideNativeDateAdapter(), {
@@ -284,7 +285,20 @@ onMouseEnter(assignmentType: 'T' | 'C' | 'O' | 'I' | 'N'|'P'):void{
   })
 }
 
- 
+  downloadProcessing(event) {
+
+    this.dashService.InputReconYettocomeReport(event).subscribe({
+      next:res=>{
+        if(res.Data.file!="N")
+        {
+          this.downloadExcelFromBase64(res.Data.file,"",res.Data.fileName)
+        }
+        else{
+          alert('Data not available')
+        }
+      }
+    })
+  }
 
 
 exportToExcelPending():void
@@ -468,15 +482,16 @@ const request = {
 
 }
 
-BindDashboardDetail(val){
-  this.dashService.getadmindashboarddetail(val).subscribe({
-      next:res=>{
-        
-        this.dataSource= new MatTableDataSource<AdminDashboardDetailUI>(res.Data);
-      this.dataSource.paginator = this.paginator;},
-      error:err=>{console.log(err.message)}
+  BindDashboardDetail(val) {
+    this.dashService.getadmindashboarddetail(val).subscribe({
+      next: res => {
+
+        this.dataSource = new MatTableDataSource<AdminDashboardDetailUI>(res.Data);
+        this.dataSource.paginator = this.paginator;
+      },
+      error: err => { console.log(err.message) }
     })
-}
+  }
 
   BindDashBoard()
   {

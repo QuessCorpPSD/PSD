@@ -105,4 +105,7 @@ export class DashBoardServices implements IDashBoardServices {
         const url = `${this.environment.apiUrl}DashBoard/SaveInvoiceAllotEdit/${reqNo}/${userId}`;       
         return this.http.get<APIResponse>(url);
     }
+        InputReconYettocomeReport(val: string): Observable<APIResponse> {
+        return this.http.get<APIResponse>(this.environment.apiUrl + 'DashBoard/ReconNotYettoCome/'+val);
+    }
 }
