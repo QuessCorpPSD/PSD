@@ -7,26 +7,14 @@ import { IAssignmentService } from "../Repository/IAssignment.service";
 
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class AssignmentService implements IAssignmentService {
     environment = environment;
     constructor(private http: HttpClient) {
 
     }
-    GetAssignmentLot(userid,filterType): Observable<APIResponse> {
-                    const headers = new HttpHeaders({
-            'Cache-Control': 'no-cache, no-store, must-revalidate',
-            'Pragma': 'no-cache',
-            'Expires': '0'
-            });
-
-const config = { headers };
-        return this.http.get<APIResponse>(this.environment.apiUrl + 'Assignment/GetAssignmentLot/' + userid+'/'+filterType,config)
-    }
-
-    AutoAllotmentByUser(val):Observable<APIResponse>
-    {
+    GetAssignmentLot(userid, filterType): Observable<APIResponse> {
         const headers = new HttpHeaders({
             'Cache-Control': 'no-cache, no-store, must-revalidate',
             'Pragma': 'no-cache',
@@ -34,7 +22,18 @@ const config = { headers };
         });
 
         const config = { headers };
-       // console.log(this.environment.apiUrl + 'Assignment/AutoAllomentByUserId/' + val);
+        return this.http.get<APIResponse>(this.environment.apiUrl + 'Assignment/GetAssignmentLot/' + userid + '/' + filterType, config)
+    }
+
+    AutoAllotmentByUser(val): Observable<APIResponse> {
+        const headers = new HttpHeaders({
+            'Cache-Control': 'no-cache, no-store, must-revalidate',
+            'Pragma': 'no-cache',
+            'Expires': '0'
+        });
+
+        const config = { headers };
+        // console.log(this.environment.apiUrl + 'Assignment/AutoAllomentByUserId/' + val);
         return this.http.get<APIResponse>(this.environment.apiUrl + 'Assignment/GetAssignmentLot/' + val, config)
 
     }
@@ -46,12 +45,12 @@ const config = { headers };
             'Expires': '0'
         }).set('Content-Type', 'application/json')
             .set('Accept', 'application/json')
-            
+
         return this.http.post<APIResponse>(this.environment.apiUrl + 'Assignment/GetAllotment', inputval, { headers: config })
     }
     PayRegisterDownload(val): Observable<APIResponse> {
         var inputval = JSON.stringify(val);
-           const config = new HttpHeaders({
+        const config = new HttpHeaders({
             'Cache-Control': 'no-cache, no-store, must-revalidate',
             'Pragma': 'no-cache',
             'Expires': '0'
@@ -61,7 +60,7 @@ const config = { headers };
     }
     ReconPayRegisterDownload(val): Observable<APIResponse> {
         var inputval = JSON.stringify(val);
-           const config = new HttpHeaders({
+        const config = new HttpHeaders({
             'Cache-Control': 'no-cache, no-store, must-revalidate',
             'Pragma': 'no-cache',
             'Expires': '0'
@@ -72,12 +71,12 @@ const config = { headers };
     InputFileDownload(val): Observable<APIResponse> {
 
         var inputval = JSON.stringify(val);
-           const config = new HttpHeaders({
+        const config = new HttpHeaders({
             'Cache-Control': 'no-cache, no-store, must-revalidate',
             'Pragma': 'no-cache',
             'Expires': '0'
         }).set('Content-Type', 'application/json')
-            .set('Accept', 'application/json');           
+            .set('Accept', 'application/json');
         return this.http.post<APIResponse>(this.environment.apiUrl + 'Assignment/InputLotDownload', inputval, { headers: config })
     }
 
@@ -89,13 +88,13 @@ const config = { headers };
     GetSOP_QA(): Observable<APIResponse> {
         return this.http.get<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/GetCustomerSOPQuestionAnswer');
     }
-     RevokDetail(userId): Observable<APIResponse> {
-        return this.http.get<APIResponse>(this.environment.apiUrl + 'Assignment/AllottmentRevokDetail/'+userId);
+    RevokDetail(userId): Observable<APIResponse> {
+        return this.http.get<APIResponse>(this.environment.apiUrl + 'Assignment/AllottmentRevokDetail/' + userId);
     }
 
     PayRegisterUpload(val: any): Observable<APIResponse> {
         var inputval = JSON.stringify(val);
-           const config = new HttpHeaders({
+        const config = new HttpHeaders({
             'Cache-Control': 'no-cache, no-store, must-revalidate',
             'Pragma': 'no-cache',
             'Expires': '0'
@@ -103,9 +102,9 @@ const config = { headers };
             .set('Accept', 'application/json')
         return this.http.post<APIResponse>(this.environment.apiUrl + 'PayRegister/PayRegisterUpload', inputval, { headers: config })
     }
-    AssignmentRevok(val): Observable<APIResponse>{
-         var inputval = JSON.stringify(val);
-           const config = new HttpHeaders({
+    AssignmentRevok(val): Observable<APIResponse> {
+        var inputval = JSON.stringify(val);
+        const config = new HttpHeaders({
             'Cache-Control': 'no-cache, no-store, must-revalidate',
             'Pragma': 'no-cache',
             'Expires': '0'
@@ -116,7 +115,7 @@ const config = { headers };
 
     LotStatus(val): Observable<APIResponse> {
         var inputval = JSON.stringify(val);
-           const config = new HttpHeaders({
+        const config = new HttpHeaders({
             'Cache-Control': 'no-cache, no-store, must-revalidate',
             'Pragma': 'no-cache',
             'Expires': '0'
@@ -141,11 +140,10 @@ const config = { headers };
         return this.http.get<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/GetCompanyCode?user_id=' + val);
     }
 
-    UserLotValidation(val):Observable<APIResponse>
-    {
+    UserLotValidation(val): Observable<APIResponse> {
         var inputval = JSON.stringify(val);
-        
-           const config = new HttpHeaders({
+
+        const config = new HttpHeaders({
             'Cache-Control': 'no-cache, no-store, must-revalidate',
             'Pragma': 'no-cache',
             'Expires': '0'
@@ -154,11 +152,10 @@ const config = { headers };
         return this.http.post<APIResponse>(this.environment.apiUrl + 'Assignment/UserEstimateLotValidation', inputval, { headers: config })
     }
 
-    UserLotValidationAdd(val):Observable<APIResponse>
-    {
+    UserLotValidationAdd(val): Observable<APIResponse> {
         var inputval = JSON.stringify(val);
         console.log(inputval);
-           const config = new HttpHeaders({
+        const config = new HttpHeaders({
             'Cache-Control': 'no-cache, no-store, must-revalidate',
             'Pragma': 'no-cache',
             'Expires': '0'
@@ -193,7 +190,7 @@ const config = { headers };
 
     PostSOPAnswer1(val): Observable<APIResponse> {
         var inputval = JSON.stringify(val);
-           const config = new HttpHeaders({
+        const config = new HttpHeaders({
             'Cache-Control': 'no-cache, no-store, must-revalidate',
             'Pragma': 'no-cache',
             'Expires': '0'
@@ -208,7 +205,7 @@ const config = { headers };
 
     PostSOPAnswer2(val): Observable<APIResponse> {
         var inputval = JSON.stringify(val);
-           const config = new HttpHeaders({
+        const config = new HttpHeaders({
             'Cache-Control': 'no-cache, no-store, must-revalidate',
             'Pragma': 'no-cache',
             'Expires': '0'
@@ -223,7 +220,7 @@ const config = { headers };
 
     PostSOPAnswer3(val): Observable<APIResponse> {
         var inputval = JSON.stringify(val);
-           const config = new HttpHeaders({
+        const config = new HttpHeaders({
             'Cache-Control': 'no-cache, no-store, must-revalidate',
             'Pragma': 'no-cache',
             'Expires': '0'
@@ -238,7 +235,7 @@ const config = { headers };
 
     PostSOPAnswer6(val): Observable<APIResponse> {
         var inputval = JSON.stringify(val);
-           const config = new HttpHeaders({
+        const config = new HttpHeaders({
             'Cache-Control': 'no-cache, no-store, must-revalidate',
             'Pragma': 'no-cache',
             'Expires': '0'
@@ -253,7 +250,7 @@ const config = { headers };
 
     PostSOPAnswer8(val): Observable<APIResponse> {
         var inputval = JSON.stringify(val);
-           const config = new HttpHeaders({
+        const config = new HttpHeaders({
             'Cache-Control': 'no-cache, no-store, must-revalidate',
             'Pragma': 'no-cache',
             'Expires': '0'
@@ -268,7 +265,7 @@ const config = { headers };
 
     PostSOPAnswer9(val): Observable<APIResponse> {
         var inputval = JSON.stringify(val);
-           const config = new HttpHeaders({
+        const config = new HttpHeaders({
             'Cache-Control': 'no-cache, no-store, must-revalidate',
             'Pragma': 'no-cache',
             'Expires': '0'
@@ -283,7 +280,7 @@ const config = { headers };
 
     PostSOPAnswer10(val): Observable<APIResponse> {
         var inputval = JSON.stringify(val);
-           const config = new HttpHeaders({
+        const config = new HttpHeaders({
             'Cache-Control': 'no-cache, no-store, must-revalidate',
             'Pragma': 'no-cache',
             'Expires': '0'
@@ -298,7 +295,7 @@ const config = { headers };
 
     PostSOPAnswer5(val): Observable<APIResponse> {
         var inputval = JSON.stringify(val);
-           const config = new HttpHeaders({
+        const config = new HttpHeaders({
             'Cache-Control': 'no-cache, no-store, must-revalidate',
             'Pragma': 'no-cache',
             'Expires': '0'
@@ -313,7 +310,7 @@ const config = { headers };
 
     PostSOPAnswer7(val): Observable<APIResponse> {
         var inputval = JSON.stringify(val);
-           const config = new HttpHeaders({
+        const config = new HttpHeaders({
             'Cache-Control': 'no-cache, no-store, must-revalidate',
             'Pragma': 'no-cache',
             'Expires': '0'
@@ -328,7 +325,7 @@ const config = { headers };
 
     PostSOPAnswer12(val): Observable<APIResponse> {
         var inputval = JSON.stringify(val);
-           const config = new HttpHeaders({
+        const config = new HttpHeaders({
             'Cache-Control': 'no-cache, no-store, must-revalidate',
             'Pragma': 'no-cache',
             'Expires': '0'
@@ -343,7 +340,7 @@ const config = { headers };
 
     PostSOPAnswer13(val): Observable<APIResponse> {
         var inputval = JSON.stringify(val);
-           const config = new HttpHeaders({
+        const config = new HttpHeaders({
             'Cache-Control': 'no-cache, no-store, must-revalidate',
             'Pragma': 'no-cache',
             'Expires': '0'
@@ -358,7 +355,7 @@ const config = { headers };
 
     PostSOPAnswer14(val): Observable<APIResponse> {
         var inputval = JSON.stringify(val);
-           const config = new HttpHeaders({
+        const config = new HttpHeaders({
             'Cache-Control': 'no-cache, no-store, must-revalidate',
             'Pragma': 'no-cache',
             'Expires': '0'
@@ -373,7 +370,7 @@ const config = { headers };
 
     PostSOPAnswer16(val): Observable<APIResponse> {
         var inputval = JSON.stringify(val);
-           const config = new HttpHeaders({
+        const config = new HttpHeaders({
             'Cache-Control': 'no-cache, no-store, must-revalidate',
             'Pragma': 'no-cache',
             'Expires': '0'
@@ -388,7 +385,7 @@ const config = { headers };
 
     PostSOPAnswer17(val): Observable<APIResponse> {
         var inputval = JSON.stringify(val);
-           const config = new HttpHeaders({
+        const config = new HttpHeaders({
             'Cache-Control': 'no-cache, no-store, must-revalidate',
             'Pragma': 'no-cache',
             'Expires': '0'
@@ -403,7 +400,7 @@ const config = { headers };
 
     PostSOPAnswer18(val): Observable<APIResponse> {
         var inputval = JSON.stringify(val);
-           const config = new HttpHeaders({
+        const config = new HttpHeaders({
             'Cache-Control': 'no-cache, no-store, must-revalidate',
             'Pragma': 'no-cache',
             'Expires': '0'
@@ -418,7 +415,7 @@ const config = { headers };
 
     PostSOPAnswer19(val): Observable<APIResponse> {
         var inputval = JSON.stringify(val);
-           const config = new HttpHeaders({
+        const config = new HttpHeaders({
             'Cache-Control': 'no-cache, no-store, must-revalidate',
             'Pragma': 'no-cache',
             'Expires': '0'
@@ -433,7 +430,7 @@ const config = { headers };
 
     PostSOPAnswer21(val): Observable<APIResponse> {
         var inputval = JSON.stringify(val);
-           const config = new HttpHeaders({
+        const config = new HttpHeaders({
             'Cache-Control': 'no-cache, no-store, must-revalidate',
             'Pragma': 'no-cache',
             'Expires': '0'
@@ -448,7 +445,7 @@ const config = { headers };
 
     PostSOPAnswer23(val): Observable<APIResponse> {
         var inputval = JSON.stringify(val);
-           const config = new HttpHeaders({
+        const config = new HttpHeaders({
             'Cache-Control': 'no-cache, no-store, must-revalidate',
             'Pragma': 'no-cache',
             'Expires': '0'
@@ -463,7 +460,7 @@ const config = { headers };
 
     PostSOPAnswer25(val): Observable<APIResponse> {
         var inputval = JSON.stringify(val);
-           const config = new HttpHeaders({
+        const config = new HttpHeaders({
             'Cache-Control': 'no-cache, no-store, must-revalidate',
             'Pragma': 'no-cache',
             'Expires': '0'
@@ -478,7 +475,7 @@ const config = { headers };
 
     PostSOPAnswer28(val): Observable<APIResponse> {
         var inputval = JSON.stringify(val);
-           const config = new HttpHeaders({
+        const config = new HttpHeaders({
             'Cache-Control': 'no-cache, no-store, must-revalidate',
             'Pragma': 'no-cache',
             'Expires': '0'
@@ -493,7 +490,7 @@ const config = { headers };
 
     PostSOPAnswer29(val): Observable<APIResponse> {
         var inputval = JSON.stringify(val);
-           const config = new HttpHeaders({
+        const config = new HttpHeaders({
             'Cache-Control': 'no-cache, no-store, must-revalidate',
             'Pragma': 'no-cache',
             'Expires': '0'
@@ -508,7 +505,7 @@ const config = { headers };
 
     PostSOPAnswer30(val): Observable<APIResponse> {
         var inputval = JSON.stringify(val);
-           const config = new HttpHeaders({
+        const config = new HttpHeaders({
             'Cache-Control': 'no-cache, no-store, must-revalidate',
             'Pragma': 'no-cache',
             'Expires': '0'
@@ -523,7 +520,7 @@ const config = { headers };
 
     PostSOPAnswer32(val): Observable<APIResponse> {
         var inputval = JSON.stringify(val);
-           const config = new HttpHeaders({
+        const config = new HttpHeaders({
             'Cache-Control': 'no-cache, no-store, must-revalidate',
             'Pragma': 'no-cache',
             'Expires': '0'
@@ -538,7 +535,7 @@ const config = { headers };
 
     PostSOPAnswer36(val): Observable<APIResponse> {
         var inputval = JSON.stringify(val);
-           const config = new HttpHeaders({
+        const config = new HttpHeaders({
             'Cache-Control': 'no-cache, no-store, must-revalidate',
             'Pragma': 'no-cache',
             'Expires': '0'
@@ -553,7 +550,7 @@ const config = { headers };
 
     PostSOPAnswer37(val): Observable<APIResponse> {
         var inputval = JSON.stringify(val);
-           const config = new HttpHeaders({
+        const config = new HttpHeaders({
             'Cache-Control': 'no-cache, no-store, must-revalidate',
             'Pragma': 'no-cache',
             'Expires': '0'
@@ -568,7 +565,7 @@ const config = { headers };
 
     PostSOPAnswer38(val): Observable<APIResponse> {
         var inputval = JSON.stringify(val);
-           const config = new HttpHeaders({
+        const config = new HttpHeaders({
             'Cache-Control': 'no-cache, no-store, must-revalidate',
             'Pragma': 'no-cache',
             'Expires': '0'
@@ -577,13 +574,13 @@ const config = { headers };
         return this.http.post<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/PostSOPAnswer38', inputval, { headers: config })
     }
 
-    GetSOPAnswer27(val1: string,val2: string): Observable<APIResponse> {
-        return this.http.get<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/GetSOPAnswer27/'+val1+'/'+val2);
+    GetSOPAnswer27(val1: string, val2: string): Observable<APIResponse> {
+        return this.http.get<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/GetSOPAnswer27/' + val1 + '/' + val2);
     }
 
     PostSOPAnswer27(val): Observable<APIResponse> {
         var inputval = JSON.stringify(val);
-           const config = new HttpHeaders({
+        const config = new HttpHeaders({
             'Cache-Control': 'no-cache, no-store, must-revalidate',
             'Pragma': 'no-cache',
             'Expires': '0'
@@ -592,13 +589,13 @@ const config = { headers };
         return this.http.post<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/PostSOPAnswer27', inputval, { headers: config })
     }
 
-    GetSOPAnswer39(val1: string,val2: string): Observable<APIResponse> {
-        return this.http.get<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/GetSOPAnswer39/'+val1+'/'+val2);
+    GetSOPAnswer39(val1: string, val2: string): Observable<APIResponse> {
+        return this.http.get<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/GetSOPAnswer39/' + val1 + '/' + val2);
     }
 
     PostSOPAnswer39(val): Observable<APIResponse> {
         var inputval = JSON.stringify(val);
-           const config = new HttpHeaders({
+        const config = new HttpHeaders({
             'Cache-Control': 'no-cache, no-store, must-revalidate',
             'Pragma': 'no-cache',
             'Expires': '0'
@@ -608,16 +605,16 @@ const config = { headers };
     }
 
     GetmarkedQuestion(val1: string): Observable<APIResponse> {
-        return this.http.get<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/GetmarkedQuestion/'+val1);
+        return this.http.get<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/GetmarkedQuestion/' + val1);
     }
 
-    GetSOPAnswer4(val1: string,val2: string): Observable<APIResponse> {
-        return this.http.get<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/GetSOPAnswer4/'+val1+'/'+val2);
+    GetSOPAnswer4(val1: string, val2: string): Observable<APIResponse> {
+        return this.http.get<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/GetSOPAnswer4/' + val1 + '/' + val2);
     }
 
     PostSOPAnswer4(val): Observable<APIResponse> {
         var inputval = JSON.stringify(val);
-           const config = new HttpHeaders({
+        const config = new HttpHeaders({
             'Cache-Control': 'no-cache, no-store, must-revalidate',
             'Pragma': 'no-cache',
             'Expires': '0'
@@ -626,14 +623,14 @@ const config = { headers };
         return this.http.post<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/PostSOPAnswer4', inputval, { headers: config })
     }
 
-    
-    GetSOPAnswer33(val1: string,val2: string): Observable<APIResponse> {
-        return this.http.get<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/GetSOPAnswer33/'+val1+'/'+val2);
+
+    GetSOPAnswer33(val1: string, val2: string): Observable<APIResponse> {
+        return this.http.get<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/GetSOPAnswer33/' + val1 + '/' + val2);
     }
 
     PostSOPAnswer33(val): Observable<APIResponse> {
         var inputval = JSON.stringify(val);
-           const config = new HttpHeaders({
+        const config = new HttpHeaders({
             'Cache-Control': 'no-cache, no-store, must-revalidate',
             'Pragma': 'no-cache',
             'Expires': '0'
@@ -642,30 +639,30 @@ const config = { headers };
         return this.http.post<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/PostSOPAnswer33', inputval, { headers: config })
     }
 
-    PostSOPAnswer31(formData:FormData): Observable<APIResponse> {
+    PostSOPAnswer31(formData: FormData): Observable<APIResponse> {
         return this.http.post<APIResponse>(
             this.environment.apiUrl + 'QuestionAnswer/PostSOPAnswer31',
             formData // send as FormData directly
-          );
+        );
     }
-    PostSOPAnswer31_1(formData:FormData): Observable<APIResponse> {
+    PostSOPAnswer31_1(formData: FormData): Observable<APIResponse> {
         return this.http.post<APIResponse>(
             this.environment.apiUrl + 'QuestionAnswer/PostSOPAnswer31_1',
             formData // send as FormData directly
-          );
+        );
     }
 
-    GetSOPAnswer31(val1: string,val2: string): Observable<APIResponse> {
-        return this.http.get<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/GetSOPAnswer31/'+val1+'/'+val2);
+    GetSOPAnswer31(val1: string, val2: string): Observable<APIResponse> {
+        return this.http.get<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/GetSOPAnswer31/' + val1 + '/' + val2);
     }
 
-    GetSOPAnswer11(val1: string,val2: string): Observable<APIResponse> {
-        return this.http.get<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/GetSOPAnswer11/'+val1+'/'+val2);
+    GetSOPAnswer11(val1: string, val2: string): Observable<APIResponse> {
+        return this.http.get<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/GetSOPAnswer11/' + val1 + '/' + val2);
     }
 
     PostSOPAnswer11(val): Observable<APIResponse> {
         var inputval = JSON.stringify(val);
-           const config = new HttpHeaders({
+        const config = new HttpHeaders({
             'Cache-Control': 'no-cache, no-store, must-revalidate',
             'Pragma': 'no-cache',
             'Expires': '0'
@@ -673,13 +670,13 @@ const config = { headers };
             .set('Accept', 'application/json')
         return this.http.post<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/PostSOPAnswer11', inputval, { headers: config })
     }
-    GetSOPAnswer15(val1: string,val2: string): Observable<APIResponse> {
-        return this.http.get<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/GetSOPAnswer15/'+val1+'/'+val2);
+    GetSOPAnswer15(val1: string, val2: string): Observable<APIResponse> {
+        return this.http.get<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/GetSOPAnswer15/' + val1 + '/' + val2);
     }
 
     PostSOPAnswer15(val): Observable<APIResponse> {
         var inputval = JSON.stringify(val);
-           const config = new HttpHeaders({
+        const config = new HttpHeaders({
             'Cache-Control': 'no-cache, no-store, must-revalidate',
             'Pragma': 'no-cache',
             'Expires': '0'
@@ -690,7 +687,7 @@ const config = { headers };
 
     PostSOPAnswer20(val): Observable<APIResponse> {
         var inputval = JSON.stringify(val);
-           const config = new HttpHeaders({
+        const config = new HttpHeaders({
             'Cache-Control': 'no-cache, no-store, must-revalidate',
             'Pragma': 'no-cache',
             'Expires': '0'
@@ -699,13 +696,13 @@ const config = { headers };
         return this.http.post<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/PostSOPAnswer20', inputval, { headers: config })
     }
 
-    GetSOPAnswer20(val1: string,val2: string): Observable<APIResponse> {
-        return this.http.get<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/GetSOPAnswer20/'+val1+'/'+val2);
+    GetSOPAnswer20(val1: string, val2: string): Observable<APIResponse> {
+        return this.http.get<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/GetSOPAnswer20/' + val1 + '/' + val2);
     }
 
     PostSOPAnswer22(val): Observable<APIResponse> {
         var inputval = JSON.stringify(val);
-           const config = new HttpHeaders({
+        const config = new HttpHeaders({
             'Cache-Control': 'no-cache, no-store, must-revalidate',
             'Pragma': 'no-cache',
             'Expires': '0'
@@ -714,43 +711,42 @@ const config = { headers };
         return this.http.post<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/PostSOPAnswer22', inputval, { headers: config })
     }
 
-    GetSOPAnswer22(val1: string,val2: string): Observable<APIResponse> {
-        return this.http.get<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/GetSOPAnswer22/'+val1+'/'+val2);
+    GetSOPAnswer22(val1: string, val2: string): Observable<APIResponse> {
+        return this.http.get<APIResponse>(this.environment.apiUrl + 'QuestionAnswer/GetSOPAnswer22/' + val1 + '/' + val2);
     }
-    LotValidationEstimate(val):Observable<APIResponse>{
-          var inputval = JSON.stringify(val);         
-           const config = new HttpHeaders({
-            'Cache-Control': 'no-cache, no-store, must-revalidate',
-            'Pragma': 'no-cache',
-            'Expires': '0'
-        }).set('Content-Type', 'application/json')
-            .set('Accept', 'application/json')
-        return this.http.post<APIResponse>(this.environment.apiUrl+'Assignment/UserLotStatusValidation',inputval,{ headers: config })
-    }
-       CheckINFileDownload(val):Observable<APIResponse>{
-          var inputval = JSON.stringify(val);         
-           const config = new HttpHeaders({
-            'Cache-Control': 'no-cache, no-store, must-revalidate',
-            'Pragma': 'no-cache',
-            'Expires': '0'
-        }).set('Content-Type', 'application/json')
-            .set('Accept', 'application/json')
-        return this.http.post<APIResponse>(this.environment.apiUrl+'Assignment/CheckINFileDownload',inputval,{ headers: config })
-    }
-    FeedBackMail(val):Observable<APIResponse>{
-          var inputval = JSON.stringify(val);
-           const config = new HttpHeaders({
-            'Cache-Control': 'no-cache, no-store, must-revalidate',
-            'Pragma': 'no-cache',
-            'Expires': '0'
-        }).set('Content-Type', 'application/json')
-            .set('Accept', 'application/json')
-        return this.http.post<APIResponse>(this.environment.apiUrl+'CheckInCheckOut/SendFeedBackMail',inputval,{ headers: config })
-    }
-    OutPutFileDownload(val):Observable<APIResponse>
-    {
+    LotValidationEstimate(val): Observable<APIResponse> {
         var inputval = JSON.stringify(val);
-           const config = new HttpHeaders({
+        const config = new HttpHeaders({
+            'Cache-Control': 'no-cache, no-store, must-revalidate',
+            'Pragma': 'no-cache',
+            'Expires': '0'
+        }).set('Content-Type', 'application/json')
+            .set('Accept', 'application/json')
+        return this.http.post<APIResponse>(this.environment.apiUrl + 'Assignment/UserLotStatusValidation', inputval, { headers: config })
+    }
+    CheckINFileDownload(val): Observable<APIResponse> {
+        var inputval = JSON.stringify(val);
+        const config = new HttpHeaders({
+            'Cache-Control': 'no-cache, no-store, must-revalidate',
+            'Pragma': 'no-cache',
+            'Expires': '0'
+        }).set('Content-Type', 'application/json')
+            .set('Accept', 'application/json')
+        return this.http.post<APIResponse>(this.environment.apiUrl + 'Assignment/CheckINFileDownload', inputval, { headers: config })
+    }
+    FeedBackMail(val): Observable<APIResponse> {
+        var inputval = JSON.stringify(val);
+        const config = new HttpHeaders({
+            'Cache-Control': 'no-cache, no-store, must-revalidate',
+            'Pragma': 'no-cache',
+            'Expires': '0'
+        }).set('Content-Type', 'application/json')
+            .set('Accept', 'application/json')
+        return this.http.post<APIResponse>(this.environment.apiUrl + 'CheckInCheckOut/SendFeedBackMail', inputval, { headers: config })
+    }
+    OutPutFileDownload(val): Observable<APIResponse> {
+        var inputval = JSON.stringify(val);
+        const config = new HttpHeaders({
             'Cache-Control': 'no-cache, no-store, must-revalidate',
             'Pragma': 'no-cache',
             'Expires': '0'

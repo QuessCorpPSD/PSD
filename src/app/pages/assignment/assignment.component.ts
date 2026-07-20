@@ -1,4 +1,4 @@
-import { AfterViewInit, Component,  CUSTOM_ELEMENTS_SCHEMA,  Inject,  InjectionToken,  OnInit } from '@angular/core';
+import { AfterViewInit, Component, CUSTOM_ELEMENTS_SCHEMA, Inject, InjectionToken, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTabsModule } from '@angular/material/tabs';
 import { GridviewComponent } from './gridview/gridview.component';
@@ -11,85 +11,109 @@ import { SessionStorageService } from '../../Shared/SessionStorageService';
 
 
 
-const auth= InjectionToken<IAssignmentService>;
+const auth = InjectionToken<IAssignmentService>;
 
 @Component({
-    selector: 'assignment',
-    imports: [CommonModule, MatTabsModule, GridviewComponent, ListviewComponent],
-    templateUrl: './assignment.component.html',
-    styleUrl: './assignment.component.css',
-    providers: [
-        {
-            provide: auth,
-            useClass: AssignmentService,
-        }
-    ],
-    schemas: [CUSTOM_ELEMENTS_SCHEMA]
+  selector: 'assignment',
+  imports: [CommonModule, MatTabsModule, GridviewComponent, ListviewComponent],
+  templateUrl: './assignment.component.html',
+  styleUrl: './assignment.component.css',
+  providers: [
+    {
+      provide: auth,
+      useClass: AssignmentService,
+    }
+  ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 
 export class AssignmentComponent implements OnInit, AfterViewInit {
   isDropdownOpen = false;
   private isDragging = false;
   isGridDarkMode: boolean = true;
-  data:any;
-  constructor(@Inject(auth)private _authService:IAssignmentService 
-  ,private _decrypt:EncryptionService,
-private _sessionStoreage:SessionStorageService){
+  data: any;
+  constructor(@Inject(auth) private _authService: IAssignmentService
+    , private _decrypt: EncryptionService,
+    private _sessionStoreage: SessionStorageService) {
 
   }
-  
+
   toggleDropdown() {
     this.isDropdownOpen = !this.isDropdownOpen;
   }
   ngOnInit(): void {
     //const user_id=this._sessionStoreage.getItem("userId");   
     this.AutoAllotment();
-   
+
   }
 
-  AutoAllotment(){
-      const userdetail = this._sessionStoreage.getItem('UserProfile');
+  AutoAllotment() {
+    const userdetail = this._sessionStoreage.getItem('UserProfile');
     var user = JSON.parse(this._decrypt.decrypt(userdetail!));
     // this._authService.AutoAllotmentByUser(user.user_Id).subscribe({
     //   next:res=>{ this.GetCompanyData();},
     //   error:err=>{}
     // })
-    
-  var user = JSON.parse(this._decrypt.decrypt(userdetail!));
-    this._authService.GetAssignmentLot(user.user_Id,'A').subscribe(
+
+    var user = JSON.parse(this._decrypt.decrypt(userdetail!));
+    this._authService.GetAssignmentLot(user.user_Id, 'A').subscribe(
       {
-        next: data => { this.data = data.Data;console.log(this.data)  },
+        next: data => {
+          if (data.Data.autoAllocation.statusCode == 200) {
+            alert(data.Data.autoAllocation.messages)
+            this.data = data.Data.lots; console.log(this.data)
+          } else {
+            alert(data.Data.autoAllocation.messages)
+          }
+          //this.data = data.Data;console.log(this.data)  
+        },
         error: error => console.error('Error:', error)
       });
   }
-  
+
 
   GetCompanyData() {
     const userdetail = this._sessionStoreage.getItem('UserProfile');
     var user = JSON.parse(this._decrypt.decrypt(userdetail!));
-    
-    
+
+
     this._authService.GetAssignmentLot(user.user_Id, 'A').subscribe(
       {
-        next: data => { this.data = data.Data; },
+        next: data => {
+          if (data.Data.autoAllocation.statusCode == 200) {
+            alert(data.Data.autoAllocation.messages)
+            this.data = data.Data.lots; console.log(this.data)
+          } else {
+            alert(data.Data.autoAllocation.messages)
+          }
+          //this.data = data.Data; 
+        },
         error: error => console.error('Error:', error)
       });
   }
-  FilterLayout(filterType):void{
-const userdetail= this._sessionStoreage.getItem('UserProfile');
-  var user = JSON.parse(this._decrypt.decrypt(userdetail!));
-    this._authService.GetAssignmentLot(user.user_Id,filterType).subscribe(
+  FilterLayout(filterType): void {
+    const userdetail = this._sessionStoreage.getItem('UserProfile');
+    var user = JSON.parse(this._decrypt.decrypt(userdetail!));
+    this._authService.GetAssignmentLot(user.user_Id, filterType).subscribe(
       {
-        next: data => { this.data = data.Data;console.log(this.data)  },
+        next: data => {
+          if (data.Data.autoAllocation.statusCode == 200) {
+            alert(data.Data.autoAllocation.messages)
+            this.data = data.Data.lots; console.log(this.data)
+          } else {
+            alert(data.Data.autoAllocation.messages)
+          }
+          //this.data = data.Data;console.log(this.data)  
+        },
         error: error => console.error('Error:', error)
       });
   }
-  GridActive(){
-this.isGridDarkMode=true;
+  GridActive() {
+    this.isGridDarkMode = true;
 
   }
-  ListActive(){
-    this.isGridDarkMode=false;
+  ListActive() {
+    this.isGridDarkMode = false;
 
   }
 
@@ -99,7 +123,7 @@ this.isGridDarkMode=true;
   // onMouseOver(e) {
   //   console.log(e);
   //   this.hovered = true;
-    
+
   // }
   // onMouseMove(event: MouseEvent) {
 
@@ -113,12 +137,12 @@ this.isGridDarkMode=true;
   //   this.isDragging = false; // Reset after mouse is released
   // }
 
-  onCardClick(event:any) {
- 
+  onCardClick(event: any) {
+
   }
   ngAfterViewInit(): void {
-   
-    
+
+
   }
- 
+
 }

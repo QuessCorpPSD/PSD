@@ -181,26 +181,27 @@ import { BankInvoiceNEFTCultureComponent } from './pages/SalaryReleaseNew/bank-i
 import { InvoiceBatchConsolidationReportComponent } from './pages/SalaryReleaseNew/invoice-batch-consolidation-report/invoice-batch-consolidation-report.component';
 import { ReIssueProcessApproveComponent } from './pages/SalaryReleaseNew/re-issue-process-approve/re-issue-process-approve.component';
 import { ReIssueProcessReportComponent } from './pages/SalaryReleaseNew/re-issue-process-report/re-issue-process-report.component';
-import { AccountReceivablenavigationComponent } from './pages/AccountReceivable/Bankinvoice/account-receivablenavigation/account-receivablenavigation.component';
-import { ClientAdvancePaymentsComponent } from './pages/AccountReceivable/Bankinvoice/client-advance-payments/client-advance-payments.component';
-import { ClientAdvanceReportComponent } from './pages/AccountReceivable/Bankinvoice/client-advance-report/client-advance-report.component';
-import { CollectionpendingreportComponent } from './pages/AccountReceivable/Bankinvoice/collectionpendingreport/collectionpendingreport.component';
-import { ForecastComponent } from './pages/AccountReceivable/Bankinvoice/forecast/forecast.component';
-import { InvoiceCollectionreportComponent } from './pages/AccountReceivable/Bankinvoice/invoice-collectionreport/invoice-collectionreport.component';
-import { CreditNoteApproveComponent } from './pages/AccountReceivable/Bankinvoice/credit-note-approve/credit-note-approve.component';
-import { CreditNoteUpdateComponent } from './pages/AccountReceivable/Bankinvoice/credit-note-update/credit-note-update.component';
-import { ClientledgerreportComponent } from './pages/AccountReceivable/Bankinvoice/clientledgerreport/clientledgerreport.component';
-import { LTDSreportComponent } from './pages/AccountReceivable/Bankinvoice/ltdsreport/ltdsreport.component';
-import { UnpaidInvoiceReportComponent } from './pages/AccountReceivable/Bankinvoice/unpaid-invoice-report/unpaid-invoice-report.component';
-import { CreditMatrixComponent } from './pages/AccountReceivable/Bankinvoice/credit-matrix/credit-matrix.component';
-import { DebitNoteComponent } from './pages/AccountReceivable/Bankinvoice/debit-note/debit-note.component';
-import { BankTransferHTHStatusComponent } from './pages/AccountReceivable/Bankinvoice/bank-transfer-hthstatus/bank-transfer-hthstatus.component';
-import { ClientTDSSlabMasterComponent } from './pages/AccountReceivable/Bankinvoice/client-tdsslab-master/client-tdsslab-master.component';
-import { InvoiceCollectionComponent } from './pages/AccountReceivable/Bankinvoice/invoice-collection/invoice-collection.component';
-import { APARAdjustmentupdateComponent } from './pages/AccountReceivable/Bankinvoice/aparadjustmentupdate/aparadjustmentupdate.component';
 import { InvoiceruleComponent } from './pages/customers/invoicerule/invoicerule.component';
 import { ProvisionalInvoiceReportComponent } from './pages/Reports/provisional-invoice-report/provisional-invoice-report.component';
 import { CreditNoteReportComponent } from './pages/Reports/credit-note-report/credit-note-report.component';
+import { CategorychangeComponent } from './pages/admin/categorychange/categorychange.component';
+import { AccountReceivablenavigationComponent } from './pages/accountreceivable/Bankinvoice/account-receivablenavigation/account-receivablenavigation.component';
+import { APARAdjustmentupdateComponent } from './pages/accountreceivable/Bankinvoice/aparadjustmentupdate/aparadjustmentupdate.component';
+import { BankTransferHTHStatusComponent } from './pages/accountreceivable/Bankinvoice/bank-transfer-hthstatus/bank-transfer-hthstatus.component';
+import { ClientAdvancePaymentsComponent } from './pages/accountreceivable/Bankinvoice/client-advance-payments/client-advance-payments.component';
+import { ClientAdvanceReportComponent } from './pages/accountreceivable/Bankinvoice/client-advance-report/client-advance-report.component';
+import { ClientTDSSlabMasterComponent } from './pages/accountreceivable/Bankinvoice/client-tdsslab-master/client-tdsslab-master.component';
+import { ClientledgerreportComponent } from './pages/accountreceivable/Bankinvoice/clientledgerreport/clientledgerreport.component';
+import { CollectionpendingreportComponent } from './pages/accountreceivable/Bankinvoice/collectionpendingreport/collectionpendingreport.component';
+import { CreditMatrixComponent } from './pages/accountreceivable/Bankinvoice/credit-matrix/credit-matrix.component';
+import { CreditNoteApproveComponent } from './pages/accountreceivable/Bankinvoice/credit-note-approve/credit-note-approve.component';
+import { CreditNoteUpdateComponent } from './pages/accountreceivable/Bankinvoice/credit-note-update/credit-note-update.component';
+import { DebitNoteComponent } from './pages/accountreceivable/Bankinvoice/debit-note/debit-note.component';
+import { ForecastComponent } from './pages/accountreceivable/Bankinvoice/forecast/forecast.component';
+import { InvoiceCollectionComponent } from './pages/accountreceivable/Bankinvoice/invoice-collection/invoice-collection.component';
+import { InvoiceCollectionreportComponent } from './pages/accountreceivable/Bankinvoice/invoice-collectionreport/invoice-collectionreport.component';
+import { LTDSreportComponent } from './pages/accountreceivable/Bankinvoice/ltdsreport/ltdsreport.component';
+import { UnpaidInvoiceReportComponent } from './pages/accountreceivable/Bankinvoice/unpaid-invoice-report/unpaid-invoice-report.component';
 
 
 export const routes: Routes = [
@@ -414,6 +415,7 @@ export const routes: Routes = [
           { path: "companypermission", component: CompanypermissionComponent, },
           { path: "passwordunlock", component: PasswordunlockComponent, },
           { path: "payperiodunlock", component: PayperiodunlockComponent, },
+          {path: "categorychange", component: CategorychangeComponent,},
         ]
       },
       {
