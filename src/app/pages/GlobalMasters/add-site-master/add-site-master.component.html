@@ -2,7 +2,8 @@
     <mat-card class="custom-card py-1">
         <mat-card-header class="sticky-header">
 
-            <mat-card-title style="color: #302CB3; font-size: 22px; font-family: Montserrat; font-weight: 700;"> Add Site Master</mat-card-title>
+            <mat-card-title style="color: #302CB3; font-size: 22px; font-family: Montserrat; font-weight: 700;"> Add
+                Site Master</mat-card-title>
 
             <span class="spacer"></span>
             <button mat-icon-button (click)="onClose()" class="no-border-icon">
@@ -64,43 +65,22 @@
 
             <div class="row g-3 mb-3">
                 <div class="col-md-3">
-                    <label class="form-label text-muted small">SAP Customer Code<span
-                            class="text-danger">*</span></label>
+                    <label class="form-label text-muted small">SAP Customer Code</label>
                     <input type="text" class="form-control form-control-sm" formControlName="SAPCustomerCode">
-
-                    <small class="text-danger"
-                        *ngIf="siteForm.get('SAPCustomerCode')?.touched && siteForm.get('SAPCustomerCode')?.invalid">
-                        SAP Customer Code is required
-                    </small>
                 </div>
 
                 <div class="col-md-3">
-                    <label class="form-label text-muted small">SAP Customer Name<span
-                            class="text-danger">*</span></label>
+                    <label class="form-label text-muted small">SAP Customer Name</label>
                     <input type="text" class="form-control form-control-sm" formControlName="SAPCustomerName">
-
-                    <small class="text-danger"
-                        *ngIf="siteForm.get('SAPCustomerName')?.touched && siteForm.get('SAPCustomerName')?.invalid">
-                        SAP Customer Name is required
-                    </small>
                 </div>
 
                 <div class="col-md-3">
-                    <label class="form-label text-muted small">WBS2<span class="text-danger">*</span></label>
+                    <label class="form-label text-muted small">WBS2</label>
                     <input type="text" class="form-control form-control-sm" formControlName="WBS2">
-
-                    <small class="text-danger" *ngIf="siteForm.get('WBS2')?.touched && siteForm.get('WBS2')?.invalid">
-                        WBS2 is required
-                    </small>
                 </div>
                 <div class="col-md-3">
-                    <label class="form-label text-muted small">WBS Name<span class="text-danger">*</span></label>
+                    <label class="form-label text-muted small">WBS Name</label>
                     <input type="text" class="form-control form-control-sm" formControlName="WBSName">
-
-                    <small class="text-danger"
-                        *ngIf="siteForm.get('WBSName')?.touched && siteForm.get('WBSName')?.invalid">
-                        WBS Name is required
-                    </small>
                 </div>
             </div>
 
@@ -235,30 +215,19 @@
                 </div>
 
                 <div class="col-md-3">
-                    <label class="form-label">StartDate <span class="text-danger">*</span></label>
+                    <label class="form-label">StartDate</label>
                     <input type="date" class="form-control" formControlName="StartDate" />
-
-                    <small class="text-danger"
-                        *ngIf="siteForm.get('StartDate')?.touched && siteForm.get('StartDate')?.invalid">
-                        Start Date is required
-                    </small>
                 </div>
 
                 <div class="col-md-3">
-                    <label class="form-label">Salary Date <span class="text-danger">*</span></label>
+                    <label class="form-label">Salary Date</label>
                     <input type="date" class="form-control" formControlName="SalaryDate" />
-
-                    <small class="text-danger"
-                        *ngIf="siteForm.get('SalaryDate')?.touched && siteForm.get('SalaryDate')?.invalid">
-                        Salary Date is required
-                    </small>
                 </div>
             </div>
 
             <div class="row g-3 mb-3">
                 <div class="col-md-3">
-                    <label class="form-label text-muted small">Portal_Payslip_Format<span
-                            class="text-danger">*</span></label>
+                    <label class="form-label text-muted small">Portal_Payslip_Format</label>
                     <select class="form-select form-select-sm" formControlName="PortalPayslipFormat">
                         <option value="">Select</option>
                         <option *ngFor="let p of payslipFormatList" [value]="p.portal_Payslip_Format">
@@ -267,31 +236,48 @@
                         </option>
                     </select>
 
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Discount Type<span class="text-danger">*</span></label>
+                    <select class="form-select form-select-sm" formControlName="Discount_Type">
+                        <option value="">Select</option>
+                        <option value="1">Fixed</option>
+                        <option value="2">Percentage</option>
+                    </select>
+
                     <small class="text-danger"
-                        *ngIf="siteForm.get('PortalPayslipFormat')?.touched && siteForm.get('PortalPayslipFormat')?.invalid">
-                        Portal Payslip Format is required
+                        *ngIf="siteForm.get('Discount_Type')?.touched && siteForm.get('Discount_Type')?.invalid">
+                        Discount Type is required
+                    </small>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Discount Value<span class="text-danger">*</span></label>
+                    <input type="number" class="form-control form-control-sm" formControlName="Discount_Value">
+
+                    <small class="text-danger"
+                        *ngIf="siteForm.get('Discount_Value')?.touched && siteForm.get('Discount_Value')?.invalid">
+                        Discount Value is required
                     </small>
                 </div>
             </div>
 
-        </mat-card-content>
+            <div class="d-flex justify-content-end mt-3">
+                <div class="btn-1"
+                    style="display: flex; justify-content: flex-end; gap: 10px; width: 100%; padding-right: 7px;">
 
-        <div class="d-flex justify-content-end mt-3">
-            <div class="btn-1"
-                style="display: flex; justify-content: flex-end; gap: 10px; width: 100%; padding-right: 7px;">
+                    <button type="button" (click)="onCancel()"
+                        style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: #f0f0f0; color: black;">
+                        Cancel
+                    </button>
 
-                <button type="button" (click)="onCancel()"
-                    style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: #f0f0f0; color: black;">
-                    Cancel
-                </button>
+                    <button type="button" (click)="onSave()"
+                        style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: blue; color: white;">
+                        Save
+                    </button>
 
-                <button type="button" (click)="onSave()"
-                    style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: blue; color: white;">
-                    Save
-                </button>
-
+                </div>
             </div>
-        </div>
+        </mat-card-content>
         <div *ngIf="isLoading" class="loading-overlay">
             <img src="assets/Loading.gif" alt="Loading...">
         </div>
@@ -578,6 +564,28 @@
                     <small class="text-danger"
                         *ngIf="siteForm.get('PortalPayslipFormat')?.touched && siteForm.get('PortalPayslipFormat')?.invalid">
                         Portal Payslip Format is required
+                    </small>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Discount Type<span class="text-danger">*</span></label>
+                    <select class="form-select form-select-sm" formControlName="Discount_Type">
+                        <option value="">Select</option>
+                        <option value="1">Fixed</option>
+                        <option value="2">Percentage</option>
+                    </select>
+
+                    <small class="text-danger"
+                        *ngIf="siteForm.get('Discount_Type')?.touched && siteForm.get('Discount_Type')?.invalid">
+                        Discount Type is required
+                    </small>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Discount Value<span class="text-danger">*</span></label>
+                    <input type="number" class="form-control form-control-sm" formControlName="Discount_Value">
+
+                    <small class="text-danger"
+                        *ngIf="siteForm.get('Discount_Value')?.touched && siteForm.get('Discount_Value')?.invalid">
+                        Discount Value is required
                     </small>
                 </div>
             </div>

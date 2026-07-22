@@ -94,10 +94,10 @@ export class AddSiteMasterComponent {
       VendorName: new FormControl("", Validators.required),
       GroupName: new FormControl("", Validators.required),
       WBS: new FormControl("", Validators.required),
-      SAPCustomerCode: new FormControl("", Validators.required),
-      SAPCustomerName: new FormControl("", Validators.required),
-      WBS2: new FormControl("", Validators.required),
-      WBSName: new FormControl("", Validators.required),
+      SAPCustomerCode: new FormControl(""),
+      SAPCustomerName: new FormControl(""),
+      WBS2: new FormControl(""),
+      WBSName: new FormControl(""),
       EstablishmentName: new FormControl("", Validators.required),
       EstablishmentAddress1: new FormControl("", Validators.required),
       PrincipalEmployerName: new FormControl("", Validators.required),
@@ -108,9 +108,11 @@ export class AddSiteMasterComponent {
       IsLeaveApplicable: new FormControl("", Validators.required),
       Active: new FormControl("", Validators.required),
       IsBonusPayThroughFFDisplay: new FormControl("", Validators.required),
-      StartDate: new FormControl("", Validators.required),
-      SalaryDate: new FormControl("", Validators.required),
-      PortalPayslipFormat: new FormControl("", Validators.required),
+      StartDate: new FormControl(""),
+      SalaryDate: new FormControl(""),
+      PortalPayslipFormat: new FormControl(""),
+      Discount_Type: new FormControl("", Validators.required),
+      Discount_Value: new FormControl("", Validators.required)
       //Value: new FormControl("", Validators.required),
     });
 
@@ -120,10 +122,10 @@ export class AddSiteMasterComponent {
       VendorName: new FormControl("", Validators.required),
       GroupName: new FormControl("", Validators.required),
       WBS: new FormControl("", Validators.required),
-      SAPCustomerCode: new FormControl("", Validators.required),
-      SAPCustomerName: new FormControl("", Validators.required),
-      WBS2: new FormControl("", Validators.required),
-      WBSName: new FormControl("", Validators.required),
+      SAPCustomerCode: new FormControl(""),
+      SAPCustomerName: new FormControl(""),
+      WBS2: new FormControl(""),
+      WBSName: new FormControl(""),
       EstablishmentName: new FormControl("", Validators.required),
       EstablishmentAddress1: new FormControl("", Validators.required),
       PrincipalEmployerName: new FormControl("", Validators.required),
@@ -134,9 +136,11 @@ export class AddSiteMasterComponent {
       IsLeaveApplicable: new FormControl("", Validators.required),
       Active: new FormControl("", Validators.required),
       IsBonusPayThroughFFDisplay: new FormControl("", Validators.required),
-      StartDate: new FormControl("", Validators.required),
-      SalaryDate: new FormControl("", Validators.required),
-      PortalPayslipFormat: new FormControl("", Validators.required),
+      StartDate: new FormControl(""),
+      SalaryDate: new FormControl(""),
+      PortalPayslipFormat: new FormControl(""),
+      Discount_Type: new FormControl("", Validators.required),
+      Discount_Value: new FormControl("", Validators.required),
       //Value: new FormControl("", Validators.required)
     });
 
@@ -148,7 +152,21 @@ export class AddSiteMasterComponent {
       const row = this.editSiteData.row;
 
 
+      const discountTypeMap: Record<string, string> = {
+        Fixed: "1",
+        Percentage: "2",
+        "": "0"
+      };
 
+      const payslipFormatMap: Record<string, string> = {
+        "Format-1": "1",
+        "Format-2": "2",
+        "Format-3": "3",
+        "Format-4": "4",
+        "": "0"
+      };
+
+      
       this.SiteEditForm.patchValue({
         CompanyCode: row.Company_Code,
         VendorName: row.Client_Id,
@@ -164,7 +182,7 @@ export class AddSiteMasterComponent {
         PrincipalEmployeAddress1: row.Principal_Employe_Address1,
         ContractorName: row.Contractor_Name,
         ContractorAddress1: row.Contractor_Address1,
-        PayslipFormat: row.PAYSLIP_FORMAT_Id,
+        PayslipFormat: payslipFormatMap[row.PAYSLIP_FORMAT] ?? "",
         IsLeaveApplicable: row.LeaveApplicable === "Yes" || row.Isleave_Applicable === true ? "1" : "0",
         Active: row.Value ? "1" : "0",
         IsBonusPayThroughFFDisplay: row.IsBonusPayThroughFF === 1 ? "1" : "0",
@@ -172,9 +190,11 @@ export class AddSiteMasterComponent {
         SalaryDate: row.SalaryDate,
         PortalPayslipFormat: row.Portal_Payslip_Format,
         Value: row.Active === "Yes" || row.Active === true ? "1" : "0",
+        Discount_Type: discountTypeMap[row.Discount_Type] ?? "",
+        Discount_Value: row.Discount_Value,
       });
 
-   
+
     }
 
     this.loadVendorList();
@@ -221,7 +241,7 @@ export class AddSiteMasterComponent {
       Contractor_Name: f.ContractorName,
       Contractor_Address1: f.ContractorAddress1,
       PAYSLIP_FORMAT_Id: Number(f.PayslipFormat),
-      PAYSLIP_FORMAT: Number(f.PayslipFormat),
+      PAYSLIP_FORMAT: f.PayslipFormat === "1" ? "Format-1" : f.PayslipFormat === "2" ? "Format-2" : f.PayslipFormat === "3" ? "Format-3" : f.PayslipFormat === "4" ? "Format-4" : "",
       IsBonusPayThroughFF: Number(f.IsBonusPayThroughFFDisplay),
       LeaveApplicable: Number(f.IsLeaveApplicable),
       StartDate: f.StartDate,
@@ -233,11 +253,12 @@ export class AddSiteMasterComponent {
       Active: Number(f.Active),
       SalaryDate: f.SalaryDate,
       Portal_Payslip_Format: f.PortalPayslipFormat,
-      Value: Number(f.Active)
+      Value: Number(f.Active),
+      Discount_Type: f.Discount_Type === "1" ? "Fixed" : f.Discount_Type === "2" ? "Percentage" : "",
+      Discount_Value: f.Discount_Value
     };
 
-   
-
+    console.log("Payload",payload);
     this.siteService.CreateSiteMaster(payload).subscribe({
       next: (res: any) => {
         if (res?.StatusCode === 200) {
@@ -262,35 +283,39 @@ export class AddSiteMasterComponent {
 
 
     const payload = {
-      
-        Action: "Edit",
-        UserId: String(this.userdetail.user_Id),        
-        Company_Id: row.Company_Id,
-        Group_Id: row.Group_Id,                       
-        Group_Detail_Id: row.Group_Detail_Id,         
-        Group_Name: formvalue.GroupName,              
-        Client_Id: row.Client_Id, 
-        CostCenter_Id: row.CostCenter_Id,
-        Establishment_Name: formvalue.EstablishmentName,
-        Establishment_Adress1: formvalue.EstablishmentAddress1,
-        Principal_Employer_Name: formvalue.PrincipalEmployerName,
-        Principal_Employe_Address1: formvalue.PrincipalEmployeAddress1,
-        Contractor_Name: formvalue.ContractorName,
-        Contractor_Address1: formvalue.ContractorAddress1, 
-        PAYSLIP_FORMAT_Id: Number(formvalue.PayslipFormat),
-        PAYSLIP_FORMAT: Number(formvalue.PayslipFormat),
-        IsBonusPayThroughFF: Number(formvalue.IsBonusPayThroughFFDisplay),
-        LeaveApplicable: Number(formvalue.IsLeaveApplicable),        
-        SAP_Cust_Code: formvalue.SAPCustomerCode,
-        SAP_Cust_Name: formvalue.SAPCustomerName,
-        WBS2: formvalue.WBS2,
-        WBS_Name: formvalue.WBSName,   
-        StartDate: formvalue.StartDate,
-        SalaryDate: formvalue.SalaryDate,
-        Portal_Payslip_Format: formvalue.PortalPayslipFormat,
-        Value: Number(formvalue.Active),
-      
+
+      Action: "Edit",
+      UserId: String(this.userdetail.user_Id),
+      Company_Id: row.Company_Id,
+      Group_Id: row.Group_Id,
+      City_Id: row.Location,
+      Group_Detail_Id: row.Group_Detail_Id,
+      Group_Name: formvalue.GroupName,
+      Client_Id: row.Client_Id,
+      CostCenter_Id: row.CostCenter_Id,
+      Establishment_Name: formvalue.EstablishmentName,
+      Establishment_Adress1: formvalue.EstablishmentAddress1,
+      Principal_Employer_Name: formvalue.PrincipalEmployerName,
+      Principal_Employe_Address1: formvalue.PrincipalEmployeAddress1,
+      Contractor_Name: formvalue.ContractorName,
+      Contractor_Address1: formvalue.ContractorAddress1,
+      PAYSLIP_FORMAT_Id: Number(formvalue.PayslipFormat),
+      PAYSLIP_FORMAT: formvalue.PayslipFormat === "1" ? "Format-1" : formvalue.PayslipFormat === "2" ? "Format-2" : formvalue.PayslipFormat === "3" ? "Format-3" : formvalue.PayslipFormat === "4" ? "Format-4" : "",
+      IsBonusPayThroughFF: Number(formvalue.IsBonusPayThroughFFDisplay),
+      LeaveApplicable: Number(formvalue.IsLeaveApplicable),
+      SAP_Cust_Code: formvalue.SAPCustomerCode,
+      SAP_Cust_Name: formvalue.SAPCustomerName,
+      WBS2: formvalue.WBS2,
+      WBS_Name: formvalue.WBSName,
+      StartDate: formvalue.StartDate,
+      SalaryDate: formvalue.SalaryDate,
+      Portal_Payslip_Format: formvalue.PortalPayslipFormat,
+      Value: Number(formvalue.Active),
+      Discount_Type: formvalue.Discount_Type === "1" ? "Fixed" : formvalue.Discount_Type === "2" ? "Percentage" : "",
+      Discount_Value: formvalue.Discount_Value
     };
+
+    console.log("EditPayload",payload);
     this.siteService.CreateSiteMaster(payload).subscribe({
       next: (res: any) => {
         if (res?.StatusCode === 200) {

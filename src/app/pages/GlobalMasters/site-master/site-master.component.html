@@ -23,6 +23,11 @@
                         matTooltip="export to excel" (click)="exportToExcel()">
                         <mat-icon>download</mat-icon>
                     </button>
+                    
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-download"
+                        matTooltip="Template" (click)=" DownloadTemplate()">
+                        <mat-icon>cloud_download</mat-icon>
+                    </button>
 
                     <button class="btn btn-sm d-flex align-items-center justify-content-center btn-upload"
                         matTooltip="Import" (click)="ImportClick(fileInput)">
@@ -30,11 +35,6 @@
                     </button>
                     <input type="file" #fileInput style="display:none" (change)="onFileSelected($event)" />
 
-
-                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-download"
-                        matTooltip="Template" (click)=" DownloadTemplate()">
-                        <mat-icon>cloud_download</mat-icon>
-                    </button>
                     <button class="btn btn-sm d-flex align-items-center justify-content-center btn-success"
                         matTooltip="Add" (click)="AddPOOpen()">
                         <mat-icon>add</mat-icon>
@@ -158,7 +158,10 @@
                         <mat-header-cell *matHeaderCellDef><strong>Principal Employer Name</strong></mat-header-cell>
                         <mat-cell *matCellDef="let row">{{ row['Principal_Employer_Name'] }}</mat-cell>
                     </ng-container>
-
+                    <ng-container matColumnDef="Location">
+                        <mat-header-cell *matHeaderCellDef><strong>Location</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['Location'] }}</mat-cell>
+                    </ng-container>
                     <!-- Principal Employe Address1 -->
                     <ng-container matColumnDef="Principal Employe Address1">
                         <mat-header-cell *matHeaderCellDef><strong>Principal Employer
@@ -242,6 +245,18 @@
                     <ng-container matColumnDef="Portal_Payslip_Format">
                         <mat-header-cell *matHeaderCellDef><strong>Portal Payslip Format</strong></mat-header-cell>
                         <mat-cell *matCellDef="let row">{{ row['Portal_Payslip_Format'] }}</mat-cell>
+                    </ng-container>
+
+                    <!-- Discount_Type -->
+                    <ng-container matColumnDef="Discount_Type">
+                        <mat-header-cell *matHeaderCellDef><strong>Discount Type</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['Discount_Type'] }}</mat-cell>
+                    </ng-container>
+
+                    <!-- Discount_Value -->
+                    <ng-container matColumnDef="Discount_Value">
+                        <mat-header-cell *matHeaderCellDef><strong>Discount Value</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['Discount_Value'] }}</mat-cell>
                     </ng-container>
 
 
