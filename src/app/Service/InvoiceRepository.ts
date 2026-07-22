@@ -56,15 +56,11 @@ export class InvoiceRepository implements IInvoiceRepository {
         //console.log(url);
         return this.http.get<APIResponse>(url);
     }
-    // GetAllInvoiceDetailsByCompanyId(companyId: number, payPeriodId: number): Observable<APIResponse> {
-    //     const url = `${this.environment.apiUrl}GSTInvoice/GetAllInvoiceDetails/${companyId}/${payPeriodId}`;
-    //     //console.log(url);
-    //     return this.http.get<APIResponse>(url);
-    // }
 
-    GetAllInvoiceDetailsByCompanyId(companyId: number, payPeriodId: number): Observable<APIResponse> {
-        const url = `${this.environment.apiUrl}EInvoice/GetAllInvoiceDetails/${companyId}/${payPeriodId}`;
-        //console.log(url);
+    GetAllInvoiceDetailsByCompanyId(companyId: number, payPeriodId: number,userId:number): Observable<APIResponse> {
+        alert('Hi')
+        const url = `${this.environment.apiUrl}EInvoice/GetAllInvoiceDetails/${companyId}/${payPeriodId}/${userId}`;
+        console.log(url);
         return this.http.get<APIResponse>(url);
     }
     GetExportData(companyId: number, payPeriodId: number): Observable<APIResponse> {

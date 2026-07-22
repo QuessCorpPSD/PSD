@@ -32,7 +32,7 @@ export interface IInvoiceRepository {
     GetPayPeriod(payload: any): Observable<APIResponse>;
     GetAllAttribute(val): Observable<APIResponse>
     GetIRNColors(): Observable<APIResponse>
-    GetAllInvoiceDetailsByCompanyId(companyId: number, payPeriodId: number): Observable<APIResponse> ;
+    GetAllInvoiceDetailsByCompanyId(companyId: number, payPeriodId: number,userId:number): Observable<APIResponse> ;
     GetExportData(companyId: number, payPeriodId: number): Observable<APIResponse>;
     InitiateIRN(InitiateIRN: any): Observable<APIResponse>;
     GetEInvoiceError(invoiceId): Observable<APIResponse>
