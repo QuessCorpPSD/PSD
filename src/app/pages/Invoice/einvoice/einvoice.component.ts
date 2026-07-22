@@ -30,7 +30,7 @@ import { finalize } from 'rxjs';
 import { SessionStorageService } from '../../../Shared/SessionStorageService';
 import { IInvoiceRepository } from '../../../Repository/IInvoiceRepository';
 import { EInvoiceGrid } from '../../../Models/EInvoiceGrid';
-import { InvoiceRepository } from '../../../Service/invoice/InvoiceRepository';
+import { InvoiceRepository } from '../../../Service/InvoiceRepository';
 import { AlertpopupComponent } from '../../../common/alertpopup/alertpopup.component';
 import { PayPeriodComponent } from "../../../common/payperiod/payperiod.component";
 import { CompanyallComponent } from '../../../common/CompanyAll/companyall.component';
@@ -171,35 +171,34 @@ export class EInvoiceComponent {
     }
   }
 
-  search() {
+  // search() {
 
-    this.selectedTemplate = '';
-    this.searchText = '';
-    this.selection.clear();
-    this.invoiceService.GetAllInvoiceDetailsByCompanyId(this.companyUI.companyId, this.payperiodUI.payfrequencyid).subscribe({
-      next: res => {
-        // Check data here
-        console.log(res);
-        const tableData = res.data.data.Table0;
+  //   this.selectedTemplate = '';
+  //   this.searchText = '';
+  //   this.selection.clear();
+  //   this.invoiceService.GetAllInvoiceDetailsByCompanyId(this.companyUI.companyId, this.payperiodUI.payfrequencyid, this.userdetail.user_Id).subscribe({
+  //     next: res => {
+  //       ;
+  //       const tableData = res.data.data.Table0;
 
-        if (!tableData || tableData.length === 0) {
-          alert("No data available to display.");
-          this.isLoading = false;
-          return;
-        }
+  //       if (!tableData || tableData.length === 0) {
+  //         alert("No data available to display.");
+  //         this.isLoading = false;
+  //         return;
+  //       }
 
-        this.dataSource = new MatTableDataSource<EInvoiceGrid>(tableData);
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
-        this.onTemplateChange();
-        this.isLoading = false;
-      },
-      error: err => {
-        console.error('Error fetching data:', err.message);
-        this.isLoading = false;
-      }
-    });
-  }
+  //       this.dataSource = new MatTableDataSource<EInvoiceGrid>(tableData);
+  //       this.dataSource.paginator = this.paginator;
+  //       this.dataSource.sort = this.sort;
+  //       this.onTemplateChange();
+  //       this.isLoading = false;
+  //     },
+  //     error: err => {
+  //       console.error('Error fetching data:', err.message);
+  //       this.isLoading = false;
+  //     }
+  //   });
+  // }
   ngOnInit(): void {
     //this.payPeriodTypetoChild = "All"
     this.payPeriodTypefromParent = "All";
@@ -327,7 +326,7 @@ export class EInvoiceComponent {
 
     if (this.companyUI && this.payperiodUI) {
       this.isLoading = true;
-      this.BindDashBoard(this.companyUI.companyId, this.payperiodUI.payfrequencyid)
+      this.BindDashBoard(this.companyUI.companyId, this.payperiodUI.payfrequencyid, this.userdetail.user_Id)
     }
   }
 
@@ -408,14 +407,16 @@ export class EInvoiceComponent {
     return selected.some(item => item.IRN_Number === irnumbers[0]); // && item.isSubmitted === true);
   }
 
-  BindDashBoard(companyId: number, payPeriodId: number) {
+  BindDashBoard(companyId: number, payPeriodId: number, userId: number) {
     this.selectedTemplate = '';
     this.searchText = '';
     this.selection.clear();
-    this.invoiceService.GetAllInvoiceDetailsByCompanyId(companyId, payPeriodId).subscribe({
+  
+
+    this.invoiceService.GetAllInvoiceDetailsByCompanyId(companyId, payPeriodId, userId).subscribe({
       next: res => {
         // Check data here
-        console.log(res);
+
         const tableData = res.Data.data.Table0;
 
         if (!tableData || tableData.length === 0) {
@@ -614,7 +615,7 @@ export class EInvoiceComponent {
           if (errorMessage) {
             //console.log(errorMessage);
             alert(errorMessage);
-            this.BindDashBoard(this.companyUI.companyId, this.payperiodUI.payfrequencyid);
+            this.BindDashBoard(this.companyUI.companyId, this.payperiodUI.payfrequencyid, this.userdetail.user_Id);
             this.isLoading = false;
           }
           else {

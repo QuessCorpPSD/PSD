@@ -14,11 +14,6 @@ export class InvoiceRepository implements IInvoiceRepository {
 
     }
 
-    GetAllInvoiceDetailsByCompanyId(companyId: number, payPeriodId: number): Observable<APIResponse> {
-        const url = `${this.environment.apiUrl}EInvoice/GetAllInvoiceDetails/${companyId}/${payPeriodId}`;
-        //console.log(url);
-        return this.http.get<APIResponse>(url);
-    }
     GetAllAttributeAddAndUpdate(val): Observable<APIResponse> {
 
         const url = `${this.environment.apiUrl}Attributes/AttributeAddUpdate`;
