@@ -256,7 +256,7 @@ export class SiteMasterComponent {
           this.formData = new FormData();
           this.formData.append('File', file, file.name);
           this.formData.append('QZoneUserName', this.userdetail.userId);
-          this.formData.append('CreatedBy', '3');
+          this.formData.append('CreatedBy', this.userdetail.user_Id);
 
           this.isUploadGridVisible = true;
           this.isUploadDataVisible = true;
