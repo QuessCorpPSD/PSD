@@ -359,7 +359,7 @@ console.log(payload)
           this.isLoading = false;
         }
         else {
-          this.popupMessage = 'Cancel Request Rejection Failed';
+          this.popupMessage = 'Request rejected successfully';
           this.popupSubMessage ='Note:' + res.Data[0].Error_Message;
           this.showPopup = true;
           this.isLoading = false;
