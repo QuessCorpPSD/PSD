@@ -8,5 +8,7 @@ export interface IGstRepository {
     Edit(payload: any): Observable<APIResponse>;
     GetEntity(): Observable<APIResponse>;
     Delete(gstmasterid: any, userid: any): Observable<APIResponse>;
-
+    GetGSTTypes(stateId: any): Observable<APIResponse>;
+    GetAllState(): Observable<APIResponse>;
+    GetAllcityBystate(stateId: any): Observable<APIResponse>;
 }

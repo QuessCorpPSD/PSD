@@ -42,7 +42,9 @@
 
                     <ng-container matColumnDef="Effective Date">
                         <mat-header-cell *matHeaderCellDef><strong>Effective Date</strong></mat-header-cell>
-                        <mat-cell *matCellDef="let row">{{ row['EffectiveDate'] }}</mat-cell>
+                        <mat-cell *matCellDef="let row">
+                            {{ row.EffectiveDate.split(' ')[0] }}
+                        </mat-cell>
                     </ng-container>
 
                     <ng-container matColumnDef="Quess Legal Entity">

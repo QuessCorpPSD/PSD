@@ -28,9 +28,22 @@
                 <input class="form-control form-control-sm" [(ngModel)]="GSTNumber" name="GSTNumber" />
             </div>
             <div class="col-md-4">
+                <label class="form-label text-muted small">State Name <span style="color: red;">*</span></label>
+                <select class="form-select form-select-sm" [(ngModel)]="StateName" name="StateName"
+                    (ngModelChange)="Loadgsttype($event); Loadlocation($event)">
+
+                    <option *ngFor="let pf of state" [ngValue]="pf.state_Id">
+                        {{ pf.state_Name }}
+                    </option>
+                </select>
+
+            </div>
+            <div class="col-md-4">
                 <label class="form-label text-muted small">GST Type <span style="color: red;">*</span></label>
                 <select class="form-select form-select-sm" [(ngModel)]="GSTType" name="GSTType">
-                    <option value="">-Select-</option>
+                    <option *ngFor="let pf of gsttypes" [value]="pf.gstTypeId">
+                        {{ pf.gstTypeName }}
+                    </option>
                 </select>
 
             </div>
@@ -46,13 +59,7 @@
             </div>
 
 
-            <div class="col-md-4">
-                <label class="form-label text-muted small">State Name <span style="color: red;">*</span></label>
-                <select class="form-select form-select-sm" [(ngModel)]="StateName" name="StateName">
-                    <option value="">-Select-</option>
-                </select>
 
-            </div>
 
             <div class="col-md-4">
                 <label class="form-label text-muted small">Company Name</label>
@@ -84,7 +91,12 @@
             </div>
             <div class="col-md-4">
                 <label class="form-label text-muted small">Location <span style="color: red;">*</span></label>
-                <input class="form-control form-control-sm" [(ngModel)]="Location" name="Location" />
+                <!-- <input class="form-control form-control-sm" [(ngModel)]="Location" name="Location" /> -->
+                <select class="form-select form-select-sm" [(ngModel)]="Location" name="Location">
+                    <option *ngFor="let loaction of location" [ngValue]="loaction.city_Id">
+                        {{ loaction.city_Name }}
+                    </option>
+                </select>
             </div>
         </div>
 

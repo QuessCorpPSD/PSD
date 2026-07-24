@@ -32,6 +32,9 @@ export class GSTEditComponent {
   popupSubMessage = '';
   userdetail: any;
   entity: any;
+  gsttypes: any;
+  state: any;
+  location: any;
 
 
   constructor(
@@ -44,7 +47,15 @@ export class GSTEditComponent {
   ) { }
   formatDate(date: string): string {
     const [day, month, year] = date.split('-');
-    return `${year}-${month}-${day}`; // Converts DD-MM-YYYY to YYYY-MM-DD
+    return `${year}-${month}-${day}`;
+  }
+  formatDateTime(dateStr: string): string {
+    if (!dateStr) return '';
+
+    const datePart = dateStr.split(' ')[0];
+    const [day, month, year] = datePart.split('-');
+
+    return `${year}-${month}-${day}`;
   }
   ngOnInit(): void {
     const json = this._sessionStoreage.getItem('UserProfile');
@@ -55,54 +66,56 @@ export class GSTEditComponent {
     }
     this.Gsteditform = this.fb.group({
 
-      Gstmasterid: [{ value: '', disabled: true }],  // disabled but empty
+      Gstmasterid: [this.editData.GstMasterId],
 
-      EffectiveDate: ['', Validators.required],
+      EffectiveDate: [this.formatDateTime(this.editData.EffectiveDate), Validators.required],
 
-      GSTNumber: ['', Validators.required],
+      GSTNumber: [this.editData.GstNumber, Validators.required],
 
-      GSTType: ['', Validators.required],
+      GSTType: [this.editData.GstTypeId, Validators.required],
 
-      Entity: ['', Validators.required],
+      Entity: [this.editData.EntityId, Validators.required],
 
-      StateName: ['', Validators.required],
+      StateName: [this.editData.StateId, Validators.required],
 
-      CompanyName: ['', Validators.required],
+      CompanyName: [this.editData.CompanyName, Validators.required],
 
-      CompanyAddress: ['', Validators.required],
+      CompanyAddress: [this.editData.CompanyAddress, Validators.required],
 
-      PinCode: ['', Validators.required],
+      PinCode: [this.editData.PinCode, Validators.required],
 
       // ===== TAX IDs =====
-      PANNumber: ['', Validators.required],
+      PANNumber: [this.editData.PanNumber, Validators.required],
 
-      TANNumber: ['', Validators.required],
+      TANNumber: [this.editData.TanNumber, Validators.required],
 
-      Location: ['', Validators.required],
+      Location: [this.editData.LocationId, Validators.required],
 
-      cgstApplicable: [{ value: true, disabled: true }],  // assuming CGST always applicable and locked
+      cgstApplicable: [this.editData.CGST_Applicable, { value: true, disabled: true }],
 
-      sgstApplicable: [false],
+      sgstApplicable: [this.editData.SGST_Applicable],
 
-      utgstApplicable: [false],
+      utgstApplicable: [this.editData.UTGST_Applicable],
 
-      cgstPercentage: [0, Validators.required],
+      cgstPercentage: [this.editData.CGST_Percentage, Validators.required],
 
-      sgstPercentage: [{ value: 0, disabled: true }],
+      sgstPercentage: [this.editData.SGST_Percentage, { disabled: true }],
 
-      utgstPercentage: [{ value: 0, disabled: true }],
+      utgstPercentage: [this.editData.UTGST_Percentage, { disabled: true }],
 
       // ===== CESS =====
-      cessPercentage: [0],
-      cessFromDate: [''],
-      cessToDate: ['']
+      cessPercentage: [this.editData.Cess_Percentage],
+      cessFromDate: [this.formatDateTime(this.editData.CessEffectiveFromDate)],
+      cessToDate: [this.formatDateTime(this.editData.CessEffectiveToDate)]
     });
 
 
     this.LoadEntity();
 
 
+    this.Loadstate();
     this.handleGSTToggle();
+
 
   }
 
@@ -166,6 +179,31 @@ export class GSTEditComponent {
       error: err => console.error(" Pay Category API Error:", err)
     });
   }
+
+  Loadgsttype(stateId) {
+    this.gstService.GetGSTTypes(stateId).subscribe({
+      next: (res: any) => {
+        this.gsttypes = res.Data;
+      },
+    });
+  }
+  Loadlocation(stateId) {
+    this.gstService.GetAllcityBystate(stateId).subscribe({
+      next: (res: any) => {
+        this.location = res.Data;
+      }
+    });
+  }
+  Loadstate() {
+    this.gstService.GetAllState().subscribe({
+      next: (res: any) => {
+        this.state = res.Data;
+      },
+    });
+    const stateId = this.Gsteditform.get('StateName')?.value;
+    this.Loadgsttype(stateId);
+    this.Loadlocation(stateId)
+  }
   onClose(): void {
     this.dialogRef.close();
   }
@@ -182,18 +220,47 @@ export class GSTEditComponent {
     const form = this.Gsteditform.value;
 
     const payload = {
-      "Action": "Edit",
-      "UserId": String(this.userdetail.user_Id),
-      "GstMasterId": Number(form.Gstmasterid),
-      "EffectiveDate": String(form.EffectiveDate),
-      "GstNumber": String(form.GSTNumber),
-      "CompanyName": String(form.CompanyName),
-      "CompanyAddress": String(form.CompanyAddress),
-      "CreatedBy": this.userdetail.user_Id,
-      "Gst_Percentage": String(form.cgstPercentage),
-      "EntityId": Number(form.Entity),
-      "Pincode": String(form.PinCode)
+      Action: "Edit",
+      UserId: Number(this.userdetail.user_Id),
+      GstMasterId: Number(form.Gstmasterid),
+      EffectiveDate: form.EffectiveDate,
+
+      EntityId: Number(form.Entity),
+      StateId: Number(form.StateName),
+
+      GstNumber: form.GSTNumber,
+      PanNumber: form.PANNumber,
+      TanNumber: form.TANNumber,
+
+      CompanyName: form.CompanyName,
+      CompanyAddress: form.CompanyAddress,
+
+      CreatedBy: Number(this.userdetail.user_Id),
+      CreatedOn: new Date().toISOString(),
+
+      CGST_Applicable: form.cgstApplicable,
+      CGST_Percentage: Number(form.cgstPercentage),
+
+      SGST_Applicable: form.sgstApplicable,
+      SGST_Percentage: Number(form.sgstPercentage),
+
+      UTGST_Applicable: form.utgstApplicable,
+      UTGST_Percentage: Number(form.utgstPercentage),
+
+      // If your form doesn't have IGST fields, send defaults
+      IGST_Applicable: false,
+      IGST_Percentage: 0,
+
+      GstTypeId: Number(form.GSTType),
+
+      Cess_Percentage: Number(form.cessPercentage),
+      CessEffectiveFromDate: form.cessFromDate,
+      CessEffectiveToDate: form.cessToDate,
+
+      Pincode: form.PinCode,
+      LocationId: Number(form.Location) || 0
     };
+
     this.gstService.Edit(payload).subscribe({
       next: (res: any) => {
         this.isLoading = false;
