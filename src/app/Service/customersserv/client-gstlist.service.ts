@@ -18,17 +18,29 @@ export class ClientGSTListService implements IClienGSTList {
     private tokenService: TokenService
   ) { }
 
-  Search(userId: any): Observable<APIResponse> {
+  // Search(userId: any): Observable<APIResponse> {
 
-    const token = this.tokenService.getAccessToken();
+  //   const token = this.tokenService.getAccessToken();
 
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`
-    });
+  //   const headers = new HttpHeaders({
+  //     Authorization: `Bearer ${token}`
+  //   });
 
-    return this.http.get<APIResponse>(
-      this.env.apiUrl + 'ClientGST/GetAllClientGSTDetails/' + userId,
-      { headers: headers }
+  //   return this.http.get<APIResponse>(
+  //     this.env.apiUrl + 'ClientGST/GetAllClientGSTDetails/' + userId,
+  //     { headers: headers }
+  //   );
+  // }
+
+  Search(payload: any): Observable<APIResponse> {
+    return this.http.post<any>(
+      this.env.apiUrl + 'ClientGST/GetAllClientGSTDetails', payload
+    );
+  }
+
+  SearchVendorgst(payload: any): Observable<APIResponse> {
+    return this.http.post<any>(
+      this.env.apiUrl + 'VendorClientGST/GetAllVendorClientGSTDetails', payload
     );
   }
 

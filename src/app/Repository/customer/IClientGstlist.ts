@@ -2,7 +2,9 @@ import { Observable } from "rxjs";
 import { APIResponse } from "../../Models/apiresponse";
 
 export interface IClienGSTList {
-    Search(userId: any): Observable<APIResponse>;
+    // Search(userId: any): Observable<APIResponse>;
+    Search(payload: any): Observable<APIResponse>;
+    SearchVendorgst(payload: any): Observable<APIResponse>;
     Export(userId: any): Observable<APIResponse>;
     GetInvoiceCategory(): Observable<APIResponse>;
     GetGSTTypes(stateId: any): Observable<APIResponse>;

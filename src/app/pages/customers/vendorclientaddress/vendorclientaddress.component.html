@@ -71,7 +71,7 @@
                         <mat-header-cell *matHeaderCellDef>
                             <input matInput class="form-control form-control-sm"
                                 [(ngModel)]="filterValues.vendorClientAddressId"
-                                (input)="applyFilter($event, 'vendorClientAddressId')">
+                                (keydown.enter)="applyFilter($event, 'vendorClientAddressId')">
                         </mat-header-cell>
                     </ng-container>
 
@@ -79,7 +79,7 @@
                     <ng-container matColumnDef="filterCompanycode">
                         <mat-header-cell *matHeaderCellDef>
                             <input matInput class="form-control form-control-sm" [(ngModel)]="filterValues.company_Code"
-                                (input)="applyFilter($event, 'company_Code')">
+                                (keydown.enter)="applyFilter($event, 'company_Code')">
                         </mat-header-cell>
                     </ng-container>
 
@@ -87,7 +87,7 @@
                     <ng-container matColumnDef="filterState">
                         <mat-header-cell *matHeaderCellDef>
                             <input matInput class="form-control form-control-sm" [(ngModel)]="filterValues.state_Name"
-                                (input)="applyFilter($event, 'state_Name')">
+                                (keydown.enter)="applyFilter($event, 'state_Name')">
                         </mat-header-cell>
                     </ng-container>
 
@@ -95,7 +95,7 @@
                     <ng-container matColumnDef="filterMapName">
                         <mat-header-cell *matHeaderCellDef>
                             <input matInput class="form-control form-control-sm" [(ngModel)]="filterValues.map_Name"
-                                (input)="applyFilter($event, 'map_Name')">
+                                (keydown.enter)="applyFilter($event, 'map_Name')">
                         </mat-header-cell>
                     </ng-container>
 
@@ -103,7 +103,7 @@
                     <ng-container matColumnDef="filterSACCode">
                         <mat-header-cell *matHeaderCellDef>
                             <input matInput class="form-control form-control-sm" [(ngModel)]="filterValues.saC_Code"
-                                (input)="applyFilter($event, 'saC_Code')">
+                                (keydown.enter)="applyFilter($event, 'saC_Code')">
                         </mat-header-cell>
                     </ng-container>
 
@@ -112,7 +112,7 @@
                         <mat-header-cell *matHeaderCellDef>
                             <input matInput class="form-control form-control-sm"
                                 [(ngModel)]="filterValues.billingClientName"
-                                (input)="applyFilter($event, 'billingClientName')">
+                                (keydown.enter)="applyFilter($event, 'billingClientName')">
                         </mat-header-cell>
                     </ng-container>
 
@@ -121,7 +121,7 @@
                         <mat-header-cell *matHeaderCellDef>
                             <input matInput class="form-control form-control-sm"
                                 [(ngModel)]="filterValues.billingAddress"
-                                (input)="applyFilter($event, 'billingAddress')">
+                                (keydown.enter)="applyFilter($event, 'billingAddress')">
                         </mat-header-cell>
                     </ng-container>
 
@@ -130,16 +130,16 @@
                         <mat-header-cell *matHeaderCellDef>
                             <input matInput class="form-control form-control-sm"
                                 [(ngModel)]="filterValues.billingStateName"
-                                (input)="applyFilter($event, 'billingStateName')">
+                                (keydown.enter)="applyFilter($event, 'billingStateName')">
                         </mat-header-cell>
                     </ng-container>
 
                     <!-- Shipping Same As Billing -->
                     <ng-container matColumnDef="filterShippingaddresssameasbilling">
                         <mat-header-cell *matHeaderCellDef>
-                            <input matInput class="form-control form-control-sm"
+                            <!-- <input matInput class="form-control form-control-sm"
                                 [(ngModel)]="filterValues.isShippingAddressSameAsBilling"
-                                (input)="applyFilter($event, 'isShippingAddressSameAsBilling')">
+                                (keydown.enter)="applyFilter($event, 'isShippingAddressSameAsBilling')"> -->
                         </mat-header-cell>
                     </ng-container>
 
@@ -148,7 +148,7 @@
                         <mat-header-cell *matHeaderCellDef>
                             <input matInput class="form-control form-control-sm"
                                 [(ngModel)]="filterValues.shippingClientName"
-                                (input)="applyFilter($event, 'shippingClientName')">
+                                (keydown.enter)="applyFilter($event, 'shippingClientName')">
                         </mat-header-cell>
                     </ng-container>
 
@@ -157,16 +157,16 @@
                         <mat-header-cell *matHeaderCellDef>
                             <input matInput class="form-control form-control-sm"
                                 [(ngModel)]="filterValues.shippingAddress"
-                                (input)="applyFilter($event, 'shippingAddress')">
+                                (keydown.enter)="applyFilter($event, 'shippingAddress')">
                         </mat-header-cell>
                     </ng-container>
 
                     <!-- Shipping State -->
                     <ng-container matColumnDef="filterShippingstate">
                         <mat-header-cell *matHeaderCellDef>
-                            <input matInput class="form-control form-control-sm"
+                            <!-- <input matInput class="form-control form-control-sm"
                                 [(ngModel)]="filterValues.shippingStateName"
-                                (input)="applyFilter($event, 'shippingStateName')">
+                                (keydown.enter)="applyFilter($event, 'shippingStateName')"> -->
                         </mat-header-cell>
                     </ng-container>
 
@@ -181,9 +181,9 @@
                     <!-- SEZ Applicable -->
                     <ng-container matColumnDef="filterSezApplicable">
                         <mat-header-cell *matHeaderCellDef>
-                            <input matInput class="form-control form-control-sm"
+                            <!-- <input matInput class="form-control form-control-sm"
                                 [(ngModel)]="filterValues.seZ_Applicable"
-                                (input)="applyFilter($event, 'seZ_Applicable')">
+                                (keydown.enter)="applyFilter($event, 'seZ_Applicable')"> -->
                         </mat-header-cell>
                     </ng-container>
 
@@ -199,8 +199,8 @@
                     <!-- LUT Number -->
                     <ng-container matColumnDef="filterLutNumber">
                         <mat-header-cell *matHeaderCellDef>
-                            <input matInput class="form-control form-control-sm" [(ngModel)]="filterValues.luT_Number"
-                                (input)="applyFilter($event, 'luT_Number')">
+                            <!-- <input matInput class="form-control form-control-sm" [(ngModel)]="filterValues.luT_Number"
+                                (keydown.enter)="applyFilter($event, 'luT_Number')"> -->
                         </mat-header-cell>
                     </ng-container>
 
@@ -224,75 +224,75 @@
                     <!-- Vendor Code -->
                     <ng-container matColumnDef="filterVendorCode">
                         <mat-header-cell *matHeaderCellDef>
-                            <input matInput class="form-control form-control-sm" [(ngModel)]="filterValues.vendorCode"
-                                (input)="applyFilter($event, 'vendorCode')">
+                            <!-- <input matInput class="form-control form-control-sm" [(ngModel)]="filterValues.vendorCode"
+                                (keydown.enter)="applyFilter($event, 'vendorCode')"> -->
                         </mat-header-cell>
                     </ng-container>
 
                     <!-- GST Number -->
                     <ng-container matColumnDef="filtergstnumber">
                         <mat-header-cell *matHeaderCellDef>
-                            <input matInput class="form-control form-control-sm" [(ngModel)]="filterValues.gstNumber"
-                                (input)="applyFilter($event, 'gstNumber')">
+                            <!-- <input matInput class="form-control form-control-sm" [(ngModel)]="filterValues.gstNumber"
+                                (keydown.enter)="applyFilter($event, 'gstNumber')"> -->
                         </mat-header-cell>
                     </ng-container>
 
                     <!-- Billing Location -->
                     <ng-container matColumnDef="filterBillingLocation">
                         <mat-header-cell *matHeaderCellDef>
-                            <input matInput class="form-control form-control-sm" [(ngModel)]="filterValues.city_Name"
-                                (input)="applyFilter($event, 'city_Name')">
+                            <!-- <input matInput class="form-control form-control-sm" [(ngModel)]="filterValues.city_Name"
+                                (keydown.enter)="applyFilter($event, 'city_Name')"> -->
                         </mat-header-cell>
                     </ng-container>
 
                     <!-- Shipping Location -->
                     <ng-container matColumnDef="filterShippingLocation">
                         <mat-header-cell *matHeaderCellDef>
-                            <input matInput class="form-control form-control-sm"
+                            <!-- <input matInput class="form-control form-control-sm"
                                 [(ngModel)]="filterValues.shippingCity_Name"
-                                (input)="applyFilter($event, 'shippingCity_Name')">
+                                (keydown.enter)="applyFilter($event, 'shippingCity_Name')"> -->
                         </mat-header-cell>
                     </ng-container>
 
                     <!-- Billing PinCode -->
                     <ng-container matColumnDef="filterBillingPincode">
                         <mat-header-cell *matHeaderCellDef>
-                            <input matInput class="form-control form-control-sm"
+                            <!-- <input matInput class="form-control form-control-sm"
                                 [(ngModel)]="filterValues.billingPinCode"
-                                (input)="applyFilter($event, 'billingPinCode')">
+                                (keydown.enter)="applyFilter($event, 'billingPinCode')"> -->
                         </mat-header-cell>
                     </ng-container>
 
                     <!-- Shipping PinCode -->
                     <ng-container matColumnDef="filterShippingPincode">
                         <mat-header-cell *matHeaderCellDef>
-                            <input matInput class="form-control form-control-sm"
+                            <!-- <input matInput class="form-control form-control-sm"
                                 [(ngModel)]="filterValues.shippingPinCode"
-                                (input)="applyFilter($event, 'shippingPinCode')">
+                                (keydown.enter)="applyFilter($event, 'shippingPinCode')"> -->
                         </mat-header-cell>
                     </ng-container>
 
                     <!-- SAP Bill To -->
                     <ng-container matColumnDef="filterSapBillTo">
                         <mat-header-cell *matHeaderCellDef>
-                            <input matInput class="form-control form-control-sm" [(ngModel)]="filterValues.sapBillTo"
-                                (input)="applyFilter($event, 'sapBillTo')">
+                            <!-- <input matInput class="form-control form-control-sm" [(ngModel)]="filterValues.sapBillTo"
+                                (keydown.enter)="applyFilter($event, 'sapBillTo')"> -->
                         </mat-header-cell>
                     </ng-container>
 
                     <!-- SAP Ship To -->
                     <ng-container matColumnDef="filterSapShipTo">
                         <mat-header-cell *matHeaderCellDef>
-                            <input matInput class="form-control form-control-sm" [(ngModel)]="filterValues.sapShipTo"
-                                (input)="applyFilter($event, 'sapShipTo')">
+                            <!-- <input matInput class="form-control form-control-sm" [(ngModel)]="filterValues.sapShipTo"
+                                (keydown.enter)="applyFilter($event, 'sapShipTo')"> -->
                         </mat-header-cell>
                     </ng-container>
 
                     <!-- Address Code -->
                     <ng-container matColumnDef="filterAddressCode">
                         <mat-header-cell *matHeaderCellDef>
-                            <input matInput class="form-control form-control-sm" [(ngModel)]="filterValues.addressCode"
-                                (input)="applyFilter($event, 'addressCode')">
+                            <!-- <input matInput class="form-control form-control-sm" [(ngModel)]="filterValues.addressCode"
+                                (keydown.enter)="applyFilter($event, 'addressCode')"> -->
                         </mat-header-cell>
                     </ng-container>
                     <!-- Action -->
@@ -504,8 +504,8 @@
             </div>
 
             <!-- Paginator -->
-            <mat-paginator [length]="dataSource.data.length" [pageSize]="5" [pageSizeOptions]="[5,10,20]"
-                showFirstLastButtons>
+            <mat-paginator [length]="totalCount" [pageIndex]="pageIndex" [pageSize]="pageSize"
+                [pageSizeOptions]="[10,25,50,100,500,1000]" showFirstLastButtons (page)="onPageChange($event)">
             </mat-paginator>
 
         </div>
