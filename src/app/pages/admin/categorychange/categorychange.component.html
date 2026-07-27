@@ -16,7 +16,8 @@
                 </div>
                 <div class="col-md-3">
                     <label class="form-label text-muted small">Lot Number</label>
-                    <input type="text" class="form-control form-control-sm" />
+                    
+                     <input type="text" class="form-control form-control-sm"  [(ngModel)]="lot_number"/> 
                 </div>
                 <div class="col-md-2 d-flex gap-2">
                     <button class="btn btn-sm d-flex align-items-center justify-content-center btn-search"
@@ -25,6 +26,73 @@
                     </button>
                 </div>
             </div>
+        </div>
+        <div class="table-wrapper1" *ngIf="showTable">
+            <div class="table-scroll">
+                <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 custom-table">
+
+                    <!--  Action -->
+                    <!-- 🔹 Sl.No -->
+                    <ng-container matColumnDef="slNo">
+                        <mat-header-cell *matHeaderCellDef>Sl.No</mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.SNo }}</mat-cell>
+                    </ng-container>
+
+                    <!-- 🔹 Pay Code -->
+                    <ng-container matColumnDef="companycode">
+                        <mat-header-cell *matHeaderCellDef>Company Code</mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.Company_Code }}</mat-cell>
+                    </ng-container>
+
+                    <!-- 🔹 Description -->
+                    <ng-container matColumnDef="lotNumber">
+                        <mat-header-cell *matHeaderCellDef>Lot Number</mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.Lot_Number }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="payrollinputtype">
+                        <mat-header-cell *matHeaderCellDef>Payroll Input Type</mat-header-cell>
+                        <mat-cell *matCellDef="let element;let i = index">
+                            <select [(ngModel)]="element.process_Category" name="process_Category{{i}}"
+                                id="ProcessCategory" name="Process_category" class="form-select border-bottom">
+                                <option value="0">-- Select --</option>
+                                <option *ngFor="let process of ProcessCategory" [ngValue]="process.process_Category">
+                                    {{process.process_Category}}</option>
+                            </select>
+                        </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="update">
+                        <mat-header-cell *matHeaderCellDef>Action</mat-header-cell>
+                        <mat-cell *matCellDef="let row">
+
+                            <button class="btn btn-sm d-flex align-items-center justify-content-center"
+                                matTooltip="update" style="color:white;background-color: blue;"(click)="onUpdate()">
+                                Update
+                            </button>
+                            <!-- <button class="btn btn-sm d-flex align-items-center justify-content-center" style="display: none;"
+                                    matTooltip="Delete" (click)="deleteCompany(row)">
+                                    <mat-icon>delete</mat-icon>
+                                </button> -->
+
+                        </mat-cell>
+                    </ng-container>
+
+                    <!-- Header Rows -->
+                    <mat-header-row *matHeaderRowDef="uploadDisplayedColumns"></mat-header-row>
+
+                    <!-- Data Rows -->
+                    <mat-row *matRowDef="let row; columns: uploadDisplayedColumns"></mat-row>
+
+                </table>
+            </div>
+
+            <div *ngIf="dataSource.data.length === 0" class="text-center p-4">
+                <p class="text-muted">No data to display</p>
+            </div>
+
+            <mat-paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
+                style="border: 1px solid #ddd;"></mat-paginator>
         </div>
     </div>
 </div>
