@@ -202,6 +202,7 @@ import { InvoiceruleComponent } from './pages/customers/invoicerule/invoicerule.
 import { ProvisionalInvoiceReportComponent } from './pages/Reports/provisional-invoice-report/provisional-invoice-report.component';
 import { CreditNoteReportComponent } from './pages/Reports/credit-note-report/credit-note-report.component';
 import { PTRuleComponent } from './pages/customers/ptrule/ptrule.component';
+import { SkillCategoryConstructionComponent } from './pages/customers/skill-category-construction/skill-category-construction.component';
 import { ArpaymentreportComponent } from './pages/Reports/arpaymentreport/arpaymentreport.component';
 
 
@@ -443,7 +444,7 @@ export const routes: Routes = [
           { path: "genericupload", component: GenericuploadComponent },
           { path: "invoicerule", component: InvoiceruleComponent },
           { path: "ptrule", component: PTRuleComponent },
-
+          { path: "skill-category", component: SkillCategoryConstructionComponent },
         ]
       },
       {
