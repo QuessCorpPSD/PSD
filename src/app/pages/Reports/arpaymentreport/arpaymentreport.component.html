@@ -1,0 +1,46 @@
+<div class="page-wrapper">
+    <div class="scrollable-content">
+
+        <div style="color: #302CB3; font-size: 22px; font-family: Nunito Sans;
+             font-weight: 700; min-width: 960px">
+            AR Payment Report
+            <!-- <img src="assets/Ai_Powered.png" width="150px;" height="150px;"/> -->
+        </div>
+
+        <div class="container py-4">
+
+            <div class="row g-3 mb-3">
+                <!-- From Date -->
+                <div class="col-md-3">
+                    <label class="form-label">From Date: <span class="text-danger">*</span></label>
+                    <input type="date" class="form-control" [(ngModel)]="startDate" />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">To Date: <span class="text-danger">*</span></label>
+                    <input [disabled]="true" type="date" class="form-control" [(ngModel)]="endDate" />
+                </div>
+                <div class="col-md-3 d-flex align-items-end">
+                    <button class="btn btn-secondary d-flex align-items-center justify-content-center"
+                        (click)="exportToExcel()" matTooltip="Excel Export">
+                        <mat-icon style="font-size: 30px; width: 30px; height: 30px;">
+                            table_chart
+                        </mat-icon>
+                    </button>
+                </div>
+            </div>
+
+            <div class="row g-3 mb-3 align-items-end">
+
+                <!-- To Date -->
+
+
+                <!-- Export Button -->
+
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
+<p>provisional-invoice-report works!</p>

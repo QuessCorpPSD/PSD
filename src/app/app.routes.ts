@@ -202,6 +202,7 @@ import { InvoiceruleComponent } from './pages/customers/invoicerule/invoicerule.
 import { ProvisionalInvoiceReportComponent } from './pages/Reports/provisional-invoice-report/provisional-invoice-report.component';
 import { CreditNoteReportComponent } from './pages/Reports/credit-note-report/credit-note-report.component';
 import { PTRuleComponent } from './pages/customers/ptrule/ptrule.component';
+import { ArpaymentreportComponent } from './pages/Reports/arpaymentreport/arpaymentreport.component';
 
 
 export const routes: Routes = [
@@ -293,6 +294,7 @@ export const routes: Routes = [
         children: [
           { path: 'payregisterunprocessed', component: PayregisterunprocessedComponent },
           { path: 'payslip', component: PayslipComponent },
+          { path: 'arpaymentreport', component:ArpaymentreportComponent},
           { path: 'app-invoice-leave-balance-report', component: InvoiceLeaveBalanceReportComponent },
           { path: 'app-leave-balance-report', component: LeaveBalanceReportComponent },
           { path: 'poactiveinactivereport', component: PoactiveinactivereportComponent },
