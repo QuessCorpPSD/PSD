@@ -7,7 +7,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -62,6 +62,7 @@ export class ClientgstlistComponent {
   isEditMode = false;
   selectedRow: any = null;
   userdetail: any;
+  Clientgst: any;
   isLoading: boolean = false;
   selectedCompanyId!: number;
   selectedCompanyCode: any;
@@ -72,6 +73,7 @@ export class ClientgstlistComponent {
   selectedGroupId: number | null = null;
   selectedGroupName: string = '';
   UploadType: string = '';
+  totalCount: number = 0;
 
   GSTTypeList: any[] = [];
 
@@ -147,6 +149,10 @@ export class ClientgstlistComponent {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
+
+  pageIndex: number = 0;
+  pageSize: number = 10;
+
   ngOnInit(): void {
 
     const json = this._sessionStoreage.getItem('UserProfile');
@@ -204,7 +210,7 @@ export class ClientgstlistComponent {
     };
   }
 
-  
+
   filterValues: any = {
     clientGstId: '',
     company_Code: '',
@@ -234,6 +240,7 @@ export class ClientgstlistComponent {
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
+    this.onsearch();
   }
 
   clearFilter() {
@@ -241,13 +248,14 @@ export class ClientgstlistComponent {
     Object.keys(this.filterValues).forEach(key => {
       this.filterValues[key] = '';
     });
-
+    this.dataSource.filter = '';
     this.dataSource.filter = JSON.stringify(this.filterValues);
+    this.onsearch();
   }
 
   handleCompanyEvent(company: any) {
 
-    if (!company) return; // ✅ important fix
+    if (!company) return;
 
     this.selectedCompanyId = company.companyId;
     this.selectedCompanyCode = company.companyCode;
@@ -276,6 +284,54 @@ export class ClientgstlistComponent {
     this.selectedRow = row;
   }
 
+  // onsearch() {
+
+  //   this.isLoading = true;
+
+  //   if (!this.userdetail || !this.userdetail.user_Id) {
+  //     console.warn("User Id not found");
+  //     this.isLoading = false;
+  //     return;
+  //   }
+
+  //   const userId = this.userdetail.user_Id;
+
+  //   this.service.Search(userId).subscribe({
+  //     next: (res: any) => {
+
+  //       const data = res?.Data || [];
+
+  //       if (data.length === 0) {
+  //         this.dataSource.data = [];
+  //         console.warn("No records found");
+  //       } else {
+  //         this.dataSource.data = data;
+  //       }
+
+  //       this.isLoading = false;
+
+  //     },
+
+  //     error: (err) => {
+  //       console.error("Error loading Client GST list", err);
+  //       this.isLoading = false;
+  //     }
+
+  //   });
+
+  // }
+  onPageChange(event: PageEvent) {
+
+    this.pageIndex = event.pageIndex;
+    this.pageSize = event.pageSize;
+
+    console.log("Current Page:", this.pageIndex + 1);
+    console.log("Page Size:", this.pageSize);
+
+    this.onsearch();
+
+  }
+
   onsearch() {
 
     this.isLoading = true;
@@ -286,32 +342,56 @@ export class ClientgstlistComponent {
       return;
     }
 
-    const userId = this.userdetail.user_Id;
+    const payload = {
+      ClientGstId: this.filterValues.clientGstId || null,
+      Company_Code: this.filterValues.company_Code || "",
+      Group_Name: this.filterValues.group_Name || "",
+      State_Name: this.filterValues.state_Name || "",
+      ClientInvoicingState_Name: this.filterValues.clientInvoicingState_Name || "",
+      InvoicingState_Name: this.filterValues.invoicingState_Name || "",
+      GstTypeName: this.filterValues.gstTypeName || "",
+      GstNumber: this.filterValues.gstNumber || "",
+      PanNumber: this.filterValues.panNumber || "",
+      TanNumber: this.filterValues.tanNumber || "",
+      UserName: this.filterValues.userName || "",
+      SapCustomerCode: this.filterValues.sapCustomerCode || "",
+      InvoiceCategory: this.filterValues.invoiceCategory || "",
+      PageNo: this.pageIndex + 1,
+      PageSize: this.pageSize,
 
-    this.service.Search(userId).subscribe({
+      // PageNo: this.paginator ? this.paginator.pageIndex + 1 : 1,
+      // PageSize: this.paginator ? this.paginator.pageSize : 10,
+      UserId: this.userdetail.user_Id.toString()
+    };
+
+
+    this.service.Search(payload).subscribe({
       next: (res: any) => {
-
-        const data = res?.Data || [];
-
-        if (data.length === 0) {
-          this.dataSource.data = [];
-          console.warn("No records found");
+        console.log('result', res);
+        this.Clientgst = res?.Data || [];
+        console.log(this.Clientgst)
+        if (this.Clientgst.length != 0) {
+          // Bind table data
+          this.dataSource = new MatTableDataSource(this.Clientgst);
+          //this.dataSource.data = this.Clientgst;
+          this.dataSource.sort = this.sort;
+          this.totalCount = this.Clientgst[0].totalCount || 0;
         } else {
-          this.dataSource.data = data;
+          this.dataSource.data = [];
+          this.totalCount = 0;
         }
 
+        console.log(this.dataSource.data)
+
         this.isLoading = false;
-
       },
-
       error: (err) => {
         console.error("Error loading Client GST list", err);
         this.isLoading = false;
       }
-
     });
-
   }
+
   exportToExcel(): void {
 
     this.isLoading = true;
@@ -546,7 +626,7 @@ export class ClientgstlistComponent {
 
   ImportClick(fileInput: HTMLInputElement, Action: string): void {
     fileInput.value = '';
-    this.UploadType=Action;
+    this.UploadType = Action;
     fileInput.click();
   }
 
@@ -895,7 +975,7 @@ export class ClientgstlistComponent {
   EditTemplate(): void {
     const templateData = [
       {
-        ClientGstId:"",
+        ClientGstId: "",
         Company_Code: "",
         State: "",
         GST_Number: "",

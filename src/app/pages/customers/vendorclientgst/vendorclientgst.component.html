@@ -78,7 +78,7 @@
                             <mat-header-cell *matHeaderCellDef>
                                 <input matInput class="form-control form-control-sm"
                                     [(ngModel)]="filterValues.vendorClientGstId"
-                                    (input)="applyFilter($event,'vendorClientGstId')">
+                                    (keydown.enter)="applyFilter($event,'vendorClientGstId')">
                             </mat-header-cell>
                         </ng-container>
 
@@ -87,7 +87,7 @@
                             <mat-header-cell *matHeaderCellDef>
                                 <input matInput class="form-control form-control-sm"
                                     [(ngModel)]="filterValues.company_Code"
-                                    (input)="applyFilter($event,'company_Code')">
+                                    (keydown.enter)="applyFilter($event,'company_Code')">
                             </mat-header-cell>
                         </ng-container>
 
@@ -95,7 +95,7 @@
                         <ng-container matColumnDef="filterGroupName">
                             <mat-header-cell *matHeaderCellDef>
                                 <input matInput class="form-control form-control-sm"
-                                    [(ngModel)]="filterValues.group_Name" (input)="applyFilter($event,'group_Name')">
+                                    [(ngModel)]="filterValues.group_Name" (keydown.enter)="applyFilter($event,'group_Name')">
                             </mat-header-cell>
                         </ng-container>
 
@@ -103,7 +103,7 @@
                         <ng-container matColumnDef="filterState">
                             <mat-header-cell *matHeaderCellDef>
                                 <input matInput class="form-control form-control-sm"
-                                    [(ngModel)]="filterValues.state_Name" (input)="applyFilter($event,'state_Name')">
+                                    [(ngModel)]="filterValues.state_Name" (keydown.enter)="applyFilter($event,'state_Name')">
                             </mat-header-cell>
                         </ng-container>
 
@@ -112,7 +112,7 @@
                             <mat-header-cell *matHeaderCellDef>
                                 <input matInput class="form-control form-control-sm"
                                     [(ngModel)]="filterValues.clientInvoicingState_Name"
-                                    (input)="applyFilter($event,'clientInvoicingState_Name')">
+                                    (keydown.enter)="applyFilter($event,'clientInvoicingState_Name')">
                             </mat-header-cell>
                         </ng-container>
 
@@ -121,7 +121,7 @@
                             <mat-header-cell *matHeaderCellDef>
                                 <input matInput class="form-control form-control-sm"
                                     [(ngModel)]="filterValues.invoicingState_Name"
-                                    (input)="applyFilter($event,'invoicingState_Name')">
+                                    (keydown.enter)="applyFilter($event,'invoicingState_Name')">
                             </mat-header-cell>
                         </ng-container>
 
@@ -129,7 +129,7 @@
                         <ng-container matColumnDef="filterGstType">
                             <mat-header-cell *matHeaderCellDef>
                                 <input matInput class="form-control form-control-sm"
-                                    [(ngModel)]="filterValues.gstTypeName" (input)="applyFilter($event,'gstTypeName')">
+                                    [(ngModel)]="filterValues.gstTypeName" (keydown.enter)="applyFilter($event,'gstTypeName')">
                             </mat-header-cell>
                         </ng-container>
 
@@ -137,7 +137,7 @@
                         <ng-container matColumnDef="filterGstNumber">
                             <mat-header-cell *matHeaderCellDef>
                                 <input matInput class="form-control form-control-sm"
-                                    [(ngModel)]="filterValues.gstNumber" (input)="applyFilter($event,'gstNumber')">
+                                    [(ngModel)]="filterValues.gstNumber" (keydown.enter)="applyFilter($event,'gstNumber')">
                             </mat-header-cell>
                         </ng-container>
 
@@ -145,7 +145,7 @@
                         <ng-container matColumnDef="filterPanNumber">
                             <mat-header-cell *matHeaderCellDef>
                                 <input matInput class="form-control form-control-sm"
-                                    [(ngModel)]="filterValues.panNumber" (input)="applyFilter($event,'panNumber')">
+                                    [(ngModel)]="filterValues.panNumber" (keydown.enter)="applyFilter($event,'panNumber')">
                             </mat-header-cell>
                         </ng-container>
 
@@ -153,7 +153,7 @@
                         <ng-container matColumnDef="filterTanNumber">
                             <mat-header-cell *matHeaderCellDef>
                                 <input matInput class="form-control form-control-sm"
-                                    [(ngModel)]="filterValues.tanNumber" (input)="applyFilter($event,'tanNumber')">
+                                    [(ngModel)]="filterValues.tanNumber" (keydown.enter)="applyFilter($event,'tanNumber')">
                             </mat-header-cell>
                         </ng-container>
 
@@ -161,7 +161,7 @@
                         <ng-container matColumnDef="filterCreatedBy">
                             <mat-header-cell *matHeaderCellDef>
                                 <input matInput class="form-control form-control-sm" [(ngModel)]="filterValues.userName"
-                                    (input)="applyFilter($event,'userName')">
+                                    (keydown.enter)="applyFilter($event,'userName')">
                             </mat-header-cell>
                         </ng-container>
 
@@ -172,22 +172,22 @@
                                     [(ngModel)]="filterValues.createdOn" (input)="applyFilter($event,'createdOn')"> -->
                             </mat-header-cell>
                         </ng-container>
-
+ 
                         <!-- FILTER SUB CUSTOMER CODE -->
                         <ng-container matColumnDef="filterSubCustomerCode">
                             <mat-header-cell *matHeaderCellDef>
                                 <input matInput class="form-control form-control-sm"
                                     [(ngModel)]="filterValues.sapCustomerCode"
-                                    (input)="applyFilter($event,'sapCustomerCode')">
+                                    (keydown.enter)="applyFilter($event,'sapCustomerCode')">
                             </mat-header-cell>
                         </ng-container>
 
                         <!-- FILTER INVOICE CATEGORY -->
                         <ng-container matColumnDef="filterInvoiceCategory">
                             <mat-header-cell *matHeaderCellDef>
-                                <input matInput class="form-control form-control-sm"
+                                <!-- <input matInput class="form-control form-control-sm"
                                     [(ngModel)]="filterValues.invoiceCategory"
-                                    (input)="applyFilter($event,'invoiceCategory')">
+                                    (keydown.enter)="applyFilter($event,'invoiceCategory')"> -->
                             </mat-header-cell>
                         </ng-container>
 
@@ -195,7 +195,7 @@
                         <ng-container matColumnDef="filterTotalCount">
                             <mat-header-cell *matHeaderCellDef>
                                 <input matInput class="form-control form-control-sm"
-                                    [(ngModel)]="filterValues.totalCount" (input)="applyFilter($event,'totalCount')">
+                                    [(ngModel)]="filterValues.totalCount" (keydown.enter)="applyFilter($event,'totalCount')">
                             </mat-header-cell>
                         </ng-container>
 
@@ -203,7 +203,7 @@
                         <ng-container matColumnDef="filterCompanyId">
                             <mat-header-cell *matHeaderCellDef>
                                 <input matInput class="form-control form-control-sm"
-                                    [(ngModel)]="filterValues.companyId" (input)="applyFilter($event,'companyId')">
+                                    [(ngModel)]="filterValues.companyId" (keydown.enter)="applyFilter($event,'companyId')">
                             </mat-header-cell>
                         </ng-container>
 
@@ -211,7 +211,7 @@
                         <ng-container matColumnDef="filterStateId">
                             <mat-header-cell *matHeaderCellDef>
                                 <input matInput class="form-control form-control-sm" [(ngModel)]="filterValues.stateId"
-                                    (input)="applyFilter($event,'stateId')">
+                                    (keydown.enter)="applyFilter($event,'stateId')">
                             </mat-header-cell>
                         </ng-container>
 
@@ -220,7 +220,7 @@
                             <mat-header-cell *matHeaderCellDef>
                                 <input matInput class="form-control form-control-sm"
                                     [(ngModel)]="filterValues.invoicingStateId"
-                                    (input)="applyFilter($event,'invoicingStateId')">
+                                    (keydown.enter)="applyFilter($event,'invoicingStateId')">
                             </mat-header-cell>
                         </ng-container>
 
@@ -229,7 +229,7 @@
                             <mat-header-cell *matHeaderCellDef>
                                 <input matInput class="form-control form-control-sm"
                                     [(ngModel)]="filterValues.clientInvoicingStateId"
-                                    (input)="applyFilter($event,'clientInvoicingStateId')">
+                                    (keydown.enter)="applyFilter($event,'clientInvoicingStateId')">
                             </mat-header-cell>
                         </ng-container>
 
@@ -238,7 +238,7 @@
                             <mat-header-cell *matHeaderCellDef>
                                 <input matInput class="form-control form-control-sm"
                                     [(ngModel)]="filterValues.group_Detail_Id"
-                                    (input)="applyFilter($event,'group_Detail_Id')">
+                                    (keydown.enter)="applyFilter($event,'group_Detail_Id')">
                             </mat-header-cell>
                         </ng-container>
 
@@ -246,7 +246,7 @@
                         <ng-container matColumnDef="filterRemarks">
                             <mat-header-cell *matHeaderCellDef>
                                 <input matInput class="form-control form-control-sm" [(ngModel)]="filterValues.remarks"
-                                    (input)="applyFilter($event,'remarks')">
+                                    (keydown.enter)="applyFilter($event,'remarks')">
                             </mat-header-cell>
                         </ng-container>
 
@@ -254,7 +254,7 @@
                         <ng-container matColumnDef="filterGstTypeId">
                             <mat-header-cell *matHeaderCellDef>
                                 <input matInput class="form-control form-control-sm"
-                                    [(ngModel)]="filterValues.gstTypeId" (input)="applyFilter($event,'gstTypeId')">
+                                    [(ngModel)]="filterValues.gstTypeId" (keydown.enter)="applyFilter($event,'gstTypeId')">
                             </mat-header-cell>
                         </ng-container>
 
@@ -263,7 +263,7 @@
                             <mat-header-cell *matHeaderCellDef>
                                 <input matInput class="form-control form-control-sm"
                                     [(ngModel)]="filterValues.invoiceCategoryId"
-                                    (input)="applyFilter($event,'invoiceCategoryId')">
+                                    (keydown.enter)="applyFilter($event,'invoiceCategoryId')">
                             </mat-header-cell>
                         </ng-container>
 
@@ -271,7 +271,7 @@
                         <ng-container matColumnDef="filterStateCode">
                             <mat-header-cell *matHeaderCellDef>
                                 <input matInput class="form-control form-control-sm"
-                                    [(ngModel)]="filterValues.stateCode" (input)="applyFilter($event,'stateCode')">
+                                    [(ngModel)]="filterValues.stateCode" (keydown.enter)="applyFilter($event,'stateCode')">
                             </mat-header-cell>
                         </ng-container>
 
@@ -484,7 +484,9 @@
                     </table>
                 </div>
 
-                <mat-paginator [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons></mat-paginator>
+                <mat-paginator [length]="totalCount" [pageIndex]="pageIndex" [pageSize]="pageSize"
+                    [pageSizeOptions]="[10,25,50,100,500,1000]" showFirstLastButtons (page)="onPageChange($event)">
+                </mat-paginator>
 
             </div>
         </div>

@@ -16,11 +16,23 @@ export class ClientaddressService implements IClientaddress {
 
   }
 
-  Search(payload: any): Observable<APIResponse> {
-    const params = new HttpParams({ fromObject: payload });
+  // Search(payload: any): Observable<APIResponse> {
+  //   const params = new HttpParams({ fromObject: payload });
 
-    return this.http.get<APIResponse>(
-      this.env.apiUrl + 'ClientAddress/GetAllClientAddressDetails/' + payload
+  //   return this.http.get<APIResponse>(
+  //     this.env.apiUrl + 'ClientAddress/GetAllClientAddressDetails/' + payload
+  //   );
+  // }
+
+  Search(payload: any): Observable<APIResponse> {
+    return this.http.post<any>(
+      this.env.apiUrl + 'ClientAddress/GetAllClientAddressDetails', payload
+    );
+  }
+
+  SearchVendoraddress(payload: any): Observable<APIResponse> {
+    return this.http.post<any>(
+      this.env.apiUrl + 'VendorClientAddress/GetAllVendorClientAddressDetails', payload
     );
   }
 

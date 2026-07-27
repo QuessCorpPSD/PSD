@@ -1,5 +1,5 @@
 import { Component, Inject, InjectionToken, ViewChild } from '@angular/core';
-import { MatPaginator, MatPaginatorModule } from "@angular/material/paginator";
+import { MatPaginator, MatPaginatorModule, PageEvent } from "@angular/material/paginator";
 import { MatTableDataSource, MatTableModule } from "@angular/material/table";
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from "@angular/material/icon";
@@ -102,6 +102,7 @@ export class VendorclientaddressComponent {
   dynamicColumns: string[] = [];
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
+  totalCount: number = 0;
   showClientPopup = false;
   sameAsBilling = false;
   UploadType: string = '';
@@ -180,6 +181,7 @@ export class VendorclientaddressComponent {
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
+    this.onsearch();
   }
 
   clearFilter() {
@@ -191,6 +193,7 @@ export class VendorclientaddressComponent {
     this.dataSource.filter = '';
 
     this.dataSource.filter = JSON.stringify(this.filterValues);
+    this.onsearch();
   }
   AddPOOpen() {
     this.isEditMode = false;
@@ -323,6 +326,9 @@ export class VendorclientaddressComponent {
       shippingLocation: cityname
     });
   }
+
+  pageIndex: number = 0;
+  pageSize: number = 10;
 
   ngOnInit(): void {
     const json = this._sessionStoreage.getItem('UserProfile');
@@ -490,92 +496,76 @@ export class VendorclientaddressComponent {
   onsearch() {
     this.isLoading = true;
 
-    const userId = this.userdetail.user_Id;
+    const payload = {
+      VendorClientAddressId: this.filterValues.vendorClientAddressId || null,
+      Company_Code: this.filterValues.company_Code || "",
+      State_Name: this.filterValues.state_Name || "",
+      Map_Name: this.filterValues.map_Name || "",
+      SAC_Code: this.filterValues.saC_Code || "",
+      BillingClientName: this.filterValues.billingClientName || "",
+      BillingAddress: this.filterValues.billingAddress || "",
+      BillingStateName: this.filterValues.billingStateName || "",
+      ShippingClientName: this.filterValues.shippingClientName || "",
+      ShippingAddress: this.filterValues.shippingAddress || "",
+      IsShippingAddressSameAsBilling: this.filterValues.isShippingAddressSameAsBilling || "",
+      SEZ_Applicable: this.filterValues.seZ_Applicable || "",
+      LUT_Number: this.filterValues.luT_Number || "",
+      VendorCode: this.filterValues.vendorCode || "",
+      GstNumber: this.filterValues.gstNumber || "",
+      City_Name: this.filterValues.city_Name || "",
+      ShippingCity_Name: this.filterValues.shippingCity_Name || "",
+      BillingPinCode: this.filterValues.billingPinCode || "",
+      ShippingPinCode: this.filterValues.shippingPinCode || "",
+      SapBillTo: this.filterValues.sapBillTo || "",
+      SapShipTo: this.filterValues.sapShipTo || "",
+      AddressCode: this.filterValues.addressCode || null,
+      PageNo: this.pageIndex + 1,
+      PageSize: this.pageSize,
+      UserId: this.userdetail.user_Id.toString()
+    };
+    console.log("Search Payload", payload);
 
-    this.service.VendorSearch(userId).subscribe({
-      next: (res) => {
-        this.Clientaddress = res?.Data;
-        console.log('search', this.Clientaddress);
-
-        if (!this.Clientaddress) {
-          alert(res.Data.message)
-          this.isLoading = false;
-        }
-        if (this.Clientaddress && this.Clientaddress.length > 0) {
+    this.service.SearchVendoraddress(payload).subscribe({
+      next: (res: any) => {
+        console.log('result', res);
+        this.Clientaddress = res?.Data || [];
+        console.log(this.Clientaddress)
+        if (this.Clientaddress.length != 0) {
+          // Bind table data
           this.dataSource = new MatTableDataSource(this.Clientaddress);
           this.dataSource.paginator = this.paginator;
+          //this.dataSource.data = this.Clientaddress;
           this.dataSource.sort = this.sort;
-          this.uploadDisplayedColumns = [
-            'Action',
-            'VendorClientAddressId',
-            'Companycode',
-            'State',
-            'MapName',
-            'SACCode',
-            'Billing_Client_Name',
-            'billingaddress',
-            'billingstate',
-            'Shippingaddresssameasbilling',
-            'Shippingclientname',
-            'Shippingaddress',
-            'Shippingstate',
-            'Effectivedate',
-            'SezApplicable',
-            'SezExpiryDate',
-            'LutNumber',
-            'LutDate',
-            'LutExpiryDate',
-            'VendorCode',
-            'gstnumber',
-            'BillingLocation',
-            'ShippingLocation',
-            'BillingPincode',
-            'ShippingPincode',
-            'SapBillTo',
-            'SapShipTo',
-            'AddressCode'];
-
-          this.isLoading = false;
-          this.dataSource.filterPredicate = (data: any, filter: string): boolean => {
-
-            const searchTerms = JSON.parse(filter);
-
-            return Object.keys(searchTerms).every(key => {
-
-              const searchValue = searchTerms[key];
-
-              if (!searchValue) {
-                return true;
-              }
-
-              let dataValue = data[key];
-
-              if (dataValue === null || dataValue === undefined) {
-                dataValue = '';
-              }
-
-              if (typeof dataValue === 'boolean') {
-                dataValue = dataValue ? 'yes' : 'no';
-              }
-
-              return dataValue
-                .toString()
-                .toLowerCase()
-                .includes(searchValue.toString().toLowerCase());
-            });
-          };
-
+          this.totalCount = this.Clientaddress[0].totalCount || 0;
         } else {
-          this.isLoading = false;
-          alert('No Records Found');
           this.dataSource.data = [];
+          this.totalCount = 0;
         }
-      },
-      error: (err) => {
+
+        console.log(this.dataSource.data)
+
         this.isLoading = false;
-        console.error('Error loading Companypaycode release data', err);
       },
+
+      error: (err) => {
+
+        this.isLoading = false;
+        console.error("Search Error", err);
+
+      }
     });
+
+  }
+  onPageChange(event: PageEvent) {
+
+    this.pageIndex = event.pageIndex;
+    this.pageSize = event.pageSize;
+
+    console.log("Current Page:", this.pageIndex + 1);
+    console.log("Page Size:", this.pageSize);
+
+    this.onsearch();
+
   }
 
 
@@ -732,7 +722,7 @@ export class VendorclientaddressComponent {
 
   ImportClick(fileInput: HTMLInputElement, Action: string): void {
     fileInput.value = '';
-    this.UploadType=Action;
+    this.UploadType = Action;
     fileInput.click();
   }
 
