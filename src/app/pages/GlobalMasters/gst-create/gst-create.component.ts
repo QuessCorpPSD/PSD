@@ -28,6 +28,9 @@ export const Pay_TOKEN = new InjectionToken<IGstRepository>('Pay_TOKEN');
 })
 export class GSTCreateComponent {
   entity: any;
+  state: any;
+  gsttypes: any;
+  location: any;
   constructor(private dialogRef: MatDialogRef<GSTCreateComponent>,
     @Inject(Pay_TOKEN) private gstService: IGstRepository,
     private decry: EncryptionService,
@@ -49,6 +52,7 @@ export class GSTCreateComponent {
       console.warn('UserProfile not found in the session Storage');
     }
     this.LoadEntity();
+    this.Loadstate();
   }
   // Basic details
   GSTMasterId = 0;
@@ -56,7 +60,7 @@ export class GSTCreateComponent {
   GSTNumber: string = '';
   GSTType: string = '';
   Entity: number | null = null;
-  StateName: string = '';
+  StateName: any;
   CompanyName: string = '';
   CompanyAddress: string = '';
   PinCode: string = '';
@@ -136,9 +140,38 @@ export class GSTCreateComponent {
       error: err => console.error(" Pay Category API Error:", err)
     });
   }
+
+  Loadgsttype(StateName) {
+    this.gstService.GetGSTTypes(StateName).subscribe({
+      next: (res: any) => {
+        this.gsttypes = res.Data;
+      },
+    });
+  }
+
+  Loadlocation(StateName) {
+    this.gstService.GetAllcityBystate(StateName).subscribe({
+      next: (res: any) => {
+        this.location = res.Data;
+      }
+    });
+  }
+  Loadstate() {
+    this.gstService.GetAllState().subscribe({
+      next: (res: any) => {
+        this.state = res.Data;
+
+        if (this.StateName) {
+          this.Loadgsttype(this.StateName);
+          this.Loadlocation(this.StateName);
+        }
+      }
+    });
+  }
+
+
   SaveClick() {
     this.isLoading = true;
-    const DEFAULT_DATE = '1900-01-01';
 
     if (!this.EffectiveDate || this.EffectiveDate === '1900-01-01') {
       alert('Please select Effective Date');
@@ -177,19 +210,44 @@ export class GSTCreateComponent {
     }
     const today = new Date();
     const payload = {
+      Action: "Add",
+      UserId: Number(this.userdetail.user_Id),
+      GstMasterId: 0,
+      EffectiveDate: this.EffectiveDate,
 
-      "Action": "Add",
-      "UserId": String(this.userdetail.user_Id),
-      "GstMasterId": 0,
-      "EffectiveDate": String(this.EffectiveDate),
-      "GstNumber": String(this.GSTNumber),
-      "CompanyName": String(this.CompanyName),
-      "CompanyAddress": String(this.CompanyAddress),
-      "CreatedBy": this.userdetail.user_Id,
-      "Gst_Percentage": String(this.cgstPercentage),
-      "EntityId": Number(this.Entity),
-      "Pincode": String(this.PinCode)
+      EntityId: Number(this.Entity),
+      StateId: Number(this.StateName),
 
+      GstNumber: this.GSTNumber,
+      PanNumber: this.PANNumber,
+      TanNumber: this.TANNumber,
+
+      CompanyName: this.CompanyName,
+      CompanyAddress: this.CompanyAddress,
+
+      CreatedBy: Number(this.userdetail.user_Id),
+      CreatedOn: new Date().toISOString(),
+
+      CGST_Applicable: this.cgstApplicable,
+      CGST_Percentage: Number(this.cgstPercentage || 0),
+
+      SGST_Applicable: this.sgstApplicable,
+      SGST_Percentage: Number(this.sgstPercentage || 0),
+
+      UTGST_Applicable: this.utgstApplicable,
+      UTGST_Percentage: Number(this.utgstPercentage || 0),
+
+      IGST_Applicable: false,
+      IGST_Percentage: 0,
+
+      GstTypeId: Number(this.GSTType),
+
+      Cess_Percentage: Number(this.cessPercentage || 0),
+      CessEffectiveFromDate: this.cessFromDate || null,
+      CessEffectiveToDate: this.cessToDate || null,
+
+      Pincode: this.PinCode,
+      LocationId: Number(this.Location) // Use selected LocationId
     };
 
     this.gstService.Create(payload).subscribe({
