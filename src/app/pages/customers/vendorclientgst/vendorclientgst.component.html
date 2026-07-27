@@ -698,3 +698,32 @@
 <div *ngIf="isLoading" class="loading-overlay">
     <img src="assets\Loading.gif" alt="Loading...">
 </div>
+
+
+<div class="popupcli-overlay" *ngIf="showUploadPopup"></div>
+
+<div class="client-popup" *ngIf="showUploadPopup">
+    <div class="popupcli-header">
+        <h2>Client Address Preview</h2>
+        <button class="close-btn" (click)="closeUploadPopup()">✖</button>
+    </div>
+
+    <div class="table-responsive" *ngIf="previewData.length">
+        <table class="table table-bordered table-sm">
+            <thead>
+                <tr>
+                    <th *ngFor="let col of previewColumns">{{ col }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let row of previewData">
+                    <td *ngFor="let col of previewColumns">{{ row[col] }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="text-end mt-3">
+        <button class="btn btn-primary" (click)="submitUploadpopup()">Submit</button>
+    </div>
+</div>

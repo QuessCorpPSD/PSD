@@ -74,6 +74,10 @@ export class ClientgstlistComponent {
   selectedGroupName: string = '';
   UploadType: string = '';
   totalCount: number = 0;
+  showUploadPopup = false;
+  selectedFile!: File;
+  previewData: any[] = [];
+  previewColumns: string[] = [];
 
   GSTTypeList: any[] = [];
 
@@ -630,21 +634,82 @@ export class ClientgstlistComponent {
     fileInput.click();
   }
 
+
+  closeUploadPopup() {
+    this.showUploadPopup = false;
+    this.previewData = [];
+    this.previewColumns = [];
+  }
+
+
   onFileSelected(event: Event): void {
-
-    this.isLoading = true;
-
     const input = event.target as HTMLInputElement;
     const file = input?.files?.[0];
+    if (!file) return;
 
-    if (!file) {
-      console.error('Please upload only one Excel file.');
-      this.isLoading = false;
+    const fileName = file.name.toLowerCase();
+
+    if (!(fileName.endsWith('.xlsx') || fileName.endsWith('.xls'))) {
+      alert('Please upload a valid Excel file (.xlsx or .xls only)');
+      input.value = '';
       return;
     }
 
+    this.selectedFile = file;
+
+    const reader = new FileReader();
+    reader.onload = (e: any) => {
+      const workbook = XLSX.read(e.target.result, { type: 'array' });
+      const sheetName = workbook.SheetNames[0];
+      const worksheet = workbook.Sheets[sheetName];
+
+      const jsonData: any[] = XLSX.utils.sheet_to_json(worksheet, { defval: '' });
+      this.previewExcelFile(file);
+
+    };
+
+    reader.readAsArrayBuffer(file);
+  }
+
+
+  currentUploadType: any;
+
+  previewExcelFile(file: File) {
+
+    this.selectedFile = file;
+
+    const reader = new FileReader();
+
+    reader.onload = (e: any) => {
+
+      const workbook = XLSX.read(e.target.result, { type: 'array' });
+
+      const sheetName = workbook.SheetNames[0];
+
+      const worksheet = workbook.Sheets[sheetName];
+
+      const jsonData: any[] = XLSX.utils.sheet_to_json(worksheet, { defval: '' });
+
+      this.previewData = jsonData.slice(0, 50);
+
+      this.previewColumns = jsonData.length
+        ? Object.keys(jsonData[0])
+        : [];
+
+      this.showUploadPopup = true;
+    };
+
+    reader.readAsArrayBuffer(file);
+  }
+
+  submitUploadpopup() {
+    if (!this.selectedFile) {
+      alert("Please select file");
+      return;
+    };
+
     const formData = new FormData();
-    formData.append('file', file);
+    formData.append('file', this.selectedFile);
     formData.append('userId', this.userdetail.user_Id);
     formData.append('flag', this.UploadType);
 
