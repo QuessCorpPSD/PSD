@@ -417,7 +417,7 @@ export class DraftInvoiceComponent implements OnInit {
 
   InitiationSearchExport(element: any): void {
 
-
+    console.log(element);
     this.isLoading = true;
     const request = {
       "Company_Id": element.company_Id,
@@ -427,7 +427,8 @@ export class DraftInvoiceComponent implements OnInit {
       "Data_From": element.data_From,
       "Invoice_Type": element.invoiceType,
       "Company_Code": element.company_Code,
-      "Pay_Period": element.pay_Period
+      "Pay_Period": element.pay_Period,
+      "InvoiceCultureType":element.invoiceType
 
     }
     this._invoiceService.InitiationSearchExport(request).subscribe({
