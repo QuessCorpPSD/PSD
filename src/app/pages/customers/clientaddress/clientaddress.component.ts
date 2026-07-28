@@ -1,5 +1,5 @@
 import { Component, Inject, InjectionToken, ViewChild } from '@angular/core';
-import { MatPaginator, MatPaginatorModule } from "@angular/material/paginator";
+import { MatPaginator, MatPaginatorModule, PageEvent } from "@angular/material/paginator";
 import { MatTableDataSource, MatTableModule } from "@angular/material/table";
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from "@angular/material/icon";
@@ -55,6 +55,11 @@ export class ClientaddressComponent {
   isEditMode: boolean = false;
   rowData: any;
   UploadType: any;
+  showUploadPopup = false;
+  selectedFile!: File;
+  previewData: any[] = [];
+  previewColumns: string[] = [];
+
 
   constructor(private dialog: MatDialog, @Inject(Pay_TOKEN) private service: IClientaddress, private decry: EncryptionService,
     private _sessionStoreage: SessionStorageService, private fb: FormBuilder,) { }
@@ -131,6 +136,7 @@ export class ClientaddressComponent {
   dynamicColumns: string[] = [];
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
+  totalCount: number = 0;
   showClientPopup = false;
   sameAsBilling = false;
   filterValues: any = {
@@ -174,6 +180,7 @@ export class ClientaddressComponent {
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
+    this.onsearch();
   }
 
   clearFilter() {
@@ -185,6 +192,7 @@ export class ClientaddressComponent {
     this.dataSource.filter = '';
 
     this.dataSource.filter = JSON.stringify(this.filterValues);
+    this.onsearch();
   }
 
   AddPOOpen() {
@@ -318,6 +326,8 @@ export class ClientaddressComponent {
       shippingLocation: cityname
     });
   }
+  pageIndex: number = 0;
+  pageSize: number = 10;
 
   ngOnInit(): void {
     const json = this._sessionStoreage.getItem('UserProfile');
@@ -484,67 +494,159 @@ export class ClientaddressComponent {
       });
   }
 
+  // onsearch() {
+  //   this.isLoading = true;
+
+  //   const userId = this.userdetail.user_Id;
+
+  //   this.service.Search(userId).subscribe({
+  //     next: (res) => {
+  //       this.Clientaddress = res?.Data;
+  //       console.log('search', this.Clientaddress);
+
+  //       if (!this.Clientaddress) {
+  //         alert(res.Data.message)
+  //         this.isLoading = false;
+  //       }
+  //       if (this.Clientaddress && this.Clientaddress.length > 0) {
+
+  //         this.dataSource = new MatTableDataSource(this.Clientaddress);
+
+  //         this.dataSource.paginator = this.paginator;
+  //         this.dataSource.sort = this.sort;
+  //         this.isLoading = false;
+  //         this.dataSource.filterPredicate = (data: any, filter: string): boolean => {
+
+  //           const searchTerms = JSON.parse(filter);
+
+  //           return Object.keys(searchTerms).every(key => {
+
+  //             const searchValue = searchTerms[key];
+
+  //             if (!searchValue) {
+  //               return true;
+  //             }
+
+  //             let dataValue = data[key];
+
+  //             if (dataValue === null || dataValue === undefined) {
+  //               dataValue = '';
+  //             }
+
+  //             if (typeof dataValue === 'boolean') {
+  //               dataValue = dataValue ? 'yes' : 'no';
+  //             }
+
+  //             return dataValue
+  //               .toString()
+  //               .toLowerCase()
+  //               .includes(searchValue.toString().toLowerCase());
+  //           });
+  //         };
+
+  //       } else {
+  //         this.isLoading = false;
+  //         alert('No Records Found');
+  //         this.dataSource.data = [];
+  //       }
+  //     },
+  //     error: (err) => {
+  //       this.isLoading = false;
+  //       console.error('Error loading Companypaycode release data', err);
+  //     },
+  //   });
+  // }
+
+
+  // onPageChange(event: PageEvent) {
+
+  //   this.paginator.pageIndex = event.pageIndex;
+  //   this.paginator.pageSize = event.pageSize;
+
+  //   console.log(event.pageSize)
+  //   console.log(this.paginator.pageSize)
+
+  //   this.onsearch();
+  // }
+  onPageChange(event: PageEvent) {
+
+    this.pageIndex = event.pageIndex;
+    this.pageSize = event.pageSize;
+
+    console.log("Current Page:", this.pageIndex + 1);
+    console.log("Page Size:", this.pageSize);
+
+    this.onsearch();
+
+  }
+
   onsearch() {
+
     this.isLoading = true;
 
-    const userId = this.userdetail.user_Id;
+    const payload = {
+      ClientAddressId: this.filterValues.clientAddressId || null,
+      Company_Code: this.filterValues.company_Code || "",
+      State_Name: this.filterValues.state_Name || "",
+      Map_Name: this.filterValues.map_Name || "",
+      SAC_Code: this.filterValues.saC_Code || "",
+      BillingClientName: this.filterValues.billingClientName || "",
+      BillingAddress: this.filterValues.billingAddress || "",
+      BillingStateName: this.filterValues.billingStateName || "",
+      ShippingClientName: this.filterValues.shippingClientName || "",
+      ShippingAddress: this.filterValues.shippingAddress || "",
+      IsShippingAddressSameAsBilling: this.filterValues.isShippingAddressSameAsBilling || "",
+      SEZ_Applicable: this.filterValues.seZ_Applicable || "",
+      LUT_Number: this.filterValues.luT_Number || "",
+      VendorCode: this.filterValues.vendorCode || "",
+      GstNumber: this.filterValues.gstNumber || "",
+      City_Name: this.filterValues.city_Name || "",
+      ShippingCity_Name: this.filterValues.shippingCity_Name || "",
+      BillingPinCode: this.filterValues.billingPinCode || "",
+      ShippingPinCode: this.filterValues.shippingPinCode || "",
+      SapBillTo: this.filterValues.sapBillTo || "",
+      SapShipTo: this.filterValues.sapShipTo || "",
+      AddressCode: this.filterValues.addressCode || null,
 
-    this.service.Search(userId).subscribe({
-      next: (res) => {
-        this.Clientaddress = res?.Data;
-        console.log('search', this.Clientaddress);
+      PageNo: this.pageIndex + 1,
+      PageSize: this.pageSize,
 
-        if (!this.Clientaddress) {
-          alert(res.Data.message)
-          this.isLoading = false;
-        }
-        if (this.Clientaddress && this.Clientaddress.length > 0) {
+      // PageNo: this.paginator ? this.paginator.pageIndex + 1 : 1,
+      // PageSize: this.paginator ? this.paginator.pageSize : 10,
+      UserId: this.userdetail.user_Id.toString()
+    };
 
+    console.log("Search Payload", payload);
+
+    this.service.Search(payload).subscribe({
+      next: (res: any) => {
+        console.log('result', res);
+        this.Clientaddress = res?.Data || [];
+        console.log(this.Clientaddress)
+        if (this.Clientaddress.length != 0) {
+          // Bind table data
           this.dataSource = new MatTableDataSource(this.Clientaddress);
-
-          this.dataSource.paginator = this.paginator;
+          //this.dataSource.data = this.Clientaddress;
           this.dataSource.sort = this.sort;
-          this.isLoading = false;
-          this.dataSource.filterPredicate = (data: any, filter: string): boolean => {
-
-            const searchTerms = JSON.parse(filter);
-
-            return Object.keys(searchTerms).every(key => {
-
-              const searchValue = searchTerms[key];
-
-              if (!searchValue) {
-                return true;
-              }
-
-              let dataValue = data[key];
-
-              if (dataValue === null || dataValue === undefined) {
-                dataValue = '';
-              }
-
-              if (typeof dataValue === 'boolean') {
-                dataValue = dataValue ? 'yes' : 'no';
-              }
-
-              return dataValue
-                .toString()
-                .toLowerCase()
-                .includes(searchValue.toString().toLowerCase());
-            });
-          };
-
+          this.totalCount = this.Clientaddress[0].totalCount || 0;
         } else {
-          this.isLoading = false;
-          alert('No Records Found');
           this.dataSource.data = [];
+          this.totalCount = 0;
         }
-      },
-      error: (err) => {
+
+        console.log(this.dataSource.data)
+
         this.isLoading = false;
-        console.error('Error loading Companypaycode release data', err);
       },
+
+      error: (err) => {
+
+        this.isLoading = false;
+        console.error("Search Error", err);
+
+      }
     });
+
   }
 
 
@@ -696,6 +798,12 @@ export class ClientaddressComponent {
     FileSaver.saveAs(blob, `ClientAddress_EditTemplate.xlsx`)
   }
 
+  closeUploadPopup() {
+    this.showUploadPopup = false;
+    this.previewData = [];
+    this.previewColumns = [];
+  }
+
 
   ImportClick(fileInput: HTMLInputElement, Action: string): void {
     fileInput.value = '';
@@ -704,18 +812,73 @@ export class ClientaddressComponent {
   }
 
   onFileChange(event: Event): void {
-    this.isLoading = true;
     const input = event.target as HTMLInputElement;
     const file = input?.files?.[0];
+    if (!file) return;
 
-    if (!file) {
-      alert("Please upload only one Excel file")
-      this.isLoading = false;
+    const fileName = file.name.toLowerCase();
+
+    if (!(fileName.endsWith('.xlsx') || fileName.endsWith('.xls'))) {
+      alert('Please upload a valid Excel file (.xlsx or .xls only)');
+      input.value = '';
       return;
     }
 
+    this.selectedFile = file;
+
+    const reader = new FileReader();
+    reader.onload = (e: any) => {
+      const workbook = XLSX.read(e.target.result, { type: 'array' });
+      const sheetName = workbook.SheetNames[0];
+      const worksheet = workbook.Sheets[sheetName];
+
+      const jsonData: any[] = XLSX.utils.sheet_to_json(worksheet, { defval: '' });
+      this.previewExcelFile(file);
+
+    };
+
+    reader.readAsArrayBuffer(file);
+  }
+
+
+  currentUploadType: any;
+
+  previewExcelFile(file: File) {
+
+    this.selectedFile = file;
+
+    const reader = new FileReader();
+
+    reader.onload = (e: any) => {
+
+      const workbook = XLSX.read(e.target.result, { type: 'array' });
+
+      const sheetName = workbook.SheetNames[0];
+
+      const worksheet = workbook.Sheets[sheetName];
+
+      const jsonData: any[] = XLSX.utils.sheet_to_json(worksheet, { defval: '' });
+
+      this.previewData = jsonData.slice(0, 50);
+
+      this.previewColumns = jsonData.length
+        ? Object.keys(jsonData[0])
+        : [];
+
+      this.showUploadPopup = true;
+    };
+
+    reader.readAsArrayBuffer(file);
+  }
+
+
+  submitUploadpopup() {
+    if (!this.selectedFile) {
+      alert("Please select file");
+      return;
+    };
     const formData = new FormData();
-    formData.append('file', file);
+    formData.append('file', this.selectedFile);
     formData.append('flag', this.UploadType);
     formData.append('userId', this.userdetail.user_Id);
 

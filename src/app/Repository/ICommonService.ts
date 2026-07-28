@@ -46,14 +46,14 @@ export interface ICommonService {
     GetCompanyCodes(userId: number): Observable<APIResponse>
     GetPayperiodbyCompany(companyId: any): Observable<APIResponse>
     GetCurrentPayperiod(companyId: any): Observable<APIResponse>
-    GetPayperiodbyCompanyDeduction(companyId: any): Observable<APIResponse> 
+    GetPayperiodbyCompanyDeduction(companyId: any): Observable<APIResponse>
     GetPayperiodbyCompanyVanPayment(companyId: any): Observable<APIResponse>
     GetInvoiceType(): Observable<APIResponse>;
     GetMapNamebyCompany(companyId: any): Observable<APIResponse>;
     GetSitesByCompanyId(companyId: any): Observable<APIResponse>;
     GetAutoEntityLocation(companyId: any): Observable<APIResponse>;
     GetAllState(): Observable<APIResponse>;
-    GetClientGstStateList(companyId: any): Observable<APIResponse>; 
+    GetClientGstStateList(companyId: any): Observable<APIResponse>;
     GetPayCodes(): Observable<APIResponse>;
     GetManagerByUserId(user_Id): Observable<APIResponse>;
     SwapCategory(login): Observable<APIResponse>;
@@ -66,4 +66,5 @@ export interface ICommonService {
     GetAutoEntityLocation(companyId: any): Observable<APIResponse>;
     GetAllcityBystate(stateId: any): Observable<APIResponse>;
     GetAllFrequency(): Observable<APIResponse>;
+    GetCSNCompanyCodes(userId: number): Observable<APIResponse>;
 }

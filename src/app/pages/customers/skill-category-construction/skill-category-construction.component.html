@@ -1,0 +1,237 @@
+<div class="page-wrapper">
+    <div class="scrollable-content">
+        <div style="color: #302CB3; font-size: 22px; font-family: Montserrat; font-weight: 700; padding-top:10px">Skill
+            Category Mapping
+        </div>
+        <div class="justify-content-between align-items-center mb-3">
+            <div class="container py-3">
+                <div class="row g-3 align-items-end">
+
+                    <div class="col-md-3">
+                        <label class="form-label text-muted small">Comapny Code</label>
+                        <companyconstruction (companyEmit)="handleCompanyEvent($event)"></companyconstruction>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label text-muted small">Site Name</label>
+
+                        <groupname [selectedCompanyId]="selectedCompanyId"
+                            (sitenameEmit)="handleGroupEventmain($event)">
+                        </groupname>
+
+                    </div>
+                    <div class="col-md-2 d-flex gap-2">
+                        <button class="btn btn-sm d-flex align-items-center justify-content-center btn-search"
+                            matTooltip="Search" (click)="onsearch()">
+                            <mat-icon>search</mat-icon>
+                        </button>
+
+                        <button class="btn btn-secondary btn-sm d-flex align-items-center justify-content-center"
+                            matTooltip="export to excel" (click)="exportToExcel()">
+                            <mat-icon>download</mat-icon>
+                        </button>
+                        <button class="btn  btn-sm d-flex align-items-center justify-content-center btn-success"
+                            matTooltip="Add" (click)="openadd()">
+                            <mat-icon>add</mat-icon>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="table-wrapper1" *ngIf="showTable">
+                <div class="table-scroll">
+                    <mat-table [dataSource]="dataSource" class="mat-elevation-z8 custom-table">
+                        <ng-container matColumnDef="Action">
+                            <mat-header-cell *matHeaderCellDef>Action</mat-header-cell>
+                            <mat-cell *matCellDef="let row">
+                                <div class="action-buttons">
+                                    <button class="btn btn-sm" matTooltip="Edit" (click)="editSkillCategory(row)">
+                                        <mat-icon>edit</mat-icon>
+                                    </button>
+
+                                    <button class="btn btn-sm" matTooltip="Delete" (click)="deleteSkillCategory(row)">
+                                        <mat-icon>delete</mat-icon>
+                                    </button>
+                                </div>
+                            </mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="SNo">
+                            <mat-header-cell *matHeaderCellDef>Sl.No</mat-header-cell>
+                            <mat-cell *matCellDef="let row;let i = index">{{i+1}}</mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="Company_code">
+                            <mat-header-cell *matHeaderCellDef>Company Code</mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{row.Company_code}}</mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="SiteName">
+                            <mat-header-cell *matHeaderCellDef>SiteName</mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{row.SiteName}}</mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="PO_Number">
+                            <mat-header-cell *matHeaderCellDef>PO_Number</mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{row.PO_Number}}</mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="SkillType">
+                            <mat-header-cell *matHeaderCellDef>SkillType</mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{row.SkillType}}</mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="Amount">
+                            <mat-header-cell *matHeaderCellDef>Amount</mat-header-cell>
+                            <mat-cell *matCellDef="let row" class="description">{{row.Amount}}</mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="EffectiveDate">
+                            <mat-header-cell *matHeaderCellDef>EffectiveDate</mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{formatDate(row.EffectiveDate)}}</mat-cell>
+                        </ng-container>
+                        <!-- <ng-container matColumnDef="IsActive">
+                            <mat-header-cell *matHeaderCellDef>IsActive</mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{row.IsActive}}</mat-cell>
+                        </ng-container> -->
+                        <mat-header-row *matHeaderRowDef="uploadDisplayedColumns"></mat-header-row>
+                        <mat-row *matRowDef="let row; columns: uploadDisplayedColumns"></mat-row>
+                    </mat-table>
+                </div>
+
+                <div *ngIf="dataSource.data.length===0" class="text-center p-4">
+                    <p class="text-muted">No data to display</p>
+                </div>
+
+                <mat-paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+            </div>
+        </div>
+    </div>
+</div>
+<div *ngIf="showSkillPopup" class="popup-overlay">
+    <form [formGroup]="skillCategoryForm" novalidate>
+
+        <mat-card class="popup-card">
+
+            <mat-card-header class="popup-header">
+                <mat-card-title>
+                    {{this.isEditMode ? 'Edit Skill Category Mapping': 'Add Skill Category Mapping'}}
+                </mat-card-title>
+
+                <span class="spacer"></span>
+
+                <button mat-icon-button type="button" style="background: transparent;border:none"
+                    (click)="closePopup()">
+                    <mat-icon>close</mat-icon>
+                </button>
+            </mat-card-header>
+
+            <mat-card-content>
+
+                <div class="row g-3 mb-3">
+
+                    <div class="col-md-6">
+                        <label class="form-label text-muted small">
+                            Company Code <span class="text-danger">*</span>
+                        </label>
+
+                        <companyconstruction *ngIf="!isEditMode" formControlName="Company_code"
+                            (companyEmit)="handleCompanyEventadd($event)">
+                        </companyconstruction>
+
+                        <input *ngIf="isEditMode" class="form-control form-control-sm" formControlName="Company_code"
+                            readonly>
+
+                        <small class="text-danger" *ngIf="showErrors && skillCategoryForm.get('Company_code')?.invalid">
+                            Company Code is required
+                        </small>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label text-muted small">
+                            Site Name <span class="text-danger">*</span>
+                        </label>
+
+                        <input *ngIf="isEditMode" class="form-control form-control-sm" formControlName="SiteName"
+                            readonly>
+                        <groupname *ngIf="!isEditMode" formControlName="SiteName"
+                            [selectedCompanyId]="selectedCompanyIdadd" (sitenameEmit)="handleGroupEvent($event)">
+                        </groupname>
+                        <small class="text-danger" *ngIf="showErrors && skillCategoryForm.get('SiteName')?.invalid">
+                            Site Name is required
+                        </small>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label text-muted small">
+                            PO Number <span class="text-danger">*</span>
+                        </label>
+
+                        <!-- <input class="form-control form-control-sm" formControlName="PO_Number"> -->
+                        <select class="form-select form-select-sm" formControlName="PO_Number">
+                            <option *ngFor="let po of ponumber" [value]="po.ponumber">
+                                {{ po.ponumber }}
+                            </option>
+                        </select>
+                        <small class="text-danger" *ngIf="showErrors && skillCategoryForm.get('PO_Number')?.invalid">
+                            PO Number is required
+                        </small>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label text-muted small">
+                            Skill Type <span class="text-danger">*</span>
+                        </label>
+                        <select class="form-select form-select-sm" formControlName="SkillType">
+                            <option value="SKILLED">Skilled</option>
+                            <option value="UNSKILLED">Unskilled</option>
+                            <option value="SEMISKILLED">Semi Skilled</option>
+                        </select>
+
+
+                        <small class="text-danger" *ngIf="showErrors && skillCategoryForm.get('SkillType')?.invalid">
+                            Skill Type is required
+                        </small>
+                    </div>
+
+
+
+                    <div class="col-md-6">
+                        <label class="form-label text-muted small">
+                            Amount <span class="text-danger">*</span>
+                        </label>
+
+                        <input type="number" class="form-control form-control-sm" formControlName="Amount">
+
+                        <small class="text-danger" *ngIf="showErrors && skillCategoryForm.get('Amount')?.invalid">
+                            Amount is required
+                        </small>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label text-muted small">
+                            Effective Date <span class="text-danger">*</span>
+                        </label>
+
+                        <input type="date" class="form-control form-control-sm" formControlName="EffectiveDate">
+
+                        <small class="text-danger"
+                            *ngIf="showErrors && skillCategoryForm.get('EffectiveDate')?.invalid">
+                            Effective Date is required
+                        </small>
+                    </div>
+
+
+
+                </div>
+
+            </mat-card-content>
+
+            <!-- Footer -->
+            <mat-card-footer class="popup-footer">
+
+                <button type="button" class="btn-cancel" (click)="closePopup()">
+                    Cancel
+                </button>
+
+                <button type="button" class="btn-save" (click)="saveSkillCategory()">
+                    {{this.isEditMode ? 'Update':'save'}}
+                </button>
+
+            </mat-card-footer>
+
+        </mat-card>
+
+    </form>
+</div>

@@ -1,4 +1,5 @@
 import { CommonModule } from '@angular/common';
+import { MatPaginator, MatPaginatorModule, PageEvent } from "@angular/material/paginator";
 import { Component, Inject, InjectionToken, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -7,7 +8,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -71,12 +71,11 @@ export class VendorclientgstComponent {
   selectedGroupName: string = '';
   UploadType: string = '';
   GSTTypeList: any[] = [];
-
-
-
-
-
-
+  Clientgst: any;
+  showUploadPopup = false;
+  selectedFile!: File;
+  previewData: any[] = [];
+  previewColumns: string[] = [];
 
   displayedColumns: string[] = [
     //"Delete",
@@ -110,6 +109,7 @@ export class VendorclientgstComponent {
   ];
 
   dataSource = new MatTableDataSource<any>([]);
+  totalCount: number = 0;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -178,6 +178,7 @@ export class VendorclientgstComponent {
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
+    this.onsearch();
   }
 
   clearFilter() {
@@ -189,11 +190,15 @@ export class VendorclientgstComponent {
     this.dataSource.filter = '';
 
     this.dataSource.filter = JSON.stringify(this.filterValues);
+    this.onsearch();
   }
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
+
+  pageIndex: number = 0;
+  pageSize: number = 10;
   ngOnInit(): void {
 
     const json = this._sessionStoreage.getItem('UserProfile');
@@ -294,6 +299,17 @@ export class VendorclientgstComponent {
     this.isEditMode = true;
     this.selectedRow = row;
   }
+  onPageChange(event: PageEvent) {
+
+    this.pageIndex = event.pageIndex;
+    this.pageSize = event.pageSize;
+
+    console.log("Current Page:", this.pageIndex + 1);
+    console.log("Page Size:", this.pageSize);
+
+    this.onsearch();
+
+  }
 
   onsearch() {
 
@@ -305,29 +321,69 @@ export class VendorclientgstComponent {
       return;
     }
 
-    const userId = this.userdetail.user_Id;
+    console.log('clientGstId:', this.filterValues.clientGstId);
 
-    this.service.VendorSearch(userId).subscribe({
+    const payload = {
+
+      VendorClientGstId: this.filterValues.vendorClientGstId || null,
+      Company_Code: this.filterValues.company_Code || "",
+      Group_Name: this.filterValues.group_Name || "",
+      State_Name: this.filterValues.state_Name || "",
+      ClientInvoicingState_Name: this.filterValues.clientInvoicingState_Name || "",
+      InvoicingState_Name: this.filterValues.invoicingState_Name || "",
+      GstTypeName: this.filterValues.gstTypeName || "",
+      GstNumber: this.filterValues.gstNumber || "",
+      PanNumber: this.filterValues.panNumber || "",
+      TanNumber: this.filterValues.tanNumber || "",
+      UserName: this.filterValues.userName || "",
+      SapCustomerCode: this.filterValues.sapCustomerCode || "",
+      InvoiceCategory: this.filterValues.invoiceCategory || "",
+      PageNo: this.pageIndex + 1,
+      PageSize: this.pageSize,
+
+      // PageNo: this.paginator ? this.paginator.pageIndex + 1 : 1,
+      // PageSize: this.paginator ? this.paginator.pageSize : 10,
+      UserId: this.userdetail.user_Id.toString()
+
+    };
+
+    console.log("Search Payload", payload);
+
+    this.service.SearchVendorgst(payload).subscribe({
       next: (res: any) => {
+        console.log("API Count:", res?.Data?.length);
 
-        const data = res?.Data || [];
-
-        if (data.length === 0) {
-          this.dataSource.data = [];
-          console.warn("No records found");
+        console.table(
+          res?.Data?.map((x: any) => ({
+            clientGstId: x.clientGstId
+          }))
+        );
+        console.log('result', res);
+        this.Clientgst = res?.Data || [];
+        console.log(this.Clientgst)
+        if (this.Clientgst.length != 0) {
+          // Bind table data
+          this.dataSource = new MatTableDataSource(this.Clientgst);
+          this.dataSource.paginator = this.paginator;
+          //this.dataSource.data = this.Clientaddress;
+          this.dataSource.sort = this.sort;
+          this.totalCount = this.Clientgst[0].totalCount || 0;
         } else {
-          this.dataSource.data = data;
+          this.dataSource.data = [];
+          this.totalCount = 0;
         }
 
-        this.isLoading = false;
+        console.log(this.dataSource.data)
 
+        this.isLoading = false;
       },
 
       error: (err) => {
-        console.error("Error loading Client GST list", err);
-        this.isLoading = false;
-      }
 
+        this.isLoading = false;
+        console.error("Search Error", err);
+
+      }
     });
 
   }
@@ -568,22 +624,80 @@ export class VendorclientgstComponent {
     this.UploadType = Action;
     fileInput.click();
   }
+  
+  closeUploadPopup() {
+    this.showUploadPopup = false;
+    this.previewData = [];
+    this.previewColumns = [];
+  }
 
   onFileSelected(event: Event): void {
+      const input = event.target as HTMLInputElement;
+      const file = input?.files?.[0];
+      if(!file) return;
 
-    this.isLoading = true;
+      const fileName = file.name.toLowerCase();
 
-    const input = event.target as HTMLInputElement;
-    const file = input?.files?.[0];
-
-    if (!file) {
-      console.error('Please upload only one Excel file.');
-      this.isLoading = false;
+      if(!(fileName.endsWith('.xlsx') || fileName.endsWith('.xls'))) {
+      alert('Please upload a valid Excel file (.xlsx or .xls only)');
+      input.value = '';
       return;
     }
 
+    this.selectedFile = file;
+
+    const reader = new FileReader();
+    reader.onload = (e: any) => {
+      const workbook = XLSX.read(e.target.result, { type: 'array' });
+      const sheetName = workbook.SheetNames[0];
+      const worksheet = workbook.Sheets[sheetName];
+
+      const jsonData: any[] = XLSX.utils.sheet_to_json(worksheet, { defval: '' });
+      this.previewExcelFile(file);
+
+    };
+
+    reader.readAsArrayBuffer(file);
+  }
+
+  currentUploadType: any;
+
+  previewExcelFile(file: File) {
+
+    this.selectedFile = file;
+
+    const reader = new FileReader();
+
+    reader.onload = (e: any) => {
+
+      const workbook = XLSX.read(e.target.result, { type: 'array' });
+
+      const sheetName = workbook.SheetNames[0];
+
+      const worksheet = workbook.Sheets[sheetName];
+
+      const jsonData: any[] = XLSX.utils.sheet_to_json(worksheet, { defval: '' });
+
+      this.previewData = jsonData.slice(0, 50);
+
+      this.previewColumns = jsonData.length
+        ? Object.keys(jsonData[0])
+        : [];
+
+      this.showUploadPopup = true;
+    };
+
+    reader.readAsArrayBuffer(file);
+  }
+
+
+  submitUploadpopup() {
+    if (!this.selectedFile) {
+      alert("Please select file");
+      return;
+    };
     const formData = new FormData();
-    formData.append('file', file);
+    formData.append('file', this.selectedFile);
     formData.append('flag', this.UploadType);
     formData.append('userId', this.userdetail.user_Id);
 
@@ -913,7 +1027,7 @@ export class VendorclientgstComponent {
   EditTemplate() {
     const templateData = [
       {
-        VendorClientGstId: "",
+        clientGstId: "",
         Company_Code: "",
         State: "",
         GST_Number: "",

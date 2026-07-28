@@ -68,72 +68,72 @@
                         <ng-container matColumnDef="filterclientGstId">
                             <mat-header-cell *matHeaderCellDef>
                                 <input style="width:100%;" class="form-control form-control-sm"
-                                    [(ngModel)]="filterValues.clientGstId" (keyup)="applyFilter($event, 'clientGstId')">
+                                    [(ngModel)]="filterValues.clientGstId" (keydown.enter)="applyFilter($event, 'clientGstId')">
                             </mat-header-cell>
                         </ng-container>
                         <ng-container matColumnDef="filtercompany_Code">
                             <mat-header-cell *matHeaderCellDef>
                                 <input style="width:100%;" class="form-control form-control-sm"
                                     [(ngModel)]="filterValues.company_Code"
-                                    (keyup)="applyFilter($event, 'company_Code')">
+                                    (keydown.enter)="applyFilter($event, 'company_Code')">
                             </mat-header-cell>
                         </ng-container>
 
                         <ng-container matColumnDef="filtergroup_Name">
                             <mat-header-cell *matHeaderCellDef>
                                 <input style="width:100%;" class="form-control form-control-sm"
-                                    [(ngModel)]="filterValues.group_Name" (keyup)="applyFilter($event, 'group_Name')">
+                                    [(ngModel)]="filterValues.group_Name" (keydown.enter)="applyFilter($event, 'group_Name')">
                             </mat-header-cell>
                         </ng-container>
 
                         <ng-container matColumnDef="filterstate_Name">
                             <mat-header-cell *matHeaderCellDef>
                                 <input style="width:100%;" class="form-control form-control-sm"
-                                    [(ngModel)]="filterValues.state_Name" (keyup)="applyFilter($event, 'state_Name')">
+                                    [(ngModel)]="filterValues.state_Name" (keydown.enter)="applyFilter($event, 'state_Name')">
                             </mat-header-cell>
                         </ng-container>
                         <ng-container matColumnDef="filterclientInvoicingState_Name">
                             <mat-header-cell *matHeaderCellDef>
                                 <input style="width:100%;" class="form-control form-control-sm"
                                     [(ngModel)]="filterValues.clientInvoicingState_Name"
-                                    (keyup)="applyFilter($event, 'clientInvoicingState_Name')">
+                                    (keydown.enter)="applyFilter($event, 'clientInvoicingState_Name')">
                             </mat-header-cell>
                         </ng-container>
                         <ng-container matColumnDef="filterinvoicingState_Name">
                             <mat-header-cell *matHeaderCellDef>
                                 <input style="width:100%;" class="form-control form-control-sm"
                                     [(ngModel)]="filterValues.invoicingState_Name"
-                                    (keyup)="applyFilter($event, 'invoicingState_Name')">
+                                    (keydown.enter)="applyFilter($event, 'invoicingState_Name')">
                             </mat-header-cell>
                         </ng-container>
                         <ng-container matColumnDef="filtergstTypeName">
                             <mat-header-cell *matHeaderCellDef>
                                 <input style="width:100%;" class="form-control form-control-sm"
-                                    [(ngModel)]="filterValues.gstTypeName" (keyup)="applyFilter($event, 'gstTypeName')">
+                                    [(ngModel)]="filterValues.gstTypeName" (keydown.enter)="applyFilter($event, 'gstTypeName')">
                             </mat-header-cell>
                         </ng-container>
                         <ng-container matColumnDef="filtergstNumber">
                             <mat-header-cell *matHeaderCellDef>
                                 <input style="width:100%;" class="form-control form-control-sm"
-                                    [(ngModel)]="filterValues.gstNumber" (keyup)="applyFilter($event, 'gstNumber')">
+                                    [(ngModel)]="filterValues.gstNumber" (keydown.enter)="applyFilter($event, 'gstNumber')">
                             </mat-header-cell>
                         </ng-container>
                         <ng-container matColumnDef="filterpanNumber">
                             <mat-header-cell *matHeaderCellDef>
                                 <input style="width:100%;" class="form-control form-control-sm"
-                                    [(ngModel)]="filterValues.panNumber" (keyup)="applyFilter($event, 'panNumber')">
+                                    [(ngModel)]="filterValues.panNumber" (keydown.enter)="applyFilter($event, 'panNumber')">
                             </mat-header-cell>
                         </ng-container>
                         <ng-container matColumnDef="filtertanNumber">
                             <mat-header-cell *matHeaderCellDef>
                                 <input style="width:100%;" class="form-control form-control-sm"
-                                    [(ngModel)]="filterValues.tanNumber" (keyup)="applyFilter($event, 'tanNumber')">
+                                    [(ngModel)]="filterValues.tanNumber" (keydown.enter)="applyFilter($event, 'tanNumber')">
                             </mat-header-cell>
                         </ng-container>
                         <ng-container matColumnDef="filterusername">
                             <mat-header-cell *matHeaderCellDef>
-                                <input style="width:100%;" class="form-control form-control-sm"
-                                    [(ngModel)]="filterValues.userName" (keyup)="applyFilter($event, 'userName')">
+                                <!-- <input style="width:100%;" class="form-control form-control-sm"
+                                    [(ngModel)]="filterValues.userName" (keydown.enter)="applyFilter($event, 'userName')"> -->
                             </mat-header-cell>
                         </ng-container>
                         <ng-container matColumnDef="filtercreatedOn">
@@ -144,14 +144,14 @@
                             <mat-header-cell *matHeaderCellDef>
                                 <input style="width:100%;" class="form-control form-control-sm"
                                     [(ngModel)]="filterValues.sapCustomerCode"
-                                    (keyup)="applyFilter($event, 'sapCustomerCode')">
+                                    (keydown.enter)="applyFilter($event, 'sapCustomerCode')">
                             </mat-header-cell>
                         </ng-container>
                         <ng-container matColumnDef="filterinvoiceCategory">
                             <mat-header-cell *matHeaderCellDef>
-                                <input style="width:100%;" class="form-control form-control-sm"
+                                <!-- <input style="width:100%;" class="form-control form-control-sm"
                                     [(ngModel)]="filterValues.invoiceCategory"
-                                    (keyup)="applyFilter($event, 'invoiceCategory')">
+                                    (keydown.enter)="applyFilter($event, 'invoiceCategory')"> -->
                             </mat-header-cell>
                         </ng-container>
                         <!-- Filter Row End -->
@@ -362,7 +362,9 @@
                     </table>
                 </div>
 
-                <mat-paginator [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons></mat-paginator>
+                <mat-paginator [length]="totalCount" [pageIndex]="pageIndex" [pageSize]="pageSize"
+                    [pageSizeOptions]="[10,25,50,100,500,1000]" showFirstLastButtons (page)="onPageChange($event)">
+                </mat-paginator>
 
             </div>
         </div>
@@ -573,4 +575,33 @@
 </div>
 <div *ngIf="isLoading" class="loading-overlay">
     <img src="assets\Loading.gif" alt="Loading...">
+</div>
+
+
+<div class="popupcli-overlay" *ngIf="showUploadPopup"></div>
+
+<div class="client-popup" *ngIf="showUploadPopup">
+    <div class="popupcli-header">
+        <h2>Client GST Preview</h2>
+        <button class="close-btn" (click)="closeUploadPopup()">✖</button>
+    </div>
+
+    <div class="table-responsive" *ngIf="previewData.length">
+        <table class="table table-bordered table-sm">
+            <thead>
+                <tr>
+                    <th *ngFor="let col of previewColumns">{{ col }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let row of previewData">
+                    <td *ngFor="let col of previewColumns">{{ row[col] }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="text-end mt-3">
+        <button class="btn btn-primary" (click)="submitUploadpopup()">Submit</button>
+    </div>
 </div>
