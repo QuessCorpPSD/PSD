@@ -33,4 +33,11 @@ export class CategoryChangeService implements ICategoryChange {
     const config = { headers };
     return this.http.get<APIResponse>(this.env.apiUrl + "Common/GetAllProcessCategory", config);
   }
+
+  ImportCategory(payload: any): Observable<any> {
+    return this.http.post<any>(
+      this.env.apiUrl + 'CategoryChange/Import',
+      payload
+    );
+  }
 }

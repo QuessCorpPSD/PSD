@@ -16,14 +16,24 @@
                 </div>
                 <div class="col-md-3">
                     <label class="form-label text-muted small">Lot Number</label>
-                    
-                     <input type="text" class="form-control form-control-sm"  [(ngModel)]="lot_number"/> 
+
+                    <input type="text" class="form-control form-control-sm" [(ngModel)]="lot_number" />
                 </div>
                 <div class="col-md-2 d-flex gap-2">
                     <button class="btn btn-sm d-flex align-items-center justify-content-center btn-search"
                         matTooltip="Search" (click)="onSearch()">
                         <mat-icon>search</mat-icon>
                     </button>
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-download"
+                        matTooltip="downlaod" (click)="downloadTemplate()">
+                        <mat-icon>cloud_download</mat-icon>
+                    </button>
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-upload"
+                        matTooltip="Upload" (click)="ImportClick(fileInput)">
+                        <input #fileInput type="file" hidden accept=".xlsx,.xls" (change)="onFileChange($event)">
+                        <mat-icon>cloud_upload</mat-icon>
+                    </button>
+
                 </div>
             </div>
         </div>
@@ -33,10 +43,10 @@
 
                     <!--  Action -->
                     <!-- 🔹 Sl.No -->
-                    <ng-container matColumnDef="slNo">
+                    <!-- <ng-container matColumnDef="slNo">
                         <mat-header-cell *matHeaderCellDef>Sl.No</mat-header-cell>
                         <mat-cell *matCellDef="let row">{{ row.SNo }}</mat-cell>
-                    </ng-container>
+                    </ng-container> -->
 
                     <!-- 🔹 Pay Code -->
                     <ng-container matColumnDef="companycode">
@@ -55,7 +65,6 @@
                         <mat-cell *matCellDef="let element;let i = index">
                             <select [(ngModel)]="element.process_Category" name="process_Category{{i}}"
                                 id="ProcessCategory" name="Process_category" class="form-select border-bottom">
-                                <option value="0">-- Select --</option>
                                 <option *ngFor="let process of ProcessCategory" [ngValue]="process.process_Category">
                                     {{process.process_Category}}</option>
                             </select>
@@ -67,7 +76,7 @@
                         <mat-cell *matCellDef="let row">
 
                             <button class="btn btn-sm d-flex align-items-center justify-content-center"
-                                matTooltip="update" style="color:white;background-color: blue;"(click)="onUpdate()">
+                                matTooltip="update" style="color:white;background-color: blue;" (click)="onUpdate()">
                                 Update
                             </button>
                             <!-- <button class="btn btn-sm d-flex align-items-center justify-content-center" style="display: none;"
