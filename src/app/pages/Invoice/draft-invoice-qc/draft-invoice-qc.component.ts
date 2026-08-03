@@ -38,7 +38,7 @@ export class DraftInvoiceQCComponent implements OnInit {
   isLoading: boolean = false;
   dataSource = new MatTableDataSource<any>([]);
   selection = new SelectionModel<any>(true, []);
-  displayColumns = ['action',  'invoiceType', 'Req_No','invoice_Number', 'company_Code',  'net_CTC', 'netPay', 'lotNo', 'input_No', 'employee_Head_Count',  'serviceChargeAmount']
+  displayColumns = ['action',  'invoiceType', 'Req_No','invoice_Number', 'company_Code',  'net_CTC', 'netPay', 'lotNo', 'input_No', 'employee_Head_Count',  'serviceChargeAmount','sourcing_Fee_Amount']
 
 constructor(@Inject(Invoice_TOKEN) private _invoiceService: IInvoiceRepository, private _decrypt: EncryptionService,
     private _sessionStoreage: SessionStorageService,){

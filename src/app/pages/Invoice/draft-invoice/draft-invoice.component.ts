@@ -77,7 +77,7 @@ export class DraftInvoiceComponent implements OnInit {
     { value: 'MiscInvoice', Text: 'MiscInvoice' }
   ];
   //@ViewChild(PayPeriod) PayPeriodComponent!: Payperiodclass;
-  displayColumns = ['action', 'download', 'serial_No', 'invoiceType', 'Req_No', 'invoice_remarks', 'company_Code', 'map_name', 'net_CTC', 'netPay', 'lotNo', 'input_No', 'pO_Number', 'employee_Head_Count', 'service_Charge', 'serviceChargeAmount', 'service_Charge_Master', 'service_Charge_Type', 'bgvbl', 'astfee', 'discT1', 'discT2', 'idcard', 'email', 'regfee', 'trnfee', 'ggdbt', 'ppekit', 'vmsfee', 'edufee', 'ntpry', 'renmac', 'draded', 'othdd', 'mbapp', 'calcrg', 'calrt', 'narration', 'eapct', 'hosac']
+  displayColumns = ['action', 'download', 'serial_No', 'invoiceType', 'Req_No', 'invoice_remarks', 'company_Code', 'map_name', 'net_CTC', 'netPay', 'lotNo', 'input_No', 'pO_Number', 'employee_Head_Count', 'service_Charge', 'serviceChargeAmount', 'service_Charge_Master', 'service_Charge_Type', 'sourcing_Fee','sourcing_Fee_Amount','bgvbl', 'astfee', 'discT1', 'discT2', 'idcard', 'email', 'regfee', 'trnfee', 'ggdbt', 'ppekit', 'vmsfee', 'edufee', 'ntpry', 'renmac', 'draded', 'othdd', 'mbapp', 'calcrg', 'calrt', 'narration', 'eapct', 'hosac']
   constructor(@Inject(Invoice_TOKEN) private _invoiceService: IInvoiceRepository, private _decrypt: EncryptionService,
     private _sessionStoreage: SessionStorageService, private dialog: MatDialog
     , private signalr: SignalrService) {
@@ -690,7 +690,8 @@ export class DraftInvoiceComponent implements OnInit {
               NetPay: String(r.netPay),
               State_Name: String(r.state_name),
               Service_Charge_Amount: String(r.serviceChargeAmount),
-              Req_No: String(r.req_No)
+              Req_No: String(r.req_No),
+              Id: String(r.id)
             })
           )
       )

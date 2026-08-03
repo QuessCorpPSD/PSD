@@ -176,6 +176,14 @@
                 <th mat-header-cell *matHeaderCellDef>Service Charge Type</th>
                 <td mat-cell *matCellDef="let element">{{ element.service_Charge_Type }}</td>
             </ng-container>
+            <ng-container matColumnDef="sourcing_Fee">
+                <th mat-header-cell *matHeaderCellDef> Sourcing Fee </th>
+                <td mat-cell *matCellDef="let element">{{ element.sourcing_Fee }}</td>
+            </ng-container>
+            <ng-container matColumnDef="sourcing_Fee_Amount">
+                <th mat-header-cell *matHeaderCellDef> Sourcing Fee Amount</th>
+                <td mat-cell *matCellDef="let element">{{ element.sourcing_Fee_Amount }}</td>
+            </ng-container>
             <ng-container matColumnDef="bgvbl">
                 <th mat-header-cell *matHeaderCellDef>BGV Billing </th>
                 <td mat-cell *matCellDef="let element">{{ element.bgvbl }}</td>
