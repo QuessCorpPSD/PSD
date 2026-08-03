@@ -689,7 +689,8 @@ export class DraftInvoiceComponent implements OnInit {
               NetPay: String(r.netPay),
               State_Name: String(r.state_name),
               Service_Charge_Amount: String(r.serviceChargeAmount),
-              Req_No: String(r.req_No)
+              Req_No: String(r.req_No),
+              Id: String(r.id)
             })
           )
       )
