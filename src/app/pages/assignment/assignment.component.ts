@@ -59,12 +59,16 @@ export class AssignmentComponent implements OnInit, AfterViewInit {
     this._authService.GetAssignmentLot(user.user_Id, 'A').subscribe(
       {
         next: data => {
-          if (data.Data.autoAllocation.statusCode == 200) {
-            alert(data.Data.autoAllocation.messages)
-            this.data = data.Data.lots; console.log(this.data)
-          } else {
-            alert(data.Data.autoAllocation.messages)
-          }
+          //alert("Hi")
+          //console.log(data)
+          this.data = data.Data; 
+          //console.log(this.data)
+          // if (data.Data.autoAllocation.statusCode == 200) {
+          //   alert(data.Data.autoAllocation.messages)
+
+          // } else {
+          //   alert(data.Data.autoAllocation.messages)
+          // }
           //this.data = data.Data;console.log(this.data)  
         },
         error: error => console.error('Error:', error)
