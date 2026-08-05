@@ -89,7 +89,7 @@ export class BillableDaysComponent implements OnInit {
       console.error("⚠️ No file selected.");
       return;
     }
-
+//console.log('IMport type',this.importType.value);
     const formData = new FormData();
     if (this.excelFile) {
       formData.append('file', this.excelFile);
@@ -261,7 +261,7 @@ export class BillableDaysComponent implements OnInit {
   }
   handleImportType(event) {
     this.importType = event;
-    console.log(this.importType);
+    //console.log(this.importType);
   }
   TemplateDownload() {
 
