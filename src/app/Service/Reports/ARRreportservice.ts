@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-
 import { APIResponse } from '../../Models/apiresponse';
 import { IARReportService } from '../../Repository/Reports/IARReoprtservice';
 import { environment } from '../../../environments/environment.development';
