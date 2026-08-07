@@ -73,12 +73,12 @@
 
       <ng-container matColumnDef="company_Id">
         <mat-header-cell *matHeaderCellDef>company_Id</mat-header-cell>
-        <mat-cell *matCellDef="let element">{{ element.company_Id }}</mat-cell>
+        <mat-cell *matCellDef="let element"  >{{ element.company_Id }}</mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="company_Code">
         <mat-header-cell *matHeaderCellDef>company_Code</mat-header-cell>
-        <mat-cell *matCellDef="let element">{{ element.company_Code }}</mat-cell>
+        <mat-cell *matCellDef="let element" style="cursor: pointer;" (click)="view_detail()">{{ element.company_Code }}</mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="company_Name">
@@ -89,7 +89,7 @@
       <ng-container matColumnDef="cost_Center_Mapping_Id">
         <mat-header-cell *matHeaderCellDef>cost_Center_Mapping_Id</mat-header-cell>
         <mat-cell *matCellDef="let element">{{ element.cost_Center_Mapping_Id }}</mat-cell>
-      </ng-container>
+      </ng-container> 
 
       <ng-container matColumnDef="invoiceCul_Ref_No">
         <mat-header-cell *matHeaderCellDef>invoiceCul Ref No</mat-header-cell>

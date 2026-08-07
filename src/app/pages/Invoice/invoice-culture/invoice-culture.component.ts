@@ -23,6 +23,7 @@ import { SessionStorageService } from '../../../Shared/SessionStorageService';
 import { EncryptionService } from '../../../Shared/encryption.service';
 import { finalize } from 'rxjs';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { ViewInvoiceDialogComponent } from './view-invoice-dialog/view-invoice-dialog.component';
 
 interface ChildDetail {
   InvoiceCulture_id: number;
@@ -82,7 +83,7 @@ export class InvoiceCultureComponent implements AfterViewInit {
     private fb: FormBuilder,
     private invoiceService: InvoiceCultureService,
     private _decrypt: EncryptionService,
-    private _sessionStoreage: SessionStorageService
+    private _sessionStoreage: SessionStorageService,
   ) { }
 
   ngAfterViewInit() {
@@ -119,6 +120,15 @@ export class InvoiceCultureComponent implements AfterViewInit {
 
   AddPOOpen() {
     this.dialog.open(InvoiceCultureAddpoComponent, {
+      width: '60%',
+      height: '80vh',
+      disableClose: true,
+      data: { example: 'Hello from parent!' }
+    });
+  }
+
+  view_detail(){
+    this.dialog.open(ViewInvoiceDialogComponent, {
       width: '60%',
       height: '80vh',
       disableClose: true,
