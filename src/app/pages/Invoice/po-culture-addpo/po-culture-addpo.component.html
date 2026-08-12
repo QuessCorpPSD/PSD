@@ -1,0 +1,70 @@
+<form [formGroup]="POCultureForm" novalidate>
+  <mat-card class="custom-card">
+
+    <!-- HEADER FIX -->
+    <mat-card-header class="sticky-header" style="display:flex; justify-content: space-between; align-items:center;">
+      <mat-card-title style="color: #302CB3;"> Add PO Culture </mat-card-title>
+      <button mat-icon-button (click)="onClose()" class="no-border-icon">
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-card-header>
+
+    <mat-card-content>
+
+      <!-- Company Code -->
+      <div class="row g-3 mb-3">
+        <div class="col-6">
+          <label class="lbl form-label">Company Code <span class="req">*</span></label>
+          <companyall (companyEmit)="handleCompanyEvent($event)"></companyall>
+          <div *ngIf="isFieldInvalid('CompanyCode')" class="error-message">
+            {{ getFieldError('CompanyCode') }}
+          </div>
+        </div>
+              <!-- Map Name -->
+  <div class="col-6">
+          <label class="lbl form-label">Map Name <span class="req">*</span></label>
+          <mapname [selectedCompanyId]="selectedCC" (mapnameEmit)="handleMapNameEvent($event)"></mapname>
+          <div *ngIf="isFieldInvalid('MapName')" class="error-message">
+            {{ getFieldError('MapName') }}
+          </div>
+        </div>
+
+        <div class="col-md-8">
+  <label class="form-label text-muted small">
+    Invoice Creation Mode <span class="req">*</span>
+  </label>
+
+  <select class="form-select form-select-sm" formControlName="isMapnameWiseInvoice">
+    <option [ngValue]="null">Select..</option>
+    <option *ngFor="let mode of invoiceCreationModes" [ngValue]="mode.value">
+      {{ mode.text }}
+    </option>
+  </select>
+
+  <div *ngIf="isFieldInvalid('isMapnameWiseInvoice')" class="error-message">
+    {{ getFieldError('isMapnameWiseInvoice') }}
+  </div>
+</div>
+  </div>
+
+    </mat-card-content>
+
+    <br />
+    <mat-card-footer class="footer">
+      <div class="d-flex justify-content-end mt-3" style="gap: 10px; padding-right: 8px;">
+
+        <button type="Cancel"
+          style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: #f0f0f0; color: black;"
+          (click)="resetForm()">Cancel</button>
+        <button type="submit"
+          style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: blue; color: white; "
+          (click)="SaveData()">Save</button>
+      </div>
+    </mat-card-footer>
+  </mat-card>
+</form>
+
+<!-- Loading Overlay -->
+<div *ngIf="isLoading" class="loading-overlay">
+  <img src="assets/Loading.gif" alt="Loading...">
+</div>
