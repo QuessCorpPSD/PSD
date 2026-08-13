@@ -32,6 +32,7 @@ export class AssignmentComponent implements OnInit, AfterViewInit {
   private isDragging = false;
   isGridDarkMode: boolean = true;
   data: any;
+  error_message="";
   constructor(@Inject(auth) private _authService: IAssignmentService
     , private _decrypt: EncryptionService,
     private _sessionStoreage: SessionStorageService) {
@@ -60,8 +61,13 @@ export class AssignmentComponent implements OnInit, AfterViewInit {
       {
         next: data => {
           //alert("Hi")
-          //console.log(data)
-          this.data = data.Data; 
+          console.log(data)
+          if(data.Data.statusCode==200){
+          this.data = data.Data;
+        } 
+        else{
+            this.error_message=data.Data.error_Message;
+        }
           //console.log(this.data)
           // if (data.Data.autoAllocation.statusCode == 200) {
           //   alert(data.Data.autoAllocation.messages)

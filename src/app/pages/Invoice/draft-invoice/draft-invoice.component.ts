@@ -428,7 +428,7 @@ export class DraftInvoiceComponent implements OnInit {
       "Invoice_Type": element.invoiceType,
       "Company_Code": element.company_Code,
       "Pay_Period": element.pay_Period,
-      "InvoiceCultureType":element.invoiceType
+      "InvoiceCultureType":element.invoice_Type
 
     }
     this._invoiceService.InitiationSearchExport(request).subscribe({

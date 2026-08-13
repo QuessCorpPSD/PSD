@@ -1,5 +1,6 @@
 
             <div class="col-12" style="margin-top: 5px;border-bottom: 1px solid;">
+                
                 <div class="row p-1">
                     <div class="col-8 text-start">
                         <span style="color: #302CB3; font-family: Nunito Sans; font-size: 1em;"> <i class="title"
@@ -95,13 +96,15 @@
                     </div>
                 </div>
             </div>
-           
+           <h2 *ngIf="error_message" style="color: rosybrown;">{{error_message}}</h2>
+           <div *ngIf="!error_message">
                 <div class="row p-2" *ngIf="isGridDarkMode">
                     <app-gridview [data]="data"></app-gridview>
                 </div>
            
             <div class="row p-2" *ngIf="!isGridDarkMode">
                 <app-listview [data]="data"></app-listview>
+            </div>
             </div>
            
 
