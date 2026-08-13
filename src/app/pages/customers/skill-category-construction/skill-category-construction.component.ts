@@ -37,6 +37,7 @@ export class SkillCategoryConstructionComponent {
   skillCategoryForm!: FormGroup;
   showSkillPopup = false;
   isEditMode = false;
+  isDeleteMode = false;
   showErrors = false;
   selectedCompanyIdadd: any;
   selectedGroupId: any;
@@ -51,6 +52,7 @@ export class SkillCategoryConstructionComponent {
   userdetail: any;
   selectedcompanycode: any;
   selectedId: number = 0;
+  SelectedSkillId: number = 0;
   ponumber: any;
 
   constructor(private fb: FormBuilder, @Inject(Pay_TOKEN) private service: ISkilltypeMapping, private _decrypt: EncryptionService,
@@ -194,24 +196,24 @@ export class SkillCategoryConstructionComponent {
           const fileName = `SkilltypeMapping_${timestamp}.xlsx`;
 
           XLSX.writeFile(wb, fileName);
-          this.isLoading = false;
 
         } catch (err) {
           console.error('Error exporting to Excel:', err);
-          this.isLoading = false;
         }
       },
       error: (err) => {
         console.error('Error loading data for export', err);
-        this.isLoading = false;
       },
     });
   }
   openadd() {
     this.showSkillPopup = true;
-    this.isEditMode = false
+    this.isEditMode = false;
+    this.isDeleteMode = false;
     this.skillCategoryForm.reset();
+    this.skillCategoryForm.get('PO_Number')?.setValue(null);
     this.showErrors = false;
+    this.ponumber = [];
   }
   formatDate(value: string): string {
 
@@ -224,6 +226,7 @@ export class SkillCategoryConstructionComponent {
     this.service.getponumber(companyid).subscribe({
       next: res => {
         this.ponumber = res.Data;
+        this.skillCategoryForm.get('PO_Number')?.setValue(null);
       }
     });
   }
@@ -231,8 +234,9 @@ export class SkillCategoryConstructionComponent {
 
     this.showSkillPopup = true;
     this.isEditMode = true;
-
+    this.isDeleteMode = false;
     this.selectedId = row.Serial_No;
+    this.SelectedSkillId = row.Manual_Invoice_Id;
 
     this.selectedCompanyIdadd = row.Company_Id;
     this.selectedcompanycode = row.Company_code;
@@ -245,10 +249,21 @@ export class SkillCategoryConstructionComponent {
     this.skillCategoryForm.patchValue({
       Company_code: row.Company_code,
       SiteName: row.SiteName,
-      PO_Number: row.PO_Number,
+      //PO_Number: row.PO_Number,
       SkillType: row.SkillType,
       Amount: row.Amount,
       EffectiveDate: formattedDate,
+    });
+    this.service.getponumber(this.selectedCompanyIdadd).subscribe({
+      next: res => {
+        this.ponumber = res.Data || [];
+
+        // Now bind PO_Number AFTER options are loaded
+        this.skillCategoryForm.patchValue({
+          PO_Number: row.PO_Number
+        });
+
+      }
     });
   }
   saveSkillCategory() {
@@ -259,7 +274,13 @@ export class SkillCategoryConstructionComponent {
       return;
     }
 
+    this.isLoading = true;
     const payload = {
+      Manual_Invoice_Id: this.isDeleteMode
+        ? this.SelectedSkillId
+        : this.isEditMode
+          ? this.SelectedSkillId
+          : 0,
       Company_Id: this.selectedCompanyIdadd,
       Company_code: this.selectedcompanycode,
 
@@ -271,20 +292,28 @@ export class SkillCategoryConstructionComponent {
       EffectiveDate: this.skillCategoryForm.value.EffectiveDate,
       PO_Number: this.skillCategoryForm.value.PO_Number,
 
-      Action: this.isEditMode ? 'Edit' : 'add',
+      Action: this.isDeleteMode
+        ? 'Delete'
+        : this.isEditMode
+          ? 'Edit'
+          : 'add',
       UserId: this.userdetail.user_Id
     };
 
-    console.log(payload);
-
-    this.service.createUpdateSkillMapping(payload).subscribe({
+    this.service.createUpdateSkillMapping(payload).pipe(
+      finalize(() => {
+        this.isLoading = false;
+      })
+    ).subscribe({
       next: (res) => {
         const message = res.Data[0][""];
 
         alert(message);
 
         this.closePopup();
-        this.onsearch();
+        if (this.selectedCompanyId && this.selectedGroupIdmain) {
+          this.onsearch();
+        }
       },
       error: (err) => {
         console.error(err);
@@ -304,25 +333,54 @@ export class SkillCategoryConstructionComponent {
       return;
     }
 
-    this.service.delete(
-      row.Company_Id,
-      row.SiteId,
-      this.userdetail.user_Id
+    this.isDeleteMode = true;
+    this.isEditMode = false;
+    this.SelectedSkillId = row.Manual_Invoice_Id;
+
+    const payload = {
+      Manual_Invoice_Id: this.isDeleteMode
+        ? this.SelectedSkillId
+        : this.isEditMode
+          ? this.SelectedSkillId
+          : 0,
+      // Company_Id: this.selectedCompanyIdadd,
+      // Company_code: this.selectedcompanycode,
+
+      // SiteId: this.selectedGroupId,
+      // SiteName: this.selectedGroupName,
+
+      // SkillType: this.skillCategoryForm.value.SkillType,
+      // Amount: this.skillCategoryForm.value.Amount,
+      // EffectiveDate: this.skillCategoryForm.value.EffectiveDate,
+      // PO_Number: this.skillCategoryForm.value.PO_Number,
+
+      Action: this.isDeleteMode
+        ? 'Delete'
+        : this.isEditMode
+          ? 'Edit'
+          : 'add',
+      UserId: this.userdetail.user_Id
+    };
+
+    this.isLoading = true;
+    this.service.createUpdateSkillMapping(payload).pipe(
+      finalize(() => {
+        this.isLoading = false;
+      })
     ).subscribe({
+      next: (res) => {
+        const message = res.Data[0][""];
 
-      next: (res: any) => {
+        alert(message);
 
-        alert(res.Data[0][""]);
-
-        this.onsearch();
-
+        this.closePopup();
+        if (this.selectedCompanyId && this.selectedGroupIdmain) {
+          this.onsearch();
+        }
       },
-
       error: (err) => {
         console.error(err);
-        // alert('Delete failed');
       }
-
     });
   }
 }

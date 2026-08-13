@@ -173,10 +173,13 @@
                         <label class="form-label text-muted small">
                             Skill Type <span class="text-danger">*</span>
                         </label>
-                        <select class="form-select form-select-sm" formControlName="SkillType">
+                        <input *ngIf="isEditMode" class="form-control form-control-sm" formControlName="SkillType"
+                            readonly>
+                        <select *ngIf="!isEditMode" class="form-select form-select-sm" formControlName="SkillType">
                             <option value="SKILLED">Skilled</option>
                             <option value="UNSKILLED">Unskilled</option>
                             <option value="SEMISKILLED">Semi Skilled</option>
+                            <option value="HIGHLYSKILLED">Highly Skilled</option>
                         </select>
 
 
@@ -234,4 +237,7 @@
         </mat-card>
 
     </form>
+</div>
+<div *ngIf="isLoading" class="loading-overlay">
+    <img src="assets/Loading.gif" alt="Loading...">
 </div>
