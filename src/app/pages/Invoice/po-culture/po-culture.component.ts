@@ -245,7 +245,7 @@ export class PoCultureComponent implements AfterViewInit {
     FileSaver.saveAs(blob, fileName);
   }
 
-  deleteClick(poCulture_id: number, invoiceType: string) {
+  deleteClick(poCulture_id: number) {
     if (confirm("Are you sure you want to delete this?")) {
 
       const parentDetail = {
@@ -258,7 +258,7 @@ export class PoCultureComponent implements AfterViewInit {
         Invoice_Category_Id: 0,
         Error_Message: ""
       }
-
+ 
      
 
       const PoCultureAdd = {

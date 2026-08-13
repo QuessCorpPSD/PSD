@@ -67,7 +67,7 @@
         <mat-header-cell *matHeaderCellDef mat-sort-header class="fixed-width-column"></mat-header-cell>
         <mat-cell *matCellDef="let element" class="fixed-width-column">
           <img src="assets/delete.svg" style="cursor: pointer; width: 24px; height: 22px;"
-            (click)="deleteClick(element.invoiceCulture_id, element.invoiceType)" />
+            (click)="deleteClick(element.poCulture_id)" />
         </mat-cell>
       </ng-container>
     <ng-container matColumnDef="poCulture_id">
