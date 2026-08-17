@@ -105,9 +105,11 @@ export class InvoiceCultureAddpoComponent implements AfterViewInit {
       if (invoiceType.invoiceType_Id == 2) {
         // SPLIT → enable checkboxes
         this.enablePaycodeCheckboxes();
+        this.enablePayrollType();
       } else if (invoiceType.invoiceType_Id == 1) {
         // REGULAR → disable checkboxes
         this.disablePaycodeCheckboxes();
+        this.disablePayrollType();
       }
     });
   }
@@ -117,6 +119,15 @@ export class InvoiceCultureAddpoComponent implements AfterViewInit {
       this.InvoiceCultureForm.get(t.Paycode_Id.toString())?.enable();
     });
   }
+enablePayrollType()
+{
+  this.InvoiceCultureForm.get('PayrollType')?.enable();
+}
+disablePayrollType()
+{
+  this.InvoiceCultureForm.get('PayrollType')?.disable();
+  this.InvoiceCultureForm.get('PayrollType')?.reset();
+}
 
   disablePaycodeCheckboxes() {
     this.typeInvoiceList.forEach(t => {
@@ -157,6 +168,8 @@ export class InvoiceCultureAddpoComponent implements AfterViewInit {
       InvoiceType: ['', Validators.required],
       InvoiceCategory: ['', Validators.required],
       State: ['', Validators.required],
+       PayrollType: ['', Validators.required],
+
       // CityName: [''],
       // Description: [''],
       // CostCenterMapping: [1, Validators.required],
@@ -180,11 +193,12 @@ export class InvoiceCultureAddpoComponent implements AfterViewInit {
   }
 
   SaveData() {
-    this.isLoading = true;
+
     if (this.InvoiceCultureForm.invalid) {
       this.InvoiceCultureForm.markAllAsTouched();
       return;
     }
+        this.isLoading = true;
     const formValue = this.InvoiceCultureForm.getRawValue();
 
     const parentDetail = {
@@ -205,7 +219,8 @@ export class InvoiceCultureAddpoComponent implements AfterViewInit {
       Invoice_Category_Id: this.InvoiceCultureForm.get('InvoiceCategory')?.value,
       Error_Message: "",
       State_Id: this.stateId,
-      Spilt_Type_Id: 1
+      Spilt_Type_Id: 1,
+      PayrollType: this.InvoiceCultureForm.get('PayrollType')?.value || ''
     }
     const childDetail: ChildDetail[] = [];
 
@@ -298,6 +313,12 @@ export class InvoiceCultureAddpoComponent implements AfterViewInit {
   }
 
   onCheckboxChange() {
+      const invoiceType = this.InvoiceCultureForm.get('InvoiceType')?.value;
+  // No validation for Regular
+  if (invoiceType !== 'SPLIT') {
+    this.showInvoiceTypeError = false;
+    return;
+  }
     const selectedCount = this.typeInvoiceList.filter(t =>
       this.InvoiceCultureForm.get(t.Paycode_Id.toString())?.value
     ).length;
@@ -306,6 +327,16 @@ export class InvoiceCultureAddpoComponent implements AfterViewInit {
   }
 
   checkInvoiceTypeSelection() {
+        const invoiceType = this.InvoiceCultureForm.get('InvoiceType')?.value;
+  // No validation for Regular
+  if (invoiceType !== 'SPLIT') {
+    this.showInvoiceTypeError = false;
+    return;
+  }
+
+   if (invoiceType !== 'SPLIT') {
+    alert("Please select 'SPLIT' as the Invoice Type to enable Paycode selection.");
+  }
     const selectedCount = this.typeInvoiceList.filter(t =>
       this.InvoiceCultureForm.get(t.Paycode_Id.toString())?.value
     ).length;
