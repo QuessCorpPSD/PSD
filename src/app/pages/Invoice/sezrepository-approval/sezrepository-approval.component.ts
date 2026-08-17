@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, SimpleChanges, Inject, InjectionToken, ViewChild, ElementRef, } from '@angular/core';
+import { Component, SimpleChanges, Inject, InjectionToken, ViewChild, ElementRef, QueryList, ViewChildren, } from '@angular/core';
 import { ReactiveFormsModule, FormsModule, FormBuilder } from '@angular/forms';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -75,6 +75,18 @@ export class SEZRepositoryApprovalComponent {
   uploadedFileUrl: string | null = null;
   selectedCompanyId!: number;
   payPeriodType: string = "All";
+  filterValues: { [key: string]: string } = {};
+  filterdisplayedColumns: string[] = [
+    'filterselect',
+    'filterinvoice_Number',
+    'filterdocumentName',
+    'filterackNo',
+    'filteruploadedData',
+    'filterdocument_Remarks',
+    'filterrequestedBy',
+    'filterapprovalStatus',
+    'filteruploadStatus'
+  ];
   displayedColumns: string[] = [
     'select',
     //'edit',
@@ -101,6 +113,7 @@ export class SEZRepositoryApprovalComponent {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
+  @ViewChildren('filterInput') filterInputs!: QueryList<ElementRef>;
 
 
   selection = new SelectionModel<any>(true, []);
@@ -281,6 +294,46 @@ this.saveAsExcelFile(excelBuffer, `SezApproval_${formattedDate}`);
     //   return;
     // }
     this.dataSource.filter = this.searchText.trim().toLowerCase();
+  }
+
+  
+  applyFilterNew(event: Event, column: string) {
+
+    const inputValue = (event.target as HTMLInputElement).value || '';
+
+    // Store current column filter
+    this.filterValues[column] = inputValue;
+
+    // Create filter predicate only once
+    this.dataSource.filterPredicate = (data: any, filter: string): boolean => {
+
+      const filters = JSON.parse(filter);
+
+      return Object.keys(filters).every(col => {
+
+        const searchValues = filters[col]
+          .split(',')
+          .map((v: string) => v.trim().toLowerCase())
+          .filter((v: string) => v);
+
+        if (searchValues.length === 0) {
+          return true;
+        }
+
+        const cellValue = (data[col] ?? '').toString().toLowerCase();
+
+        // OR within a column (comma separated)
+        return searchValues.some(val => cellValue.includes(val));
+      });
+    };
+
+    // Trigger filtering
+    this.dataSource.filter = JSON.stringify(this.filterValues);
+  }
+  clearFilters() {
+    this.filterValues = {};
+    this.dataSource.filter = '';
+    
   }
 
   get selectedRowsCount(): number {

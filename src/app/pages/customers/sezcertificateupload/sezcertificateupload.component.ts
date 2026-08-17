@@ -21,6 +21,7 @@ import { finalize } from 'rxjs';
 import { CompanyallComponent } from '../../../common/CompanyAll/companyall.component';
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { MatNativeDateModule } from '@angular/material/core';
+import * as XLSX from 'xlsx';
 
 const sezservice = InjectionToken<ISEZRepositoryService>;
 
@@ -103,6 +104,7 @@ export class SezcertificateuploadComponent {
 
   applyFilter() {
     this.dataSource.filter = this.searchText.trim().toLowerCase();
+    this.filteredRows = this.dataSource.filteredData;
   }
 
   isAnyFilteredRowSelected(): boolean {
@@ -183,6 +185,7 @@ export class SezcertificateuploadComponent {
         this.dataSource = new MatTableDataSource<any>(tableData);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
+        this.filteredRows = [...tableData];
         this.isLoading = false;
       },
       error: err => {
@@ -318,13 +321,11 @@ export class SezcertificateuploadComponent {
           if (res.StatusCode === 200) {
             const data = res.Data;
             var base64 = data.file;
-            if(base64!="N")
-            {
-            this.downloadExcelFromBase64(base64, data.fileName);
+            if (base64 != "N") {
+              this.downloadExcelFromBase64(base64, data.fileName);
             }
-            else
-            {
-               alert(data.fileName);
+            else {
+              alert(data.fileName);
             }
           } else {
             alert("File Path not found!");
@@ -380,6 +381,44 @@ export class SezcertificateuploadComponent {
     this.validFrom = undefined;
     this.validTo = undefined;
     this.isaddclicked = false;
+  }
+
+  ExportDetails() {
+    console.log('Exporting details:', this.filteredRows);
+
+    const formatDate = (date: any): string => {
+      if (!date) return '';
+
+      const d = new Date(date);
+
+      if (isNaN(d.getTime())) return '';
+
+      const day = String(d.getDate()).padStart(2, '0');
+      const month = String(d.getMonth() + 1).padStart(2, '0');
+      const year = d.getFullYear();
+
+      return `${day}/${month}/${year}`;
+    };
+
+    const exportData = this.filteredRows.map(r => ({
+      Company_Code: r.company_Code,
+      Document_Name: r.document_Name,
+      Acknowledgement_No: r.ackNo,
+      Valid_From: formatDate(r.valid_From),
+      Valid_To: formatDate(r.valid_To),
+      Uploaded_Date: formatDate(r.uploaded_Date),
+      Document_Remarks: r.document_Remarks,
+      Requested_By: r.requestedBy,
+      Approval_Status: r.approvalStatus,
+      Upload_Status: r.uploadStatus
+    }));
+
+    const ws = XLSX.utils.json_to_sheet(exportData);
+    const wb = XLSX.utils.book_new();
+
+    XLSX.utils.book_append_sheet(wb, ws, 'Table');
+
+    XLSX.writeFile(wb, 'SEZ_Certificate_Upload.xlsx');
   }
 
 }
