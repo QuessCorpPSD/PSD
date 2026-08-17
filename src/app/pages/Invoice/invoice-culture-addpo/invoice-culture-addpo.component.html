@@ -61,7 +61,7 @@
 
       <!-- Invoice Category -->
       <div class="row g-3 mb-3">
-        <div class="col-md-6">
+        <div class="col-md-4">
           <label class="form-label text-muted small">Invoice Category <span class="req">*</span></label>
           <select class="form-select form-select-sm" formControlName="InvoiceCategory">
             <option value="">Select..</option>
@@ -73,7 +73,7 @@
             {{ getFieldError('InvoiceCategory') }}
           </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-4">
           <label class="form-label">State<span class="text-danger">*</span></label>
           <state formControlName="State" (stateEmit)="stateEvent($event)"></state>
           <!-- <select class="form-select form-select-sm" formControlName="State">
@@ -86,6 +86,32 @@
             {{ getFieldError('State') }}
           </div>
         </div>
+
+        <!-- Payroll Type -->
+<div class="col-md-4">
+  <label class="form-label text-muted small">
+    Payroll Type <span class="req">*</span>
+  </label>
+
+  <select
+    class="form-select form-select-sm"
+    formControlName="PayrollType">
+
+    <option value="">Select...</option>
+    <option value="Salary">Salary</option>
+    <option value="Adhoc">Adhoc</option>
+    <option value="Gratuity">Gratuity</option>
+    <option value="Arrear">Arrear</option>
+    <option value="Sourcing">Sourcing</option>
+
+  </select>
+<div
+    *ngIf="InvoiceCultureForm.get('PayrollType')?.touched &&
+           InvoiceCultureForm.get('PayrollType')?.hasError('required')"
+    class="error-message">
+    Please select Payroll Type
+  </div>
+</div>
       </div>
 
 

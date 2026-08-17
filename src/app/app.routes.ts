@@ -205,6 +205,7 @@ import { InvoiceCollectionComponent } from './pages/AccountReceivable/Bankinvoic
 import { InvoiceCollectionreportComponent } from './pages/AccountReceivable/Bankinvoice/invoice-collectionreport/invoice-collectionreport.component';
 import { LTDSreportComponent } from './pages/AccountReceivable/Bankinvoice/ltdsreport/ltdsreport.component';
 import { UnpaidInvoiceReportComponent } from './pages/AccountReceivable/Bankinvoice/unpaid-invoice-report/unpaid-invoice-report.component';
+import { PoCultureComponent } from './pages/Invoice/po-culture/po-culture.component';
 // import { AccountReceivablenavigationComponent } from './pages/accountreceivable/Bankinvoice/account-receivablenavigation/account-receivablenavigation.component';
 // import { APARAdjustmentupdateComponent } from './pages/accountreceivable/Bankinvoice/aparadjustmentupdate/aparadjustmentupdate.component';
 // import { BankTransferHTHStatusComponent } from './pages/accountreceivable/Bankinvoice/bank-transfer-hthstatus/bank-transfer-hthstatus.component';
@@ -490,6 +491,7 @@ export const routes: Routes = [
           { path: 'companyinvoiceformat', component: CompanyinvoiceformatComponent },
           { path: 'OtherIncome', component: OtherincomeComponent },
           { path: 'sezrepository-approval', component: SEZRepositoryApprovalComponent },
+          { path: 'app-po-culture', component: PoCultureComponent },
         ]
       },
       {
