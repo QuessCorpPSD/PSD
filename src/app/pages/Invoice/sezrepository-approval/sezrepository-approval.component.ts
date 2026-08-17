@@ -251,30 +251,30 @@ export class SEZRepositoryApprovalComponent {
   }
 
   onExportClick() {
-    this.isLoading=true;
-const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.dataSource.data);
-  const workbook: XLSX.WorkBook = {
-    Sheets: { 'Sheet1': worksheet },
-    SheetNames: ['Sheet1']
-  };
+    this.isLoading = true;
+    const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.dataSource.data);
+    const workbook: XLSX.WorkBook = {
+      Sheets: { 'Sheet1': worksheet },
+      SheetNames: ['Sheet1']
+    };
 
-  const excelBuffer: any = XLSX.write(workbook, {
-    bookType: 'xlsx',
-    type: 'array'
-  });
-const now = new Date();
-const formattedDate = now.toISOString().slice(0,19).replace(/[:T]/g, '-');
+    const excelBuffer: any = XLSX.write(workbook, {
+      bookType: 'xlsx',
+      type: 'array'
+    });
+    const now = new Date();
+    const formattedDate = now.toISOString().slice(0, 19).replace(/[:T]/g, '-');
 
-this.saveAsExcelFile(excelBuffer, `SezApproval_${formattedDate}`);
-  this.saveAsExcelFile(excelBuffer, 'SezApproval'+Date());
+    this.saveAsExcelFile(excelBuffer, `SezApproval_${formattedDate}`);
+    this.saveAsExcelFile(excelBuffer, 'SezApproval' + Date());
   }
   saveAsExcelFile(buffer: any, fileName: string): void {
-  const data: Blob = new Blob([buffer], {
-    type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8'
-  });
-  this.isLoading=false;
-  FileSaver.saveAs(data, `${fileName}_${new Date().getTime()}.xlsx`);
-}
+    const data: Blob = new Blob([buffer], {
+      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8'
+    });
+    this.isLoading = false;
+    FileSaver.saveAs(data, `${fileName}_${new Date().getTime()}.xlsx`);
+  }
 
   onImportClick(fileInput) {
 
@@ -296,7 +296,7 @@ this.saveAsExcelFile(excelBuffer, `SezApproval_${formattedDate}`);
     this.dataSource.filter = this.searchText.trim().toLowerCase();
   }
 
-  
+
   applyFilterNew(event: Event, column: string) {
 
     const inputValue = (event.target as HTMLInputElement).value || '';
@@ -330,10 +330,15 @@ this.saveAsExcelFile(excelBuffer, `SezApproval_${formattedDate}`);
     // Trigger filtering
     this.dataSource.filter = JSON.stringify(this.filterValues);
   }
+  
   clearFilters() {
     this.filterValues = {};
     this.dataSource.filter = '';
-    
+
+    // Clear all filter input boxes
+    this.filterInputs.forEach(input => {
+      input.nativeElement.value = '';
+    });
   }
 
   get selectedRowsCount(): number {
@@ -476,7 +481,7 @@ this.saveAsExcelFile(excelBuffer, `SezApproval_${formattedDate}`);
       this.filteredRows = [...this.rows];
     }
   }
-  exportdata(){
+  exportdata() {
 
   }
 

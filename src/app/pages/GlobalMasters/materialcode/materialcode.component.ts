@@ -47,7 +47,7 @@ export class MaterialcodeComponent {
   form!: FormGroup;
   Editform!: FormGroup;
   searchText: string = "";
-
+  filteredRows: any[] = [];
   displayedColumns: string[] = [
     "delete",
     "edit",
@@ -77,6 +77,7 @@ export class MaterialcodeComponent {
 
   applyFilter() {
     this.dataSource.filter = this.searchText.trim().toLowerCase();
+    this.filteredRows = this.dataSource.filteredData;
   }
 
   ngOnInit(): void {
@@ -89,7 +90,7 @@ export class MaterialcodeComponent {
     });
 
     this.Editform = this.fb.group({
-      id:[''],
+      id: [''],
       materialcode: ['', Validators.required],
       description: ['', Validators.required],
       issalary: [false]
@@ -105,6 +106,7 @@ export class MaterialcodeComponent {
 
         if (res.StatusCode === 200 && Array.isArray(res.Data.data.Table0) && res.Data.data.Table0.length > 0) {
           this.dataSource.data = res.Data.data.Table0;
+          this.filteredRows = [...this.dataSource.data];
 
           setTimeout(() => {
             this.dataSource.paginator = this.paginator;
@@ -212,7 +214,7 @@ export class MaterialcodeComponent {
       mode: "Add",
       detail: MaterialCodeAdd
     }
-  
+
 
 
     this.materialService.Create(payload).subscribe({
@@ -266,7 +268,7 @@ export class MaterialcodeComponent {
 
     this.materialService.Create(payload).subscribe({
       next: (res) => {
-      
+
         const errormsg = res.Data.data.Table0[0].Error_Message;
 
         if (errormsg.includes("Successfully")) {
@@ -277,7 +279,7 @@ export class MaterialcodeComponent {
         else {
           alert(errormsg);
           this.form.reset({
-            id:'',
+            id: '',
             materialcode: '',
             description: '',
             issalary: false
@@ -304,6 +306,22 @@ export class MaterialcodeComponent {
     downloadLink.href = source;
     downloadLink.download = filename;
     downloadLink.click();
+  }
+  ExportDetails() {
+    //console.log('Exporting details:', this.filteredRows);
+
+    const exportData = this.filteredRows.map(r => ({
+      Material_Code: r.Code,
+      Description: r.Description,
+      Is_Salary: r.Is_Salary
+    }));
+
+    const ws = XLSX.utils.json_to_sheet(exportData);
+    const wb = XLSX.utils.book_new();
+
+    XLSX.utils.book_append_sheet(wb, ws, 'Table');
+
+    XLSX.writeFile(wb, 'Material_Code_Export.xlsx');
   }
 
 }
