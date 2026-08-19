@@ -252,21 +252,48 @@ export class SEZRepositoryApprovalComponent {
 
   onExportClick() {
     this.isLoading = true;
-    const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.dataSource.data);
-    const workbook: XLSX.WorkBook = {
-      Sheets: { 'Sheet1': worksheet },
-      SheetNames: ['Sheet1']
-    };
+    const filteredSelected = this.selection.selected.filter((item: any) =>
+      this.dataSource.filteredData.includes(item)
+    );
+  
+    if (!filteredSelected.length) {
+      alert('Please select Records for Export ❌');
+      this.isLoading = false;
+      return;
+    }
 
-    const excelBuffer: any = XLSX.write(workbook, {
-      bookType: 'xlsx',
-      type: 'array'
-    });
-    const now = new Date();
-    const formattedDate = now.toISOString().slice(0, 19).replace(/[:T]/g, '-');
-
-    this.saveAsExcelFile(excelBuffer, `SezApproval_${formattedDate}`);
-    this.saveAsExcelFile(excelBuffer, 'SezApproval' + Date());
+    const formatDate = (date: any): string => {
+          if (!date) return '';
+    
+          const d = new Date(date);
+    
+          if (isNaN(d.getTime())) return '';
+    
+          const day = String(d.getDate()).padStart(2, '0');
+          const month = String(d.getMonth() + 1).padStart(2, '0');
+          const year = d.getFullYear();
+    
+          return `${day}/${month}/${year}`;
+        };
+    
+        const exportData = filteredSelected.map(r => ({
+          Invoice_Number: r.invoice_Number,
+          Document_Name: r.document_Name,
+          Uploaded_Date: formatDate(r.uploaded_Date),
+          Document_Remarks: r.document_Remarks,
+          Acknowledgement_No: r.ackNo,
+          Requested_By: r.requestedBy,
+          Approval_Status: r.approvalStatus,
+          Upload_Status: r.uploadStatus
+        }));
+    
+        const ws = XLSX.utils.json_to_sheet(exportData);
+        const wb = XLSX.utils.book_new();
+    
+        XLSX.utils.book_append_sheet(wb, ws, 'Table');
+    
+        XLSX.writeFile(wb, 'SEZ_Export.xlsx');
+        this.isLoading = false;
   }
   saveAsExcelFile(buffer: any, fileName: string): void {
     const data: Blob = new Blob([buffer], {
