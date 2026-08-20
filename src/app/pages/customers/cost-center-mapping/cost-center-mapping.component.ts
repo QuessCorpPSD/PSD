@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, ElementRef, QueryList, ViewChildren, } from '@angular/core';
 import { AddcostCenterMappingComponent } from '../addcost-center-mapping/addcost-center-mapping.component';
 import { CommonModule } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
@@ -38,8 +38,20 @@ export class CostCenterMappingComponent {
   searchMapName = "";
   selectedFile: File | null = null;
   userdetail: any;
+  filterValues: { [key: string]: string } = {};
+
 
   uploadedDataSource = new MatTableDataSource<any>(this.uploadedData);
+
+  uploadFilterColumns: string[] = [
+    'FilterSNo',
+    'FilterMap Name',
+    'FilterBusiness Unit Name',
+    'FilterCompany code',
+    'Filtercompany Name',
+    'FilterCost Center',
+    'FilterCompany Location'
+  ];
 
   uploadDisplayedColumns: string[] = [
     'SNo',
@@ -53,8 +65,9 @@ export class CostCenterMappingComponent {
 
   @ViewChild('paginator') paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
-
   @ViewChild('fileInput') fileInput: any;
+  @ViewChildren('filterInput') filterInputs!: QueryList<ElementRef>;
+
 
   constructor(
     private dialog: MatDialog,
@@ -303,4 +316,50 @@ export class CostCenterMappingComponent {
       disableClose: true
     });
   }
+
+
+  applyFilterNew(event: Event, column: string) {
+
+    const inputValue = (event.target as HTMLInputElement).value || '';
+
+    // Store current column filter
+    this.filterValues[column] = inputValue;
+
+    // Create filter predicate only once
+    this.uploadedDataSource.filterPredicate = (data: any, filter: string): boolean => {
+
+      const filters = JSON.parse(filter);
+
+      return Object.keys(filters).every(col => {
+
+        const searchValues = filters[col]
+          .split(',')
+          .map((v: string) => v.trim().toLowerCase())
+          .filter((v: string) => v);
+
+        if (searchValues.length === 0) {
+          return true;
+        }
+
+        const cellValue = (data[col] ?? '').toString().toLowerCase();
+
+        // OR within a column (comma separated)
+        return searchValues.some(val => cellValue.includes(val));
+      });
+    };
+
+    // Trigger filtering
+    this.uploadedDataSource.filter = JSON.stringify(this.filterValues);
+  }
+
+  clearFilters() {
+    this.filterValues = {};
+    this.uploadedDataSource.filter = '';
+
+    // Clear all filter input boxes
+    this.filterInputs.forEach(input => {
+      input.nativeElement.value = '';
+    });
+  }
+
 }

@@ -314,7 +314,8 @@ export class ClientaddressComponent {
     this.cityNameUI1 = cityname;
     this.cityNameUI3 = cityname.city_Id;
     this.clientaddress.patchValue({
-      billingLocation: cityname
+      billingLocation: cityname,
+      billingPinCode: cityname.pin_Code
     });
     console.log('BillingLocation', this.clientaddress.value.billingLocation);
     console.log('CityNameUI3', this.cityNameUI3);
@@ -323,7 +324,8 @@ export class ClientaddressComponent {
   citybystateEvent2(cityname: any) {
     this.cityNameUI2 = cityname;
     this.clientaddress.patchValue({
-      shippingLocation: cityname
+      shippingLocation: cityname,
+      shippingPinCode: cityname.pin_Code
     });
   }
   pageIndex: number = 0;
@@ -888,11 +890,13 @@ export class ClientaddressComponent {
         if (!res || !res.Data) {
           alert("Upload request Processed.Server did not return any data")
           this.isLoading = false;
+          this.closeUploadPopup();
           return;
         }
 
         if (res?.Data?.response?.includes("Row(s) Uploaded Successfully.")) {
           this.isLoading = false;
+          this.closeUploadPopup();
           this.showAlertPopup("Row(s) Uploaded Successfully.")
           this.onsearch();
           return;
@@ -903,6 +907,7 @@ export class ClientaddressComponent {
           // Optional debug
           // alert('1');
           this.isLoading = false;
+          this.closeUploadPopup();
           alert("Failed to Import")
           // errors[0] may be a JSON string, an array, or a plain string/object
           const rawErr = res?.Data?.errors?.[0];
@@ -931,6 +936,7 @@ export class ClientaddressComponent {
           };
           XLSX.writeFile(workbook, 'ErrorMessages_ClientAddress.xlsx');
           this.isLoading = false;
+          this.closeUploadPopup();
           return;
         }
 
@@ -939,6 +945,7 @@ export class ClientaddressComponent {
         if (Array.isArray(res.Data) && res.Data[0]?.Error_Message) {
           alert(res.Data[0].Error_Message)
           this.isLoading = false;
+          this.closeUploadPopup();
           return;
         }
         else {
@@ -950,6 +957,7 @@ export class ClientaddressComponent {
       },
       error: (err) => {
         this.isLoading = false;
+        this.closeUploadPopup();
         alert("Upload Failed")
       }
     });

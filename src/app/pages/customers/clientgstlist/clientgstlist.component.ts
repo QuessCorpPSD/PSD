@@ -175,7 +175,7 @@ export class ClientgstlistComponent {
 
     this.clientform = this.fb.group({
       CompanyCode: ['', Validators.required],
-      GroupName: ['', Validators.required],
+      GroupName: [''],
       State: [null, Validators.required],
       ClientInvoicingState: [null, Validators.required],
       QuessInvoicingState: [null, Validators.required],
@@ -726,6 +726,7 @@ export class ClientgstlistComponent {
         ) {
           alert(res.Data.response);
           this.isLoading = false;
+          this.closeUploadPopup();
           this.onsearch();
         }
 
@@ -765,6 +766,7 @@ export class ClientgstlistComponent {
           alert(res.Data.response);
 
           this.isLoading = false;
+          this.closeUploadPopup();
           return;
         }
 
@@ -772,6 +774,7 @@ export class ClientgstlistComponent {
         else {
           alert(res?.Data?.response || 'Error while processing');
           this.isLoading = false;
+          this.closeUploadPopup();
           return;
         }
       },
@@ -780,6 +783,7 @@ export class ClientgstlistComponent {
         console.error('Upload failed', err);
         alert('Upload failed');
         this.isLoading = false;
+        this.closeUploadPopup();
       }
     });
   }

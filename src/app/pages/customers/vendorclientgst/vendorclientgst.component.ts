@@ -714,6 +714,7 @@ export class VendorclientgstComponent {
         ) {
           alert(res.Data.response);
           this.isLoading = false;
+          this.closeUploadPopup();
           this.onsearch();
         }
 
@@ -753,6 +754,7 @@ export class VendorclientgstComponent {
           alert(res.Data.response);
 
           this.isLoading = false;
+          this.closeUploadPopup();
           return;
         }
 
@@ -760,6 +762,7 @@ export class VendorclientgstComponent {
         else {
           alert(res?.Data?.response || 'Error while processing');
           this.isLoading = false;
+          this.closeUploadPopup();
           return;
         }
       },
@@ -768,6 +771,7 @@ export class VendorclientgstComponent {
         console.error('Upload failed', err);
         alert('Upload failed');
         this.isLoading = false;
+        this.closeUploadPopup();
       }
     });
   }

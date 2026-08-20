@@ -813,11 +813,13 @@ export class VendorclientaddressComponent {
         if (!res || !res.Data) {
           alert("Upload request Processed.Server did not return any data")
           this.isLoading = false;
+          this.closeUploadPopup();
           return;
         }
 
         if (res?.Data?.response?.includes("Row(s) Uploaded Successfully.")) {
           this.isLoading = false;
+          this.closeUploadPopup();
           this.showAlertPopup("Row(s) Uploaded Successfully.")
           return;
         }
@@ -827,6 +829,7 @@ export class VendorclientaddressComponent {
           // Optional debug
           // alert('1');
           this.isLoading = false;
+          this.closeUploadPopup();
           alert("Failed to Import")
           // errors[0] may be a JSON string, an array, or a plain string/object
           const rawErr = res?.Data?.errors?.[0];
@@ -863,6 +866,7 @@ export class VendorclientaddressComponent {
         if (Array.isArray(res.Data) && res.Data[0]?.Error_Message) {
           alert(res.Data[0].Error_Message)
           this.isLoading = false;
+          this.closeUploadPopup();
           return;
         }
         else {
@@ -874,6 +878,7 @@ export class VendorclientaddressComponent {
       },
       error: (err) => {
         this.isLoading = false;
+        this.closeUploadPopup();
         alert("Upload Failed")
       }
     });

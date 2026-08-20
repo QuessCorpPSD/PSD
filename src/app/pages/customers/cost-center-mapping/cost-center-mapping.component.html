@@ -65,6 +65,52 @@
                             </mat-cell>
                         </ng-container> -->
 
+                        <ng-container matColumnDef="FilterSNo">
+                            <mat-header-cell *matHeaderCellDef class="fixed-width-column">
+                                <span style="cursor:pointer;color:blue;text-decoration:underline"
+                                    (click)="clearFilters()">
+                                    Clear
+                                </span>
+                            </mat-header-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="FilterMap Name">
+                            <mat-header-cell *matHeaderCellDef>
+                                <input #filterInput style="width:100%;" class="form-control form-control-sm"
+                                    placeholder="Search" (keyup)="applyFilterNew($event, 'Map Name')">
+                            </mat-header-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="FilterBusiness Unit Name">
+                            <mat-header-cell *matHeaderCellDef>
+                                <input #filterInput style="width:100%;" class="form-control form-control-sm"
+                                    placeholder="Search" (keyup)="applyFilterNew($event, 'Business Unit Name')">
+                            </mat-header-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="FilterCompany code">
+                            <mat-header-cell *matHeaderCellDef>
+                                <input #filterInput style="width:100%;" class="form-control form-control-sm"
+                                    placeholder="Search" (keyup)="applyFilterNew($event, 'Company code')">
+                            </mat-header-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="Filtercompany Name">
+                            <mat-header-cell *matHeaderCellDef>
+                                <input #filterInput style="width:100%;" class="form-control form-control-sm"
+                                    placeholder="Search" (keyup)="applyFilterNew($event, 'company Name')">
+                            </mat-header-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="FilterCost Center">
+                            <mat-header-cell *matHeaderCellDef>
+                                <input #filterInput style="width:100%;" class="form-control form-control-sm"
+                                    placeholder="Search" (keyup)="applyFilterNew($event, 'Cost Center')">
+                            </mat-header-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="FilterCompany Location">
+                            <mat-header-cell *matHeaderCellDef>
+                                <input #filterInput style="width:100%;" class="form-control form-control-sm"
+                                    placeholder="Search" (keyup)="applyFilterNew($event, 'Company Location')">
+                            </mat-header-cell>
+                        </ng-container>
+
+
                         <ng-container matColumnDef="SNo">
                             <mat-header-cell *matHeaderCellDef class="SNo"><strong>SNo</strong></mat-header-cell>
                             <mat-cell *matCellDef="let row" class="SNo">{{ row['SNo'] }}</mat-cell>
@@ -107,7 +153,9 @@
 
 
                         <mat-header-row *matHeaderRowDef="uploadDisplayedColumns"></mat-header-row>
+                        <mat-header-row *matHeaderRowDef="uploadFilterColumns"></mat-header-row>
                         <mat-row *matRowDef="let row; columns: uploadDisplayedColumns;"></mat-row>
+
 
                     </mat-table>
 
