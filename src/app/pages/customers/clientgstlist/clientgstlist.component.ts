@@ -934,10 +934,6 @@ export class ClientgstlistComponent {
       return;
     }
 
-    if (!this.selectedGroupId) {
-      alert("Please select Group Name");
-      return;
-    }
 
     if (!this.stateId) {
       alert("Please select State");

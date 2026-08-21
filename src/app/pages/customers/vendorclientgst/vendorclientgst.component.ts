@@ -219,7 +219,7 @@ export class VendorclientgstComponent {
 
     this.clientform = this.fb.group({
       CompanyCode: ['', Validators.required],
-      GroupName: ['', Validators.required],
+      GroupName: [''],
       State: [null, Validators.required],
       ClientInvoicingState: [null, Validators.required],
       QuessInvoicingState: [null, Validators.required],
@@ -919,11 +919,6 @@ export class VendorclientgstComponent {
   onSave() {
     if (this.clientform.invalid) {
       this.clientform.markAllAsTouched();
-      return;
-    }
-
-    if (!this.selectedGroupId) {
-      alert("Please select Group Name");
       return;
     }
 

@@ -950,6 +950,7 @@ export class ClientaddressComponent {
         }
         else {
           alert('Error while processing response.')
+          this.closeUploadPopup();
         }
 
         this.isLoading = false;

@@ -318,7 +318,8 @@ export class VendorclientaddressComponent {
     this.cityNameUI1 = cityname;
     this.cityNameUI3 = cityname.city_Id;
     this.clientaddress.patchValue({
-      billingLocation: cityname
+      billingLocation: cityname,
+      billingPinCode: cityname.pin_Code
     });
     console.log('BillingLocation', this.clientaddress.value.billingLocation);
     console.log('CityNameUI3', this.cityNameUI3);
@@ -327,7 +328,8 @@ export class VendorclientaddressComponent {
   citybystateEvent2(cityname: any) {
     this.cityNameUI2 = cityname;
     this.clientaddress.patchValue({
-      shippingLocation: cityname
+      shippingLocation: cityname,
+      shippingPinCode: cityname.pin_Code
     });
   }
 
@@ -871,6 +873,7 @@ export class VendorclientaddressComponent {
         }
         else {
           alert('Error while processing response.')
+          this.closeUploadPopup();
         }
 
         this.isLoading = false;
