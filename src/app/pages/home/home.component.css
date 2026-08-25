@@ -28,3 +28,209 @@ p {
       font-weight: 600;
       word-wrap: break-word
     }
+
+   /* Full screen overlay */
+.dialog-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 200;
+}
+
+/* Actual dialog */
+.custom-dialog {
+  width: 500px;
+  max-width: 90%;
+  background: #ffffff;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.15);
+}
+
+/* Header */
+.dialog-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  min-height: 52px;
+  padding: 10px 16px;
+
+  background: #ffffff;
+  border-bottom: 1px solid #e9ecef;
+
+  h2 {
+    margin: 0;
+    font-size: 17px;
+    font-weight: 600;
+    color: #212529;
+  }
+
+  span {
+    display: block;
+    margin-top: 2px;
+    font-size: 12px;
+    color: #6c757d;
+  }
+
+  button {
+    width: 34px;
+    height: 34px;
+    line-height: 34px;
+  }
+}
+
+/* Grid / Body */
+.dialog-body {
+  padding: 0;
+  max-height: 60vh;
+  overflow: auto;
+}
+
+/* Footer */
+.dialog-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+
+  padding: 10px 16px;
+
+  background: #f8f9fa;
+  border-top: 1px solid #e9ecef;
+}
+
+/* Table */
+.break-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+/* Table Header */
+.break-table th {
+  height: 40px;
+  padding: 0 12px;
+
+  background: #f5f6f8;
+
+  font-size: 12px;
+  font-weight: 600;
+  color: #495057;
+
+  text-align: left;
+  white-space: nowrap;
+
+  border-bottom: 1px solid #dee2e6;
+}
+
+/* Table Cells */
+.break-table td {
+  height: 42px;
+  padding: 0 12px;
+
+  font-size: 13px;
+  color: #343a40;
+
+  border-bottom: 1px solid #f0f0f0;
+}
+
+/* Row Hover */
+.break-table tbody tr:hover {
+  background: #f8faff;
+}
+
+/* Action Icon */
+.edit-btn {
+  width: 32px;
+  height: 32px;
+
+  color: #3f51b5;
+
+  &:hover {
+    background: #eef1ff;
+  }
+
+  mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+  }
+}
+
+/* Scrollbar */
+.dialog-body::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.dialog-body::-webkit-scrollbar-thumb {
+  background: #cfd3d8;
+  border-radius: 10px;
+}
+
+.dialog-body::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Buttons */
+.dialog-footer button {
+  min-width: 80px;
+  height: 34px;
+
+  border-radius: 6px;
+  font-size: 13px;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+
+  .custom-dialog {
+    border-radius: 10px;
+  }
+
+  .dialog-header {
+    padding: 9px 12px;
+  }
+
+  .dialog-footer {
+    padding: 9px 12px;
+  }
+
+  .break-table th,
+  .break-table td {
+    padding: 0 8px;
+  }
+}
+.custom-dialog-panel {
+  .mat-mdc-dialog-container {
+    padding: 0 !important;
+  }
+
+  .mdc-dialog__surface {
+    padding: 0 !important;
+    border-radius: 14px !important;
+    overflow: hidden !important;
+  }
+}
+.dialog-close {
+  border: 0;
+  background: transparent;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  color: #6c757d;
+  cursor: pointer;
+  border-radius: 50%;
+}
+
+.dialog-close:hover {
+  background: #f1f3f5;
+  color: #212529;
+}
