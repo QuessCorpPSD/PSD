@@ -318,7 +318,8 @@ export class VendorclientaddressComponent {
     this.cityNameUI1 = cityname;
     this.cityNameUI3 = cityname.city_Id;
     this.clientaddress.patchValue({
-      billingLocation: cityname
+      billingLocation: cityname,
+      billingPinCode: cityname.pin_Code
     });
     console.log('BillingLocation', this.clientaddress.value.billingLocation);
     console.log('CityNameUI3', this.cityNameUI3);
@@ -327,7 +328,8 @@ export class VendorclientaddressComponent {
   citybystateEvent2(cityname: any) {
     this.cityNameUI2 = cityname;
     this.clientaddress.patchValue({
-      shippingLocation: cityname
+      shippingLocation: cityname,
+      shippingPinCode: cityname.pin_Code
     });
   }
 
@@ -813,11 +815,13 @@ export class VendorclientaddressComponent {
         if (!res || !res.Data) {
           alert("Upload request Processed.Server did not return any data")
           this.isLoading = false;
+          this.closeUploadPopup();
           return;
         }
 
         if (res?.Data?.response?.includes("Row(s) Uploaded Successfully.")) {
           this.isLoading = false;
+          this.closeUploadPopup();
           this.showAlertPopup("Row(s) Uploaded Successfully.")
           return;
         }
@@ -827,6 +831,7 @@ export class VendorclientaddressComponent {
           // Optional debug
           // alert('1');
           this.isLoading = false;
+          this.closeUploadPopup();
           alert("Failed to Import")
           // errors[0] may be a JSON string, an array, or a plain string/object
           const rawErr = res?.Data?.errors?.[0];
@@ -863,10 +868,12 @@ export class VendorclientaddressComponent {
         if (Array.isArray(res.Data) && res.Data[0]?.Error_Message) {
           alert(res.Data[0].Error_Message)
           this.isLoading = false;
+          this.closeUploadPopup();
           return;
         }
         else {
           alert('Error while processing response.')
+          this.closeUploadPopup();
         }
 
         this.isLoading = false;
@@ -874,6 +881,7 @@ export class VendorclientaddressComponent {
       },
       error: (err) => {
         this.isLoading = false;
+        this.closeUploadPopup();
         alert("Upload Failed")
       }
     });

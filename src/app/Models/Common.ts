@@ -34,6 +34,7 @@ export interface Mapnameclass {
 export interface citynameclass {
   city_Id: number
   city_Name: string
+  pin_Code: string
 }
 
 export interface InputTypeclass {

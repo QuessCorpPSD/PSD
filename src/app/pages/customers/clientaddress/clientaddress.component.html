@@ -669,12 +669,7 @@
 
                             <label class="form-label text-muted small mt-3">Billing Pin Code <span
                                     class="text-danger">*</span></label>
-                            <input class="form-control form-control-sm" formControlName="billingPinCode">
-                            <small class="text-danger d-block mt-1"
-                                *ngIf="showErrors && clientaddress.get('billingPinCode')?.invalid">
-                                Billing Pincode is required
-                            </small>
-
+                            <input class="form-control form-control-sm" formControlName="billingPinCode" readonly>
                             <label class="form-label text-muted small mt-3">SAP Bill To</label>
                             <input class="form-control form-control-sm" formControlName="sapBillTo">
                         </div>
@@ -728,12 +723,7 @@
 
                             <label class="form-label text-muted small mt-3">Shipping Pin Code <span
                                     class="text-danger">*</span></label>
-                            <input class="form-control form-control-sm" formControlName="shippingPinCode"
-                                [readonly]="sameAsBilling">
-                            <small class="text-danger d-block mt-1"
-                                *ngIf="showErrors && clientaddress.get('shippingPinCode')?.invalid">
-                                Shipping Pin Code is required
-                            </small>
+                            <input class="form-control form-control-sm" formControlName="shippingPinCode" readonly>
                             <label class="form-label text-muted small mt-3">SAP Ship To</label>
                             <input class="form-control form-control-sm" formControlName="sapShipTo"
                                 [readonly]="sameAsBilling">
