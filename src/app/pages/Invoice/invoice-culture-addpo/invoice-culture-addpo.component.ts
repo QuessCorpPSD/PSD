@@ -18,6 +18,7 @@ import * as XLSX from 'xlsx';
 import * as FileSaver from 'file-saver';
 import { Router } from '@angular/router';
 import { StateComponent } from '../../../common/state/state.component';
+import { PaycodedragdropComponent } from "../otherincome/paycodedragdrop/paycodedragdrop.component";
 
 
 interface ChildDetail {
@@ -28,6 +29,10 @@ interface ChildDetail {
   HasAccess: boolean;
 }
 
+export interface IListBoxItem {
+  value: string;
+  text: string;
+}
 
 @Component({
   selector: 'app-invoice-culture-addpo',
@@ -35,12 +40,23 @@ interface ChildDetail {
   imports: [
     CommonModule, ReactiveFormsModule, FormsModule, MatIconModule,
     MatCheckboxModule, MatTableModule, MatPaginatorModule, MatSortModule,
-    CompanyallComponent, MapnameComponent, MatCardModule, StateComponent
+    CompanyallComponent, MapnameComponent, MatCardModule, StateComponent,
+    PaycodedragdropComponent
   ],
   templateUrl: './invoice-culture-addpo.component.html',
   styleUrls: ['./invoice-culture-addpo.component.css']
 })
 export class InvoiceCultureAddpoComponent implements AfterViewInit {
+
+  availableFilterPlaceholder = 'Search & Select available Attribute';
+
+  selectedFilterPlaceholder = ' Search & Selected Attribute';
+
+  // Search inputs
+  availableSearchInput = new FormControl('');
+  selectedSearchInput = new FormControl('');
+  filteredAvailableItems: Array<IListBoxItem> = [];
+
   InvoiceCultureForm!: FormGroup;
   showTypeOfInvoice = false;
   companyUI: any;
@@ -70,6 +86,12 @@ export class InvoiceCultureAddpoComponent implements AfterViewInit {
   mapnameUI: any;
   stateId?: number;
   typeInvoiceList: any;
+  selected: any;
+  availableItems: any[] = [];
+  selectedItems: any[] = [];
+  currentSelectItems: any[] = [];
+  selectedDragItems: Array<IListBoxItem> = [];
+  filteredSelectedItems: Array<IListBoxItem> = [];
 
   constructor(
     private fb: FormBuilder,
@@ -77,7 +99,9 @@ export class InvoiceCultureAddpoComponent implements AfterViewInit {
     @Inject(MAT_DIALOG_DATA) public Data: any,
     private poService: InvoiceCultureService, private _decrypt: EncryptionService,
     private _sessionStoreage: SessionStorageService, private router: Router
-  ) { }
+  ) {
+    console.log(this.Data);
+  }
 
   ngOnInit(): void {
     const userdetail = this._sessionStoreage.getItem('UserProfile');
@@ -112,6 +136,14 @@ export class InvoiceCultureAddpoComponent implements AfterViewInit {
         this.disablePayrollType();
       }
     });
+
+    if (this.Data.type == 'viewInvoice') {
+      console.log(this.Data.selectedList)
+      this.selectedItems = this.Data.selectedList.map(x => ({
+        value: x.paycode_Id,
+        text: x.paycode_Code
+      }));
+    }
   }
 
   enablePaycodeCheckboxes() {
@@ -119,15 +151,37 @@ export class InvoiceCultureAddpoComponent implements AfterViewInit {
       this.InvoiceCultureForm.get(t.Paycode_Id.toString())?.enable();
     });
   }
-enablePayrollType()
-{
-  this.InvoiceCultureForm.get('PayrollType')?.enable();
-}
-disablePayrollType()
-{
-  this.InvoiceCultureForm.get('PayrollType')?.disable();
-  this.InvoiceCultureForm.get('PayrollType')?.reset();
-}
+
+  applyFilterscdkDrop() {
+
+    // Available filter
+    this.availableSearchInput.valueChanges.subscribe(value => {
+      const search = value?.toLowerCase() || '';
+
+      this.filteredAvailableItems = this.availableItems.filter(item =>
+        item.value.toLowerCase().includes(search)
+      );
+    });
+
+    // Selected filter
+    this.selectedSearchInput.valueChanges.subscribe(value => {
+      const search = value?.toLowerCase() || '';
+
+      this.filteredSelectedItems = this.selectedDragItems.filter(item =>
+        item.value.toLowerCase().includes(search)
+      );
+    });
+
+    // Initialize selected list
+    this.filteredSelectedItems = [...this.selectedDragItems];
+  }
+  enablePayrollType() {
+    this.InvoiceCultureForm.get('PayrollType')?.enable();
+  }
+  disablePayrollType() {
+    this.InvoiceCultureForm.get('PayrollType')?.disable();
+    this.InvoiceCultureForm.get('PayrollType')?.reset();
+  }
 
   disablePaycodeCheckboxes() {
     this.typeInvoiceList.forEach(t => {
@@ -168,7 +222,7 @@ disablePayrollType()
       InvoiceType: ['', Validators.required],
       InvoiceCategory: ['', Validators.required],
       State: ['', Validators.required],
-       PayrollType: ['', Validators.required],
+      PayrollType: ['', Validators.required],
 
       // CityName: [''],
       // Description: [''],
@@ -192,13 +246,22 @@ disablePayrollType()
     );
   }
 
+
+  getselectedValues(selected) {
+    this.selected = selected;
+  }
+
+  onItemsMoved(event): void {
+    this.currentSelectItems = event.selected;
+  }
+
   SaveData() {
 
     if (this.InvoiceCultureForm.invalid) {
       this.InvoiceCultureForm.markAllAsTouched();
       return;
     }
-        this.isLoading = true;
+    this.isLoading = true;
     const formValue = this.InvoiceCultureForm.getRawValue();
 
     const parentDetail = {
@@ -224,17 +287,30 @@ disablePayrollType()
     }
     const childDetail: ChildDetail[] = [];
 
-    const selectedItems = this.getSelectedInvoiceTypes();
-
-    selectedItems.forEach(item => {
-      childDetail.push({
-        InvoiceCulture_id: 0,
-        Company_Id: this.companyUI.companyId,
-        Paycode_Id: item.Paycode_Id,
-        Paycode_Code: item.Paycode_Code,
-        HasAccess: true
+    const selectedItems = this.selected;
+    if (selectedItems) {
+      selectedItems.forEach(item => {
+        childDetail.push({
+          InvoiceCulture_id: 0,
+          Company_Id: this.companyUI.companyId,
+          Paycode_Id: Number(item.value),
+          Paycode_Code: item.text,
+          HasAccess: true
+        });
       });
-    });
+    }
+
+    // const selectedItems = this.getSelectedInvoiceTypes();
+
+    // selectedItems.forEach(item => {
+    //   childDetail.push({
+    //     InvoiceCulture_id: 0,
+    //     Company_Id: this.companyUI.companyId,
+    //     Paycode_Id: item.Paycode_Id,
+    //     Paycode_Code: item.Paycode_Code,
+    //     HasAccess: true
+    //   });
+    // });
 
     const InvoiceCultureAdd = {
       createdBy: this.userdetail.user_Id,
@@ -313,12 +389,12 @@ disablePayrollType()
   }
 
   onCheckboxChange() {
-      const invoiceType = this.InvoiceCultureForm.get('InvoiceType')?.value;
-  // No validation for Regular
-  if (invoiceType !== 'SPLIT') {
-    this.showInvoiceTypeError = false;
-    return;
-  }
+    const invoiceType = this.InvoiceCultureForm.get('InvoiceType')?.value;
+    // No validation for Regular
+    if (invoiceType !== 'SPLIT') {
+      this.showInvoiceTypeError = false;
+      return;
+    }
     const selectedCount = this.typeInvoiceList.filter(t =>
       this.InvoiceCultureForm.get(t.Paycode_Id.toString())?.value
     ).length;
@@ -327,16 +403,16 @@ disablePayrollType()
   }
 
   checkInvoiceTypeSelection() {
-        const invoiceType = this.InvoiceCultureForm.get('InvoiceType')?.value;
-  // No validation for Regular
-  if (invoiceType !== 'SPLIT') {
-    this.showInvoiceTypeError = false;
-    return;
-  }
+    const invoiceType = this.InvoiceCultureForm.get('InvoiceType')?.value;
+    // No validation for Regular
+    if (invoiceType !== 'SPLIT') {
+      this.showInvoiceTypeError = false;
+      return;
+    }
 
-   if (invoiceType !== 'SPLIT') {
-    alert("Please select 'SPLIT' as the Invoice Type to enable Paycode selection.");
-  }
+    if (invoiceType !== 'SPLIT') {
+      alert("Please select 'SPLIT' as the Invoice Type to enable Paycode selection.");
+    }
     const selectedCount = this.typeInvoiceList.filter(t =>
       this.InvoiceCultureForm.get(t.Paycode_Id.toString())?.value
     ).length;
@@ -400,13 +476,21 @@ disablePayrollType()
       next: (res) => {
         this.typeInvoiceList = res?.Data?.data?.Table0 || [];
 
+        this.availableItems = this.typeInvoiceList.map(x => ({
+          value: x.Paycode_Id,
+          text: x.Paycode_Code
+        }));
+
+
+        console.log("available Items", this.availableItems)
+
         // Create checkbox controls dynamically
-        this.typeInvoiceList.forEach(t => {
-          const controlName = t.Paycode_Id.toString();
-          if (!this.InvoiceCultureForm.contains(controlName)) {
-            this.InvoiceCultureForm.addControl(controlName, new FormControl(false));
-          }
-        });
+        // this.typeInvoiceList.forEach(t => {
+        //   const controlName = t.Paycode_Id.toString();
+        //   if (!this.InvoiceCultureForm.contains(controlName)) {
+        //     this.InvoiceCultureForm.addControl(controlName, new FormControl(false));
+        //   }
+        // });
         this.isPaycodesLoaded = true;
       },
       error: (err) => {

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment.development';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { APIResponse } from '../Models/apiresponse';
 import { Iinvoiceculture } from '../Repository/IInvoice culture';
@@ -58,6 +58,12 @@ export class InvoiceCultureService implements Iinvoiceculture {
     );
   }
 
+  ViewInvoiceCulture(companyId: number, InvoiceCultureid: number): Observable<APIResponse> {
+    return this.http.get<APIResponse>(
+      `${environment.apiUrl}InvoiceCulture/ViewInvoiceCulture/${companyId}/${InvoiceCultureid}`
+    );
+  }
+
 
   UploadInvoiceCulture(formData: FormData): Observable<APIResponse> {
     const url = `${environment.apiUrl}InvoiceCulture/PostUploadInvoiceCulture`;
@@ -67,13 +73,25 @@ export class InvoiceCultureService implements Iinvoiceculture {
 
   ExportToExcel(comapnyId: number) {
     return this.http.post<APIResponse>(
-      environment.apiUrl + `InvoiceCulture/InvoiceCultureExport`,comapnyId );
+      environment.apiUrl + `InvoiceCulture/InvoiceCultureExport`, comapnyId);
   }
 
   getAllPaycode(companyId: number): Observable<APIResponse> {
     return this.http.get<APIResponse>(
       `${environment.apiUrl}InvoiceCulture/GetAllPayCodeFromCompanyOI/${companyId}`
     );
+  }
+
+  getAllPaycodes(val): Observable<APIResponse> {
+    var inputval = JSON.stringify(val);
+    const config = new HttpHeaders({
+      'Cache-Control': 'no-cache, no-store, must-revalidate',
+      'Pragma': 'no-cache',
+      'Expires': '0'
+    }).set('Content-Type', 'application/json')
+      .set('Accept', 'application/json')
+
+    return this.http.post<APIResponse>(environment.apiUrl + 'Paycode/GetPayCode', inputval, { headers: config })
   }
 
 }
