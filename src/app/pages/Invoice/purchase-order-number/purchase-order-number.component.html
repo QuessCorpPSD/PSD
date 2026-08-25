@@ -1,0 +1,383 @@
+<div class="page-wrapper">
+    <div class="scrollable-content">
+        <div style="color: #302CB3; font-size: 22px; font-family: Montserrat; font-weight: 700;">
+            Purchase Order Number
+        </div>
+        <div class="container py-2">
+            <div class="row g-3 align-items-end">
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Company Code</label>
+                    <companyall (companyEmit)="handleCompanyEvent($event)"></companyall>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Purchase Order No</label>
+                    <input class="form-control" [(ngModel)]="purchaseOrderNo" name="PurchaseOrderNo" />
+                </div>
+
+                <div class="col-md-2 d-flex gap-2">
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-search"
+                        matTooltip="Search" (click)="onSearch()">
+                        <mat-icon>search</mat-icon>
+                    </button>
+                    <button class="btn btn-secondary btn-sm d-flex align-items-center justify-content-center"
+                        matTooltip="export to excel" (click)="exportToExcel()">
+                        <mat-icon>download</mat-icon>
+                    </button>
+
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-upload"
+                        matTooltip="Import" (click)="FileUpload(fileInput)">
+                        <input type="file" #fileInput style="display: none;" (change)="onFileChange($event)"
+                            accept=".xlsx, .xls" />
+                        <mat-icon>cloud_upload</mat-icon>
+                    </button>
+
+                    <button class="btn btn-secondary btn-sm d-flex align-items-center justify-content-center"
+                        matTooltip="Template" (click)="DownloadTemplate()">
+                        <mat-icon>cloud_download</mat-icon>
+                    </button>
+
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-add" matTooltip="Add"
+                        (click)="AddPurchaseOrder()">
+                        <mat-icon>add</mat-icon>
+                    </button>
+                </div>
+            </div>
+            <div class="table-wrapper1" style="top:30px;" *ngIf="showTable">
+                <div style="padding: 10px; overflow-x: auto;">
+                    <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+                        <ng-container matColumnDef="delete">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header
+                                class="fixed-width-column"></mat-header-cell>
+                            <mat-cell *matCellDef="let element" class="fixed-width-column"
+                                style="padding:10px !important">
+                                <mat-icon style="cursor: pointer; color: #302CB3;"
+                                    (click)="EditOtherIncome(element)">edit</mat-icon>
+                                <mat-icon style="cursor: pointer; color: red;"
+                                    (click)="deleteClick(element.invoiceCulture_id, element.invoiceType)">delete</mat-icon>
+                            </mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="purchaseOrderNo">
+                            <mat-header-cell *matHeaderCellDef>Purchase Order No</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Purchase_Order_Id }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="companyCode">
+                            <mat-header-cell *matHeaderCellDef>Company Code</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Company_Code }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="companyName">
+                            <mat-header-cell *matHeaderCellDef>Company Name</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Company_Name }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="clientPORefNo">
+                            <mat-header-cell *matHeaderCellDef>Client PO Ref No</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Client_PO_Ref_No }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="poDate">
+                            <mat-header-cell *matHeaderCellDef>PO Date</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.PO_Date }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="purchaseRequestNo">
+                            <mat-header-cell *matHeaderCellDef>Purchase Request No</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Purchase_Request_No }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="poAmount">
+                            <mat-header-cell *matHeaderCellDef>PO Amount</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.PO_Amount }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="poValidFrom">
+                            <mat-header-cell *matHeaderCellDef>PO Valid From</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.PO_Valid_From }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="poValidTo">
+                            <mat-header-cell *matHeaderCellDef>PO Valid To</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.PO_Valid_To }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="poBasedOn">
+                            <mat-header-cell *matHeaderCellDef>PO Based On</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.PO_Based_On }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="cityName">
+                            <mat-header-cell *matHeaderCellDef>City Name</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.City_Name }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="remarks">
+                            <mat-header-cell *matHeaderCellDef>Remarks</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Remarks }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="isActive">
+                            <mat-header-cell *matHeaderCellDef>Is Active</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.IsActive }}</mat-cell>
+                        </ng-container>
+
+                        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+
+                        <!-- Data Rows -->
+                        <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+
+                    </table>
+                </div>
+                <div *ngIf="dataSource.data.length===0" class="text-center p-4">
+                    <p class="text-muted">No data to display</p>
+                </div>
+                <mat-paginator [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons
+                    style="border-top: 1px solid #ddd;"></mat-paginator>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ========================= PURCHASE ORDER ========================= -->
+
+<div *ngIf="isAddclicked || isEditMode" class="popup-overlay" (keydown.escape)="Editedcloseclick()">
+
+    <mat-card class="popup-card">
+
+        <!-- ================= HEADER ================= -->
+
+        <mat-card-header class="popup-header">
+
+            <mat-card-title class="d-flex justify-content-center align-items-center">
+                {{ isEditMode ? 'Edit Purchase Order' : 'Add Purchase Order' }}
+            </mat-card-title>
+
+            <button class="close-btn" matTooltip="Close" (click)="Editedcloseclick()">
+
+                <mat-icon>close</mat-icon>
+
+            </button>
+
+        </mat-card-header>
+
+
+        <!-- ================= CONTENT ================= -->
+
+        <mat-card-content class="scroll-content">
+
+            <form [formGroup]="addpurchase_order" novalidate>
+
+                <!-- ================= ROW 1 ================= -->
+
+                <div class="row g-3 mb-3">
+                    <!-- Company Code -->
+                    <div class="col-md-4">
+
+                        <label class="form-label">
+                            Company Code
+                            <span class="text-danger">*</span>
+                        </label>
+                        @if(!isEditMode){
+                        <companyall
+                            (companyEmit)="handleCompanyAdd($event)"
+                            formControlName="CompanyCode">
+                        </companyall>
+
+                        <div class="text-danger small"
+                             *ngIf="addpurchase_order.get('CompanyCode')?.touched
+                             && addpurchase_order.get('CompanyCode')?.hasError('required')">
+
+                            Company Code is required
+
+                        </div>
+                        }
+                        @if(isEditMode){
+                            <input type="text" disabled [(ngModel)]="edit_company_name"
+                            [ngModelOptions]="{standalone: true}" class="form-control" />
+                        }
+                        
+
+
+                    </div>
+
+                    <!-- PO Amount -->
+                    <div class="col-md-4">
+
+                        <label class="form-label">
+                            PO Amount
+                            <span class="text-danger">*</span>
+                        </label>
+
+                        <input type="number" class="form-control" formControlName="POAmount" />
+
+                        <div class="text-danger small" *ngIf="addpurchase_order.get('POAmount')?.touched
+                             && addpurchase_order.get('POAmount')?.hasError('required')">
+
+                            PO Amount is required
+
+                        </div>
+
+                    </div>
+
+                    <!-- Purchase Request No -->
+                    <div class="col-md-4">
+
+                        <label class="form-label">
+                            Purchase Request No
+                        </label>
+
+                        <input type="text" class="form-control" formControlName="PurchaseRequestNo" />
+
+                    </div>
+
+                    <!-- PO Based On -->
+                    <div class="col-md-4">
+
+                        <label class="form-label">
+                            PO Based On
+                            <span class="text-danger">*</span>
+                        </label>
+
+                        <select class="form-select" formControlName="POBasedOn">
+
+                            <option value="">
+                                -- Select --
+                            </option>
+
+                            <option value=true>
+                                yes
+                            </option>
+
+                            <option value=false>
+                                No
+                            </option>
+                        </select>
+
+                        <div class="text-danger small" *ngIf="addpurchase_order.get('POBasedOn')?.touched
+                             && addpurchase_order.get('POBasedOn')?.hasError('required')">
+
+                            PO Based On is required
+
+                        </div>
+
+                    </div>
+
+                    <!-- PO Valid From -->
+                    <div class="col-md-4">
+
+                        <label class="form-label">
+                            PO Valid From
+                            <span class="text-danger">*</span>
+                        </label>
+
+                        <input type="date" class="form-control" formControlName="POValidFrom" />
+
+                        <div class="text-danger small" *ngIf="addpurchase_order.get('POValidFrom')?.touched
+                             && addpurchase_order.get('POValidFrom')?.hasError('required')">
+
+                            PO Valid From is required
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- PO Valid To -->
+                    <div class="col-md-4">
+
+                        <label class="form-label">
+                            PO Valid To
+                            <span class="text-danger">*</span>
+                        </label>
+
+                        <input type="date" class="form-control" formControlName="POValidTo" />
+
+                        <div class="text-danger small" *ngIf="addpurchase_order.get('POValidTo')?.touched
+                             && addpurchase_order.get('POValidTo')?.hasError('required')">
+
+                            PO Valid To is required
+
+                        </div>
+
+                    </div>
+
+                    <!-- PO Date -->
+                    <div class="col-md-4">
+
+                        <label class="form-label">
+                            PO Date
+                            <span class="text-danger">*</span>
+                        </label>
+
+                        <input type="date" class="form-control" formControlName="PODate" />
+
+                        <div class="text-danger small" *ngIf="addpurchase_order.get('PODate')?.touched
+                             && addpurchase_order.get('PODate')?.hasError('required')">
+                            PO Date is required
+                        </div>
+                    </div>
+
+                    <!-- Remarks -->
+                    <div class="col-md-4">
+                        <label class="form-label">Remarks</label>
+                        <input type="text" class="form-control" formControlName="Remarks" />
+                    </div>
+                </div>
+            </form>
+
+        </mat-card-content>
+
+
+        <!-- ================= BUTTONS ================= -->
+
+        <mat-card-actions class="d-flex justify-content-end mt-3" style="gap: 10px; padding-right: 8px;">
+
+            <div class="d-flex justify-content-end mt-3">
+
+                <div class="btn-1" style="display: flex;
+                            justify-content: flex-end;
+                            gap: 10px;
+                            width: 100%;
+                            padding-right: 7px;">
+
+                    <!-- Cancel -->
+                    <button type="button" (click)="Editedcloseclick()" style="border: none;
+                                   border-radius: 7px;
+                                   width: 80px;
+                                   height: 30px;
+                                   cursor: pointer;
+                                   background-color: #f0f0f0;
+                                   color: black;">
+
+                        Cancel
+
+                    </button>
+
+
+                    <!-- Save -->
+                    <button type="button" (click)="SaveData()" style="border: none;
+                                   border-radius: 7px;
+                                   width: 80px;
+                                   height: 30px;
+                                   cursor: pointer;
+                                   background-color: blue;
+                                   color: white;">
+
+                        {{ isEditMode ? 'Update' : 'Save' }}
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </mat-card-actions>
+
+    </mat-card>
+
+</div>
+
+<div *ngIf="isLoading" class="loading-overlay">
+    <img src="assets/Loading.gif" alt="Loading...">
+</div>

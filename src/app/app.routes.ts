@@ -205,6 +205,7 @@ import { InvoiceCollectionComponent } from './pages/AccountReceivable/Bankinvoic
 import { InvoiceCollectionreportComponent } from './pages/AccountReceivable/Bankinvoice/invoice-collectionreport/invoice-collectionreport.component';
 import { LTDSreportComponent } from './pages/AccountReceivable/Bankinvoice/ltdsreport/ltdsreport.component';
 import { UnpaidInvoiceReportComponent } from './pages/AccountReceivable/Bankinvoice/unpaid-invoice-report/unpaid-invoice-report.component';
+import { PurchaseOrderNumberComponent } from './pages/Invoice/purchase-order-number/purchase-order-number.component';
 // import { AccountReceivablenavigationComponent } from './pages/accountreceivable/Bankinvoice/account-receivablenavigation/account-receivablenavigation.component';
 // import { APARAdjustmentupdateComponent } from './pages/accountreceivable/Bankinvoice/aparadjustmentupdate/aparadjustmentupdate.component';
 // import { BankTransferHTHStatusComponent } from './pages/accountreceivable/Bankinvoice/bank-transfer-hthstatus/bank-transfer-hthstatus.component';
@@ -297,6 +298,7 @@ export const routes: Routes = [
           { path: 'payprocess', component: PayProcessComponent },
           { path: 'ITAdjustment', component: ITAdjustmentComponent },
           { path: 'otherincome', component: OtherincomeComponent },
+          { path: 'purchase_order_number', component: PurchaseOrderNumberComponent },
           { path: 'app-one-time-replacement', component: OneTimeReplacementComponent },
           { path: 'app-fnfrevoke', component: FNFRevokeComponent },
           { path: 'FFprocess', component: FFprocessComponent },
@@ -489,6 +491,7 @@ export const routes: Routes = [
           //{ path: 'creditnoteupdate', component: CreditnoteupdateComponent },
           { path: 'companyinvoiceformat', component: CompanyinvoiceformatComponent },
           { path: 'OtherIncome', component: OtherincomeComponent },
+          
           { path: 'sezrepository-approval', component: SEZRepositoryApprovalComponent },
         ]
       },

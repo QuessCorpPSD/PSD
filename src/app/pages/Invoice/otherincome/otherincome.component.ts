@@ -48,7 +48,7 @@ export interface IItemsMovedEvent {
 }
 @Component({
   selector: 'app-otherincome',
-  imports: [CommonModule,PaycodedragdropComponent, DragDropModule, FormsModule, ReactiveFormsModule, MatCardModule, MatIconModule, MatPaginatorModule, MatTableModule, CompanyallComponent, MatTooltipModule, MatCheckboxModule, StateComponent, MapnameComponent],
+  imports: [CommonModule, PaycodedragdropComponent, DragDropModule, FormsModule, ReactiveFormsModule, MatCardModule, MatIconModule, MatPaginatorModule, MatTableModule, CompanyallComponent, MatTooltipModule, MatCheckboxModule, StateComponent, MapnameComponent],
   templateUrl: './otherincome.component.html',
   styleUrl: './otherincome.component.css',
   providers: [
@@ -69,15 +69,15 @@ export class OtherincomeComponent {
 
   // Data arrays
   //availableItems: any[] = [];
-  
+
   filteredAvailableItems: Array<IListBoxItem> = [];
- availableItems: any[] = [];
+  availableItems: any[] = [];
   selectedItems: any[] = [];
   currentSelectItems: any[] = [];
-  selectedDragItems:Array<IListBoxItem> = [];
+  selectedDragItems: Array<IListBoxItem> = [];
   filteredSelectedItems: Array<IListBoxItem> = [];
-valueField!:string;
-textField!:string;
+  valueField!: string;
+  textField!: string;
   selectedCompanyId!: number;
   showTable = false;
   isAddclicked = false;
@@ -106,7 +106,7 @@ textField!:string;
   isPaycodesLoaded = false;
   searchText: string = "";
 
-   
+
   constructor(private _decrypt: EncryptionService, private _sessionStoreage: SessionStorageService, @Inject(Pay_Token) private service: OtherincomecultureService, private router: Router) { }
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -138,7 +138,7 @@ textField!:string;
           this.isPaycodesLoaded = false;
         }
         else {
-        //  this.loadPaycodes();
+          //  this.loadPaycodes();
           this.isPaycodesLoaded = true;
         }
       }
@@ -263,7 +263,7 @@ textField!:string;
   //   this.filteredSelectedItems = [...this.selectedDragItems];
   // }
 
-    drop(event: CdkDragDrop<IListBoxItem[]>) {
+  drop(event: CdkDragDrop<IListBoxItem[]>) {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
@@ -271,10 +271,10 @@ textField!:string;
     }
     // clear marked available items and emit event
 
-   
+
   }
 
-  
+
   disablePaycodeCheckboxes() {
     this.typeInvoiceList.forEach(t => {
       const control = this.addOtherIncome.get(t.Paycode_Id.toString());
@@ -291,28 +291,26 @@ textField!:string;
   handleCompanyEvent(company) {
     this.selectedCompanyId = company.companyId;
   }
-  selected:any;
-  getselectedValues(selected)
-  {
-    this.selected=selected;
-   
+  selected: any;
+  getselectedValues(selected) {
+    this.selected = selected;
+
   }
-CompanySelectedCC!:number;
-handleCompanyAdd(company)
-{
-this.CompanySelectedCC = company.companyId;
-this.selectedCC = Number(this.CompanySelectedCC) || 0;
-  this.addOtherIncome.patchValue({
+  CompanySelectedCC!: number;
+  handleCompanyAdd(company) {
+    this.CompanySelectedCC = company.companyId;
+    this.selectedCC = Number(this.CompanySelectedCC) || 0;
+    this.addOtherIncome.patchValue({
       // CompanyCode: company.companyCode,
       CompanyName: company.companyName
     });
-    const req={
-      "company_Id":this.CompanySelectedCC,
-      "Culture_Id":0,
-      "Type":'N'
+    const req = {
+      "company_Id": this.CompanySelectedCC,
+      "Culture_Id": 0,
+      "Type": 'N'
     }
-   this.loadPaycodes(req);
-}
+    this.loadPaycodes(req);
+  }
 
   handleCompany(company) {
     this.CompanyId = company;
@@ -322,7 +320,7 @@ this.selectedCC = Number(this.CompanySelectedCC) || 0;
     //   CompanyName: company.companyName
     // });
     // console.log("company", company)
-    
+
   }
 
   stateEvent(event: any) {
@@ -366,7 +364,7 @@ this.selectedCC = Number(this.CompanySelectedCC) || 0;
     this.isLoading = true;
     this.service.InvoiceType().subscribe({
       next: (res: any) => {
-       
+
         this.InvoiceTypeList = Array.isArray(res.Data) ? res.Data : [];
         this.isLoading = false;
       },
@@ -381,7 +379,7 @@ this.selectedCC = Number(this.CompanySelectedCC) || 0;
   loadInvoiceCategories(): void {
     this.service.InvoiceCategory().subscribe({
       next: (res: any) => {
-        
+
         this.InvoiceCategoryList = Array.isArray(res.Data) ? res.Data : [];
       },
       error: err => {
@@ -391,15 +389,15 @@ this.selectedCC = Number(this.CompanySelectedCC) || 0;
     });
 
   }
-Editedcloseclick(){
-  this.isAddclicked = false;
+  Editedcloseclick() {
+    this.isAddclicked = false;
     this.uploadedDataSource.data = [];
     this.addOtherIncome.reset();
     this.showInvoiceTypeError = false;
     this.selectedCC = 0;
-    this.isEditMode=false
+    this.isEditMode = false
 
-}
+  }
   applyFilterscdkDrop() {
 
     // Available filter
@@ -423,17 +421,17 @@ Editedcloseclick(){
     // Initialize selected list
     this.filteredSelectedItems = [...this.selectedDragItems];
   }
-  InvoiceCategory:boolean=false;
-  loadPaycodes(val): void {   
-    
+  InvoiceCategory: boolean = false;
+  loadPaycodes(val): void {
+
     this.service.getAllPaycodes(val).subscribe({
       next: (res) => {
         console.log(res);
         //this.typeInvoiceList = res?.Data?.data?.Table0 || [];
-       // this.availableItems = res?.Data || [];
-       // this.filteredAvailableItems = [...this.availableItems];
-        this.availableItems =res.Data.availablePaycode;
-        this.selectedItems=res.Data.mappedPaycode;
+        // this.availableItems = res?.Data || [];
+        // this.filteredAvailableItems = [...this.availableItems];
+        this.availableItems = res.Data.availablePaycode;
+        this.selectedItems = res.Data.mappedPaycode;
         this.applyFilters();
         // Create controls dynamically for each checkbox
         // this.typeInvoiceList.forEach(t => {
@@ -638,52 +636,50 @@ Editedcloseclick(){
 
   AddOtherImcome() {
     this.isAddclicked = true;
-    this.availableItems=[];
-    this.selectedItems=[];
-    this.isEditMode=false;
+    this.availableItems = [];
+    this.selectedItems = [];
+    this.isEditMode = false;
   }
-  CompanyName:string='';
-  EditedCompany_Id!:number;
-  MapName:string=''
-  MapName_Id!:number;
-  isPaycodesEditLoaded=false;
-  selectedInvoiceType:any;
-  Invoice_Category_Id:any
-EditOtherIncome(element)
-{
-  console.log("Edited")
-  console.log(element);
-  this.availableItems=[];
-  this.selectedItems=[];
-  this.selectedCompanyId = element.company_Id
-  this.CompanyName=`${element.company_Code}-${element.company_Name}`;
-  this.selectedInvoiceType=element.invoiceType_Id;
-  this.Invoice_Category_Id=element.invoice_Category_Id;
-  this.MapName=element.map_Name;
-  this.MapName_Id=element.map_Name_Id;
-  this.isAddclicked = false;
-  this.isEditMode = true;
-  this.isPaycodesEditLoaded=true;
-  const req={
-      "company_Id":element.company_Id,
-      "Culture_Id":element.invoiceCulture_id,
-      "Type":'E'
+  CompanyName: string = '';
+  EditedCompany_Id!: number;
+  MapName: string = ''
+  MapName_Id!: number;
+  isPaycodesEditLoaded = false;
+  selectedInvoiceType: any;
+  Invoice_Category_Id: any
+  EditOtherIncome(element) {
+    console.log("Edited")
+    console.log(element);
+    this.availableItems = [];
+    this.selectedItems = [];
+    this.selectedCompanyId = element.company_Id
+    this.CompanyName = `${element.company_Code}-${element.company_Name}`;
+    this.selectedInvoiceType = element.invoiceType_Id;
+    this.Invoice_Category_Id = element.invoice_Category_Id;
+    this.MapName = element.map_Name;
+    this.MapName_Id = element.map_Name_Id;
+    this.isAddclicked = false;
+    this.isEditMode = true;
+    this.isPaycodesEditLoaded = true;
+    const req = {
+      "company_Id": element.company_Id,
+      "Culture_Id": element.invoiceCulture_id,
+      "Type": 'E'
     }
     this.loadPaycodes(req)
-  
-}
-OnchagedInvoiceType(event)
-{
-  console.log(event.value);
-}
+
+  }
+  OnchagedInvoiceType(event) {
+    console.log(event.value);
+  }
   SaveData() {
     // if (this.addOtherIncome.invalid) {
     //   this.addOtherIncome.markAllAsTouched();
     //   return;
     // }
 
-      
-  
+
+
 
     this.isLoading = true;
     const formValue = this.addOtherIncome.getRawValue();
@@ -708,18 +704,17 @@ OnchagedInvoiceType(event)
     const childDetail: ChildDetail[] = [];
 
     const selectedItems = this.selected;
-    if(selectedItems)
-    {
-    selectedItems.forEach(item => {
-      childDetail.push({
-        InvoiceCulture_id: 0,
-        Company_Id: this.CompanySelectedCC,
-        Paycode_Id:Number(item.value),
-        Paycode_Code: item.text,
-        HasAccess: true
+    if (selectedItems) {
+      selectedItems.forEach(item => {
+        childDetail.push({
+          InvoiceCulture_id: 0,
+          Company_Id: this.CompanySelectedCC,
+          Paycode_Id: Number(item.value),
+          Paycode_Code: item.text,
+          HasAccess: true
+        });
       });
-    });
-  }
+    }
 
     const payload = {
       createdBy: this.userdetail.user_Id,
@@ -729,17 +724,17 @@ OnchagedInvoiceType(event)
     };
 
     this.service.postInvoiceCulture(payload).subscribe({
-      next: (res) => {       
-         this.datatable = res.Data.data.Table0;
-          this.downloadExcel(this.datatable, "OtherIncomeCulture  _Validations");
-          this.router.navigate(['/Master/invoicenavigation/OtherIncome']);
-          this.isAddclicked = false;
-          this.addOtherIncome.reset();
-          //this.onSearch();
-          this.isLoading = false;
+      next: (res) => {
+        this.datatable = res.Data.data.Table0;
+        this.downloadExcel(this.datatable, "OtherIncomeCulture  _Validations");
+        this.router.navigate(['/Master/invoicenavigation/OtherIncome']);
+        this.isAddclicked = false;
+        this.addOtherIncome.reset();
+        //this.onSearch();
+        this.isLoading = false;
         // if (res.Data.message.includes("Successfully")) {
-          
-          
+
+
         // }
         // else if (res.Data.data.Table0) {
         //  this.isLoading = false;
