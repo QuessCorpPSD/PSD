@@ -122,7 +122,7 @@ export class InvoiceCultureComponent implements AfterViewInit {
       width: '60%',
       height: '80vh',
       disableClose: true,
-      data: { example: 'Hello from parent!' }
+      data: { type: 'addInvoice', Datas: '' }
     });
   }
 
@@ -164,6 +164,33 @@ export class InvoiceCultureComponent implements AfterViewInit {
       }
     });
   }
+
+  viewClick(cultureId, companyId, data) {
+
+    this.isLoading = true;
+    this.invoiceService.ViewInvoiceCulture(companyId, cultureId).subscribe({
+      next: (res: any) => {
+        this.isLoading = false;
+
+        if (res.StatusCode === 200 && Array.isArray(res.Data) && res.Data.length > 0) {
+          this.dialog.open(InvoiceCultureAddpoComponent, {
+            width: '60%',
+            height: '80vh',
+            disableClose: true,
+            data: { type: 'viewInvoice', Datas: data ,selectedList:res.Data}
+          });
+        } else {
+          alert("No Records Found");
+        }
+      },
+
+      error: (err) => {
+        this.isLoading = false;
+        console.error("API Error:", err);
+      }
+    });
+  }
+
   DownloadTemplate() {
 
     const templateData = [
@@ -188,6 +215,7 @@ export class InvoiceCultureComponent implements AfterViewInit {
 
     FileSaver.saveAs(blob, `InvoiceCulture_Template.xlsx`);
   }
+
   FileUpload(fileInput: HTMLInputElement): void {
     this.isLoading = true;
     fileInput.click();
