@@ -161,7 +161,6 @@ export class PaycodedragdropComponent {
   }
 
   closeclick() {
-
     this.close.emit();
   }
 

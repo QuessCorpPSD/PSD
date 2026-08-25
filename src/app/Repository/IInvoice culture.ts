@@ -13,5 +13,6 @@ export interface Iinvoiceculture {
     UploadInvoiceCulture(formData: FormData): Observable<APIResponse>
     ExportToExcel(userId: number): Observable<APIResponse>
     getAllPaycode(companyId: number): Observable<APIResponse>
+    ViewInvoiceCulture(companyId: number, InvoiceCultureid: number): Observable<APIResponse>
 }
 
