@@ -330,6 +330,7 @@ export class InvoiceCultureAddpoComponent implements AfterViewInit {
           this.downloadExcel(this.datatable, "InvoiceCulture_Validations");
           this.router.navigate(['Master/invoicenavigation/app-invoice-culture']);
           this.isLoading = false;
+          this.onClose();
         }
         else {
           alert("No validations returned");
