@@ -4,16 +4,19 @@
 }
 
 .custom-table th.mat-header-cell {
-  background-color: #3f51b5; /* Indigo */
+  background-color: #3f51b5;
+  /* Indigo */
   color: white;
   font-weight: bold;
   font-size: 15px;
   padding: 12px;
 }
+
 mat-form-field.timepicker-compact .mat-form-field-flex {
   height: 20px;
   align-items: center;
 }
+
 .timepicker-compact {
   width: 140px;
 }
@@ -34,7 +37,8 @@ mat-form-field.timepicker-compact .mat-form-field-flex {
 
 /* Header cell style */
 .mat-header-cell {
-  background-color: #343a40; /* dark header */
+  background-color: #343a40;
+  /* dark header */
   color: white;
   font-weight: bold;
   text-transform: uppercase;
@@ -62,6 +66,7 @@ mat-form-field.timepicker-compact .mat-form-field-flex {
 .mat-table {
   margin-top: 1rem;
 }
+
 .mat-row:nth-child(even) {
   background-color: #f2f2f2;
 }
@@ -73,24 +78,31 @@ mat-form-field.timepicker-compact .mat-form-field-flex {
 }
 
 .compact-form-field {
-  height: 26px;             /* Total height you want */
-  font-size: 13px;          /* Optional: smaller font */
+  height: 26px;
+  /* Total height you want */
+  font-size: 13px;
+  /* Optional: smaller font */
 }
 
 .compact-form-field .mat-form-field-wrapper {
   padding-bottom: 0px;
   padding-top: 0px;
-  height: 80%;             /* Inherit full height */
+  height: 80%;
+  /* Inherit full height */
 }
 
 .compact-form-field .mat-form-field-flex {
-  height: 20px;             /* Controls internal height */
-  align-items: center;      /* Center input vertically */
+  height: 20px;
+  /* Controls internal height */
+  align-items: center;
+  /* Center input vertically */
 }
 
 .compact-form-field .mat-input-element {
-  height: 20px;             /* Input field height */
-  padding: 0 0 0 0;         /* Remove internal padding */
+  height: 20px;
+  /* Input field height */
+  padding: 0 0 0 0;
+  /* Remove internal padding */
   font-size: 13px;
   line-height: 20px;
 }
@@ -129,3 +141,6 @@ mat-form-field.timepicker-compact .mat-form-field-flex {
   padding: 2px 4px !important;
 }
 
+.edit-icon {
+  cursor: pointer;
+}

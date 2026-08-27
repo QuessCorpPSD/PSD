@@ -47,7 +47,7 @@
                     <div *ngIf="checkInStatus"
                         style="align-self: stretch; color: #A6AFC1; font-size: 0.6em; font-family: Nunito Sans; font-weight: 500; word-wrap: break-word">
                         Today’s CheckIn</div>
-                    <span *ngIf="checkInStatus">{{ checkInDateTime | date:'hh:mm:ss' }}</span>
+                    <span *ngIf="checkInStatus">{{ formatDate(checkInDateTime) | date:'hh:mm:ss a' }}</span>
                     <div *ngIf="!checkInStatus" (click)="CheckIn()"
                         style="width: 119px; height: 34px; padding-left: 16px; padding-right: 16px; padding-top: 10px; padding-bottom: 10px; background: #302CB3; border-radius: 6px; justify-content: center; align-items: center; gap: 10px; display: inline-flex">
                         <div
@@ -59,12 +59,13 @@
                     <span
                         style="align-self: stretch; color: #A6AFC1; font-size: 0.6em; font-family: Nunito Sans; font-weight: 500; word-wrap: break-word">Today’s
                         CheckOut</span>
-                    <div (click)="CheckOut()"
+                    <div (click)="CheckOut()" *ngIf="!checkOutStatus"
                         style="width: 119px; height: 34px; padding-left: 16px; padding-right: 16px; padding-top: 10px; padding-bottom: 10px; background: #302CB3; border-radius: 6px; justify-content: center; align-items: center; gap: 10px; display: inline-flex">
                         <div
                             style="color: white; font-size: 16px; font-family: Nunito Sans; font-weight: 600; word-wrap: break-word">
                             Checkout</div>
                     </div>
+                     <!-- <span *ngIf="checkOutStatus">{{ formatDate(checkoutDateTime) | date:'hh:mm:ss a' }}</span> -->
                 </div>
             </div>
 
@@ -442,7 +443,68 @@
             </div>
         </div>
     </div>
+    <div class="dialog-overlay" *ngIf="IsBreakdetail">
+<div class="custom-dialog" >
 
+    <div class="dialog-header">
+        <div>
+            <h2>Break Details</h2>
+            <span style="color: #C82909;">Today’s break slot is available. If you need any changes to the Break Detail <a [routerLink]="['/Master/Breakdetail']"  class="click-link">Click here</a></span>
+        </div>
+
+        <button mat-icon-button mat-dialog-close class="dialog-close" (click)="CancelPopup()">
+            <mat-icon>close</mat-icon>
+        </button>
+    </div>
+
+    <div class="dialog-body">
+        <div class="table-container">
+            <table mat-table [dataSource]="dataSource" class="mat-elevation-z2 w-100">
+
+                <!-- Description -->
+                <ng-container matColumnDef="description">
+                    <th mat-header-cell *matHeaderCellDef>Description</th>
+                    <td mat-cell *matCellDef="let element; let i = index">
+                        {{ element.description }}
+                    </td>
+                </ng-container>
+
+                <!-- Start Time -->
+                <ng-container matColumnDef="startTime">
+                    <th mat-header-cell *matHeaderCellDef>Start Time</th>
+                    <td mat-cell *matCellDef="let element; let i = index">
+                        {{element.startTime}}
+                    </td>
+                </ng-container>
+
+                <!-- End Time -->
+                <ng-container matColumnDef="endTime">
+                    <th mat-header-cell *matHeaderCellDef>End Time</th>
+                    <td mat-cell *matCellDef="let element; let i = index">
+                        {{element.endTime}}
+                    </td>
+                </ng-container>
+
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+            </table>
+
+        </div>
+    </div>
+
+    <div class="dialog-footer">
+        <button mat-stroked-button mat-dialog-close (click)="CancelPopup()">
+            Cancel
+        </button>
+
+        <button mat-flat-button color="primary" (click)="TodayBreakDetailSlot()">
+            Save
+        </button>
+    </div>
+
+</div>
+</div>
 </div>
 <br>
 <br>

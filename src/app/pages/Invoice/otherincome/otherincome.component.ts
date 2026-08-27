@@ -295,7 +295,6 @@ textField!:string;
   getselectedValues(selected)
   {
     this.selected=selected;
-   
   }
 CompanySelectedCC!:number;
 handleCompanyAdd(company)

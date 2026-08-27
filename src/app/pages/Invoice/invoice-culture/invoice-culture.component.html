@@ -68,7 +68,11 @@
         <mat-cell *matCellDef="let element" class="fixed-width-column">
           <img src="assets/delete.svg" style="cursor: pointer; width: 24px; height: 22px;"
             (click)="deleteClick(element.invoiceCulture_id, element.invoiceType)" />
+
+            <img src="assets/view.svg" style="cursor: pointer; width: 24px; height: 22px;"
+            (click)="viewClick(element.invoiceCulture_id,element.company_Id,element)" />
         </mat-cell>
+
       </ng-container>
 
       <ng-container matColumnDef="company_Id">

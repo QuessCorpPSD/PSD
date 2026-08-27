@@ -98,16 +98,19 @@ Onsubmit():void{
 const today_Date=new Date(); 
     const request={
       "userId":user.user_Id,
-      "BreakUserId":element.userBreakId,
-      "BreakTypeId":element.breakId,
+      "userBreakId":element.userBreakId,
+      "BreakId":element.breakId,
       "StartTime":element.startTime,
       "EndTime":element.endTime,
       "Remarks":element.remarks,
       "description":element.description
     }
-    console.log(request);
+    
     this._adminService.AddEmployeeBreak(request).subscribe({
-      next:res=>{this.dataSource=new MatTableDataSource<any>(res.Data)},
+      next:res=>{
+         this.globalbreak=res.Data;
+        this.dataSource=new MatTableDataSource<any>(res.Data)
+      },
       error:err=>{console.log(err)}
     })
 
