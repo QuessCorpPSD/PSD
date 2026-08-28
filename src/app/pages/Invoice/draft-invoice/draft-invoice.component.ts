@@ -176,7 +176,7 @@ export class DraftInvoiceComponent implements OnInit {
         next: res => {
           alert(res.Data.error_Message);
           this.isdisabled = false;
-         // this.InvoiceSearch();
+          this.InvoiceSearch('M');
           this.selection.clear();
           this.selection = new SelectionModel<any>(true, []);
           this.isLoading = false;
@@ -268,7 +268,7 @@ export class DraftInvoiceComponent implements OnInit {
 
             XLSX.writeFile(workbook, 'ProvisionalInvoiceLog.xlsx');
           this.isdisabled = false;
-          //this.InvoiceSearch();
+          this.InvoiceSearch('M');
           this.selection.clear();
           this.selection = new SelectionModel<any>(true, []);
           this.isLoading = false;
@@ -355,7 +355,7 @@ export class DraftInvoiceComponent implements OnInit {
 
           XLSX.writeFile(workbook, 'ProvisionalInvoiceLog.xlsx');
           this.isdisabled = false;
-         // this.InvoiceSearch();
+         this.InvoiceSearch('M');
           this.selection.clear();
           this.selection = new SelectionModel<any>(true, []);
           this.isLoading = false;
@@ -498,7 +498,7 @@ export class DraftInvoiceComponent implements OnInit {
     this.dataSource = new MatTableDataSource<any>([]);
     //this.loadGrid();
 
-    this.InvoiceSearch();  // auto refresh grid
+    this.InvoiceSearch('S');  // auto refresh grid
 
 
     // this._invoiceService.InitialSearch(request).subscribe({
@@ -512,7 +512,7 @@ export class DraftInvoiceComponent implements OnInit {
 
   }
 
-  InvoiceSearch() {
+  InvoiceSearch(ActionType:any) {
 
     // if(this.selectedCompanyId==undefined)
     // {
@@ -542,7 +542,7 @@ export class DraftInvoiceComponent implements OnInit {
       // "Company_Id": this.selectedCompanyId,
       // "PayPeriod_Id": this.payPeriod.payfrequencyid,
       "InvoiceType": 0,
-      "ActionType": "S",
+      "ActionType": ActionType,
       "userId": this.userdetail.user_Id
     }
     this._invoiceService.InitialSearchAllot(request).subscribe({
@@ -745,7 +745,7 @@ export class DraftInvoiceComponent implements OnInit {
 
           XLSX.writeFile(workbook, 'MiscInvoiceLog.xlsx');
           this.isdisabled = false;
-          //this.InvoiceSearch();
+          this.InvoiceSearch('M');
           this.selection.clear();
           this.selection = new SelectionModel<any>(true, []);
           this.isLoading = false;
