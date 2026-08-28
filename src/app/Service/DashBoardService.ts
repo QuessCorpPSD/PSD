@@ -100,6 +100,23 @@ export class DashBoardServices implements IDashBoardServices {
             const config = { headers };
         return this.http.get<APIResponse>(this.environment.apiUrl+'DashBoard/PendingLot',config) 
     }
+    GetInvoiceDashboard(invoiceType: string): Observable<APIResponse> {
+        const headers = new HttpHeaders({
+            'Cache-Control': 'no-cache, no-store, must-revalidate',
+            'Pragma': 'no-cache',
+            'Expires': '0'
+        }).set('Content-Type', 'application/json')
+            .set('Accept', 'application/json');
+
+        const config = { headers };
+
+        return this.http.get<APIResponse>(
+            this.environment.apiUrl +
+            'DashBoard/InvoiceDashboard/' +
+            encodeURIComponent(invoiceType),
+            config
+        );
+    }
 
     SaveInvoiceAllotEdit(reqNo: string, userId: number):Observable<APIResponse>{
         const url = `${this.environment.apiUrl}DashBoard/SaveInvoiceAllotEdit/${reqNo}/${userId}`;       
@@ -107,5 +124,6 @@ export class DashBoardServices implements IDashBoardServices {
     }
         InputReconYettocomeReport(val: string): Observable<APIResponse> {
         return this.http.get<APIResponse>(this.environment.apiUrl + 'DashBoard/ReconNotYettoCome/'+val);
+
     }
 }
