@@ -227,6 +227,8 @@ export class DraftInvoiceComponent implements OnInit {
               Input_No: String(r.input_No),
               Map_Name_Id: String(r.map_Name_Id),
               Map_Name: String(r.map_name),
+              InvoiceCulture_Id:String(r.invoiceCulture_id),
+              CreatedBy:String(this.userdetail.user_Id)
             })
           )
       )
