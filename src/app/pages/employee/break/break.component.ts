@@ -82,7 +82,8 @@ Onsubmit():void{
       }
       this._adminService.AddBulkEmployeeBreak(request).subscribe({
         next: res => {
-          this.closeDialog()
+          this.closeDialog();
+          alert("Break updated");
           //console.log(JSON.stringify(request));
         },
         error: err => console.log(err.message)
