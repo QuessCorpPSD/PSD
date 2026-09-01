@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, Inject, InjectionToken, ViewChild, OnInit } from '@angular/core';
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl,FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators ,ValidationErrors,
+  ValidatorFn,} from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
@@ -15,12 +16,46 @@ import * as XLSX from 'xlsx';
 import * as FileSaver from 'file-saver';
 import { Router } from '@angular/router';
 import { PurchaseOrderNumber } from '../../../Service/invoice/purchaseorderNumber.service';
+export const poDateValidator: ValidatorFn = (
+  control: AbstractControl
+): ValidationErrors | null => {
+
+  const poDate = control.get('PODate')?.value;
+  const fromDate = control.get('POValidFrom')?.value;
+  const toDate = control.get('POValidTo')?.value;
+
+  // Don't validate until all dates are entered
+  if (!poDate || !fromDate || !toDate) {
+    return null;
+  }
+
+  const po = new Date(poDate);
+  const from = new Date(fromDate);
+  const to = new Date(toDate);
+
+  // From date must be less than To date
+  if (from >= to) {
+    return {
+      fromDateGreaterThanToDate: true
+    };
+  }
+
+  // PO Date must be between From and To
+  if (po < from || po > to) {
+    return {
+      poDateOutOfRange: true
+    };
+  }
+
+  return null;
+};
 @Component({
   selector: 'app-purchase-order-number',
   imports: [CommonModule, FormsModule, ReactiveFormsModule, MatCardModule, MatIconModule, MatPaginatorModule, MatTableModule, CompanyallComponent, MatTooltipModule, MatCheckboxModule],
   templateUrl: './purchase-order-number.component.html',
   styleUrl: './purchase-order-number.component.css'
 })
+
 export class PurchaseOrderNumberComponent implements OnInit {
   edit_company_name = '';
   selectedCompanyId: any;
@@ -46,10 +81,18 @@ export class PurchaseOrderNumberComponent implements OnInit {
     'remarks',
     'isActive'
   ];
+  formatDateTime(dateValue: string | null): string | null {
+  if (!dateValue) {
+    return null;
+  }
+
+  return `${dateValue} 00:00:00`;
+}
   userdetail: any;
   showTable = true;
   isAddclicked = false;
   isEditMode = false;
+  PurchaseOrderID: number = 0;
   addpurchase_order!: FormGroup;
   constructor(private _decrypt: EncryptionService, private _sessionStoreage: SessionStorageService, private router: Router, public service: PurchaseOrderNumber) { }
 
@@ -60,22 +103,25 @@ export class PurchaseOrderNumberComponent implements OnInit {
     this.userdetail = JSON.parse(this._decrypt.decrypt(userdetail!));
     this.addpurchase_order = new FormGroup({
 
-      CompanyCode: new FormControl('', Validators.required),
+  CompanyCode: new FormControl('', Validators.required),
 
-      PODate: new FormControl('', Validators.required),
+  PODate: new FormControl('', Validators.required),
 
-      PurchaseRequestNo: new FormControl(''),
+  PurchaseRequestNo: new FormControl(''),
 
-      POAmount: new FormControl('', Validators.required),
+  POAmount: new FormControl('', Validators.required),
 
-      POValidFrom: new FormControl('', Validators.required),
+  POValidFrom: new FormControl('', Validators.required),
 
-      POValidTo: new FormControl('', Validators.required),
+  POValidTo: new FormControl('', Validators.required),
 
-      POBasedOn: new FormControl('', Validators.required),
+  POBasedOn: new FormControl('', Validators.required),
 
-      Remarks: new FormControl(''),
-    });
+  Remarks: new FormControl(''),
+
+}, {
+  validators: poDateValidator
+});
   }
 
   ngAfterViewInit() {
@@ -100,16 +146,16 @@ export class PurchaseOrderNumberComponent implements OnInit {
 
     const payload = {
       Action: "Get",
-      Company_Id: this.selectedCompanyId ?? null,
-      Purchase_Request_No: this.purchaseOrderNo != '' ? this.purchaseOrderNo : null,
-      Purchase_Order_Id: null,
+      Company_Id: this.selectedCompanyId ?? 0,
+      Purchase_Request_No: this.purchaseOrderNo?.trim() || null,
+      Purchase_Order_Id: 0,
       PODateFrom: null,
       PODateTo: null,
       PageNo: 1,
       PageSize: 10,
       SortField: "",
-      SortDirection: null,
-      TotalCount: null
+      SortDirection: "",
+      TotalCount: 0
     };
 
     this.service.Search(payload).subscribe({
@@ -127,8 +173,11 @@ export class PurchaseOrderNumberComponent implements OnInit {
         this.isLoading = false;
       },
       error: (err) => {
-        console.error('Error loading data', err);
-        alert('Failed to load data');
+           console.log('POSearch Error:', err);
+    console.log(
+      'Validation:',
+      JSON.stringify(err.error?.Data?.errors, null, 2)
+    );
         this.isLoading = false;
       },
     });
@@ -278,102 +327,199 @@ export class PurchaseOrderNumberComponent implements OnInit {
   }
 
 
-  deleteClick(invoiceCulture_id: number, invoiceType: string) {
-    if (confirm("Are you sure you want to delete this?")) {
+ deleteClick(Purchase_Order_Id: number) {
 
-      const parentDetail = {
-        InvoiceCulture_id: invoiceCulture_id,
-        Company_Id: 0,
-        Company_Code: '',
-        Company_Name: '',
-        InvoiceCul_Ref_No: "",
-        InvoiceType: invoiceType,
-        InvoiceType_Id: 0,
-        Cost_Center_Mapping_Id: 0,
-        Service_Charge_Master_Id: 0,
-        Service_Charge_Type_Id: 0,
-        Service_Charge_Slab_Item_Id: 0,
-        Service_Charge_Slab_Inner_Item_Id: 0,
-        Map_Name_Id: 0,
-        Map_Name: '',
-        Invoice_Category_Id: 0,
-        Error_Message: ""
-      }
+  if (!confirm('Are you sure you want to delete this Purchase Order?')) {
+    return;
+  }
 
-      // const childDetail: ChildDetail[] = [];
+  const request = {
+    Action: 'Delete',
+    Purchase_Order_Id: Purchase_Order_Id,
 
-      // childDetail.push({
-      //   InvoiceCulture_id: 0,
-      //   Company_Id: 0,
-      //   Paycode_Id: 0,
-      //   Paycode_Code: "",
-      //   HasAccess: false
-      // });
+    Company_Id: 0,
+    PO_Date: null,
+    PO_Based_On: 0,
+    Purchase_Request_No: '',
+    PO_Amount: 0,
+    PO_Valid_From: null,
+    PO_Valid_To: null,
+    Remarks: '',
+    IsActive: false,
+    CreatedBy: null,
+    ModifiedBy: this.userdetail.user_Id
+  };
 
-      const InvoiceCultureAdd = {
-        createdBy: this.userdetail.user_Id,
-        mode: 'Delete',
-        parentDetail: parentDetail,
-        //childDetail: childDetail
-      }
-      // this.service.postInvoiceCulture(InvoiceCultureAdd).subscribe({
-      //   next: (res) => {
-      //     const errormsg = res.Data.data.Table0[0].Error_Message;
-      //     alert(errormsg);
-      //     this.isLoading = true;
-      //     this.onSearch()
-      //     error: err => {
-      //       console.error('Error fetching data:', err.message);
-      //       this.isLoading = false;
-      //     }
-      //   }
-      // });
+  console.log('Delete Purchase Order Request:', request);
+
+  this.service.SavePurchaseOrder(request).subscribe({
+    next: (res: any) => {
+
+      console.log('Delete Response:', res);
+
+      const errorMessage = res?.Data?.error_Message;
+
+      console.log('Error Message:', errorMessage);
+
+          alert(errorMessage || 'Delete completed successfully');
+
+      this.onSearch();
+    },
+
+    error: (err) => {
+      console.error('Error deleting Purchase Order:', err);
+      alert('Error while deleting Purchase Order');
     }
-  }
+  });
+}
+EditPurchaseOrder(element: any) {
 
-  EditOtherIncome(element) {
-    console.log("Edited")
-    console.log(element);
+  console.log('Edited');
+  console.log(element);
 
-    const formatDate = (date: any): string => {
-      if (!date) return '';
-      // Already in yyyy-MM-dd format
-      if (/^\d{4}-\d{2}-\d{2}/.test(date)) {
-        return date.substring(0, 10);
-      }
-      // Format: dd-MM-yyyy hh:mm:ss AM/PM
-      const datePart = String(date).split(' ')[0];
-      const parts = datePart.split('-');
-      if (parts.length === 3) {
-        const [day, month, year] = parts;
-        return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
-      }
-      return '';
-    };
+  const formatDate = (date: any): string => {
 
-    this.isAddclicked = true;
-    this.isEditMode = true;
-    //this.addpurchase_order.get('CompanyCode')?.disable();
-    this.edit_company_name = element.Company_Name;
-    this.addpurchase_order.patchValue({
-      CompanyCode: element.company_Code,
-      PODate: formatDate(element.PO_Date),
-      PurchaseRequestNo: element.Purchase_Request_No,
-      POAmount: element.PO_Amount,
-      POValidFrom: formatDate(element.PO_Valid_From),
-      POValidTo: formatDate(element.PO_Valid_To),
-      POBasedOn: element.PO_Based_On,
-      Remarks: element.Remarks
-    });
-  }
+    if (!date) return '';
 
-  SaveData() {
-    if (this.addpurchase_order.invalid) {
-      alert("Please fill all required fields");
-      return;
+    // Already yyyy-MM-dd
+    if (/^\d{4}-\d{2}-\d{2}/.test(date)) {
+      return date.substring(0, 10);
     }
+
+    // dd-MM-yyyy hh:mm:ss AM/PM
+    const datePart = String(date).split(' ')[0];
+    const parts = datePart.split('-');
+
+    if (parts.length === 3) {
+
+      const [day, month, year] = parts;
+
+      return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+    }
+
+    return '';
+  };
+
+  // Open popup in Edit mode
+  this.isAddclicked = true;
+  this.isEditMode = true;
+
+  // Store database ID
+  this.PurchaseOrderID = element.Purchase_Order_Id;
+
+  console.log('PurchaseOrderID:', this.PurchaseOrderID);
+
+  // Display company name
+  this.edit_company_name = element.Company_Name;
+
+  // Populate form
+  this.addpurchase_order.patchValue({
+
+    CompanyCode: element.Company_Id,
+
+    PODate: formatDate(element.PO_Date),
+
+    PurchaseRequestNo: element.Purchase_Request_No,
+
+    POAmount: element.PO_Amount,
+
+    POValidFrom: formatDate(element.PO_Valid_From),
+
+    POValidTo: formatDate(element.PO_Valid_To),
+
+    POBasedOn: element.PO_Based_On,
+
+    Remarks: element.Remarks
+
+  });
+}
+SaveData() {
+
+  if (this.addpurchase_order.invalid) {
+
+    this.addpurchase_order.markAllAsTouched();
+
+    return;
   }
 
+  const formValue = this.addpurchase_order.value;
+console.log("form value",  JSON.stringify(formValue, null, 2));
+  const payload = {
+
+    Action: this.isEditMode ? 'Edit' : 'Create',
+
+    Purchase_Order_Id: this.isEditMode
+      ? this.PurchaseOrderID
+      : 0,
+
+    Company_Id:  formValue.CompanyCode?.companyId ?? this.selectedCompanyId ?? 0,
+
+    PO_Date: this.formatDateTime(formValue.PODate),
+
+    PO_Based_On: formValue.POBasedOn ? 1 : 0,
+
+    Purchase_Request_No: formValue.PurchaseRequestNo,
+
+    PO_Amount: formValue.POAmount,
+
+    PO_Valid_From: this.formatDateTime(formValue.POValidFrom),
+
+   PO_Valid_To: this.formatDateTime(formValue.POValidTo),
+
+    Remarks: formValue.Remarks,
+
+    IsActive: true,
+
+    CreatedBy: this.isEditMode
+      ? null
+      : this.userdetail.user_Id,
+
+    ModifiedBy: this.isEditMode
+      ? this.userdetail.user_Id
+      : null
+  };
+
+  console.log('Payload:', payload);
+
+  this.isLoading = true;
+
+  this.service.SavePurchaseOrder(payload).subscribe({
+
+    next: (res: any) => {
+
+      //console.log('Response:', res);
+
+      this.isLoading = false;
+const errorMessage =
+  res?.Data?.data?.Table0?.[0]?.Error_Message ??
+  res?.Data?.Table0?.[0]?.Error_Message ??
+  res?.Data?.error_Message ??
+  res?.Error_Message ??
+  res?.Message ??
+  'Operation completed successfully';
+
+//console.log('Message:', errorMessage);
+
+    alert(errorMessage);
+      this.isEditMode = false;
+      this.isAddclicked = false;
+      this.PurchaseOrderID = 0;
+      this.dataSource.data = [];
+      this.addpurchase_order.reset();
+
+      this.onSearch();
+    },
+
+    error: (err) => {
+
+      this.isLoading = false;
+
+      console.error('Error:', err);
+
+      alert('Error while saving Purchase Order');
+    }
+  });
+}
   Editedcloseclick() {
     this.isAddclicked = false;
     this.isEditMode = false;

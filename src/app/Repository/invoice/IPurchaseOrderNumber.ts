@@ -6,4 +6,5 @@ export interface IPurchaseOrderNumber {
 
     Search(payload: any): Observable<APIResponse>;
     Exporttoexcel(payload: any): Observable<APIResponse>;
+    SavePurchaseOrder(payload: any): Observable<APIResponse>;
 }

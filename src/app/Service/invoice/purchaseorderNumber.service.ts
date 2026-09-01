@@ -20,12 +20,10 @@ export class PurchaseOrderNumber implements IPurchaseOrderNumber{
   Exporttoexcel(payload: any): Observable<APIResponse> {
     return this.http.post<APIResponse>(this.env.apiUrl + 'PurchaseOrder/ExportExcel', payload);
   }
-
-//    Addsave(BillingPayFrequencyRequest: any): Observable<APIResponse> {
-//     return this
-//       .http.post<APIResponse>(
-//         this.env.apiUrl + 'BillingPayFrequency/Create',
-//         BillingPayFrequencyRequest
-//       );
-//   }
+ SavePurchaseOrder(payload: any): Observable<APIResponse> {
+    return this.http.post<APIResponse>(
+      this.env.apiUrl + 'PurchaseOrder/CreateUpdateDelete',
+      payload
+    );
+  }
 }

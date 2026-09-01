@@ -51,9 +51,9 @@
                             <mat-cell *matCellDef="let element" class="fixed-width-column"
                                 style="padding:10px !important">
                                 <mat-icon style="cursor: pointer; color: #302CB3;"
-                                    (click)="EditOtherIncome(element)">edit</mat-icon>
+                                    (click)="EditPurchaseOrder(element)">edit</mat-icon>
                                 <mat-icon style="cursor: pointer; color: red;"
-                                    (click)="deleteClick(element.invoiceCulture_id, element.invoiceType)">delete</mat-icon>
+                                    (click)="deleteClick(element.Purchase_Order_Id)">delete</mat-icon>
                             </mat-cell>
                         </ng-container>
                         <ng-container matColumnDef="purchaseOrderNo">
@@ -279,7 +279,16 @@
                             PO Valid From is required
 
                         </div>
+  <!-- From > To validation -->
+    <div
+        class="text-danger small"
+        *ngIf="addpurchase_order.hasError('fromDateGreaterThanToDate')
+            && addpurchase_order.get('POValidFrom')?.touched
+            && addpurchase_order.get('POValidTo')?.touched">
 
+        PO Valid From should be less than PO Valid To
+
+    </div>
                     </div>
 
 
@@ -299,7 +308,15 @@
                             PO Valid To is required
 
                         </div>
+  <!-- From > To validation -->
+    <div
+        class="text-danger small"
+        *ngIf="addpurchase_order.hasError('fromDateGreaterThanToDate')
+            && addpurchase_order.get('POValidTo')?.touched">
 
+        PO Valid To should be greater than PO Valid From
+
+    </div>
                     </div>
 
                     <!-- PO Date -->
@@ -316,6 +333,15 @@
                              && addpurchase_order.get('PODate')?.hasError('required')">
                             PO Date is required
                         </div>
+                          <!-- PO Date range validation -->
+    <div
+        class="text-danger small"
+        *ngIf="addpurchase_order.hasError('poDateOutOfRange')
+            && addpurchase_order.get('PODate')?.touched">
+
+        PO Date should be between PO Valid From and PO Valid To
+
+    </div>
                     </div>
 
                     <!-- Remarks -->

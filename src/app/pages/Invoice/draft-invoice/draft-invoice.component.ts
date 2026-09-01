@@ -549,22 +549,24 @@ export class DraftInvoiceComponent implements OnInit {
     this._invoiceService.InitialSearchAllot(request).subscribe({
       next: res => {
           console.log(res);
-        if(res.Data.statusCode==200)
-        {
-          
-        this.dataSource = new MatTableDataSource<any>(Array.isArray(res.Data.draftInvoiceInitation
-) ? res.Data.draftInvoiceInitation : []);
-      
+      if (res?.Data && Array.isArray(res.Data)) {
+
+        this.dataSource = new MatTableDataSource<any>(res.Data);
+
         this.dataSource.paginator = this.PeningLot_paginator;
-        this.issearch = false;
-        this.isLoading = false;
-        }
-        else{
-        this.issearch = false;
-        this.isLoading = false;
-          this.message=res.Data.messages;
-        }
-      },
+
+        console.log('Grid Data:', this.dataSource.data);
+
+      } else {
+
+        this.dataSource = new MatTableDataSource<any>([]);
+        this.message = 'No data found';
+
+      }
+
+      this.issearch = false;
+      this.isLoading = false;
+    },
       error: err => { this.issearch = false; }
     });
   }
