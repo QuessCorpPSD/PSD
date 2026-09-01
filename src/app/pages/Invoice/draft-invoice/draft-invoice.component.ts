@@ -76,6 +76,7 @@ export class DraftInvoiceComponent implements OnInit {
     { value: 'Vendor', Text: 'Vendor' },
     { value: 'MiscInvoice', Text: 'MiscInvoice' }
   ];
+  message:string=''
   //@ViewChild(PayPeriod) PayPeriodComponent!: Payperiodclass;
   displayColumns = ['action', 'download', 'serial_No', 'invoiceType', 'Req_No', 'invoice_remarks', 'company_Code', 'map_name', 'net_CTC', 'netPay', 'lotNo', 'input_No', 'pO_Number', 'employee_Head_Count', 'service_Charge', 'serviceChargeAmount', 'service_Charge_Master', 'service_Charge_Type', 'sourcing_Fee','sourcing_Fee_Amount','bgvbl', 'astfee', 'discT1', 'discT2', 'idcard', 'email', 'regfee', 'trnfee', 'ggdbt', 'ppekit', 'vmsfee', 'edufee', 'ntpry', 'renmac', 'draded', 'othdd', 'mbapp', 'calcrg', 'calrt', 'narration', 'eapct', 'hosac']
   constructor(@Inject(Invoice_TOKEN) private _invoiceService: IInvoiceRepository, private _decrypt: EncryptionService,
@@ -175,7 +176,7 @@ export class DraftInvoiceComponent implements OnInit {
         next: res => {
           alert(res.Data.error_Message);
           this.isdisabled = false;
-          this.InvoiceSearch();
+          this.InvoiceSearch('M');
           this.selection.clear();
           this.selection = new SelectionModel<any>(true, []);
           this.isLoading = false;
@@ -202,9 +203,9 @@ export class DraftInvoiceComponent implements OnInit {
 
   InvoiceInitiateClick() {
     //this.isLoading = true;
-    console.log('Provisional');
+    //console.log('Provisional');
     const selectedRows = this.selection.selected;
-    console.log('Selected', selectedRows);
+   // console.log('Selected', selectedRows);
 
     if (selectedRows.length === 0) {
       alert("Please select at least one row");
@@ -239,7 +240,7 @@ export class DraftInvoiceComponent implements OnInit {
       CreatedBy: this.userdetail.user_Id
     }
 
-    console.log("Sending API for row:", requestPayload);
+   // console.log("Sending API for row:", requestPayload);
 
     this._invoiceService.ProvisionalInvoiceInitiate(requestPayload).subscribe({
       next: res => {
@@ -268,7 +269,7 @@ export class DraftInvoiceComponent implements OnInit {
 
             XLSX.writeFile(workbook, 'ProvisionalInvoiceLog.xlsx');
           this.isdisabled = false;
-          this.InvoiceSearch();
+          this.InvoiceSearch('M');
           this.selection.clear();
           this.selection = new SelectionModel<any>(true, []);
           this.isLoading = false;
@@ -286,9 +287,9 @@ export class DraftInvoiceComponent implements OnInit {
   }
   VendorInvoiceInitiate(){
     //this.isLoading = true;
-    console.log('Vendor');
+    //console.log('Vendor');
     const selectedRows = this.selection.selected;
-    console.log('Selected', selectedRows);
+   // console.log('Selected', selectedRows);
 
     if (selectedRows.length === 0) {
       alert("Please select at least one row");
@@ -328,7 +329,7 @@ export class DraftInvoiceComponent implements OnInit {
       CreatedBy: this.userdetail.user_Id
     }
 
-    console.log("Sending API for row:", requestPayload);
+   // console.log("Sending API for row:", requestPayload);
 
     this._invoiceService.VendorInvoiceInitiate(requestPayload).subscribe({
       next: res => {
@@ -355,7 +356,7 @@ export class DraftInvoiceComponent implements OnInit {
 
           XLSX.writeFile(workbook, 'ProvisionalInvoiceLog.xlsx');
           this.isdisabled = false;
-          this.InvoiceSearch();
+         this.InvoiceSearch('M');
           this.selection.clear();
           this.selection = new SelectionModel<any>(true, []);
           this.isLoading = false;
@@ -498,7 +499,7 @@ export class DraftInvoiceComponent implements OnInit {
     this.dataSource = new MatTableDataSource<any>([]);
     //this.loadGrid();
 
-    this.InvoiceSearch();  // auto refresh grid
+    this.InvoiceSearch('S');  // auto refresh grid
 
 
     // this._invoiceService.InitialSearch(request).subscribe({
@@ -512,7 +513,7 @@ export class DraftInvoiceComponent implements OnInit {
 
   }
 
-  InvoiceSearch() {
+  InvoiceSearch(ActionType:any) {
 
     // if(this.selectedCompanyId==undefined)
     // {
@@ -542,16 +543,27 @@ export class DraftInvoiceComponent implements OnInit {
       // "Company_Id": this.selectedCompanyId,
       // "PayPeriod_Id": this.payPeriod.payfrequencyid,
       "InvoiceType": 0,
-      "ActionType": "S",
+      "ActionType": ActionType,
       "userId": this.userdetail.user_Id
     }
     this._invoiceService.InitialSearchAllot(request).subscribe({
       next: res => {
-        this.dataSource = new MatTableDataSource<any>(Array.isArray(res.Data) ? res.Data : []);
-        console.log('Grid Data', this.dataSource);
+          console.log(res);
+        if(res.Data.statusCode==200)
+        {
+          
+        this.dataSource = new MatTableDataSource<any>(Array.isArray(res.Data.draftInvoiceInitation
+) ? res.Data.draftInvoiceInitation : []);
+      
         this.dataSource.paginator = this.PeningLot_paginator;
         this.issearch = false;
         this.isLoading = false;
+        }
+        else{
+        this.issearch = false;
+        this.isLoading = false;
+          this.message=res.Data.messages;
+        }
       },
       error: err => { this.issearch = false; }
     });
@@ -661,9 +673,9 @@ export class DraftInvoiceComponent implements OnInit {
 
   MiscInvoiceInvoiceInitiate(){
     //this.isLoading = true;
-    console.log('Misc');
+    //console.log('Misc');
     const selectedRows = this.selection.selected;
-    console.log('Selected', selectedRows);
+   // console.log('Selected', selectedRows);
 
     if (selectedRows.length === 0) {
       alert("Please select at least one row");
@@ -705,7 +717,7 @@ export class DraftInvoiceComponent implements OnInit {
       CreatedBy: this.userdetail.user_Id
     }
 
-    console.log("Sending API for row:", requestPayload);
+   // console.log("Sending API for row:", requestPayload);
 
     this._invoiceService.MiscInvoiceInitiate(requestPayload).subscribe({
 
@@ -734,7 +746,7 @@ export class DraftInvoiceComponent implements OnInit {
 
           XLSX.writeFile(workbook, 'MiscInvoiceLog.xlsx');
           this.isdisabled = false;
-          this.InvoiceSearch();
+          this.InvoiceSearch('M');
           this.selection.clear();
           this.selection = new SelectionModel<any>(true, []);
           this.isLoading = false;

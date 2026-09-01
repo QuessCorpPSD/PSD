@@ -30,6 +30,7 @@ import { ToastrService } from 'ngx-toastr';
 
 import { AgGridModule } from 'ag-grid-angular';
 import { MatIconModule } from '@angular/material/icon';
+import { InvoicedashboardComponent } from './invoicedashboard/invoicedashboard.component';
 
 ModuleRegistry.registerModules([ AllCommunityModule ]);
 
@@ -37,7 +38,7 @@ ModuleRegistry.registerModules([ AllCommunityModule ]);
     selector: 'app-dashboard',
     imports: [MatCheckboxModule, MatPaginator, MatTooltipModule, CommonModule, FinancialYearComponent,
         UserComponent, MatTableModule, MatFormFieldModule, MatDatepickerModule, FormsModule,
-        ReactiveFormsModule, AgGridModule,MatIconModule],
+        ReactiveFormsModule, AgGridModule,MatIconModule,InvoicedashboardComponent],
     templateUrl: './dashboard.component.html',
     styleUrls: ['./dashboard.component.css'],
     providers: [provideNativeDateAdapter(), {

@@ -1,0 +1,211 @@
+<h2>Invoice Dashboard</h2>
+
+<div class="dashboard-panel">
+
+    <!-- Dashboard Tabs -->
+    <div class="dashboard-tabs">
+
+        <button class="dashboard-tab" [class.active]="activeTab === 'overview'"
+            (click)="activeTab = 'overview'; getInvoiceDashboard()">
+
+            <mat-icon>bar_chart</mat-icon>
+            <span>Overview</span>
+
+        </button>
+
+        <button class="dashboard-tab" [class.active]="activeTab === 'summary'"
+            (click)="activeTab = 'summary'; InvoiceDashDetail('S')">
+
+            <mat-icon>payments</mat-icon>
+            <span>Salary</span>
+
+        </button>
+
+        <button class="dashboard-tab" [class.active]="activeTab === 'status'"
+            (click)="activeTab = 'status'; InvoiceDashDetail('O')">
+
+            <mat-icon>account_balance_wallet</mat-icon>
+            <span>One Time</span>
+
+        </button>
+
+        <button class="dashboard-tab" [class.active]="activeTab === 'time'"
+            (click)="activeTab = 'time'; InvoiceDashDetail('U')">
+
+            <mat-icon>schedule</mat-icon>
+            <span>UBR</span>
+
+        </button>
+
+        <button class="dashboard-tab" [class.active]="activeTab === 'clients'"
+            (click)="activeTab = 'clients'; InvoiceDashDetail('A')">
+
+            <mat-icon>compare_arrows</mat-icon>
+            <span>UBR To Actual</span>
+
+        </button>
+
+        <button class="dashboard-tab" [class.active]="activeTab === 'reports'"
+            (click)="activeTab = 'reports'; InvoiceDashDetail('M')">
+
+            <mat-icon>more_horiz</mat-icon>
+            <span>Misc</span>
+
+        </button>
+
+    </div>
+
+
+    <!-- Tab Content -->
+    <div class="tab-content">
+
+        <div class="summary-grid">
+
+            <!-- Total -->
+            <div class="summary-card blue">
+
+                <div class="summary-icon">
+                    <mat-icon>description</mat-icon>
+                </div>
+
+                <div class="summary-info">
+                    <span>Total</span>
+
+                    <h3>{{ InvoiceTotal }}</h3>
+
+                    <small>
+                        Total Amount {{ TotalInvoiceAmount}}
+                    </small>
+                </div>
+
+                <div class="summary-footer">
+
+                    <div class="mini-chart">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+
+                    <strong>
+                        {{ InvoiceTotalPercentage }}%
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <!-- Completed -->
+            <div class="summary-card green">
+
+                <div class="summary-icon">
+                    <mat-icon>check_circle</mat-icon>
+                </div>
+
+                <div class="summary-info">
+                    <span>Completed</span>
+
+                    <h3>{{ InvoiceCompleted }}</h3>
+
+                    <small>
+                        Completed Amount {{ CompletedInvoiceAmount }}
+                    </small>
+                </div>
+
+                <div class="summary-footer">
+
+                    <div class="mini-chart">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+
+                    <strong>
+                        {{ InvoiceCompletedPercentage }}%
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <!-- Pending -->
+            <div class="summary-card orange">
+
+                <div class="summary-icon">
+                    <mat-icon>hourglass_empty</mat-icon>
+                </div>
+
+                <div class="summary-info">
+                    <span>Pending</span>
+
+                    <h3>{{ InvoicePending }}</h3>
+
+                    <small>
+                        Pending Amount {{ PendingInvoiceAmount }}
+                    </small>
+                </div>
+
+                <div class="summary-footer">
+
+                    <div class="mini-chart">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+
+                    <strong>
+                        {{ InvoicePendingPercentage }}%
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <!-- Yet To Come -->
+            <div class="summary-card purple">
+
+                <div class="summary-icon">
+                    <mat-icon>event</mat-icon>
+                </div>
+
+                <div class="summary-info">
+                    <span>Yet To Come</span>
+
+                    <h3>{{ InvoiceYetToCome }}</h3>
+
+                    <small>
+                        Yet To Come Amount {{ yettoComeInvoiceAmount }}
+                    </small>
+                </div>
+
+                <div class="summary-footer">
+
+                    <div class="mini-chart">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+
+                    <strong>
+                        {{ InvoiceYetToComePercentage }}%
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

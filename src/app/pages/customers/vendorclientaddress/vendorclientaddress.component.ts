@@ -822,7 +822,7 @@ export class VendorclientaddressComponent {
         if (res?.Data?.response?.includes("Row(s) Uploaded Successfully.")) {
           this.isLoading = false;
           this.closeUploadPopup();
-          this.showAlertPopup("Row(s) Uploaded Successfully.")
+          alert("Row(s) Uploaded Successfully.")
           return;
         }
 
