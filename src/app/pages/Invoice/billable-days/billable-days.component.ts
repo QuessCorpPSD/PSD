@@ -17,7 +17,6 @@ import { Payperiodclass } from '../../../Models/Common';
 import { TextFieldModule } from '@angular/cdk/text-field';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import * as XLSX from 'xlsx';
-import FileSaver from 'file-saver';
 import { Observable, ReplaySubject } from 'rxjs';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { SessionStorageService } from '../../../Shared/SessionStorageService';
@@ -124,11 +123,7 @@ export class BillableDaysComponent implements OnInit {
       Sheets: { 'Sheet1': worksheet },
       SheetNames: ['Sheet1']
     };
-
-    const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-    const blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
-    const fileName = `${templateId}.xlsx`;
-    FileSaver.saveAs(blob, fileName);
+    XLSX.writeFile(workbook, `${templateId}.xlsx`);
   }
 
   FileUpload(fileInput: HTMLInputElement): void { 
