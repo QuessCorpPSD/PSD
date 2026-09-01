@@ -66,6 +66,7 @@ ngOnInit(): void {
  getBreakDetailByEmployee(userId, date): void {
   this._adminService.GetEmployeeBreakByDate(userId, date).subscribe({
     next: res => {
+      //console.log(res);
       const breakData = res.Data;
       // use breakData here as needed
     
@@ -153,7 +154,7 @@ CheckIn(){
   
    const today_Date = new Date();   
    this.getBreakDetailByEmployee(this.user.user_Id, today_Date);
-   this.IsBreakdetail=true;
+   
 //    this.dialog.open(HomeComponent, {
 //   width: '650px',
 //   maxWidth: '95vw',
@@ -243,16 +244,17 @@ GetDashboardByUserId(userId){
 this._dashboard.GetUserDashBoard(userId).subscribe({
 next: res => {
 	this.userData=res.Data;
+
+ this.IsBreakdetail = !this.userData.checkInStatus;
+
+if (this.IsBreakdetail) {
+  this.getBreakDetailByEmployee(userId, new Date());
+}
   
 	this.checkInStatus=this.userData.checkInStatus;
 	this.checkInDateTime=res.Data.checkInDateTime;
 	this.percent_inComplate_Assignment=res.Data.inComplate_Assignment;
-  (!this.checkInStatus)
-  {
-    this.IsBreakdetail=true;
-    const today_Date = new Date();   
-    this.getBreakDetailByEmployee(userId,today_Date)
-  }
+  
       // this.progressBar.nativeElement.style.width = this.percent_inComplate_Assignment+"%";
 },
 error:error=>{}
