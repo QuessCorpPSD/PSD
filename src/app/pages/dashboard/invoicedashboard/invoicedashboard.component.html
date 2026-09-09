@@ -1,4 +1,4 @@
-<h2>Invoice Dashboard</h2>
+<h1>Invoice Dashboard</h1>
 
 <div class="dashboard-panel">
 
@@ -64,6 +64,10 @@
             <!-- Total -->
             <div class="summary-card blue">
 
+                <div class="download-icon" (click)="downloadProcessing(downloadKeyword('total'))">
+                    <mat-icon>download</mat-icon>
+                </div>
+
                 <div class="summary-icon">
                     <mat-icon>description</mat-icon>
                 </div>
@@ -74,7 +78,7 @@
                     <h3>{{ InvoiceTotal }}</h3>
 
                     <small>
-                        Total Amount {{ TotalInvoiceAmount}}
+                        Total Amount {{ TotalInvoiceAmount }}
                     </small>
                 </div>
 
@@ -99,6 +103,10 @@
 
             <!-- Completed -->
             <div class="summary-card green">
+
+                <div class="download-icon" (click)="downloadProcessing(downloadKeyword('completed'))">
+                    <mat-icon>download</mat-icon>
+                </div>
 
                 <div class="summary-icon">
                     <mat-icon>check_circle</mat-icon>
@@ -136,6 +144,10 @@
             <!-- Pending -->
             <div class="summary-card orange">
 
+                <div class="download-icon" (click)="downloadProcessing(downloadKeyword('pending'))">
+                    <mat-icon>download</mat-icon>
+                </div>
+
                 <div class="summary-icon">
                     <mat-icon>hourglass_empty</mat-icon>
                 </div>
@@ -171,6 +183,10 @@
 
             <!-- Yet To Come -->
             <div class="summary-card purple">
+
+                <div class="download-icon" (click)="downloadProcessing(downloadKeyword('yettocome'))">
+                    <mat-icon>download</mat-icon>
+                </div>
 
                 <div class="summary-icon">
                     <mat-icon>event</mat-icon>
