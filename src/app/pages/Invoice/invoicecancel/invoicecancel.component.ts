@@ -20,7 +20,7 @@ import { SessionStorageService } from '../../../Shared/SessionStorageService';
 import { AlertpopupComponent } from '../../../common/alertpopup/alertpopup.component';
 import { finalize } from 'rxjs';
 import { MatTooltipModule } from '@angular/material/tooltip';
-
+import * as XLSX from 'xlsx';
 
 interface IrnColor {
   label: string,
@@ -341,11 +341,17 @@ console.log(payload)
     
     this._invoiceService.BulkRejectCancelRequest(payload).subscribe({
       next: (res: any) => {
-        if (res.Data[0].Status === "SUCCESS") {
-          this.popupMessage = 'Cancel Request Rejected successfully';
+        console.log(res);
+        if (
+        res?.StatusCode === 200 &&
+        res?.Message?.toLowerCase() === 'success'
+      )
+      {
+          this.popupMessage = 'Invoice Cancel Request Rejected successfully';
+          this.popupSubMessage ='Note:' + res.Data[0].Error_Message;
           this.showPopup = true;
           const isSuccess =
-            res?.status === 'SUCCESS' ||
+           res?.Message?.toLowerCase() === 'success' ||
             res?.statusCode === 200;
 
           if (isSuccess) {
@@ -355,11 +361,11 @@ console.log(payload)
             }
             this.InvoiceSearch();
           }
-
+         this.remarkText = '';
           this.isLoading = false;
         }
         else {
-          this.popupMessage = 'Request rejected successfully';
+          this.popupMessage = 'Invoice Cancel Request Rejected successfully';
           this.popupSubMessage ='Note:' + res.Data[0].Error_Message;
           this.showPopup = true;
           this.isLoading = false;
@@ -659,4 +665,54 @@ applyGlobalFilter(event: Event) {
 applyMainFilter() {
   this.dataSource.filter = JSON.stringify(this.filterValues);
 }
+
+ExportExcel() {
+
+  const dataToExport = this.dataSource.filteredData;
+
+  if (!dataToExport || dataToExport.length === 0) {
+    alert("No data available to export.");
+    return;
+  }
+
+  const exportData = dataToExport.map(x => ({
+    "Invoice Number": x.invoice_Number,
+    "Re-Raise Invoice": x.reRaiseInvoice,
+    "Invoice Date": x.invoice_Date
+      ? new Date(x.invoice_Date).toLocaleDateString('en-GB')
+      : '',
+    "Invoice IRN Status": x.irN_Status,
+    "Company Code": x.company_Code,
+    "Pay Period": x.pay_Period,
+    "Map Name": x.map_Name,
+    "Amount": x.amount,
+    "CGST Amount": x.cgsT_Amount,
+    "SGST Amount": x.sgsT_Amount,
+    "IGST Amount": x.igsT_Amount,
+    "Net Amount": x.net_Amount,
+    "Credit Note Status": x.creditNote_Status,
+    "Credit Note Number": x.creditNoteNumber,
+    "Cancelled On": x.cancelledOn
+      ? new Date(x.cancelledOn).toLocaleDateString('en-GB')
+      : '',
+    "CRN IRN Status": x.crn_IRN_Status,
+    "CRN IRN Number": x.crn_IRN_Number,
+    "Remarks": x.remarks
+  }));
+
+  const ws = XLSX.utils.json_to_sheet(exportData);
+  const wb = XLSX.utils.book_new();
+
+  XLSX.utils.book_append_sheet(
+    wb,
+    ws,
+    "Invoice Cancellation"
+  );
+
+  XLSX.writeFile(
+    wb,
+    "Invoice_Cancel_Export.xlsx"
+  );
+}
+
 }
