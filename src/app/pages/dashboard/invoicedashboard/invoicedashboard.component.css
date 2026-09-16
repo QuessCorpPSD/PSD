@@ -1,15 +1,20 @@
-.invoice-dashboard {
+/* .invoice-dashboard {
     background: #f5f7fb;
     min-height: 100vh;
     padding: 24px;
     font-family: "Nunito Sans", sans-serif;
     color: #172554;
+} */
+:host {
+    font-family: Georgia, "Times New Roman", serif;
+    color: #172554;
 }
 
-
-/* =========================
-   HEADER
-========================= */
+.invoice-dashboard {
+    background: #f5f7fb;
+    min-height: 100vh;
+    padding: 24px;
+}
 
 .dashboard-header {
     background: #ffffff;
@@ -118,9 +123,6 @@
 }
 
 
-/* =========================
-   STATUS CARDS
-========================= */
 
 .status-grid {
     display: grid;
@@ -214,10 +216,6 @@
 }
 
 
-/* =========================
-   MAIN PANEL
-========================= */
-
 .dashboard-panel {
     background: #ffffff;
     border: 1px solid #e5eaf1;
@@ -225,11 +223,6 @@
     overflow: hidden;
     box-shadow: 0 4px 18px rgba(15, 23, 42, .04);
 }
-
-
-/* =========================
-   TABS
-========================= */
 
 .dashboard-tabs {
     display: flex;
@@ -280,18 +273,11 @@
 }
 
 
-/* =========================
-   TAB CONTENT
-========================= */
-
 .tab-content {
     padding: 22px;
 }
 
 
-/* =========================
-   SUMMARY CARDS
-========================= */
 
 .summary-grid {
     display: grid;
@@ -376,7 +362,7 @@
 
 .summary-info span {
     display: block;
-    font-size: 14px;
+    font-size: 12px;
     font-weight: 700;
     color: #172554;
 }
@@ -498,10 +484,6 @@
 }
 
 
-/* =========================
-   INVOICE SUMMARY
-========================= */
-
 .invoice-summary {
     background: #fff;
     border: 1px solid #e8edf4;
@@ -602,10 +584,6 @@
 }
 
 
-/* =========================
-   OTHER TAB PLACEHOLDER
-========================= */
-
 .tab-placeholder {
     min-height: 420px;
     display: flex;
@@ -632,9 +610,6 @@
 }
 
 
-/* =========================
-   RESPONSIVE
-========================= */
 
 @media (max-width: 1400px) {
 
@@ -684,4 +659,106 @@
         width: 100%;
     }
 
+}
+
+/* .summary-card {
+    position: relative;
+}
+
+    .download-button {
+        position: absolute;
+        top: 14px;
+        right: 14px;
+        width: 34px;
+        height: 34px;
+        border: none;
+        border-radius: 8px;
+        background: transparent;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        z-index: 5;
+        transition: all 0.2s ease;
+    }
+
+    .download-button mat-icon {
+        font-size: 20px;
+        width: 20px;
+        height: 20px;
+    }
+
+    .blue .download-button {
+        color: #2563eb;
+    }
+
+    .green .download-button {
+        color: #16a34a;
+    }
+
+    .orange .download-button {
+        color: #f97316;
+    }
+
+    .purple .download-button {
+        color: #7c3aed;
+    }
+
+    .download-button:hover {
+        background: rgba(0, 0, 0, 0.06);
+        transform: translateY(-1px);
+    }
+
+    .download-button:active {
+        transform: scale(0.95);
+    } */
+.summary-card {
+    position: relative;
+}
+
+.download-icon {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 31px;
+    height: 31px;
+    border-radius: 8px;
+    background: gray;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+    transition: all 0.2s ease;
+}
+
+.download-icon mat-icon {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+}
+
+.blue .download-icon {
+    color: #2563eb;
+}
+
+.green .download-icon {
+    color: #16a34a;
+}
+
+.orange .download-icon {
+    color: #f97316;
+}
+
+.purple .download-icon {
+    color: #7c3aed;
+}
+
+.download-icon:hover {
+    background: rgba(0, 0, 0, 0.06);
+    transform: translateY(-1px);
+}
+
+.download-icon:active {
+    transform: scale(0.95);
 }
