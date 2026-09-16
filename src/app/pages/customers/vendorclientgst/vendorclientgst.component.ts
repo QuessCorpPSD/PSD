@@ -967,12 +967,12 @@ export class VendorclientgstComponent {
       StateCode: this.selectedState?.state_Code || ""
     };
 
-    // Wrap the payload inside the required 'Request' property
-    const requestPayload = { Request: payload };
+    // // Wrap the payload inside the required 'Request' property
+    // const requestPayload = { Request: payload };
 
-    console.log("EDIT/SAVE PAYLOAD:", JSON.stringify(requestPayload));
+    //console.log("EDIT/SAVE PAYLOAD:", JSON.stringify(requestPayload));
 
-    this.service.SaveVendorClientGST(requestPayload).subscribe({
+    this.service.SaveVendorClientGST(payload).subscribe({
       next: (res: any) => {
         const msg = res?.response || res?.Message;
         if (msg && msg.toLowerCase().includes('success')) {
