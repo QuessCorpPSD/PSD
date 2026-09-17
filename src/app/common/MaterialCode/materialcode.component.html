@@ -1,14 +1,14 @@
 <mat-form-field class="w-100 custom-height rounded-4 hover-clear-field" appearance="outline" style="background-color: white;height:30px;">
   <input #input style="color: #222;font-family: Montserrat; font-size: 12px; font-weight: 500;" type="text" matInput
-    [formControl]="myControl" placeholder="Select Group Name" [matAutocomplete]="auto" />
+    [formControl]="myControl" placeholder="Select Material Code" [matAutocomplete]="auto" />
   <mat-icon matSuffix class="clear-icon" *ngIf="myControl.value" (click)="clearSelection(input)">
     close
   </mat-icon>
   <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn"
     (optionSelected)="onOptionSelected($event.option.value)">
     <mat-option style="font-size: 11px;min-height: 15px;" *ngFor="let option of filteredOptions$ | async"
-      [value]="option" [disabled]="option.isDisabled">
-      {{ option.siteName }}
+      [value]="option">
+      {{ option.Code }} - {{ option.Description }}
     </mat-option>
   </mat-autocomplete>
 </mat-form-field>

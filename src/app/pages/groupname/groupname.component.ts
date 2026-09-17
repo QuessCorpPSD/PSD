@@ -28,6 +28,7 @@ import { Observable, startWith, map } from 'rxjs';
 import { Groupnameclass } from '../../Models/Common';
 import { ICommonService } from '../../Repository/ICommonService';
 import { CommonService } from '../../Service/CommonService';
+import { MatIconModule } from '@angular/material/icon';
 
 export const COMM_TOKEN = new InjectionToken<ICommonService>('COMM_TOKEN');
 
@@ -39,7 +40,7 @@ export const COMM_TOKEN = new InjectionToken<ICommonService>('COMM_TOKEN');
     ReactiveFormsModule,
     MatAutocompleteModule,
     MatInputModule,
-    MatFormFieldModule
+    MatFormFieldModule,MatIconModule
   ],
   templateUrl: './groupname.component.html',
   styleUrl: './groupname.component.css',
@@ -61,7 +62,7 @@ export class GroupnameComponent
 
   @Input() selectedCompanyId?: number;
 
-  @Output() sitenameEmit = new EventEmitter<Groupnameclass>();
+  @Output() sitenameEmit = new EventEmitter<Groupnameclass | null>();
 
   searchText: string = '';
 
@@ -71,18 +72,18 @@ export class GroupnameComponent
 
   filteredOptions$!: Observable<Groupnameclass[]>;
 
-  selectedOption?: Groupnameclass;
+  selectedOption?: Groupnameclass | null;
 
   private pendingValue: any;
 
   // CVA callbacks
-  onChange: any = () => {};
-  onTouched: any = () => {};
+  onChange: any = () => { };
+  onTouched: any = () => { };
 
   constructor(
     @Inject(COMM_TOKEN)
     private _commonService: ICommonService
-  ) {}
+  ) { }
 
   ngOnChanges(changes: SimpleChanges): void {
 
@@ -177,7 +178,7 @@ export class GroupnameComponent
   writeValue(value: any): void {
 
     this.pendingValue = value;
-console.log("Write Group Value", value);
+    console.log("Write Group Value", value);
     if (!value) {
 
       this.myControl.setValue(null);
@@ -196,7 +197,7 @@ console.log("Write Group Value", value);
     const selected = this.siteName.find(
       x => x.siteCode == this.pendingValue
     );
-console.log("Group Try Resolve with value:", this.siteName, this.pendingValue, selected);
+    console.log("Group Try Resolve with value:", this.siteName, this.pendingValue, selected);
     if (selected) {
 
       this.selectedOption = selected;
@@ -223,5 +224,17 @@ console.log("Group Try Resolve with value:", this.siteName, this.pendingValue, s
     isDisabled
       ? this.myControl.disable()
       : this.myControl.enable();
+  }
+
+  clearSelection(input: HTMLInputElement) {
+    this.selectedOption = null;
+
+    this.myControl.setValue(null);
+
+    this.onChange(null);
+    this.onTouched();
+    this.sitenameEmit.emit(null);
+
+    input.blur();
   }
 }

@@ -16,10 +16,13 @@ import * as XLSX from 'xlsx';
 import { EncryptionService } from '../../../Shared/encryption.service';
 import { SessionStorageService } from '../../../Shared/SessionStorageService';
 import { CompanyconstructionComponent } from "../../../common/companyconstruction/companyconstruction.component";
+import { DesignationComponent } from '../../../common/Designation/designation.component';
+import { MaterialCodeComponent } from '../../../common/MaterialCode/materialcode.component';
+import { BillingtypeComponent } from '../../../common/billingtype/billingtype.component';
 const Pay_TOKEN = new InjectionToken<ISkilltypeMapping>('Pay_TOKEN');
 @Component({
   selector: 'app-skill-category-construction',
-  imports: [MatIcon, MatTooltipModule, MatPaginator, MatTableModule, CommonModule, MatCardModule, ReactiveFormsModule, GroupnameComponent, CompanyconstructionComponent],
+  imports: [MatIcon, MatTooltipModule, MatPaginator, MatTableModule, CommonModule, MatCardModule, ReactiveFormsModule, GroupnameComponent, CompanyconstructionComponent, DesignationComponent, MaterialCodeComponent, BillingtypeComponent],
   templateUrl: './skill-category-construction.component.html',
   styleUrl: './skill-category-construction.component.css',
   providers: [
@@ -32,7 +35,7 @@ const Pay_TOKEN = new InjectionToken<ISkilltypeMapping>('Pay_TOKEN');
 export class SkillCategoryConstructionComponent {
   selectedCompanyId: any;
   dataSource = new MatTableDataSource<any>();
-  uploadDisplayedColumns = ['Action', 'SNo', 'Company_code', 'SiteName', 'PO_Number', 'SkillType', 'Amount', 'EffectiveDate'];
+  uploadDisplayedColumns = ['Action', 'SNo', 'Company_code', 'SiteName', 'PO_Number', 'SkillType', 'MaterialCodeName', 'DesignationName', 'BillingTypeName', 'OTRate', 'Amount', 'EffectiveDate'];
   showTable = false;
   skillCategoryForm!: FormGroup;
   showSkillPopup = false;
@@ -54,6 +57,15 @@ export class SkillCategoryConstructionComponent {
   selectedId: number = 0;
   SelectedSkillId: number = 0;
   ponumber: any;
+  selectedDesignation?:any;
+  selectedDesignationId?: number;
+  selectedDesignationName: string = '';
+  selectedMaterialCode?:any;
+  selectedMaterialCodeId?: number;
+  selectedMaterialCodeName: string = '';
+  selectedBillingtype?:any;
+  selectedBillingTypeId?: number;
+  selectedBillingTypeName: string = '';
 
   constructor(private fb: FormBuilder, @Inject(Pay_TOKEN) private service: ISkilltypeMapping, private _decrypt: EncryptionService,
     private _sessionStoreage: SessionStorageService,
@@ -62,12 +74,15 @@ export class SkillCategoryConstructionComponent {
     const userdetail = this._sessionStoreage.getItem('UserProfile');
     this.userdetail = JSON.parse(this._decrypt.decrypt(userdetail!));
     this.skillCategoryForm = this.fb.group({
-
       Company_code: ['', Validators.required],
       SiteName: ['', Validators.required],
       PO_Number: ['', Validators.required],
       SkillType: ['', Validators.required],
-      Amount: ['', Validators.required],
+      MaterialCode: ['', Validators.required],
+      Designation: ['', Validators.required],
+      BillingType: ['', Validators.required],
+      OTRate: [0, Validators.required],
+      Amount: [0, Validators.required],
       EffectiveDate: ['', Validators.required],
 
     });
@@ -94,8 +109,36 @@ export class SkillCategoryConstructionComponent {
     this.selectedGroupIdmain = group.siteCode;
     this.selectedGroupNamemain = group.siteName;
   }
-  onsearch() {
 
+  handleMaterialCodeEvent(materialCode: any) {
+    //console.log('Selected Material Code:', materialCode);
+    this.selectedMaterialCodeId = materialCode.ID;
+    this.selectedMaterialCodeName = materialCode.Code;
+    this.skillCategoryForm.patchValue({
+      MaterialCode: materialCode
+    });
+  }
+
+
+  handleDesignationEvent(designation: any) {
+    this.selectedDesignationId = designation.designation_Id;
+    this.selectedDesignationName = designation.designation_Name;
+    //this.Designation = designation;
+    this.skillCategoryForm.patchValue({
+      Designation: designation
+    });
+  }
+
+  handleBillingTypeEvent(billingType: any) {
+    //console.log('Selected Billing Type:', billingType);
+    this.selectedBillingTypeId = billingType.rowid;
+    this.selectedBillingTypeName = billingType.code;
+    this.skillCategoryForm.patchValue({
+      BillingType: billingType
+    });
+  }
+
+  onsearch() {
     if (!this.selectedCompanyId) {
       alert('Please select company');
       return;
@@ -230,6 +273,14 @@ export class SkillCategoryConstructionComponent {
       }
     });
   }
+
+//   writeValue(value: any): void {
+//   if (value) {
+//     this.selectedBillingtype = value;
+//   } else {
+//     this.selectedBillingtype = null;
+//   }
+// }
   editSkillCategory(row: any) {
 
     this.showSkillPopup = true;
@@ -243,14 +294,21 @@ export class SkillCategoryConstructionComponent {
 
     this.selectedGroupId = row.SiteId;
     this.selectedGroupName = row.SiteName;
+    const patchDesignation = { designation_Id: row.DesignationId, designation_Name: row.DesignationName }
+    const patchMaterialCode = { ID: row.MaterialCodeId, Code: row.MaterialCodeName , Description: row.MaterialCodeName}
+    const patchBillingType = { rowid: row.BillingTypeId, code: row.BillingTypeName }
+
     const parts = row.EffectiveDate.split(' ')[0].split('-');
 
     const formattedDate = `${parts[2]}-${parts[1]}-${parts[0]}`;
     this.skillCategoryForm.patchValue({
       Company_code: row.Company_code,
       SiteName: row.SiteName,
-      //PO_Number: row.PO_Number,
       SkillType: row.SkillType,
+      Designation: patchDesignation,
+      MaterialCode: patchMaterialCode,
+      BillingType: patchBillingType,
+      OTRate: row.OTRate,
       Amount: row.Amount,
       EffectiveDate: formattedDate,
     });
@@ -265,6 +323,7 @@ export class SkillCategoryConstructionComponent {
 
       }
     });
+
   }
   saveSkillCategory() {
 
@@ -286,12 +345,17 @@ export class SkillCategoryConstructionComponent {
 
       SiteId: this.selectedGroupId,
       SiteName: this.selectedGroupName,
-
       SkillType: this.skillCategoryForm.value.SkillType,
       Amount: this.skillCategoryForm.value.Amount,
       EffectiveDate: this.skillCategoryForm.value.EffectiveDate,
       PO_Number: this.skillCategoryForm.value.PO_Number,
-
+      DesignationId: this.selectedDesignationId,
+      DesignationName: this.selectedDesignationName,
+      MaterialCodeId: this.selectedMaterialCodeId,
+      MaterialCodeName: this.selectedMaterialCodeName.toString(),
+      BillingTypeId: this.selectedBillingTypeId,
+      BillingTypeName: this.selectedBillingTypeName,
+      OTRate: this.skillCategoryForm.value.OTRate,
       Action: this.isDeleteMode
         ? 'Delete'
         : this.isEditMode
@@ -299,7 +363,6 @@ export class SkillCategoryConstructionComponent {
           : 'add',
       UserId: this.userdetail.user_Id
     };
-
     this.service.createUpdateSkillMapping(payload).pipe(
       finalize(() => {
         this.isLoading = false;
@@ -323,6 +386,16 @@ export class SkillCategoryConstructionComponent {
 
   closePopup() {
     this.showSkillPopup = false;
+    this.selectedCompanyId.clear();
+    this.selectedCompanyIdadd.clear();
+    this.selectedGroupId.clear();
+    this.selectedGroupName.clear();
+    this.selectedDesignationId = undefined;
+    this.selectedDesignationName = '';
+    this.selectedMaterialCodeId = undefined;
+    this.selectedMaterialCodeName = '';
+    this.selectedBillingTypeId = undefined;
+    this.selectedBillingTypeName = '';
     this.skillCategoryForm.reset({
       IsActive: true
     });
@@ -343,17 +416,6 @@ export class SkillCategoryConstructionComponent {
         : this.isEditMode
           ? this.SelectedSkillId
           : 0,
-      // Company_Id: this.selectedCompanyIdadd,
-      // Company_code: this.selectedcompanycode,
-
-      // SiteId: this.selectedGroupId,
-      // SiteName: this.selectedGroupName,
-
-      // SkillType: this.skillCategoryForm.value.SkillType,
-      // Amount: this.skillCategoryForm.value.Amount,
-      // EffectiveDate: this.skillCategoryForm.value.EffectiveDate,
-      // PO_Number: this.skillCategoryForm.value.PO_Number,
-
       Action: this.isDeleteMode
         ? 'Delete'
         : this.isEditMode

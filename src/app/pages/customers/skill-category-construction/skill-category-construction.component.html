@@ -73,6 +73,42 @@
                             <mat-header-cell *matHeaderCellDef>SkillType</mat-header-cell>
                             <mat-cell *matCellDef="let row">{{row.SkillType}}</mat-cell>
                         </ng-container>
+
+                        <ng-container matColumnDef="OTRate">
+                            <mat-header-cell *matHeaderCellDef>OT Rate</mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{row.OTRate}}</mat-cell>
+                        </ng-container> 
+                        
+                        <ng-container matColumnDef="DesignationId">
+                            <mat-header-cell *matHeaderCellDef>DesignationId</mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{row.DesignationId}}</mat-cell>
+                        </ng-container> 
+                        
+                        <ng-container matColumnDef="DesignationName">
+                            <mat-header-cell *matHeaderCellDef>DesignationName</mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{row.DesignationName}}</mat-cell>
+                        </ng-container> 
+                        
+                        <ng-container matColumnDef="MaterialCodeId">
+                            <mat-header-cell *matHeaderCellDef>MaterialCodeId</mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{row.MaterialCodeId}}</mat-cell>
+                        </ng-container> 
+                        
+                        <ng-container matColumnDef="MaterialCodeName">
+                            <mat-header-cell *matHeaderCellDef>MaterialCodeName</mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{row.MaterialCodeName}}</mat-cell>
+                        </ng-container> 
+                        
+                        <ng-container matColumnDef="BillingTypeId">
+                            <mat-header-cell *matHeaderCellDef>BillingTypeId</mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{row.BillingTypeId}}</mat-cell>
+                        </ng-container> 
+                        
+                        <ng-container matColumnDef="BillingTypeName">
+                            <mat-header-cell *matHeaderCellDef>BillingTypeName</mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{row.BillingTypeName}}</mat-cell>
+                        </ng-container> 
+
                         <ng-container matColumnDef="Amount">
                             <mat-header-cell *matHeaderCellDef>Amount</mat-header-cell>
                             <mat-cell *matCellDef="let row" class="description">{{row.Amount}}</mat-cell>
@@ -121,7 +157,7 @@
 
                 <div class="row g-3 mb-3">
 
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <label class="form-label text-muted small">
                             Company Code <span class="text-danger">*</span>
                         </label>
@@ -138,7 +174,7 @@
                         </small>
                     </div>
 
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <label class="form-label text-muted small">
                             Site Name <span class="text-danger">*</span>
                         </label>
@@ -153,7 +189,7 @@
                         </small>
                     </div>
 
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <label class="form-label text-muted small">
                             PO Number <span class="text-danger">*</span>
                         </label>
@@ -169,7 +205,7 @@
                         </small>
                     </div>
 
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <label class="form-label text-muted small">
                             Skill Type <span class="text-danger">*</span>
                         </label>
@@ -188,9 +224,68 @@
                         </small>
                     </div>
 
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">
+                            Material Code <span class="text-danger">*</span>
+                        </label>
 
+                        <materialcode *ngIf="isEditMode" formControlName="MaterialCode"
+                            (materialCodeEmit)="handleMaterialCodeEvent($event)">
+                        </materialcode>
+                        <materialcode *ngIf="!isEditMode" formControlName="MaterialCode"
+                            (materialCodeEmit)="handleMaterialCodeEvent($event)">
+                        </materialcode>
+                        <small class="text-danger" *ngIf="showErrors && skillCategoryForm.get('MaterialCode')?.invalid">
+                            Material Code is required
+                        </small>
+                    </div>
 
-                    <div class="col-md-6">
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">
+                            Designation <span class="text-danger">*</span>
+                        </label>
+                        <designation *ngIf="isEditMode" formControlName="Designation"
+                            [selectedCompanyId]="selectedCompanyIdadd"
+                            (designationEmit)="handleDesignationEvent($event)">
+                        </designation>
+                        <designation *ngIf="!isEditMode" formControlName="Designation"
+                            [selectedCompanyId]="selectedCompanyIdadd"
+                            (designationEmit)="handleDesignationEvent($event)">
+                        </designation>
+                        <small class="text-danger" *ngIf="showErrors && skillCategoryForm.get('Designation')?.invalid">
+                            Designation is required
+                        </small>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">
+                            Billing Type <span class="text-danger">*</span>
+                        </label>
+
+                        <billingtype *ngIf="isEditMode" formControlName="BillingType"
+                          (billingtypeEmit)="handleBillingTypeEvent($event)">
+                        </billingtype>
+                        <billingtype *ngIf="!isEditMode" formControlName="BillingType"
+                            (billingtypeEmit)="handleBillingTypeEvent($event)">
+                        </billingtype>
+                        <small class="text-danger" *ngIf="showErrors && skillCategoryForm.get('BillingType')?.invalid">
+                            Billing Type is required
+                        </small>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">
+                            OT Rate <span class="text-danger">*</span>
+                        </label>
+
+                        <input type="number" class="form-control form-control-sm" formControlName="OTRate">
+
+                        <small class="text-danger" *ngIf="showErrors && skillCategoryForm.get('OTRate')?.invalid">
+                            OT Rate is required
+                        </small>
+                    </div>
+
+                    <div class="col-md-4">
                         <label class="form-label text-muted small">
                             Amount <span class="text-danger">*</span>
                         </label>
@@ -202,7 +297,7 @@
                         </small>
                     </div>
 
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <label class="form-label text-muted small">
                             Effective Date <span class="text-danger">*</span>
                         </label>

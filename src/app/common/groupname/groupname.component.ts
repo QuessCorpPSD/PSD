@@ -76,13 +76,13 @@ export class GroupnameComponent
   private pendingValue: any;
 
   // CVA callbacks
-  onChange: any = () => {};
-  onTouched: any = () => {};
+  onChange: any = () => { };
+  onTouched: any = () => { };
 
   constructor(
     @Inject(COMM_TOKEN)
     private _commonService: ICommonService
-  ) {}
+  ) { }
 
   ngOnChanges(changes: SimpleChanges): void {
 
@@ -223,5 +223,24 @@ export class GroupnameComponent
     isDisabled
       ? this.myControl.disable()
       : this.myControl.enable();
+  }
+
+  clearMenuSearch(): void {
+
+    this.searchText = '';
+
+    this.filteredOptions$ = this.myControl.valueChanges.pipe(
+      startWith(''),
+      map(value => {
+        let searchText = '';
+        if (typeof value === 'string') {
+          searchText = value;
+        } else if (value && typeof value === 'object') {
+          searchText = value.siteName ?? '';
+        }
+        return this._filter(searchText);
+      })
+    );
+
   }
 }

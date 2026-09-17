@@ -17,6 +17,7 @@ export class SkillmappingService implements ISkilltypeMapping {
     return this.http.get<APIResponse>(this.env.apiUrl + 'SkillMapping/Search/?companyId=' + companyId + '&siteId=' + siteId)
   }
   createUpdateSkillMapping(request: any): Observable<APIResponse> {
+    console.log('Request payload:', request); // Log the request payload for debugging
     return this.http.post<APIResponse>(
       environment.apiUrl + 'SkillMapping/CreateUpdateSkillMapping',
       request

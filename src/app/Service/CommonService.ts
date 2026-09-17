@@ -382,7 +382,21 @@ export class CommonService implements ICommonService {
 
   GetCSNCompanyCodes(userId: number): Observable<APIResponse> {
     const url = `${this.environment.apiUrl}Common/GetAllCSNCompanyCode/${userId}`;
-    console.log(url);
     return this.http.get<APIResponse>(url);
+  }
+
+  GetDesignationbyCompany(companyId: any): Observable<APIResponse> {
+    const url = `${this.environment.apiUrl}Common/GetAllDesignationByCompanyId/${companyId}`;
+    return this.http.get<APIResponse>(url);
+  }
+
+  GetAllBillingTypes(): Observable<APIResponse> {
+    const url = `${this.environment.apiUrl}Common/GetAllBillingTypes`;
+    return this.http.get<APIResponse>(url);
+  }
+
+  GetMaterialCodes(): Observable<APIResponse>{
+    const url = `${this.environment.apiUrl}MaterialCode/Search`;
+    return this.http.get<APIResponse>(url); 
   }
 }

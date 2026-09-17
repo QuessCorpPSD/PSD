@@ -67,4 +67,8 @@ export interface ICommonService {
     GetAllcityBystate(stateId: any): Observable<APIResponse>;
     GetAllFrequency(): Observable<APIResponse>;
     GetCSNCompanyCodes(userId: number): Observable<APIResponse>;
+    GetDesignationbyCompany(companyId: any): Observable<APIResponse>;
+    GetMaterialCodes(): Observable<APIResponse>;
+    GetAllBillingTypes(): Observable<APIResponse>;
+
 }
