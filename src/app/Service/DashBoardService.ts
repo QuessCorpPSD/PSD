@@ -6,106 +6,116 @@ import { APIResponse } from "../Models/apiresponse";
 import { Observable } from "rxjs";
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class DashBoardServices implements IDashBoardServices {
-    environment=environment;
-    constructor(private http:HttpClient)
-    {
+    environment = environment;
+    constructor(private http: HttpClient) {
 
     }
 
-    GetUserDashBoard(userId):Observable<APIResponse>
-    {
-        const headers  = new HttpHeaders({
+    GetUserDashBoard(userId): Observable<APIResponse> {
+        const headers = new HttpHeaders({
             'Cache-Control': 'no-cache, no-store, must-revalidate',
             'Pragma': 'no-cache',
             'Expires': '0'
         }).set('Content-Type', 'application/json')
             .set('Accept', 'application/json');
 
-            const config = { headers };
-        return this.http.get<APIResponse>(this.environment.apiUrl+'DashBoard/GetDashBoardByUserId/'+userId,config);
+        const config = { headers };
+        return this.http.get<APIResponse>(this.environment.apiUrl + 'DashBoard/GetDashBoardByUserId/' + userId, config);
     }
-    UserCheckIn(userId,Type):Observable<APIResponse>
-    {
-         const headers  = new HttpHeaders({
+    UserCheckIn(userId, Type): Observable<APIResponse> {
+        const headers = new HttpHeaders({
             'Cache-Control': 'no-cache, no-store, must-revalidate',
             'Pragma': 'no-cache',
             'Expires': '0'
         }).set('Content-Type', 'application/json')
             .set('Accept', 'application/json');
 
-            const config = { headers };
-        return this.http.get<APIResponse>(this.environment.apiUrl + 'CheckInCheckOut/CheckIn/' + userId + '/' + Type,config)
+        const config = { headers };
+        return this.http.get<APIResponse>(this.environment.apiUrl + 'CheckInCheckOut/CheckIn/' + userId + '/' + Type, config)
     }
-        getCategoryLotDetail(assignmentType):Observable<APIResponse>
-    {
-          const headers  = new HttpHeaders({
+    getCategoryLotDetail(assignmentType): Observable<APIResponse> {
+        const headers = new HttpHeaders({
             'Cache-Control': 'no-cache, no-store, must-revalidate',
             'Pragma': 'no-cache',
             'Expires': '0'
         }).set('Content-Type', 'application/json')
             .set('Accept', 'application/json');
 
-            const config = { headers };
-        return this.http.get<APIResponse>(this.environment.apiUrl+'DashBoard/CategoryLotDetail/'+assignmentType,config)
+        const config = { headers };
+        return this.http.get<APIResponse>(this.environment.apiUrl + 'DashBoard/CategoryLotDetail/' + assignmentType, config)
     }
-    GetPendingLotDetail():Observable<APIResponse>{
-        const headers  = new HttpHeaders({
+    GetPendingLotDetail(): Observable<APIResponse> {
+        const headers = new HttpHeaders({
             'Cache-Control': 'no-cache, no-store, must-revalidate',
             'Pragma': 'no-cache',
             'Expires': '0'
         }).set('Content-Type', 'application/json')
             .set('Accept', 'application/json');
 
-            const config = { headers };
-        return this.http.get<APIResponse>(this.environment.apiUrl+'DashBoard/GetPendingLotDetail',config)
+        const config = { headers };
+        return this.http.get<APIResponse>(this.environment.apiUrl + 'DashBoard/GetPendingLotDetail', config)
     }
-    getadmindashboard():Observable<APIResponse>
-    {
-           const headers  = new HttpHeaders({
+    getadmindashboard(): Observable<APIResponse> {
+        const headers = new HttpHeaders({
             'Cache-Control': 'no-cache, no-store, must-revalidate',
             'Pragma': 'no-cache',
             'Expires': '0'
         }).set('Content-Type', 'application/json')
             .set('Accept', 'application/json');
 
-            const config = { headers };
-        return this.http.get<APIResponse>(this.environment.apiUrl+'DashBoard/GetAdminDashBoard',config)
+        const config = { headers };
+        return this.http.get<APIResponse>(this.environment.apiUrl + 'DashBoard/GetAdminDashBoard', config)
     }
-    getadmindashboarddetail(val):Observable<APIResponse>
-    {
+    getadmindashboarddetail(val): Observable<APIResponse> {
 
         const url = `${this.environment.apiUrl}DashBoard/GetAdminDashBoardDetail`;
         const headers = new HttpHeaders({
             'Content-Type': 'application/json',
             'Accept': 'application/json'
         });
-        
+
         const config = new HttpHeaders().set('Content-Type', 'application/json')
             .set('Accept', 'application/json')
         return this.http.post<APIResponse>(url, JSON.stringify(val), { headers });
 
     }
-    getadminPendingLot():Observable<APIResponse>
-    {
-         const headers  = new HttpHeaders({
+    getadminPendingLot(): Observable<APIResponse> {
+        const headers = new HttpHeaders({
             'Cache-Control': 'no-cache, no-store, must-revalidate',
             'Pragma': 'no-cache',
             'Expires': '0'
         }).set('Content-Type', 'application/json')
             .set('Accept', 'application/json');
 
-            const config = { headers };
-        return this.http.get<APIResponse>(this.environment.apiUrl+'DashBoard/PendingLot',config) 
+        const config = { headers };
+        return this.http.get<APIResponse>(this.environment.apiUrl + 'DashBoard/PendingLot', config)
     }
 
-    SaveInvoiceAllotEdit(reqNo: string, userId: number):Observable<APIResponse>{
-        const url = `${this.environment.apiUrl}DashBoard/SaveInvoiceAllotEdit/${reqNo}/${userId}`;       
+    SaveInvoiceAllotEdit(reqNo: string, userId: number): Observable<APIResponse> {
+        const url = `${this.environment.apiUrl}DashBoard/SaveInvoiceAllotEdit/${reqNo}/${userId}`;
         return this.http.get<APIResponse>(url);
     }
-        InputReconYettocomeReport(val: string): Observable<APIResponse> {
-        return this.http.get<APIResponse>(this.environment.apiUrl + 'DashBoard/ReconNotYettoCome/'+val);
+    InputReconYettocomeReport(val: string): Observable<APIResponse> {
+        return this.http.get<APIResponse>(this.environment.apiUrl + 'DashBoard/ReconNotYettoCome/' + val);
+    }
+    GetInvoiceDashboard(invoiceType: string): Observable<APIResponse> {
+        const headers = new HttpHeaders({
+            'Cache-Control': 'no-cache, no-store, must-revalidate',
+            'Pragma': 'no-cache',
+            'Expires': '0'
+        }).set('Content-Type', 'application/json')
+            .set('Accept', 'application/json');
+
+        const config = { headers };
+
+        return this.http.get<APIResponse>(
+            this.environment.apiUrl +
+            'DashBoard/InvoiceDashboard/' +
+            encodeURIComponent(invoiceType),
+            config
+        );
     }
 }
