@@ -1,0 +1,126 @@
+<div class="page-wrapper">
+    <div class="scrollable-content">
+
+        <div style="color:#302CB3;font-size:22px;font-family:Montserrat;font-weight:700;padding-top:10px">
+            Employee Repository
+        </div>
+
+        <div class="justify-content-between align-items-center mb-3">
+            <div class="container py-3">
+                <div class="row g-3 align-items-end">
+
+                    <div class="col-md-3">
+                        <label class="form-label text-muted small">Employee Code:</label>
+                        <input type="text" class="form-control form-control-sm" [(ngModel)]="employeeCodeSearch" />
+                    </div>
+
+                    <div class="col-md-6 d-flex gap-2">
+                        <button class="btn btn-sm d-flex align-items-center justify-content-center btn-search" matTooltip="Search" (click)="onSearch()">
+                            Search
+                        </button>
+
+                        <button class="btn btn-secondary btn-sm d-flex align-items-center justify-content-center" matTooltip="Download" (click)="onDownload()">
+                            Download
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="table-wrapper1" *ngIf="showTable">
+                <div class="table-scroll">
+                    <mat-table [dataSource]="dataSource.data" class="mat-elevation-z8 custom-table">
+
+                        <ng-container matColumnDef="Action">
+                            <mat-header-cell *matHeaderCellDef>Action</mat-header-cell>
+                            <mat-cell *matCellDef="let row">
+                                <div class="action-buttons">
+                                    <button class="btn btn-sm" matTooltip="Edit" (click)="editDocument(row)">
+                                        <mat-icon>edit</mat-icon>
+                                    </button>
+                                </div>
+                            </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="SNo">
+                            <mat-header-cell *matHeaderCellDef>SNo</mat-header-cell>
+                            <mat-cell *matCellDef="let row; let i = index">{{ i + 1 }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="EmployeeCode">
+                            <mat-header-cell *matHeaderCellDef>Employee Code</mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{ row.EmployeeCode }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="EmployeeName">
+                            <mat-header-cell *matHeaderCellDef>Employee Name</mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{ row.EmployeeName }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Remarks">
+                            <mat-header-cell *matHeaderCellDef>Remarks</mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{ row.Remarks }}</mat-cell>
+                        </ng-container>
+
+                        <mat-header-row *matHeaderRowDef="uploadDisplayedColumns"></mat-header-row>
+                        <mat-row *matRowDef="let row; columns: uploadDisplayedColumns;"
+                                 (click)="onRowSelect(row)"
+                                 [class.selected-row]="selectedRow === row"></mat-row>
+
+                    </mat-table>
+                </div>
+
+                <div *ngIf="dataSource.data.length === 0" class="text-center p-4">
+                    <p class="text-muted">No data to display</p>
+                </div>
+
+                <mat-paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="showDocumentPopup" class="popup-overlay">
+    <form [formGroup]="documentForm" novalidate>
+        <mat-card class="popup-card popup-card-sm">
+
+            <mat-card-header class="popup-header">
+                <mat-card-title>
+                    Upload Employee Document
+                </mat-card-title>
+                <span class="spacer"></span>
+                <button mat-icon-button type="button" style="background:transparent;border:none" (click)="closePopup()">
+                    <mat-icon>close</mat-icon>
+                </button>
+            </mat-card-header>
+
+            <mat-card-content>
+                <div class="row g-3 mb-3">
+
+                    <div class="col-md-12">
+                        <label class="form-label text-muted small">
+                            Remarks <span class="text-danger">*</span>
+                        </label>
+                        <input type="text" class="form-control form-control-sm" formControlName="remarks" />
+                        <small class="text-danger d-block" *ngIf="showErrors && documentForm.get('remarks')?.invalid">
+                            Remarks is required
+                        </small>
+                    </div>
+
+                    <div class="col-md-12 mt-3">
+                        <input type="file" (change)="onFileSelected($event)" />
+                    </div>
+
+                </div>
+            </mat-card-content>
+
+            <mat-card-footer class="popup-footer">
+                <button type="button" class="btn-save" (click)="attachDocument()">
+                    Attach
+                </button>
+                <button type="button" class="btn-cancel" (click)="closePopup()">Cancel</button>
+            </mat-card-footer>
+
+        </mat-card>
+    </form>
+</div>

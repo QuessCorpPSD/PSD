@@ -140,7 +140,7 @@ export class BandADDComponent {
 
         // SUCCESS RESPONSE
         if (response && response.toLowerCase().includes("success")) {
-          alert("Band Added Successfully!");
+          alert(response);
           this.dialogRef.close(true);
           return;
         }

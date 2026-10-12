@@ -208,6 +208,28 @@ import { UnpaidInvoiceReportComponent } from './pages/AccountReceivable/Bankinvo
 import { PoCultureComponent } from './pages/Invoice/po-culture/po-culture.component';
 import { BreakdetailsComponent } from './layout/loginmaster/breakdetails/breakdetails.component';
 import { PurchaseOrderNumberComponent } from './pages/Invoice/purchase-order-number/purchase-order-number.component';
+import { ServicechargeComponent } from './pages/customers/servicecharge/servicecharge.component';
+import { LoantypeComponent } from './pages/customers/loantype/loantype.component';
+import { PtcircleComponent } from './pages/customers/ptcircle/ptcircle.component';
+import { EntitybillingComponent } from './pages/customers/entitybilling/entitybilling.component';
+import { QrsjobsubcategoryComponent } from './pages/customers/qrsjobsubcategory/qrsjobsubcategory.component';
+import { CurrencyconversionComponent } from './pages/customers/currencyconversion/currencyconversion.component';
+import { ClratrackerComponent } from './pages/customers/clratracker/clratracker.component';
+import { LeavetypesComponent } from './pages/customers/leavetypes/leavetypes.component';
+import { CompanygroupmasterComponent } from './pages/customers/companygroupmaster/companygroupmaster.component';
+import { JobcategoryComponent } from './pages/customers/jobcategory/jobcategory.component';
+import { ThirdpartyvendorComponent } from './pages/customers/thirdpartyvendor/thirdpartyvendor.component';
+import { ClientofficeaddressComponent } from './pages/customers/clientofficeaddress/clientofficeaddress.component';
+import { LeavetakenComponent } from './pages/customers/leavetaken/leavetaken.component';
+import { EmployeerepositoryComponent } from './pages/customers/employeerepository/employeerepository.component';
+import { InsuranceverticalComponent } from './pages/customers/insurancevertical/insurancevertical.component';
+import { QrsservicechargetypeComponent } from './pages/customers/qrsservicechargetype/qrsservicechargetype.component';
+import { VMSchargeComponent } from './pages/customers/vmscharge/vmscharge.component';
+import { ServicechargeuploadComponent } from './pages/customers/servicechargeupload/servicechargeupload.component';
+import { MagnaleaveopeningbalanceComponent } from './pages/customers/magnaleaveopeningbalance/magnaleaveopeningbalance.component';
+import { LeaveopeningbalanceComponent } from './pages/customers/leaveopeningbalance/leaveopeningbalance.component';
+import { QRSmasterComponent } from './pages/customers/qrsmaster/qrsmaster.component';
+import { InsurancepolicymappingComponent } from './pages/customers/insurancepolicymapping/insurancepolicymapping.component';
 // import { AccountReceivablenavigationComponent } from './pages/accountreceivable/Bankinvoice/account-receivablenavigation/account-receivablenavigation.component';
 // import { APARAdjustmentupdateComponent } from './pages/accountreceivable/Bankinvoice/aparadjustmentupdate/aparadjustmentupdate.component';
 // import { BankTransferHTHStatusComponent } from './pages/accountreceivable/Bankinvoice/bank-transfer-hthstatus/bank-transfer-hthstatus.component';
@@ -318,7 +340,7 @@ export const routes: Routes = [
         children: [
           { path: 'payregisterunprocessed', component: PayregisterunprocessedComponent },
           { path: 'payslip', component: PayslipComponent },
-          { path: 'arpaymentreport', component:ArpaymentreportComponent},
+          { path: 'arpaymentreport', component: ArpaymentreportComponent },
           { path: 'app-invoice-leave-balance-report', component: InvoiceLeaveBalanceReportComponent },
           { path: 'app-leave-balance-report', component: LeaveBalanceReportComponent },
           { path: 'poactiveinactivereport', component: PoactiveinactivereportComponent },
@@ -441,7 +463,7 @@ export const routes: Routes = [
           { path: "companypermission", component: CompanypermissionComponent, },
           { path: "passwordunlock", component: PasswordunlockComponent, },
           { path: "payperiodunlock", component: PayperiodunlockComponent, },
-          {path: "categorychange", component: CategorychangeComponent,},
+          { path: "categorychange", component: CategorychangeComponent, },
         ]
       },
       {
@@ -459,7 +481,7 @@ export const routes: Routes = [
           { path: "vendorclientgst", component: VendorclientgstComponent },
           { path: "itcalender", component: ITcalenderComponent },
           { path: "companypaycodemapping", component: CompanypaycodemappingComponent },
-          { path: "ServiceCharge", component: ServiceChargeComponent },
+          { path: "ServiceCharge", component: ServicechargeComponent },
           { path: "VendorServiceCharge", component: VendorServiceChargeComponent },
           { path: "employee", component: EmployeeComponents },
           { path: "cancelledinvoicerepository", component: CancelledinvoicerepositoryComponent },
@@ -469,6 +491,28 @@ export const routes: Routes = [
           { path: "invoicerule", component: InvoiceruleComponent },
           { path: "ptrule", component: PTRuleComponent },
           { path: "skill-category", component: SkillCategoryConstructionComponent },
+          { path: "loantype", component: LoantypeComponent },
+          { path: "ptcircle", component: PtcircleComponent },
+          { path: "entitybilling", component: EntitybillingComponent },
+          { path: "qrssubJobcategory", component: QrsjobsubcategoryComponent },
+          { path: "currencyconversion", component: CurrencyconversionComponent },
+          { path: "clratracker", component: ClratrackerComponent },
+          { path: "leavetypes", component: LeavetypesComponent },
+          { path: "companygroupmaster", component: CompanygroupmasterComponent },
+          { path: "jobcategory", component: JobcategoryComponent },
+          { path: "thirdpartyvendor", component: ThirdpartyvendorComponent },
+          { path: "Clientofficeaddress", component: ClientofficeaddressComponent },
+          { path: "leavetaken", component: LeavetakenComponent },
+          { path: "employeerepository", component: EmployeerepositoryComponent },
+          { path: "insurancevertical", component: InsuranceverticalComponent },
+          { path: "qrsservicechargetype", component: QrsservicechargetypeComponent },
+          { path: "Vmscharge", component: VMSchargeComponent },
+          { path: "servicechargeupload", component: ServicechargeuploadComponent },
+          { path: "magnaleaveopeningbalance", component: MagnaleaveopeningbalanceComponent },
+          { path: "leaveopeningbalance", component: LeaveopeningbalanceComponent },
+          { path: "qrsmaster", component: QRSmasterComponent },
+          { path: "insurancepolicymapping", component: InsurancepolicymappingComponent },
+
         ]
       },
       {
@@ -494,7 +538,7 @@ export const routes: Routes = [
           //{ path: 'creditnoteupdate', component: CreditnoteupdateComponent },
           { path: 'companyinvoiceformat', component: CompanyinvoiceformatComponent },
           { path: 'OtherIncome', component: OtherincomeComponent },
-          
+
           { path: 'sezrepository-approval', component: SEZRepositoryApprovalComponent },
           { path: 'app-po-culture', component: PoCultureComponent },
         ]

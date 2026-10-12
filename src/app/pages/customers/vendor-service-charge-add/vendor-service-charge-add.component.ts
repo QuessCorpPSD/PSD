@@ -273,7 +273,7 @@ onSave() {
   this.vendorservice.saveVendorServiceCharge(payload).subscribe({
     next: (res: any) => {
      // console.log('Success:', res);
-      alert('Saved successfully');
+      alert(res.Data.response);
         this.dialogRef.close(true);
     },
     error: (err) => {

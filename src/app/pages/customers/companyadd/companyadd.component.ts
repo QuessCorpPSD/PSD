@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MatCard, MatCardModule } from '@angular/material/card';
+import { MatCardModule } from '@angular/material/card';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
@@ -11,22 +11,21 @@ import { MatInputModule } from '@angular/material/input';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material/table';
 import { MatRadioModule } from '@angular/material/radio';
-import { MatCheckbox, MatCheckboxModule } from '@angular/material/checkbox';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { CompanyserviceService } from '../../../Service/CUSTOMER/companyservice.service';
-import { from } from 'rxjs';
-import { json } from 'node:stream/consumers';
 import { EncryptionService } from '../../../Shared/encryption.service';
 import { SessionStorageService } from '../../../Shared/SessionStorageService';
-import { AlertpopupComponent } from "../../../common/alertpopup/alertpopup.component";
+import { AlertpopupComponent } from '../../../common/alertpopup/alertpopup.component';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 @Component({
   selector: 'app-companyadd',
   standalone: true,
   imports: [
     CommonModule,
-    MatCard,
-    MatCardModule,
+    FormsModule,
     ReactiveFormsModule,
+    MatCardModule,
     MatFormFieldModule,
     MatInputModule,
     MatDatepickerModule,
@@ -36,14 +35,16 @@ import { AlertpopupComponent } from "../../../common/alertpopup/alertpopup.compo
     MatTableModule,
     MatRadioModule,
     MatCheckboxModule,
-    FormsModule,
-    AlertpopupComponent
+    AlertpopupComponent,
+    MatAutocompleteModule
   ],
   templateUrl: './companyadd.component.html',
   styleUrl: './companyadd.component.css'
 })
 export class CompanyaddComponent {
+
   CompanyAddForm!: FormGroup;
+
   companyName: any;
   groupCode: any;
   entityName: any;
@@ -58,27 +59,38 @@ export class CompanyaddComponent {
   serviceClubbing: any;
   billingModel: any;
   BusinessUnitLocation: any;
-  entityid: any;
+  invoiceFormat: any;
+  pfCategory: any;
+  vertical: any;
+
   selectedEntityId: any;
   userdetail: any;
-  isLoading: boolean = false;
-  message: string = '';
-  popupMessage: string = '';
-  popupSubMessage: string = '';
-  showPopupalert = false;
-  showPopupvalidate = false;
-  showPopup = false;
 
-  constructor(private fb: FormBuilder, private dialogRef: MatDialogRef<CompanyaddComponent>,
-    private dialog: MatDialog, private company: CompanyserviceService,
-    private _decrypt: EncryptionService, private _sessionStoreage: SessionStorageService) { }
-  get invoiceType() {
-    return this.CompanyAddForm.get('InvoiceType')?.value;
-  }
+  isLoading = false;
+  popupMessage = '';
+  popupSubMessage = '';
+  showPopup = false;
+  isLoadingCities: boolean = false;
+  cityname: any[] = [];
+  filteredCities: any[] = [];
+  searchTerm: string = '';
+  selectedCity: any = null;
+  reimbinvoiceFormat: any;
+  getBankName: any;
+
+  constructor(
+    private fb: FormBuilder,
+    private dialogRef: MatDialogRef<CompanyaddComponent>,
+    private dialog: MatDialog,
+    private company: CompanyserviceService,
+    private _decrypt: EncryptionService,
+    private _sessionStoreage: SessionStorageService
+  ) { }
 
   ngOnInit() {
     const userdetail = this._sessionStoreage.getItem('UserProfile');
     this.userdetail = JSON.parse(this._decrypt.decrypt(userdetail!));
+
     this.BindGetCompanyName();
     this.BindGetCompanyGroupCode();
     this.BindGetEntityName();
@@ -92,342 +104,303 @@ export class CompanyaddComponent {
     this.BindBankAdvice();
     this.BindServiceClubbing();
     this.BindBillingModel();
+    this.Bindpfcategory();
+    this.BindInvoiceformats();
+    this.loadcity();
+    this.BindReimbInvoiceformats();
+    this.BindGetbankname();
     this.CompanyAddForm = this.fb.group({
-
-      // Basic Info
       CompanyCode: [''],
       ComapnyName: ['', Validators.required],
       MISName: [''],
       BusinessUnitName: ['', Validators.required],
       BusinessUnitLocation: [''],
       Zone: [''],
-      CompanyGroupCode: ['', Validators.required],
+      CompanyGroupCode: [''],
       CompanyGroupName: [''],
-      PayrollType: ['1', Validators.required],
       WBSCode: ['', Validators.required],
       ClientSince: ['', Validators.required],
-      ContractStartType: ['', Validators.required],
-      ContractExpiryType: ['', Validators.required],
+      ContractStartDate: ['', Validators.required],
+      ContractExpiryDate: ['', Validators.required],
       Active: ['1'],
-      FPayMode: [''],
-
-      // Invoice
-      // InvoiceType: ['Multiple', Validators.required],
+      FPayMode: ['1'],
+      PayrollType: ['1', Validators.required],
       InsuranceApplicable: ['1'],
-      InvoiceType: ['1'],
-
-      // Radio - PO Wise Batch (Yes/No)
-      POWiseBatch: ['0'],
-
-      // Dropdowns
-      AttendanceCycleForm: ['', Validators.required],
-      AttendanceCycleTo: ['', Validators.required],
-
-      // Checkbox
-      IsNewJoinee: [true],
-
-      // Other Text Inputs
+      InvoiceType: ['Single', Validators.required],
+      UploadContract: [null],
+      UploadGST: [null],
       MonthDays: ['1'],
-      // City: [''],
-      // State: [''],
-      // PinCode: [''],
-      // PhoneNo: [''],
-      // PTCode: [''],
-      // ServiceTax: [''],
-      // EmailId: [''],
-      // CertificateNo: [''],
-      // FaxNo: [''],
-      // Website: [''],
-      // Address: [''],
-      // ESICode: [''],
-      WorkDaysbased: ['1'],
-      CTC: ['0'],
-      BankName: ['', Validators.required],
-      AccountNo: ['', Validators.required],
-      SwiftCode: ['', Validators.required],
-      Branch: ['', Validators.required],
-      BranchCode: ['', Validators.required],
-      BankCode: ['', Validators.required],
-      BankAddress: ['', Validators.required],
-      OnboardingCategory: ['',],
-      OnboardingCharges: [''],
-      OnboardingChargesValue: ['1'],
+      WorkDaysBasedOn: ['1'],
+      AttendanceCycleFrom: ['', Validators.required],
+      AttendanceCycleTo: ['', Validators.required],
+      CTC: ['1'],
+      OnboardingCategory: [''],
       InedgeCategory: [''],
-      InedgeCharges: [''],
-      InedgeChargesValue: ['1'],
       IncentiveType: [''],
-      QdemyCharges: [''],
-      QdemyChargesValue: ['1'],
-      Portal_Type: [''],
       POApplicable: ['1'],
-      TechSubscriptionCharges: [''],
-      TechSubscriptionChargesvalue: ['1'],
+      POWiseBatch: ['0'],
       FDuesBasedon: ['1'],
+      IsNonInvoice: ['0'],
       SourcingOBApplicable: ['0'],
-      InvoiceFormats: [''],
-      Insurance: [''],
-      Segment: ['', Validators.required],
-      ReimbInvoiceFormat: [''],
-      SubSegment: [''],
-      PaySlipFormats: [''],
-      BillingType: [''],
-      Modeofpayment: ['0'],
-      PortalPaySlipFormat: [''],
-      Incharge: [''],
-      RoundOffApplicable: ['0'],
-      TAT: [''],
-      ValidDate: ['', Validators.required],
-      IncentiveDate: [''],
-      Deviation: ['0'],
+      Insurance: ['1'],
       SalarySMS: ['1'],
-      EffectiveDate: ['', Validators.required],
+      Deviation: ['0'],
+      RoundOffApplicable: ['0'],
+      IncentiveDate: [''],
+      OnboardingChargesValue: ['1'],
+      OnboardingCharges: [''],
+      InedgeChargesValue: ['1'],
+      InedgeCharges: [''],
+      QdemyChargesValue: ['1'],
+      QdemyCharges: [''],
+      TechSubscriptionChargesvalue: ['1'],
+      TechSubscriptionCharges: [''],
+      InvoiceFormats: [''],
+      Segment: [''],
+      SubSegment: [''],
+      Modeofpayment: ['0'],
+      ReimbInvoiceFormat: [0],
+      PayslipFormats: [''],
+      PortalPayslipFormat: [''],
+      TAT: [''],
+      ReimbursementType: [''],
       SalesPerson: [''],
       BranchLocation: [''],
       ProfitCenterCode: [''],
       Particulars: [''],
-      SapCustomerCode: ['', Validators.required],
-      IsNonInvoice: ['0'],
+      SapCustomerCode: [''],
+      PanNo: [''],
+      TanNo: [''],
+      PayrollWithDecimal: [''],
+      ServiceFeeWithDecimal: [''],
+      PFCategory: [''],
+      Vertial: [0],
+      IsOneTouchInvoicing: [0],
+      IsInvoicePoBased: [0],
+      ISESISplit: [0],
+      CompanyType: [''],
+      ReimbPayment: [''],
+      BankAdvice: [''],
+      ServiceChargeClubbing: [0],
+      DGPSF: [0],
+      Sector: [''],
+      BillingModel: [0],
+      DigitalPlatformConsent: [''],
+      WorkingHours: [0],
+      IsNewJoinee: [true],
       HeaderFooter: [false],
-      MinimumWagesApplicability: [true],
-      WorkingDaysServiceFee: [false],
       IsBonusPayThroughFF: [false],
       AttendanceInputwithLeave: [false],
-      ManagementMIS: [''],
-      PfCode: [''],
-      PayrollWithDecimal: ['', Validators.required],
+      MinimumWagesApplicability: [true],
+      WorkingDaysServiceFee: [false],
       IsDecimal: [false],
-      CompanyType: ['', Validators.required],
-      ServiceFeeWithDecimal: ['', Validators.required],
       ManualNewJoinee: [false],
-      ReimbPayment: ['', Validators.required],
-      Vertial: [''],
-      DigitalPlatformConsent: ['', Validators.required],
       IsProforma: [false],
-      IsOneTouchInvoicing: [''],
-      WorkingHours: [''],
       IsSignature: [false],
-      IsInovicePoBased: [''],
-      Is40BillingModel: [false],
       IsCurrencyConversion: [false],
-      BillingModel: [''],
-      BankAdvice: ['', Validators.required],
-      ServiceChargeClubbing: [''],
-      DGPSF: ['', Validators.required],
-      Sector: ['', Validators.required],
-      ReimbursementType: [''],
-      wbc: [''],
-      invoicetype: [''],
-      absorptionfee: [''],
+      Is40BillingModel: [false],
       billingType: [''],
-      Reimbrusementdate: [''],
-      onboardingtat: [''],
-      pfcode: [''],
-      PanNo: ['', Validators.required],
-      pfcategory: ['', Validators.required],
-      TanNo: ['', Validators.required],
-      Vertical: [''],
-      VMSFee: [''],
-      isesiSplit: [''],
-      MSPFee: [''],
-      VMSType: [''],
-      MSPType: ['']
-    })
-    this.CompanyAddForm.get('CompanyGroupCode')?.valueChanges.subscribe(code => {
-      const selectedGroup = this.groupCode.find(g => g.value === code);
-
-      if (selectedGroup) {
-        this.CompanyAddForm.patchValue({
-          CompanyGroupName: selectedGroup.name
-        });
-      } else {
-        this.CompanyAddForm.patchValue({
-          CompanyGroupName: ''
-        });
-      }
+      Incharge: [''],
+      PFCode: [''],
+      ValidDate: [''],
+      EffectiveDate: [''],
+      ReimbursementDate: [''],
+      ManagementMIS: [''],
+      BankName: ['', Validators.required],
+      AccountNo: ['', Validators.required],
+      SwiftCode: ['', Validators.required],
+      BankAddress: ['', Validators.required],
+      City: ['', Validators.required],
+      State: [''],
+      PinCode: ['', Validators.required],
+      PhoneNo: [''],
+      PTCode: [''],
+      ServiceTax: [''],
+      EmailId: [''],
+      CertificateNo: [''],
+      FaxNo: [''],
+      Website: [''],
+      Address: ['', Validators.required],
+      ESICode: ['']
     });
+
+    this.CompanyAddForm.get('CompanyGroupCode')?.valueChanges.subscribe(code => {
+      const selectedGroup = this.groupCode?.find((g: any) => g.value === code);
+      this.CompanyAddForm.patchValue({
+        CompanyGroupName: selectedGroup ? selectedGroup.name : ''
+      });
+    });
+
     this.CompanyAddForm.get('CompanyGroupName')?.disable();
+    this.CompanyAddForm.get('CompanyCode')?.disable();
     this.CompanyAddForm.get('AccountNo')?.disable();
     this.CompanyAddForm.get('SwiftCode')?.disable();
     this.CompanyAddForm.get('BankAddress')?.disable();
-    this.CompanyAddForm.get('Branch')?.disable();
-    this.CompanyAddForm.get('BranchCode')?.disable();
-    this.CompanyAddForm.get('BankCode')?.disable();
-    this.CompanyAddForm.get('CompanyCode')?.disable();
-    this.CompanyAddForm.get('OT_weekend_type')?.valueChanges.subscribe(value => {
-      const valueCtrl = this.CompanyAddForm.get('Weekend_Value');
-      const formulaCtrl = this.CompanyAddForm.get('Weekend_Formula');
 
-      valueCtrl?.reset();
-      formulaCtrl?.reset();
-
-      valueCtrl?.clearValidators();
-      formulaCtrl?.clearValidators();
-
-      valueCtrl?.disable();
-      formulaCtrl?.disable();
-
-      if (value === '1') { // Fixed
-        valueCtrl?.enable();
-        valueCtrl?.setValidators(Validators.required);
+    this.CompanyAddForm.get('InvoiceType')?.valueChanges.subscribe(value => {
+      const cityControl = this.CompanyAddForm.get('City');
+      const pinCodeControl = this.CompanyAddForm.get('PinCode');
+      const addressControl = this.CompanyAddForm.get('Address');
+      if (value === 'Single') {
+        cityControl?.setValidators([Validators.required]);
+        pinCodeControl?.setValidators([Validators.required]);
+        addressControl?.setValidators([Validators.required]);
+      } else {
+        cityControl?.clearValidators();
+        pinCodeControl?.clearValidators();
+        addressControl?.clearValidators();
       }
-
-      if (value === '2') { // Formula
-        formulaCtrl?.enable();
-        formulaCtrl?.setValidators(Validators.required);
-      }
-
-      valueCtrl?.updateValueAndValidity();
-      formulaCtrl?.updateValueAndValidity();
+      cityControl?.updateValueAndValidity();
+      pinCodeControl?.updateValueAndValidity();
+      addressControl?.updateValueAndValidity();
     });
 
-    this.CompanyAddForm.get('weekday_type')?.valueChanges.subscribe(value => {
-      const valueCtrl = this.CompanyAddForm.get('Weekday_Value');
-      const formulaCtrl = this.CompanyAddForm.get('Weekday_Formula');
-
-      valueCtrl?.reset();
-      formulaCtrl?.reset();
-
-      valueCtrl?.clearValidators();
-      formulaCtrl?.clearValidators();
-
-      valueCtrl?.disable();
-      formulaCtrl?.disable();
-
-      if (value === '1') {
-        valueCtrl?.enable();
-        valueCtrl?.setValidators(Validators.required);
-      }
-
-      if (value === '2') {
-        formulaCtrl?.enable();
-        formulaCtrl?.setValidators(Validators.required);
-      }
-
-      valueCtrl?.updateValueAndValidity();
-      formulaCtrl?.updateValueAndValidity();
-    });
-
-    this.CompanyAddForm.get('Nightshift_type')?.valueChanges.subscribe(value => {
-      const valueCtrl = this.CompanyAddForm.get('Nightshift_Value');
-      const formulaCtrl = this.CompanyAddForm.get('Nightshift_Formula');
-
-      valueCtrl?.reset();
-      formulaCtrl?.reset();
-
-      valueCtrl?.clearValidators();
-      formulaCtrl?.clearValidators();
-
-      valueCtrl?.disable();
-      formulaCtrl?.disable();
-
-      if (value === '1') {
-        valueCtrl?.enable();
-        valueCtrl?.setValidators(Validators.required);
-      }
-
-      if (value === '2') {
-        formulaCtrl?.enable();
-        formulaCtrl?.setValidators(Validators.required);
-      }
-
-      valueCtrl?.updateValueAndValidity();
-      formulaCtrl?.updateValueAndValidity();
-    });
-
-    this.CompanyAddForm.get('Holiday_type')?.valueChanges.subscribe(value => {
-      const valueCtrl = this.CompanyAddForm.get('Holiday_Value');
-      const formulaCtrl = this.CompanyAddForm.get('Holiday_Formula');
-
-      valueCtrl?.reset();
-      formulaCtrl?.reset();
-
-      valueCtrl?.clearValidators();
-      formulaCtrl?.clearValidators();
-
-      valueCtrl?.disable();
-      formulaCtrl?.disable();
-
-      if (value === '1') {
-        valueCtrl?.enable();
-        valueCtrl?.setValidators(Validators.required);
-      }
-
-      if (value === '2') {
-        formulaCtrl?.enable();
-        formulaCtrl?.setValidators(Validators.required);
-      }
-
-      valueCtrl?.updateValueAndValidity();
-      formulaCtrl?.updateValueAndValidity();
-    });
-
-  }
-  allowDecimalOnly(event: any) {
-    const input = event.target;
-    input.value = input.value.replace(/[^0-9.]/g, '');
-
-    // allow only ONE decimal point
-    const parts = input.value.split('.');
-    if (parts.length > 2) {
-      input.value = parts[0] + '.' + parts.slice(1).join('');
+    const initialInvoiceType = this.CompanyAddForm.get('InvoiceType')?.value;
+    if (initialInvoiceType === 'Single') {
+      this.CompanyAddForm.get('City')?.setValidators([Validators.required]);
+      this.CompanyAddForm.get('PinCode')?.setValidators([Validators.required]);
+      this.CompanyAddForm.get('Address')?.setValidators([Validators.required]);
     }
 
-    this.CompanyAddForm.get('adhoc_service_fee')?.setValue(input.value, {
-      emitEvent: false
+  }
+  loadcity() {
+    this.isLoadingCities = true;
+    this.company.getcity().subscribe({
+      next: (res) => {
+        this.cityname = res.Data.data?.Table0;
+        this.isLoadingCities = false;
+      },
+      error: (err) => {
+        console.error('Error loading cities:', err);
+        this.isLoadingCities = false;
+      }
     });
   }
 
+  onCitySearch(event: any): void {
+    const value = event.target.value.trim();
+    this.searchTerm = value;
+    if (value.length < 3) {
+      this.filteredCities = [];
+      if (value.length === 0) {
+        this.CompanyAddForm.patchValue({ State: '' });
+        this.selectedCity = null;
+      }
+      return;
+    }
+    this.filterCities(value);
+  }
+
+  filterCities(searchText: string): void {
+    if (!this.cityname || this.cityname.length === 0) {
+      this.loadcity();
+      return;
+    }
+    this.isLoadingCities = true;
+    this.filteredCities = this.cityname.filter((city: any) =>
+      city.CityName?.toLowerCase().includes(searchText.toLowerCase()) ||
+      city.CityCode?.toLowerCase().includes(searchText.toLowerCase()) ||
+      city.StateName?.toLowerCase().includes(searchText.toLowerCase())
+    );
+    if (this.filteredCities.length > 20) {
+      this.filteredCities = this.filteredCities.slice(0, 20);
+    }
+    this.isLoadingCities = false;
+  }
+
+  onCitySelected(event: any): void {
+    const selectedCityName = event.option.value;
+    this.selectedCity = this.filteredCities.find(
+      (city: any) => city.CityName === selectedCityName
+    );
+    if (this.selectedCity) {
+      this.CompanyAddForm.patchValue({
+        State: this.selectedCity.StateName || this.selectedCity.State,
+        City: this.selectedCity.CityName
+      });
+    }
+  }
 
   BindGetCompanyName() {
     this.company.getCompanySearch().subscribe({
-      next: res => { this.companyName = res.Data.data?.Table0 }
+      next: (res: any) => { this.companyName = res?.Data?.data?.Table0; }
+    });
+  }
+
+  BindGetbankname() {
+    this.company.getCompanyName().subscribe({
+      next: res => { this.getBankName = res.Data.data?.getBankName }
+    });
+  }
+  ongetBankChange(event: any) {
+    const selectedValue = event.target.value;
+    if (!selectedValue) {
+      this.CompanyAddForm.patchValue({
+        AccountNo: '',
+        SwiftCode: '',
+        BankAddress: ''
+      });
+      return;
+    }
+    const parts = selectedValue.split('|');
+    if (parts.length === 4) {
+      this.CompanyAddForm.patchValue({
+        AccountNo: parts[1] || '',
+        SwiftCode: parts[2] || '',
+        BankAddress: parts[3] || ''
+      });
+    }
+  }
+
+  BindGetCity() {
+    this.company.getCompanySearch().subscribe({
+      next: (res: any) => { this.companyName = res?.Data?.data?.Table0; }
     });
   }
 
   BindGetCompanyGroupCode() {
     this.company.getCompanyName().subscribe({
-      next: res => {
-        this.groupCode = res.Data.data?.getCompanyGroupCode
-        console.log('groupcode', this.groupCode)
-      }
+      next: (res: any) => { this.groupCode = res?.Data?.data?.getCompanyGroupCode; }
+    });
+  }
+  BindInvoiceformats() {
+    this.company.getInvoiceformats().subscribe({
+      next: (res: any) => { this.invoiceFormat = res?.Data?.data?.Table0; }
+    });
+  }
+  BindReimbInvoiceformats() {
+    this.company.getReimInvoiceformats().subscribe({
+      next: (res: any) => { this.reimbinvoiceFormat = res?.Data?.data?.Table0; }
     });
   }
 
   BindGetEntityName() {
     this.company.getCompanyName().subscribe({
-      next: res => {
-        this.entityName = res.Data.data?.getEntityName
-      }
+      next: (res: any) => { this.entityName = res?.Data?.data?.getEntityName; }
     });
   }
 
   OnEntitychange(event: any) {
-    const selectedValue = event.target.value;
-    this.selectedEntityId = selectedValue;
-    if (this.selectedEntityId != '') {
+    this.selectedEntityId = event.target.value;
+    if (this.selectedEntityId) {
       this.BindBusinessUnitLocation();
     }
   }
 
   BindBankName() {
-    this.company?.getBankName().subscribe({
-      next: res => { this.BankName = res.Data?.data?.Table0 }
-
+    this.company.getBankName().subscribe({
+      next: (res: any) => { this.BankName = res?.Data?.data?.Table0; }
     });
   }
 
   onBankChange(event: any) {
-    const selectedId = Number(event.target.value);  // Bank_Id
-
-    const bank = this.BankName.find((b: any) => b.Bank_Id === selectedId);
+    const selectedId = Number(event.target.value);
+    const bank = this.BankName?.find((b: any) => b.Bank_Id === selectedId);
 
     if (bank) {
       this.CompanyAddForm.patchValue({
         AccountNo: bank.Account_No,
         SwiftCode: bank.Swift_Code,
-        Branch: bank.BranchName,
-        BranchCode: bank.BranchCode,
-        BankCode: bank.bank_code,
         BankAddress: bank.Address
       });
     }
@@ -435,284 +408,271 @@ export class CompanyaddComponent {
 
   BindSegment() {
     this.company.getCompanyName().subscribe({
-      next: res => { this.segmentName = res.Data.data?.getSegmentName }
+      next: (res: any) => { this.segmentName = res?.Data?.data?.getSegmentName; }
     });
   }
 
   BindSubSegment() {
     this.company.getCompanyName().subscribe({
-      next: res => { this.subSegmentName = res.Data.data?.getSubSegmentName }
+      next: (res: any) => { this.subSegmentName = res?.Data?.data?.getSubSegmentName; }
     });
   }
 
   BindPayWithDecimal() {
     this.company.getCompanyName().subscribe({
-      next: res => { this.paywithDeciamal = res.Data.data?.getPayrollWithDecimal }
+      next: (res: any) => { this.paywithDeciamal = res?.Data?.data?.getPayrollWithDecimal; }
     });
   }
 
   BindGetCompanyType() {
     this.company.getCompanyName().subscribe({
-      next: res => { this.companyType = res.Data.data?.getCompanyType }
+      next: (res: any) => { this.companyType = res?.Data?.data?.getCompanyType; }
     });
   }
 
   BindServicefeewithDecimal() {
     this.company.getCompanyName().subscribe({
-      next: res => { this.servicefee = res.Data.data?.getServiceFeeWithDecimal }
+      next: (res: any) => { this.servicefee = res?.Data?.data?.getServiceFeeWithDecimal; }
     });
   }
 
   BindRiembPayment() {
     this.company.getCompanyName().subscribe({
-      next: res => { this.reimPayment = res.Data.data?.getReimbPayment }
+      next: (res: any) => { this.reimPayment = res?.Data?.data?.getReimbPayment; }
     });
   }
 
+  Bindpfcategory() {
+    this.company.getCompanyName().subscribe({
+      next: (res: any) => { this.pfCategory = res?.Data?.data?.getPfCategory; }
+    });
+  }
+
+
+
   BindBankAdvice() {
     this.company.getCompanyName().subscribe({
-      next: res => { this.bankAdvice = res.Data.data?.getBankAdvice }
+      next: (res: any) => { this.bankAdvice = res?.Data?.data?.getBankAdvice; }
     });
   }
 
   BindServiceClubbing() {
     this.company.getCompanyName().subscribe({
-      next: res => { this.serviceClubbing = res.Data.data?.getServiceChargeClubbing }
+      next: (res: any) => { this.serviceClubbing = res?.Data?.data?.getServiceChargeClubbing; }
     });
   }
 
   BindBillingModel() {
     this.company.getCompanyName().subscribe({
-      next: res => { this.billingModel = res.Data.data?.getBillingCompanyCodeList }
+      next: (res: any) => { this.billingModel = res?.Data?.data?.getBillingCompanyCodeList; }
     });
   }
 
   BindBusinessUnitLocation() {
-    const entityId = this.selectedEntityId;
-    this.company.getBusinessUnitLoation(entityId).subscribe({
-      next: res => { this.BusinessUnitLocation = res.Data.data?.Table0 }
-
+    this.company.getBusinessUnitLoation(this.selectedEntityId).subscribe({
+      next: (res: any) => { this.BusinessUnitLocation = res?.Data?.data?.Table0; }
     });
   }
 
   formatDate(dateString: string): string {
+    if (!dateString) return '';
     const date = new Date(dateString);
+    if (isNaN(date.getTime())) return '';
     const day = String(date.getDate()).padStart(2, '0');
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const year = date.getFullYear();
     return `${day}/${month}/${year}`;
   }
 
-  showAlertPopup(message: string, subMessage: string = '') {
+  showAlertPopup(message: string, subMessage = '') {
     this.popupMessage = message;
     this.popupSubMessage = subMessage;
     this.showPopup = true;
   }
 
-  closePoopup() {
-    this.showPopup = false;
-    this.popupMessage = '';
-    this.popupSubMessage = '';
+onSubmit() {
+  if (this.CompanyAddForm.invalid) {
+    this.CompanyAddForm.markAllAsTouched();
+    alert('Please fill all required fields marked with *');
+    const firstInvalid = document.querySelector('.ng-invalid[formControlName]');
+    firstInvalid?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
   }
 
+  this.isLoading = true;
+  const f = this.CompanyAddForm.getRawValue();
 
-  AddCompany() {
+  let bankId = f?.BankName?.toString() ?? '';
+  if (bankId.includes('|')) bankId = bankId.split('|')[0];
 
-    if (this.CompanyAddForm.invalid) {
-      this.CompanyAddForm.markAllAsTouched();
-      return;
+  const payload = {
+    mode: 'Add',
+    CreatedBy: this.userdetail?.user_Id?.toString() ?? '0',
+    companyrequest: {
+      Client_Id: f?.ComapnyName ?? 0,
+      Financial_Year_Id: 0,
+      Client_Since: this.formatDate(f?.ClientSince),
+      Company_Active: Number(f?.Active ?? 1),
+      Is_Zip_Documents: 0,
+      Payroll_Type: Number(f?.PayrollType ?? 0),
+      Invoicing_Type: f?.InvoiceType === 'Single' ? 1 : 0,
+      Investment_Block_Date: this.formatDate(f?.ValidDate),
+      Business_Unit_Name_Id: f?.BusinessUnitName ?? 0,
+      Month_Days: f?.MonthDays || '0',
+      Salary_Fix_Days: '0',
+      Business_Unit_Location_Id: f?.BusinessUnitLocation || '0',
+      Attendance_Cycle_From: f?.AttendanceCycleFrom || '0',
+      Attendance_Cycle_To: f?.AttendanceCycleTo || '0',
+      Is_PF_Remittance: '0',
+      Input_Date: '1',
+      Output_Date: '2',
+      Work_Days_Based_On: f?.WorkDaysBasedOn || '0',
+      CTC: f?.CTC || '0',
+      Sourcing_Fee_Criteria_Type: '0',
+      Sourcing_Fee: f?.SourcingOBApplicable || '0',
+      Absorption_Fee_Criteria_Type: '0',
+      Absorption_Fee: '0',
+      Incentive_Type: f?.IncentiveType || '0',
+      Is_PO_Applicable: f?.POApplicable || '0',
+      Salary_SMS: f?.SalarySMS || '0',
+      Dues_Based_On: f?.FDuesBasedon || '0',
+      Is_Insurance_Applicable: f?.InsuranceApplicable || '0',
+      Invoice_Format: f?.InvoiceFormats || '0',
+      ReimbInvoiceFormat_Id: Number(f?.ReimbInvoiceFormat ?? 0),
+      Segment_Id: f?.Segment || '0',
+      SubSegment_Id: f?.SubSegment || '0',
+      Payslip_Format: f?.PayslipFormats || '0',
+      Mode_Of_Payment: f?.Modeofpayment || '0',
+      TAT: f?.TAT || '0',
+      Billing_Type: f?.billingType || '0',
+      Is_RoundOff_Applicable: f?.RoundOffApplicable || '0',
+      Deviation: f?.Deviation || '0',
+      Incharge: f?.Incharge ?? '',
+      Credit_Days_Upfront: '0',
+      Customer_Type: '0',
+      Incentive_Date: this.formatDate(f?.IncentiveDate),
+      Service_Tax_Applicable: 0,
+      Reimbursement_Type: f?.ReimbursementType || '0',
+      Salary_Transfer_Date: '0',
+      Effective_Date: this.formatDate(f?.EffectiveDate),
+      Sales_Person: f?.SalesPerson ?? '',
+      Branch_Location: f?.BranchLocation ?? '',
+      Reimbursement_Date: this.formatDate(f?.ReimbursementDate),
+      SAP_Code: f?.SAP_Code ?? '',
+      Pin_Code: f?.PinCode ?? '',
+      Address: f?.Address ?? '',
+      Phone_Number: f?.PhoneNo ?? '',
+      PAN_Number: f?.PanNo ?? '',
+      TAN_Number: f?.TanNo ?? '',
+      Service_Tax_Number: f?.ServiceTax ?? '',
+      PF_Code: f.PFCode || '',
+      ESI_Code: f?.ESICode ?? '',
+      PT_Code: f?.PTCode ?? '',
+      Email_Id: f?.EmailId ?? '',
+      Certificate_Number: f?.CertificateNo ?? '',
+      Fax_Number: f?.FaxNo ?? '',
+      Website_Name: f?.Website ?? '',
+      Wages: f?.MinimumWagesApplicability ? '1' : '0',
+      Particulars: f?.Particulars ?? '',
+      Is_NonInvoice: f?.IsNonInvoice || '0',
+      Mis_Name: f?.MISName ?? '',
+      Zone_Tagging: f?.Zone ?? '',
+      IsHeaderFooter: f?.HeaderFooter ? '1' : '0',
+      Sap_Customer_Code: f?.SapCustomerCode ?? '',
+      Profit_Center_Code: f?.ProfitCenterCode ?? '',
+      Inedge_charges: f?.InedgeCharges || '0',
+      Inedge_charges_Criteria_Type: f?.InedgeChargesValue || '0',
+      CompanyGroupCode: f?.CompanyGroupCode ?? '0',
+      OnBoarding_Category: f?.OnboardingCategory || '0',
+      InEdge_Category: f?.InedgeCategory || '0',
+      Is_PO_Wise_Batch: f?.POWiseBatch || '0',
+      IsBonusPayThroughFF: f?.IsBonusPayThroughFF ? 1 : 0,
+      IsExtraWorkingDaysServiceFee: f?.WorkingDaysServiceFee ? 1 : 0,
+      AttendanceInputWithLeave: f?.AttendanceInputwithLeave ? 1 : 0,
+      Management_MIS: f?.ManagementMIS ?? '0',
+      PfCode_Id: Number(f?.PFCode ?? 0),
+      IsDecimal: f?.IsDecimal ? '1' : '0',
+      IsProforma: f?.IsProforma ? '1' : '0',
+      CompanyType: f?.CompanyType || '1',
+      Manual_NewJoinee: f?.ManualNewJoinee ? '1' : '0',
+      Invoice_Submission_Date: 0,
+      Collection_Date: 0,
+      PE_User_ID: '',
+      PE_Name: '',
+      PE_Email_Id: '',
+      RM_User_ID: '',
+      RM_Name: '',
+      RM_Email_Id: '',
+      Client_SPOC_Name: '',
+      Client_SPOC_Email_Id: '',
+      Client_SPOC_Mobile_No: '',
+      Client_Escalation_Manager_Name: '',
+      Client_Escalation_Manager_Email_Id: '',
+      Client_Escalation_Manager_Mobile_No: '',
+      Portal_Payslip_Format: f?.PortalPayslipFormat ?? '0',
+      IsNewJoinee: f?.IsNewJoinee ? '1' : '0',
+      ReimbPaymentId: Number(f?.ReimbPayment ?? 0),
+      PayrollWithDecimalId: Number(f?.PayrollWithDecimal ?? 0),
+      PfCategoryId: Number(f?.PFCategory ?? 0),
+      IsSignature: f?.IsSignature ? 1 : 0,
+      ServiceFeeWithDecimalId: Number(f?.ServiceFeeWithDecimal ?? 0),
+      Qdemy_charges: f?.QdemyCharges || '0',
+      IsCurrencyConversion: f?.IsCurrencyConversion ? 1 : 0,
+      TechSubscriptionCharges: f?.TechSubscriptionCharges || '0',
+      Tech_Subscription_Charges_Criteria_Type: f?.TechSubscriptionChargesvalue || '0',
+      DigitalPlatformConsent: Number(f?.DigitalPlatformConsent ?? 0),
+      DGPSF: Number(f?.DGPSF ?? 0),
+      Vertical_Id: Number(f?.Vertial ?? 0),
+      ServiceChargeClubbing: Number(f?.ServiceChargeClubbing ?? 0),
+      IsOneTouchInvoicing: Number(f?.IsOneTouchInvoicing ?? 0),
+      IsInvoicePoBased: Number(f?.IsInvoicePoBased ?? 0),
+      IS_ESI_split: Number(f?.ISESISplit ?? 0),
+      WorkingHours: Number(f?.WorkingHours ?? 0),
+      Is40BillingModel: f?.Is40BillingModel ? 1 : 0,
+      BillingCompanyId: Number(f?.BillingModel ?? 0),
+      Contract_Start_Date: this.formatDate(f?.ContractStartDate),
+      Contract_End_Date: this.formatDate(f?.ContractExpiryDate),
+      Contract_File_Path: f?.UploadContract ?? '',
+      Bank_Id: bankId,
+      IFSC_Code: f?.SwiftCode ?? '',
+      Account_Number: f?.AccountNo ?? '',
+      Bank_Address: f?.BankAddress ?? '',
+      BankAdviceId: f?.BankAdvice || '0',
+      OT_WEEK_DAY_TYPE: 0,
+      OT_WEEK_DAY_VLAUE: '',
+      OT_WEEK_DAY_FORMULA: '',
+      OT_NIGHT_SHIFT_TYPE: 0,
+      OT_NIGHT_SHIFT_VLAUE: '',
+      OT_NIGHT_SHIFT_FORMULA: '',
+      OT_WEEKEND_TYPE: 0,
+      OT_WEEKEND_VLAUE: '',
+      OT_WEEKEND_FORMULA: '',
+      OT_HOLIDAY_TYPE: 0,
+      OT_HOLIDAY_VLAUE: '',
+      OT_HOLIDAY_FORMULA: '',
+      Adhoc_Service_Fee: '',
+      Adhoc_Service_Formula: '',
+      Portal_Type: '',
+     
     }
+  };
 
-    this.isLoading = true;
-
-    const formValue = this.CompanyAddForm.getRawValue();
-    const payload = {
-      mode: "Add",
-      CreatedBy: this.userdetail.user_Id?.toString(),
-      companyrequest: {
-        Client_Id: formValue?.ComapnyName ?? 0,
-        Financial_Year_Id: 0,
-        Client_Since: this.formatDate(formValue?.ClientSince) ?? "",
-        Company_Active: formValue?.Active ?? "1",
-        Is_Zip_Documents: 0,
-        Payroll_Type: Number(formValue?.PayrollType ?? 0),
-        Invoicing_Type: Number(formValue?.InvoiceType ?? 0),
-        Investment_Block_Date: this.formatDate(formValue?.ValidDate) ?? "",
-        Business_Unit_Name_Id: formValue?.BusinessUnitName ?? "",
-        Month_Days: formValue?.MonthDays ?? "",
-        Salary_Fix_Days: "0",
-        Business_Unit_Location_Id: formValue?.BusinessUnitLocation ?? "",
-        Attendance_Cycle_From: formValue?.AttendanceCycleForm ?? "",
-        Attendance_Cycle_To: formValue?.AttendanceCycleTo ?? "",
-        Is_PF_Remittance: "",
-        Input_Date: "1",
-        Output_Date: "2",
-        Work_Days_Based_On: formValue?.WorkDaysbased ?? "",
-        CTC: formValue?.CTC ?? "",
-        Sourcing_Fee_Criteria_Type: "",
-        Sourcing_Fee: formValue?.SourcingOBApplicable ?? "",
-        Absorption_Fee_Criteria_Type: "",
-        Absorption_Fee: "",
-        Incentive_Type: formValue?.IncentiveType ?? "",
-        Is_PO_Applicable: formValue?.POApplicable ?? "",
-        Salary_SMS: formValue?.SalarySMS ?? "",
-        Dues_Based_On: formValue?.FDuesBasedon ?? "",
-        Is_Insurance_Applicable: formValue?.InsuranceApplicable ?? "",
-        ReimbInvoiceFormat_Id: Number(formValue?.ReimbInvoiceFormat ?? 0),
-        Segment_Id: formValue?.Segment ?? "",
-        SubSegment_Id: formValue?.SubSegment ?? "",
-        Payslip_Format: "0",
-        Mode_Of_Payment: "0",
-        TAT: formValue?.TAT ?? "",
-        Billing_Type: "0",
-        Is_RoundOff_Applicable: formValue?.RoundOffApplicable ?? "",
-        Deviation: formValue?.Deviation ?? "",
-        Incharge: formValue?.Incharge ?? "",
-        Credit_Days_Upfront: "",
-        Customer_Type: "",
-        Incentive_Date: formValue?.IncentiveDate ?? 0,
-        Service_Tax_Applicable: 0,
-        Reimbursement_Type: "0",
-        Salary_Transfer_Date: "0",
-        Effective_Date: this.formatDate(formValue?.EffectiveDate) ?? "",
-        Sales_Person: formValue?.SalesPerson ?? "",
-        Branch_Location: formValue?.BranchLocation ?? "",
-        Reimbursement_Date: "0",
-        SAP_Code: formValue?.SapCustomerCode ?? "",
-        Pin_Code: "",
-        Address: "",
-        Phone_Number: "",
-        PAN_Number: "",
-        TAN_Number: "",
-        Service_Tax_Number: "",
-        PF_Code: "",
-        ESI_Code: "",
-        PT_Code: "",
-        Email_Id: "",
-        Certificate_Number: "",
-        Fax_Number: "",
-        Website_Name: "",
-        Wages: formValue.MinimumWagesApplicability ? "1 " : "0",
-        Particulars: formValue?.Particulars ?? "",
-        Is_NonInvoice: formValue?.IsNonInvoice ?? "",
-        Mis_Name: formValue?.MISName ?? "",
-        Zone_Tagging: formValue?.Zone ?? "",
-        IsHeaderFooter: "1",
-        Sap_Customer_Code: formValue?.SapCustomerCode ?? "",
-        Profit_Center_Code: formValue?.ProfitCenterCode ?? "",
-        Inedge_charges: formValue?.InedgeCharges ?? 0,
-        Inedge_charges_Criteria_Type: formValue?.InedgeChargesValue ?? 0,
-        CompanyGroupCode: formValue?.CompanyGroupCode ?? "",
-        OnBoarding_Category: formValue?.OnboardingCategory ?? "",
-        InEdge_Category: formValue?.InedgeCategory ?? "",
-        Is_PO_Wise_Batch: formValue?.POWiseBatch ?? "",
-        IsBonusPayThroughFF: Number(formValue?.IsBonusPayThroughFF ?? 0),
-        IsExtraWorkingDaysServiceFee: Number(formValue?.WorkingDaysServiceFee ?? 0),
-        AttendanceInputWithLeave: Number(formValue?.AttendanceInputwithLeave ?? 0),
-        Management_MIS: formValue?.ManagementMIS ?? "",
-        PfCode_Id: Number(formValue?.PfCode ?? 0),
-        IsDecimal: formValue?.IsDecimal ? "1" : "0",
-        IsProforma: formValue?.IsProforma ? "1" : "0",
-        CompanyType: 0,
-        Manual_NewJoinee: formValue?.ManualNewJoinee ? "1" : "0",
-        Invoice_Submission_Date: 0,
-        Collection_Date: 0,
-        PE_User_ID: "",
-        PE_Name: "",
-        PE_Email_Id: "",
-        RM_User_ID: "",
-        RM_Name: "",
-        RM_Email_Id: "",
-        Client_SPOC_Name: "",
-        Client_SPOC_Email_Id: "",
-        Client_SPOC_Mobile_No: "",
-        Client_Escalation_Manager_Name: "",
-        Client_Escalation_Manager_Email_Id: "",
-        Client_Escalation_Manager_Mobile_No: "",
-        Portal_Payslip_Format: formValue?.PortalPaySlipFormat ?? "",
-        IsNewJoinee: formValue?.IsNewJoinee ? "1" : "0",
-        ReimbPaymentId: Number(formValue?.ReimbPaymentId ?? 0),
-        PayrollWithDecimalId: Number(formValue?.PayrollWithDecimal ?? 0),
-        PfCategoryId: 0,
-        IsSignature: formValue?.IsSignature ? 1 : 0,
-        ServiceFeeWithDecimalId: Number(formValue?.ServiceFeeWithDecimal ?? 0),
-        Qdemy_charges: formValue?.QdemyCharges ?? 0,
-        IsCurrencyConversion: formValue?.IsCurrencyConversion ? 1 : 0,
-        TechSubscriptionCharges: formValue?.TechSubscriptionCharges ?? 0,
-        Tech_Subscription_Charges_Criteria_Type: formValue?.TechSubscriptionChargesvalue ?? 0,
-        DigitalPlatformConsent: Number(formValue?.DigitalPlatformConsent ?? 0),
-        DGPSF: Number(formValue?.DGPSF ?? 0),
-        Vertical_Id: Number(formValue?.Vertial ?? 0),
-        ServiceChargeClubbing: Number(formValue?.ServiceChargeClubbing ?? 0),
-        IsOneTouchInvoicing: Number(formValue?.IsOneTouchInvoicing ?? 0),
-        IsInvoicePoBased: Number(formValue?.IsInovicePoBased ?? 0),
-        IS_ESI_split: Number(formValue?.ESISplit ?? 0),
-        WorkingHours: Number(formValue?.WorkingHours ?? 0),
-        Is40BillingModel: formValue?.Is40BillingModel ? 1 : 0,
-        BillingCompanyId: 0,
-        Contract_Start_Date: this.formatDate(formValue?.ContractStartType) ?? "",
-        Contract_End_Date: this.formatDate(formValue?.ContractExpiryType) ?? "",
-        Contract_File_Path: formValue?.ContractFile ?? "",
-        Contract_File_Name: formValue?.ContractFileName ?? "",
-        Contract_Uploaded_File_Name: formValue?.ContractUploadedFileName ?? "",
-        Service_Tax_Date: this.formatDate(formValue?.ValidDate) ?? "",
-        Service_Tax_File_Path: formValue?.ServiceTaxFile ?? "",
-        Service_Tax_File_Name: formValue?.ServiceTaxFileName ?? "",
-        Service_Tax_Uploaded_File_Name: formValue?.ServiceTax ?? "",
-        Bank_Id: formValue?.BankName ?? "",
-        IFSC_Code: formValue?.SwiftCode ?? "",
-        Account_Number: formValue?.AccountNo ?? "",
-        Bank_Address: formValue?.BankAddress ?? "",
-        Branch: formValue?.Branch ?? "",
-        BranchCode: formValue?.BranchCode ?? "",
-        BankCode: formValue?.BankCode ?? "",
-        BankAdviceId: formValue?.BankAdvice ?? "",
-        Portal_Type: formValue?.Portal_Type ?? "",
-        OT_WEEK_DAY_TYPE: formValue.weekday_type ?? null,
-        OT_WEEK_DAY_VLAUE: formValue.Weekday_Value ?? '',
-        OT_WEEK_DAY_FORMULA: formValue.Weekday_Formula ?? '',
-
-        OT_NIGHT_SHIFT_TYPE: formValue.Nightshift_type ?? null,
-        OT_NIGHT_SHIFT_VLAUE: formValue.Nightshift_Value ?? '',
-        OT_NIGHT_SHIFT_FORMULA: formValue.Nightshift_Formula ?? '',
-
-        OT_WEEKEND_TYPE: formValue.OT_weekend_type ?? null,
-        OT_WEEKEND_VLAUE: formValue.Weekend_Value ?? '',
-        OT_WEEKEND_FORMULA: formValue.Weekend_Formula ?? '',
-
-        OT_HOLIDAY_TYPE: formValue.Holiday_type ?? null,
-        OT_HOLIDAY_VLAUE: formValue.Holiday_Value ?? '',
-        OT_HOLIDAY_FORMULA: formValue.Holiday_Formula ?? '',
-
-        Adhoc_Service_Fee: formValue.adhoc_service_fee ?? '',
-        Adhoc_Service_Formula: formValue.adhoc_service_formula ?? ''
-      }
-    };
-    console.log('payload', JSON.stringify(payload))
-    this.company.createCompany(payload).subscribe({
-      next: res => {
-        const msg = res.Data.message
-        this.showAlertPopup(msg);
-        this.isLoading = false;
-        this.onClose();
-        this.dialogRef.close('refresh');
-      },
-      error: err => console.error(err)
-    });
-    this.isLoading = false;
-  }
-
-  // AddContactDetails() {
-  //   this.dialog.open(ContactdetailsComponent, {
-  //     width: '65%',
-  //     height: '47vh',
-  //     disableClose: true,
-  //     data: { example: 'Hello from parent!' }
-  //   });
-  // }
+  this.company.createCompany(payload).subscribe({
+    next: (res: any) => {
+      const msg = res?.Data?.message ?? 'Company saved successfully';
+      this.showAlertPopup(msg);
+      this.isLoading = false;
+      this.onClose();
+      this.dialogRef.close('refresh');
+    },
+    error: (err: any) => {
+      console.error(err);
+      this.isLoading = false;
+    }
+  });
+}
 
   onClose() {
     this.dialogRef.close();
   }
-
 }

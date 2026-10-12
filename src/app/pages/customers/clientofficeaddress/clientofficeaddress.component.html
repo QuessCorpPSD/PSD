@@ -1,0 +1,182 @@
+<div class="page-wrapper">
+    <div class="scrollable-content">
+
+        <div style="color:#302CB3;font-size:22px;font-family:Montserrat;font-weight:700;padding-top:10px">
+            Client Office Address
+        </div>
+
+        <div class="justify-content-between align-items-center mb-3">
+            <div class="container py-3">
+                <div class="row g-3 align-items-end">
+
+                    <div class="col-md-3">
+                        <label class="form-label text-muted small">Company Code</label>
+                        <companyall (companyEmit)="handleCompany($event)"></companyall>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label text-muted small">Customer Name</label>
+                        <input type="text" class="form-control form-control-sm"
+                            [(ngModel)]="customerNameSearch" />
+                    </div>
+
+                    <div class="col-md-4 d-flex gap-2">
+                        <button class="btn btn-sm d-flex align-items-center justify-content-center btn-search"
+                            matTooltip="Search" (click)="onsearch()">
+                            <mat-icon>search</mat-icon>
+                        </button>
+
+                        <button class="btn btn-secondary btn-sm d-flex align-items-center justify-content-center"
+                            matTooltip="Export to Excel" (click)="exportToExcel()">
+                            <mat-icon>download</mat-icon>
+                        </button>
+
+                        <button class="btn btn-sm d-flex align-items-center justify-content-center btn-success"
+                            matTooltip="Add" (click)="openadd()">
+                            <mat-icon>add</mat-icon>
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="table-wrapper1" *ngIf="showTable">
+                <div class="table-scroll">
+                    <mat-table [dataSource]="dataSource" class="mat-elevation-z8 custom-table">
+
+                        <ng-container matColumnDef="Action">
+                            <mat-header-cell *matHeaderCellDef>Action</mat-header-cell>
+                            <mat-cell *matCellDef="let row">
+                                <div class="action-buttons">
+                                    <button class="btn btn-sm" matTooltip="Edit" (click)="editAddress(row)">
+                                        <mat-icon>edit</mat-icon>
+                                    </button>
+                                    <button class="btn btn-sm" matTooltip="Delete" (click)="deleteAddress(row)">
+                                        <mat-icon>delete</mat-icon>
+                                    </button>
+                                </div>
+                            </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="SNo">
+                            <mat-header-cell *matHeaderCellDef>SNo</mat-header-cell>
+                            <mat-cell *matCellDef="let row; let i = index">{{ i + 1 }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="CompanyCode">
+                            <mat-header-cell *matHeaderCellDef>Company Code</mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{ row.CompanyCode }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="CustomerName">
+                            <mat-header-cell *matHeaderCellDef>Customer Name</mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{ row.CustomerName }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="AddressCode">
+                            <mat-header-cell *matHeaderCellDef>Address Code</mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{ row.AddressCode }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="CustomerLocationAddress">
+                            <mat-header-cell *matHeaderCellDef>Customer Location Address</mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{ row.CustomerLocationAddress }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="LocalAuthority">
+                            <mat-header-cell *matHeaderCellDef>Local Authority</mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{ row.LocalAuthority }}</mat-cell>
+                        </ng-container>
+
+                        <mat-header-row *matHeaderRowDef="uploadDisplayedColumns"></mat-header-row>
+                        <mat-row *matRowDef="let row; columns: uploadDisplayedColumns;"
+                                 (click)="onRowSelect(row)"
+                                 [class.selected-row]="selectedRow === row"></mat-row>
+
+                    </mat-table>
+                </div>
+
+                <div *ngIf="dataSource.data.length === 0" class="text-center p-4">
+                    <p class="text-muted">No data to display</p>
+                </div>
+
+                <mat-paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="showAddressPopup" class="popup-overlay">
+    <form [formGroup]="addressForm" novalidate>
+        <mat-card class="popup-card">
+
+            <mat-card-header class="popup-header">
+                <mat-card-title>
+                    {{ isEditMode ? 'Edit Client Office Address' : 'Add Client Office Address' }}
+                </mat-card-title>
+                <span class="spacer"></span>
+                <button mat-icon-button type="button" style="background:transparent;border:none" (click)="closePopup()">
+                    <mat-icon>close</mat-icon>
+                </button>
+            </mat-card-header>
+
+            <mat-card-content>
+                <div class="row g-3 mb-3">
+
+                    <div class="col-md-12">
+                        <label class="form-label text-muted small">
+                            Company Code: <span class="text-danger">*</span>
+                        </label>
+                        <companyall (companyEmit)="handleCompany($event)"></companyall>
+                        <small class="text-danger d-block"
+                            *ngIf="showErrors && addressForm.get('companyId')?.invalid">
+                            Company Code is required
+                        </small>
+                    </div>
+
+                    <div class="col-md-12">
+                        <label class="form-label text-muted small">Address Code:</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="addressCode" />
+                    </div>
+
+                    <div class="col-md-12">
+                        <label class="form-label text-muted small">
+                            Customer Location Address: <span class="text-danger">*</span>
+                        </label>
+                        <input type="text" class="form-control form-control-sm"
+                            formControlName="customerLocationAddress" />
+                        <small class="text-danger d-block"
+                            *ngIf="showErrors && addressForm.get('customerLocationAddress')?.invalid">
+                            Customer Location Address is required
+                        </small>
+                    </div>
+
+                    <div class="col-md-12">
+                        <label class="form-label text-muted small">
+                            Local Authority: <span class="text-danger">*</span>
+                        </label>
+                        <select class="form-select form-select-sm" formControlName="localAuthority">
+                            <option [ngValue]="null">--Select--</option>
+                            <option *ngFor="let l of localAuthorityList" [ngValue]="l.localAuthorityId">
+                                {{ l.localAuthorityName }}
+                            </option>
+                        </select>
+                        <small class="text-danger d-block"
+                            *ngIf="showErrors && addressForm.get('localAuthority')?.invalid">
+                            Local Authority is required
+                        </small>
+                    </div>
+
+                </div>
+            </mat-card-content>
+
+            <mat-card-footer class="popup-footer">
+                <button type="button" class="btn-save" (click)="saveAddress()">
+                    {{ isEditMode ? 'Update' : 'Save' }}
+                </button>
+                <button type="button" class="btn-cancel" (click)="closePopup()">Cancel</button>
+            </mat-card-footer>
+
+        </mat-card>
+    </form>
+</div>

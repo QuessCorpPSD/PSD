@@ -34,6 +34,27 @@
                     </div>
 
                     <!-- Company Name -->
+                    
+                    <label class="form-label text-muted small mb-0" style="white-space: nowrap;">Company Name<span
+                            style="color:red">*</span></label>
+                    <div>
+                        <input type="text" class="form-control form-control-sm" formControlName="companyname" readonly/>
+
+                        <!-- <small class="text-danger d-block mt-1"
+                            *ngIf="showErrors && costForm.get('CostCenter')?.invalid">
+                            Cost Center is required
+                        </small> -->
+                    </div>
+                      <label class="form-label text-muted small mb-0" style="white-space: nowrap;">Company Location<span
+                            style="color:red">*</span></label>
+                    <div>
+                        <input type="text" class="form-control form-control-sm" formControlName="companylocation" readonly />
+
+                        <!-- <small class="text-danger d-block mt-1"
+                            *ngIf="showErrors && costForm.get('CostCenter')?.invalid">
+                            Cost Center is required
+                        </small> -->
+                    </div>
                     <label class="form-label text-muted small mb-0" style="white-space: nowrap;">Cost Center<span
                             style="color:red">*</span></label>
                     <div>
@@ -44,6 +65,8 @@
                             Cost Center is required
                         </small>
                     </div>
+
+
                 </div>
             </div>
         </mat-card-content>

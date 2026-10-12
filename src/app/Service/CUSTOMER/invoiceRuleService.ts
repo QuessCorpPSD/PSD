@@ -21,8 +21,12 @@ export class invoiceRuleService implements IinvoiceRuleService {
     return this.http.post<APIResponse>(url, InvoiceRuleAdd);
   }
   PostDeleteInvoiceRule(invoicingRulesID: number): Observable<APIResponse> {
-    const url = `${this.environment.apiUrl}InvoiceRule/PostDeleteInvoiceRule`;
-    return this.http.post<APIResponse>(url, invoicingRulesID);
+    // const url = `${this.environment.apiUrl}InvoiceRule/PostDeleteInvoiceRule`;
+    // return this.http.post<APIResponse>(url, invoicingRulesID);
+    const url = `${this.environment.apiUrl}InvoiceRule/PostDeleteInvoiceRule/${invoicingRulesID}`;
+    return this.http.get<APIResponse>(url);
+
+
   }
   GetInvoiceRuleTemplate(formData: FormData): Observable<APIResponse> {
     const url = `${this.environment.apiUrl}InvoiceRule/GetInvoiceRuleTemplate`;

@@ -1,0 +1,176 @@
+<div class="page-wrapper">
+    <div class="scrollable-content">
+
+        <!-- TITLE -->
+        <div style="color:#302CB3;font-size:22px;font-family:Montserrat;font-weight:700;padding-top:10px">
+            Loan Type
+        </div>
+
+        <!-- FILTER BAR -->
+        <div class="justify-content-between align-items-center mb-3">
+            <div class="container py-3">
+                <div class="row g-3 align-items-end">
+
+                    <!-- COMPANY -->
+                    <div class="col-md-3">
+                        <label class="form-label text-muted small">Company Code</label>
+                        <companyall (companyEmit)="handleCompanyEvent($event)"></companyall>
+
+                    </div>
+
+                    <!-- ACTION BUTTONS -->
+                    <div class="col-md-4 d-flex gap-2">
+                        <button class="btn btn-sm d-flex align-items-center justify-content-center btn-search"
+                            matTooltip="Search" (click)="onsearch()">
+                            <mat-icon>search</mat-icon>
+                        </button>
+
+                        <button class="btn btn-secondary btn-sm d-flex align-items-center justify-content-center"
+                            matTooltip="Export to Excel">
+                            <mat-icon>download</mat-icon>
+                        </button>
+
+                        <button class="btn btn-sm d-flex align-items-center justify-content-center btn-success"
+                            matTooltip="Add" (click)="openadd()">
+                            <mat-icon>add</mat-icon>
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- TABLE -->
+            <div class="table-wrapper1" *ngIf="showTable">
+                <div class="table-scroll">
+                    <mat-table [dataSource]="dataSource" class="mat-elevation-z8 custom-table">
+
+                        <!-- ACTION -->
+                        <ng-container matColumnDef="Action">
+                            <mat-header-cell *matHeaderCellDef>Action</mat-header-cell>
+                            <mat-cell *matCellDef="let row">
+                                <div class="action-buttons">
+                                    <button class="btn btn-sm" matTooltip="Edit" (click)="editLoanType(row)">
+                                        <mat-icon>edit</mat-icon>
+                                    </button>
+                                    <button class="btn btn-sm" matTooltip="Delete" (click)="deleteLoanType(row)">
+                                        <mat-icon>delete</mat-icon>
+                                    </button>
+                                </div>
+                            </mat-cell>
+                        </ng-container>
+
+                        <!-- SL.NO -->
+                        <ng-container matColumnDef="SNo">
+                            <mat-header-cell *matHeaderCellDef>Sl.No</mat-header-cell>
+                            <mat-cell *matCellDef="let row; let i = index">{{ i + 1 }}</mat-cell>
+                        </ng-container>
+
+                        <!-- COMPANY CODE -->
+                        <ng-container matColumnDef="Company_code">
+                            <mat-header-cell *matHeaderCellDef>Company Code</mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{ row.Company_code }}</mat-cell>
+                        </ng-container>
+
+                        <!-- PAY CODE -->
+                        <ng-container matColumnDef="Pay_Code">
+                            <mat-header-cell *matHeaderCellDef>Pay Code</mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{ row.Pay_Code }}</mat-cell>
+                        </ng-container>
+
+                        <!-- ELIGIBILITY -->
+                        <ng-container matColumnDef="Eligibility">
+                            <mat-header-cell *matHeaderCellDef>Eligibility</mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{ row.Eligibility }}</mat-cell>
+                        </ng-container>
+
+                        <mat-header-row *matHeaderRowDef="uploadDisplayedColumns"></mat-header-row>
+                        <mat-row *matRowDef="let row; columns: uploadDisplayedColumns;"></mat-row>
+
+                    </mat-table>
+                </div>
+
+                <div *ngIf="dataSource.data.length === 0" class="text-center p-4">
+                    <p class="text-muted">No data to display</p>
+                </div>
+
+                <mat-paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ========== ADD / EDIT POPUP ========== -->
+<div *ngIf="showLoanPopup" class="popup-overlay">
+    <form [formGroup]="loanTypeForm" novalidate>
+        <mat-card class="popup-card">
+
+            <!-- HEADER -->
+            <mat-card-header class="popup-header">
+                <mat-card-title>
+                    {{ isEditMode ? 'Edit Loan Type' : 'Add Loan Type' }}
+                </mat-card-title>
+                <span class="spacer"></span>
+                <button mat-icon-button type="button" style="background:transparent;border:none" (click)="closePopup()">
+                    <mat-icon>close</mat-icon>
+                </button>
+            </mat-card-header>
+
+            <mat-card-content>
+                <div class="row g-3 mb-3">
+
+                    <!-- COMPANY CODE -->
+                    <div class="col-md-12">
+                        <label class="form-label text-muted small">
+                            Company Code: <span class="text-danger">*</span>
+                        </label>
+                        <companyall (companyEmit)="handleCompanyEvent($event)"></companyall>
+
+                        <small class="text-danger d-block" *ngIf="showErrors && loanTypeForm.get('companyId')?.invalid">
+                            Company Code is required
+                        </small>
+                    </div>
+
+                    <!-- PAY CODE -->
+                    <div class="col-md-12">
+                        <label class="form-label text-muted small">
+                            Pay Code: <span class="text-danger">*</span>
+                        </label>
+                        <select class="form-select form-select-sm" formControlName="payCodeId">
+                            <option [ngValue]="null">Select Pay</option>
+                            <option *ngFor="let p of payCodeList" [ngValue]="p.payCodeId">
+                                {{ p.payCode }}
+                            </option>
+                        </select>
+                        <small class="text-danger d-block" *ngIf="showErrors && loanTypeForm.get('payCodeId')?.invalid">
+                            Pay Code is required
+                        </small>
+                    </div>
+
+                    <!-- ELIGIBILITY -->
+                    <div class="col-md-12">
+                        <label class="form-label text-muted small">
+                            Eligibility: <span class="text-danger">*</span>
+                        </label>
+                        <input type="text" class="form-control form-control-sm" formControlName="eligibility" />
+                        <small class="text-danger d-block"
+                            *ngIf="showErrors && loanTypeForm.get('eligibility')?.invalid">
+                            Eligibility is required
+                        </small>
+                    </div>
+
+                </div>
+            </mat-card-content>
+
+            <!-- FOOTER -->
+            <mat-card-footer class="popup-footer">
+                <button type="button" class="btn-save" (click)="saveLoanType()">
+                    Save
+                </button>
+                <button type="button" class="btn-cancel" (click)="closePopup()">
+                    Cancel
+                </button>
+            </mat-card-footer>
+
+        </mat-card>
+    </form>
+</div>

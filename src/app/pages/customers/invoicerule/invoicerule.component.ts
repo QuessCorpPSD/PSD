@@ -262,7 +262,11 @@ export class InvoiceruleComponent {
   }
   deleteClick(invoicingRulesID: number) {
     if (confirm("Are you sure you want to delete this?")) {
-      this.invoicerule.PostDeleteInvoiceRule(invoicingRulesID).subscribe({
+      this.invoicerule.PostDeleteInvoiceRule(invoicingRulesID).pipe(
+        finalize(() => {
+          this.isLoading = false;
+        })
+      ).subscribe({
         next: (res) => {
           const errormsg = res.Data[0].msg;
           alert(errormsg);
@@ -271,6 +275,7 @@ export class InvoiceruleComponent {
         }
       });
     } else {
+      console.log("Delete Failed")
 
     }
 

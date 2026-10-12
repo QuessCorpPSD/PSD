@@ -1,0 +1,388 @@
+<div class="page-wrapper">
+    <div class="scrollable-content">
+
+        <div style="color:#302CB3;font-size:22px;font-family:Montserrat;font-weight:700;padding-top:10px">
+            CLRA Tracker
+        </div>
+
+        <div class="justify-content-between align-items-center mb-3">
+            <div class="container py-3">
+                <div class="row g-3 align-items-end">
+
+                    <div class="col-md-2">
+                        <label class="form-label text-muted small">Entity Name</label>
+                        <select class="form-select form-select-sm" [(ngModel)]="selectedEntityId">
+                            <option [ngValue]="null">SELECT</option>
+                            <option *ngFor="let e of entityList" [ngValue]="e.entityId">
+                                {{ e.entityName }}
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-2">
+                        <label class="form-label text-muted small">Customer Name</label>
+                        <input type="text" class="form-control form-control-sm" [(ngModel)]="customerNameSearch" />
+                    </div>
+
+                    <div class="col-md-2">
+                        <label class="form-label text-muted small">Internal Reference Number</label>
+                        <input type="text" class="form-control form-control-sm" [(ngModel)]="internalRefSearch" />
+                    </div>
+
+                    <div class="col-md-4 d-flex gap-2">
+                        <button class="btn btn-sm d-flex align-items-center justify-content-center btn-search"
+                            matTooltip="Search" (click)="onsearch()">
+                            <mat-icon>search</mat-icon>
+                        </button>
+
+                        <button class="btn btn-sm d-flex align-items-center justify-content-center btn-search"
+                            matTooltip="Bulk License Download" (click)="bulkLicenseDownload()">
+                            <mat-icon>download</mat-icon>
+                        </button>
+
+                        <button class="btn btn-secondary btn-sm d-flex align-items-center justify-content-center"
+                            matTooltip="Export to Excel" (click)="exportToExcel()">
+                            <mat-icon>download</mat-icon>
+                        </button>
+
+                        <button class="btn btn-sm d-flex align-items-center justify-content-center btn-success"
+                            matTooltip="Add" (click)="openadd()">
+                            <mat-icon>add</mat-icon>
+                        </button>
+
+                        <button class="btn btn-sm d-flex align-items-center justify-content-center btn-search"
+                            matTooltip="Import" (click)="onImport()">
+                            <mat-icon>cloud_upload</mat-icon>
+                        </button>
+
+                        <button class="btn btn-sm d-flex align-items-center justify-content-center btn-download"
+                            matTooltip="Download Template" (click)="downloadTemplate()">
+                            <mat-icon>cloud_download</mat-icon>
+                        </button>
+
+                        <input type="file" class="form-control form-control-sm" accept=".xlsx,.xls" style="display:none"
+                            (change)="onFileChange($event)" />
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="table-wrapper1" *ngIf="showTable">
+                <div class="table-scroll">
+                    <mat-table [dataSource]="dataSource" class="mat-elevation-z8 custom-table">
+
+                        <ng-container matColumnDef="Action">
+                            <mat-header-cell *matHeaderCellDef>Action</mat-header-cell>
+                            <mat-cell *matCellDef="let row">
+                                <div class="action-buttons">
+                                    <button class="btn btn-sm" matTooltip="Edit" (click)="editClra(row)">
+                                        <mat-icon>edit</mat-icon>
+                                    </button>
+                                    <button class="btn btn-sm" matTooltip="Delete" (click)="deleteClra(row)">
+                                        <mat-icon>delete</mat-icon>
+                                    </button>
+                                </div>
+                            </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="SNo">
+                            <mat-header-cell *matHeaderCellDef>Sl.No</mat-header-cell>
+                            <mat-cell *matCellDef="let row; let i = index">{{ i + 1 }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="CompanyCode">
+                            <mat-header-cell *matHeaderCellDef>Company Code</mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{ row.CompanyCode }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="InternalReferenceNo">
+                            <mat-header-cell *matHeaderCellDef>Internal_Reference_No</mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{ row.InternalReferenceNo }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="CustomerName">
+                            <mat-header-cell *matHeaderCellDef>Customer Name</mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{ row.CustomerName }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="EntityName">
+                            <mat-header-cell *matHeaderCellDef>Entity Name</mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{ row.EntityName }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Region">
+                            <mat-header-cell *matHeaderCellDef>Region</mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{ row.Region }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="CustomerLocationAddress">
+                            <mat-header-cell *matHeaderCellDef>Customer Location Address</mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{ row.CustomerLocationAddress }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="ValidFrom">
+                            <mat-header-cell *matHeaderCellDef>Valid_From</mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{ row.ValidFrom }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="ValidTo">
+                            <mat-header-cell *matHeaderCellDef>Valid_To</mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{ row.ValidTo }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="LocationSPOCName">
+                            <mat-header-cell *matHeaderCellDef>Location_SPOC_Name</mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{ row.LocationSPOCName }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="LocationSPOCEmail">
+                            <mat-header-cell *matHeaderCellDef>Location_SPOC_Email</mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{ row.LocationSPOCEmail }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Status">
+                            <mat-header-cell *matHeaderCellDef>Status</mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{ row.Status }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="AdditionalRemarks">
+                            <mat-header-cell *matHeaderCellDef>Additional_Remarks</mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{ row.AdditionalRemarks }}</mat-cell>
+                        </ng-container>
+
+                        <mat-header-row *matHeaderRowDef="uploadDisplayedColumns"></mat-header-row>
+                        <mat-row *matRowDef="let row; columns: uploadDisplayedColumns;"></mat-row>
+
+                    </mat-table>
+                </div>
+
+                <div *ngIf="dataSource.data.length === 0" class="text-center p-4">
+                    <p class="text-muted">No data to display</p>
+                </div>
+
+                <mat-paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="showClraPopup" class="popup-overlay">
+    <form [formGroup]="clraForm" novalidate>
+        <mat-card class="popup-card popup-card-wide">
+
+            <mat-card-header class="popup-header">
+                <mat-card-title>
+                    {{ isEditMode ? 'Edit CLRA Tracker' : 'Add CLRA Tracker' }}
+                </mat-card-title>
+                <span class="spacer"></span>
+                <button mat-icon-button type="button" style="background:transparent;border:none" (click)="closePopup()">
+                    <mat-icon>close</mat-icon>
+                </button>
+            </mat-card-header>
+
+            <mat-card-content>
+                <div class="row g-3 mb-3">
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">
+                            Internal Reference No: <span class="text-danger">*</span>
+                        </label>
+                        <input type="text" class="form-control form-control-sm" formControlName="internalReferenceNo" />
+                        <small class="text-danger d-block"
+                            *ngIf="showErrors && clraForm.get('internalReferenceNo')?.invalid">
+                            Internal Reference No is required
+                        </small>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">
+                            Company Code: <span class="text-danger">*</span>
+                        </label>
+                        <select class="form-select form-select-sm" formControlName="companyId">
+                            <option [ngValue]="null">--Select--</option>
+                            <option *ngFor="let c of companyList" [ngValue]="c.companyId">
+                                {{ c.companyCode }}
+                            </option>
+                        </select>
+                        <small class="text-danger d-block" *ngIf="showErrors && clraForm.get('companyId')?.invalid">
+                            Company Code is required
+                        </small>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">
+                            Entity Name: <span class="text-danger">*</span>
+                        </label>
+                        <select class="form-select form-select-sm" formControlName="entityId">
+                            <option [ngValue]="null">SELECT</option>
+                            <option *ngFor="let e of entityList" [ngValue]="e.entityId">
+                                {{ e.entityName }}
+                            </option>
+                        </select>
+                        <small class="text-danger d-block" *ngIf="showErrors && clraForm.get('entityId')?.invalid">
+                            Entity Name is required
+                        </small>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Nature Of Work:</label>
+                        <select class="form-select form-select-sm" formControlName="natureOfWork">
+                            <option [ngValue]="null">--Select--</option>
+                            <option *ngFor="let w of workNatureList" [ngValue]="w.id">
+                                {{ w.name }}
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Customer Location Address:</label>
+                        <select class="form-select form-select-sm" formControlName="customerLocationAddress">
+                            <option [ngValue]="null">--Select--</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Amendment With Ques:</label>
+                        <select class="form-select form-select-sm" formControlName="amendmentWithQues">
+                            <option [ngValue]="null">--Select--</option>
+                            <option *ngFor="let y of yesNoList" [ngValue]="y.id">
+                                {{ y.name }}
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">
+                            Customer Name: <span class="text-danger">*</span>
+                        </label>
+                        <input type="text" class="form-control form-control-sm" formControlName="customerName" />
+                        <small class="text-danger d-block" *ngIf="showErrors && clraForm.get('customerName')?.invalid">
+                            Customer Name is required
+                        </small>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">No Of Employees:</label>
+                        <input type="number" class="form-control form-control-sm" formControlName="noOfEmployees" />
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Region:</label>
+                        <select class="form-select form-select-sm" formControlName="region">
+                            <option [ngValue]="null">--Select--</option>
+                            <option *ngFor="let r of regionList" [ngValue]="r.id">
+                                {{ r.name }}
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">License No:</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="licenseNo" />
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Valid From:</label>
+                        <input type="date" class="form-control form-control-sm" formControlName="validFrom" />
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Client RC No:</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="clientRcNo" />
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Valid To:</label>
+                        <input type="date" class="form-control form-control-sm" formControlName="validTo" />
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Issuing Authority:</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="issuingAuthority" />
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">
+                            Location SPOC Name: <span class="text-danger">*</span>
+                        </label>
+                        <select class="form-select form-select-sm" formControlName="locationSpocName">
+                            <option [ngValue]="null">Select Spoc</option>
+                            <option *ngFor="let s of spocList" [ngValue]="s.spocId">
+                                {{ s.spocName }}
+                            </option>
+                        </select>
+                        <small class="text-danger d-block"
+                            *ngIf="showErrors && clraForm.get('locationSpocName')?.invalid">
+                            Location SPOC Name is required
+                        </small>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">License Issuing Location:</label>
+                        <select class="form-select form-select-sm" formControlName="licenseIssuingLocation">
+                            <option [ngValue]="null">--Select--</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">
+                            Status: <span class="text-danger">*</span>
+                        </label>
+                        <select class="form-select form-select-sm" formControlName="status">
+                            <option [ngValue]="null">--SELECT--</option>
+                            <option *ngFor="let s of statusList" [ngValue]="s.id">
+                                {{ s.name }}
+                            </option>
+                        </select>
+                        <small class="text-danger d-block" *ngIf="showErrors && clraForm.get('status')?.invalid">
+                            Status is required
+                        </small>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Remarks:</label>
+                        <textarea rows="2" class="form-control form-control-sm" formControlName="remarks"></textarea>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">
+                            Additional Remarks: <span class="text-danger">*</span>
+                        </label>
+                        <select class="form-select form-select-sm" formControlName="additionalRemarks">
+                            <option [ngValue]="null">--SELECT--</option>
+                        </select>
+                        <small class="text-danger d-block"
+                            *ngIf="showErrors && clraForm.get('additionalRemarks')?.invalid">
+                            Additional Remarks is required
+                        </small>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">
+                            Upload License: <span class="text-danger">*</span>
+                        </label>
+                        <div class="upload-license-row">
+                            <input type="file" class="form-control form-control-sm" formControlName="uploadLicense" />
+                            <a class="delete-link">Delete</a>
+                        </div>
+                        <small class="text-danger d-block"
+                            *ngIf="showErrors && clraForm.get('uploadLicense')?.invalid">
+                            Upload License is required
+                        </small>
+                    </div>
+
+                </div>
+            </mat-card-content>
+
+            <mat-card-footer class="popup-footer">
+                <button type="button" class="btn-save" (click)="saveClra()">
+                    {{ isEditMode ? 'Update' : 'Save' }}
+                </button>
+                <button type="button" class="btn-cancel" (click)="closePopup()">
+                    Cancel
+                </button>
+            </mat-card-footer>
+
+        </mat-card>
+    </form>
+</div>

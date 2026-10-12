@@ -555,7 +555,7 @@
             <!-- HEADER -->
             <mat-card-header class="popup-header">
                 <mat-card-title>
-                    {{ isEditMode ? 'Edit Client Address' : 'Add Client Address' }}
+                    {{ isEditMode ? 'Edit Vendor Client Address' : 'Add Vendor Client Address' }}
                 </mat-card-title>
                 <span class="spacer"></span>
 
@@ -691,7 +691,7 @@
 
                             <label class="form-label text-muted small mt-3">Billing Pin Code <span
                                     class="text-danger">*</span></label>
-                            <input class="form-control form-control-sm" formControlName="billingPinCode" readonly>
+                            <input class="form-control form-control-sm" formControlName="billingPinCode">
 
                             <label class="form-label text-muted small mt-3">SAP Bill To</label>
                             <input class="form-control form-control-sm" formControlName="sapBillTo">
@@ -721,9 +721,14 @@
                             </small>
                             <label class="form-label text-muted small mt-3">Shipping State <span
                                     class="text-danger">*</span></label>
-                            <state formControlName="shippingState" (stateEmit)="handleStateNameEvent2($event)"
-                                [readonly]="sameAsBilling">
+
+                            <state *ngIf="!sameAsBilling" formControlName="shippingState"
+                                (stateEmit)="handleStateNameEvent2($event)">
                             </state>
+
+                            <input *ngIf="sameAsBilling" class="form-control form-control-sm"
+                                [value]="shippingStateDisplay" readonly>
+
                             <small class="text-danger d-block mt-1"
                                 *ngIf="showErrors && clientaddress.get('shippingState')?.invalid">
                                 Shipping State is required
@@ -733,10 +738,15 @@
 
                             <label class="form-label text-muted small mt-3">Shipping Location <span
                                     class="text-danger">*</span></label>
-                            <citybystate formControlName="shippingLocation"
+
+                            <citybystate *ngIf="!sameAsBilling" formControlName="shippingLocation"
                                 [selectedStateId]="clientaddress.get('shippingState')?.value?.state_Id"
-                                (citybyStateEmit)="citybystateEvent2($event)" [readonly]="sameAsBilling">
+                                (citybyStateEmit)="citybystateEvent2($event)">
                             </citybystate>
+
+                            <input *ngIf="sameAsBilling" class="form-control form-control-sm"
+                                [value]="shippingLocationDisplay" readonly>
+
                             <small class="text-danger d-block mt-1"
                                 *ngIf="showErrors && clientaddress.get('shippingLocation')?.invalid">
                                 Shipping Location is required
@@ -746,8 +756,11 @@
 
                             <label class="form-label text-muted small mt-3">Shipping Pin Code <span
                                     class="text-danger">*</span></label>
-                            <input class="form-control form-control-sm" formControlName="shippingPinCode" readonly>
-                            <label class="form-label text-muted small mt-3">SAP Ship To</label>
+                            <label class="form-label text-muted small mt-3">Shipping Pin Code <span
+                                    class="text-danger">*</span></label>
+                            <input class="form-control form-control-sm" formControlName="shippingPinCode"
+                                [readonly]="sameAsBilling"> <label class="form-label text-muted small mt-3">SAP Ship
+                                To</label>
                             <input class="form-control form-control-sm" formControlName="sapShipTo"
                                 [readonly]="sameAsBilling">
                             <small class="text-danger d-block mt-1"

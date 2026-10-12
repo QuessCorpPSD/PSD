@@ -16,6 +16,7 @@ import { AlertpopupComponent } from "../../../common/alertpopup/alertpopup.compo
 import { EncryptionService } from '../../../Shared/encryption.service';
 import { SessionStorageService } from '../../../Shared/SessionStorageService';
 import { ICompanypaycodemapping } from '../../../Repository/customer/ICompanypaycodemapping';
+import { finalize } from 'rxjs';
 export const Pay_TOKEN = new InjectionToken<ICompanypaycodemapping>('Pay_TOKEN');
 
 @Component({
@@ -87,7 +88,7 @@ export class CompanypaycodemappingAddComponent {
     this.selectedCompanyId = company.companyId;
     this.selectedCompanyCode = company.companyCode;
   }
-  
+
   showAlertPopup(message: string, subMessage: string = '') {
     this.popupMessage = message;
     this.popupSubMessage = subMessage;
@@ -293,13 +294,16 @@ export class CompanypaycodemappingAddComponent {
       PaycodeDetail: paycodeDetail
     };
 
-    this.paycodeService.PostAddPaycodeMapping(payloadCreate).subscribe({
+    this.paycodeService.PostAddPaycodeMapping(payloadCreate).pipe(
+      finalize(() => {
+        this.isLoading = false;
+      })
+    ).subscribe({
       next: (res) => {
-        const parsedData = JSON.parse(res.Data.data);
-        const errormsg = parsedData[0].Error_Message;
+        const errormsg = res.Data.data.Table0[0].Error_Message;
 
         if (errormsg.toLowerCase().includes("success")) {
-          alert("Company Paycode Mapping Created Successfully");
+          alert(errormsg);
           this.isLoading = false;
           this.onClose();
         } else {

@@ -1,0 +1,318 @@
+<div class="page-wrapper">
+    <div class="scrollable-content">
+
+        <div style="color:#302CB3;font-size:22px;font-family:Montserrat;font-weight:700;padding-top:10px">
+            VENDOR EMPLOYEE
+        </div>
+
+        <div class="justify-content-between align-items-center mb-3">
+            <div class="container py-3">
+                <div class="row g-3 align-items-end">
+
+                    <div class="col-md-3">
+                        <label class="form-label text-muted small">Vendor Name/Code</label>
+                        <input type="text" class="form-control form-control-sm" placeholder="Vendor Name/Code"
+                            [(ngModel)]="vendorSearch" />
+                    </div>
+
+                    <div class="col-md-4 d-flex gap-2">
+                        <button class="btn btn-sm d-flex align-items-center justify-content-center btn-search"
+                            matTooltip="Search" (click)="onsearch()">
+                            <mat-icon>search</mat-icon>
+                        </button>
+
+                        <button class="btn btn-secondary btn-sm d-flex align-items-center justify-content-center"
+                            matTooltip="Export to Excel" (click)="exportToExcel()">
+                            <mat-icon>download</mat-icon>
+                        </button>
+
+                        <button class="btn btn-sm d-flex align-items-center justify-content-center btn-success"
+                            matTooltip="Add" (click)="openadd()">
+                            <mat-icon>add</mat-icon>
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="table-wrapper1" *ngIf="showTable">
+                <div class="table-scroll">
+                    <mat-table [dataSource]="dataSource" class="mat-elevation-z8 custom-table">
+
+                        <ng-container matColumnDef="Action">
+                            <mat-header-cell *matHeaderCellDef>Action</mat-header-cell>
+                            <mat-cell *matCellDef="let row">
+                                <div class="action-buttons">
+                                    <button class="btn btn-sm" matTooltip="Edit" (click)="editVendor(row)">
+                                        <mat-icon>edit</mat-icon>
+                                    </button>
+                                    <button class="btn btn-sm" matTooltip="Delete" (click)="deleteVendor(row)">
+                                        <mat-icon>delete</mat-icon>
+                                    </button>
+                                </div>
+                            </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="SNo">
+                            <mat-header-cell *matHeaderCellDef>SNo</mat-header-cell>
+                            <mat-cell *matCellDef="let row; let i = index">{{ i + 1 }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Vendor_Name">
+                            <mat-header-cell *matHeaderCellDef>Vendor_Name</mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{ row.Vendor_Name }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="POC_Name_1">
+                            <mat-header-cell *matHeaderCellDef>POC Name 1</mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{ row.POC_Name_1 }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="POC_Mobile_NO_1">
+                            <mat-header-cell *matHeaderCellDef>POC Mobile NO 1</mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{ row.POC_Mobile_NO_1 }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="POC_Email_Id_1">
+                            <mat-header-cell *matHeaderCellDef>POC Email Id 1</mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{ row.POC_Email_Id_1 }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="POC_Name_2">
+                            <mat-header-cell *matHeaderCellDef>POC Name 2</mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{ row.POC_Name_2 }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="POC_Mobile_NO_2">
+                            <mat-header-cell *matHeaderCellDef>POC Mobile NO 2</mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{ row.POC_Mobile_NO_2 }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="POC_Email_Id_2">
+                            <mat-header-cell *matHeaderCellDef>POC Email Id 2</mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{ row.POC_Email_Id_2 }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="POC_Name_3">
+                            <mat-header-cell *matHeaderCellDef>POC Name 3</mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{ row.POC_Name_3 }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="POC_Mobile_NO_3">
+                            <mat-header-cell *matHeaderCellDef>POC Mobile NO 3</mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{ row.POC_Mobile_NO_3 }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="POC_Email_Id_3">
+                            <mat-header-cell *matHeaderCellDef>POC Email Id 3</mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{ row.POC_Email_Id_3 }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Payment_Terms">
+                            <mat-header-cell *matHeaderCellDef>Payment Terms</mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{ row.Payment_Terms }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Agreement_Start">
+                            <mat-header-cell *matHeaderCellDef>Agreement Start</mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{ row.Agreement_Start }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Agreement_End">
+                            <mat-header-cell *matHeaderCellDef>Agreement End</mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{ row.Agreement_End }}</mat-cell>
+                        </ng-container>
+
+                        <mat-header-row *matHeaderRowDef="uploadDisplayedColumns"></mat-header-row>
+                        <mat-row *matRowDef="let row; columns: uploadDisplayedColumns;" (click)="onRowSelect(row)"
+                            [class.selected-row]="selectedRow === row"></mat-row>
+
+                    </mat-table>
+                </div>
+
+                <div *ngIf="dataSource.data.length === 0" class="text-center p-4">
+                    <p class="text-muted">No data to display</p>
+                </div>
+
+                <mat-paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="showVendorPopup" class="popup-overlay">
+    <form [formGroup]="vendorForm" novalidate>
+        <mat-card class="popup-card popup-card-wide">
+
+            <mat-card-header class="popup-header">
+                <mat-card-title>
+                    {{ isEditMode ? 'Edit Vendor' : 'Add Vendor' }}
+                </mat-card-title>
+                <span class="spacer"></span>
+                <button mat-icon-button type="button" style="background:transparent;border:none" (click)="closePopup()">
+                    <mat-icon>close</mat-icon>
+                </button>
+            </mat-card-header>
+
+            <mat-card-content>
+                <div class="row g-3 mb-3">
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Vendor Name</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="vendorName" />
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">
+                            Agreement Start: <span class="text-danger">*</span>
+                        </label>
+                        <input type="date" class="form-control form-control-sm" formControlName="agreementStart" />
+                        <small class="text-danger d-block"
+                            *ngIf="showErrors && vendorForm.get('agreementStart')?.invalid">
+                            Agreement Start is required
+                        </small>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">
+                            Agreement End: <span class="text-danger">*</span>
+                        </label>
+                        <input type="date" class="form-control form-control-sm" formControlName="agreementEnd" />
+                        <small class="text-danger d-block"
+                            *ngIf="showErrors && vendorForm.get('agreementEnd')?.invalid">
+                            Agreement End is required
+                        </small>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">
+                            POC Name 1: <span class="text-danger">*</span>
+                        </label>
+                        <input type="text" class="form-control form-control-sm" formControlName="pocName1" />
+                        <small class="text-danger d-block" *ngIf="showErrors && vendorForm.get('pocName1')?.invalid">
+                            POC Name 1 is required
+                        </small>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">
+                            POC Mobile NO 1: <span class="text-danger">*</span>
+                        </label>
+                        <input type="text" class="form-control form-control-sm" formControlName="pocMobileNo1" />
+                        <small class="text-danger d-block"
+                            *ngIf="showErrors && vendorForm.get('pocMobileNo1')?.invalid">
+                            POC Mobile NO 1 is required
+                        </small>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">
+                            POC Email Id 1: <span class="text-danger">*</span>
+                        </label>
+                        <input type="email" class="form-control form-control-sm" formControlName="pocEmailId1" />
+                        <small class="text-danger d-block" *ngIf="showErrors && vendorForm.get('pocEmailId1')?.invalid">
+                            POC Email Id 1 is required
+                        </small>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">POC Name 2:</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="pocName2" />
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">POC Mobile No 2:</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="pocMobileNo2" />
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">POC Email Id 2:</label>
+                        <input type="email" class="form-control form-control-sm" formControlName="pocEmailId2" />
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">POC Name 3:</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="pocName3" />
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">POC Mobile No 3:</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="pocMobileNo3" />
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">POC Email Id 3:</label>
+                        <input type="email" class="form-control form-control-sm" formControlName="pocEmailId3" />
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">
+                            Payment Terms: <span class="text-danger">*</span>
+                        </label>
+                        <input type="text" class="form-control form-control-sm" formControlName="paymentTerms" />
+                        <small class="text-danger d-block"
+                            *ngIf="showErrors && vendorForm.get('paymentTerms')?.invalid">
+                            Payment Terms is required
+                        </small>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">
+                            Client Details: <span class="text-danger">*</span>
+                        </label>
+                        <input type="text" class="form-control form-control-sm" formControlName="clientDetails" />
+                        <small class="text-danger d-block"
+                            *ngIf="showErrors && vendorForm.get('clientDetails')?.invalid">
+                            Client Details is required
+                        </small>
+                    </div>
+
+                </div>
+
+                <div class="action-bar-inner">
+                    <button type="button" class="btn btn-sm btn-add" (click)="addInnerRow()">Add</button>
+                    <button type="button" class="btn btn-sm btn-add"
+                        (click)="deleteInnerRow(selectedInnerRow)">Delete</button>
+                </div>
+
+                <div class="table-wrapper2">
+                    <div class="table-scrolls">
+                        <mat-table [dataSource]="innerDataSource" class="custom-table">
+
+                            <ng-container matColumnDef="SNo">
+                                <mat-header-cell *matHeaderCellDef>SNO</mat-header-cell>
+                                <mat-cell *matCellDef="let row; let i = index">{{ i + 1 }}</mat-cell>
+                            </ng-container>
+
+                            <ng-container matColumnDef="CompanyCode">
+                                <mat-header-cell *matHeaderCellDef>Company Code</mat-header-cell>
+                                <mat-cell *matCellDef="let row">
+                                    <companyall (companyEmit)="handleCompany($event, row)"></companyall>
+                                </mat-cell>
+                            </ng-container>
+
+                            <mat-header-row *matHeaderRowDef="innerColumns"></mat-header-row>
+                            <mat-row *matRowDef="let row; columns: innerColumns;"></mat-row>
+
+                        </mat-table>
+                    </div>
+
+                    <div *ngIf="innerDataSource.data.length === 0" class="text-center p-3">
+                        <p class="text-muted mb-0">No data to display</p>
+                    </div>
+
+                    <mat-paginator #innerPaginator [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons>
+                    </mat-paginator>
+                </div>
+            </mat-card-content>
+
+            <mat-card-footer class="popup-footer">
+                <button type="button" class="btn-save" (click)="saveVendor()">
+                    {{ isEditMode ? 'Update' : 'Save' }}
+                </button>
+                <button type="button" class="btn-cancel" (click)="closePopup()">Cancel</button>
+            </mat-card-footer>
+
+        </mat-card>
+    </form>
+</div>

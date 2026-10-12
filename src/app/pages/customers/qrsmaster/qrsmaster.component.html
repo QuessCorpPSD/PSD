@@ -1,0 +1,47 @@
+<div class="page-wrapper">
+    <div class="scrollable-content">
+
+        <div style="color:#302CB3;font-size:22px;font-family:Montserrat;font-weight:700;padding-top:10px">
+            QRS
+        </div>
+
+        <div class="container py-3">
+            <div class="row g-3 align-items-end">
+
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Company Code :</label>
+                    <companyall (companyEmit)="handleCompanyEvent($event)"></companyall>
+                </div>
+
+                <div class="col-md-2">
+                    <label class="form-label text-muted small">Status</label>
+                    <select class="form-select form-select-sm" [(ngModel)]="statusSearch">
+                        <option value="">--Select--</option>
+                        <option *ngFor="let s of statusList" [value]="s.id">{{ s.name }}</option>
+                    </select>
+                </div>
+
+                <div class="col-md-4 d-flex gap-2">
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-search"
+                        matTooltip="Search" (click)="onSearch()">
+                        <mat-icon>search</mat-icon>
+                    </button>
+
+                    <input type="file" class="form-control form-control-sm" (change)="onFileSelected($event)"
+                        style="display:none" />
+
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-secondary"
+                        matTooltip="Export to Excel" (click)="exportToExcel()">
+                        <mat-icon>download</mat-icon>
+                    </button>
+
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center"
+                        style="background-color: #6f42c1; color:white" matTooltip="Import" (click)="importData()">
+                        <mat-icon>cloud_upload</mat-icon>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

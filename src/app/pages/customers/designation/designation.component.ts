@@ -354,7 +354,7 @@ export class DesignationComponent {
   AddDesignation() {
     this.dialog.open(DesignationaddComponent, {
       width: '65%',
-      height: '50vh',
+      height: '61vh',
       disableClose: true,
       data: { example: 'Hello from parent!' }
     });

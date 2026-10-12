@@ -1,0 +1,413 @@
+<div class="page-wrapper">
+    <div class="scrollable-content">
+
+        <mat-card-title style="color: #302CB3; font-size: 22px; font-family: Montserrat; font-weight: 700;">
+            Service Charge
+        </mat-card-title>
+
+        <div class="container py-2">
+            <div class="row g-3 align-items-end">
+
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Company Code</label>
+                    <companyall (companyEmit)="handleCompanyEvent($event)"></companyall>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Service Charge Type</label>
+                    <select [(ngModel)]="selectedServiceChargeTypeId">
+                        <option *ngFor="let s of servicechargedata" [value]="s.Service_Charge_Type">
+                            {{ s.Service_Charge_Type }}
+                        </option>
+                    </select>
+                </div>
+
+                <div class="col-md-3 d-flex gap-2">
+                    <button class="btn btn-sm btn-primary" matTooltip="Search" (click)="onSearchClick()">
+                        <mat-icon>search</mat-icon>
+                    </button>
+
+                    <button class="btn btn-sm btn-add" matTooltip="Add" (click)="openadd()">
+                        <mat-icon>add</mat-icon>
+                    </button>
+
+                    <button class="btn btn-secondary btn-sm d-flex align-items-center justify-content-center"
+                        matTooltip="Export" (click)="exportToExcel()">
+                        <mat-icon>download</mat-icon>
+                    </button>
+
+                    <!-- <button class="btn btn-sm d-flex align-items-center justify-content-center btn-upload"
+                        matTooltip="Import">
+                        <mat-icon>cloud_upload</mat-icon>
+                    </button>
+
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-download"
+                        matTooltip="Template">
+                        <mat-icon>cloud_download</mat-icon>
+                    </button> -->
+                </div>
+
+            </div>
+        </div>
+
+        <div class="table-wrapper1" [hidden]="!showtable">
+            <div class="table-scroll">
+                <mat-table [dataSource]="dataSource" matSort class="custom-table mat-elevation-z8 auto-fit-table">
+
+                    <!-- Action -->
+                    <ng-container matColumnDef="Action">
+                        <mat-header-cell *matHeaderCellDef><strong>Action</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">
+                            <div class="action-wrapper">
+                                <button class="btn btn-sm" matTooltip="Edit" (click)="editOpen(row)">
+                                    <mat-icon>edit</mat-icon>
+                                </button>
+                                <button class="btn btn-sm" matTooltip="Delete" (click)="deleteRow(row)">
+                                    <mat-icon>delete</mat-icon>
+                                </button>
+                            </div>
+                        </mat-cell>
+                    </ng-container>
+
+                    <!-- SNo -->
+                    <ng-container matColumnDef="SNo">
+                        <mat-header-cell *matHeaderCellDef><strong>SNo</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let e">{{ e.SNo }}</mat-cell>
+                    </ng-container>
+
+                    <!-- Map Name -->
+                    <ng-container matColumnDef="Map_Name">
+                        <mat-header-cell *matHeaderCellDef><strong>Map Name</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let e">{{ e.Map_Name }}</mat-cell>
+                    </ng-container>
+
+                    <!-- Value -->
+                    <ng-container matColumnDef="Value">
+                        <mat-header-cell *matHeaderCellDef><strong>Value</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let e">{{ e.Value }}</mat-cell>
+                    </ng-container>
+
+                    <!-- Cap Value -->
+                    <ng-container matColumnDef="Cap_Value">
+                        <mat-header-cell *matHeaderCellDef><strong>Cap Value</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let e">{{ e.Cap_Value }}</mat-cell>
+                    </ng-container>
+
+                    <!-- Max Amount -->
+                    <ng-container matColumnDef="MaxAmount">
+                        <mat-header-cell *matHeaderCellDef><strong>Max Amount</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let e">{{ e.MaxAmount }}</mat-cell>
+                    </ng-container>
+
+                    <!-- Pay Code -->
+                    <ng-container matColumnDef="PayCode_Code">
+                        <mat-header-cell *matHeaderCellDef><strong>Pay Code</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let e">{{ e.PayCode_Code }}</mat-cell>
+                    </ng-container>
+
+                    <!-- Effective Date -->
+                    <ng-container matColumnDef="Effective_Date">
+                        <mat-header-cell *matHeaderCellDef><strong>Effective Date</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let e">{{ e.Effective_Date }}</mat-cell>
+                    </ng-container>
+
+                    <!-- Prorate flags -->
+                    <ng-container matColumnDef="IsAttendanceProrated_Text">
+                        <mat-header-cell *matHeaderCellDef><strong>Attendance Prorated</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let e">{{ e.IsAttendanceProrated_Text }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="IsFAndFProrate_Text">
+                        <mat-header-cell *matHeaderCellDef><strong>FandF Prorate</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let e">{{ e.IsFAndFProrate_Text }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="IsFAndFArrearProrate_Text">
+                        <mat-header-cell *matHeaderCellDef><strong>FandF Arrear Prorate</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let e">{{ e.IsFAndFArrearProrate_Text }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="IsNewjoineeProrate_Text">
+                        <mat-header-cell *matHeaderCellDef><strong>New Joinee Prorate</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let e">{{ e.IsNewjoineeProrate_Text }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="IsNewJoineeArrearProrate_Text">
+                        <mat-header-cell *matHeaderCellDef><strong>New Joinee Arrear Prorate</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let e">{{ e.IsNewJoineeArrearProrate_Text }}</mat-cell>
+                    </ng-container>
+
+                    <!-- Fees -->
+                    <ng-container matColumnDef="Compliance_Fee">
+                        <mat-header-cell *matHeaderCellDef><strong>Compliance Fee</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let e">{{ e.Compliance_Fee }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="RandStad_Fee">
+                        <mat-header-cell *matHeaderCellDef><strong>Randstad Fee</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let e">{{ e.RandStad_Fee }}</mat-cell>
+                    </ng-container>
+
+                    <!-- Upfront -->
+                    <ng-container matColumnDef="Upfront_Type">
+                        <mat-header-cell *matHeaderCellDef><strong>Upfront Type</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let e">{{ e.Upfront_Type }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Upfront_Charge">
+                        <mat-header-cell *matHeaderCellDef><strong>Upfront Charge</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let e">{{ e.Upfront_Charge }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Upfront_PayCode">
+                        <mat-header-cell *matHeaderCellDef><strong>Upfront PayCode</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let e">{{ e.Upfront_PayCode }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Insurance_Amount">
+                        <mat-header-cell *matHeaderCellDef><strong>Insurance Amount</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let e">{{ e.Insurance_Amount }}</mat-cell>
+                    </ng-container>
+
+                    <!-- Qdemy -->
+                    <ng-container matColumnDef="QDemyFee_Type">
+                        <mat-header-cell *matHeaderCellDef><strong>Qdemy Fee Type</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let e">{{ e.QDemyFee_Type }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="QDemyFee">
+                        <mat-header-cell *matHeaderCellDef><strong>Qdemy Fee</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let e">{{ e.QDemyFee }}</mat-cell>
+                    </ng-container>
+
+                    <!-- InEdge -->
+                    <ng-container matColumnDef="InEdgeFee_Type">
+                        <mat-header-cell *matHeaderCellDef><strong>InEdge Fee Type</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let e">{{ e.InEdgeFee_Type }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="InEdgeFee">
+                        <mat-header-cell *matHeaderCellDef><strong>InEdge Fee</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let e">{{ e.InEdgeFee }}</mat-cell>
+                    </ng-container>
+
+                    <!-- Bill To Rate columns -->
+                    <ng-container matColumnDef="Employee_Code">
+                        <mat-header-cell *matHeaderCellDef><strong>Employee Code</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let e">{{ e.Employee_Code }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Unit_Price">
+                        <mat-header-cell *matHeaderCellDef><strong>Unit Price</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let e">{{ e.Unit_Price }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Unit_Type">
+                        <mat-header-cell *matHeaderCellDef><strong>Unit Type</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let e">{{ e.Unit_Type }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Discount_Type">
+                        <mat-header-cell *matHeaderCellDef><strong>Discount Type</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let e">{{ e.Discount_Type }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Discount_Amount">
+                        <mat-header-cell *matHeaderCellDef><strong>Discount Amount</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let e">{{ e.Discount_Amount }}</mat-cell>
+                    </ng-container>
+
+                    <!-- SuppFee Percentage -->
+                    <ng-container matColumnDef="MarginalPayCode">
+                        <mat-header-cell *matHeaderCellDef><strong>Marginal PayCode</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let e">{{ e.MarginalPayCode }}</mat-cell>
+                    </ng-container>
+
+                    <!-- SourcingFee columns -->
+                    <ng-container matColumnDef="Type_Names">
+                        <mat-header-cell *matHeaderCellDef><strong>Type</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let e">{{ e.Type_Names }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="IsReplacementClauseApplicable_Text">
+                        <mat-header-cell *matHeaderCellDef><strong>Replacement Clause</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let e">{{ e.IsReplacementClauseApplicable_Text }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Replacement">
+                        <mat-header-cell *matHeaderCellDef><strong>Replacement</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let e">{{ e.Replacement }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="IsSourcingWaitingPeriod_Text">
+                        <mat-header-cell *matHeaderCellDef><strong>Sourcing Waiting</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let e">{{ e.IsSourcingWaitingPeriod_Text }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="SourcingValue">
+                        <mat-header-cell *matHeaderCellDef><strong>Sourcing Value</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let e">{{ e.SourcingValue }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Criteria">
+                        <mat-header-cell *matHeaderCellDef><strong>Criteria</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let e">{{ e.Criteria }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="TATDays">
+                        <mat-header-cell *matHeaderCellDef><strong>TAT Days</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let e">{{ e.TATDays }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Category_Name">
+                        <mat-header-cell *matHeaderCellDef><strong>Category</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let e">{{ e.Category_Name }}</mat-cell>
+                    </ng-container>
+
+                    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+
+                </mat-table>
+            </div>
+
+            <div *ngIf="dataSource.data.length === 0" class="text-center p-4">
+                <p class="text-muted">No data to display</p>
+            </div>
+
+            <mat-paginator #paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 25, 100]" showFirstLastButtons>
+            </mat-paginator>
+        </div>
+
+    </div>
+</div>
+
+<div *ngIf="servicechargeadd" class="popup-overlay">
+    <mat-card class="popup-card">
+
+        <mat-card-header class="popup-header">
+            <mat-card-title>{{ isEditMode ? 'Edit Service Charge' : 'Add Service Charge' }}</mat-card-title> <span
+                class="spacer"></span>
+            <button style="background: transparent; border:none" mat-icon-button (click)="closeForm()">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-card-header>
+
+        <mat-card-content>
+
+            <div class="row g-3 mb-3">
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Service Charge <span class="text-danger">*</span></label>
+                    <select class="form-control form-control-sm" (change)="onServiceChargeChange($event)"
+                        [(ngModel)]="selectedServiceChargeId">
+                        <option value="">Select</option>
+                        <option *ngFor="let item of serviceChargeMaster" [value]="item.Service_Charge_Master_Id">
+                            {{ item.Service_Charge_Master_Name }}
+                        </option>
+                    </select>
+                    <small class="text-danger d-block mt-1" *ngIf="showValidation && !selectedServiceChargeId">
+                        Service Charge is required
+                    </small>
+                </div>
+
+                <div class="col-md-3" *ngIf="selectedParentId !== 3 && serviceChargeTypes.length > 1">
+                    <label class="form-label text-muted small">Service Charge Type <span
+                            class="text-danger">*</span></label>
+                    <!-- <select class="form-control form-control-sm" (change)="onTypeChange($event)">
+                        <option value="">Select</option>
+                        <option *ngFor="let type of serviceChargeTypes" [value]="type.Service_Charge_Type_Id">
+                            {{ type.Service_Charge_Type_Name }}
+                        </option>
+                    </select> -->
+                    <select class="form-control form-control-sm" (change)="onTypeChange($event)"
+                        [(ngModel)]="selectedTypeId">
+                        <option value="">Select</option>
+                        <option *ngFor="let type of serviceChargeTypes" [value]="type.Service_Charge_Type_Id">
+                            {{ type.Service_Charge_Type_Name }}
+                        </option>
+                    </select>
+                    <small class="text-danger d-block mt-1" *ngIf="showValidation && !selectedTypeId">
+                        Service Charge Type is required
+                    </small>
+
+                </div>
+            </div>
+
+            <ng-container *ngIf="dynamicFields.length > 0">
+                <div class="row g-3 mb-3">
+
+                    <div class="col-md-3" *ngFor="let field of dynamicFields">
+                        <label class="form-label text-muted small">
+                            {{ field.label }}
+                            <span class="text-danger" *ngIf="field.required">*</span>
+                        </label>
+
+                        <input *ngIf="field.type === 'text'" type="text" class="form-control form-control-sm"
+                            [class.is-invalid]="formErrors[field.fieldName]" [ngModel]="formValues[field.fieldName]"
+                            (ngModelChange)="onFieldChange(field.fieldName, $event)" />
+
+                        <input *ngIf="field.type === 'number'" type="number" class="form-control form-control-sm"
+                            [class.is-invalid]="formErrors[field.fieldName]" [ngModel]="formValues[field.fieldName]"
+                            (ngModelChange)="onFieldChange(field.fieldName, $event)" />
+
+                        <input *ngIf="field.type === 'date'" type="date" class="form-control form-control-sm"
+                            [class.is-invalid]="formErrors[field.fieldName]" [ngModel]="formValues[field.fieldName]"
+                            (ngModelChange)="onFieldChange(field.fieldName, $event)" (keydown)="$event.preventDefault()"
+                            (paste)="$event.preventDefault()" />
+
+                        <select *ngIf="field.type === 'dropdown'" class="form-control form-control-sm"
+                            [class.is-invalid]="formErrors[field.fieldName]" [ngModel]="formValues[field.fieldName]"
+                            (ngModelChange)="onFieldChange(field.fieldName, $event)">
+                            <option value="">Select</option>
+                            <option *ngFor="let opt of field.options" [ngValue]="opt.Id ?? opt">
+                                {{ opt.Name || opt.Text || opt }}
+                            </option>
+                        </select>
+
+                        <div *ngIf="field.type === 'mapname'">
+
+                            <mapname *ngIf="!isEditMode" [selectedCompanyId]="selectedCompanyId"
+                                (mapnameEmit)="handleMapNameEvent($event)">
+                            </mapname>
+
+                            <input *ngIf="isEditMode" type="text" class="form-control form-control-sm"
+                                [value]="editRowData?.Map_Name || mapnameUI?.mapName || ''" readonly />
+
+                            <small class="text-danger d-block mt-1" *ngIf="formErrors[field.fieldName]">
+                                {{ field.label }} is required
+                            </small>
+                        </div>
+
+                        <div *ngIf="field.type === 'searchable-dropdown'">
+                            <input type="text" class="form-control form-control-sm"
+                                [class.is-invalid]="formErrors[field.fieldName]" list="employeeList"
+                                [placeholder]="'Search ' + field.label" [ngModel]="formValues[field.fieldName]"
+                                (ngModelChange)="onFieldChange(field.fieldName, $event)" />
+                            <datalist id="employeeList">
+                                <option *ngFor="let opt of field.options" [value]="opt"></option>
+                            </datalist>
+                        </div>
+
+                        <small class="text-danger d-block mt-1"
+                            *ngIf="formErrors[field.fieldName] && field.type !== 'mapname'">
+                            {{ field.label }} is required
+                        </small>
+                    </div>
+
+                </div>
+            </ng-container>
+
+
+        </mat-card-content>
+
+        <mat-card-footer class="popup-footer">
+            <button class="btn-cancel" type="button" (click)="closeForm()">Cancel</button>
+            <button class="btn-save" type="button" (click)="saveServiceCharge()">
+                Save
+            </button>
+        </mat-card-footer>
+
+    </mat-card>
+</div>
+<div *ngIf="isLoading" class="loading-overlay">
+    <img src="assets/Loading.gif" alt="Loading..." />
+</div>

@@ -12,7 +12,6 @@ import { SessionStorageService } from '../../../Shared/SessionStorageService';
 import { ICorporatebabk } from '../../../Repository/customer/Icorporatebank';
 import { CorporateBankService } from '../../../Service/CUSTOMER/corporatebank.service';
 import * as XLSX from 'xlsx';
-import { ThemeService } from 'ng2-charts';
 import { AlertpopupComponent } from '../../../common/alertpopup/alertpopup.component';
 
 export const Pay_TOKEN = new InjectionToken<ICorporatebabk>('Pay_TOKEN');
@@ -21,7 +20,7 @@ export const Pay_TOKEN = new InjectionToken<ICorporatebabk>('Pay_TOKEN');
   selector: 'app-corporatebank',
   standalone: true,
   imports: [CommonModule, MatIconModule, MatTooltipModule, MatTableModule,
-    MatPaginatorModule, FormsModule, ReactiveFormsModule, AlertpopupComponent],
+    MatPaginator, FormsModule, ReactiveFormsModule, AlertpopupComponent],
   templateUrl: './corporatebank.component.html',
   styleUrl: './corporatebank.component.css',
   providers: [
@@ -48,14 +47,14 @@ export class CorporatebankComponent {
   popupSubMessage = '';
 
   uploadDisplayedColumns: string[] = [
-    'Action', 'slNo', 'bankname', 'branch', 'branchcode', 'bankcode', 'accountno', 'swiftcode', 'address'
+    'Action', 'slNo', 'bankname', 'branch', 'branchcode', 'accountno', 'swiftcode', 'address'
   ];
 
-  uploadedData: any[] = []; // 🧾 No mock data
+  uploadedData: any[] = []; 
 
   uploadedDataSource = new MatTableDataSource<any>(this.uploadedData);
 
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild('pagiantor') paginator!: MatPaginator;
 
 
   ngAfterViewInit() {
@@ -137,8 +136,8 @@ export class CorporatebankComponent {
 
   AddCorporatebank() {
     const dialogRef = this.dialog.open(CorporatebankaddComponent, {
-      width: '65%',
-      height: '70vh',
+      width: '60%',
+      height: '56vh',
       disableClose: true,
       data: null
     });

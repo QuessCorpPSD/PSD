@@ -46,4 +46,16 @@ export class ServiceChargeService implements IServiceCharge {
       request
     );
   }
+  employeecode(companyId: number, employeeId: number): Observable<APIResponse> {
+    return this.http.get<APIResponse>(
+      this.env.apiUrl + 'ServiceCharge/EmployeeCode',
+      { params: { companyId, employeeId } }
+    );
+  }
+  ServiceChargeDelete(payload: any): Observable<APIResponse> {
+    return this.http.post<APIResponse>(
+      this.env.apiUrl + 'ServiceCharge/ServiceChargeDelete',
+      payload
+    );
+  }
 }

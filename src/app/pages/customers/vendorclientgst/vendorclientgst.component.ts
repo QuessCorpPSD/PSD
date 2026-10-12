@@ -76,7 +76,10 @@ export class VendorclientgstComponent {
   selectedFile!: File;
   previewData: any[] = [];
   previewColumns: string[] = [];
-
+  clientInvoicingStateId: number | null = null;
+  clientInvoicingStateName: string = '';
+  quessInvoicingStateId: number | null = null;
+  quessInvoicingStateName: string = '';
   displayedColumns: string[] = [
     //"Delete",
     "Edit",
@@ -512,42 +515,26 @@ export class VendorclientgstComponent {
 
   stateEvent2(event: State) {
     if (!event) {
-      this.stateId = 0;
-      this.stateName = '';
-      this.stateUI = undefined;
-      this.selectedState = undefined;
-      // this.clientform.get('State')?.setValue(null);
+      this.clientInvoicingStateId = null;
+      this.clientInvoicingStateName = '';
+      this.clientform.patchValue({ ClientInvoicingState: null });
       return;
     }
-
-    this.stateId = event.state_Id;
-    this.stateName = event.state_Name;
-    this.stateUI = event;
-    this.selectedState = event;
-
-
-    console.log('State received in city component:', event);
-    console.log('Selected State:', this.stateUI);
-
+    this.clientInvoicingStateId = event.state_Id;
+    this.clientInvoicingStateName = event.state_Name;
+    this.clientform.patchValue({ ClientInvoicingState: event });
   }
 
   stateEvent3(event: State) {
     if (!event) {
-      this.stateId = 0;
-      this.stateName = '';
-      this.stateUI = undefined;
-      this.selectedState = undefined;
-
+      this.quessInvoicingStateId = null;
+      this.quessInvoicingStateName = '';
+      this.clientform.patchValue({ QuessInvoicingState: null });
       return;
     }
-
-    this.stateId = event.state_Id;
-    this.stateName = event.state_Name;
-    this.stateUI = event;
-    this.selectedState = event;
-    console.log('State received in city component:', event);
-    console.log('Selected State:', this.stateUI);
-
+    this.quessInvoicingStateId = event.state_Id;
+    this.quessInvoicingStateName = event.state_Name;
+    this.clientform.patchValue({ QuessInvoicingState: event });
   }
   handleGroupEvent(group: any) {
     this.selectedGroupId = Number(group.siteCode);
@@ -624,7 +611,7 @@ export class VendorclientgstComponent {
     this.UploadType = Action;
     fileInput.click();
   }
-  
+
   closeUploadPopup() {
     this.showUploadPopup = false;
     this.previewData = [];
@@ -632,13 +619,13 @@ export class VendorclientgstComponent {
   }
 
   onFileSelected(event: Event): void {
-      const input = event.target as HTMLInputElement;
-      const file = input?.files?.[0];
-      if(!file) return;
+    const input = event.target as HTMLInputElement;
+    const file = input?.files?.[0];
+    if (!file) return;
 
-      const fileName = file.name.toLowerCase();
+    const fileName = file.name.toLowerCase();
 
-      if(!(fileName.endsWith('.xlsx') || fileName.endsWith('.xls'))) {
+    if (!(fileName.endsWith('.xlsx') || fileName.endsWith('.xls'))) {
       alert('Please upload a valid Excel file (.xlsx or .xls only)');
       input.value = '';
       return;
@@ -777,106 +764,39 @@ export class VendorclientgstComponent {
   }
 
   onDeleteRow(row: any) {
-    if (!confirm('Are you sure you want to delete this Client GST?')) {
-      return;
-    }
-    if (!row?.clientGstId) {
+    if (!confirm('Are you sure you want to delete this Client GST?')) return;
+
+    // ✅ FIX: row has vendorClientGstId, not clientGstId
+    if (!row?.vendorClientGstId) {
       alert("Invalid Client GST Id");
       return;
     }
 
     this.isLoading = true;
-    const payload = {
 
-      Action: "Delete",
-      UserId: String(this.userdetail?.user_Id),
-      XmlData: "",
-
-      ClientGstId: String(row.clientGstId),
-
-      CompanyId: String(row.companyId),
-      Company_Code: row.company_Code,
-
-      StateId: String(row.stateId),
-      State_Name: row.state_Name,
-
-      InvoicingStateId: String(row.invoicingStateId),
-      InvoicingState_Name: row.invoicingState_Name,
-
-      ClientInvoicingStateId: String(row.clientInvoicingStateId),
-      ClientInvoicingState_Name: row.clientInvoicingState_Name,
-
-      Group_Detail_Id: String(row.group_Detail_Id),
-      Group_Name: row.group_Name,
-
-      GstNumber: row.gstNumber,
-      PanNumber: row.panNumber,
-      TanNumber: row.tanNumber,
-
-      GstTypeId: String(row.gstTypeId),
-      GstTypeName: row.gstTypeName,
-
-      SapCustomerCode: row.sapCustomerCode,
-
-      InvoiceCategoryId: String(row.invoiceCategoryId),
-      InvoiceCategory: row.invoiceCategory,
-
-      Remarks: row.remarks || "",
-
-      CreatedBy: String(this.userdetail?.user_Id),
-      CreatedOn: new Date().toISOString(),
-
-      PageNo: "1",
-      PageSize: "10",
-      TotalCount: row.totalCount ? String(row.totalCount) : "0",
-
-      SortField: "",
-      SortDirection: "",
-
-      UserName: this.userdetail?.user_Name || "",
-
-      StateCode: row.stateCode || ""
-    };
-
-
-    console.log("DELETE JSON:", JSON.stringify(payload));
-
-    this.service.DeleteVendorClientGST(row.clientGstId, this.userdetail.user_Id).subscribe({
-
-      next: (res: any) => {
-
-        const msg = res?.response || res?.Message;
-
-        if (msg) {
+    this.service.DeleteVendorClientGST(row.vendorClientGstId, this.userdetail.user_Id)
+      .subscribe({
+        next: (res: any) => {
           alert("Client GST deleted successfully");
+          this.isLoading = false;
+          this.onsearch();
+        },
+        error: (err) => {
+          console.error("DELETE ERROR:", err);
+          alert("Error while deleting");
+          this.isLoading = false;
         }
-
-        this.isLoading = false;
-
-        // ✅ refresh
-        this.onsearch();
-      },
-
-      error: (err) => {
-        console.error("DELETE ERROR:", err);
-        alert("Error while deleting");
-        this.isLoading = false;
-      }
-
-    });
+      });
   }
 
   onEditRow(row: any) {
-
     this.isAddclicked = true;
     this.isEditMode = true;
     this.selectedRow = row;
 
-    console.log("EDIT ROW:", row);
-    // ✅ RESET FIRST (IMPORTANT)
     this.GSTTypeList = [];
     this.clientform.reset();
-    // ✅ set main values
+
     this.selectedCompanyId = row.companyId;
     this.selectedCompanyCode = row.company_Code;
 
@@ -888,34 +808,42 @@ export class VendorclientgstComponent {
       state_Code: row.stateCode
     };
 
+    // ✅ FIX: restore separate invoicing states
+    this.clientInvoicingStateId = row.clientInvoicingStateId;
+    this.clientInvoicingStateName = row.clientInvoicingState_Name;
+
+    this.quessInvoicingStateId = row.invoicingStateId;
+    this.quessInvoicingStateName = row.invoicingState_Name;
+
     this.selectedGroupId = row.group_Detail_Id;
     this.selectedGroupName = row.group_Name;
 
-    // ✅ patch form (like TDS)
     this.clientform.patchValue({
-
       CompanyCode: row.company_Code,
       GroupName: row.group_Name,
 
       State: this.selectedState,
-      ClientInvoicingState: this.selectedState,
-      QuessInvoicingState: this.selectedState,
 
-      // GstType: row.gstTypeId,
+      ClientInvoicingState: {
+        state_Id: row.clientInvoicingStateId,
+        state_Name: row.clientInvoicingState_Name
+      },
+      QuessInvoicingState: {
+        state_Id: row.invoicingStateId,
+        state_Name: row.invoicingState_Name
+      },
 
       GSTNumber: row.gstNumber,
       PANNumber: row.panNumber,
       TANNumber: row.tanNumber,
 
       InvoiceCatagory: row.invoiceCategoryId,
-
       Remarks: row.remarks,
       SubCustomerCode: row.sapCustomerCode
     });
-    this.clientform.get('CompanyCode');
+
     this.BindGSTTypes(row.gstTypeId);
   }
-
   onSave() {
     if (this.clientform.invalid) {
       this.clientform.markAllAsTouched();
@@ -931,46 +859,60 @@ export class VendorclientgstComponent {
 
     const form = this.clientform.value;
 
-    // Build the payload object as required
     const payload = {
       Action: this.isEditMode ? "Edit" : "Add",
       UserId: String(this.userdetail?.user_Id),
-      XmlData: "",
-      ClientGstId: this.isEditMode ? String(this.selectedRow.clientGstId) : "0",
+      XmlData: null,   // ✅ FIX: null, not ""
+
+      VendorClientGstId: this.isEditMode
+        ? String(this.selectedRow.vendorClientGstId)
+        : "0",
+
       CompanyId: String(this.selectedCompanyId),
       Company_Code: this.selectedCompanyCode,
+
       StateId: String(this.stateId),
       State_Name: this.stateName,
-      InvoicingStateId: String(this.stateId),
-      InvoicingState_Name: this.stateName,
-      ClientInvoicingStateId: String(this.stateId),
-      ClientInvoicingState_Name: this.stateName,
+
+      InvoicingStateId: String(this.quessInvoicingStateId ?? 0),
+      InvoicingState_Name: this.quessInvoicingStateName || "",
+
+      // ✅ FIX: use the actual selected Client state
+      ClientInvoicingStateId: String(this.clientInvoicingStateId ?? 0),
+      ClientInvoicingState_Name: this.clientInvoicingStateName || "",
+
       Group_Detail_Id: String(this.selectedGroupId),
       Group_Name: this.selectedGroupName,
+
       GstNumber: form.GSTNumber ? String(form.GSTNumber).trim() : "",
       PanNumber: form.PANNumber ? String(form.PANNumber).trim() : "",
       TanNumber: form.TANNumber ? String(form.TANNumber).trim() : "",
+
       GstTypeId: String(form.GstType),
       GstTypeName: this.GSTTypeList.find(x => x.gstTypeId == form.GstType)?.gstTypeName || "",
+
       SapCustomerCode: form.SubCustomerCode,
+
       InvoiceCategoryId: String(form.InvoiceCatagory),
-      InvoiceCategory: this.InvoiceCategoryList.find(x => x.invoiceCategoryId == form.InvoiceCatagory)?.invoiceCategory || "",
+      InvoiceCategory: this.InvoiceCategoryList.find(
+        x => x.invoiceCategoryId == form.InvoiceCatagory
+      )?.invoiceCategory || "",
+
       Remarks: form.Remarks || "",
       CreatedBy: String(this.userdetail?.user_Id),
       CreatedOn: new Date().toISOString(),
+
       PageNo: "1",
       PageSize: "10",
       TotalCount: "0",
       SortField: "",
       SortDirection: "",
+
       UserName: this.userdetail?.user_Name || "",
       StateCode: this.selectedState?.state_Code || ""
     };
 
-    // // Wrap the payload inside the required 'Request' property
-    // const requestPayload = { Request: payload };
-
-    //console.log("EDIT/SAVE PAYLOAD:", JSON.stringify(requestPayload));
+    console.log("SAVE PAYLOAD:", JSON.stringify(payload));
 
     this.service.SaveVendorClientGST(payload).subscribe({
       next: (res: any) => {
@@ -978,8 +920,7 @@ export class VendorclientgstComponent {
         if (msg && msg.toLowerCase().includes('success')) {
           alert(this.isEditMode
             ? "Client GST updated successfully"
-            : "Client GST saved successfully"
-          );
+            : "Client GST saved successfully");
         }
         this.isLoading = false;
         this.clientform.reset();

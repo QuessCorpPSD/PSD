@@ -52,4 +52,16 @@ export class CompanyserviceService {
   deleteCompany(payload: any): Observable<APIResponse> {
     return this.http.post<APIResponse>(this.env.apiUrl + 'Company/DeleteCompany', payload)
   }
+  getCityByName(cityName: string): Observable<any> {
+    return this.http.get(`${this.env.apiUrl}Company/GetCityByName?cityName=${cityName}`);
+  }
+  getInvoiceformats(): Observable<APIResponse> {
+    return this.http.get<APIResponse>(this.env.apiUrl + "Company/GetInvoiceFormat")
+  }
+  getReimInvoiceformats(): Observable<APIResponse> {
+    return this.http.get<APIResponse>(this.env.apiUrl + "Company/GetReimbInvoiceFormat")
+  }
+  getcity(): Observable<APIResponse> {
+    return this.http.get<APIResponse>(this.env.apiUrl + 'Company/getallcity')
+  }
 }

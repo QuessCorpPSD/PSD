@@ -1,0 +1,149 @@
+<div class="page-wrapper">
+    <div class="scrollable-content">
+        <div style="color:#302CB3;font-size:22px;font-family:Montserrat;font-weight:700;padding-top:10px">
+            PT Circle
+        </div>
+
+        <div class="justify-content-between align-items-center mb-3">
+            <div class="container py-3">
+                <div class="row g-3 align-items-end">
+
+                    <div class="col-md-3">
+                        <label class="form-label text-muted small">State Name</label>
+                        <select class="form-select form-select-sm" [(ngModel)]="selectedStateId">
+                            <option [ngValue]="null">-Select-</option>
+                            <option *ngFor="let s of stateList" [ngValue]="s.stateId">
+                                {{ s.stateName }}
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-3 d-flex gap-2">
+                        <button class="btn btn-sm d-flex align-items-center justify-content-center btn-search"
+                            matTooltip="Search" (click)="onsearch()">
+                            <mat-icon>search</mat-icon>
+                        </button>
+
+                        <button class="btn btn-sm d-flex align-items-center justify-content-center btn-success"
+                            matTooltip="Add" (click)="openadd()">
+                            <mat-icon>add</mat-icon>
+                        </button>
+
+                        <button class="btn btn-secondary btn-sm d-flex align-items-center justify-content-center"
+                            matTooltip="Export to Excel" (click)="exportToExcel()">
+                            <mat-icon>download</mat-icon>
+                        </button>
+                        <button class="btn btn-sm d-flex align-items-center justify-content-center"
+                            matTooltip="import" style="background-color: #6f42c1; color:white" (click)="onImport()">
+                            <mat-icon>cloud_upload</mat-icon>
+                        </button>
+                        <input type="file" class="form-control form-control-sm" accept=".xlsx,.xls" style="display:none"
+                            (change)="onFileChange($event)" />
+                    </div>
+
+                </div>
+
+
+            </div>
+
+            <div class="table-wrapper1" *ngIf="showTable">
+                <div class="table-scroll">
+                    <mat-table [dataSource]="dataSource" class="mat-elevation-z8 custom-table">
+
+                        <ng-container matColumnDef="Action">
+                            <mat-header-cell *matHeaderCellDef>Action</mat-header-cell>
+                            <mat-cell *matCellDef="let row">
+                                <div class="action-buttons">
+                                    <button class="btn btn-sm" matTooltip="Edit" (click)="editCircle(row)">
+                                        <mat-icon>edit</mat-icon>
+                                    </button>
+                                    <button class="btn btn-sm" matTooltip="Delete" (click)="deleteCircle(row)">
+                                        <mat-icon>delete</mat-icon>
+                                    </button>
+                                </div>
+                            </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="StateName">
+                            <mat-header-cell *matHeaderCellDef>State Name</mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{ row.StateName }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="CircleName">
+                            <mat-header-cell *matHeaderCellDef>Circle Name</mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{ row.CircleName }}</mat-cell>
+                        </ng-container>
+
+                        <mat-header-row *matHeaderRowDef="uploadDisplayedColumns"></mat-header-row>
+                        <mat-row *matRowDef="let row; columns: uploadDisplayedColumns;"></mat-row>
+
+                    </mat-table>
+                </div>
+
+                <div *ngIf="dataSource.data.length === 0" class="text-center p-4">
+                    <p class="text-muted">No data to display</p>
+                </div>
+
+                <mat-paginator [length]="totalCount" [pageSize]="10" [pageSizeOptions]="[10, 25, 50, 100]"
+                    showFirstLastButtons></mat-paginator>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="showCirclePopup" class="popup-overlay">
+    <form [formGroup]="circleForm" novalidate>
+        <mat-card class="popup-card">
+
+            <mat-card-header class="popup-header">
+                <mat-card-title>
+                    {{ isEditMode ? 'Edit PT Circle' : 'Add PT Circle' }}
+                </mat-card-title>
+                <span class="spacer"></span>
+                <button mat-icon-button type="button" style="background: transparent;border:none"
+                    (click)="closePopup()">
+                    <mat-icon>close</mat-icon>
+                </button>
+            </mat-card-header>
+
+            <mat-card-content>
+                <div class="row g-3 mb-3">
+
+                    <div class="col-md-6">
+                        <label class="form-label text-muted small">
+                            State Name <span class="text-danger">*</span>
+                        </label>
+                        <select class="form-select form-select-sm" formControlName="stateId">
+                            <option [ngValue]="null">Select State</option>
+                            <option *ngFor="let s of stateList" [ngValue]="s.stateId">
+                                {{ s.stateName }}
+                            </option>
+                        </select>
+                        <small class="text-danger" *ngIf="showErrors && circleForm.get('stateId')?.invalid">
+                            State Name is required
+                        </small>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label text-muted small">
+                            Circle Name <span class="text-danger">*</span>
+                        </label>
+                        <input type="text" class="form-control form-control-sm" formControlName="circleName" />
+                        <small class="text-danger" *ngIf="showErrors && circleForm.get('circleName')?.invalid">
+                            Circle Name is required
+                        </small>
+                    </div>
+
+                </div>
+            </mat-card-content>
+
+            <mat-card-footer class="popup-footer">
+                <button type="button" class="btn-cancel" (click)="closePopup()">Cancel</button>
+                <button type="button" class="btn-save" (click)="saveCircle()">
+                    {{ isEditMode ? 'Update' : 'Save' }}
+                </button>
+            </mat-card-footer>
+
+        </mat-card>
+    </form>
+</div>

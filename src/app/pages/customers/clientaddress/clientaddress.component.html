@@ -368,7 +368,7 @@
                     <!-- Effective Date -->
                     <ng-container matColumnDef="Effectivedate">
                         <mat-header-cell *matHeaderCellDef><strong>Effective Date</strong></mat-header-cell>
-                        <mat-cell *matCellDef="let row">{{ row.effectiveDate  | date:'dd/MM/yyyy' }}</mat-cell>
+                        <mat-cell *matCellDef="let row">{{ row.effectiveDate | date:'dd/MM/yyyy' }}</mat-cell>
                     </ng-container>
 
                     <!-- SEZ Applicable -->
@@ -669,13 +669,14 @@
 
                             <label class="form-label text-muted small mt-3">Billing Pin Code <span
                                     class="text-danger">*</span></label>
-                            <input class="form-control form-control-sm" formControlName="billingPinCode" readonly>
+                            <input class="form-control form-control-sm" formControlName="billingPinCode">
                             <label class="form-label text-muted small mt-3">SAP Bill To</label>
                             <input class="form-control form-control-sm" formControlName="sapBillTo">
                         </div>
                     </div>
 
 
+                    <!-- SHIPPING -->
                     <!-- SHIPPING -->
                     <div class="col-md-12">
                         <div class="address-box">
@@ -688,6 +689,7 @@
                                 *ngIf="showErrors && clientaddress.get('shippingClientName')?.invalid">
                                 Shipping Client Name is required
                             </small>
+
                             <label class="form-label text-muted small mt-3">Shipping Address <span
                                     class="text-danger">*</span></label>
                             <textarea class="form-control form-control-sm" rows="4" formControlName="shippingAddress"
@@ -696,34 +698,45 @@
                                 *ngIf="showErrors && clientaddress.get('shippingAddress')?.invalid">
                                 Shipping Address is required
                             </small>
+
                             <label class="form-label text-muted small mt-3">Shipping State <span
                                     class="text-danger">*</span></label>
-                            <state formControlName="shippingState" (stateEmit)="handleStateNameEvent2($event)"
-                                [readonly]="sameAsBilling">
+
+                            <!-- Dropdown when checkbox OFF -->
+                            <state *ngIf="!sameAsBilling" formControlName="shippingState"
+                                (stateEmit)="handleStateNameEvent2($event)">
                             </state>
+
+                            <!-- Readonly input when checkbox ON -->
+                            <input *ngIf="sameAsBilling" class="form-control form-control-sm"
+                                [value]="shippingStateDisplay" readonly>
+
                             <small class="text-danger d-block mt-1"
                                 *ngIf="showErrors && clientaddress.get('shippingState')?.invalid">
                                 Shipping State is required
                             </small>
-                            <!-- <input *ngIf="isEditMode" class="form-control form-control-sm"
-                                formControlName="shippingState" readonly> -->
 
                             <label class="form-label text-muted small mt-3">Shipping Location <span
                                     class="text-danger">*</span></label>
-                            <citybystate formControlName="shippingLocation"
+
+                            <citybystate *ngIf="!sameAsBilling" formControlName="shippingLocation"
                                 [selectedStateId]="clientaddress.get('shippingState')?.value?.state_Id"
-                                (citybyStateEmit)="citybystateEvent2($event)" [readonly]="sameAsBilling">
+                                (citybyStateEmit)="citybystateEvent2($event)">
                             </citybystate>
+
+                            <input *ngIf="sameAsBilling" class="form-control form-control-sm"
+                                [value]="shippingLocationDisplay" readonly>
+
                             <small class="text-danger d-block mt-1"
                                 *ngIf="showErrors && clientaddress.get('shippingLocation')?.invalid">
                                 Shipping Location is required
                             </small>
-                            <!-- <input *ngIf="isEditMode" class="form-control form-control-sm"
-                                formControlName="shippingLocation" readonly> -->
 
                             <label class="form-label text-muted small mt-3">Shipping Pin Code <span
                                     class="text-danger">*</span></label>
-                            <input class="form-control form-control-sm" formControlName="shippingPinCode" readonly>
+                            <input class="form-control form-control-sm" formControlName="shippingPinCode"
+                                [readonly]="sameAsBilling">
+
                             <label class="form-label text-muted small mt-3">SAP Ship To</label>
                             <input class="form-control form-control-sm" formControlName="sapShipTo"
                                 [readonly]="sameAsBilling">

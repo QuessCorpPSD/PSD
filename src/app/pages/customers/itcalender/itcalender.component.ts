@@ -20,7 +20,7 @@ export const Pay_TOKEN = new InjectionToken<IItcalender>('Pay_TOKEN');
 @Component({
   selector: 'app-itcalender',
   standalone: true,
-  imports: [AlertpopupComponent, MatPaginatorModule, MatTableModule, MatIconModule, CompanyallComponent, CommonModule, FormsModule, ReactiveFormsModule, MatTooltipModule],
+  imports: [AlertpopupComponent, MatPaginator, MatTableModule, MatIconModule, CompanyallComponent, CommonModule, FormsModule, ReactiveFormsModule, MatTooltipModule],
   templateUrl: './itcalender.component.html',
   styleUrl: './itcalender.component.css',
   providers: [
@@ -112,6 +112,7 @@ export class ITcalenderComponent {
           if (Array.isArray(data) && data.length > 0) {
             this.uploadedData = data;
             this.uploadedDataSource.data = this.uploadedData;
+            this.uploadedDataSource.paginator = this.paginator;
             this.isuploadgridvisible = true;
           }
           else if (res?.Data?.errors) {

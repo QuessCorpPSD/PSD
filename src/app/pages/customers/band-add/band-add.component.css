@@ -141,6 +141,7 @@
 } */
 .no-border-icon {
     border: none;
+    background: transparent !important;
 }
 
 .rounded-pill {

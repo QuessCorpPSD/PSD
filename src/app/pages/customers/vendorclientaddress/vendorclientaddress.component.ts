@@ -26,7 +26,7 @@ export const Pay_TOKEN = new InjectionToken<IClientaddress>('Pay_TOKEN');
 
 @Component({
   selector: 'vendorclientaddress',
-  imports: [MatPaginatorModule, MatTableModule, MatIconModule, CommonModule, FormsModule, ReactiveFormsModule, MatTooltipModule, MatCardModule, CompanyallComponent, MapnameComponent, StateComponent, CitybystateComponent, MatMenuModule],
+  imports: [MatPaginator, MatTableModule, MatIconModule, CommonModule, FormsModule, ReactiveFormsModule, MatTooltipModule, MatCardModule, CompanyallComponent, MapnameComponent, StateComponent, CitybystateComponent, MatMenuModule],
   templateUrl: './vendorclientaddress.component.html',
   styleUrl: './vendorclientaddress.component.css',
   providers: [
@@ -57,7 +57,8 @@ export class VendorclientaddressComponent {
   showErrors = false;
   isEditMode: boolean = false;
   rowData: any;
-
+  shippingStateDisplay = '';
+  shippingLocationDisplay = '';
   constructor(private dialog: MatDialog, @Inject(Pay_TOKEN) private service: IClientaddress, private decry: EncryptionService,
     private _sessionStoreage: SessionStorageService, private fb: FormBuilder,) { }
   message: string = '';
@@ -202,6 +203,9 @@ export class VendorclientaddressComponent {
   AddPOOpen() {
     this.isEditMode = false;
     this.clientaddress.reset();
+    this.sameAsBilling = false;
+    this.shippingStateDisplay = '';
+    this.shippingLocationDisplay = '';
     this.showClientPopup = true;
   }
 
@@ -233,31 +237,42 @@ export class VendorclientaddressComponent {
       },
       billingLocationId: row.billingLocationId,
       billingPinCode: row.billingPinCode,
-      shippingsameasbilling: row.isShippingAddressSameAsBilling,
+      shippingsameasbilling: !!row.isShippingAddressSameAsBilling,
+      shippingState: { state_Id: row.shippingStateId, state_Name: row.shippingStateName },
+      shippingLocation: { city_Id: row.shippingLocationId, city_Name: row.shippingCity_Name },
       shippingClientName: row.shippingClientName,
       shippingAddress: row.shippingAddress,
-      shippingState: {
-        state_Id: row.shippingStateId,
-        state_Name: row.shippingStateName
-      },
+      // shippingState: {
+      //   state_Id: row.shippingStateId,
+      //   state_Name: row.shippingStateName
+      // },
       shippingStateId: row.shippingStateId,
-      shippingLocation: {
-        city_Id: row.shippingLocationId,
-        city_Name: row.shippingCity_Name
-      },
+      // shippingLocation: {
+      //   city_Id: row.shippingLocationId,
+      //   city_Name: row.shippingCity_Name
+      // },
       shippingLocationId: row.shippingLocationId,
       shippingPinCode: row.shippingPinCode,
       sapBillTo: row.sapBillTo,
       sapShipTo: row.sapShipTo,
-      effectiveDate: row.effectiveDate,
       vendorcode: row.vendorCode,
       sezApplicable: row.seZ_Applicable,
-      sezExpiryDate: row.seZ_ExpiryDate,
       lutNumber: row.luT_Number,
-      lutDate: row.luT_Date,
-      lutExpiryDate: row.luT_ExpiryDate,
+      effectiveDate: this.toDateInput(row.effectiveDate),
+      sezExpiryDate: this.toDateInput(row.seZ_ExpiryDate),
+      lutDate: this.toDateInput(row.luT_Date),
+      lutExpiryDate: this.toDateInput(row.luT_ExpiryDate),
 
     });
+    this.sameAsBilling = !!row.isShippingAddressSameAsBilling;
+
+    if (this.sameAsBilling) {
+      this.shippingStateDisplay = row.shippingStateName || '';
+      this.shippingLocationDisplay = row.shippingCity_Name || '';
+    } else {
+      this.shippingStateDisplay = '';
+      this.shippingLocationDisplay = '';
+    }
 
     console.log('Clientaddress', this.clientaddress)
   }
@@ -334,7 +349,7 @@ export class VendorclientaddressComponent {
   }
 
   pageIndex: number = 0;
-  pageSize: number = 10;
+  pageSize: number = 5;
 
   ngOnInit(): void {
     const json = this._sessionStoreage.getItem('UserProfile');
@@ -406,28 +421,74 @@ export class VendorclientaddressComponent {
     //   vendorcode: ['']
 
     // });
-  }
 
-  sameAsBillingChange(event: any) {
-
-    this.sameAsBilling = event.target.checked;
-
-    console.log('BillingLocation', this.clientaddress.value.billingLocation);
-
-    if (this.sameAsBilling) {
+    const sync = () => {
+      if (!this.sameAsBilling) return;
+      const b = this.clientaddress.value;
 
       this.clientaddress.patchValue({
+        shippingClientName: b.billingClientName,
+        shippingAddress: b.billingAddress,
+        shippingState: b.billingState,
+        shippingLocation: b.billingLocation,
+        shippingPinCode: b.billingPinCode,
+        sapShipTo: b.sapBillTo
+      }, { emitEvent: false });
 
-        shippingClientName: this.clientaddress.value.billingClientName,
-        shippingAddress: this.clientaddress.value.billingAddress,
-        shippingState: this.clientaddress.value.billingState,
-        shippingLocation: this.clientaddress.value.billingLocation,
-        shippingPinCode: this.clientaddress.value.billingPinCode,
-        sapShipTo: this.clientaddress.value.sapBillTo
-      });
+      this.shippingStateDisplay =
+        typeof b.billingState === 'object' ? (b.billingState?.state_Name || '') : (b.billingState || '');
+      this.shippingLocationDisplay =
+        typeof b.billingLocation === 'object' ? (b.billingLocation?.city_Name || '') : (b.billingLocation || '');
+    };
+  }
 
+  // sameAsBillingChange(event: any) {
+
+  //   this.sameAsBilling = event.target.checked;
+
+  //   console.log('BillingLocation', this.clientaddress.value.billingLocation);
+
+  //   if (this.sameAsBilling) {
+
+  //     this.clientaddress.patchValue({
+
+  //       shippingClientName: this.clientaddress.value.billingClientName,
+  //       shippingAddress: this.clientaddress.value.billingAddress,
+  //       shippingState: this.clientaddress.value.billingState,
+  //       shippingLocation: this.clientaddress.value.billingLocation,
+  //       shippingPinCode: this.clientaddress.value.billingPinCode,
+  //       sapShipTo: this.clientaddress.value.sapBillTo
+  //     });
+
+  //   }
+
+  // }
+
+
+  sameAsBillingChange(event: any) {
+    this.sameAsBilling = event.target.checked;
+    const b = this.clientaddress.value;
+
+    if (this.sameAsBilling) {
+      // Copy the actual state/city objects so the form value is correct
+      this.clientaddress.patchValue({
+        shippingClientName: b.billingClientName,
+        shippingAddress: b.billingAddress,
+        shippingState: b.billingState,
+        shippingLocation: b.billingLocation,
+        shippingPinCode: b.billingPinCode,
+        sapShipTo: b.sapBillTo
+      }, { emitEvent: false });
+
+      // Handle both object and string cases
+      this.shippingStateDisplay =
+        typeof b.billingState === 'object' ? (b.billingState?.state_Name || '') : (b.billingState || '');
+      this.shippingLocationDisplay =
+        typeof b.billingLocation === 'object' ? (b.billingLocation?.city_Name || '') : (b.billingLocation || '');
+    } else {
+      this.shippingStateDisplay = '';
+      this.shippingLocationDisplay = '';
     }
-
   }
 
   showAlertPopup(message: string, subMessage: string = '') {
@@ -626,6 +687,16 @@ export class VendorclientaddressComponent {
     document.body.appendChild(downloadLink);
     downloadLink.click();
     document.body.removeChild(downloadLink);
+  }
+
+  private toDateInput(value: any): string {
+    if (!value) return '';
+    const d = new Date(value);
+    if (isNaN(d.getTime())) return '';
+    const yyyy = d.getFullYear();
+    const mm = String(d.getMonth() + 1).padStart(2, '0');
+    const dd = String(d.getDate()).padStart(2, '0');
+    return `${yyyy}-${mm}-${dd}`;
   }
 
   AddTemplate() {
@@ -955,7 +1026,7 @@ export class VendorclientaddressComponent {
           const cleanMessage = res.replace(/<br\s*\/?>/gi, '\n');
 
           if (cleanMessage.includes('Success')) {
-            alert('Client Address updated Successfully');
+            alert('Vendor Client Address updated Successfully');
             this.closeClientPopup();
             this.onsearch();
             resolve();
@@ -1032,7 +1103,7 @@ export class VendorclientaddressComponent {
       next: (res: string) => {
         const cleanMessage = res.replace(/<br\s*\/?>/gi, '\n');
         if (cleanMessage.includes('Success')) {
-          alert('Client Address Created Successfully');
+          alert('Vendor Client Address Created Successfully');
           this.closeClientPopup();
           this.onsearch();
         } else {

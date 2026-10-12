@@ -27,6 +27,11 @@
                     </select> -->
                 </div>
                 <div class="col-md-4">
+                    <label class="form-label">Designation Code</label>
+                    <input type="text" class="form-control" formControlName="Designationcode" />
+                    
+                </div>
+                <div class="col-md-4">
                     <label class="form-label">Designation Name<span class="text-danger">*</span></label>
                     <input type="text" class="form-control" formControlName="DesignationName" />
                     <div class="text-danger small" *ngIf="DesinationAddForm.get('DesignationName')?.touched 
@@ -43,9 +48,7 @@
                     <input type="text" class="form-control" formControlName="StandardDesignation"
                         placeholder="Enter Standard Designation">
                 </div>
-            </div>
-            <!-- Row 2 -->
-            <div class="row g-3 mb-3">
+
 
                 <div class="col-md-4">
                     <label class="form-label">Amount<span class="text-danger"></span></label>

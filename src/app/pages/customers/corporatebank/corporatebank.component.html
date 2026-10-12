@@ -27,9 +27,9 @@
                 </div>
             </div>
         </div>
-        <div class=" table-wrapper1" *ngIf="showTable">
+        <div class=" table-wrapper1">
             <div class="table-scroll">
-                <mat-table [dataSource]="uploadedData" class="mat-elevation-z8 custom-table">
+                <mat-table [dataSource]="uploadedDataSource" class="mat-elevation-z8 custom-table">
 
                     <!--  Action -->
                     <ng-container matColumnDef="Action">
@@ -74,16 +74,12 @@
                     </ng-container>
 
                     <ng-container matColumnDef="branchcode">
-                        <mat-header-cell *matHeaderCellDef><strong>Branch Code</strong></mat-header-cell>
+                        <mat-header-cell *matHeaderCellDef><strong>BRS Code</strong></mat-header-cell>
                         <mat-cell *matCellDef="let row">{{ row.BranchCode }}</mat-cell>
                     </ng-container>
 
                     <!-- 🔹 Pay Type -->
-                    <ng-container matColumnDef="bankcode">
-                        <mat-header-cell *matHeaderCellDef><strong>Bank Code</strong></mat-header-cell>
-                        <mat-cell *matCellDef="let row">{{ row.bank_code }}</mat-cell>
-                    </ng-container>
-
+                  
                     <!-- 🔹 Taxable -->
                     <ng-container matColumnDef="accountno">
                         <mat-header-cell *matHeaderCellDef><strong>Account No</strong></mat-header-cell>
@@ -91,7 +87,7 @@
                     </ng-container>
 
                     <ng-container matColumnDef="swiftcode">
-                        <mat-header-cell *matHeaderCellDef><strong>Swift Code</strong></mat-header-cell>
+                        <mat-header-cell *matHeaderCellDef><strong>IFSC Code</strong></mat-header-cell>
                         <mat-cell *matCellDef="let row">{{ row.Swift_Code }}</mat-cell>
                     </ng-container>
 
@@ -125,7 +121,8 @@
                 <p class="text-muted">No data to display</p>
             </div>
 
-            <mat-paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+            <mat-paginator #pagiantor [pageSize]="5" [pageSizeOptions]="[5, 10, 20]"
+                showFirstLastButtons></mat-paginator>
         </div>
     </div>
 </div>

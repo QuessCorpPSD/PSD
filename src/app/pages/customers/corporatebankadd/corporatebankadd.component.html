@@ -28,7 +28,7 @@
                     <input type="text" class="form-control" formControlName="Branch">
                 </div>
                 <div class="col-md-4">
-                    <label class="form-label">Branch Code <span class="text-danger"></span></label>
+                    <label class="form-label">BRS Code <span class="text-danger"></span></label>
                     <input type="text" class="form-control" formControlName="BranchCode"
                         placeholder="Enter Branch Code">
 
@@ -40,12 +40,12 @@
             </div>
             <!-- Row 2 -->
             <div class="row g-3 mb-3">
-                <div class="col-md-4">
+                <!-- <div class="col-md-4">
                     <label class="form-label">Bank Code <span class="text-danger"></span></label>
                     <input type="text" class="form-control" formControlName="BankCode" placeholder="Enter Bank Code">
-                </div>
+                </div> -->
                 <div class="col-md-4">
-                    <label class="form-label">Swift Code <span class="text-danger">*</span></label>
+                    <label class="form-label">IFSC Code <span class="text-danger">*</span></label>
                     <input type="text" class="form-control" formControlName="SwiftCode" placeholder="Enter Swift Code">
                     <div class="text-danger small" *ngIf="CorporateBankAddForm.get('SwiftCode')?.touched 
              && CorporateBankAddForm.get('SwiftCode')?.hasError('required')">
@@ -61,9 +61,7 @@
                     </div>
                 </div>
 
-            </div>
-            <!-- Row 3 -->
-            <div class="row g-3 mb-3">
+          
                 <div class="col-md-4">
                     <label class="form-label">Address <span class="text-danger">*</span></label>
                     <textarea class="form-control" formControlName="BankAddress" style="height: 80px;"

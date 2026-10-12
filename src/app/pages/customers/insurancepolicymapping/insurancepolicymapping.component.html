@@ -1,0 +1,385 @@
+<div class="page-wrapper">
+    <div class="scrollable-content">
+
+        <div style="color:#302CB3;font-size:22px;font-family:Montserrat;font-weight:700;padding-top:10px">
+            Insurance Policy Mapping
+        </div>
+
+        <div class="justify-content-between align-items-center mb-3">
+            <div class="container py-3">
+                <div class="row g-3 align-items-end">
+
+                    <div class="col-md-3">
+                        <label class="form-label text-muted small">Company Code</label>
+                        <companyall (companyEmit)="handleCompanyEvent($event)"></companyall>
+                    </div>
+
+                    <div class="col-md-4 d-flex gap-2">
+                        <button class="btn btn-sm d-flex align-items-center justify-content-center btn-search" matTooltip="Search" (click)="onSearch()">
+                            <mat-icon>search</mat-icon>
+                        </button>
+
+                        <button class="btn btn-secondary btn-sm d-flex align-items-center justify-content-center" matTooltip="Export to Excel" (click)="exportToExcel()">
+                            <mat-icon>download</mat-icon>
+                        </button>
+
+                        <button class="btn btn-sm d-flex align-items-center justify-content-center btn-success" matTooltip="Add" (click)="openAdd()">
+                            <mat-icon>add</mat-icon>
+                        </button>
+
+                        <input type="file" class="form-control form-control-sm" style="display: none;" (change)="onFileSelected($event)" />
+                        <button class="btn btn-sm d-flex align-items-center justify-content-center btn-primary" matTooltip="Import" (click)="importData()">
+                            <mat-icon>cloud_upload</mat-icon>
+                        </button>
+                        <button class="btn btn-sm d-flex align-items-center justify-content-center btn-secondary" matTooltip="Download Template" (click)="downloadTemplate()">
+                            <mat-icon>cloud_download</mat-icon>
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="table-wrapper1" *ngIf="showTable">
+                <div class="table-scroll">
+                    <mat-table [dataSource]="dataSource.data" class="mat-elevation-z8 custom-table">
+
+                        <ng-container matColumnDef="Action">
+                            <mat-header-cell *matHeaderCellDef>Action</mat-header-cell>
+                            <mat-cell *matCellDef="let row">
+                                <div class="action-buttons">
+                                    <button class="btn btn-sm" matTooltip="Edit" (click)="editPolicy(row)">
+                                        <mat-icon>edit</mat-icon>
+                                    </button>
+                                    <button class="btn btn-sm" matTooltip="Delete" (click)="deletePolicy(row)">
+                                        <mat-icon>delete</mat-icon>
+                                    </button>
+                                </div>
+                            </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="SNo">
+                            <mat-header-cell *matHeaderCellDef>SNo</mat-header-cell>
+                            <mat-cell *matCellDef="let row; let i = index">{{ i + 1 }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="CompanyCode">
+                            <mat-header-cell *matHeaderCellDef>Company Code</mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{ row.CompanyCode }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="GroupName">
+                            <mat-header-cell *matHeaderCellDef>Group Name</mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{ row.GroupName }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="PremiumTracker">
+                            <mat-header-cell *matHeaderCellDef>Premium Tracker</mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{ row.PremiumTracker }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="CoverageType">
+                            <mat-header-cell *matHeaderCellDef>Coverage Type</mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{ row.CoverageType }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="GMCPolicyCondition">
+                            <mat-header-cell *matHeaderCellDef>GMC Policy Condition</mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{ row.GMCPolicyCondition }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="GMCPolicyNumber">
+                            <mat-header-cell *matHeaderCellDef>GMC Policy Number</mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{ row.GMCPolicyNumber }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="GMCSumInsured">
+                            <mat-header-cell *matHeaderCellDef>GMC Sum Insured</mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{ row.GMCSumInsured }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="GPAPolicyNumber">
+                            <mat-header-cell *matHeaderCellDef>GPA Policy Number</mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{ row.GPAPolicyNumber }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="GPASumInsured">
+                            <mat-header-cell *matHeaderCellDef>GPA Sum Insured</mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{ row.GPASumInsured }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="GTLIPolicyNumber">
+                            <mat-header-cell *matHeaderCellDef>GTLI Policy Number</mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{ row.GTLIPolicyNumber }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="GTLISumInsured">
+                            <mat-header-cell *matHeaderCellDef>GTLI Sum Insured</mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{ row.GTLISumInsured }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="EffectiveDate">
+                            <mat-header-cell *matHeaderCellDef>Effective Date</mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{ row.EffectiveDate }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="DeductionPayCode">
+                            <mat-header-cell *matHeaderCellDef>Deduction Pay Code</mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{ row.DeductionPayCode }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="DeductionAmount">
+                            <mat-header-cell *matHeaderCellDef>Deduction Amount</mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{ row.DeductionAmount }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="BillingPayCode">
+                            <mat-header-cell *matHeaderCellDef>Billing Pay Code</mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{ row.BillingPayCode }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="BillingAmount">
+                            <mat-header-cell *matHeaderCellDef>Billing Amount</mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{ row.BillingAmount }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Remarks">
+                            <mat-header-cell *matHeaderCellDef>Remarks</mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{ row.Remarks }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="DesignationName">
+                            <mat-header-cell *matHeaderCellDef>Designation Name</mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{ row.DesignationName }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="EmployeeType">
+                            <mat-header-cell *matHeaderCellDef>Employee Type</mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{ row.EmployeeType }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="IsESIApplicable">
+                            <mat-header-cell *matHeaderCellDef>IsESIApplicable</mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{ row.IsESIApplicable }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="IsESINotApplicable">
+                            <mat-header-cell *matHeaderCellDef>IsESINotApplicable</mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{ row.IsESINotApplicable }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="MaritalStatus">
+                            <mat-header-cell *matHeaderCellDef>MaritalStatus</mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{ row.MaritalStatus }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="InsuranceVertical">
+                            <mat-header-cell *matHeaderCellDef>Insurance Vertical</mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{ row.InsuranceVertical }}</mat-cell>
+                        </ng-container>
+
+                        <mat-header-row *matHeaderRowDef="uploadDisplayedColumns"></mat-header-row>
+                        <mat-row *matRowDef="let row; columns: uploadDisplayedColumns;" (click)="onRowSelect(row)"
+                            [class.selected-row]="selectedRow === row"></mat-row>
+
+                    </mat-table>
+                </div>
+
+                <div *ngIf="dataSource.data.length === 0" class="text-center p-4">
+                    <p class="text-muted">No data to display</p>
+                </div>
+
+                <mat-paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="showPopup" class="popup-overlay">
+    <form [formGroup]="policyForm" novalidate>
+        <mat-card class="popup-card">
+
+            <mat-card-header class="popup-header">
+                <mat-card-title>
+                    {{ isEditMode ? 'Edit Insurance Policy Mapping' : 'Add Insurance Policy Mapping' }}
+                </mat-card-title>
+                <span class="spacer"></span>
+                <button mat-icon-button type="button" style="background:transparent;border:none" (click)="closePopup()">
+                    <mat-icon>close</mat-icon>
+                </button>
+            </mat-card-header>
+
+            <mat-card-content>
+                <div class="row g-3 mb-3">
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">
+                            Company Code : <span class="text-danger">*</span>
+                        </label>
+                        <companyall (companyEmit)="handleCompanyEvent($event)" formControlName="CompanyCode"></companyall>
+                        <small class="text-danger d-block" *ngIf="showErrors && policyForm.get('CompanyCode')?.invalid">
+                            Company Code is required
+                        </small>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Group Name :</label>
+                        <select class="form-select form-select-sm" formControlName="groupName">
+                            <option value="">-Select-</option>
+                            <option *ngFor="let g of groupList" [value]="g.id">{{ g.name }}</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">
+                            Premium Tracker : <span class="text-danger">*</span>
+                        </label>
+                        <select class="form-select form-select-sm" formControlName="premiumTracker">
+                            <option [ngValue]="null">-Select-</option>
+                            <option *ngFor="let p of premiumTrackerList" [value]="p.id">{{ p.name }}</option>
+                        </select>
+                        <small class="text-danger d-block" *ngIf="showErrors && policyForm.get('premiumTracker')?.invalid">
+                            Premium Tracker is required
+                        </small>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Designation :</label>
+                        <select class="form-select form-select-sm" formControlName="designation">
+                            <option value="">-Select-</option>
+                            <option *ngFor="let d of designationList" [value]="d.id">{{ d.name }}</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Coverage Type :</label>
+                        <select class="form-select form-select-sm" formControlName="coverageType">
+                            <option value="">-Select-</option>
+                            <option *ngFor="let c of coverageTypeList" [value]="c.id">{{ c.name }}</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">GMC Policy Condition :</label>
+                        <select class="form-select form-select-sm" formControlName="gmcPolicyCondition">
+                            <option value="">-Select-</option>
+                            <option *ngFor="let g of gmcPolicyConditionList" [value]="g.id">{{ g.name }}</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">GMC Sum Insured :</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="gmcSumInsured" />
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">GMC Policy No :</label>
+                        <select class="form-select form-select-sm" formControlName="gmcPolicyNo">
+                            <option value="">-Select-</option>
+                            <option *ngFor="let g of gmcPolicyNumberList" [value]="g.id">{{ g.name }}</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">GTLI Sum Insured :</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="gtliSumInsured" />
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">GTLI Policy No :</label>
+                        <select class="form-select form-select-sm" formControlName="gtliPolicyNo">
+                            <option value="">-Select-</option>
+                            <option *ngFor="let g of gtliPolicyNumberList" [value]="g.id">{{ g.name }}</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Deduction PayCode :</label>
+                        <select class="form-select form-select-sm" formControlName="deductionPayCode">
+                            <option value="">-Select-</option>
+                            <option *ngFor="let d of deductionPayCodeList" [value]="d.id">{{ d.name }}</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Billing PayCode :</label>
+                        <select class="form-select form-select-sm" formControlName="billingPayCode">
+                            <option value="">-Select-</option>
+                            <option *ngFor="let b of billingPayCodeList" [value]="b.id">{{ b.name }}</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Deduction Amount :</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="deductionAmount" />
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Billing Amount :</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="billingAmount" />
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Effective Date :</label>
+                        <input type="date" class="form-control form-control-sm" formControlName="effectiveDate" />
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Remarks :</label>
+                        <textarea class="form-control form-control-sm" formControlName="remarks" rows="1"></textarea>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">
+                            Marital Status : <span class="text-danger">*</span>
+                        </label>
+                        <select class="form-select form-select-sm" formControlName="maritalStatus">
+                            <option [ngValue]="null">-Select-</option>
+                            <option *ngFor="let m of maritalStatusList" [value]="m.id">{{ m.name }}</option>
+                        </select>
+                        <small class="text-danger d-block" *ngIf="showErrors && policyForm.get('maritalStatus')?.invalid">
+                            Marital Status is required
+                        </small>
+                    </div>
+
+                    <div class="col-md-4 d-flex align-items-center mt-3">
+                        <mat-checkbox formControlName="isESIApplicable" class="me-3">Is ESI Applicable</mat-checkbox>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">
+                            Employee Type : <span class="text-danger">*</span>
+                        </label>
+                        <select class="form-select form-select-sm" formControlName="employeeType">
+                            <option [ngValue]="null">-Select-</option>
+                            <option *ngFor="let e of employeeTypeList" [value]="e.id">{{ e.name }}</option>
+                        </select>
+                        <small class="text-danger d-block" *ngIf="showErrors && policyForm.get('employeeType')?.invalid">
+                            Employee Type is required
+                        </small>
+                    </div>
+
+                    <div class="col-md-4 d-flex align-items-center mt-3">
+                        <mat-checkbox formControlName="isESINotApplicable">Is ESI NonApplicable</mat-checkbox>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Insurance Vertical :</label>
+                        <select class="form-select form-select-sm" formControlName="insuranceVertical">
+                            <option value="">-Select-</option>
+                            <option *ngFor="let i of insuranceVerticalList" [value]="i.id">{{ i.name }}</option>
+                        </select>
+                    </div>
+
+                </div>
+            </mat-card-content>
+
+            <mat-card-footer class="popup-footer">
+                <button type="button" class="btn-save" (click)="savePolicy()">
+                    Save
+                </button>
+                <button type="button" class="btn-cancel" (click)="closePopup()">Cancel</button>
+            </mat-card-footer>
+
+        </mat-card>
+    </form>
+</div>

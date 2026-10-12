@@ -65,7 +65,8 @@ export class DesignationaddComponent {
       StandardDesignation: new FormControl(''),
       Amount: new FormControl(''),
       Skill_Category: new FormControl(''),
-      NPDays: new FormControl('')
+      NPDays: new FormControl(''),
+      Designationcode: new FormControl(''),
     })
     this.DesinationAddForm.get('DepartmentCode')?.disable();
   }
@@ -135,8 +136,8 @@ export class DesignationaddComponent {
         }
 
         // SUCCESS RESPONSE
-        if (response && response.toLowerCase().includes("success")) {
-          alert("Desigantion Added Successfully!");
+        if (response && response.toLowerCase().includes("sucess")) {
+          alert(response);
           this.isLoading = false;
           this.onClose();
           return;

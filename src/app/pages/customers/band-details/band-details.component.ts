@@ -79,73 +79,94 @@ export class BandDetailsComponent {
   }
 
 
-  onSearchClick() {
-    this.showTable = true;
-    this.isLoading = true;
+onSearchClick() {
+  this.showTable = true;
+  this.isLoading = true;
 
-    this.bandService.GetAllBandDetails(this.selectedCompanyId || 0).subscribe({
-      next: (res) => {
-
-        //  Stop loading immediately if invalid data
-        if (res.StatusCode !== 200 || !res.Data || res.Data.length === 0) {
-          this.uploadedData = [];
-          this.uploadedDataSource.data = [];
-          this.isLoading = false; // ✅ STOP LOADING
-          return;
-        }
-
-        let table = res.Data;
-
-        //  FILTER BY COMPANY CODE
-        if (this.selectedCompanyCode && this.selectedCompanyCode !== "") {
-          const keyword = String(this.selectedCompanyCode).trim().toLowerCase();
-          table = table.filter((row: any) =>
-            row.company_Code?.toLowerCase().includes(keyword)
-          );
-        }
-
-        //  MAP TO TABLE FORMAT
-        this.uploadedData = table.map((item, index) => ({
-          SNo: index + 1,
-          'Company Code': item.company_Code,
-          'Band Code': item.band_Code,
-          'Band Name': item.band_Name
-        }));
-
-        this.uploadedDataSource = new MatTableDataSource(this.uploadedData);
-        this.uploadedDataSource.paginator = this.paginator;
-        this.uploadedDataSource.sort = this.sort;
-
-        this.isLoading = false; //  STOP LOADING
-      },
-
-      error: (err) => {
-        console.error(err);
+  this.bandService.GetAllBandDetails(this.selectedCompanyId || 0).subscribe({
+    next: (res) => {
+      if (res.StatusCode !== 200 || !res.Data || res.Data.length === 0) {
         this.uploadedData = [];
         this.uploadedDataSource.data = [];
-        this.isLoading = false; // STOP LOADING
+        this.showAlertPopup('No records found');
+        this.isLoading = false;
+        return;
       }
-    });
-  }
 
+      this.uploadedData = res.Data.map((item, index) => ({
+        SNo: index + 1,
+        'Company Code': item.company_Code,
+        'Band Code': item.band_Code,
+        'Band Name': item.band_Name
+      }));
 
-  exportToExcel() {
+      this.uploadedDataSource = new MatTableDataSource(this.uploadedData);
+      this.uploadedDataSource.paginator = this.paginator;
+      this.uploadedDataSource.sort = this.sort;
 
-    if (!this.uploadedData || this.uploadedData.length === 0) {
-      alert("No data available to export");
-      return;
+      this.isLoading = false;
+    },
+    error: (err) => {
+      console.error(err);
+      this.uploadedData = [];
+      this.uploadedDataSource.data = [];
+      this.isLoading = false;
     }
+  });
+}
 
-    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.uploadedData);
 
-    const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "BandDetails");
+exportToExcel() {
+  this.isLoading = true;
 
-    const today = new Date().toISOString().split('T')[0];
-    const fileName = `Band_Details_${today}.xlsx`;
+  this.bandService.GetAllBandDetails(this.selectedCompanyId || 0).subscribe({
+    next: (res) => {
 
-    XLSX.writeFile(wb, fileName);
-  }
+      if (res.StatusCode !== 200 || !res.Data || res.Data.length === 0) {
+        this.isLoading = false;
+        this.showAlertPopup('No data available to export');
+        return;
+      }
+
+      let table = res.Data;
+
+      if (this.selectedCompanyCode && this.selectedCompanyCode !== '') {
+        const keyword = String(this.selectedCompanyCode).trim().toLowerCase();
+        table = table.filter((row: any) =>
+          row.company_Code?.toLowerCase().includes(keyword)
+        );
+      }
+
+      if (table.length === 0) {
+        this.isLoading = false;
+        this.showAlertPopup('No data available to export');
+        return;
+      }
+
+      const exportData = table.map((item: any, index: number) => ({
+        SNo: index + 1,
+        'Company Code': item.company_Code,
+        'Band Code': item.band_Code,
+        'Band Name': item.band_Name
+      }));
+
+      const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
+      const wb: XLSX.WorkBook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, 'BandDetails');
+
+      const today = new Date().toLocaleDateString('en-CA'); 
+      const fileName = `Band_Details_${today}.xlsx`;
+
+      XLSX.writeFile(wb, fileName);
+      this.isLoading = false;
+    },
+    error: (err) => {
+      console.error(err);
+      this.isLoading = false;
+      console.error('Failed to export');
+    }
+  });
+}
 
   ngOnInit(): void {
     const json = this._sessionStoreage.getItem('UserProfile');
@@ -174,7 +195,7 @@ export class BandDetailsComponent {
 
   handleCompanyEvent(company) {
     this.selectedCompanyId = company.companyId;
-    this.selectedCompanyCode = company.companyId;
+    this.selectedCompanyCode = company.companyCode;
   }
 }
 

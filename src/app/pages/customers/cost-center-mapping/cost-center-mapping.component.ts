@@ -273,7 +273,6 @@ export class CostCenterMappingComponent {
           alert(res.Data[0]?.Error_Message || "Error occurred");
           return;
         }
-        //  FALLBACK
         alert("Unexpected server response.");
       },
 
@@ -306,13 +305,12 @@ export class CostCenterMappingComponent {
 
     FileSaver.saveAs(blob, `CostCenterMapping_Template_${Date.now()}.xlsx`);
 
-    // this.showAlertPopup("Template Downloaded Successfully!");
   }
 
   AddPOOpen() {
     this.dialog.open(AddcostCenterMappingComponent, {
-      width: '30%',
-      height: '52vh',
+      width: '35%',
+      height: '70vh',
       disableClose: true
     });
   }

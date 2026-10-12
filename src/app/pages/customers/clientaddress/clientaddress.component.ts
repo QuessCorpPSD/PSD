@@ -59,7 +59,8 @@ export class ClientaddressComponent {
   selectedFile!: File;
   previewData: any[] = [];
   previewColumns: string[] = [];
-
+  shippingStateDisplay = '';
+  shippingLocationDisplay = '';
 
   constructor(private dialog: MatDialog, @Inject(Pay_TOKEN) private service: IClientaddress, private decry: EncryptionService,
     private _sessionStoreage: SessionStorageService, private fb: FormBuilder,) { }
@@ -195,18 +196,38 @@ export class ClientaddressComponent {
     this.onsearch();
   }
 
+  // private setShippingDisabled(disabled: boolean) {
+  //   ['shippingClientName', 'shippingAddress', 'shippingState',
+  //     'shippingLocation', 'shippingPinCode', 'sapShipTo']
+  //     .forEach(name => {
+  //       const ctrl = this.clientaddress.get(name);
+  //       if (!ctrl) return;
+  //       disabled ? ctrl.disable({ emitEvent: false }) : ctrl.enable({ emitEvent: false });
+  //     });
+  // }
+
   AddPOOpen() {
     this.isEditMode = false;
     this.clientaddress.reset();
+    this.sameAsBilling = false;
+    this.shippingStateDisplay = '';
+    this.shippingLocationDisplay = '';
     this.showClientPopup = true;
+  }
+  private toDateInput(value: any): string {
+    if (!value) return '';
+    const d = new Date(value);
+    if (isNaN(d.getTime())) return '';
+    const yyyy = d.getFullYear();
+    const mm = String(d.getMonth() + 1).padStart(2, '0');
+    const dd = String(d.getDate()).padStart(2, '0');
+    return `${yyyy}-${mm}-${dd}`;
   }
 
   editOpen(row: any) {
     this.isEditMode = true;
     this.rowData = row;
     this.showClientPopup = true;
-    console.log('RowData', this.rowData);
-
 
     this.clientaddress.patchValue({
       companyId: row.companyId,
@@ -218,44 +239,40 @@ export class ClientaddressComponent {
       subCustomerCode: row.saC_Code,
       billingClientName: row.billingClientName,
       billingAddress: row.billingAddress,
-      billingState: {
-        state_Id: row.billingStateId,
-        state_Name: row.billingStateName
-      },
+      billingState: { state_Id: row.billingStateId, state_Name: row.billingStateName },
       billingStateId: row.billingStateId,
-      billingLocation: {
-        city_Id: row.billingLocationId,
-        city_Name: row.city_Name
-      },
+      billingLocation: { city_Id: row.billingLocationId, city_Name: row.city_Name },
       billingLocationId: row.billingLocationId,
       billingPinCode: row.billingPinCode,
-      shippingsameasbilling: row.isShippingAddressSameAsBilling,
+      shippingsameasbilling: !!row.isShippingAddressSameAsBilling,
       shippingClientName: row.shippingClientName,
       shippingAddress: row.shippingAddress,
-      shippingState: {
-        state_Id: row.shippingStateId,
-        state_Name: row.shippingStateName
-      },
+      shippingState: { state_Id: row.shippingStateId, state_Name: row.shippingStateName },
       shippingStateId: row.shippingStateId,
-      shippingLocation: {
-        city_Id: row.shippingLocationId,
-        city_Name: row.shippingCity_Name
-      },
+      shippingLocation: { city_Id: row.shippingLocationId, city_Name: row.shippingCity_Name },
       shippingLocationId: row.shippingLocationId,
       shippingPinCode: row.shippingPinCode,
       sapBillTo: row.sapBillTo,
       sapShipTo: row.sapShipTo,
-      effectiveDate: row.effectiveDate,
+      effectiveDate: this.toDateInput(row.effectiveDate),
       vendorcode: row.vendorCode,
-      sezApplicable: row.seZ_Applicable,
-      sezExpiryDate: row.seZ_ExpiryDate,
+      sezApplicable: row.seZ_Applicable ?? row.sezApplicable ?? false,
+      sezExpiryDate: this.toDateInput(row.seZ_ExpiryDate),
       lutNumber: row.luT_Number,
-      lutDate: row.luT_Date,
-      lutExpiryDate: row.luT_ExpiryDate,
-
+      lutDate: this.toDateInput(row.luT_Date),
+      lutExpiryDate: this.toDateInput(row.luT_ExpiryDate)
     });
 
-    console.log('Clientaddress', this.clientaddress)
+    // ✅ Apply Same-As-Billing state and populate display strings
+    this.sameAsBilling = !!row.isShippingAddressSameAsBilling;
+
+    if (this.sameAsBilling) {
+      this.shippingStateDisplay = row.shippingStateName || '';
+      this.shippingLocationDisplay = row.shippingCity_Name || '';
+    } else {
+      this.shippingStateDisplay = '';
+      this.shippingLocationDisplay = '';
+    }
   }
 
   closeClientPopup() {
@@ -329,7 +346,7 @@ export class ClientaddressComponent {
     });
   }
   pageIndex: number = 0;
-  pageSize: number = 10;
+  pageSize: number = 5;
 
   ngOnInit(): void {
     const json = this._sessionStoreage.getItem('UserProfile');
@@ -401,30 +418,83 @@ export class ClientaddressComponent {
     //   vendorcode: ['']
 
     // });
+    const sync = () => {
+      if (!this.sameAsBilling) return;
+      const b = this.clientaddress.value;
 
+      this.clientaddress.patchValue({
+        shippingClientName: b.billingClientName,
+        shippingAddress: b.billingAddress,
+        shippingState: b.billingState,
+        shippingLocation: b.billingLocation,
+        shippingPinCode: b.billingPinCode,
+        sapShipTo: b.sapBillTo
+      }, { emitEvent: false });
+
+      this.shippingStateDisplay =
+        typeof b.billingState === 'object'
+          ? (b.billingState?.state_Name || '')
+          : (b.billingState || '');
+
+      this.shippingLocationDisplay =
+        typeof b.billingLocation === 'object'
+          ? (b.billingLocation?.city_Name || '')
+          : (b.billingLocation || '');
+    };
+
+    ['billingClientName', 'billingAddress', 'billingState', 'billingLocation', 'billingPinCode', 'sapBillTo']
+      .forEach(name => this.clientaddress.get(name)?.valueChanges.subscribe(sync));
 
   }
 
+  // sameAsBillingChange(event: any) {
+
+  //   this.sameAsBilling = event.target.checked;
+
+  //   console.log('BillingLocation', this.clientaddress.value.billingLocation);
+
+  //   if (this.sameAsBilling) {
+
+  //     this.clientaddress.patchValue({
+
+  //       shippingClientName: this.clientaddress.value.billingClientName,
+  //       shippingAddress: this.clientaddress.value.billingAddress,
+  //       shippingState: this.clientaddress.value.billingState,
+  //       shippingLocation: this.clientaddress.value.billingLocation,
+  //       shippingPinCode: this.clientaddress.value.billingPinCode,
+  //       sapShipTo: this.clientaddress.value.sapBillTo
+  //     });
+
+  //   }
+
+  // }
   sameAsBillingChange(event: any) {
-
     this.sameAsBilling = event.target.checked;
-
-    console.log('BillingLocation', this.clientaddress.value.billingLocation);
+    const b = this.clientaddress.value;
 
     if (this.sameAsBilling) {
-
       this.clientaddress.patchValue({
-
-        shippingClientName: this.clientaddress.value.billingClientName,
-        shippingAddress: this.clientaddress.value.billingAddress,
-        shippingState: this.clientaddress.value.billingState,
-        shippingLocation: this.clientaddress.value.billingLocation,
-        shippingPinCode: this.clientaddress.value.billingPinCode,
-        sapShipTo: this.clientaddress.value.sapBillTo
+        shippingClientName: b.billingClientName,
+        shippingAddress: b.billingAddress,
+        shippingState: b.billingState,
+        shippingLocation: b.billingLocation,
+        shippingPinCode: b.billingPinCode,
+        sapShipTo: b.sapBillTo
       });
 
-    }
+      this.shippingStateDisplay =
+        typeof b.billingState === 'object'
+          ? (b.billingState?.state_Name || '')
+          : (b.billingState || '');
 
+      this.shippingLocationDisplay =
+        typeof b.billingLocation === 'object'
+          ? (b.billingLocation?.city_Name || '')
+          : (b.billingLocation || '');
+    } else {
+      this.shippingStateDisplay = '';
+      this.shippingLocationDisplay = '';
+    }
   }
 
   showAlertPopup(message: string, subMessage: string = '') {

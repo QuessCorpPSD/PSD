@@ -67,6 +67,8 @@ export class AddcostCenterMappingComponent {
       mapName: ['', Validators.required],
       companyCode: ['', Validators.required],
       CostCenter: [{ value: '', disabled: false }, Validators.required],
+      companyname:[''],
+      companylocation:['']
 
     });
   }
@@ -125,13 +127,12 @@ export class AddcostCenterMappingComponent {
         const response = res?.Data?.response;
         const errors = res?.Data?.errors;
 
-        //  FAILED RESPONSE
         if (response && response.toLowerCase().includes("failed")) {
 
           let msg = "Error!";
 
           if (errors && errors.length > 0) {
-            msg = errors.join("\n"); // Example: "Cost center mapping already exists"
+            msg = errors.join("\n"); 
           } else {
             msg = response;
           }
@@ -141,9 +142,8 @@ export class AddcostCenterMappingComponent {
           return;
         }
 
-        //  SUCCESS RESPONSE
         if (response && response.toLowerCase().includes("success")) {
-          alert("Cost Center Mapping Added Successfully!");
+          alert(response);
           this.dialogRef.close(true);
           return;
         }
