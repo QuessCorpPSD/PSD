@@ -1,0 +1,212 @@
+<div class="page-wrapper">
+    <div class="scrollable-content">
+
+        <div style="color:#302CB3;font-size:22px;font-family:Montserrat;font-weight:700;padding-top:10px">
+            AR Knock Off
+        </div>
+
+        <div class="container py-3">
+            <div class="row g-3 align-items-end">
+
+
+
+                <div class="col-md-5 d-flex gap-2">
+
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-success"
+                        matTooltip="Add" (click)="openAdd()">
+                        <mat-icon>add</mat-icon>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="table-wrapper1" *ngIf="showTable">
+            <div class="table-scroll">
+                <mat-table [dataSource]="dataSource" class="mat-elevation-z8 custom-table">
+
+
+
+                    <ng-container matColumnDef="Action">
+                        <mat-header-cell *matHeaderCellDef>Action</mat-header-cell>
+                        <mat-cell *matCellDef="let row">
+                            <div class="action-buttons">
+                                <button class="btn btn-sm" matTooltip="Edit" (click)="editRow(row)">
+                                    <mat-icon>edit</mat-icon>
+                                </button>
+                                <button class="btn btn-sm" matTooltip="Delete" (click)="deleteRow(row)">
+                                    <mat-icon>delete</mat-icon>
+                                </button>
+                            </div>
+                        </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="SNo">
+                        <mat-header-cell *matHeaderCellDef>SNo</mat-header-cell>
+                        <mat-cell *matCellDef="let row; let i = index">
+                            {{ dataSource.paginator ? dataSource.paginator.pageIndex * dataSource.paginator.pageSize + i
+                            + 1 : i + 1 }}
+                        </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="UTR_No">
+                        <mat-header-cell *matHeaderCellDef>UTR No</mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.UTR_No_keywords || '-' }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Benificiary">
+                        <mat-header-cell *matHeaderCellDef>Benificiary</mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.Benificiary_keywords || '-' }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Total_Remitted_Amount">
+                        <mat-header-cell *matHeaderCellDef>Total Remitted Amount</mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.Total_Remitted_Amount_keywords || 0 }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Invoice_Number">
+                        <mat-header-cell *matHeaderCellDef>Invoice Number</mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.Invoice_Number_keywords || '-' }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Amount">
+                        <mat-header-cell *matHeaderCellDef>Amount</mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.Amount_keywords || 0 }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="TDS_Amount">
+                        <mat-header-cell *matHeaderCellDef>TDS Amount</mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.TDS_Amount_keywords || 0 }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="TDS_Percent">
+                        <mat-header-cell *matHeaderCellDef>TDS Percent</mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.TDS_Percent_keywords || 0 }}</mat-cell>
+                    </ng-container>
+
+                    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+
+                </mat-table>
+            </div>
+
+            <div *ngIf="dataSource.data.length === 0" class="text-center p-4">
+                <p class="text-muted">No data to display</p>
+            </div>
+
+            <mat-paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 20, 50]" showFirstLastButtons></mat-paginator>
+        </div>
+
+    </div>
+</div>
+
+<div *ngIf="showPopup" class="popup-overlay">
+    <form [formGroup]="popupForm" novalidate>
+        <mat-card class="popup-card">
+
+            <mat-card-header class="popup-header">
+                <mat-card-title>
+                    {{ isEditMode ? 'Edit AR Knock Off' : 'Add AR Knock Off' }}
+                </mat-card-title>
+                <span class="spacer"></span>
+                <button mat-icon-button type="button" style="background:transparent;border:none" (click)="closePopup()">
+                    <mat-icon>close</mat-icon>
+                </button>
+            </mat-card-header>
+
+            <mat-card-content>
+                <div class="row g-3">
+
+                    <div class="col-md-6">
+                        <label class="form-label text-muted small">
+                            UTR No Keywords<span class="text-danger">*</span>
+                        </label>
+                        <input type="text" class="form-control form-control-sm" formControlName="UTR_No" />
+                        <small class="text-danger d-block" *ngIf="showErrors && popupForm.get('UTR_No')?.invalid">
+                            UTR No is required
+                        </small>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label text-muted small">
+                            Benificiary Keywords<span class="text-danger">*</span>
+                        </label>
+                        <input type="text" class="form-control form-control-sm" formControlName="Benificiary" />
+                        <small class="text-danger d-block" *ngIf="showErrors && popupForm.get('Benificiary')?.invalid">
+                            Benificiary is required
+                        </small>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label text-muted small">
+                            Total Remitted Amount Keywords<span class="text-danger">*</span>
+                        </label>
+                        <input type="text" class="form-control form-control-sm"
+                            formControlName="Total_Remitted_Amount" />
+                        <small class="text-danger d-block"
+                            *ngIf="showErrors && popupForm.get('Total_Remitted_Amount')?.invalid">
+                            Total Remitted Amount is required
+                        </small>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label text-muted small">
+                            Invoice Number Keywords<span class="text-danger">*</span>
+                        </label>
+                        <input type="text" class="form-control form-control-sm" formControlName="Invoice_Number" />
+                        <small class="text-danger d-block"
+                            *ngIf="showErrors && popupForm.get('Invoice_Number')?.invalid">
+                            Invoice Number is required
+                        </small>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label text-muted small">
+                            Amount Keywords<span class="text-danger">*</span>
+                        </label>
+                        <input type="text" class="form-control form-control-sm" formControlName="Amount" />
+                        <small class="text-danger d-block" *ngIf="showErrors && popupForm.get('Amount')?.invalid">
+                            Amount is required
+                        </small>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label text-muted small">
+                            TDS Amount Keywords<span class="text-danger">*</span>
+                        </label>
+                        <input type="text" class="form-control form-control-sm" formControlName="TDS_Amount" />
+                        <small class="text-danger d-block" *ngIf="showErrors && popupForm.get('TDS_Amount')?.invalid">
+                            TDS Amount is required
+                        </small>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label text-muted small">
+                            TDS Percent Keywords<span class="text-danger">*</span>
+                        </label>
+                        <input type="text" class="form-control form-control-sm" formControlName="TDS_Percent" />
+                        <small class="text-danger d-block" *ngIf="showErrors && popupForm.get('TDS_Percent')?.invalid">
+                            TDS Percent is required
+                        </small>
+                    </div>
+
+                </div>
+            </mat-card-content>
+
+            <mat-card-footer class="popup-footer">
+                <button type="button" class="btn-save" (click)="saveKnockOff()">
+                    {{ isEditMode ? 'Update' : 'Save' }}
+                </button>
+                <button type="button" class="btn-cancel" (click)="closePopup()">Cancel</button>
+            </mat-card-footer>
+
+        </mat-card>
+    </form>
+</div>
+
+<div *ngIf="isLoading" class="loading-overlay">
+    <div class="loading-spinner"></div>
+</div>
+
+<app-alertpopup *ngIf="showPopupAlert" [message]="popupMessage" [submessage]="popupSubMessage" class="centered-popup"
+    (close)="showPopupAlert = false">
+</app-alertpopup>

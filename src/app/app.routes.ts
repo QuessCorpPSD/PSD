@@ -208,6 +208,7 @@ import { UnpaidInvoiceReportComponent } from './pages/AccountReceivable/Bankinvo
 import { PoCultureComponent } from './pages/Invoice/po-culture/po-culture.component';
 import { BreakdetailsComponent } from './layout/loginmaster/breakdetails/breakdetails.component';
 import { PurchaseOrderNumberComponent } from './pages/Invoice/purchase-order-number/purchase-order-number.component';
+import { ARKnockoffComponent } from './pages/customers/arknockoff/arknockoff.component';
 // import { AccountReceivablenavigationComponent } from './pages/accountreceivable/Bankinvoice/account-receivablenavigation/account-receivablenavigation.component';
 // import { APARAdjustmentupdateComponent } from './pages/accountreceivable/Bankinvoice/aparadjustmentupdate/aparadjustmentupdate.component';
 // import { BankTransferHTHStatusComponent } from './pages/accountreceivable/Bankinvoice/bank-transfer-hthstatus/bank-transfer-hthstatus.component';
@@ -318,7 +319,7 @@ export const routes: Routes = [
         children: [
           { path: 'payregisterunprocessed', component: PayregisterunprocessedComponent },
           { path: 'payslip', component: PayslipComponent },
-          { path: 'arpaymentreport', component:ArpaymentreportComponent},
+          { path: 'arpaymentreport', component: ArpaymentreportComponent },
           { path: 'app-invoice-leave-balance-report', component: InvoiceLeaveBalanceReportComponent },
           { path: 'app-leave-balance-report', component: LeaveBalanceReportComponent },
           { path: 'poactiveinactivereport', component: PoactiveinactivereportComponent },
@@ -441,7 +442,7 @@ export const routes: Routes = [
           { path: "companypermission", component: CompanypermissionComponent, },
           { path: "passwordunlock", component: PasswordunlockComponent, },
           { path: "payperiodunlock", component: PayperiodunlockComponent, },
-          {path: "categorychange", component: CategorychangeComponent,},
+          { path: "categorychange", component: CategorychangeComponent, },
         ]
       },
       {
@@ -469,6 +470,8 @@ export const routes: Routes = [
           { path: "invoicerule", component: InvoiceruleComponent },
           { path: "ptrule", component: PTRuleComponent },
           { path: "skill-category", component: SkillCategoryConstructionComponent },
+          { path: "Arknockoff", component: ARKnockoffComponent },
+
         ]
       },
       {
@@ -494,7 +497,7 @@ export const routes: Routes = [
           //{ path: 'creditnoteupdate', component: CreditnoteupdateComponent },
           { path: 'companyinvoiceformat', component: CompanyinvoiceformatComponent },
           { path: 'OtherIncome', component: OtherincomeComponent },
-          
+
           { path: 'sezrepository-approval', component: SEZRepositoryApprovalComponent },
           { path: 'app-po-culture', component: PoCultureComponent },
         ]
