@@ -19,7 +19,9 @@ import { CompanyconstructionComponent } from "../../../common/companyconstructio
 import { DesignationComponent } from '../../../common/Designation/designation.component';
 import { MaterialCodeComponent } from '../../../common/MaterialCode/materialcode.component';
 import { BillingtypeComponent } from '../../../common/billingtype/billingtype.component';
+import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 const Pay_TOKEN = new InjectionToken<ISkilltypeMapping>('Pay_TOKEN');
+
 @Component({
   selector: 'app-skill-category-construction',
   imports: [MatIcon, MatTooltipModule, MatPaginator, MatTableModule, CommonModule, MatCardModule, ReactiveFormsModule, GroupnameComponent, CompanyconstructionComponent, DesignationComponent, MaterialCodeComponent, BillingtypeComponent],
@@ -57,13 +59,14 @@ export class SkillCategoryConstructionComponent {
   selectedId: number = 0;
   SelectedSkillId: number = 0;
   ponumber: any;
-  selectedDesignation?:any;
+  Designation: any;
+  selectedDesignation?: any;
   selectedDesignationId?: number;
   selectedDesignationName: string = '';
-  selectedMaterialCode?:any;
+  selectedMaterialCode?: any;
   selectedMaterialCodeId?: number;
   selectedMaterialCodeName: string = '';
-  selectedBillingtype?:any;
+  selectedBillingtype?: any;
   selectedBillingTypeId?: number;
   selectedBillingTypeName: string = '';
 
@@ -93,6 +96,7 @@ export class SkillCategoryConstructionComponent {
     this.selectedCompanyId = company.companyId;
   }
   handleCompanyEventadd(company) {
+    //console.log('Selected Company:', company);
     this.selectedCompanyIdadd = company.companyId;
     this.selectedcompanycode = company.companyCode;
     this.BindPonumber();
@@ -111,7 +115,7 @@ export class SkillCategoryConstructionComponent {
   }
 
   handleMaterialCodeEvent(materialCode: any) {
-    //console.log('Selected Material Code:', materialCode);
+    ////console.log('Selected Material Code:', materialCode);
     this.selectedMaterialCodeId = materialCode.ID;
     this.selectedMaterialCodeName = materialCode.Code;
     this.skillCategoryForm.patchValue({
@@ -130,12 +134,39 @@ export class SkillCategoryConstructionComponent {
   }
 
   handleBillingTypeEvent(billingType: any) {
-    //console.log('Selected Billing Type:', billingType);
+    ////console.log('Selected Billing Type:', billingType);
     this.selectedBillingTypeId = billingType.rowid;
     this.selectedBillingTypeName = billingType.code;
     this.skillCategoryForm.patchValue({
       BillingType: billingType
     });
+  }
+
+  showAllDesignations = true;
+
+  onSkillTypeChange(event: Event): void {
+    const skillType = (event.target as HTMLSelectElement).value;
+
+    if (skillType === '0') {
+      this.showAllDesignations = true;
+      this.skillCategoryForm.get('Designation')?.setValue(null);
+    }
+    else {
+      this.showAllDesignations = false;
+      const allDesignation = {
+        designation_Id: 0,
+        designation_Name: 'All',
+        designation_Code: '',
+        standard_Designation: '',
+        amount: 0,
+        skill_Category: '',
+        npDays: 0
+      };
+      //this.Designation = [allDesignation];
+      this.skillCategoryForm.get('Designation')?.setValue(allDesignation);
+      this.skillCategoryForm.get('Designation')?.disable();
+    }
+    this.skillCategoryForm.updateValueAndValidity();
   }
 
   onsearch() {
@@ -274,13 +305,13 @@ export class SkillCategoryConstructionComponent {
     });
   }
 
-//   writeValue(value: any): void {
-//   if (value) {
-//     this.selectedBillingtype = value;
-//   } else {
-//     this.selectedBillingtype = null;
-//   }
-// }
+  //   writeValue(value: any): void {
+  //   if (value) {
+  //     this.selectedBillingtype = value;
+  //   } else {
+  //     this.selectedBillingtype = null;
+  //   }
+  // }
   editSkillCategory(row: any) {
 
     this.showSkillPopup = true;
@@ -295,7 +326,7 @@ export class SkillCategoryConstructionComponent {
     this.selectedGroupId = row.SiteId;
     this.selectedGroupName = row.SiteName;
     const patchDesignation = { designation_Id: row.DesignationId, designation_Name: row.DesignationName }
-    const patchMaterialCode = { ID: row.MaterialCodeId, Code: row.MaterialCodeName , Description: row.MaterialCodeName}
+    const patchMaterialCode = { ID: row.MaterialCodeId, Code: row.MaterialCodeName, Description: row.MaterialCodeName }
     const patchBillingType = { rowid: row.BillingTypeId, code: row.BillingTypeName }
 
     const parts = row.EffectiveDate.split(' ')[0].split('-');
@@ -383,7 +414,6 @@ export class SkillCategoryConstructionComponent {
       }
     });
   }
-
   closePopup() {
     this.showSkillPopup = false;
     this.selectedCompanyId.clear();

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Inject, InjectionToken, OnChanges, Input, OnInit, Output, ViewEncapsulation, forwardRef } from '@angular/core';
+import { Component, EventEmitter, Inject, InjectionToken, OnChanges, Input, OnInit, Output, ViewEncapsulation, forwardRef, SimpleChanges } from '@angular/core';
 import { ReactiveFormsModule, FormControl, NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatInputModule } from '@angular/material/input';
@@ -35,6 +35,7 @@ export const COMM_TOKEN = new InjectionToken<ICommonService>('COMM_TOKEN');
 export class DesignationComponent implements ControlValueAccessor, OnChanges {
   @Input() selectedCompanyId?: number;
   @Input() selectedOption?: designationclass | null;
+  @Input() showAllOption: boolean = true;
   options: string[] = [];
   searchText: string = '';
   myControl = new FormControl<string | designationclass>('');
@@ -45,8 +46,11 @@ export class DesignationComponent implements ControlValueAccessor, OnChanges {
   constructor(@Inject(COMM_TOKEN) private _commonService: ICommonService) {
 
   }
-  ngOnChanges() {
+  ngOnChanges(changes: SimpleChanges): void {
     if (this.selectedCompanyId) {
+      this.BindDesignation(this.selectedCompanyId);
+    }
+    if (changes['showAllOption'] && this.selectedCompanyId) {
       this.BindDesignation(this.selectedCompanyId);
     }
   }
@@ -54,8 +58,27 @@ export class DesignationComponent implements ControlValueAccessor, OnChanges {
   BindDesignation(selectedCompanyId: any) {
     this._commonService.GetDesignationbyCompany(selectedCompanyId).subscribe({
       next: res => {
-        this.Designation = res.Data;
-        //console.log(res.Data);
+        const designationList = res.Data || [];
+        //console.log('Show All Option:', this.showAllOption);
+        if (this.showAllOption) {
+          this.Designation = designationList.filter(
+            (item: any) =>
+              item.designation_Name?.toLowerCase() !== 'all' &&
+              item.designation_Id !== 0
+          );
+        } else {
+          this.Designation = [
+            {
+              designation_Id: 0,
+              designation_Name: 'All',
+              designation_Code: '',
+              standard_Designation: '',
+              amount: 0,
+              skill_Category: '',
+              npDays: 0
+            }];
+        }
+
         this.filteredOptions$ = this.myControl.valueChanges.pipe(
           startWith(''),
           map(value => {
@@ -63,8 +86,12 @@ export class DesignationComponent implements ControlValueAccessor, OnChanges {
 
             if (typeof value === 'string') {
               searchText = value;
-            } else if (value && typeof value === 'object' && 'designation_Name' in value) {
-              searchText = value?.designation_Name;
+            } else if (
+              value &&
+              typeof value === 'object' &&
+              'designation_Name' in value
+            ) {
+              searchText = value.designation_Name;
             }
 
             return this._filter(searchText);
@@ -75,6 +102,30 @@ export class DesignationComponent implements ControlValueAccessor, OnChanges {
     });
   }
 
+  // BindDesignation(selectedCompanyId: any) {
+  //   this._commonService.GetDesignationbyCompany(selectedCompanyId).subscribe({
+  //     next: res => {
+  //       this.Designation = res.Data;
+  //       ////console.log(res.Data);
+  //       this.filteredOptions$ = this.myControl.valueChanges.pipe(
+  //         startWith(''),
+  //         map(value => {
+  //           let searchText = '';
+
+  //           if (typeof value === 'string') {
+  //             searchText = value;
+  //           } else if (value && typeof value === 'object' && 'designation_Name' in value) {
+  //             searchText = value?.designation_Name;
+  //           }
+
+  //           return this._filter(searchText);
+  //         })
+  //       );
+  //     },
+  //     error: err => console.error(err.message)
+  //   });
+  // }
+
   private onChange =
     (value: designationclass | null) => { };
 
@@ -82,7 +133,7 @@ export class DesignationComponent implements ControlValueAccessor, OnChanges {
 
   writeValue(value: designationclass | null): void {
 
-    console.log('Designation received:', value);
+    //console.log('Designation received:', value);
 
     this.selectedDesignation = value ?? undefined;
     this.selectedOption = value ?? undefined;
@@ -128,6 +179,7 @@ export class DesignationComponent implements ControlValueAccessor, OnChanges {
   }
 
   clearSelection(input: HTMLInputElement) {
+    if (this.showAllOption === true){
     this.selectedOption = null;
 
     this.myControl.setValue(null);
@@ -137,5 +189,7 @@ export class DesignationComponent implements ControlValueAccessor, OnChanges {
     this.designationEmit.emit(null);
 
     input.blur();
+    }
+
   }
 }
