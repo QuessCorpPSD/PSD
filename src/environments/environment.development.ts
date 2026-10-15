@@ -18,7 +18,7 @@ export const environment = {
 ////AWS Prod
 
     apiUrl:"https://qpayerp-api.quesscorp.com/api/",
-    signalRURL:"https://awqpayerp-api.quesscorp.com/api/"
+    signalRURL:"https://qpayerp-api.quesscorp.com/api/"
 
 
 
