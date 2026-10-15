@@ -1,11 +1,25 @@
 export const environment = {
     production:false,
-apiUrl:"https://localhost:7087/api/",
-//  apiUrl:"https://psdautomationapi-dev.quesscorp.com/api/",
-signalRURL:"https://localhost:7087/",
-// apiUrl:"https://qpayerp-api.quesscorp.com/api/",
-//  signalRURL:"https://qpayerp-api.quesscorp.com/api/"
+////Local
 
- //apiUrl:"https://psdautomationapi-dev.quesscorp.com/api/",
- //signalRURL:"https://psdautomationapi-dev.quesscorp.com/"
+    // apiUrl:"https://localhost:7087/api/",
+    // signalRURL:"https://localhost:7087/",
+
+////Test
+
+    // apiUrl:"https://psdautomationapi-dev.quesscorp.com/api/",
+    // signalRURL:"https://psdautomationapi-dev.quesscorp.com/"
+
+////Prod
+
+    // apiUrl:"https://qpayerp-api.quesscorp.com/api/",
+    // signalRURL:"https://qpayerp-api.quesscorp.com/api/"
+
+////AWS Prod
+
+    apiUrl:"https://qpayerp-api.quesscorp.com/api/",
+    signalRURL:"https://awqpayerp-api.quesscorp.com/api/"
+
+
+
 };

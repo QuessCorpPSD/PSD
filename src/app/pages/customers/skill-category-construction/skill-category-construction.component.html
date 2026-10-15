@@ -245,8 +245,9 @@
                         <label class="form-label text-muted small">
                             Designation <span class="text-danger">*</span>
                         </label>
-
-                        <designation formControlName="Designation" [selectedCompanyId]="selectedCompanyIdadd"
+                        <input *ngIf="isEditMode" class="form-control form-control-sm" formControlName="Designation"
+                            readonly>
+                        <designation *ngIf="!isEditMode" formControlName="Designation" [selectedCompanyId]="selectedCompanyIdadd"
                             [showAllOption]="showAllDesignations" (designationEmit)="handleDesignationEvent($event)">
                         </designation>
 

@@ -69,6 +69,7 @@ export class SkillCategoryConstructionComponent {
   selectedBillingtype?: any;
   selectedBillingTypeId?: number;
   selectedBillingTypeName: string = '';
+  editData: any;
 
   constructor(private fb: FormBuilder, @Inject(Pay_TOKEN) private service: ISkilltypeMapping, private _decrypt: EncryptionService,
     private _sessionStoreage: SessionStorageService,
@@ -150,6 +151,7 @@ export class SkillCategoryConstructionComponent {
     if (skillType === '0') {
       this.showAllDesignations = true;
       this.skillCategoryForm.get('Designation')?.setValue(null);
+      this.skillCategoryForm.get('Designation')?.enable();
     }
     else {
       this.showAllDesignations = false;
@@ -313,7 +315,7 @@ export class SkillCategoryConstructionComponent {
   //   }
   // }
   editSkillCategory(row: any) {
-
+    this.editData=row;
     this.showSkillPopup = true;
     this.isEditMode = true;
     this.isDeleteMode = false;
@@ -325,7 +327,7 @@ export class SkillCategoryConstructionComponent {
 
     this.selectedGroupId = row.SiteId;
     this.selectedGroupName = row.SiteName;
-    const patchDesignation = { designation_Id: row.DesignationId, designation_Name: row.DesignationName }
+    //const patchDesignation = { designation_Id: row.DesignationId, designation_Name: row.DesignationName }
     const patchMaterialCode = { ID: row.MaterialCodeId, Code: row.MaterialCodeName, Description: row.MaterialCodeName }
     const patchBillingType = { rowid: row.BillingTypeId, code: row.BillingTypeName }
 
@@ -336,7 +338,7 @@ export class SkillCategoryConstructionComponent {
       Company_code: row.Company_code,
       SiteName: row.SiteName,
       SkillType: row.SkillType,
-      Designation: patchDesignation,
+      Designation: row.DesignationName,
       MaterialCode: patchMaterialCode,
       BillingType: patchBillingType,
       OTRate: row.OTRate,
@@ -380,8 +382,8 @@ export class SkillCategoryConstructionComponent {
       Amount: this.skillCategoryForm.value.Amount,
       EffectiveDate: this.skillCategoryForm.value.EffectiveDate,
       PO_Number: this.skillCategoryForm.value.PO_Number,
-      DesignationId: this.selectedDesignationId,
-      DesignationName: this.selectedDesignationName,
+      DesignationId: this.editData.DesignationId,
+      DesignationName: this.editData.DesignationName,
       MaterialCodeId: this.selectedMaterialCodeId,
       MaterialCodeName: this.selectedMaterialCodeName.toString(),
       BillingTypeId: this.selectedBillingTypeId,
