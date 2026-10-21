@@ -126,6 +126,7 @@ export class SkillCategoryConstructionComponent {
 
 
   handleDesignationEvent(designation: any) {
+
     this.selectedDesignationId = designation.designation_Id;
     this.selectedDesignationName = designation.designation_Name;
     //this.Designation = designation;
@@ -315,7 +316,7 @@ export class SkillCategoryConstructionComponent {
   //   }
   // }
   editSkillCategory(row: any) {
-    this.editData=row;
+    this.editData = row;
     this.showSkillPopup = true;
     this.isEditMode = true;
     this.isDeleteMode = false;
@@ -382,8 +383,12 @@ export class SkillCategoryConstructionComponent {
       Amount: this.skillCategoryForm.value.Amount,
       EffectiveDate: this.skillCategoryForm.value.EffectiveDate,
       PO_Number: this.skillCategoryForm.value.PO_Number,
-      DesignationId: this.editData.DesignationId,
-      DesignationName: this.editData.DesignationName,
+      // DesignationId: this.editData.DesignationId,
+      // DesignationName: this.editData.DesignationName,
+      DesignationId: (this.isEditMode || this.isDeleteMode ? this.editData?.DesignationId
+        : this.selectedDesignationId) ?? 0,
+      DesignationName: (this.isEditMode || this.isDeleteMode ? this.editData?.DesignationName
+        : this.selectedDesignationName) ?? 'All',
       MaterialCodeId: this.selectedMaterialCodeId,
       MaterialCodeName: this.selectedMaterialCodeName.toString(),
       BillingTypeId: this.selectedBillingTypeId,
@@ -467,7 +472,7 @@ export class SkillCategoryConstructionComponent {
 
         alert(message);
 
-        this.closePopup();
+        //this.closePopup();
         if (this.selectedCompanyId && this.selectedGroupIdmain) {
           this.onsearch();
         }
