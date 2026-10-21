@@ -388,7 +388,7 @@ export class SkillCategoryConstructionComponent {
       DesignationId: (this.isEditMode || this.isDeleteMode ? this.editData?.DesignationId
         : this.selectedDesignationId) ?? 0,
       DesignationName: (this.isEditMode || this.isDeleteMode ? this.editData?.DesignationName
-        : this.selectedDesignationName) ?? 'All',
+        : this.selectedDesignationName) || 'All',
       MaterialCodeId: this.selectedMaterialCodeId,
       MaterialCodeName: this.selectedMaterialCodeName.toString(),
       BillingTypeId: this.selectedBillingTypeId,
