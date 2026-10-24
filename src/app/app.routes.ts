@@ -209,6 +209,7 @@ import { PoCultureComponent } from './pages/Invoice/po-culture/po-culture.compon
 import { BreakdetailsComponent } from './layout/loginmaster/breakdetails/breakdetails.component';
 import { PurchaseOrderNumberComponent } from './pages/Invoice/purchase-order-number/purchase-order-number.component';
 import { ARKnockoffComponent } from './pages/customers/arknockoff/arknockoff.component';
+import { InputreportconsolidatedComponent } from './pages/Reports/inputreportconsolidated/inputreportconsolidated.component';
 // import { AccountReceivablenavigationComponent } from './pages/accountreceivable/Bankinvoice/account-receivablenavigation/account-receivablenavigation.component';
 // import { APARAdjustmentupdateComponent } from './pages/accountreceivable/Bankinvoice/aparadjustmentupdate/aparadjustmentupdate.component';
 // import { BankTransferHTHStatusComponent } from './pages/accountreceivable/Bankinvoice/bank-transfer-hthstatus/bank-transfer-hthstatus.component';
@@ -318,6 +319,7 @@ export const routes: Routes = [
         component: ReportsComponent,
         children: [
           { path: 'payregisterunprocessed', component: PayregisterunprocessedComponent },
+          { path: 'inputreportconsolidated', component: InputreportconsolidatedComponent },
           { path: 'payslip', component: PayslipComponent },
           { path: 'arpaymentreport', component: ArpaymentreportComponent },
           { path: 'app-invoice-leave-balance-report', component: InvoiceLeaveBalanceReportComponent },
