@@ -17,4 +17,13 @@ export class PayregisterunprocessedService implements IpayregisterunprocessedSer
     return this.http.get<APIResponse>(this.environment.apiUrl + 'PayregisterUnprocessed/Exporttoexcel/' + CompanyId + '/' + PayperiodId);
   }
 
+   getInputType(): Observable<APIResponse> {
+    return this.http.get<APIResponse>(this.environment.apiUrl + 'Common/GetAllInputTypes');
+  }
+
+    GetInputReportConsolidated(companyId: any, payPeriodId: any, inputId: any): Observable<APIResponse> {
+    return this.http.get<APIResponse>(this.environment.apiUrl + 'InputReportConsolidated/GetInputReportConsolidated/' + companyId + '/' + payPeriodId + '/' + inputId );
+  }
+
+
 }
