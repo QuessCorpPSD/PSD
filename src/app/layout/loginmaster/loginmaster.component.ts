@@ -85,32 +85,67 @@ username:string = ''
     return `${this.pads(m)}:${this.pads(s)}`;
   }
 validateOtp() {
+  
   const enteredOtp = this.otpForm.get('otp')?.value?.trim();
-
-  // Check Expiry
-  if (this.isOtpExpired) {
-    this.isResendDisabled=true;
-    alert("OTP expired. Please resend again.")
-   this.ExpireRemarks=true;
-   this.timer.unsubscribe();
-   this.isResendDisabled = false;
-   this.timeLeft=0;
+ if (enteredOtp == null || String(enteredOtp).trim() === "") {
+    alert("Please enter OTP");
     return;
-  }
-  // Check correctness (convert both sides to string)
-  if (enteredOtp?.toString() === this.serverOtp?.toString()) {
-    this.errorMessage = '';
+}
+  const userdetail = this.sessionStorageService.getItem('UserProfile')||"";
+  const user = JSON.parse(this._encry.decrypt(userdetail)); 
+  console.log(user) 
 
-       if (this.getUserRole(this.userdata.role_Id)=='admin') {
+  const request={
+    "mailTokenContent":user.mailToken,
+    "userId":user.user_Id,
+    "otp":enteredOtp
+  }
+ 
+  this._authService.ValidateOTP(request).subscribe({
+    next:res=>{  
+
+      if(res.Data.message=="OTP is valid")
+      {
+        if (this.getUserRole(user.role_Id) == 'admin') {
           this.router.navigateByUrl('/Master/dashboard');
-        } else {      
+        } else {
           this.router.navigateByUrl('/Master/Home');
         }
-  } else {
-    this.errorMessage = 'Invalid OTP. Please try again.';
-    this.isResendDisabled=false;
-    this.ExpireRemarks=true;
-  }
+      }
+      else{
+        this.toastr.error(res.Data.message || "Invalid OTP", "Error");
+      }
+    },
+    error:err=>{}
+  })
+
+
+
+
+  // // Check Expiry
+  // if (this.isOtpExpired) {
+  //   this.isResendDisabled=true;
+  //   alert("OTP expired. Please resend again.")
+  //  this.ExpireRemarks=true;
+  //  this.timer.unsubscribe();
+  //  this.isResendDisabled = false;
+  //  this.timeLeft=0;
+  //   return;
+  // }
+  // // Check correctness (convert both sides to string)
+  // if (enteredOtp?.toString() === this.serverOtp?.toString()) {
+  //   this.errorMessage = '';
+
+  //      if (this.getUserRole(this.userdata.role_Id)=='admin') {
+  //         this.router.navigateByUrl('/Master/dashboard');
+  //       } else {      
+  //         this.router.navigateByUrl('/Master/Home');
+  //       }
+  // } else {
+  //   this.errorMessage = 'Invalid OTP. Please try again.';
+  //   this.isResendDisabled=false;
+  //   this.ExpireRemarks=true;
+  // }
 }
 
 
@@ -261,15 +296,26 @@ ResendOTP(){
           this._encry.encrypt(data.token),
           this._encry.encrypt(data.refreshtoken)
         );
-        // this.Isvalid=false;
+        if(data.is_MFA_Enabled)
+        {
+         this.Isvalid=false;
+        }
+        else{
+          if (this.getUserRole(data.role_Id)=='admin') {
+          this.router.navigateByUrl('/Master/dashboard');
+        } else {
+           this.router.navigateByUrl('/Master/Home');
+        }
+          
+        }
         // this.timeLeft= data.expirytime;
         // this.otpExpiryTime = Date.now() + (this.timeLeft * 1000);        
         // this.serverOtp=data.otp;
         // this.isResendDisabled=true;
         // this.startTimer();
-        if (this.getUserRole(data.role_Id)=='admin') {
-          this.router.navigateByUrl('/Master/dashboard');
-        } else {
+        // if (this.getUserRole(data.role_Id)=='admin') {
+        //   this.router.navigateByUrl('/Master/dashboard');
+        // } else {
       //  const dialogRef=   this.dialog.open(BreakdetailsComponent, {
       //       width: '90%',
       //       height: '90vh', // adjust size
@@ -282,12 +328,12 @@ ResendOTP(){
       //         // do something, e.g., refresh table
       //       }
       //     });
-          this.router.navigateByUrl('/Master/Home');
+        //  this.router.navigateByUrl('/Master/Home');
         }
-      } else {
+       else {
         this.toastr.error(data.error_Message || "Invalid credentials", "Error");
-       // this.router.navigate(['/Login']);
-      }
+        // this.router.navigate(['/Login']);
+       }
     },
     error: (err) => {
       console.error(err);

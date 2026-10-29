@@ -32,6 +32,18 @@ export class AuthServiceService implements IAuthServiceService {
         //return userInfo.headers.get('authorization');
       }));
   }
+  ValidateOTP(val):Observable<APIResponse>{
+     var inputval=JSON.stringify(val);
+   
+      const config = new HttpHeaders({
+            'Cache-Control': 'no-cache, no-store, must-revalidate',
+            'Pragma': 'no-cache',
+            'Expires': '0'
+        }).set('Content-Type', 'application/json')
+            .set('Accept', 'application/json')
+             return this.http.post<APIResponse>(this.environment.apiUrl+"Authendicate/VerifyEmailOTPAsync",inputval, { headers: config })
+
+  }
   
 changepassword(val):Observable<APIResponse>
 {
