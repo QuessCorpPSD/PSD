@@ -421,7 +421,7 @@ export class DraftInvoiceComponent implements OnInit {
 
   InitiationSearchExport(element: any): void {
 
-    console.log(element);
+    
     this.isLoading = true;
     const request = {
       "Company_Id": element.company_Id,

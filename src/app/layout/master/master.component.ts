@@ -75,7 +75,7 @@ if(this.userRole!='admin')
     
   }
    roleIdGroups: Record<Role, number[]> = {
-  [Role.Admin]: [ 1,2,12, 4,11,14, 17, 20,38, 52, 263],
+  [Role.Admin]: [ 1,2,12, 4,11,14, 17, 20,38,34,54, 52, 263],
   [Role.SOP]: [0],
   [Role.GS]:[1],
   [Role.Manager]: [] // fallback

@@ -2,13 +2,13 @@ export const environment = {
     production:false,
 ////Local
 
-    // apiUrl:"https://localhost:7087/api/",
-    // signalRURL:"https://localhost:7087/",
+     apiUrl:"https://localhost:7087/api/",
+     signalRURL:"https://localhost:7087/",
 
 ////Test
 
-    // apiUrl:"https://psdautomationapi-dev.quesscorp.com/api/",
-    // signalRURL:"https://psdautomationapi-dev.quesscorp.com/"
+ //   apiUrl:"https://psdautomationapi-dev.quesscorp.com/api/",
+   //  signalRURL:"https://psdautomationapi-dev.quesscorp.com/"
 
 ////Prod
 
@@ -17,8 +17,8 @@ export const environment = {
 
 ////AWS Prod
 
-    apiUrl:"https://qpayerp-api.quesscorp.com/api/",
-    signalRURL:"https://qpayerp-api.quesscorp.com/api/"
+   // apiUrl:"https://qpayerp-api.quesscorp.com/api/",
+   // signalRURL:"https://qpayerp-api.quesscorp.com/api/"
 
 
 
