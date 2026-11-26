@@ -69,6 +69,7 @@ import { ProvidentfundComponent } from './pages/GlobalMasters/providentfund/prov
 import { SDLslabDetailComponent } from './pages/GlobalMasters/sdlslab-detail/sdlslab-detail.component';
 import { ShgslabdetailComponent } from './pages/GlobalMasters/shgslabdetail/shgslabdetail.component';
 import { SiteMasterComponent } from './pages/GlobalMasters/site-master/site-master.component';
+import { HSNSACComponent } from './pages/GlobalMasters/hsnsac/hsnsac.component';
 import { StatesComponent } from './pages/GlobalMasters/state/state.component';
 import { TDSslabComponent } from './pages/GlobalMasters/tdsslab/tdsslab.component';
 import { VendorComponent } from './pages/GlobalMasters/vendor/vendor.component';
@@ -373,6 +374,7 @@ export const routes: Routes = [
           { path: "InvoiceLegalEntity", component: InvoiceLegalEntityComponent },
           { path: "Vendor", component: VendorComponent },
           { path: "gst", component: GSTComponent },
+          { path: "hsnsac", component:HSNSACComponent },
           { path: "sitemaster", component: SiteMasterComponent },
           { path: "materialcode", component: MaterialcodeComponent },
           { path: 'BankMaster', component: BankmasterComponent },

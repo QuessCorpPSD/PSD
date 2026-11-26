@@ -1,0 +1,129 @@
+.page-container {
+  padding: 20px;
+  background: #f5f6fa;
+  min-height: 100%;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.page-header h2 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.form-card,
+.table-card {
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.form-card h3 {
+  margin: 0 0 15px;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+/* Five columns for the first row */
+.form-grid {
+  display: grid;
+  grid-template-columns: 0.8fr 1fr 2fr 0.8fr 0.8fr;
+  gap: 12px;
+  align-items: center;
+}
+
+/* Four columns for the second row */
+.second-row {
+  grid-template-columns: 0.8fr 0.8fr 1fr 1fr;
+  margin-top: 8px;
+}
+
+.compact-field {
+  width: 100%;
+  font-size: 12px;
+  margin: 0;
+}
+
+.description-field textarea {
+  resize: none;
+}
+
+.checkbox-field {
+  display: flex;
+  align-items: center;
+  padding-left: 10px;
+  min-height: 45px;
+}
+
+/* Compact Material fields */
+.compact-field .mat-mdc-form-field-infix {
+  min-height: 40px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+.compact-field input,
+.compact-field textarea {
+  font-size: 13px;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 15px;
+}
+
+/* Table */
+table {
+  width: 100%;
+}
+
+th {
+  font-weight: 600;
+  background: #f5f6fa;
+  white-space: nowrap;
+}
+
+td {
+  font-size: 13px;
+}
+
+.no-data {
+  padding: 20px;
+  text-align: center;
+}
+
+/* Tablet */
+@media (max-width: 900px) {
+  .form-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .second-row {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+  .form-grid,
+  .second-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .form-card {
+    padding: 12px;
+  }
+
+  .table-card {
+    overflow-x: auto;
+  }
+}
