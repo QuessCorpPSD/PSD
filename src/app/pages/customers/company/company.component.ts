@@ -19,7 +19,7 @@ import { AlertpopupComponent } from "../../../common/alertpopup/alertpopup.compo
 @Component({
   selector: 'app-company',
   standalone: true,
-  imports: [CommonModule, MatIconModule, MatTooltipModule, MatTableModule, MatPaginatorModule, FormsModule, AlertpopupComponent],
+  imports: [CommonModule, MatIconModule,CompanyallComponent, MatTooltipModule, MatTableModule, MatPaginatorModule, FormsModule, AlertpopupComponent],
   templateUrl: './company.component.html',
   styleUrl: './company.component.css'
 })

@@ -71,7 +71,7 @@ export class HSNSACComponent implements OnInit {
   isEditMode = false;
   selectedId: number | null = null;
  userdetail: any;
-userId: number = 0;
+userId: String = '0';
 
   displayedColumns: string[] = [
     'action',
@@ -133,7 +133,7 @@ ngOnInit(): void {
     this.userdetail = JSON.parse(this.decry.decrypt(json));
 
     // Get User ID after decrypting UserProfile
-    this.userId = Number(this.userdetail?.user_Id || 0);
+    this.userId = String(this.userdetail?.user_Id || '0');
   }
   else {
     console.warn('UserProfile not found in the session Storage');
